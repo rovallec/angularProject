@@ -6,11 +6,17 @@ import { MiprofilesComponent } from "./miprofiles/miprofiles.component";
 import { LoginComponent } from "./login/login.component";
 import { AuthGuard } from './guard/auth-guard.service';
 import { AccdashboardComponent } from './accdashboard/accdashboard.component';
+import { RealtimeTrackComponent } from './realtime-track/realtime-track.component';
 
 const routes:Routes = [
   {
     path:'rehome',
     component:HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'realtime',
+    component:RealtimeTrackComponent,
     canActivate: [AuthGuard]
   },
   {

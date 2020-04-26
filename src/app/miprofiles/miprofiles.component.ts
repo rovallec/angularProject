@@ -1120,8 +1120,6 @@ export class MiprofilesComponent implements OnInit {
         }
       }
     }
-
-
     this.apiservice.insDocProc_doc(formData).subscribe((data: testRes) => {
       if (this.procAddition == "Test Results") {
         this.addDoc_proc[0].doc_path = data.EnglishTest;
@@ -1219,7 +1217,7 @@ export class MiprofilesComponent implements OnInit {
   toggle_Status() {
     if (this.toggleEdit_Status) {
       var qry = {
-        query: "UPDATE `process_details` SET `value`= '" + this.fullScheduleVisit[0].attendance + "' WHERE `id_process` = '" + this.fullScheduleVisit[0].idprocesses + "' AND `name` = 'Attendance';"
+        query: "UPDATE `process_details` SET `value`= '" + this.fullScheduleVisit[0].attendance + "' WHERE `id_process` = '" + this.fullScheduleVisit[0].idprocesses + "' AND `name` = 'Result';"
       };
       this.apiservice.updateInformation(qry).subscribe((sts: string) => { });
     }

@@ -4,7 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { profiles } from './profiles';
 import { process } from './process';
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack } from './process_templates';
 
 import { Observable } from 'rxjs'; 
 import { users } from './users';
@@ -169,5 +169,14 @@ updateInformation(qry:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateInformation.php`, qry);
 }
 
+//RealTime Track
+
+getFilteredParam(filter:any){
+  return this.httpClient.post<string[]>(`${this.PHP_API_SERVER}/phpscripts/getValfilter.php`, filter);
+}
+
+getrealTime(){
+  return this.httpClient.get<realTimeTrack[]>(`${this.PHP_API_SERVER}/phpscripts/getRealTime.php`);
+}
   constructor(private httpClient:HttpClient) { }
 }

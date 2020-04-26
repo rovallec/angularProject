@@ -1,0 +1,57 @@
+<table style="width:95%; margin-left:2.5%; margin-top:10px;">
+    <tr style="background:#eff6ff;border-style:solid; border-width: 1px; border-color:#adc7ff;">
+        <td>
+            <div class="form-group col-sm-12">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label>Filter:</label>
+                        <Select class="form-control" [(ngModel)]="selectedOption" ngDefaultControl
+                            (change)="onChangeFilter()">
+                            <option *ngFor="let opt of searchOptions" [ngValue]="opt">{{opt}}</option>
+                        </Select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Value:</label>
+                        <select class="form-control"
+                            *ngIf="selectedOption == 'RECRUITER' || selectedOption == 'ACCOUNT' || selectedOption ==  'LAST PROCESS'">
+                            <option *ngFor="let valFilter of valFilters">{{valFilter}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <table class="table table-striped table-hover" style="text-align: center" width=100%>
+            <thead>
+                <th>DATE</th>
+                <th>NAME</th>
+                <th>PROCESS</th>
+                <th>STATUS</th>
+                <th>RECRUITER</th>
+                <th>1ST STATUS</th>
+                <th>2ND STATUS</th>
+                <th>ACCOUNT</th>
+                <th>WAVE</th>
+                <th>STARTING</th>
+                <th>STATUS</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let track of realTimeReport">
+                    <td>{{track.date}}</td>
+                    <td>{{track.first_name}} {{track.second_name}} {{track.first_lastname}} {{track.second_lastname}}
+                    </td>
+                    <td>{{track.lastprocessName}}</td>
+                    <td>{{track.lastValue}}</td>
+                    <td>{{track.Recruiter}}</td>
+                    <td>{{track.firstInterview}}</td>
+                    <td>{{track.secondInterview}}</td>
+                    <td>{{track.account}}</td>
+                    <td>{{track.wave}}</td>
+                    <td>{{track.startingDate}}</td>
+                    <td>{{track.candidate_status}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </tr>
+</table>
