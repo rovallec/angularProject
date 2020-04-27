@@ -99,6 +99,8 @@ export class realTimeTrack {
     account: string;
     startingDate: string;
     candidate_status: string;
+    filter:string;
+    filterValue:string;
     constructor(){
         this.date = null;
         this.first_name = null;
@@ -116,5 +118,7 @@ export class realTimeTrack {
         this.account = null;
         this.startingDate = null;
         this.candidate_status = null;
+        this.filter = null;
+        this.filterValue = null;
     }
 }

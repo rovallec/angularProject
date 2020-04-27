@@ -175,8 +175,8 @@ getFilteredParam(filter:any){
   return this.httpClient.post<string[]>(`${this.PHP_API_SERVER}/phpscripts/getValfilter.php`, filter);
 }
 
-getrealTime(){
-  return this.httpClient.get<realTimeTrack[]>(`${this.PHP_API_SERVER}/phpscripts/getRealTime.php`);
+getrealTime(rlt:realTimeTrack){
+  return this.httpClient.post<realTimeTrack[]>(`${this.PHP_API_SERVER}/phpscripts/getRealTime.php`, rlt);
 }
   constructor(private httpClient:HttpClient) { }
 }

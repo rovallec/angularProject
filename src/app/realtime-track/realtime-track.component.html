@@ -1,57 +1,88 @@
 <table style="width:95%; margin-left:2.5%; margin-top:10px;">
-    <tr style="background:#eff6ff;border-style:solid; border-width: 1px; border-color:#adc7ff;">
-        <td>
+    <tr>
+        <td
+            style="padding:6px; background-color:rgb(227, 239, 255); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255)">
             <div class="form-group col-sm-12">
                 <div class="form-row">
                     <div class="form-group col-md-3">
                         <label>Filter:</label>
                         <Select class="form-control" [(ngModel)]="selectedOption" ngDefaultControl
                             (change)="onChangeFilter()">
-                            <option *ngFor="let opt of searchOptions" [ngValue]="opt">{{opt}}</option>
+                            <option *ngFor="let opt of searchOptions" value={{opt.value}}>{{opt.name}}</option>
                         </Select>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-3" *ngIf="selectedOption != 'date'">
                         <label>Value:</label>
                         <select class="form-control"
-                            *ngIf="selectedOption == 'RECRUITER' || selectedOption == 'ACCOUNT' || selectedOption ==  'LAST PROCESS'">
+                            *ngIf="selectedOption == 'Recruiter' || selectedOption == 'account' || selectedOption ==  'lastprocessName'" [(ngModel)]="selectedValue">
                             <option *ngFor="let valFilter of valFilters">{{valFilter}}</option>
                         </select>
+                        <select *ngIf="selectedOption == 'firstInterview' || selectedOption == 'secondInterview'" [(ngModel)]="selectedValue" class="form-control">
+                            <option>APPROVED</option>
+                            <option value="Deny">DENIED</option>
+                            <option value="IS NULL">N/A</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date'">
+                        <label>YEAR:</label>
+                        <select class="form-control" (change)="pushDays()" [(ngModel)]="selectedDate[0]">
+                            <option *ngFor="let year of years">{{year}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date'">
+                        <label>MONTH:</label>
+                        <select class="form-control" (change)="pushDays()" [(ngModel)]="selectedDate[1]">
+                            <option *ngFor="let month of months">{{month}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date'">
+                        <label>DAY:</label>
+                        <select class="form-control" [(ngModel)]="selectedDate[2]" (change)="pushDays()">
+                            <option *ngFor="let day of days">{{day}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <i i class="fas fa-search" style="margin-top:50%; margin-left:50%" (click)="fillUpRealTime()"></i>
                     </div>
                 </div>
             </div>
         </td>
     </tr>
     <tr>
-        <table class="table table-striped table-hover" style="text-align: center" width=100%>
-            <thead>
-                <th>DATE</th>
-                <th>NAME</th>
-                <th>PROCESS</th>
-                <th>STATUS</th>
-                <th>RECRUITER</th>
-                <th>1ST STATUS</th>
-                <th>2ND STATUS</th>
-                <th>ACCOUNT</th>
-                <th>WAVE</th>
-                <th>STARTING</th>
-                <th>STATUS</th>
-            </thead>
-            <tbody>
-                <tr *ngFor="let track of realTimeReport">
-                    <td>{{track.date}}</td>
-                    <td>{{track.first_name}} {{track.second_name}} {{track.first_lastname}} {{track.second_lastname}}
-                    </td>
-                    <td>{{track.lastprocessName}}</td>
-                    <td>{{track.lastValue}}</td>
-                    <td>{{track.Recruiter}}</td>
-                    <td>{{track.firstInterview}}</td>
-                    <td>{{track.secondInterview}}</td>
-                    <td>{{track.account}}</td>
-                    <td>{{track.wave}}</td>
-                    <td>{{track.startingDate}}</td>
-                    <td>{{track.candidate_status}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <td
+            style="padding:15px; background-color:rgb(239, 246, 255);border-color:rgb(187, 208, 255);border-style: solid; border-width: 1px">
+            <table class="table table-striped table-hover" style="text-align: center" width=100%>
+                <thead>
+                    <th>DATE</th>
+                    <th>NAME</th>
+                    <th>PROCESS</th>
+                    <th>STATUS</th>
+                    <th>RECRUITER</th>
+                    <th>1ST STATUS</th>
+                    <th>2ND STATUS</th>
+                    <th>ACCOUNT</th>
+                    <th>WAVE</th>
+                    <th>STARTING</th>
+                    <th>STATUS</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let track of realTimeReport" (dblclick)="gotoProfile(track.id_profile)">
+                        <td>{{track.date}}</td>
+                        <td>{{track.first_name}} {{track.second_name}} {{track.first_lastname}}
+                            {{track.second_lastname}}
+                        </td>
+                        <td>{{track.lastprocessName}}</td>
+                        <td>{{track.lastValue}}</td>
+                        <td>{{track.Recruiter}}</td>
+                        <td>{{track.firstInterview}}</td>
+                        <td>{{track.secondInterview}}</td>
+                        <td>{{track.account}}</td>
+                        <td>{{track.wave}}</td>
+                        <td>{{track.startingDate}}</td>
+                        <td>{{track.candidate_status}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
     </tr>
 </table>
