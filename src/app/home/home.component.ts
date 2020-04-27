@@ -58,6 +58,10 @@ export class HomeComponent implements OnInit {
   trainning_schedule_mn_st:string = null;
   trainning_schedule_hr_end:string = null;
   trainning_schedule_mn_end:string = null;
+  training_start_day:string = null;
+  training_start_month:string = null;
+  training_start_year:string = null;
+
   days_off:string[] = [
     "Monday",
     "Tuesday",
@@ -395,11 +399,14 @@ export class HomeComponent implements OnInit {
     this.day_toEdit_e = this.wave_ToEdit.end_date.split("-")[2];
     this.month_toEdit_e = this.wave_ToEdit.end_date.split("-")[1];
     this.year_toEdit_e = this.wave_ToEdit.end_date.split("-")[0];
+    this.training_start_day = this.wave_ToEdit.ops_start.split("-")[2];
+    this.training_start_month = this.wave_ToEdit.ops_start.split("-")[1];
+    this.training_start_year = this.wave_ToEdit.ops_start.split("-")[0];
 
     this.trainning_schedule_hr_st = this.wave_ToEdit.trainning_schedule.split("-")[0].split(":")[0];
     this.trainning_schedule_mn_st = this.wave_ToEdit.trainning_schedule.split("-")[0].split(":")[1].split(" ")[0];
     this.trainning_schedule_hr_end = this.wave_ToEdit.trainning_schedule.split("-")[1].split(":")[0].split(" ")[1];
-    this.trainning_schedule_mn_end = this.wave_ToEdit.trainning_schedule.split("-")[1].split(":")[1].split(" ")[0]; 
+    this.trainning_schedule_mn_end = this.wave_ToEdit.trainning_schedule.split("-")[1].split(":")[1].split(" ")[0];
 
 
     this.getSchedules(this.wave_ToEdit);
@@ -426,12 +433,15 @@ export class HomeComponent implements OnInit {
   updateSchedule(){
     this.schedule_to_edit.start_time = this.sch_hrs_st + ":" + this.sch_min_st + ":00";
     this.schedule_to_edit.end_time = this.sch_hrs_e + ":" + this.sch_min_e + ":00";
+    this.schedule_to_edit.days_off = this.day1_off + "," + this.day2_off
     this.apiService.updateSchedules(this.schedule_to_edit).subscribe((st:string)=>{});
   }
 
   updateWave(){
-    this.wave_ToEdit.starting_date = this.year_toEdit_st + this.month_toEdit_st + this.day_toEdit_st;
-    this.wave_ToEdit.end_date = this.year_toEdit_e + this.month_toEdit_e + this.day_toEdit_e;
+    this.wave_ToEdit.starting_date = this.year_toEdit_st + "/" + this.month_toEdit_st + "/"  + this.day_toEdit_st;
+    this.wave_ToEdit.end_date = this.year_toEdit_e + "/"  + this.month_toEdit_e + "/"  + this.day_toEdit_e;
+    this.wave_ToEdit.trainning_schedule = this.trainning_schedule_hr_st + ":" + this.trainning_schedule_mn_st + " - " + this.trainning_schedule_hr_end + ":" + this.trainning_schedule_mn_end;
+    this.wave_ToEdit.ops_start = this.training_start_year + "/" + this.training_start_month + "/" + this.training_start_day;
     this.apiService.updateWave(this.wave_ToEdit).subscribe((st:string)=>{});
     this.getWavesAll();
   }
@@ -467,6 +477,7 @@ export class HomeComponent implements OnInit {
     this.wave_ToEdit.starting_date = this.year_toEdit_st + "/" + this.month_toEdit_st +  "/" + this.day_toEdit_st;
     this.wave_ToEdit.end_date = this.year_toEdit_e +  "/" + this.month_toEdit_e +  "/" + this.day_toEdit_e;
     this.wave_ToEdit.trainning_schedule = this.trainning_schedule_hr_st + ":" + this.trainning_schedule_mn_st + " - " + this.trainning_schedule_hr_end + ":" + this.trainning_schedule_mn_end;
+    this.wave_ToEdit.ops_start = this.training_start_year + "/" + this.training_start_month + "/" + this.training_start_day;
     this.apiService.insertNewWave(this.wave_ToEdit).subscribe((st:string)=>{
       this.schedules = [new schedules];
       this.add_schedule(st);

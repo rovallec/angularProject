@@ -78,7 +78,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-8">
                                 <label>TrainNing Schedule:</label>
                                 <div class="form-row col-sm-12">
                                     <div class="form-group col-md-6">
@@ -113,6 +113,32 @@
                                                     <option *ngFor="let mn of min_t">{{mn}}</option>
                                                 </select>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label>Training Start:</label>
+                                <div class="form-row col-md-12">
+                                    <label>Date:</label>
+                                    <div class="form-row col-sm-12">
+                                        <div class="form-group col-md-4">
+                                            <label>Day:</label>
+                                            <select class="form-control" [(ngModel)]="training_start_day">
+                                                <option *ngFor="let dy of today_day">{{dy}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Month:</label>
+                                            <select class="form-control" [(ngModel)]="training_start_month">
+                                                <option *ngFor="let mn of today_month">{{mn}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Year:</label>
+                                            <select class="form-control" [(ngModel)]="training_start_year">
+                                                <option *ngFor="let yr of today_year">{{yr}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -350,9 +376,13 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-10">
+                            <div class="form-group col-md-5">
                                 <label>Training Schedule:</label>
                                 <input type="text" class="form-control" [disabled]="true" [(ngModel)]="wave.trainning_schedule">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label>Training Starts:</label>
+                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="wave.ops_start">
                             </div>
                             <div class="form-group col-md-2">
                                 <i class="fas fa-angle-double-down" (click)="getSchedules(wave)"

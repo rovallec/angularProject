@@ -17,6 +17,7 @@ export class waves_template {
     prefix: string;
     state: string;
     account_name: string;
+    ops_start:string;
     show: string;
     constructor() {
         this.idwaves = null;

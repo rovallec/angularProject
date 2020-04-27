@@ -35,6 +35,7 @@ export class RealtimeTrackComponent implements OnInit {
   todayDate:Date = new Date();
 
   selectedDate:number[] = [this.todayDate.getFullYear(), this.todayDate.getMonth() + 1, this.todayDate.getDate()];
+  selectedDateB:number[] = [this.todayDate.getFullYear(), this.todayDate.getMonth() + 1, this.todayDate.getDate()];
   valFilters:string[] = [null];
 
   selectedOption:string = "date";
@@ -69,10 +70,20 @@ export class RealtimeTrackComponent implements OnInit {
   }
 
   pushDays(){
+    this.days = [null];
     for (let i = 0; i < new Date(this.selectedDate[0], this.selectedDate[1], 0).getDate() ; i++) {
-      this.days.push((i+1).toString());
+      if(i == 0){
+        this.days[0] = (i+1).toString();
+      }else{
+        this.days.push((i+1).toString());
+      }
     };
-    this.selectedValue = this.selectedDate[0].toString() + "-" + this.selectedDate[1].toString() + "-" + this.selectedDate[2].toString();
+    if(this.selectedOption == "date"){
+      this.selectedValue = this.selectedDate[0].toString() + "-" + this.selectedDate[1].toString() + "-" + this.selectedDate[2].toString();
+    }
+    if(this.selectedOption == "between"){
+      this.selectedValue = " BETWEEN '" + this.selectedDate[0].toString() + "-" + this.selectedDate[1].toString() + "-" + this.selectedDate[2].toString() + "' AND '" + this.selectedDateB[0].toString() + "-" + this.selectedDateB[1].toString() + "-" + this.selectedDateB[2].toString() + "'";
+    }
   }
 
   fillUpRealTime(){
@@ -81,6 +92,15 @@ export class RealtimeTrackComponent implements OnInit {
     this.realTimeReport[0].filterValue = this.selectedValue;
     this.apiService.getrealTime(this.realTimeReport[0]).subscribe((rlt:realTimeTrack[])=>{
       this.realTimeReport = rlt;
+      if(this.searchOptions[0].value == 'between'){
+        this.searchOptions[0].value = 'date';
+        this.selectedOption = 'date';
+      }
     });
+  }
+
+  changeBetween(){
+    this.selectedOption = 'between';
+    this.searchOptions[0].value = 'between';
   }
 }

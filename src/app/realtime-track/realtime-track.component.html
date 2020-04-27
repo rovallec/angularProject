@@ -11,7 +11,7 @@
                             <option *ngFor="let opt of searchOptions" value={{opt.value}}>{{opt.name}}</option>
                         </Select>
                     </div>
-                    <div class="form-group col-md-3" *ngIf="selectedOption != 'date'">
+                    <div class="form-group col-md-3" *ngIf="selectedOption != 'date' && selectedOption != 'between'">
                         <label>Value:</label>
                         <select class="form-control"
                             *ngIf="selectedOption == 'Recruiter' || selectedOption == 'account' || selectedOption ==  'lastprocessName'" [(ngModel)]="selectedValue">
@@ -23,26 +23,47 @@
                             <option value="IS NULL">N/A</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date'">
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date' || selectedOption == 'between'">
                         <label>YEAR:</label>
                         <select class="form-control" (change)="pushDays()" [(ngModel)]="selectedDate[0]">
                             <option *ngFor="let year of years">{{year}}</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date'">
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date' || selectedOption == 'between'">
                         <label>MONTH:</label>
                         <select class="form-control" (change)="pushDays()" [(ngModel)]="selectedDate[1]">
                             <option *ngFor="let month of months">{{month}}</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date'">
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'date' || selectedOption == 'between'">
                         <label>DAY:</label>
                         <select class="form-control" [(ngModel)]="selectedDate[2]" (change)="pushDays()">
                             <option *ngFor="let day of days">{{day}}</option>
                         </select>
                     </div>
+                    <div class="form-group col-md-0" *ngIf="selectedOption == 'date' || selectedOption == 'between'">
+                        <i class="fas fa-plus-circle" style="margin-top:45px; margin-left:0px"  (click)="changeBetween()"></i>
+                    </div>
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'between'">
+                        <label>YEAR:</label>
+                        <select class="form-control" (change)="pushDays()" [(ngModel)]="selectedDateB[0]">
+                            <option *ngFor="let year of years">{{year}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'between'">
+                        <label>MONTH:</label>
+                        <select class="form-control" (change)="pushDays()" [(ngModel)]="selectedDateB[1]">
+                            <option *ngFor="let month of months">{{month}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1" *ngIf="selectedOption == 'between'">
+                        <label>DAY:</label>
+                        <select class="form-control" [(ngModel)]="selectedDateB[2]" (change)="pushDays()">
+                            <option *ngFor="let day of days">{{day}}</option>
+                        </select>
+                    </div>
                     <div class="form-group col-md-1">
-                        <i i class="fas fa-search" style="margin-top:50%; margin-left:50%" (click)="fillUpRealTime()"></i>
+                        <i i class="fas fa-search" style="margin-top:45px; margin-left:20px" (click)="fillUpRealTime()"></i>
                     </div>
                 </div>
             </div>
