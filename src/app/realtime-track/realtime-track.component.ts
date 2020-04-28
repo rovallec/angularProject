@@ -106,7 +106,12 @@ export class RealtimeTrackComponent implements OnInit {
   }
 
   downloadReport(){
-    this.selectedValue = "BETWEEN_'" + this.selectedDate[0].toString() + "-" + this.selectedDate[1].toString() + "-" + this.selectedDate[2].toString() + "'_AND_'" + this.selectedDateB[0].toString() + "-" + this.selectedDateB[1].toString() + "-" + this.selectedDateB[2].toString() + "'";
+    if(this.selectedOption == 'between'){
+      this.selectedValue = "BETWEEN_'" + this.selectedDate[0].toString() + "-" + this.selectedDate[1].toString() + "-" + this.selectedDate[2].toString() + "'_AND_'" + this.selectedDateB[0].toString() + "-" + this.selectedDateB[1].toString() + "-" + this.selectedDateB[2].toString() + "'";
+    }
+    if(this.selectedValue == 'IS NULL'){
+      this.selectedValue = 'IS_NULL';
+    }
     window.open("http://168.194.75.13/phpscripts/exportRealTrack.php?filter=" + this.selectedOption + "&value=" + this.selectedValue, "_blank");
   }
 }
