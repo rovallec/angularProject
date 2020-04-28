@@ -103,4 +103,16 @@ export class RealtimeTrackComponent implements OnInit {
     this.selectedOption = 'between';
     this.searchOptions[0].value = 'between';
   }
+
+  downloadReport(){
+    this.realTimeReport.push(new realTimeTrack);
+    this.realTimeReport[0].filter = this.selectedOption;
+    this.realTimeReport[0].filterValue = this.selectedValue;
+    this.apiService.downloadRealTimeReport(this.realTimeReport[0]).subscribe((rlt:any)=>{
+      if(this.searchOptions[0].value == 'between'){
+        this.searchOptions[0].value = 'date';
+        this.selectedOption = 'date';
+      }
+    });
+  }
 }

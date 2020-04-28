@@ -178,5 +178,9 @@ getFilteredParam(filter:any){
 getrealTime(rlt:realTimeTrack){
   return this.httpClient.post<realTimeTrack[]>(`${this.PHP_API_SERVER}/phpscripts/getRealTime.php`, rlt);
 }
+
+downloadRealTimeReport(rlt:realTimeTrack){
+  return this.httpClient.post<realTimeTrack[]>(`${this.PHP_API_SERVER}/phpscripts/exportRealTrack.php`, rlt);
+}
   constructor(private httpClient:HttpClient) { }
 }

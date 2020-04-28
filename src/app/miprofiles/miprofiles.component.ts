@@ -96,7 +96,11 @@ export class MiprofilesComponent implements OnInit {
     typing_test: 'N/A',
     psicometric_test: 'N/A',
     IGSS: 'N/A',
-    IRTRA: 'N/A'
+    IRTRA: 'N/A',
+    source:null,
+    post:null,
+    referrer:null,
+    about:null
   }];
 
   toggleEdit_Status: boolean = false;
@@ -330,6 +334,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -346,6 +354,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -362,6 +374,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -378,6 +394,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -394,6 +414,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -410,6 +434,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -426,6 +454,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -442,6 +474,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -458,6 +494,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -474,6 +514,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     },
     {
       idprocesses: ' ',
@@ -490,6 +534,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path: ' ',
       result: ' ',
       notes: ' ',
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     }
   ];
 
@@ -1187,6 +1235,10 @@ export class MiprofilesComponent implements OnInit {
           doc_path:null,
           result:null,
           notes:null,
+          source:null,
+          post:null,
+          referrer:null,
+          about:null
         };
       });
     });
@@ -1211,6 +1263,10 @@ export class MiprofilesComponent implements OnInit {
       doc_path:null,
       result:null,
       notes:null,
+      source:null,
+      post:null,
+      referrer:null,
+      about:null
     };
   };
 

@@ -102,6 +102,7 @@ export class realTimeTrack {
     candidate_status: string;
     filter:string;
     filterValue:string;
+    comment:string;
     constructor(){
         this.date = null;
         this.first_name = null;

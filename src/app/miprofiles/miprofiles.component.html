@@ -1026,7 +1026,7 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label>Notes:</label>
-                                            <textarea class="form-control" width="100%"
+                                            <textarea class="form-control" width="100%" style="height: 190px;"
                                                 [(ngModel)]="fullTestResult[0].notes" #message='ngModel'
                                                 [disabled]="true"></textarea>
                                         </div>
@@ -1093,6 +1093,58 @@
                                         <div class="col-sm-2">
                                             <div class="form-group" style="text-align: center; align-content: center;">
                                                 <a (click)="view_doc(2)"><i class="far fa-eye"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" [disabled]="true"
+                                                    placeholder="Source">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group" style="text-align: center; align-content: center;">
+                                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="fullTestResult[0].source">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" [disabled]="true"
+                                                    placeholder="Post">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group" style="text-align: center; align-content: center;">
+                                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="fullTestResult[0].post">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" [disabled]="true"
+                                                    placeholder="Referrer">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group" style="text-align: center; align-content: center;">
+                                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="fullTestResult[0].referrer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" [disabled]="true"
+                                                    placeholder="About Us">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group" style="text-align: center; align-content: center;">
+                                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="fullTestResult[0].about">
                                             </div>
                                         </div>
                                     </div>
@@ -2534,7 +2586,7 @@
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
                                             <label>Notes:</label>
-                                            <textarea class="form-control" width="100%"
+                                            <textarea class="form-control" width="100%" style="height: 290px;"
                                                 [(ngModel)]="addDoc_proc[0].notes" #message='ngModel'
                                                 [disabled]="!toggleAddend"></textarea>
                                         </div>
@@ -2616,6 +2668,54 @@
                                                     *ngIf="toggleAddend">
                                                 <input type="text" style="background-color: green; color:white"
                                                     *ngIf="!toggleAddend" value="Uploaded" [disabled]='true'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Source:</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group col-md-12">
+                                                <input type="text" class="form-control"  [disabled]="!toggleAddend" [(ngModel)]="addDoc_proc[0].source">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Post:</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group col-md-12">
+                                                <input type="text" class="form-control"  [disabled]="!toggleAddend" [(ngModel)]="addDoc_proc[0].post">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Referrer:</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group col-md-12">
+                                                <input type="text" class="form-control"  [disabled]="!toggleAddend" [(ngModel)]="addDoc_proc[0].referrer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>About Us:</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group col-md-12">
+                                                <input type="text" class="form-control"  [disabled]="!toggleAddend" [(ngModel)]="addDoc_proc[0].about">
                                             </div>
                                         </div>
                                     </div>

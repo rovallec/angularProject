@@ -58,6 +58,10 @@ export class fullDoc_Proc{
     doc_path:string;
     result:string;
     notes:string;
+    source:string;
+    post:string;
+    referrer:string;
+    about:string;
 }
 
 export class queryDoc_Proc{
@@ -76,6 +80,10 @@ export class queryDoc_Proc{
     psicometric_test:string;
     IGSS:string;
     IRTRA:string;
+    source:string;
+    post:string;
+    referrer:string;
+    about:string;
 }
 
 
