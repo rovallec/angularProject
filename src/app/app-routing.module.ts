@@ -7,6 +7,7 @@ import { LoginComponent } from "./login/login.component";
 import { AuthGuard } from './guard/auth-guard.service';
 import { AccdashboardComponent } from './accdashboard/accdashboard.component';
 import { RealtimeTrackComponent } from './realtime-track/realtime-track.component';
+import { RecDailyconvergentReportComponent } from './rec-dailyconvergent-report/rec-dailyconvergent-report.component';
 
 const routes:Routes = [
   {
@@ -17,6 +18,11 @@ const routes:Routes = [
   {
     path:'realtime',
     component:RealtimeTrackComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'dilyconvergent',
+    component:RecDailyconvergentReportComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -182,5 +182,10 @@ getrealTime(rlt:realTimeTrack){
 downloadRealTimeReport(rlt:realTimeTrack){
   return this.httpClient.post<realTimeTrack[]>(`${this.PHP_API_SERVER}/phpscripts/exportRealTrack.php`, rlt);
 }
+
+//Recruitment Daily Report
+getfilteredWaves(flt:any){
+  return this.httpClient.post<waves_template[]>(`${this.PHP_API_SERVER}/phpscripts/getfilteredWaves.php`, flt);
+}
   constructor(private httpClient:HttpClient) { }
 }

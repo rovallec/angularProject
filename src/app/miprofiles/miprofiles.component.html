@@ -2495,14 +2495,10 @@
                                                     *ngIf="!toggleAddend" value="Uploaded" [disabled]='true'>
                                             </div>
                                         </div>
-                                        <div class="col-sm-2">
+                                        <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label>Result:</label>
-                                                <select [(ngModel)]="addDoc_proc[0].doc_res" class="form-control"
-                                                    [disabled]="!toggleAddend">
-                                                    <option>Approved</option>
-                                                    <option>Deny</option>
-                                                </select>
+                                                <label>Approved By:</label>
+                                                <input [(ngModel)]="addDoc_proc[0].doc_res" class="form-control" [disabled]="!toggleAddend">
                                             </div>
                                         </div>
                                     </div>

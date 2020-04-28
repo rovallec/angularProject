@@ -13,7 +13,8 @@ import { LoginComponent } from './login/login.component';
 
 import { AuthGuard } from './guard/auth-guard.service';
 import { AccdashboardComponent } from './accdashboard/accdashboard.component';
-import { RealtimeTrackComponent } from './realtime-track/realtime-track.component'
+import { RealtimeTrackComponent } from './realtime-track/realtime-track.component';
+import { RecDailyconvergentReportComponent } from './rec-dailyconvergent-report/rec-dailyconvergent-report.component'
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { RealtimeTrackComponent } from './realtime-track/realtime-track.componen
     MiprofilesComponent,
     LoginComponent,
     AccdashboardComponent,
-    RealtimeTrackComponent
+    RealtimeTrackComponent,
+    RecDailyconvergentReportComponent
   ],
   imports: [
     BrowserModule,

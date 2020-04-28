@@ -9,7 +9,7 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
-      <li>
+      <li class="no_background">
         <div style="width: 80px">
 
         </div>
@@ -26,6 +26,9 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="#">Payroll</a>
         </div>
+      </li>
+      <li *ngIf="getAuth()" class="nav-item active">
+        <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/dilyconvergent" style="color: white">DAILY CONVERGENT</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
