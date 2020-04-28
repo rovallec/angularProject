@@ -88,6 +88,7 @@ export class RealtimeTrackComponent implements OnInit {
   }
 
   fillUpRealTime(){
+    this.realTimeReport = [new realTimeTrack];
     this.realTimeReport.push(new realTimeTrack);
     this.realTimeReport[0].filter = this.selectedOption;
     this.realTimeReport[0].filterValue = this.selectedValue;
