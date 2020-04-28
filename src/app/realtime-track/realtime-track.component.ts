@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { Router } from '@angular/router';
 import { realTimeTrack } from '../process_templates';
+import { saveAs } from 'file-saver/dist/FileSaver';
 
 @Component({
   selector: 'app-realtime-track',
@@ -105,14 +106,7 @@ export class RealtimeTrackComponent implements OnInit {
   }
 
   downloadReport(){
-    this.realTimeReport.push(new realTimeTrack);
-    this.realTimeReport[0].filter = this.selectedOption;
-    this.realTimeReport[0].filterValue = this.selectedValue;
-    this.apiService.downloadRealTimeReport(this.realTimeReport[0]).subscribe((rlt:any)=>{
-      if(this.searchOptions[0].value == 'between'){
-        this.searchOptions[0].value = 'date';
-        this.selectedOption = 'date';
-      }
-    });
+    this.selectedValue = "BETWEEN_'" + this.selectedDate[0].toString() + "-" + this.selectedDate[1].toString() + "-" + this.selectedDate[2].toString() + "'_AND_'" + this.selectedDateB[0].toString() + "-" + this.selectedDateB[1].toString() + "-" + this.selectedDateB[2].toString() + "'";
+    window.open("http://168.194.75.13/phpscripts/exportRealTrack.php?filter=" + this.selectedOption + "&value=" + this.selectedValue, "_blank");
   }
 }
