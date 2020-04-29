@@ -187,7 +187,7 @@ export class HomeComponent implements OnInit {
 
   updateApproved(profil:profiles){
     this.updateOngoing = 'true';
-    profil['status']='approved';
+    profil['status']='APPROVED';
 
     this.procAdd.id_user = this.authSrv.getAuthusr().iduser;
     this.procAdd.id_role = this.authSrv.getAuthusr().id_role;

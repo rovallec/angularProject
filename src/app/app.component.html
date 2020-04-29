@@ -15,20 +15,23 @@
         </div>
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
-        <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/rehome" style="color: white">HOME</a>
+        <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/rehome" style="color: white" [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
         <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/achome" style="color: white">HOME</a>
       </li>
       <li class="nav-item dropdown" *ngIf="getAuth()">
         <a *ngIf="getSaved().department == '4'" style="color: white" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           IMPORT
         </a>
-        <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/realtime" style="color: white">REAL TIME</a>
+        <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/realtime" style="color: white"  [ngClass]="{'act':selectedOption=='REAL'}" (click)="SetSel('REAL')">REAL TIME</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="#">Payroll</a>
         </div>
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
-        <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/dilyconvergent" style="color: white">DAILY CONVERGENT</a>
+        <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/dilyconvergent" style="color: white"  [ngClass]="{'act':selectedOption=='DAILY'}" (click)="SetSel('DAILY')">DAILY CONVERGENT</a>
+      </li>
+      <li *ngIf="getAuth()" class="nav-item active">
+        <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/classlist" style="color: white" [ngClass]="{'act':selectedOption=='CLASS'}" (click)="SetSel('CLASS')">CLASS LIST</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">

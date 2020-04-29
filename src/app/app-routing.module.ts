@@ -8,6 +8,7 @@ import { AuthGuard } from './guard/auth-guard.service';
 import { AccdashboardComponent } from './accdashboard/accdashboard.component';
 import { RealtimeTrackComponent } from './realtime-track/realtime-track.component';
 import { RecDailyconvergentReportComponent } from './rec-dailyconvergent-report/rec-dailyconvergent-report.component';
+import { CalllistreportComponent } from './calllistreport/calllistreport.component';
 
 const routes:Routes = [
   {
@@ -23,6 +24,11 @@ const routes:Routes = [
   {
     path:'dilyconvergent',
     component:RecDailyconvergentReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'classlist',
+    component:CalllistreportComponent,
     canActivate: [AuthGuard]
   },
   {

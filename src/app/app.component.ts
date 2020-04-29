@@ -21,6 +21,7 @@ export class AppComponent {
     password:'N/A',
     id_role:'N/A'
   };
+  selectedOption:string = 'HOME';
 
   constructor(private authSrv:AuthServiceService){
   }
@@ -34,4 +35,7 @@ export class AppComponent {
       return this.authSrv.getAuthusr();
     }
   };
+  SetSel(sel:string){
+    this.selectedOption = sel;
+  }
 }

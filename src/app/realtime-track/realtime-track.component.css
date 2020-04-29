@@ -1,6 +1,5 @@
 tr{
     height: 10px;
-    cursor: pointer;
 }
 thead{
     line-height: 0;
@@ -26,7 +25,8 @@ tbody td{
     border-width: 1px;
     border-right-color: rgb(233, 232, 232);
 }
-tbody tr{
+table .table-striped tbody tr {
+    cursor: pointer;
     font-size:12px;
 }
 i{
