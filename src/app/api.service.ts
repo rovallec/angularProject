@@ -79,7 +79,7 @@ getSearchProfile(srch:any){
 
 getFilterSchHires(sch:schedules){
   return this.httpClient.post<hires_template[]>(`${this.PHP_API_SERVER}/phpscripts/getschHires.php`, sch);
-}
+} 
 
 getUsers(wv:waves_template){
   return this.httpClient.post<users[]>(`${this.PHP_API_SERVER}/phpscripts/getUsers.php`, wv);

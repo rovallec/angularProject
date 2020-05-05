@@ -15,7 +15,8 @@ import { AuthGuard } from './guard/auth-guard.service';
 import { AccdashboardComponent } from './accdashboard/accdashboard.component';
 import { RealtimeTrackComponent } from './realtime-track/realtime-track.component';
 import { RecDailyconvergentReportComponent } from './rec-dailyconvergent-report/rec-dailyconvergent-report.component';
-import { CalllistreportComponent } from './calllistreport/calllistreport.component'
+import { CalllistreportComponent } from './calllistreport/calllistreport.component';
+import { HrhomeComponent } from './hrhome/hrhome.component'
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { CalllistreportComponent } from './calllistreport/calllistreport.compone
     AccdashboardComponent,
     RealtimeTrackComponent,
     RecDailyconvergentReportComponent,
-    CalllistreportComponent
+    CalllistreportComponent,
+    HrhomeComponent
   ],
   imports: [
     BrowserModule,

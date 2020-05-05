@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
 
   end_wave_edit:boolean;
 
-  schedules:schedules[] = [new schedules];
+  schedules:schedules[] = [];
 
   prof_ps:profiles[];
   prof_a:profiles[];
@@ -466,11 +466,13 @@ export class HomeComponent implements OnInit {
   }
 
   insertSchedule(){
+    const lstIndex:string = this.wave_ToEdit.idwaves;
     this.schedule_to_edit.days_off = this.day1_off + "," + this.day2_off;
     this.schedule_to_edit.start_time = this.sch_hrs_st + ":" + this.sch_min_st + ":00";
     this.schedule_to_edit.end_time = this.sch_hrs_e + ":" + this.sch_min_e + ":00";
     this.apiService.insertNewSchedule(this.schedule_to_edit).subscribe((st:string)=>{});
     this.add_new_schedule = false;
+    this.wave_ToEdit.idwaves = lstIndex;
   }
 
   insertWave(){
@@ -479,7 +481,8 @@ export class HomeComponent implements OnInit {
     this.wave_ToEdit.trainning_schedule = this.trainning_schedule_hr_st + ":" + this.trainning_schedule_mn_st + " - " + this.trainning_schedule_hr_end + ":" + this.trainning_schedule_mn_end;
     this.wave_ToEdit.ops_start = this.training_start_year + "/" + this.training_start_month + "/" + this.training_start_day;
     this.apiService.insertNewWave(this.wave_ToEdit).subscribe((st:string)=>{
-      this.schedules = [new schedules];
+      this.schedules = [];
+      this.wave_ToEdit.idwaves = st;
       this.add_schedule(st);
     });
     this.add_new_wave = false;
