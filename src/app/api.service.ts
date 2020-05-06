@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 import { profiles } from './profiles';
 import { process } from './process';
@@ -186,6 +186,12 @@ downloadRealTimeReport(rlt:realTimeTrack){
 //Recruitment Daily Report
 getfilteredWaves(flt:any){
   return this.httpClient.post<waves_template[]>(`${this.PHP_API_SERVER}/phpscripts/getfilteredWaves.php`, flt);
+}
+
+//HR
+
+getHiresAsEmployees(flt:any){
+  return this.httpClient.post<hires_template[]>(`${this.PHP_API_SERVER}/phpscripts/getHiresToEmployees.php`, flt);
 }
   constructor(private httpClient:HttpClient) { }
 }

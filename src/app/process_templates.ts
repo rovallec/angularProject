@@ -46,6 +46,8 @@ export class hires_template {
     second_lastname: string;
     status: string;
     id_schedule: string;
+    client_id:string;
+    idemployees:string;
 }
 
 export class accounts {
