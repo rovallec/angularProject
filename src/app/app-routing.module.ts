@@ -10,6 +10,7 @@ import { RealtimeTrackComponent } from './realtime-track/realtime-track.componen
 import { RecDailyconvergentReportComponent } from './rec-dailyconvergent-report/rec-dailyconvergent-report.component';
 import { CalllistreportComponent } from './calllistreport/calllistreport.component';
 import { HrhomeComponent } from './hrhome/hrhome.component';
+import { HrprofilesComponent } from './hrprofiles/hrprofiles.component';
 
 const routes:Routes = [
   {
@@ -48,6 +49,11 @@ const routes:Routes = [
   {
     path:'profiles/:id',
     component: MiprofilesComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'hrprofiles/:id',
+    component: HrprofilesComponent,
     canActivate:[AuthGuard]
   },
   {

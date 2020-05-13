@@ -48,6 +48,9 @@ export class hires_template {
     id_schedule: string;
     client_id:string;
     idemployees:string;
+    reporter:string;
+    day_off1:string;
+    day_off2:string;
 }
 
 export class accounts {
@@ -124,5 +127,40 @@ export class realTimeTrack {
         this.candidate_status = null;
         this.filter = null;
         this.filterValue = null;
+    }
+}
+
+export class attendences{
+    idattendences:string;
+    id_employee:string;
+    nearsol_id:string;
+    client_id:string;
+    first_name: string;
+    second_name: string;
+    first_lastname: string;
+    second_lastname: string;
+    date:string;
+    scheduled:string;
+    worked_time:string;
+    day_off1:string;
+    day_off2:string;
+    status:string;
+    id_wave:string;
+    constructor(){
+        this.idattendences = null;
+        this.id_employee = null;
+        this.date = null;
+        this.scheduled = null;
+        this.worked_time = null;
+        this.nearsol_id = null;
+        this.client_id = null;
+        this.first_name = null;
+        this.second_name = null;
+        this.first_lastname = null;
+        this.second_lastname = null;
+        this.day_off1 = null;
+        this.day_off2 = null;    
+        this.status = null;
+        this.id_wave = null;
     }
 }

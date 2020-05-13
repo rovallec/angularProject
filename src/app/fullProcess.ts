@@ -147,3 +147,59 @@ export class coincidences{
         this.status = null;
     }
 }
+
+export class employees{
+    idemployees:string;
+    id_hire:string;
+    id_account:string;
+    reporter:string;
+    client_id:string;
+    hiring_date:string;
+    job:string;
+    salary:string;
+    state:string;
+    id_user:string;
+    id_department:string;
+    name:string;
+    account:string;
+    constructor(){
+        this.idemployees = null;
+        this.id_hire = null;
+        this.id_account = null;
+        this.reporter = null;
+        this.client_id = null;
+        this.hiring_date = null;
+        this.job = null;
+        this.salary = null;
+        this.state = null;
+        this.name = null;
+        this.account = null;
+    }
+}
+
+export class hrProcess{
+    idhr_process:string;
+    id_user:string;
+    user_name:string;
+    id_employee:string;
+    employee:string;
+    id_type:string;
+    name:string;
+    id_department:string;
+    date:string;
+    notes:string;
+    status:string;
+    constructor(){
+        this.idhr_process = null;
+        this.id_user = null;
+        this.user_name = null;
+        this.id_employee = null;
+        this.employee = null;
+        this.id_type = null;
+        this.name = null;
+        this.id_department = null;
+        this.date = null;
+        this.notes = null;
+        this.status = null;
+    }
+}

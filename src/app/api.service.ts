@@ -3,8 +3,8 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 import { profiles } from './profiles';
 import { process } from './process';
-import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack } from './process_templates';
+import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess } from './fullProcess';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences } from './process_templates';
 
 import { Observable } from 'rxjs'; 
 import { users } from './users';
@@ -192,6 +192,30 @@ getfilteredWaves(flt:any){
 
 getHiresAsEmployees(flt:any){
   return this.httpClient.post<hires_template[]>(`${this.PHP_API_SERVER}/phpscripts/getHiresToEmployees.php`, flt);
+}
+
+insertEmployees(emp:employees[]){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertEmployees.php`, emp);
+}
+
+getAttendences(flt:any){
+  return this.httpClient.post<attendences[]>(`${this.PHP_API_SERVER}/phpscripts/getAttendences.php`, flt);
+}
+
+insertAttendences(att:attendences[]){
+  return this.httpClient.post<attendences[]>(`${this.PHP_API_SERVER}/phpscripts/insertAttendences.php`, att);
+}
+
+updateWaveState(wv:waves_template){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateWaveState.php`, wv);
+}
+
+getallEmployees(){
+  return this.httpClient.get<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getallEmployees.php`);
+}
+
+getallHrProcesses(){
+  return this.httpClient.get<hrProcess[]>(`${this.PHP_API_SERVER}/phpscripts/getallHrProcesses.php`);
 }
   constructor(private httpClient:HttpClient) { }
 }

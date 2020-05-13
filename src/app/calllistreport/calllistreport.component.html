@@ -35,8 +35,8 @@
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label>Waves:</label>
-                                <select class="form-control" *ngFor="let wv of waves" [(ngModel)]="selectedWave" (change)="changedWave()">
-                                    <option [ngValue]="wv">{{wv.account}} {{wv.name}}</option>
+                                <select class="form-control" [(ngModel)]="selectedWave" (change)="changedWave()">
+                                    <option [ngValue]="wv"  *ngFor="let wv of waves" >{{wv.account}} {{wv.name}}</option>
                                 </select>
                             </div>
                         </div>
