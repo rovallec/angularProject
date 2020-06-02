@@ -149,6 +149,7 @@ export class coincidences{
 }
 
 export class employees{
+    id_profile:string;
     idemployees:string;
     id_hire:string;
     id_account:string;
@@ -163,6 +164,7 @@ export class employees{
     name:string;
     account:string;
     constructor(){
+        this.id_profile = null;
         this.idemployees = null;
         this.id_hire = null;
         this.id_account = null;

@@ -17,7 +17,7 @@ export class waves_template {
     prefix: string;
     state: string;
     account_name: string;
-    ops_start:string;
+    ops_start: string;
     show: string;
     constructor() {
         this.idwaves = null;
@@ -46,11 +46,11 @@ export class hires_template {
     second_lastname: string;
     status: string;
     id_schedule: string;
-    client_id:string;
-    idemployees:string;
-    reporter:string;
-    day_off1:string;
-    day_off2:string;
+    client_id: string;
+    idemployees: string;
+    reporter: string;
+    day_off1: string;
+    day_off2: string;
 }
 
 export class accounts {
@@ -89,7 +89,7 @@ export class schedules {
 }
 
 export class realTimeTrack {
-    date:string;
+    date: string;
     first_name: string;
     second_name: string;
     first_lastname: string;
@@ -105,10 +105,10 @@ export class realTimeTrack {
     account: string;
     startingDate: string;
     candidate_status: string;
-    filter:string;
-    filterValue:string;
-    comment:string;
-    constructor(){
+    filter: string;
+    filterValue: string;
+    comment: string;
+    constructor() {
         this.date = null;
         this.first_name = null;
         this.second_name = null;
@@ -130,23 +130,24 @@ export class realTimeTrack {
     }
 }
 
-export class attendences{
-    idattendences:string;
-    id_employee:string;
-    nearsol_id:string;
-    client_id:string;
+export class attendences {
+    idattendences: string;
+    id_employee: string;
+    nearsol_id: string;
+    client_id: string;
     first_name: string;
     second_name: string;
     first_lastname: string;
     second_lastname: string;
-    date:string;
-    scheduled:string;
-    worked_time:string;
-    day_off1:string;
-    day_off2:string;
-    status:string;
-    id_wave:string;
-    constructor(){
+    date: string;
+    scheduled: string;
+    worked_time: string;
+    day_off1: string;
+    day_off2: string;
+    status: string;
+    id_wave: string;
+    balance: string;
+    constructor() {
         this.idattendences = null;
         this.id_employee = null;
         this.date = null;
@@ -159,8 +160,52 @@ export class attendences{
         this.first_lastname = null;
         this.second_lastname = null;
         this.day_off1 = null;
-        this.day_off2 = null;    
+        this.day_off2 = null;
         this.status = null;
         this.id_wave = null;
+        this.balance = null;
+    }
+}
+
+export class attendences_adjustment {
+    //adjustments
+    idattendence_adjustemnt: string;
+    id_attendence: string;
+    id_justification: string;
+    time_before: string;
+    time_after: string;
+    amount: string;
+    state: string;
+    //justifications
+    id_process: string;
+    reason: string;
+    //processes
+    id_user: string;
+    id_employee: string;
+    id_type: string;
+    id_department: string;
+    date: string;
+    notes: string;
+    status: string;
+    constructor() {
+        //adjustments
+        this.idattendence_adjustemnt = null;
+        this.id_attendence = null;
+        this.id_justification = null;
+        this.time_before = null;;
+        this.time_after = null;
+        this.amount = null;
+        this.state = null;
+        //justifications
+        this.id_process = null;
+        this.reason = null;
+        //processes
+        this.id_user = null;
+        this.id_employee = null;
+        this.id_type = null;
+        this.id_department = null;
+        this.date = null;
+        this.notes = null;
+        this.status = null;
     }
 }

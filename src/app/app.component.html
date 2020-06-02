@@ -16,7 +16,9 @@
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/rehome" style="color: white" [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
-        <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/achome" style="color: white">HOME</a>
+        <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/achome" style="color: white" [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
+        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/hrhome" style="color: white" [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
+
       </li>
       <li class="nav-item dropdown" *ngIf="getAuth()">
         <a *ngIf="getSaved().department == '4'" style="color: white" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

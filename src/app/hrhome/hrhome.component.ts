@@ -18,6 +18,10 @@ export class HrhomeComponent implements OnInit {
   showAttendenceDetails:boolean[] = [];
   makeEmployee:boolean = false;
   toggleDate:boolean = false;
+  searching:boolean = false;
+  
+  filter:string = null;
+  value:string = null;
 
   allEmployees:employees[] = [];
   allProcesses:hrProcess[] = [];
@@ -70,7 +74,7 @@ export class HrhomeComponent implements OnInit {
   }
 
   gotoProfile(emp:employees){
-    this.route.navigate(['./hrprofiles', emp.idemployees]);
+    this.route.navigate(['./hrprofiles', emp.id_profile]);
   }
 
   showWave(wv:waves_template){
@@ -213,5 +217,17 @@ export class HrhomeComponent implements OnInit {
     this.apiService.insertAttendences(insertAttendences).subscribe((at:attendences[])=>{
       this.emplAttendences = at;
     })
+  }
+
+  searchEmployee(){
+    this.apiService.getSearchEmployees({filter:this.filter, value:this.value}).subscribe((emp:employees[])=>{
+      this.allEmployees = emp;
+    });
+    this.searching = true;
+  }
+
+  cancelSearch(){
+    this.searching = false;
+    this.start();
   }
 }
