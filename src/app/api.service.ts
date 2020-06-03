@@ -22,7 +22,7 @@ id_profile:number;
 PHP_API_SERVER = "http://168.194.75.13";
 
 readProfiles():Observable<profiles[]>{
-  return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/minearsol/read_profiles.php`);
+  return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
 }
 
 readFilteredProfiles(parameters:search_parameters[]):Observable<profiles[]>{
@@ -30,7 +30,7 @@ readFilteredProfiles(parameters:search_parameters[]):Observable<profiles[]>{
 }
 
 readApproved():Observable<profiles[]>{
-  return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/minearsol/read_approved.php`);
+  return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_approved.php`);
 }
 
 readFilteredProfiles_Apr(parameters:search_parameters[]):Observable<profiles[]>{
@@ -38,7 +38,7 @@ readFilteredProfiles_Apr(parameters:search_parameters[]):Observable<profiles[]>{
 }
 
 readRejected():Observable<profiles[]>{
-  return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/minearsol/read_rejected.php`);
+  return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_rejected.php`);
 }
 
 readFilteredProfiles_Den(parameters:search_parameters[]):Observable<profiles[]>{
@@ -90,7 +90,7 @@ getSchedules(wv:waves_template){
 }
 
 changeStatus(prof:profiles):Observable<number>{
-  return this.httpClient.post<number>(`${this.PHP_API_SERVER}/minearsol/update_status.php`,prof);
+  return this.httpClient.post<number>(`${this.PHP_API_SERVER}/phpscripts/update_status.php`,prof);
 }
 
 getCoincidences(prof:profiles){
@@ -98,7 +98,7 @@ getCoincidences(prof:profiles){
 }
 
 getProfile(prof:profiles):Observable<profiles[]>{
-  return this.httpClient.post<profiles[]>(`${this.PHP_API_SERVER}/minearsol/full_query.php`, prof);
+  return this.httpClient.post<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/full_query.php`, prof);
 }
 
 authUsr(users:users):Observable<users[]>{

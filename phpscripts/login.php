@@ -14,7 +14,7 @@ if(isset($postdata)&&!empty($postdata)){
 
 
 
-define('db_host', '172.18.2.45');
+define('db_host', 'localhost');
 define('db_user', $usr);
 define('db_password', $pss);
 define('db_name','minearsol');
