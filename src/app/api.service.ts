@@ -19,7 +19,7 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-PHP_API_SERVER = "http://168.194.75.13";
+PHP_API_SERVER = "localhost";
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/minearsol/read_profiles.php`);
