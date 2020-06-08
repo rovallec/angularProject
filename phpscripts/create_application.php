@@ -73,8 +73,12 @@ header('Access-Control-Allow-Headers: *');
 							$degree = ($request->degree);
 
 							$sql6 = "INSERT INTO `education_details`(`id_profile`, `current_level`, `further_education`, `currently_studing`, `institution_name`, `degree`) VALUES ('{$id_profile}', '{$current_level}', '{$futher_education}','{$currently_studing}', '{$institution_name}','{$degree}');";
-							http_response_code(200);
-							echo $id_profile;
+							if(mysqli_query($con,$sql6)){
+								http_response_code(200);
+								echo $id_profile;
+							}else{
+								http_response_code(400);
+							}
 						}else{
 							http_response_code(400);
 						}
