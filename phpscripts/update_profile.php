@@ -64,11 +64,11 @@ header('Access-Control-Allow-Headers: *');
 						$medical_treatment = ($request->medical_treatment);
 						$medical_prescription = ($request->medical_prescription);
 
-						$sql5 = "UPDATE `medical_details` SET `medical_treatment` = '{$medical_treatment}', `medical_prescription` = '{$medical_prescription}' WHERE `id_profile` = '{$idprofiles}';" 
+						$sql5 = "UPDATE `medical_details` SET `medical_treatment` = '{$medical_treatment}', `medical_prescription` = '{$medical_prescription}' WHERE `id_profile` = '{$idprofiles}';" ;
 
 						if(mysqli_query($con,$sql5)){
 								http_response_code(200);
-								echo $id_profile;
+								echo json_encode($request);
 						}else{
 							http_response_code(400);
 						}
