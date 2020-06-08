@@ -23,7 +23,7 @@ export class MiprofilesComponent implements OnInit {
   coincidences: coincidences[] = [new coincidences];
 
   toggle_contact: boolean = true;
-  toggle_profile: boolean = true;
+  toggle_profile: boolean = false;
   toggle_job: boolean = true;
   toggle_details: boolean = true;
   toggle_emergency: boolean = true;
@@ -742,7 +742,20 @@ export class MiprofilesComponent implements OnInit {
   }
 
   toggle_profile_edit() {
-    this.toggle_profile = !this.toggle_profile
+    this.toggle_profile = true;
+  }
+
+  end_editProfile(){
+    this.prof_getted[0].first_name = this.profile_full_name.split(' ')[0];
+    this.prof_getted[0].second_name = this.profile_full_name.split(' ')[1];
+    this.prof_getted[0].first_lastname = this.profile_full_name.split(' ')[2];
+    this.prof_getted[0].second_lastname = this.profile_full_name.split(' ')[3];
+    
+    this.apiservice.updateProfile(this.prof_getted[0]).subscribe((prof:profiles)=>{
+      this.prof_getted[0] = prof;
+    });
+
+    this.toggle_profile = false;
   }
 
   toggle_job_edit() {

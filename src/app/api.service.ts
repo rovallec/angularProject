@@ -188,6 +188,11 @@ getfilteredWaves(flt:any){
   return this.httpClient.post<waves_template[]>(`${this.PHP_API_SERVER}/phpscripts/getfilteredWaves.php`, flt);
 }
 
+//Edit Profile
+updateProfile(prof:profiles){
+  return this.httpClient.post<profiles>(`${this.PHP_API_SERVER}/phpscripts/update_profile.php`, prof);
+}
+
 //HR
 
 getHiresAsEmployees(flt:any){

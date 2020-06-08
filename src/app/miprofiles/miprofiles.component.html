@@ -30,17 +30,6 @@
                             [(ngModel)]="prof_getted[0].nationality" [disabled]=toggle_profile>
                     </div>
                 </div>
-                <div class="form-row" style="margin-top:20px" [hidden]=toggle_profile>
-                    <div class="form-group col-md-2">
-                        <button class="form-control">Cancel</button>
-                    </div>
-                    <div class="form-group col-md-8">
-
-                    </div>
-                    <div class="form-group col-md-2">
-                        <button class="form-control">Apply</button>
-                    </div>
-                </div>
             </div>
             <div class="form-row">
                 <ul class="progressbar" style="width:100%;">
@@ -55,6 +44,8 @@
                     <li [ngClass]="{'active':pross[8] === true}">Campaign Assignation</li>
                     <li [ngClass]="{'active':pross[9] === true}">New Hire</li>
                 </ul>
+                <i class="fas fa-edit" style="padding-left:7px" (click)="toggle_profile_edit()" *ngIf='!toggle_profile'></i>
+                <i _ngcontent-oub-c2="" class="fas fa-check-circle" (click)="end_editProfile()" *ngIf='toggle_profile'></i>
             </div>
     </tr>
     <!------------------------------------------------------------------------    Show Procedures Tab --------------------------------------------------------->
@@ -3142,31 +3133,31 @@
                                 <div class="form-group col-md-6">
                                     <label for="txt_primary_phone">Primary Phone Number:</label>
                                     <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                        [(ngModel)]="prof_getted[0].primary_phone" [disabled]=toggle_contact>
+                                        [(ngModel)]="prof_getted[0].primary_phone" [disabled]=!toggle_profile>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="txt_secondary_phone">Secondary Phone Number:</label>
                                     <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                        [(ngModel)]="prof_getted[0].secondary_phone" [disabled]=toggle_contact>
+                                        [(ngModel)]="prof_getted[0].secondary_phone" [disabled]=!toggle_profile>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="txt_address">Address:</label>
                                     <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                        [(ngModel)]="prof_getted[0].address" [disabled]=toggle_contact>
+                                        [(ngModel)]="prof_getted[0].address" [disabled]=!toggle_profile>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="txt_city">City:</label>
                                     <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                        [(ngModel)]="prof_getted[0].city" [disabled]=toggle_contact>
+                                        [(ngModel)]="prof_getted[0].city" [disabled]=!toggle_profile>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="txt_email">Email Address:</label>
                                     <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                        [(ngModel)]="prof_getted[0].email" [disabled]=toggle_contact>
+                                        [(ngModel)]="prof_getted[0].email" [disabled]=!toggle_profile>
                                 </div>
                             </div>
                             <div class="form-row" style="margin-top:20px" [hidden]=toggle_contact>
@@ -3190,22 +3181,22 @@
                             <div class="form-group col-md-3">
                                 <label for="txt_company">Company:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="jb_prof.company" [disabled]=toggle_job>
+                                    [(ngModel)]="jb_prof.company" [disabled]=true>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="txt_joining">Date of Joining:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="jb_prof.date_joining" [disabled]=toggle_job>
+                                    [(ngModel)]="jb_prof.date_joining" [disabled]=true>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="txt_position">Position:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="jb_prof.position" [disabled]=toggle_job>
+                                    [(ngModel)]="jb_prof.position" [disabled]=true>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="txt_working">Working:</label>
                                 <select class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="jb_prof.working" [disabled]=toggle_job>
+                                    [(ngModel)]="jb_prof.working" [disabled]=true>
                                     <option>Yes</option>
                                     <option>No</option>
                                 </select>
@@ -3215,22 +3206,22 @@
                             <div class="form-group col-md-3">
                                 <label for="txt_reference_name">Reference Name:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="jb_prof.reference_name" [disabled]=toggle_job>
+                                    [(ngModel)]="jb_prof.reference_name" [disabled]=true>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="txt_reference_position">Reference Position:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="jb_prof.reference_lastname" [disabled]=toggle_job>
+                                    [(ngModel)]="jb_prof.reference_lastname" [disabled]=true>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="txt_reference_mail">Reference Email</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="jb_prof.reference_email" [disabled]=toggle_job>
+                                    [(ngModel)]="jb_prof.reference_email" [disabled]=true>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="txt_reference_phone">Reference Phone:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="jb_prof.reference_phone" [disabled]=toggle_job>
+                                    [(ngModel)]="jb_prof.reference_phone" [disabled]=true>
                             </div>
                         </div>
                         <div class="form-row" style="margin-top:20px" [hidden]=toggle_job>
@@ -3252,46 +3243,46 @@
                             <div class="form-group col-md-4">
                                 <label for="txt_englis_level">English Level:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].english_level" [disabled]=toggle_details>
+                                    [(ngModel)]="prof_getted[0].english_level" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="txt_transport">Arrival Method:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].transport" [disabled]=toggle_details>
+                                    [(ngModel)]="prof_getted[0].transport" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="txt_marketing">Marketing Campaing:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].marketing_campaing" [disabled]=toggle_details>
+                                    [(ngModel)]="prof_getted[0].marketing_campaing" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="txt_start_date">Starting Date:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].start_date" [disabled]=toggle_details>
+                                    [(ngModel)]="prof_getted[0].start_date" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="txt_unavailable">Unavailable Days:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].unavialable_days" [disabled]=toggle_details>
+                                    [(ngModel)]="prof_getted[0].unavialable_days" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="txt_first_lenguage">First lenguage:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].first_lenguage" [disabled]=toggle_details>
+                                    [(ngModel)]="prof_getted[0].first_lenguage" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="txt_second_lenguage">Second lenguage:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].second_lenguage" [disabled]=toggle_details>
+                                    [(ngModel)]="prof_getted[0].second_lenguage" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="txt_third_lenguage">Third lenguage:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].third_lenguage" [disabled]=toggle_details>
+                                    [(ngModel)]="prof_getted[0].third_lenguage" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row" style="margin-top:20px" [hidden]=toggle_details>
@@ -3312,36 +3303,36 @@
                             <div class="form-group col-md-6">
                                 <label for="txt_emergency_fristName">Contact's First Name:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].emergency_first_name" [disabled]=toggle_emergency>
+                                    [(ngModel)]="prof_getted[0].emergency_first_name" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="txt_emergency_secondName">Contact's Middle Name:</label>
                                 <input class="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].emergency_second_name" [disabled]=toggle_emergency>
+                                    [(ngModel)]="prof_getted[0].emergency_second_name" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="txt_emergency_lastname">Contact's First Lastname:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].emergency_first_lastname" [disabled]=toggle_emergency>
+                                    [(ngModel)]="prof_getted[0].emergency_first_lastname" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="txt_emergency_secondLastname">Contact's Second Lastname:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].emergency_second_lastname" [disabled]=toggle_emergency>
+                                    [(ngModel)]="prof_getted[0].emergency_second_lastname" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="txt_emergency_phone">Phone Number:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].phone" [disabled]=toggle_emergency>
+                                    [(ngModel)]="prof_getted[0].phone" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="txt_emergency_relationship">Relationship</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].relationship" [disabled]=toggle_emergency>
+                                    [(ngModel)]="prof_getted[0].relationship" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row" style="margin-top:20px" [hidden]=toggle_emergency>
@@ -3362,14 +3353,14 @@
                             <div class="form-group col-md-12">
                                 <label for="txt_medical_treatment">Medical Treatment:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].medical_treatment" [disabled]=toggle_medical>
+                                    [(ngModel)]="prof_getted[0].medical_treatment" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-gropu col-md-12">
                                 <label for="txt_medical_condition">Medical Prescription</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].medical_prescription" [disabled]=toggle_medical>
+                                    [(ngModel)]="prof_getted[0].medical_prescription" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row" style="margin-top:20px" [hidden]=toggle_medical>
@@ -3390,29 +3381,29 @@
                             <div class="form-group col-md-6">
                                 <label for="txt_current">Current Education:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].current_level" [disabled]=toggle_education>
+                                    [(ngModel)]="prof_getted[0].current_level" [disabled]=true>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="txt_further">Further Education::</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].further_education" [disabled]=toggle_education>
+                                    [(ngModel)]="prof_getted[0].further_education" [disabled]=true>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-4">
                                 <label for="txt_studing">Currently Studing:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].currently_studing" [disabled]=toggle_education>
+                                    [(ngModel)]="prof_getted[0].currently_studing" [disabled]=true>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="txt_inst">Institution Name:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].institution_name" [disabled]=toggle_education>
+                                    [(ngModel)]="prof_getted[0].institution_name" [disabled]=true>
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="txt_degree">Degree</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
-                                    [(ngModel)]="prof_getted[0].degree" [disabled]=toggle_education>
+                                    [(ngModel)]="prof_getted[0].degree" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row" style="margin-top:20px" [hidden]=toggle_education>
