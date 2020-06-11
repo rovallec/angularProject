@@ -57,8 +57,11 @@ header('Access-Control-Allow-Headers: *');
                         $sql5 = "SELECT * FROM `hires` WHERE `id_wave` = '$id_wave';";
                         $i = 0;
                         if($result2 = mysqli_query($con, $sql5)){
-                            $i = mysqli_num_rows($result2);
-                            $sql7 = "UPDATE `waves` SET `hires`= '$i' WHERE `idwaves` = '$id_wave';";
+                            while($row2 = mysqli_fetch_assoc($result2)){
+                                $i++;
+                            }
+                            $i = $i - 1;
+                            $sql7 = "UPDATE `waves` SET `hires`= '{$i}' WHERE `idwaves` = '$id_wave';";
                             if(mysqli_query($con,$sql7)){
                                 $sql8 = "SELECT * FROM `hires` WHERE `id_schedule` = '$id_schedule';";
                                 $i = 0;
@@ -74,25 +77,29 @@ header('Access-Control-Allow-Headers: *');
                                                 if(mysqli_query($con,$sql11)){
                                                     $sql6 = "DELETE FROM `hires` WHERE `idhires` = $id_hire;";
                                                     if(mysqli_query($con,$sql6)){
-                                                        $sql_prefix = "SELECT * FROM `waves` WHERE `idwaves` = '$id_wave';";
-                                                        if($pref_res = mysqli_query($con, $sql_prefix)){
-                                                            $prefix_row = mysqli_fetch_assoc($pref_res);
-                                                            $prefix = $prefix_row['prefix'];
+                                                        http_response_code(404);
+                                                        $sql_search_prefix = "SELECT * FROM `waves` WHERE `idwaves` = '$id_wave'";
+                                                        if($prf_result = (mysqli_query($con,$sql_search_prefix))){
+                                                            while($rs = mysqli_fetch_assoc($prf_result)){
+                                                                $prefix = $rs['prefix'];
+                                                            }
                                                         }
+
                                                         $count_hire = 0;
-                                                        $sql_hires = "SELECT * FROM `hires` WHERE `id_wave` = '$id_wave'";
+                                                        $ns_id = "";
+                                                        $sql_hires = "SELECT * FROM `hires` WHERE `id_wave` = '$id_wave';";
                                                         if($hrs_res = mysqli_query($con,$sql_hires)){
-                                                            while($rs_hrs = mysqli_fetch_assoc(mysqli_query($con,$sql_hires))){
-                                                                $ns_id = $prefix . str_pad(($count_hire + 1), 2, "0", STR_PAD_LEFT);
+                                                           while($rs_hrs = mysqli_fetch_assoc($hrs_res)){
+                                                                $count_hire = $count_hire + 1;
+                                                                $ns_id = $prefix . str_pad(($count_hire), 2, "0", STR_PAD_LEFT);
                                                                 $idhires = $rs_hrs['idhires'];
-                                                                $sql_update_hires = "UPDATE `hires` SET `nearsol_id`= '$ns_id' WHERE `idhires` = '$idhires';";
+                                                                $sql_update_hires = "UPDATE `hires` SET `nearsol_id` = '$ns_id' WHERE `idhires` = '$idhires';";
                                                                 if(mysqli_query($con,$sql_update_hires)){
                                                                     echo("1");
                                                                 }else{
                                                                     echo("0");
                                                                 }
                                                             }
-                                                        }
                                                         }
                                                             echo mysqli_insert_id($con);
                                                         }else{
