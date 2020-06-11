@@ -4,6 +4,7 @@
 header('Access-Control-Allow-Headers: *');
 
     $postdata = file_get_contents("php://input");
+    $prefix = "";
 
     if(isset($postdata) && !empty($postdata)){
 
@@ -56,10 +57,7 @@ header('Access-Control-Allow-Headers: *');
                         $sql5 = "SELECT * FROM `hires` WHERE `id_wave` = '$id_wave';";
                         $i = 0;
                         if($result2 = mysqli_query($con, $sql5)){
-                            while($row2 = mysqli_fetch_assoc($result2)){
-                                $i++;
-                            }
-                            $i = $i - 1;
+                            $i = mysqli_num_rows($result2);
                             $sql7 = "UPDATE `waves` SET `hires`= '$i' WHERE `idwaves` = '$id_wave';";
                             if(mysqli_query($con,$sql7)){
                                 $sql8 = "SELECT * FROM `hires` WHERE `id_schedule` = '$id_schedule';";
@@ -76,14 +74,11 @@ header('Access-Control-Allow-Headers: *');
                                                 if(mysqli_query($con,$sql11)){
                                                     $sql6 = "DELETE FROM `hires` WHERE `idhires` = $id_hire;";
                                                     if(mysqli_query($con,$sql6)){
-
-                                                        $sql_search_prefix = "SELECT * FROM `waves` WHERE `idwaves` = '$id_wave'";
-                                                        if($prf_result = (mysqli_query($con,$sql_search_prefix))){
-                                                            while($rs = mysqli_fetch_assoc($prf_result)){
-                                                                $prefix = $rs['prefix'];
-                                                            }
+                                                        $sql_prefix = "SELECT * FROM `waves` WHERE `idwaves` = '$id_wave';";
+                                                        if($pref_res = mysqli_query($con, $sql_prefix)){
+                                                            $prefix_row = mysqli_fetch_assoc($pref_res);
+                                                            $prefix = $prefix_row['prefix'];
                                                         }
-
                                                         $count_hire = 0;
                                                         $sql_hires = "SELECT * FROM `hires` WHERE `id_wave` = '$id_wave'";
                                                         if($hrs_res = mysqli_query($con,$sql_hires)){
@@ -97,6 +92,7 @@ header('Access-Control-Allow-Headers: *');
                                                                     echo("0");
                                                                 }
                                                             }
+                                                        }
                                                         }
                                                             echo mysqli_insert_id($con);
                                                         }else{

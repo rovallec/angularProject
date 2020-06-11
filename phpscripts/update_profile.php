@@ -13,7 +13,7 @@ header('Access-Control-Allow-Headers: *');
 		$second_name = ($request->second_name);
 		$first_lastname = ($request->first_lastname);
 		$second_lastname = ($request->second_lastname);
-		$day_of_birthday = ($request->day_of_birthday);
+		$day_of_birthday = ($request->day_of_birth);
 		$nationality = ($request->nationality);
 		$marital_status = ($request->marital_status);
 		$dpi = ($request->dpi);
@@ -22,7 +22,7 @@ header('Access-Control-Allow-Headers: *');
 		$irtra = ($request->irtra);
 		$status = ($request->status);
 
-		$sql = "UPDATE `profiles` set `tittle` = '{$tittle}', `first_name` = '{$first_name}', `second_name` = '{$second_name}', `first_lastname` = '{$first_lastname}', `second_lastname` = '{$second_lastname}', `day_of_birth` = '{$day_of_birthday}', `nationality` = '{$nationality}', `marital_status` = '{$marital_status}', `dpi` = '{$dpi}', `nit` = '{$nit}', `iggs` = '{$igss}', `irtra` = '{$irtra}', `status` = '{$status}' WHERE `id_profile` = '$idprofiles';";
+		$sql = "UPDATE `profiles` set `tittle` = '{$tittle}', `first_name` = '{$first_name}', `second_name` = '{$second_name}', `first_lastname` = '{$first_lastname}', `second_lastname` = '{$second_lastname}', `day_of_birth` = '{$day_of_birthday}', `nationality` = '{$nationality}', `marital_status` = '{$marital_status}', `dpi` = '{$dpi}', `nit` = '{$nit}', `iggs` = '{$igss}', `irtra` = '{$irtra}', `status` = '{$status}' WHERE `idprofiles` = '$idprofiles';";
 
 		if(mysqli_query($con,$sql)){
 			$id_profile = mysqli_insert_id($con);
@@ -74,7 +74,7 @@ header('Access-Control-Allow-Headers: *');
 						}
 
 					}else{
-						http_response_code(422);
+						http_response_code(400);
 					}
 				}else{
 					http_response_code(422);
