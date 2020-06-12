@@ -77,7 +77,6 @@ header('Access-Control-Allow-Headers: *');
                                                 if(mysqli_query($con,$sql11)){
                                                     $sql6 = "DELETE FROM `hires` WHERE `idhires` = $id_hire;";
                                                     if(mysqli_query($con,$sql6)){
-                                                        http_response_code(404);
                                                         $sql_search_prefix = "SELECT * FROM `waves` WHERE `idwaves` = '$id_wave'";
                                                         if($prf_result = (mysqli_query($con,$sql_search_prefix))){
                                                             while($rs = mysqli_fetch_assoc($prf_result)){

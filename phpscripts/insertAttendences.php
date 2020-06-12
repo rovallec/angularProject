@@ -16,6 +16,7 @@
             if($i > 0){
                 $sql = $sql . ",";
             }
+            echo($request);
             $en = json_encode($request[$i]);
             $de = json_decode($en);
             $id_employee = ($de->id_employee);

@@ -211,6 +211,11 @@ export class HrhomeComponent implements OnInit {
     this.emplAttendences.forEach(emp => {
       if(isNull(emp.idattendences)){
         emp.date = this.stringDate;
+        if(emp.day_off1 !== this.weekday && emp.day_off2 !== this.weekday){
+          emp.scheduled = '8';
+        }else{
+          emp.scheduled = '0';
+        }
         insertAttendences.push(emp);
       }
     });
