@@ -23,6 +23,8 @@ if($result = mysqli_query($con, $sql))
 		$waves[$i]['state'] = $row['state'];
 		$waves[$i]['account_name'] = $row['account_name'];
 		$waves[$i]['ops_start'] = $row['ops_start'];
+		$waves[$i]['job'] = $row['job'];
+		$waves[$i]['payment'] = $row['payment'];
 		$waves[$i]['show'] = "0";
 		$i++;
 	}
