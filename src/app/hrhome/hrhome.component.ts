@@ -23,8 +23,8 @@ export class HrhomeComponent implements OnInit {
   filter:string = null;
   value:string = null;
 
-  allEmployees:employees[] = [];
-  allProcesses:hrProcess[] = [];
+  allEmployees:employees[] = [new employees];
+  allProcesses:hrProcess[] = [new hrProcess];
 
   weekdays:string[] = [
     "Sunday",
