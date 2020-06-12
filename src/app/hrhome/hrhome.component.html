@@ -190,10 +190,12 @@
                                             <td style="padding:0px; vertical-align: middle;">{{hire.first_name}} {{hire.second_name}} {{hire.first_lastname}}
                                                 {{hire.second_lastname}}</td>
                                             <td
-                                                *ngIf="hire.day_off1 !== this.weekday && hire.day_off2 !== this.weekday" style="padding:0px; vertical-align: middle;" [(ngModel)]='hire.scheduled'>
+                                                *ngIf="hire.day_off1 !== this.weekday && hire.day_off2 !== this.weekday" style="padding:0px; vertical-align: middle;">
+                                                8
                                                 </td>
                                             <td
-                                                *ngIf="hire.day_off1 === this.weekday || hire.day_off2 === this.weekday" style="padding:0px; vertical-align: middle;" [(ngModel)]='hire.scheduled'>
+                                                *ngIf="hire.day_off1 === this.weekday || hire.day_off2 === this.weekday" style="padding:0px; vertical-align: middle;">
+                                                0
                                                 </td>
                                             <td style="vertical-align: middle;" style="padding:0px; vertical-align: middle;">
                                                 <select
