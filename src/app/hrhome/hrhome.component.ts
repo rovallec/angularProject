@@ -117,17 +117,7 @@ export class HrhomeComponent implements OnInit {
   }
 
   showEmployeesAt(wv:waves_template){
-    this.showAttendenceDetails[this.wavesToShow.indexOf(wv)] = true;
-    this.apiService.getAttendences({id:wv.idwaves, date:this.stringDate}).subscribe((rs:attendences[])=>{
-      this.emplAttendences = rs;
-    })
-    this.emplAttendences.forEach(emp => {
-      if(emp.day_off1 !== this.weekday && emp.day_off2 !== this.weekday){
-        emp.scheduled = '8';
-      }else{
-        emp.scheduled = '0';
-      }
-    });
+    console.log(wv);
   }
 
   getDef(att:attendences){
