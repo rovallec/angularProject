@@ -18,6 +18,8 @@ export class waves_template {
     state: string;
     account_name: string;
     ops_start: string;
+    job:string;
+    payment:string;
     show: string;
     constructor() {
         this.idwaves = null;

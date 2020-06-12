@@ -15,8 +15,10 @@ $training_schedule = ($request->trainning_schedule);
 $prefix = ($request->prefix);
 $ops_start = ($request->ops_start);
 $state = ($request->state);
+$payment = ($request->payment);
+$job = ($request->job);
 
-$sql = "INSERT INTO `waves`(`idwaves`, `id_account`, `starting_date`, `end_date`, `max_recriut`, `hires`, `name`, `trainning_schedule`, `prefix`, `ops_start`, `state`) VALUES (null, '$id_account', '$starting_date', '$end_date', '$max_recriut', '0', '$name', '$training_schedule', '$prefix', '$ops_start', '$state')";
+$sql = "INSERT INTO `waves`(`idwaves`, `id_account`, `starting_date`, `end_date`, `max_recriut`, `hires`, `name`, `trainning_schedule`, `prefix`, `ops_start`, `state`, `payment`, `position`) VALUES (null, '$id_account', '$starting_date', '$end_date', '$max_recriut', '0', '$name', '$training_schedule', '$prefix', '$ops_start', '$state', '$payment', '$job');";
 if(mysqli_query($con,$sql)){
 	echo(mysqli_insert_id($con));
 }else{

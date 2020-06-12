@@ -55,19 +55,27 @@
                     style="padding:6px; background-color:rgb(227, 239, 255); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255);cursor:auto">
                     <div class="form-group col-md-12">
                         <div class="form-row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label>Account:</label>
                                 <select class="form-control" [(ngModel)]="wave_ToEdit.id_account">
                                     <option *ngFor="let ac of accounts" [ngValue]="ac.idaccounts">{{ac.name}}</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <label>Name:</label>
                                 <input type="text" class="form-control" [(ngModel)]="wave_ToEdit.name">
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-1">
                                 <label>Max. Candidates:</label>
                                 <input type="text" class="form-control" [(ngModel)]="wave_ToEdit.max_recriut">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Job Description:</label>
+                                <input type="text" class="form-control" [(ngModel)]="wave_ToEdit.job">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>Payment:</label>
+                                <input type="text" class="form-control" [(ngModel)]="wave_ToEdit.payment">
                             </div>
                             <div class="form-group col-md-1" style="text-align: center;">
                                 <i class="fas fa-save" style="margin-top:35%" *ngIf="editing_wave"
