@@ -59,6 +59,7 @@ export class HrhomeComponent implements OnInit {
     })
     for (let i = 0; i < this.wavesToShow.length; i++) {
       this.showEmployeeDetails.push(false);
+      this.showAttendenceDetails.push(false);
       this.editWave.push(false);
     }
     this.weekday = this.weekdays[new Date().getDay()];
@@ -117,7 +118,10 @@ export class HrhomeComponent implements OnInit {
   }
 
   showEmployeesAt(wv:waves_template){
-    console.log(wv);
+    this.showAttendenceDetails[this.wavesToShow.indexOf(wv)] = true;
+    this.apiService.getAttendences({id:wv.idwaves, date:this.stringDate}).subscribe((rs:attendences[])=>{
+      this.emplAttendences = rs;
+    })
   }
 
   getDef(att:attendences){
