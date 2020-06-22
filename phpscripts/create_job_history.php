@@ -20,6 +20,7 @@ header('Access-Control-Allow-Headers: *');
             $r_val_working = ($val->working);
 
             $sql = "INSERT INTO `job_histories`(`id_profile`, `company`, `date_joining`, `position`, `reference_name`, `reference_lastname`, `reference_position`, `reference_email`, `reference_phone`, `working`) VALUES ('{$r_val_id_profile}','{$r_val_company}','{$r_val_date_joining}','{$r_val_position}','{$r_val_reference_name}','{$r_val_reference_lastname}', '{$r_val_reference_position}', '{$r_val_reference_mail}', '{$r_val_reference_phone}', '{$r_val_working}');";
+            echo($sql);
             if(mysqli_query($con,$sql)){					
                 http_response_code(200);
             }else{

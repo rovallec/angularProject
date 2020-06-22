@@ -167,7 +167,6 @@ export class HrhomeComponent implements OnInit {
         actual_emp.client_id = hire.client_id;
         actual_emp.hiring_date = wv.ops_start;
         actual_emp.job = wv.job;
-        actual_emp.payment = wv.payment;
         actual_emp.id_user = this.authService.getAuthusr().iduser;
         actual_emp.id_department = this.authService.getAuthusr().department
         actual_emp.state = "EMPLOYEE";
