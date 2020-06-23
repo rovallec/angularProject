@@ -16,6 +16,7 @@ export class HrprofilesComponent implements OnInit {
 
   attAdjudjment:attendences_adjustment = new attendences_adjustment;
   activeVacation:vacations = new vacations;
+  activeLeave:leaves = new leaves;
 
   todayDate:string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
   
@@ -175,5 +176,11 @@ export class HrprofilesComponent implements OnInit {
   setLeave(){
     this.vacationAdd = false;
     this.editLeave = true;
+  }
+
+  insertLeave(){
+    this.apiService.insertLeaves(this.activeLeave).subscribe((str:string)=>{
+      this.getLeaves();
+    })
   }
 }

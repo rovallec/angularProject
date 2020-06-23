@@ -251,5 +251,9 @@ getLeaves(str:any){
   return this.httpClient.post<leaves[]>(`${this.PHP_API_SERVER}/phpscripts/getLeaves.php`, str);
 }
 
+insertLeaves(leaves:leaves){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/getLeaves.php`, leaves);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
