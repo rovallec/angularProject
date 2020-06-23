@@ -109,7 +109,7 @@ export class HrprofilesComponent implements OnInit {
     this.earnVacations = 0;
     this.tookVacations = 0;
     this.availableVacations = 0;
-    this.apiService.getVacations({id:this.route.snapshot.paramMap.get('id')}).subscribe((res:vacations[])=>{
+    this.apiService.getVacations({id:this.activeEmp}).subscribe((res:vacations[])=>{
       this.showVacations = res;
       res.forEach(vac =>{
         if(vac.action == "Add"){
@@ -125,6 +125,7 @@ export class HrprofilesComponent implements OnInit {
 
   addVacation(action:string, type:string){
     this.vacationAdd = true;
+    this.editVac = true;
     this.activeVacation.count = '1';
     this.activeVacation.action = action;
     this.activeVacation.id_type = type;
@@ -153,8 +154,14 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getLeaves(){
-    this.apiService.getLeaves({id:this.route.snapshot.paramMap.get('id')}).subscribe((leaves:leaves[])=>{
+    this.apiService.getLeaves({id:this.activeEmp}).subscribe((leaves:leaves[])=>{
       this.leaves = leaves;
     })
+  }
+
+  cancelView(){
+    this.vacationAdd = false;
+    this.editVac = false;
+    this.getVacations();
   }
 }

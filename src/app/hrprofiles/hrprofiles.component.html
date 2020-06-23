@@ -76,7 +76,7 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let att of showAttendences" style="cursor:pointer"
-                                            (click)="addJustification(att)">
+                                            (click)="addJustification(att)" class="selectable">
                                             <td>{{att.date}}</td>
                                             <td>{{att.scheduled}}</td>
                                             <td>{{att.worked_time}}</td>
@@ -102,7 +102,7 @@
                                     </thead>
                                     <tbody>
                                         <tr style="cursor:pointer" *ngFor="let adj of showAttAdjustments"
-                                            (click)="getRecordAdjustment(adj.id_justification)">
+                                            (click)="getRecordAdjustment(adj.id_justification)" class="selectable">
                                             <td>{{adj.date}}</td>
                                             <td>{{adj.id_user}}</td>
                                             <td>{{adj.state}}</td>
@@ -216,7 +216,7 @@
                                         <th>DATE</th>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let vacation of showVacations" (click)="getVacation(vacation)">
+                                        <tr *ngFor="let vacation of showVacations" (click)="getVacation(vacation)" class="selectable">
                                             <td>{{vacation.id_type}}</td>
                                             <td>{{vacation.action}}</td>
                                             <td>{{vacation.count}}</td>
@@ -248,7 +248,8 @@
                                     style="border-bottom: solid 4px #e3f2fd; height: 20px;"></div>
                                 <div class="form-group col-md-1"></div>
                             </div>
-                            <label>LEAVE HISTORY</label>
+                            <label
+                            style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Leave History</label>
                             <div class="form-row col-md-12">
                                 <table style="width:98%; padding: 1%;" class="table table-striped table-hover">
                                     <thead>
@@ -259,7 +260,7 @@
                                         <th>STATUS</th>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let leave of leaves">
+                                        <tr *ngFor="let leave of leaves" class="selectable">
                                             <td>{{leave.name}}</td>
                                             <td>{{leave.motive}}</td>
                                             <td>{{leave.start}}</td>
@@ -276,14 +277,15 @@
                                 <div class="form-group col-md-8">
                                     <label>Date:</label>
                                     <input type="date" class="form-control"
-                                        (change)="pushVacationDate($event.target.value)" [disabled]="editVac">
+                                        (change)="pushVacationDate($event.target.value)" *ngIf="editVac">
+                                    <input type="text" class="form-control" [(ngModel)]="activeVacation.took_date" *ngIf="!editVac" disabled="true">
                                 </div>
                                 <div class="form-group col-md-2"></div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-12">
                                     <label>Notes:</label>
-                                    <textarea class="form-control" width="100%" [disabled]="editVac"></textarea>
+                                    <textarea class="form-control" width="100%" [disabled]="!editVac" [(ngModel)]="activeVacation.notes"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
@@ -308,13 +310,15 @@
                                         [(ngModel)]="authUser.getAuthusr().user_name">
                                 </div>
                             </div>
-                            <div class="form-row col-md-12" *ngIf="editVac">
+                            <div class="form-row col-md-12" *ngIf="editVac || !editVac">
                                 <div class="form-group col-md-2">
-                                    <button class="form-control" (click)="cancelVacation()">Cancel</button>
+                                    <button class="form-control" (click)="cancelVacation()" *ngIf="editVac">Cancel</button>
                                 </div>
-                                <div class="form-group col-md-8"></div>
+                                <div class="form-group col-md-8">
+                                    <button class="form-control" (click)="cancelView()" *ngIf="!editVac">Return</button>
+                                </div>
                                 <div class="form-group col-md-2">
-                                    <button class="form-control" (click)="insertVacation()">Accept</button>
+                                    <button class="form-control" (click)="insertVacation()" *ngIf="editVac">Accept</button>
                                 </div>
                             </div>
                         </div>
