@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment } from '../process_templates';
+import { attendences, attendences_adjustment, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 
 @Component({
@@ -17,7 +17,10 @@ export class HrprofilesComponent implements OnInit {
   attAdjudjment:attendences_adjustment = new attendences_adjustment;
   todayDate:string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
   addJ:boolean = false;
+
   showAttAdjustments:attendences_adjustment[] = [];
+  showVacations:vacations[] = [];
+
   activeEmp:string = null;
   editAdj:boolean = false;
 
@@ -35,6 +38,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.state = 'PENDING';
     this.attAdjudjment.status = 'PENDING';
     this.editAdj = false;
+    this.getVacations();
   }
 
   getAttendences(dt:string){
@@ -82,6 +86,12 @@ export class HrprofilesComponent implements OnInit {
 
   cancelAdjustment(){
     this.addJ = false;
+  }
+
+  getVacations(){
+    this.apiService.getVacations({id:this.route.snapshot.paramMap.get('id')}).subscribe((res:vacations[])=>{
+      this.showVacations = res;
+    })
   }
 
 }

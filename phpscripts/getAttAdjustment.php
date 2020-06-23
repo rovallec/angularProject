@@ -8,8 +8,7 @@
     $id = ($request->justify);
     $resp = [];
 
-    $sql = "SELECT * FROM attendence_adjustemnt LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process WHERE attendence_justifications.idattendence_justifications = $id";
-    echo($sql);
+    $sql = "SELECT * FROM attendence_adjustemnt LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE attendence_justifications.idattendence_justifications  = $id";
     if($result = mysqli_query($con,$sql)){
         while($res = mysqli_fetch_assoc($result)){
             $resp['idattendence_adjustemnt'] = $res['idattendence_adjustemnt'];
@@ -28,6 +27,7 @@
             $resp['date'] = $res['date'];
             $resp['notes'] = $res['notes'];
             $resp['status'] = $res['status'];
+            $resp['id_user'] = $res['user_name'];
         }
         echo(json_encode($resp));
     }else{

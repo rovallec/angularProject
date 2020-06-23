@@ -152,7 +152,9 @@
                                 <div class="form-group col-md-4">
                                     <label>User:</label>
                                     <input type="text" [disabled]="true"
-                                        [(ngModel)]="authUser.getAuthusr().user_name" class="form-control">
+                                        [(ngModel)]="authUser.getAuthusr().user_name" class="form-control" *ngIf="!editAdj">
+                                    <input type="text" [disabled]="true"
+                                        [(ngModel)]="attAdjudjment.id_user" class="form-control" *ngIf="editAdj">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Date:</label>
@@ -178,7 +180,30 @@
                 </div>
 
                 <div class="tab-pane fade" id="nav-leavs" role="tabpanel" aria-labelledby="nav-leavs-tab">
-
+                    <div class="form-row col-md-12">
+                        <label
+                        style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">LEAVE</label>
+                        <div class="form-group col-sm-6" >
+                            <table style="width:98%; padding: 1%;" class="table table-striped table-hover">
+                                <thead>
+                                    <th>PROCESS</th>
+                                    <th>ACTION</th>
+                                    <th>COUNT</th>
+                                    <th>DATE</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let leave from leaves">
+                                        <td>{{leave.type}}</td>
+                                        <td>{{leave.action}}</td>
+                                        <td>{{leave.count}}</td>
+                                        <td>{{leave.date}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;">                            
+                        </div>
+                    </div>
                 </div>
 
                 <div class="tab-pane fade" id="nav-dp" role="tabpanel" aria-labelledby="nav-dp-tab">

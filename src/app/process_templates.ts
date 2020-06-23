@@ -211,3 +211,30 @@ export class attendences_adjustment {
         this.status = null;
     }
 }
+
+export class vacations{
+    //process
+    id_user:string;
+    id_employee:string;
+    id_type:string;
+    id_department:string;
+    date:string;
+    notes:string;
+    status:string;
+    //vacations
+    action:string;
+    count:string;
+    took_date:string;
+    constructor(){
+        this.id_user = null;
+        this.id_employee = null;
+        this.id_type = null;
+        this.id_department = null;
+        this.date = null;
+        this.notes = null;
+        this.status = null;
+        this.action = null;
+        this.count = null;
+        this.took_date = null;
+    }
+}
