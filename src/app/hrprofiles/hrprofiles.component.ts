@@ -107,12 +107,13 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getVacations({id:this.route.snapshot.paramMap.get('id')}).subscribe((res:vacations[])=>{
       this.showVacations = res;
     })
+
     this.showVacations.forEach(vac => {
       if(vac.action == 'Add'){
-        this.earnVacations++;
+        this.earnVacations = this.earnVacations + 1;
       }
       if(vac.action == 'Take'){
-        this.tookVacations++;
+        this.tookVacations = this.tookVacations + 1;
       }
       this.availableVacations = this.earnVacations - this.tookVacations;
     });
