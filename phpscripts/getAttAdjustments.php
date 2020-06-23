@@ -14,7 +14,7 @@ $sql = "SELECT `users`.*, `hr_processes`.*, `attendence_justifications`.*, `atte
         FROM `hr_processes` 
 	    LEFT JOIN `attendence_justifications` ON `attendence_justifications`.`id_process` = `hr_processes`.`idhr_processes` 
         LEFT JOIN `attendence_adjustemnt` ON `attendence_adjustemnt`.`id_justification` = `attendence_justifications`.`idattendence_justifications`
-        LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `hr_processes`.`id_employee` = '$id' AND `id_type` = '2'";
+        LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `hr_processes`.`id_employee` = '$id' AND `id_type` = '2';";
 
 
 if($result = mysqli_query($con,$sql)){

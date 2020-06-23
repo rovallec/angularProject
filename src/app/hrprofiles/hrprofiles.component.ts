@@ -76,7 +76,7 @@ export class HrprofilesComponent implements OnInit {
 
   getAttAdjustemt(){
     this.editAdj = false;
-    this.apiService.getAttAdjustments({id:this.route.snapshot.paramMap.get('id')}).subscribe((adj:attendences_adjustment[])=>{
+    this.apiService.getAttAdjustments({id:this.activeEmp}).subscribe((adj:attendences_adjustment[])=>{
       this.showAttAdjustments = adj;
     })
   }
