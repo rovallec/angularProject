@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 
 @Component({
@@ -22,11 +22,13 @@ export class HrprofilesComponent implements OnInit {
   showAttAdjustments:attendences_adjustment[] = [];
   showVacations:vacations[] = [];
   showAttendences:attendences[] = [];
+  leaves:leaves[] = [];
 
   activeEmp:string = null;
   editAdj:boolean = false;
   vacationAdd:boolean = false;
   addJ:boolean = false;
+  editVac:boolean = true;
   
   earnVacations:number = 0;
   tookVacations:number = 0;
@@ -104,13 +106,16 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getVacations(){
+    this.earnVacations = 0;
+    this.tookVacations = 0;
+    this.availableVacations = 0;
     this.apiService.getVacations({id:this.route.snapshot.paramMap.get('id')}).subscribe((res:vacations[])=>{
       this.showVacations = res;
       res.forEach(vac =>{
-        if(vac.action = "Add"){
+        if(vac.action == "Add"){
           this.earnVacations++;
         }
-        if(vac.action = "Take"){
+        if(vac.action == "Take"){
           this.tookVacations++;
         }
       })
@@ -131,6 +136,7 @@ export class HrprofilesComponent implements OnInit {
 
   cancelVacation(){
     this.vacationAdd = false;
+    this.editVac = true;
   }
 
   insertVacation(){
@@ -138,5 +144,17 @@ export class HrprofilesComponent implements OnInit {
       this.getVacations();
     })
     this.vacationAdd = false;
+  }
+
+  getVacation(vac:vacations){
+    this.activeVacation = vac;
+    this.vacationAdd = true;
+    this.editVac = false;
+  }
+
+  getLeaves(){
+    this.apiService.getLeaves({id:this.route.snapshot.paramMap.get('id')}).subscribe((leaves:leaves[])=>{
+      this.leaves = leaves;
+    })
   }
 }

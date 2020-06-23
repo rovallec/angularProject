@@ -238,3 +238,32 @@ export class vacations{
         this.took_date = null;
     }
 }
+
+export class leaves{
+        //process
+        id_user:string;
+        id_employee:string;
+        id_type:string;
+        id_department:string;
+        date:string;
+        notes:string;
+        status:string;
+        //leaves
+        motive:string;
+        approved_by:string;
+        start:string;
+        end:string;
+        constructor(){
+            this.id_user = null;
+            this.id_employee = null;
+            this.id_type = null;
+            this.id_department = null;
+            this.date = null;
+            this.notes = null;
+            this.status = null;
+            this.motive = null;
+            this.approved_by = null;
+            this.start = null;
+            this.end = null;
+        }
+}

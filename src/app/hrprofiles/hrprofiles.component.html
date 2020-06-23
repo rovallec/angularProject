@@ -193,15 +193,18 @@
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-4">
                                     <label>Earned:</label>
-                                    <input type="text" class="form-control" [disabled]="true" [(ngModel)]="earnVacations">
+                                    <input type="text" class="form-control" [disabled]="true"
+                                        [(ngModel)]="earnVacations">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Took:</label>
-                                    <input type="text" class="form-control" [disabled]="true" [(ngModel)]="tookVacations">
+                                    <input type="text" class="form-control" [disabled]="true"
+                                        [(ngModel)]="tookVacations">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Available:</label>
-                                    <input type="text" class="form-control" [disabled]="true" [(ngModel)]="availableVacations">
+                                    <input type="text" class="form-control" [disabled]="true"
+                                        [(ngModel)]="availableVacations">
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
@@ -213,7 +216,7 @@
                                         <th>DATE</th>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let vacation of showVacations">
+                                        <tr *ngFor="let vacation of showVacations" (click)="getVacation(vacation)">
                                             <td>{{vacation.id_type}}</td>
                                             <td>{{vacation.action}}</td>
                                             <td>{{vacation.count}}</td>
@@ -239,41 +242,73 @@
                                 </div>
                                 <div class="form-group col-md-1"></div>
                             </div>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-1"></div>
+                                <div class="form-group col-md-10"
+                                    style="border-bottom: solid 4px #e3f2fd; height: 20px;"></div>
+                                <div class="form-group col-md-1"></div>
+                            </div>
+                            <label>LEAVE HISTORY</label>
+                            <div class="form-row col-md-12">
+                                <table style="width:98%; padding: 1%;" class="table table-striped table-hover">
+                                    <thead>
+                                        <th>PROCESS</th>
+                                        <th>MOTIVE</th>
+                                        <th>START DATE</th>
+                                        <th>END DATE</th>
+                                        <th>STATUS</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let leave of leaves">
+                                            <td>{{leave.name}}</td>
+                                            <td>{{leave.motive}}</td>
+                                            <td>{{leave.start}}</td>
+                                            <td>{{leave.end}}</td>
+                                            <td>{{leave.status}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;" *ngIf="vacationAdd">
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2"></div>
                                 <div class="form-group col-md-8">
                                     <label>Date:</label>
-                                    <input type="date" class="form-control" (change)="pushVacationDate($event.target.value)">
+                                    <input type="date" class="form-control"
+                                        (change)="pushVacationDate($event.target.value)" [disabled]="editVac">
                                 </div>
                                 <div class="form-group col-md-2"></div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-12">
                                     <label>Notes:</label>
-                                    <textarea class="form-control" width="100%"></textarea>
+                                    <textarea class="form-control" width="100%" [disabled]="editVac"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-3">
                                     <label>Date:</label>
-                                    <input type="text" class="form-control" disabled="true" [(ngModel)]="activeVacation.date">
+                                    <input type="text" class="form-control" disabled="true"
+                                        [(ngModel)]="activeVacation.date">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Days:</label>
-                                    <input type="text" class="form-control" disabled="true" [(ngModel)]="activeVacation.count">
+                                    <input type="text" class="form-control" disabled="true"
+                                        [(ngModel)]="activeVacation.count">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Status:</label>
-                                    <input type="text" class="form-control" disabled="true" [(ngModel)]="activeVacation.status">
+                                    <input type="text" class="form-control" disabled="true"
+                                        [(ngModel)]="activeVacation.status">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>User:</label>
-                                    <input type="text" class="form-control" disabled="true" [(ngModel)]="authUser.getAuthusr().user_name">
+                                    <input type="text" class="form-control" disabled="true"
+                                        [(ngModel)]="authUser.getAuthusr().user_name">
                                 </div>
                             </div>
-                            <div class="form-row col-md-12">
+                            <div class="form-row col-md-12" *ngIf="editVac">
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="cancelVacation()">Cancel</button>
                                 </div>
