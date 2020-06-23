@@ -116,7 +116,7 @@
                                     Reception</label>
                                 <div class="form-group col-md-12">
                                     <label>Reason:</label>
-                                    <select class="form-control" [(ngModel)]="attAdjudjment.reason" [disalbed]="editAdj">
+                                    <select class="form-control" [(ngModel)]="attAdjudjment.reason" [disabled]="editAdj">
                                         <option>IGSS</option>
                                         <option>Insurance</option>
                                         <option>Private Doctor</option>
@@ -130,22 +130,22 @@
                                 <div class="form-group col-md-4">
                                     <label>Time Before:</label>
                                     <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.time_before"
-                                        class="form-control" [disalbed]="editAdj">
+                                        class="form-control" [disabled]="editAdj">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Time After:</label>
-                                    <input type="text" [(ngModel)]="attAdjudjment.time_after" class="form-control" [disalbed]="editAdj">
+                                    <input type="text" [(ngModel)]="attAdjudjment.time_after" class="form-control" [disabled]="editAdj">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Amount:</label>
-                                    <input type="text" [(ngModel)]="attAdjudjment.amount" class="form-control" [disalbed]="editAdj">
+                                    <input type="text" [(ngModel)]="attAdjudjment.amount" class="form-control" [disabled]="editAdj">
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-12">
                                     <label>Notes:</label>
                                     <textarea class="form-control" width="100%" [(ngModel)]="attAdjudjment.notes"
-                                        #message='ngModel' [disalbed]="editAdj"></textarea>
+                                        #message='ngModel' [disabled]="editAdj"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
@@ -164,7 +164,7 @@
                                     <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.state" class="form-control">
                                 </div>
                             </div>
-                            <div class="form-row col-md-12" [disalbed]="!editAdj">
+                            <div class="form-row col-md-12" [disabled]="!editAdj">
                                 <div class="form-group col-md-2">
                                     <button (click)="cancelAdjustment()" class="form-control">Cancel</button>
                                 </div>
