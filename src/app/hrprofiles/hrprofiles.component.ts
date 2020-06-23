@@ -29,7 +29,8 @@ export class HrprofilesComponent implements OnInit {
   vacationAdd:boolean = false;
   addJ:boolean = false;
   editVac:boolean = true;
-  
+  editLeave:boolean = false;
+
   earnVacations:number = 0;
   tookVacations:number = 0;
   availableVacations:number = 0;
@@ -56,6 +57,8 @@ export class HrprofilesComponent implements OnInit {
     this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
     this.activeVacation.status = 'PENDING';
     this.getVacations();
+
+    this.getLeaves();
   }
 
   getAttendences(dt:string){
@@ -72,7 +75,7 @@ export class HrprofilesComponent implements OnInit {
 
   getAttAdjustemt(){
     this.editAdj = false;
-    this.apiService.getAttAdjustments({id:this.activeEmp}).subscribe((adj:attendences_adjustment[])=>{
+    this.apiService.getAttAdjustments({id:this.route.snapshot.paramMap.get('id')}).subscribe((adj:attendences_adjustment[])=>{
       this.showAttAdjustments = adj;
     })
   }
@@ -109,7 +112,7 @@ export class HrprofilesComponent implements OnInit {
     this.earnVacations = 0;
     this.tookVacations = 0;
     this.availableVacations = 0;
-    this.apiService.getVacations({id:this.activeEmp}).subscribe((res:vacations[])=>{
+    this.apiService.getVacations({id:this.route.snapshot.paramMap.get('id')}).subscribe((res:vacations[])=>{
       this.showVacations = res;
       res.forEach(vac =>{
         if(vac.action == "Add"){
@@ -126,6 +129,7 @@ export class HrprofilesComponent implements OnInit {
   addVacation(action:string, type:string){
     this.vacationAdd = true;
     this.editVac = true;
+    this.activeVacation.notes = null;
     this.activeVacation.count = '1';
     this.activeVacation.action = action;
     this.activeVacation.id_type = type;
@@ -151,10 +155,11 @@ export class HrprofilesComponent implements OnInit {
     this.activeVacation = vac;
     this.vacationAdd = true;
     this.editVac = false;
+    this.editLeave = false;
   }
 
   getLeaves(){
-    this.apiService.getLeaves({id:this.activeEmp}).subscribe((leaves:leaves[])=>{
+    this.apiService.getLeaves({id:this.route.snapshot.paramMap.get('id')}).subscribe((leaves:leaves[])=>{
       this.leaves = leaves;
     })
   }
@@ -162,6 +167,13 @@ export class HrprofilesComponent implements OnInit {
   cancelView(){
     this.vacationAdd = false;
     this.editVac = false;
+    this.editLeave = false;
     this.getVacations();
+    this.getLeaves();
+  }
+
+  setLeave(){
+    this.vacationAdd = false;
+    this.editLeave = true;
   }
 }

@@ -231,7 +231,7 @@
                                     style="border-bottom: solid 4px #e3f2fd; height: 20px;"></div>
                                 <div class="form-group col-md-2"></div>
                             </div>
-                            <div class="form-row col-md-12" *ngIf="!vacationAdd">
+                            <div class="form-row col-md-12" *ngIf="!vacationAdd || !editLeave">
                                 <div class="form-group col-md-1"></div>
                                 <div class="form-group col-md-3">
                                     <button class="form-control" (click)="addVacation('Add', '3')">Add</button>
@@ -270,8 +270,77 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-2"></div>
+                                <div class="form-group col-md-8"
+                                    style="border-bottom: solid 4px #e3f2fd; height: 20px;"></div>
+                                <div class="form-group col-md-2"></div>
+                            </div>
+                            <div class="form-row col-md-12" *ngIf="!vacationAdd || !editLeave">
+                                <div class="form-group col-md-5"></div>
+                                <div class="form-group col-md-2">
+                                    <button class="form-control" (click)="setLeave()">Set</button>
+                                </div>
+                                <div class="form-group col-md-5"></div>
+                            </div>
                         </div>
-                        <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;" *ngIf="vacationAdd">
+                        <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;" *ngIf="!vacationAdd  && editLeave">
+                            <label style="margin-left:40%; font-weight: bold; font-size:16px;">Set Leave</label>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-2"></div>
+                                <div class="form-group col-md-8">
+                                    <label>Motive:</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="form-group col-md-2"></div>
+                            </div>
+                            <div class="form-row col-md-12">
+                                <div class="from-group col-md-4">
+                                    <label>Start:</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                                <div class="from-group col-md-4">
+                                    <label>End:</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                                <div class="from-group col-md-4">
+                                    <label>Approved:</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-12">
+                                    <label>Notes:</label>
+                                    <textarea class="form-control" width="100%"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-4">
+                                    <label>User:</label>
+                                    <input type="text" [disabled]="true" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Date:</label>
+                                    <input type="text" [disabled]="true" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>State:</label>
+                                    <input type="text" [disabled]="true" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-2">
+                                    <button class="form-control" (click)="cancelLeave()" *ngIf="editLeave">Cancel</button>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <button class="form-control" (click)="cancelView()" *ngIf="!editLeave">Return</button>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="form-control" (click)="insertLeave()" *ngIf="editLeave">Accept</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;" *ngIf="vacationAdd && !editLeave">
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2"></div>
                                 <div class="form-group col-md-8">
@@ -310,7 +379,7 @@
                                         [(ngModel)]="authUser.getAuthusr().user_name">
                                 </div>
                             </div>
-                            <div class="form-row col-md-12" *ngIf="editVac || !editVac">
+                            <div class="form-row col-md-12">
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="cancelVacation()" *ngIf="editVac">Cancel</button>
                                 </div>

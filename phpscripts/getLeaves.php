@@ -12,7 +12,7 @@
 
     $sql = "SELECT `hr_processes`.*, `hr_processes`.*, `users`.*, `accounts`.`name` as `departmet`, `leaves`.* , `process_types`.`idprocess_types`, `process_types`.`name` as `type` FROM `leaves` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `leaves`.`id_process` LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `hr_processes`.`id_department` WHERE `id_employee` = $id;";
 
-    if($result = mysqli($con, $sql)){
+    if($result = mysqli_query($con, $sql)){
         while($res = mysqli_fetch_assoc($result)){
             $return[$i]['id_user'] = $res['id_user'];
             $return[$i]['id_employee'] = $id;
