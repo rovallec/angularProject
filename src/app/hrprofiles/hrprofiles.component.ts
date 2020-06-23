@@ -76,6 +76,7 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getAttAdjustment({justify:id_justification}).subscribe((requested:attendences_adjustment)=>{
       this.attAdjudjment = requested;
     })
+    this.addJ = true;
     this.editAdj = true;
   }
 
