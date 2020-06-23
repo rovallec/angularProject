@@ -243,5 +243,9 @@ getVacations(str:any){
   return this.httpClient.post<vacations[]>(`${this.PHP_API_SERVER}/phpscripts/getVacations.php`,str);
 }
 
+insertVacations(vacation:vacations){
+  return this.httpClient.post<vacations>(`${this.PHP_API_SERVER}/phpscripts/insertVacations.php`, vacation);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

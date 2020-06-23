@@ -13,16 +13,20 @@ import { AuthServiceService } from '../auth-service.service';
 export class HrprofilesComponent implements OnInit {
 
   profile:profiles[] = [new profiles()];
-  showAttendences:attendences[] = [];
-  attAdjudjment:attendences_adjustment = new attendences_adjustment;
-  todayDate:string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
-  addJ:boolean = false;
 
+  attAdjudjment:attendences_adjustment = new attendences_adjustment;
+  activeVacation:vacations = new vacations;
+
+  todayDate:string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
+  
   showAttAdjustments:attendences_adjustment[] = [];
   showVacations:vacations[] = [];
+  showAttendences:attendences[] = [];
 
   activeEmp:string = null;
   editAdj:boolean = false;
+  vacationAdd:boolean = false;
+  addJ:boolean = false;
 
   constructor(private apiService:ApiService, private route:ActivatedRoute, public authUser:AuthServiceService) { }
 
@@ -38,6 +42,13 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.state = 'PENDING';
     this.attAdjudjment.status = 'PENDING';
     this.editAdj = false;
+    
+    this.vacationAdd = false;
+    this.activeVacation.date = this.todayDate;
+    this.activeVacation.id_department = this.authUser.getAuthusr().department;
+    this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
+    this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
+    this.activeVacation.status = 'PENDING';
     this.getVacations();
   }
 
@@ -66,7 +77,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.id_attendence = att.idattendences;
     this.attAdjudjment.id_type = '2';
     this.attAdjudjment.id_employee = att.id_employee;
-    this.attAdjudjment.id_department = '5';
+    this.attAdjudjment.id_department = this.authUser.getAuthusr().department;
     this.addJ = true;
   }
 
@@ -94,4 +105,24 @@ export class HrprofilesComponent implements OnInit {
     })
   }
 
+  addVacation(action:string, type:string){
+    this.vacationAdd = true;
+    this.activeVacation.count = '1';
+    this.activeVacation.action = action;
+    this.activeVacation.id_type = type;
+  }
+  
+  pushVacationDate(str:string){
+    this.activeVacation.took_date = str;
+  }
+
+  cancelVacation(){
+    this.vacationAdd = false;
+  }
+
+  insertVacation(){
+    this.apiService.insertVacations(this.activeVacation).subscribe((str:any)=>{
+      this.getVacations();
+    })
+  }
 }
