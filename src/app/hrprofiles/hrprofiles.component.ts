@@ -27,6 +27,10 @@ export class HrprofilesComponent implements OnInit {
   editAdj:boolean = false;
   vacationAdd:boolean = false;
   addJ:boolean = false;
+  
+  earnVacations:number = 0;
+  tookVacations:number = 0;
+  availableVacations:number = 0;
 
   constructor(private apiService:ApiService, private route:ActivatedRoute, public authUser:AuthServiceService) { }
 
@@ -103,6 +107,15 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getVacations({id:this.route.snapshot.paramMap.get('id')}).subscribe((res:vacations[])=>{
       this.showVacations = res;
     })
+    this.showVacations.forEach(vac => {
+      if(vac.action == 'Add'){
+        this.earnVacations++;
+      }
+      if(vac.action == 'Take'){
+        this.tookVacations++;
+      }
+      this.availableVacations = this.earnVacations - this.tookVacations;
+    });
   }
 
   addVacation(action:string, type:string){
@@ -124,5 +137,6 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.insertVacations(this.activeVacation).subscribe((str:any)=>{
       this.getVacations();
     })
+    this.vacationAdd = false;
   }
 }
