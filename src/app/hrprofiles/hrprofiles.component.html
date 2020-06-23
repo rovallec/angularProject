@@ -164,7 +164,7 @@
                                     <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.state" class="form-control">
                                 </div>
                             </div>
-                            <div class="form-row col-md-12" [disabled]="!editAdj">
+                            <div class="form-row col-md-12" *ngIf="!editAdj">
                                 <div class="form-group col-md-2">
                                     <button (click)="cancelAdjustment()" class="form-control">Cancel</button>
                                 </div>
