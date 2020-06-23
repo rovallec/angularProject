@@ -4,7 +4,6 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
-import { Console } from 'console';
 
 @Component({
   selector: 'app-hrprofiles',
