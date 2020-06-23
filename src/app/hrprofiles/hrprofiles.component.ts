@@ -19,6 +19,7 @@ export class HrprofilesComponent implements OnInit {
   addJ:boolean = false;
   showAttAdjustments:attendences_adjustment[] = [];
   activeEmp:string = null;
+  editAdj:boolean = false;
 
   constructor(private apiService:ApiService, private route:ActivatedRoute, public authUser:AuthServiceService) { }
 
@@ -33,6 +34,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.date = this.todayDate;
     this.attAdjudjment.state = 'PENDING';
     this.attAdjudjment.status = 'PENDING';
+    this.editAdj = false;
   }
 
   getAttendences(dt:string){
@@ -44,15 +46,18 @@ export class HrprofilesComponent implements OnInit {
         })
         this.getAttAdjustemt();
       });
+      this.editAdj = false;
   }
 
   getAttAdjustemt(){
+    this.editAdj = false;
     this.apiService.getAttAdjustments({id:this.activeEmp}).subscribe((adj:attendences_adjustment[])=>{
       this.showAttAdjustments = adj;
     })
   }
 
   addJustification(att:attendences){
+    this.editAdj = false;
     this.attAdjudjment.time_before = att.worked_time;
     this.attAdjudjment.id_attendence = att.idattendences;
     this.attAdjudjment.id_type = '2';
@@ -65,6 +70,13 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.insertAttJustification(this.attAdjudjment).subscribe((str:string)=>{
       this.getAttAdjustemt();
     });
+  }
+
+  getRecordAdjustment(id_justification:string){
+    this.apiService.getAttAdjustment({justify:id_justification}).subscribe((requested:attendences_adjustment)=>{
+      this.attAdjudjment = requested;
+    })
+    this.editAdj = true;
   }
 
   cancelAdjustment(){

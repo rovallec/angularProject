@@ -100,7 +100,7 @@
                                         <th>AMOUNT</th>
                                     </thead>
                                     <tbody>
-                                        <tr style="cursor:pointer" *ngFor="let adj of showAttAdjustments">
+                                        <tr style="cursor:pointer" *ngFor="let adj of showAttAdjustments" (click)="getRecordAdjustment(adj.id_justification)">
                                             <td>{{adj.date}}</td>
                                             <td>{{adj.id_user}}</td>
                                             <td>{{adj.state}}</td>
@@ -116,7 +116,7 @@
                                     Reception</label>
                                 <div class="form-group col-md-12">
                                     <label>Reason:</label>
-                                    <select class="form-control" [(ngModel)]="attAdjudjment.reason">
+                                    <select class="form-control" [(ngModel)]="attAdjudjment.reason" [disalbed]="editAdj">
                                         <option>IGSS</option>
                                         <option>Insurance</option>
                                         <option>Private Doctor</option>
@@ -130,22 +130,22 @@
                                 <div class="form-group col-md-4">
                                     <label>Time Before:</label>
                                     <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.time_before"
-                                        class="form-control">
+                                        class="form-control" [disalbed]="editAdj">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Time After:</label>
-                                    <input type="text" [(ngModel)]="attAdjudjment.time_after" class="form-control">
+                                    <input type="text" [(ngModel)]="attAdjudjment.time_after" class="form-control" [disalbed]="editAdj">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Amount:</label>
-                                    <input type="text" [(ngModel)]="attAdjudjment.amount" class="form-control">
+                                    <input type="text" [(ngModel)]="attAdjudjment.amount" class="form-control" [disalbed]="editAdj">
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-12">
                                     <label>Notes:</label>
                                     <textarea class="form-control" width="100%" [(ngModel)]="attAdjudjment.notes"
-                                        #message='ngModel'></textarea>
+                                        #message='ngModel' [disalbed]="editAdj"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
@@ -164,7 +164,7 @@
                                     <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.state" class="form-control">
                                 </div>
                             </div>
-                            <div class="form-row col-md-12">
+                            <div class="form-row col-md-12" [disalbed]="!editAdj">
                                 <div class="form-group col-md-2">
                                     <button (click)="cancelAdjustment()" class="form-control">Cancel</button>
                                 </div>

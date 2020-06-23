@@ -235,5 +235,9 @@ getAttAdjustments(str:any){
   return this.httpClient.post<attendences_adjustment[]>(`${this.PHP_API_SERVER}/phpscripts/getAttAdjustments.php`, str);
 }
 
+getAttAdjustment(str:any){
+  return this.httpClient.post<attendences_adjustment>(`${this.PHP_API_SERVER}/phpscripts/getAttAdjustment.php`, str);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
