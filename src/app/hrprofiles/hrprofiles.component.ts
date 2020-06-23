@@ -48,7 +48,6 @@ export class HrprofilesComponent implements OnInit {
 
   getAttAdjustemt(){
     this.apiService.getAttAdjustments({id:this.activeEmp}).subscribe((adj:attendences_adjustment[])=>{
-      console.log(adj);
       this.showAttAdjustments = adj;
     })
   }
@@ -64,7 +63,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertAdjustment(){
     this.apiService.insertAttJustification(this.attAdjudjment).subscribe((str:string)=>{
-      console.log(str)
+      this.getAttAdjustemt();
     });
   }
 
