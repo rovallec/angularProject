@@ -4,6 +4,7 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -106,17 +107,16 @@ export class HrprofilesComponent implements OnInit {
   getVacations(){
     this.apiService.getVacations({id:this.route.snapshot.paramMap.get('id')}).subscribe((res:vacations[])=>{
       this.showVacations = res;
-    })
-
-    this.showVacations.forEach(vac => {
-      if(vac.action == 'Add'){
-        this.earnVacations = this.earnVacations + 1;
-      }
-      if(vac.action == 'Take'){
-        this.tookVacations = this.tookVacations + 1;
-      }
+      res.forEach(vac =>{
+        if(vac.action = "Add"){
+          this.earnVacations++;
+        }
+        if(vac.action = "Take"){
+          this.tookVacations++;
+        }
+      })
       this.availableVacations = this.earnVacations - this.tookVacations;
-    });
+    })
   }
 
   addVacation(action:string, type:string){
