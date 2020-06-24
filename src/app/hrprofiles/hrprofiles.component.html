@@ -290,42 +290,46 @@
                                 <div class="form-group col-md-2"></div>
                                 <div class="form-group col-md-8">
                                     <label>Motive:</label>
-                                    <input type="text" class="form-control">
+                                    <select class="form-control">
+                                        <option *ngFor="let motive of motives">{{motive}}</option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-2"></div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="from-group col-md-4">
                                     <label>Start:</label>
-                                    <input type="date" class="form-control">
+                                    <input type="date" class="form-control" [(ngModel)]="activeLeave.start">
                                 </div>
                                 <div class="from-group col-md-4">
                                     <label>End:</label>
-                                    <input type="date" class="form-control">
+                                    <input type="date" class="form-control" [(ngModel)]="activeLeave.end">
                                 </div>
                                 <div class="from-group col-md-4">
                                     <label>Approved:</label>
-                                    <input type="text" class="form-control">
+                                    <select class="form-control">
+                                        <option *ngFor="let app of approvals" value='app.iduser'>{{app.username}}</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-12">
                                     <label>Notes:</label>
-                                    <textarea class="form-control" width="100%"></textarea>
+                                    <textarea class="form-control" width="100%" [(ngModel)]="activeLeave.notes"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-4">
                                     <label>User:</label>
-                                    <input type="text" [disabled]="true" class="form-control">
+                                    <input type="text" [disabled]="true" class="form-control" [(ngModel)]="authUser.getAuthusr().user_name">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Date:</label>
-                                    <input type="text" [disabled]="true" class="form-control">
+                                    <input type="text" [disabled]="true" class="form-control" [(ngModel)]="activeLeave.date">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>State:</label>
-                                    <input type="text" [disabled]="true" class="form-control">
+                                    <input type="text" [disabled]="true" class="form-control" [(ngModel)]="activeLeave.status">
                                 </div>
                             </div>
                             <div class="form-row col-md-12">

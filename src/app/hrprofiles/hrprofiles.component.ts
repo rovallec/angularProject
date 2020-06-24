@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
+import { employees } from '../fullProcess';
+import { users } from '../users';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -36,6 +38,9 @@ export class HrprofilesComponent implements OnInit {
   tookVacations:number = 0;
   availableVacations:number = 0;
 
+  approvals:users[] = [new users];
+  motives:string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others'];
+
   constructor(private apiService:ApiService, private route:ActivatedRoute, public authUser:AuthServiceService) { }
 
   ngOnInit() {
@@ -44,6 +49,11 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getProfile(this.profile[0]).subscribe((prof:profiles[])=>{
       this.profile = prof;
     });
+
+    this.apiService.getEmployeeId({id:this.route.snapshot.paramMap.get('id')}).subscribe((emp:employees)=>{
+      this.activeEmp = emp.idemployees;
+    })
+
     this.getAttendences(this.todayDate);
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
     this.attAdjudjment.date = this.todayDate;
@@ -60,12 +70,15 @@ export class HrprofilesComponent implements OnInit {
     this.getVacations();
 
     this.getLeaves();
+
+    this.apiService.getApprovers().subscribe((usrs:users[])=>{
+      this.approvals = usrs;
+    });
   }
 
   getAttendences(dt:string){
       this.apiService.getAttendences({id:this.route.snapshot.paramMap.get('id'), date:"<= '" + dt + "'"}).subscribe((att:attendences[])=>{
         this.showAttendences = att;
-        this.activeEmp = att[0].id_employee;
         this.showAttendences.forEach(att => {
           att.balance = (Number.parseFloat(att.worked_time) - Number.parseFloat(att.scheduled)).toString();
         })
@@ -174,6 +187,12 @@ export class HrprofilesComponent implements OnInit {
   }
 
   setLeave(){
+    this.activeLeave.date = this.todayDate;
+    this.activeLeave.id_department = '5';
+    this.activeLeave.id_employee = this.activeEmp;
+    this.activeLeave.id_type = '5';
+    this.activeLeave.id_user = this.authUser.getAuthusr().iduser;
+    this.activeLeave.status = 'PENDING';
     this.vacationAdd = false;
     this.editLeave = true;
   }

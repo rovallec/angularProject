@@ -255,5 +255,12 @@ insertLeaves(leaves:leaves){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/getLeaves.php`, leaves);
 }
 
+getEmployeeId(str:any){
+  return this.httpClient.post<employees>(`${this.PHP_API_SERVER}/phpscripts/getEmployeeId.php`, str);
+}
+
+getApprovers(){
+  return this.httpClient.get<users[]>(`${this.PHP_API_SERVER}/phpscripts/getApprovers.php`);
+}
   constructor(private httpClient:HttpClient) { }
 }
