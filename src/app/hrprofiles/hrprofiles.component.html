@@ -260,8 +260,8 @@
                                         <th>STATUS</th>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let leave of leaves" class="selectable">
-                                            <td>{{leave.name}}</td>
+                                        <tr *ngFor="let leave of leaves" class="selectable" (click)="selectLeave(leave)">
+                                            <td>{{leave.id_type}}</td>
                                             <td>{{leave.motive}}</td>
                                             <td>{{leave.start}}</td>
                                             <td>{{leave.end}}</td>
@@ -290,7 +290,7 @@
                                 <div class="form-group col-md-2"></div>
                                 <div class="form-group col-md-8">
                                     <label>Motive:</label>
-                                    <select class="form-control">
+                                    <select class="form-control" [(ngModel)]="activeLeave.motive" [disabled]="showLeave">
                                         <option *ngFor="let motive of motives">{{motive}}</option>
                                     </select>
                                 </div>
@@ -299,23 +299,23 @@
                             <div class="form-row col-md-12">
                                 <div class="from-group col-md-4">
                                     <label>Start:</label>
-                                    <input type="date" class="form-control" [(ngModel)]="activeLeave.start">
+                                    <input type="date" class="form-control" [(ngModel)]="activeLeave.start" [disabled]="showLeave">
                                 </div>
                                 <div class="from-group col-md-4">
                                     <label>End:</label>
-                                    <input type="date" class="form-control" [(ngModel)]="activeLeave.end">
+                                    <input type="date" class="form-control" [(ngModel)]="activeLeave.end" [disabled]="showLeave">
                                 </div>
                                 <div class="from-group col-md-4">
                                     <label>Approved:</label>
-                                    <select class="form-control">
-                                        <option *ngFor="let app of approvals" value='app.iduser'>{{app.username}}</option>
+                                    <select class="form-control" [(ngModel)]="activeLeave.approved_by" [disabled]="showLeave">
+                                        <option *ngFor="let app of approvals" [value]="app.iduser">{{app.user_name}}</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-12">
                                     <label>Notes:</label>
-                                    <textarea class="form-control" width="100%" [(ngModel)]="activeLeave.notes"></textarea>
+                                    <textarea class="form-control" width="100%" [(ngModel)]="activeLeave.notes" [disabled]="showLeave"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
@@ -334,13 +334,13 @@
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2">
-                                    <button class="form-control" (click)="cancelView()" *ngIf="editLeave">Cancel</button>
+                                    <button class="form-control" (click)="cancelView()" *ngIf="editLeave && !showLeave">Cancel</button>
                                 </div>
                                 <div class="form-group col-md-8">
-                                    <button class="form-control" (click)="cancelView()" *ngIf="!editLeave">Return</button>
+                                    <button class="form-control" (click)="cancelView()" *ngIf="showLeave">Return</button>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="form-control" (click)="insertLeave()" *ngIf="editLeave">Accept</button>
+                                    <button class="form-control" (click)="insertLeave()" *ngIf="editLeave && !showLeave">Accept</button>
                                 </div>
                             </div>
                         </div>

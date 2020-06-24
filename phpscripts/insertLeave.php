@@ -6,19 +6,19 @@
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata);
 
-    $id_user = $request['id_user'];
-    $id_employee = $request['id_employee'];
-    $id_type = $request['id_type'];
-    $id_department = $request['id_department'];
-    $date = $request['date'];
-    $notes = $request['notes'];
-    $status = $request['status'];
-    $motive = $request['motive'];
-    $approved_by = $request['approved_by'];
-    $start = $request['start'];
-    $end = $request['end'];
+    $id_user = ($request->id_user);
+    $id_employee = ($request->id_employee);
+    $id_type = ($request->id_type);
+    $id_department = ($request->id_department);
+    $date = ($request->date);
+    $notes = ($request->notes);
+    $status = ($request->status);
+    $motive = ($request->motive);
+    $approved_by = ($request->approved_by);
+    $start = ($request->start);
+    $end = ($request->end);
     
-    $sql = "INSERT INTO `hr_processes` (`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `status`) VALUES (null, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$status');";
+    $sql = "INSERT INTO `hr_processes` (`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (null, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status');";
 
     if(mysqli_query($con, $sql)){
         $idprocesses = mysqli_insert_id($con);

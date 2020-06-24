@@ -252,7 +252,7 @@ getLeaves(str:any){
 }
 
 insertLeaves(leaves:leaves){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/getLeaves.php`, leaves);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertLeave.php`, leaves);
 }
 
 getEmployeeId(str:any){

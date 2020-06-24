@@ -33,6 +33,7 @@ export class HrprofilesComponent implements OnInit {
   addJ:boolean = false;
   editVac:boolean = true;
   editLeave:boolean = false;
+  showLeave:boolean = false;
 
   earnVacations:number = 0;
   tookVacations:number = 0;
@@ -48,6 +49,10 @@ export class HrprofilesComponent implements OnInit {
     this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
     this.apiService.getProfile(this.profile[0]).subscribe((prof:profiles[])=>{
       this.profile = prof;
+    });
+
+    this.apiService.getApprovers().subscribe((usrs:users[])=>{
+      this.approvals = usrs;
     });
 
     this.apiService.getEmployeeId({id:this.route.snapshot.paramMap.get('id')}).subscribe((emp:employees)=>{
@@ -70,10 +75,6 @@ export class HrprofilesComponent implements OnInit {
     this.getVacations();
 
     this.getLeaves();
-
-    this.apiService.getApprovers().subscribe((usrs:users[])=>{
-      this.approvals = usrs;
-    });
   }
 
   getAttendences(dt:string){
@@ -182,6 +183,7 @@ export class HrprofilesComponent implements OnInit {
     this.vacationAdd = false;
     this.editVac = false;
     this.editLeave = false;
+    this.showLeave = false;
     this.getVacations();
     this.getLeaves();
   }
@@ -195,11 +197,16 @@ export class HrprofilesComponent implements OnInit {
     this.activeLeave.status = 'PENDING';
     this.vacationAdd = false;
     this.editLeave = true;
+    this.showLeave = false;
   }
 
   insertLeave(){
-    this.apiService.insertLeaves(this.activeLeave).subscribe((str:string)=>{
-      this.getLeaves();
-    })
+    console.log(this.activeLeave);
+  }
+
+  selectLeave(leave:leaves){
+    this.activeLeave = leave;
+    this.editLeave = true;
+    this.showLeave = true;
   }
 }
