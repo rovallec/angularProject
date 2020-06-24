@@ -201,7 +201,9 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertLeave(){
-    console.log(this.activeLeave);
+    this.apiService.insertLeaves(this.activeLeave).subscribe((str:string)=>{
+      this.getLeaves();
+    })
   }
 
   selectLeave(leave:leaves){
