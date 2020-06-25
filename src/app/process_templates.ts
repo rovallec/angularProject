@@ -18,8 +18,8 @@ export class waves_template {
     state: string;
     account_name: string;
     ops_start: string;
-    job:string;
-    payment:string;
+    job: string;
+    payment: string;
     show: string;
     constructor() {
         this.idwaves = null;
@@ -212,20 +212,20 @@ export class attendences_adjustment {
     }
 }
 
-export class vacations{
+export class vacations {
     //process
-    id_user:string;
-    id_employee:string;
-    id_type:string;
-    id_department:string;
-    date:string;
-    notes:string;
-    status:string;
+    id_user: string;
+    id_employee: string;
+    id_type: string;
+    id_department: string;
+    date: string;
+    notes: string;
+    status: string;
     //vacations
-    action:string;
-    count:string;
-    took_date:string;
-    constructor(){
+    action: string;
+    count: string;
+    took_date: string;
+    constructor() {
         this.id_user = null;
         this.id_employee = null;
         this.id_type = null;
@@ -239,84 +239,99 @@ export class vacations{
     }
 }
 
-export class leaves{
-        //process
-        id_user:string;
-        id_employee:string;
-        id_type:string;
-        id_department:string;
-        date:string;
-        notes:string;
-        status:string;
-        //leaves
-        motive:string;
-        approved_by:string;
-        start:string;
-        end:string;
-        constructor(){
-            this.id_user = null;
-            this.id_employee = null;
-            this.id_type = null;
-            this.id_department = null;
-            this.date = null;
-            this.notes = null;
-            this.status = null;
-            this.motive = null;
-            this.approved_by = null;
-            this.start = null;
-            this.end = null;
-        }
+export class leaves {
+    //process
+    id_user: string;
+    id_employee: string;
+    id_type: string;
+    id_department: string;
+    date: string;
+    notes: string;
+    status: string;
+    //leaves
+    motive: string;
+    approved_by: string;
+    start: string;
+    end: string;
+    constructor() {
+        this.id_user = null;
+        this.id_employee = null;
+        this.id_type = null;
+        this.id_department = null;
+        this.date = null;
+        this.notes = null;
+        this.status = null;
+        this.motive = null;
+        this.approved_by = null;
+        this.start = null;
+        this.end = null;
+    }
 }
 
-export class disciplinary_processes{
-            //Process
-            id_user:string;
-            id_employee:string;
-            id_type:string;
-            id_department:string;
-            date:string;
-            notes:string;
-            status:string;
-            //Request
-            idrequests:string;
-            requested_by:string;
-            reason:string;
-            description:string;
-            resolution:string;
-            proceed:string;
-            //Disciplinary Process
-            iddp:string;
-            type:string;
-            cathegory:string;
-            dp_grade:string;
-            motive:string;
-            imposition_date:string;
-            legal_foundament:string;
-            consequences:string;
-            observations:string
+export class disciplinary_processes {
+    //Process
+    id_processes:string;
+    id_user: string;
+    id_employee: string;
+    id_type: string;
+    id_department: string;
+    date: string;
+    notes: string;
+    status: string;
+    //Request
+    idrequests: string;
+    requested_by: string;
+    reason: string;
+    description: string;
+    resolution: string;
+    proceed: string;
+    //Disciplinary Process
+    iddp: string;
+    type: string;
+    cathegory: string;
+    dp_grade: string;
+    motive: string;
+    imposition_date: string;
+    legal_foundament: string;
+    consequences: string;
+    observations: string
+    //Audiences
+    audience_date: string;
+    time: string;
+    comments: string;
+    audience_status: string;
+    //Suspensions
+    start: string;
+    end: string;
 
-            constructor(){
-            this.id_user = null;
-            this.id_employee = null;
-            this.id_type = null;
-            this.id_department = null;
-            this.date = null;
-            this.notes = null;
-            this.status = null;
-            this.idrequests = null;
-            this.requested_by = null;
-            this.reason = null;
-            this.description = null;
-            this.resolution = null;
-            this.proceed = null;
-            this.iddp = null;
-            this.type = null;
-            this.cathegory = null;
-            this.dp_grade = null;
-            this.motive = null;
-            this.imposition_date = null;
-            this.legal_foundament = null;
-            this.consequences = null;
-            this.observations = null;
-            }
+    constructor() {
+        this.id_user = null;
+        this.id_employee = null;
+        this.id_type = null;
+        this.id_department = null;
+        this.date = null;
+        this.notes = null;
+        this.status = null;
+        this.idrequests = null;
+        this.requested_by = null;
+        this.reason = null;
+        this.description = null;
+        this.resolution = null;
+        this.proceed = null;
+        this.iddp = null;
+        this.type = null;
+        this.cathegory = null;
+        this.dp_grade = null;
+        this.motive = null;
+        this.imposition_date = null;
+        this.legal_foundament = null;
+        this.consequences = null;
+        this.observations = null;
+        this.audience_date = null;
+        this.time = null;
+        this.comments = null;
+        this.audience_status = null;
+        this.start = null;
+        this.end = null;
+    }
 }

@@ -32,5 +32,4 @@ if(mysqli_query($con,$sql)){
         http_response_code(404);
     }
 }
-}
 ?>

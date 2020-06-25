@@ -279,5 +279,17 @@ getDisciplinaryProcesses(str:any){
   return this.httpClient.post<disciplinary_processes[]>(`${this.PHP_API_SERVER}/phpscripts/getDisciplinaryProcesses.php`, str)
 }
 
+insertDPA(dp:disciplinary_processes){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertDPA.php`, dp);
+}
+
+insertDPS(dp:disciplinary_processes){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertDPS.php`, dp);
+}
+
+insertDPSA(dp:disciplinary_processes){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertDPSA.php`, dp);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

@@ -41,6 +41,9 @@ export class HrprofilesComponent implements OnInit {
   reasonRequiered: boolean = false;
   setNewRequest:boolean = false;
   storedRequest:boolean = false;
+  newAudience:string = "NO";
+  editRequest:boolean = true;
+  newSuspension:string = "NO";
 
   earnVacations: number = 0;
   tookVacations: number = 0;
@@ -211,9 +214,15 @@ export class HrprofilesComponent implements OnInit {
     this.getVacations();
 
     this.newRequest = false;
+    this.editRequest = true;
     this.getLeaves();
 
     this.getDisciplinaryProcesses();
+    this.getStaffes();
+
+    this.newAudience = "NO";
+    this.newSuspension = "NO";
+
   }
 
   getStaffes(){
@@ -331,6 +340,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   cancelView() {
+    this.editRequest = true;
     this.vacationAdd = false;
     this.editVac = false;
     this.editLeave = false;
@@ -338,6 +348,10 @@ export class HrprofilesComponent implements OnInit {
     this.setNewRequest = false;
     this.reasonRequiered = false;
     this.storedRequest = false;
+    this.activeRequest.status = "PENDING";
+    this.activeRequest.audience_status = 'PENDING';
+    this.newAudience = "NO";
+    this.newSuspension = "NO";
     this.getVacations();
     this.getLeaves();
   }
@@ -367,13 +381,22 @@ export class HrprofilesComponent implements OnInit {
   }
 
   setRequest() {
+    this.editRequest = true;
+    this.activeRequest = new disciplinary_processes;
+    this.activeRequest.id_user = this.authUser.getAuthusr().iduser;
+    this.activeRequest.id_employee = this.activeEmp;
+    this.activeRequest.id_type = "6";
+    this.activeRequest.id_department = "5";
+    this.activeRequest.status = "PENDING";
     this.activeRequest.date = this.todayDate;
+    this.activeRequest.audience_status = 'PENDING';
+    this.storedRequest = false;
     this.setNewRequest = true;
     this.newRequest = true;
   }
 
   pushRequestDate(str: string) {
-    this.activeRequest.date = str;
+    this.activeRequest.imposition_date = str;
   }
 
   reasonChange() {
@@ -476,17 +499,53 @@ export class HrprofilesComponent implements OnInit {
     }
   }
 
-  addDp(){
-  }
-
   insertDPRequest(){
-    this.activeRequest.id_user = this.authUser.getAuthusr().iduser;
-    this.activeRequest.id_employee = this.activeEmp;
-    this.activeRequest.id_type = "6";
-    this.activeRequest.id_department = "5";
-    this.activeRequest.status = "PENDING";
     this.apiService.insertDisciplinary_Request(this.activeRequest).subscribe((str:string)=>{
       this.getDisciplinaryProcesses();
     })
+    this.storedRequest = true;
+  }
+
+  showDp(dp:disciplinary_processes){
+    if(dp.status == 'DISPENSED'){
+      this.editRequest = false;
+    }
+    this.newRequest = false;
+    this.activeRequest = dp;
+    this.storedRequest = true
+  }
+
+  pushAudienceDate(dt:any){
+    this.activeRequest.audience_date = dt; 
+  }
+
+  pushAudienceTime(tm:any){
+    this.activeRequest.time = tm;
+  }
+
+  addDP(){
+    this.activeRequest.audience_status = "SCHEDULED";
+    console.log(this.activeRequest);
+    if(this.newAudience == "YES"){
+      this.apiService.insertDPA(this.activeRequest).subscribe((str:string)=>{
+        this.getDisciplinaryProcesses();
+      })
+    }
+    if(this.newSuspension == "YES"){
+      this.apiService.insertDPS(this.activeRequest).subscribe((str:string)=>{
+        this.getDisciplinaryProcesses();
+      })
+    }
+    if(this.newSuspension == "YES" && this.newAudience == "YES"){
+      this.apiService.insertDPSA(this.activeRequest)
+    }
+  }
+
+  pushSuspensionStart(str:any){
+    this.activeRequest.start = str;
+  }
+
+  pushSuspensionEnd(str:any){
+    this.activeRequest.end = str;
   }
 }

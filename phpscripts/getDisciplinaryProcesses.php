@@ -8,12 +8,13 @@ $request = json_decode($postdata);
 
 $id = ($request->id);
 $return = [];
-$i = [];
+$i = 0;
 
-$sql = "SELECT * FROM `disciplinary_requests` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `disciplinary_requests`.`id_process` LEFT JOIN `disciplinary_processes` ON `disciplinary_processes`.`id_request` = `disciplinary_requests`.`iddisciplinary_requests`;";
+$sql = "SELECT `disciplinary_requests`.*, `hr_processes`.*, `disciplinary_processes`.*, `audiences`.`date` AS `audience_date`, `audiences`.`time`, `audiences`.`comments`, `audiences`.`status` AS `audience_status`, `suspensions`.* FROM `disciplinary_requests` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `disciplinary_requests`.`id_process` LEFT JOIN `disciplinary_processes` ON `disciplinary_processes`.`id_request` = `disciplinary_requests`.`iddisciplinary_requests` LEFT JOIN `audiences` ON `audiences`.`id_disciplinary_process` = `disciplinary_processes`.`iddisciplinary_processes` LEFT JOIN `suspensions` ON `suspensions`.`id_disciplinary_process` = `disciplinary_processes`.`iddisciplinary_processes` WHERE `id_employee` = $id;";
 
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){
+        $return[$i]['id_processes'] = $res['idhr_processes'];
         $return[$i]['id_user'] = $res['id_user'];
         $return[$i]['id_employee'] = $res['id_employee'];
         $return[$i]['id_type'] = $res['id_type'];
@@ -34,8 +35,13 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['motive'] = $res['motive'];
         $return[$i]['imposition_date'] = $res['imposition_date'];
         $return[$i]['legal_foundament'] = $res['legal_foundament'];
-        $return[$i]['consequences'] = $res['consequences'];
         $return[$i]['observations'] = $res['observations'];
+        $return[$i]['audience_date'] = $res['audience_date'];
+        $return[$i]['time'] = $res['time'];
+        $return[$i]['comments'] = $res['comments'];
+        $return[$i]['audience_status'] = $res['audience_status'];
+        $return[$i]['start'] = $res['start'];
+        $return[$i]['end'] = $res['end'];
         $i++;
     }
     echo(json_encode($return));
