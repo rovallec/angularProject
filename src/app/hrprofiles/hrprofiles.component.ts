@@ -223,7 +223,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getDisciplinaryProcesses(){
-    this.apiService.getDisciplinaryProcesses(this.activeEmp).subscribe((dp:disciplinary_processes[])=>{
+    this.apiService.getDisciplinaryProcesses({id:this.activeEmp}).subscribe((dp:disciplinary_processes[])=>{
       this.discilplinary_processes = dp;
     })
   }
