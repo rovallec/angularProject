@@ -267,3 +267,56 @@ export class leaves{
             this.end = null;
         }
 }
+
+export class disciplinary_processes{
+            //Process
+            id_user:string;
+            id_employee:string;
+            id_type:string;
+            id_department:string;
+            date:string;
+            notes:string;
+            status:string;
+            //Request
+            idrequests:string;
+            requested_by:string;
+            reason:string;
+            description:string;
+            resolution:string;
+            proceed:string;
+            //Disciplinary Process
+            iddp:string;
+            type:string;
+            cathegory:string;
+            dp_grade:string;
+            motive:string;
+            imposition_date:string;
+            legal_foundament:string;
+            consequences:string;
+            observations:string
+
+            constructor(){
+            this.id_user = null;
+            this.id_employee = null;
+            this.id_type = null;
+            this.id_department = null;
+            this.date = null;
+            this.notes = null;
+            this.status = null;
+            this.idrequests = null;
+            this.requested_by = null;
+            this.reason = null;
+            this.description = null;
+            this.resolution = null;
+            this.proceed = null;
+            this.iddp = null;
+            this.type = null;
+            this.cathegory = null;
+            this.dp_grade = null;
+            this.motive = null;
+            this.imposition_date = null;
+            this.legal_foundament = null;
+            this.consequences = null;
+            this.observations = null;
+            }
+}

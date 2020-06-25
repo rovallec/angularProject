@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { profiles } from './profiles';
 import { process } from './process';
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes } from './process_templates';
 
 import { Observable } from 'rxjs'; 
 import { users } from './users';
@@ -262,5 +262,22 @@ getEmployeeId(str:any){
 getApprovers(){
   return this.httpClient.get<users[]>(`${this.PHP_API_SERVER}/phpscripts/getApprovers.php`);
 }
+
+insertDisciplinary_Request(str:disciplinary_processes){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertDisciplinary_Request.php`, str)
+}
+
+insertDisciplinary_Process(str:disciplinary_processes){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertDisciplinary_Process.php`, str)
+}
+
+getStaffPeople(){
+  return this.httpClient.get<users[]>(`${this.PHP_API_SERVER}/phpscripts/getStaffPeople.php`)
+}
+
+getDisciplinaryProcesses(str:any){
+  return this.httpClient.post<disciplinary_processes[]>(`${this.PHP_API_SERVER}/phpscripts/getDisciplinaryProcesses.php`, str)
+}
+
   constructor(private httpClient:HttpClient) { }
 }
