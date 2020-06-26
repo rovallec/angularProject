@@ -194,9 +194,7 @@ export class HrprofilesComponent implements OnInit {
       this.approvals = usrs;
     });
 
-    this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
-      this.activeEmp = emp.idemployees;
-    })
+    this.getEmployeeId();
 
     this.getAttendences(this.todayDate);
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
@@ -225,6 +223,12 @@ export class HrprofilesComponent implements OnInit {
 
   }
 
+  getEmployeeId(){  
+    this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+      this.activeEmp = emp.idemployees;
+    })
+  }
+
   getStaffes(){
     this.apiService.getStaffPeople().subscribe((usr:users[])=>{
       this.staffes = usr;
@@ -232,8 +236,10 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getDisciplinaryProcesses(){
+    this.getEmployeeId();
     this.apiService.getDisciplinaryProcesses({id:this.activeEmp}).subscribe((dp:disciplinary_processes[])=>{
       this.discilplinary_processes = dp;
+      console.log(dp);
     })
   }
 
