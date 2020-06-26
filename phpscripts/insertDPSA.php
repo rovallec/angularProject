@@ -6,7 +6,7 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$id_process = ($request->id_processes)
+$id_process = ($request->id_processes);
 $status = ($request->status);
 $idrequests = ($request->idrequests);
 //Disciplinary Process

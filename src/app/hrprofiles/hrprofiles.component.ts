@@ -232,7 +232,9 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getDisciplinaryProcesses(){
-    
+    this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+      this.activeEmp = emp.idemployees;
+    })
     this.apiService.getDisciplinaryProcesses({id:this.activeEmp}).subscribe((dp:disciplinary_processes[])=>{
       this.discilplinary_processes = dp;
       console.log(dp);
@@ -528,12 +530,12 @@ export class HrprofilesComponent implements OnInit {
   addDP(){
     this.activeRequest.audience_status = "SCHEDULED";
     console.log(this.activeRequest);
-    if(this.newAudience == "YES"){
+    if(this.newAudience == "YES" && this.newSuspension == "NO"){
       this.apiService.insertDPA(this.activeRequest).subscribe((str:string)=>{
         this.getDisciplinaryProcesses();
       })
     }
-    if(this.newSuspension == "YES"){
+    if(this.newSuspension == "YES" && this.newAudience == "NO"){
       this.apiService.insertDPS(this.activeRequest).subscribe((str:string)=>{
         this.getDisciplinaryProcesses();
       })
