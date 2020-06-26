@@ -10,11 +10,10 @@ $id = ($request->id);
 $return = [];
 $i = 0;
 
-$sql = "SELECT `disciplinary_requests`.*, `hr_processes`.*, `disciplinary_processes`.*, `audiences`.`date` AS `audience_date`, `audiences`.`time`, `audiences`.`comments`, `audiences`.`status` AS `audience_status`, `suspensions`.* FROM `disciplinary_requests` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `disciplinary_requests`.`id_process` LEFT JOIN `disciplinary_processes` ON `disciplinary_processes`.`id_request` = `disciplinary_requests`.`iddisciplinary_requests` LEFT JOIN `audiences` ON `audiences`.`id_disciplinary_process` = `disciplinary_processes`.`iddisciplinary_processes` LEFT JOIN `suspensions` ON `suspensions`.`id_disciplinary_process` = `disciplinary_processes`.`iddisciplinary_processes` WHERE `id_employee` = $id;";
+$sql = "SELECT `disciplinary_requests`.*, `hr_processes`.*, `disciplinary_processes`.*, `audiences`.`date` AS `audience_date`, `audiences`.`time`, `audiences`.`comments`, `audiences`.`status` AS `audience_status` FROM `disciplinary_requests` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `disciplinary_requests`.`id_process` LEFT JOIN `disciplinary_processes` ON `disciplinary_processes`.`id_request` = `disciplinary_requests`.`iddisciplinary_requests` LEFT JOIN `audiences` ON `audiences`.`id_disciplinary_process` = `disciplinary_processes`.`iddisciplinary_processes` LEFT JOIN `suspensions` ON `suspensions`.`id_disciplinary_process` = `disciplinary_processes`.`iddisciplinary_processes` WHERE `id_employee` = $id;";
 
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){
-        $return[$i]['id_processes'] = $res['idhr_processes'];
         $return[$i]['id_user'] = $res['id_user'];
         $return[$i]['id_employee'] = $res['id_employee'];
         $return[$i]['id_type'] = $res['id_type'];
@@ -41,7 +40,7 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['comments'] = $res['comments'];
         $return[$i]['audience_status'] = $res['audience_status'];
         $return[$i]['start'] = $res['start'];
-        $return[$i]['end'] = $res['end'];
+        $return[$i]['end'] = $res['observations'];
         $i++;
     }
     echo(json_encode($return));
