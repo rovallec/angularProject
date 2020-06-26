@@ -184,6 +184,7 @@ export class HrprofilesComponent implements OnInit {
   constructor(private apiService: ApiService, private route: ActivatedRoute, public authUser: AuthServiceService) { }
 
   ngOnInit() {
+    this.getEmployeeId();
     this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
     this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
     this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
@@ -193,8 +194,6 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getApprovers().subscribe((usrs: users[]) => {
       this.approvals = usrs;
     });
-
-    this.getEmployeeId();
 
     this.getAttendences(this.todayDate);
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
@@ -224,7 +223,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getEmployeeId(){  
-    this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+    this.apiService.getEmployeeId({id: this.route.snapshot.paramMap.get('id')}).subscribe((emp: employees) => {
       this.activeEmp = emp.idemployees;
     })
   }
@@ -239,7 +238,6 @@ export class HrprofilesComponent implements OnInit {
     this.getEmployeeId();
     this.apiService.getDisciplinaryProcesses({id:this.activeEmp}).subscribe((dp:disciplinary_processes[])=>{
       this.discilplinary_processes = dp;
-      console.log(dp);
     })
   }
 
