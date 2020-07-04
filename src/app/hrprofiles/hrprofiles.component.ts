@@ -529,19 +529,21 @@ export class HrprofilesComponent implements OnInit {
 
   addDP(){
     this.activeRequest.audience_status = "SCHEDULED";
-    console.log(this.activeRequest);
-    if(this.newAudience == "YES" && this.newSuspension == "NO"){
+    console.log(this.newAudience + " " + this.newSuspension);
+    if(this.newAudience === "YES" && this.newSuspension === "NO"){
       this.apiService.insertDPA(this.activeRequest).subscribe((str:string)=>{
         this.getDisciplinaryProcesses();
       })
     }
-    if(this.newSuspension == "YES" && this.newAudience == "NO"){
+    if(this.newSuspension === "YES" && this.newAudience === "NO"){
       this.apiService.insertDPS(this.activeRequest).subscribe((str:string)=>{
         this.getDisciplinaryProcesses();
       })
     }
-    if(this.newSuspension == "YES" && this.newAudience == "YES"){
-      this.apiService.insertDPSA(this.activeRequest)
+    if(this.newSuspension === "YES" && this.newAudience === "YES"){
+      this.apiService.insertDPSA(this.activeRequest).subscribe((str:string)=>{
+        this.getDisciplinaryProcesses();
+      })
     }
   }
 
