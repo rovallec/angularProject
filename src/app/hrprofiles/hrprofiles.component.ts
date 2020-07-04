@@ -235,7 +235,7 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.activeEmp = emp.idemployees;
     })
-    this.apiService.getDisciplinaryProcesses({id:this.activeEmp}).subscribe((dp:disciplinary_processes[])=>{
+    this.apiService.getDisciplinaryProcesses({id:this.route.snapshot.paramMap.get('id')}).subscribe((dp:disciplinary_processes[])=>{
       this.discilplinary_processes = dp;
       console.log(dp);
     })
