@@ -18,21 +18,15 @@ $imposition_date = ($request->imposition_date);
 $legal_foundament = ($request->legal_foundament);
 $consequences = ($request->consequences);
 $observations = ($request->observations);
-//Suspensions
-$start = ($request->start);
-$end = ($request->end);
+//Audiences
+$audience_date = ($request->audience_date);
+$time = ($request->time);
+$comments = ($request->comments);
+$audience_status = ($request->audience_status);
 
 $sql = "UPDATE `hr_processes` SET `status` = '$status' WHERE `idhr_processes` = '$id_process'";
 $sql2 = "INSERT INTO `disciplinary_processes` (`iddisciplinary_processes`,`id_request`,`type`,`cathegory`,`dp_grade`,`motive`,`imposition_date`,`legal_foundament`,`consequences`,`observations`) VALUES (null, '$idrequests', '$type', '$cathegory', '$dp_grade', '$motive', '$imposition_date', '$legal_foundament', '$consequences', '$observations');";
 if(mysqli_query($con,$sql)){
-    if(mysqli_query($con,$sql2)){
-        $iddp = mysqli_insert_id($con);
-        $sql3 = "INSERT INTO `suspensions` (`idsuspensions`, `id_disciplinary_process`, `start`, `end`) VALUES (null, '$iddp', '$start', '$end');";
-        if(mysqli_query($con,$sql3)){
-            http_response_code(200);
-        }else{
-            http_response_code(404);
-        }
-    }
-}
+    echo(mysqli_insert_id($con));
+};
 ?>
