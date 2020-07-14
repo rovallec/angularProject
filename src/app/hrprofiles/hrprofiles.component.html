@@ -443,7 +443,7 @@
                                             <td>{{dp.id_type}}</td>
                                             <td>{{dp.id_user}}</td>
                                             <td>{{dp.date}}</td>
-                                            <td>{{dp.motive}}</td>
+                                            <td>{{dp.cathegory}</td>
                                             <td>{{dp.status}}</td>
                                         </tr>
                                     </tbody>
@@ -557,7 +557,7 @@
                                 <div class="form-group col-md-4">
                                     <label>Cathegory:</label>
                                     <select class="form-control" (change)="reasonChange()"
-                                        [(ngModel)]="activeRequest.cathegory">
+                                        [(ngModel)]="activeRequest.cathegory" [disabled]="activeRequest.status === 'DISPENSED'">
                                         <option *ngFor="let reason of reasons">{{reason}}</option>
                                     </select>
                                 </div>
@@ -572,7 +572,7 @@
                                 <div class="form-group col-md-4"
                                     *ngIf="storedRequest  && activeRequest.status != 'PENDING'">
                                     <label>Grade:</label>
-                                    <select class="form-control" [(ngModel)]="activeRequest.dp_grade">
+                                    <select class="form-control" [(ngModel)]="activeRequest.dp_grade" [disabled]="activeRequest.status === 'DISPENSED'">
                                         <option>Retroalimentacion</option>
                                         <option>Advertencia Verbal</option>
                                         <option>Advertencia Escrita</option>
@@ -589,11 +589,11 @@
                                     <label>Imposition Date:</label>
                                     <input type="date" (change)="pushRequestDate($event.target.value)"
                                         class="form-control" *ngIf="activeRequest.status != 'ACCEPTED' && activeRequest.status != 'DISPENSED'">
-                                        <input type="text" class="form-control" [(ngModel)]="activeRequest.imposition_date" *ngIf="activeRequest.status === 'DISPENSED'" >
+                                        <input type="text" class="form-control" [(ngModel)]="activeRequest.imposition_date" *ngIf="activeRequest.status === 'DISPENSED'" [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Type:</label>
-                                    <select class="form-control" [(ngModel)]="activeRequest.type">
+                                    <select class="form-control" [(ngModel)]="activeRequest.type" [disabled]="activeRequest.status === 'DISPENSED'">
                                         <option>Entrada/Salida Tarde/Temprano</option>
                                         <option>Violacion a Reglas de la Empresa</option>
                                         <option>Fraude</option>
@@ -606,7 +606,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Consequences:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="activeRequest.consequences">
+                                    <input type="text" class="form-control" [(ngModel)]="activeRequest.consequences" [disabled]="activeRequest.status === 'DISPENSED'">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Legal Foundament</label>
@@ -703,13 +703,13 @@
                                 *ngIf="storedRequest && activeRequest.status === 'ACCEPTED' && newSuspension === 'YES' || !editRequest">
                                 <div class="form-group col-md-6">
                                     <label>Start Date:</label>
-                                    <input type="date" (change)="pushSuspensionStart($event.target.value)" class="form-control">
+                                    <input type="date" (change)="pushSuspensionStart($event.target.value)" class="form-control" *ngIf="activeRequest.status != 'DISPENSED'">
                                     <input class="form-control" type="text" [disabled]="true" [(ngModel)]="activeRequest.start" *ngIf=" activeRequest.status === 'DISPENSED'">
                                     
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>End Date:</label>
-                                    <input type="date" (change)="pushSuspensionEnd($event.target.value)" class="form-control">
+                                    <input type="date" (change)="pushSuspensionEnd($event.target.value)" class="form-control" *ngIf="activeRequest.status != 'DISPENSED'">
                                     <input class="form-control" type="text" [disabled]="true" [(ngModel)]="activeRequest.end" *ngIf=" activeRequest.status === 'DISPENSED'">
                                 </div>
                             </div>
