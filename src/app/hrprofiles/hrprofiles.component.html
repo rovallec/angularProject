@@ -514,7 +514,7 @@
                                     <label>Status:</label>
                                     <input type="text" class="form-control" [disabled]=true
                                         [(ngModel)]="activeRequest.status"
-                                        *ngIf="activeRequest.status === 'ACCEPTED' || activeRequest.status === 'REJECTED' || activeRequest.status = 'DISPENSED'">
+                                        *ngIf="activeRequest.status === 'ACCEPTED' || activeRequest.status === 'REJECTED' || activeRequest.status === 'DISPENSED'">
                                     <select class="form-control" [disabled]="!storedRequest"
                                         [(ngModel)]="activeRequest.status"
                                         *ngIf="storedRequest && activeRequest.status === 'PENDING'">
