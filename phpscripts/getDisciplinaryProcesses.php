@@ -42,7 +42,7 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['comments'] = $res['comments'];
         $return[$i]['audience_status'] = $res['audience_status'];
         $return[$i]['start'] = $res['start'];
-        $return[$i]['end'] = $res['observations'];
+        $return[$i]['end'] = $res['end'];
         $i++;
     }
     echo(json_encode($return));
