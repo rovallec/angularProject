@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -29,7 +30,10 @@ export class HrprofilesComponent implements OnInit {
   showAttendences: attendences[] = [];
   leaves: leaves[] = [];
   discilplinary_processes: disciplinary_processes[] = [];
+  insurances:insurances = new insurances;
+  beneficiaries:beneficiaries[] = [];
 
+  insuranceNull:boolean = true;
   activeEmp: string = null;
   editAdj: boolean = false;
   vacationAdd: boolean = false;
@@ -222,6 +226,9 @@ export class HrprofilesComponent implements OnInit {
 
     this.newAudience = "NO";
     this.newSuspension = "NO";
+
+    this.getInsurances();
+    this.getBeneficiaries();
 
   }
 
@@ -559,5 +566,20 @@ export class HrprofilesComponent implements OnInit {
 
   pushSuspensionEnd(str:any){
     this.activeRequest.end = str;
+  }
+
+  getBeneficiaries(){
+    this.apiService.getBeneficiaries({id: this.insurances.idinsurances}).subscribe((res:beneficiaries[])=>{
+    this.beneficiaries = res;
+    })
+  }
+
+  getInsurances(){
+    this.apiService.getInsurances({id: this.route.snapshot.paramMap.get('id')}).subscribe((ins:insurances)=>{
+      this.insurances = ins;
+    });
+    if(isNullOrUndefined(this.insurances)){
+      this.insuranceNull = false;
+    }
   }
 }

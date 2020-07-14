@@ -335,3 +335,45 @@ export class disciplinary_processes {
         this.end = null;
     }
 }
+
+export class insurances{
+    idinsurances:string;
+    id_process:string;
+    plan:string;
+    license:string;
+    cert:string;
+    contractor:string;
+    place:string;
+    reception:string;
+    delivered:string;
+    status:string;
+    constructor(){
+        this.idinsurances = null;
+        this.id_process = null;
+        this.plan = null;
+        this.license = null;
+        this.cert = null;
+        this.contractor = null;
+        this.place = null;
+        this.reception = null;
+        this.delivered = null;
+        this.status = null;
+    }
+}
+
+export class beneficiaries{
+        idbeneficiaries:string;
+        first_name:string;
+        second_name:string;
+        first_lastname:string;
+        second_lastname:string;
+        afinity:string;
+        constructor(){
+            this.idbeneficiaries = null;
+            this.first_name = null;
+            this.second_name = null;
+            this.first_lastname = null;
+            this.second_lastname = null;
+            this.afinity = null;
+        }
+}
