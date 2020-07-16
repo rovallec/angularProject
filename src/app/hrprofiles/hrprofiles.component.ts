@@ -590,6 +590,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertInsurance(){
+    this.insurances = new insurances;
     this.insurances.id_user = this.authUser.getAuthusr().user_name;
     this.insurances.date = this.todayDate;
     this.insurances.status = "PENDING";
