@@ -598,4 +598,10 @@ export class HrprofilesComponent implements OnInit {
     this.insurances.id_employee = this.activeEmp;
     this.newInsurance = true;
   }
+  
+  insertInsurances(){
+    this.apiService.insertInsurances(this.insurances).subscribe((str:string)=>{
+      this.getInsurances();
+    })
+  }
 }
