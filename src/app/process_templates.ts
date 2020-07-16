@@ -337,6 +337,16 @@ export class disciplinary_processes {
 }
 
 export class insurances{
+    //Process
+    id_processes:string;
+    id_user: string;
+    id_employee: string;
+    id_type: string;
+    id_department: string;
+    date: string;
+    notes: string;
+    status: string;
+    //Insurances
     idinsurances:string;
     id_process:string;
     plan:string;
@@ -346,7 +356,7 @@ export class insurances{
     place:string;
     reception:string;
     delivered:string;
-    status:string;
+    in_status:string;
     constructor(){
         this.idinsurances = null;
         this.id_process = null;

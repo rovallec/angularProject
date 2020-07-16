@@ -30,9 +30,10 @@ export class HrprofilesComponent implements OnInit {
   showAttendences: attendences[] = [];
   leaves: leaves[] = [];
   discilplinary_processes: disciplinary_processes[] = [];
-  insurances:insurances = new insurances;
+  insurances:insurances;
   beneficiaries:beneficiaries[] = [];
 
+  newInsurance:boolean = false;
   insuranceNull:boolean = true;
   activeEmp: string = null;
   editAdj: boolean = false;
@@ -569,17 +570,32 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getBeneficiaries(){
-    this.apiService.getBeneficiaries({id: this.insurances.idinsurances}).subscribe((res:beneficiaries[])=>{
-    this.beneficiaries = res;
-    })
+    if(isNullOrUndefined(this.insurances)){
+      this.insuranceNull = false;
+    }else{
+      this.apiService.getBeneficiaries({id: this.insurances.idinsurances}).subscribe((res:beneficiaries[])=>{
+        this.beneficiaries = res;
+        });
+    }
   }
 
   getInsurances(){
-    this.apiService.getInsurances({id: this.route.snapshot.paramMap.get('id')}).subscribe((ins:insurances)=>{
-      this.insurances = ins;
-    });
     if(isNullOrUndefined(this.insurances)){
       this.insuranceNull = false;
+    }else{
+      this.apiService.getInsurances({id: this.route.snapshot.paramMap.get('id')}).subscribe((ins:insurances)=>{
+        this.insurances = ins;
+      });
     }
+  }
+
+  insertInsurance(){
+    this.insurances = new insurances;
+    this.insurances.id_user = this.authUser.getAuthusr().user_name;
+    this.insurances.date = this.todayDate;
+    this.insurances.status = "PENDING";
+    this.insurances.place = "Guatemala";
+    this.insurances.id_employee = this.activeEmp;
+    this.newInsurance = true;
   }
 }
