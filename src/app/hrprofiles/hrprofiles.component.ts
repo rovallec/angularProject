@@ -595,7 +595,9 @@ export class HrprofilesComponent implements OnInit {
     this.insurances.date = this.todayDate;
     this.insurances.status = "PENDING";
     this.insurances.place = "Guatemala";
-    this.insurances.id_employee = this.activeEmp;
+    this.apiService.getEmployeeId({id:this.route.snapshot.paramMap.get('id')}).subscribe((txt:employees)=>{
+      this.insurances.id_employee = txt.idemployees;
+    })
     this.newInsurance = true;
   }
   
