@@ -358,6 +358,14 @@ export class insurances{
     delivered:string;
     in_status:string;
     constructor(){
+        this.id_processes = null;
+        this.id_user = null;
+        this.id_employee = null;
+        this.id_type = null;
+        this.id_department = null;
+        this.date = null;
+        this.notes = null;
+        this.status = null;
         this.idinsurances = null;
         this.id_process = null;
         this.plan = null;
