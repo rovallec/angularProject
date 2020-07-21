@@ -599,7 +599,6 @@ export class HrprofilesComponent implements OnInit {
       this.insurances.id_employee = txt.idemployees;
     })
     this.newInsurance = true;
-    console.log(this.insurances);
   }
   
   insertInsurances(){
@@ -607,6 +606,7 @@ export class HrprofilesComponent implements OnInit {
     this.insurances.id_type = '7';
     this.insurances.id_department = '5';
     this.insurances.place = "Guatemala";
+    console.log(this.insurances);
     this.apiService.insertInsurances(this.insurances).subscribe((str:string)=>{
       this.getInsurances();
     })
