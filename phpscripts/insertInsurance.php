@@ -7,7 +7,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id_user = ($request->id_user);
-$id_employe = ($request->id_employee);
+$id_employee = ($request->id_employee);
 $id_type = ($request->id_type);
 $id_department = ($request->id_department);
 $date = ($request->date);
