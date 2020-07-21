@@ -6,7 +6,6 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$id_processes = ($request->id_processes);
 $id_user = ($request->id_user);
 $id_employe = ($request->id_employee);
 $id_type = ($request->id_type);
