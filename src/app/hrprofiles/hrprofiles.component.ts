@@ -590,10 +590,14 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertInsurance(){
+    this.insurances.id_user = this.authUser.getAuthusr().iduser;
+    this.insurances.id_type = '7';
+    this.insurances.id_department = '5';
     this.insurances = new insurances;
     this.insurances.id_user = this.authUser.getAuthusr().user_name;
     this.insurances.date = this.todayDate;
     this.insurances.status = "PENDING";
+    this.insurances.in_status = "PENDING";
     this.insurances.place = "Guatemala";
     this.apiService.getEmployeeId({id:this.route.snapshot.paramMap.get('id')}).subscribe((txt:employees)=>{
       this.insurances.id_employee = txt.idemployees;
