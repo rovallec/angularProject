@@ -590,6 +590,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertInsurance(){
+    this.insurances = new insurances;
     this.insurances.id_user = this.authUser.getAuthusr().iduser;
     this.insurances.id_type = '7';
     this.insurances.id_department = '5';
