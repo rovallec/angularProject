@@ -604,6 +604,7 @@ export class HrprofilesComponent implements OnInit {
       this.insurances.id_employee = txt.idemployees;
     })
     this.newInsurance = true;
+    console.log(this.insurances);
   }
   
   insertInsurances(){
