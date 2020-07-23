@@ -585,6 +585,8 @@ export class HrprofilesComponent implements OnInit {
       });
       if(isNullOrUndefined(this.insurances)){
         this.insuranceNull = false;
+      }else{
+        this.insuranceNull = true;
       }
   }
 
