@@ -23,6 +23,7 @@ export class HrprofilesComponent implements OnInit {
   activeLeave: leaves = new leaves;
   activeRequest = new disciplinary_processes;
 
+  beneficiaryName:string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
 
   showAttAdjustments: attendences_adjustment[] = [];
@@ -33,6 +34,8 @@ export class HrprofilesComponent implements OnInit {
   insurances: insurances = new insurances;
   beneficiaries: beneficiaries[] = [];
 
+  addBeneficiary:boolean = false;
+  modifyInsurance:boolean = false;
   newInsurance: boolean = false;
   insuranceNull: boolean = true;
   activeEmp: string = null;
@@ -366,6 +369,7 @@ export class HrprofilesComponent implements OnInit {
     this.newSuspension = "NO";
     this.getVacations();
     this.getLeaves();
+    this.modifyInsurance = false;
   }
 
   setLeave() {
@@ -609,4 +613,15 @@ export class HrprofilesComponent implements OnInit {
       this.getInsurances();
     })
   }
+
+  activeModify(){
+    this.modifyInsurance = true;
+  }
+
+  insertBeneficiary(){
+    this.addBeneficiary = true;
+    this.beneficiaries.push(new beneficiaries);
+  }
+  
+  saveInsurance(){}
 }
