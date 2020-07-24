@@ -867,7 +867,7 @@
                                     </tr>
                                     <tr>
                                         <td><input type="text" class="form-control" [(ngModel)]="beneficiaryName"></td>
-                                        <td><input type="text" class="form-control" [(ngModel)]="beneficiaries[beneficiaries.length].afinity"></td>
+                                        <td><input type="text" class="form-control" [(ngModel)]="beneficiaries[beneficiaries.length - 1].afinity"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -875,9 +875,9 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="activeModify()"
-                                    *ngIf="!modifyInsurance">Modify</button>
+                                    *ngIf="!modifyInsurance && !addBeneficiary">Modify</button>
                                 <button class="form-control" (click)="cancelView()"
-                                    *ngIf="modifyInsurance">Cancel</button>
+                                    *ngIf="modifyInsurance || addBeneficiary">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -885,6 +885,7 @@
                                     *ngIf="!modifyInsurance">New</button>
                                 <button class="form-control" (click)="saveInsurance()"
                                     *ngIf="modifyInsurance">Save</button>
+                                    <button class="form-control" (click)="saveBeneficiary()" *ngIf="addBeneficiary">Save</button>
                             </div>
                         </div>
                     </div>

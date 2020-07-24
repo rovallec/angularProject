@@ -355,6 +355,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   cancelView() {
+    this.addBeneficiary = false;
     this.editRequest = true;
     this.vacationAdd = false;
     this.editVac = false;
@@ -628,4 +629,6 @@ export class HrprofilesComponent implements OnInit {
   }
 
   saveInsurance(){}
+  
+  saveBeneficiary(){}
 }
