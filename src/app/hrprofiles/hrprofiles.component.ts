@@ -6,7 +6,7 @@ import { attendences, attendences_adjustment, vacations, leaves, waves_template,
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -583,7 +583,7 @@ export class HrprofilesComponent implements OnInit {
       this.apiService.getInsurances({id: this.route.snapshot.paramMap.get('id')}).subscribe((ins:insurances)=>{
         this.insurances = ins;
       });
-      if(isNullOrUndefined(this.insurances)){
+      if(isUndefined(this.insurances)){
         this.insuranceNull = false;
       }else{
         this.insuranceNull = true;
