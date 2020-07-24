@@ -622,6 +622,6 @@ export class HrprofilesComponent implements OnInit {
     this.addBeneficiary = true;
     this.beneficiaries.push(new beneficiaries);
   }
-  
+
   saveInsurance(){}
 }
