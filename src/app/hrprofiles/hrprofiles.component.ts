@@ -579,11 +579,11 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getInsurances({ id: this.route.snapshot.paramMap.get('id') }).subscribe((ins: insurances) => {
       this.insurances = ins;
     });
-    if (isNullOrUndefined(this.insurances)) {
-      this.insuranceNull = false;
-    } else {
+    if(this.insurances.status.length > 0) {
       this.insuranceNull = true;
       this.getBeneficiaries;
+    } else {
+      this.insuranceNull = false;
     }
   }
 
