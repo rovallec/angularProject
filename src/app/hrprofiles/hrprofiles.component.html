@@ -818,7 +818,7 @@
                             <div class="form-group col-md-3">
                                 <label>License:</label>
                                 <input type="text" class="form-control" [(ngModel)]="insurances.license"
-                                    [disabled]="modifyInsurance">
+                                    [disabled]="!modifyInsurance">
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Certificate:</label>
@@ -836,7 +836,23 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-row col-md-12">
+                        <div class="form-row col-md-12" *ngIf="addBeneficiary">
+                            <table style="width:98%; margin-left: 1%; text-align: center;"
+                                class="table table-striped table-hover">
+                                <thead>
+                                    <th>NAME</th>
+                                    <th>AFINITY</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="selectable" *ngFor="let bn of beneficiaries">
+                                        <td>{{bn.first_name}} {{bn.second_name}} {{bn.first_lastname}}
+                                            {{bn.second_lastname}}</td>
+                                        <td>{{bn.afinity}}</td>
+                                    </tr>   
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-row col-md-12" *ngIf="!addBeneficiary">
                             <table style="width:98%; margin-left: 1%; text-align: center;"
                                 class="table table-striped table-hover">
                                 <thead>
@@ -849,9 +865,9 @@
                                             {{bn.second_lastname}}</td>
                                         <td>{{bn.afinity}}</td>
                                     </tr>
-                                    <tr *ngIf="addBeneficiary">
-                                        <td>test</td>
-                                        <td>test</td>
+                                    <tr>
+                                        <td>Test</td>
+                                        <td>Test</td>
                                     </tr>
                                 </tbody>
                             </table>
