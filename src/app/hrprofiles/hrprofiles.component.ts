@@ -6,7 +6,7 @@ import { attendences, attendences_adjustment, vacations, leaves, waves_template,
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
-import { isNullOrUndefined, isUndefined } from 'util';
+import { isNullOrUndefined, isUndefined, isNull } from 'util';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -16,7 +16,7 @@ import { isNullOrUndefined, isUndefined } from 'util';
 export class HrprofilesComponent implements OnInit {
 
   profile: profiles[] = [new profiles()];
-  staffes:users[] = [];
+  staffes: users[] = [];
 
   attAdjudjment: attendences_adjustment = new attendences_adjustment;
   activeVacation: vacations = new vacations;
@@ -30,11 +30,11 @@ export class HrprofilesComponent implements OnInit {
   showAttendences: attendences[] = [];
   leaves: leaves[] = [];
   discilplinary_processes: disciplinary_processes[] = [];
-  insurances:insurances;
-  beneficiaries:beneficiaries[] = [];
+  insurances: insurances;
+  beneficiaries: beneficiaries[] = [];
 
-  newInsurance:boolean = false;
-  insuranceNull:boolean = true;
+  newInsurance: boolean = false;
+  insuranceNull: boolean = true;
   activeEmp: string = null;
   editAdj: boolean = false;
   vacationAdd: boolean = false;
@@ -44,11 +44,11 @@ export class HrprofilesComponent implements OnInit {
   showLeave: boolean = false;
   newRequest: boolean = false;
   reasonRequiered: boolean = false;
-  setNewRequest:boolean = false;
-  storedRequest:boolean = false;
-  newAudience:string = "NO";
-  editRequest:boolean = true;
-  newSuspension:string = "NO";
+  setNewRequest: boolean = false;
+  storedRequest: boolean = false;
+  newAudience: string = "NO";
+  editRequest: boolean = true;
+  newSuspension: string = "NO";
 
   earnVacations: number = 0;
   tookVacations: number = 0;
@@ -233,17 +233,17 @@ export class HrprofilesComponent implements OnInit {
 
   }
 
-  getStaffes(){
-    this.apiService.getStaffPeople().subscribe((usr:users[])=>{
+  getStaffes() {
+    this.apiService.getStaffPeople().subscribe((usr: users[]) => {
       this.staffes = usr;
     })
   }
 
-  getDisciplinaryProcesses(){
+  getDisciplinaryProcesses() {
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.activeEmp = emp.idemployees;
     })
-    this.apiService.getDisciplinaryProcesses({id:this.route.snapshot.paramMap.get('id')}).subscribe((dp:disciplinary_processes[])=>{
+    this.apiService.getDisciplinaryProcesses({ id: this.route.snapshot.paramMap.get('id') }).subscribe((dp: disciplinary_processes[]) => {
       this.discilplinary_processes = dp;
       console.log(dp);
     })
@@ -449,77 +449,77 @@ export class HrprofilesComponent implements OnInit {
   motiveChange() {
     this.activeRequest.legal_foundament = null;
 
-    if(this.activeRequest.motive.split("*")[0] == "21" || this.activeRequest.motive.split("*")[0] == "55" || this.activeRequest.motive.split("*")[0] == "58" || this.activeRequest.motive.split("*")[0] == "73" || this.activeRequest.motive.split("*")[0] == "74" || this.activeRequest.motive.split("*")[0] == "75"){
+    if (this.activeRequest.motive.split("*")[0] == "21" || this.activeRequest.motive.split("*")[0] == "55" || this.activeRequest.motive.split("*")[0] == "58" || this.activeRequest.motive.split("*")[0] == "73" || this.activeRequest.motive.split("*")[0] == "74" || this.activeRequest.motive.split("*")[0] == "75") {
       this.activeRequest.legal_foundament = this.legal_foundament[0].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "1" || this.activeRequest.motive.split("*")[0] == "3" || this.activeRequest.motive.split("*")[0] == "4" || this.activeRequest.motive.split("*")[0] == "5" || this.activeRequest.motive.split("*")[0] == "7" || this.activeRequest.motive.split("*")[0] == "8" || this.activeRequest.motive.split("*")[0] == "9" || this.activeRequest.motive.split("*")[0] == "10" || this.activeRequest.motive.split("*")[0] == "11" || this.activeRequest.motive.split("*")[0] == "13" || this.activeRequest.motive.split("*")[0] == "14" || this.activeRequest.motive.split("*")[0] == "15" || this.activeRequest.motive.split("*")[0] == "16" || this.activeRequest.motive.split("*")[0] == "17" || this.activeRequest.motive.split("*")[0] == "19" || this.activeRequest.motive.split("*")[0] == "24" || this.activeRequest.motive.split("*")[0] == "25" || this.activeRequest.motive.split("*")[0] == "27" || this.activeRequest.motive.split("*")[0] == "31" || this.activeRequest.motive.split("*")[0] == "36" || this.activeRequest.motive.split("*")[0] == "37" || this.activeRequest.motive.split("*")[0] == "42" || this.activeRequest.motive.split("*")[0] == "61" || this.activeRequest.motive.split("*")[0] == "62" || this.activeRequest.motive.split("*")[0] == "64" || this.activeRequest.motive.split("*")[0] == "65" || this.activeRequest.motive.split("*")[0] == "67" || this.activeRequest.motive.split("*")[0] == "68" || this.activeRequest.motive.split("*")[0] == "69" || this.activeRequest.motive.split("*")[0] == "72" || this.activeRequest.motive.split("*")[0] == "76" || this.activeRequest.motive.split("*")[0] == "78" || this.activeRequest.motive.split("*")[0] == "79" || this.activeRequest.motive.split("*")[0] == "80" || this.activeRequest.motive.split("*")[0] == "81" || this.activeRequest.motive.split("*")[0] == "82" || this.activeRequest.motive.split("*")[0] == "83"){
+    if (this.activeRequest.motive.split("*")[0] == "1" || this.activeRequest.motive.split("*")[0] == "3" || this.activeRequest.motive.split("*")[0] == "4" || this.activeRequest.motive.split("*")[0] == "5" || this.activeRequest.motive.split("*")[0] == "7" || this.activeRequest.motive.split("*")[0] == "8" || this.activeRequest.motive.split("*")[0] == "9" || this.activeRequest.motive.split("*")[0] == "10" || this.activeRequest.motive.split("*")[0] == "11" || this.activeRequest.motive.split("*")[0] == "13" || this.activeRequest.motive.split("*")[0] == "14" || this.activeRequest.motive.split("*")[0] == "15" || this.activeRequest.motive.split("*")[0] == "16" || this.activeRequest.motive.split("*")[0] == "17" || this.activeRequest.motive.split("*")[0] == "19" || this.activeRequest.motive.split("*")[0] == "24" || this.activeRequest.motive.split("*")[0] == "25" || this.activeRequest.motive.split("*")[0] == "27" || this.activeRequest.motive.split("*")[0] == "31" || this.activeRequest.motive.split("*")[0] == "36" || this.activeRequest.motive.split("*")[0] == "37" || this.activeRequest.motive.split("*")[0] == "42" || this.activeRequest.motive.split("*")[0] == "61" || this.activeRequest.motive.split("*")[0] == "62" || this.activeRequest.motive.split("*")[0] == "64" || this.activeRequest.motive.split("*")[0] == "65" || this.activeRequest.motive.split("*")[0] == "67" || this.activeRequest.motive.split("*")[0] == "68" || this.activeRequest.motive.split("*")[0] == "69" || this.activeRequest.motive.split("*")[0] == "72" || this.activeRequest.motive.split("*")[0] == "76" || this.activeRequest.motive.split("*")[0] == "78" || this.activeRequest.motive.split("*")[0] == "79" || this.activeRequest.motive.split("*")[0] == "80" || this.activeRequest.motive.split("*")[0] == "81" || this.activeRequest.motive.split("*")[0] == "82" || this.activeRequest.motive.split("*")[0] == "83") {
       this.activeRequest.legal_foundament = this.legal_foundament[1].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "22" || this.activeRequest.motive.split("*")[0] == "32" || this.activeRequest.motive.split("*")[0] == "38" || this.activeRequest.motive.split("*")[0] == "39" || this.activeRequest.motive.split("*")[0] == "45"){
+    if (this.activeRequest.motive.split("*")[0] == "22" || this.activeRequest.motive.split("*")[0] == "32" || this.activeRequest.motive.split("*")[0] == "38" || this.activeRequest.motive.split("*")[0] == "39" || this.activeRequest.motive.split("*")[0] == "45") {
       this.activeRequest.legal_foundament = this.legal_foundament[2].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "23" || this.activeRequest.motive.split("*")[0] == "41"){
+    if (this.activeRequest.motive.split("*")[0] == "23" || this.activeRequest.motive.split("*")[0] == "41") {
       this.activeRequest.legal_foundament = this.legal_foundament[3].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "86"){
+    if (this.activeRequest.motive.split("*")[0] == "86") {
       this.activeRequest.legal_foundament = this.legal_foundament[5].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "2"){
+    if (this.activeRequest.motive.split("*")[0] == "2") {
       this.activeRequest.legal_foundament = this.legal_foundament[6].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "26"){
+    if (this.activeRequest.motive.split("*")[0] == "26") {
       this.activeRequest.legal_foundament = this.legal_foundament[7].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "29" || this.activeRequest.motive.split("*")[0] == "33" || this.activeRequest.motive.split("*")[0] == "34" || this.activeRequest.motive.split("*")[0] == "35" || this.activeRequest.motive.split("*")[0] == "43" || this.activeRequest.motive.split("*")[0] == "44" || this.activeRequest.motive.split("*")[0] == "59" || this.activeRequest.motive.split("*")[0] == "70" || this.activeRequest.motive.split("*")[0] == "71"){
+    if (this.activeRequest.motive.split("*")[0] == "29" || this.activeRequest.motive.split("*")[0] == "33" || this.activeRequest.motive.split("*")[0] == "34" || this.activeRequest.motive.split("*")[0] == "35" || this.activeRequest.motive.split("*")[0] == "43" || this.activeRequest.motive.split("*")[0] == "44" || this.activeRequest.motive.split("*")[0] == "59" || this.activeRequest.motive.split("*")[0] == "70" || this.activeRequest.motive.split("*")[0] == "71") {
       this.activeRequest.legal_foundament = this.legal_foundament[9].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "47"){
+    if (this.activeRequest.motive.split("*")[0] == "47") {
       this.activeRequest.legal_foundament = this.legal_foundament[10].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "20" || this.activeRequest.motive.split("*")[0] == "30" || this.activeRequest.motive.split("*")[0] == "40" || this.activeRequest.motive.split("*")[0] == "60" || this.activeRequest.motive.split("*")[0] == "63" || this.activeRequest.motive.split("*")[0] == "66" || this.activeRequest.motive.split("*")[0] == "84" || this.activeRequest.motive.split("*")[0] == "87" || this.activeRequest.motive.split("*")[0] == "88" || this.activeRequest.motive.split("*")[0] == "89" || this.activeRequest.motive.split("*")[0] == "90" || this.activeRequest.motive.split("*")[0] == "91"){
+    if (this.activeRequest.motive.split("*")[0] == "20" || this.activeRequest.motive.split("*")[0] == "30" || this.activeRequest.motive.split("*")[0] == "40" || this.activeRequest.motive.split("*")[0] == "60" || this.activeRequest.motive.split("*")[0] == "63" || this.activeRequest.motive.split("*")[0] == "66" || this.activeRequest.motive.split("*")[0] == "84" || this.activeRequest.motive.split("*")[0] == "87" || this.activeRequest.motive.split("*")[0] == "88" || this.activeRequest.motive.split("*")[0] == "89" || this.activeRequest.motive.split("*")[0] == "90" || this.activeRequest.motive.split("*")[0] == "91") {
       this.activeRequest.legal_foundament = this.legal_foundament[11].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "48"){
+    if (this.activeRequest.motive.split("*")[0] == "48") {
       this.activeRequest.legal_foundament = this.legal_foundament[12].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "49" || this.activeRequest.motive.split("*")[0] == "12"){
+    if (this.activeRequest.motive.split("*")[0] == "49" || this.activeRequest.motive.split("*")[0] == "12") {
       this.activeRequest.legal_foundament = this.legal_foundament[13].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "50" || this.activeRequest.motive.split("*")[0] == "54"){
+    if (this.activeRequest.motive.split("*")[0] == "50" || this.activeRequest.motive.split("*")[0] == "54") {
       this.activeRequest.legal_foundament = this.legal_foundament[14].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "51" || this.activeRequest.motive.split("*")[0] == "56" || this.activeRequest.motive.split("*")[0] == "57"){
+    if (this.activeRequest.motive.split("*")[0] == "51" || this.activeRequest.motive.split("*")[0] == "56" || this.activeRequest.motive.split("*")[0] == "57") {
       this.activeRequest.legal_foundament = this.legal_foundament[15].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "6"){
+    if (this.activeRequest.motive.split("*")[0] == "6") {
       this.activeRequest.legal_foundament = this.legal_foundament[16].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "52" || this.activeRequest.motive.split("*")[0] == "77"){
+    if (this.activeRequest.motive.split("*")[0] == "52" || this.activeRequest.motive.split("*")[0] == "77") {
       this.activeRequest.legal_foundament = this.legal_foundament[17].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "28"){
+    if (this.activeRequest.motive.split("*")[0] == "28") {
       this.activeRequest.legal_foundament = this.legal_foundament[19].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "53"){
+    if (this.activeRequest.motive.split("*")[0] == "53") {
       this.activeRequest.legal_foundament = this.legal_foundament[20].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "18"){
+    if (this.activeRequest.motive.split("*")[0] == "18") {
       this.activeRequest.legal_foundament = this.legal_foundament[1].split("*")[0] + ", " + this.legal_foundament[15].split("*")[0];
     }
-    if(this.activeRequest.motive.split("*")[0] == "85"){
+    if (this.activeRequest.motive.split("*")[0] == "85") {
       this.activeRequest.legal_foundament = this.legal_foundament[5].split("*")[0] + ", 77, e";
     }
   }
 
-  insertDPRequest(){
-    this.apiService.insertDisciplinary_Request(this.activeRequest).subscribe((str:string)=>{
+  insertDPRequest() {
+    this.apiService.insertDisciplinary_Request(this.activeRequest).subscribe((str: string) => {
       this.getDisciplinaryProcesses();
     })
     this.storedRequest = true;
   }
 
-  showDp(dp:disciplinary_processes){
-    if(dp.status == 'DISPENSED'){
+  showDp(dp: disciplinary_processes) {
+    if (dp.status == 'DISPENSED') {
       this.editRequest = false;
     }
     this.newRequest = false;
@@ -527,88 +527,85 @@ export class HrprofilesComponent implements OnInit {
     this.storedRequest = true
   }
 
-  pushAudienceDate(dt:any){
-    this.activeRequest.audience_date = dt; 
+  pushAudienceDate(dt: any) {
+    this.activeRequest.audience_date = dt;
   }
 
-  pushAudienceTime(tm:any){
+  pushAudienceTime(tm: any) {
     this.activeRequest.time = tm;
   }
 
-  addDP(){
+  addDP() {
     this.activeRequest.audience_status = "SCHEDULED";
     this.activeRequest.status = "DISPENSED";
     console.log(this.newAudience + " " + this.newSuspension);
-    if(this.newAudience === "YES" && this.newSuspension === "NO"){
-      this.apiService.insertDPA(this.activeRequest).subscribe((str:string)=>{
+    if (this.newAudience === "YES" && this.newSuspension === "NO") {
+      this.apiService.insertDPA(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
       })
     }
-    if(this.newSuspension === "YES" && this.newAudience === "NO"){
-      this.apiService.insertDPS(this.activeRequest).subscribe((str:string)=>{
+    if (this.newSuspension === "YES" && this.newAudience === "NO") {
+      this.apiService.insertDPS(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
       })
     }
-    if(this.newSuspension === "YES" && this.newAudience === "YES"){
-      this.apiService.insertDPSA(this.activeRequest).subscribe((str:string)=>{
+    if (this.newSuspension === "YES" && this.newAudience === "YES") {
+      this.apiService.insertDPSA(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
       })
     }
-    if(this.newSuspension === "NO" && this.newAudience === "NO"){
-      this.apiService.insertDP(this.activeRequest).subscribe((str:string)=>{
+    if (this.newSuspension === "NO" && this.newAudience === "NO") {
+      this.apiService.insertDP(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
       })
     }
   }
 
-  pushSuspensionStart(str:any){
+  pushSuspensionStart(str: any) {
     this.activeRequest.start = str;
   }
 
-  pushSuspensionEnd(str:any){
+  pushSuspensionEnd(str: any) {
     this.activeRequest.end = str;
   }
 
-  getBeneficiaries(){
-    if(isNullOrUndefined(this.insurances)){
+  getBeneficiaries() {
+    this.apiService.getBeneficiaries({ id: this.insurances.idinsurances }).subscribe((res: beneficiaries[]) => {
+      this.beneficiaries = res;
+    });
+  }
+
+  getInsurances() {
+    this.apiService.getInsurances({ id: this.route.snapshot.paramMap.get('id') }).subscribe((ins: insurances) => {
+      this.insurances = ins;
+    });
+    if (isUndefined(this.insurances)) {
       this.insuranceNull = false;
-    }else{
-      this.apiService.getBeneficiaries({id: this.insurances.idinsurances}).subscribe((res:beneficiaries[])=>{
-        this.beneficiaries = res;
-        });
+    } else {
+      this.insuranceNull = true;
+      this.getBeneficiaries;
     }
   }
 
-  getInsurances(){
-      this.apiService.getInsurances({id: this.route.snapshot.paramMap.get('id')}).subscribe((ins:insurances)=>{
-        this.insurances = ins;
-      });
-      if(isUndefined(this.insurances)){
-        this.insuranceNull = false;
-      }else{
-        this.insuranceNull = true;
-      }
-  }
-
-  insertInsurance(){
+  insertInsurance() {
     this.insurances = new insurances;
     this.insurances.id_user = this.authUser.getAuthusr().user_name;
     this.insurances.date = this.todayDate;
     this.insurances.status = "PENDING";
     this.insurances.in_status = "PENDING";
-    this.apiService.getEmployeeId({id:this.route.snapshot.paramMap.get('id')}).subscribe((txt:employees)=>{
+    this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((txt: employees) => {
       this.insurances.id_employee = txt.idemployees;
     })
     this.newInsurance = true;
   }
-  
-  insertInsurances(){
+
+  insertInsurances() {
     this.insurances.id_user = this.authUser.getAuthusr().iduser;
     this.insurances.id_type = '7';
     this.insurances.id_department = '5';
     this.insurances.place = "Guatemala";
     console.log(this.insurances);
-    this.apiService.insertInsurances(this.insurances).subscribe((str:string)=>{
+    this.apiService.insertInsurances(this.insurances).subscribe((str: string) => {
       this.getInsurances();
     })
   }
