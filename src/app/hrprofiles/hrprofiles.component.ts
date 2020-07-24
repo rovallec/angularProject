@@ -30,7 +30,7 @@ export class HrprofilesComponent implements OnInit {
   showAttendences: attendences[] = [];
   leaves: leaves[] = [];
   discilplinary_processes: disciplinary_processes[] = [];
-  insurances: insurances;
+  insurances: insurances = new insurances;
   beneficiaries: beneficiaries[] = [];
 
   newInsurance: boolean = false;
@@ -579,7 +579,7 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getInsurances({ id: this.route.snapshot.paramMap.get('id') }).subscribe((ins: insurances) => {
       this.insurances = ins;
     });
-    if (isUndefined(this.insurances)) {
+    if (isNull(this.insurances.id_employee)) {
       this.insuranceNull = false;
     } else {
       this.insuranceNull = true;
