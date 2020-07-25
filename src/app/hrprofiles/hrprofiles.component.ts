@@ -622,7 +622,7 @@ export class HrprofilesComponent implements OnInit {
   insertBeneficiary(){
     this.addBeneficiary = true;
     if(isNullOrUndefined(this.beneficiaries)){
-      this.beneficiaries = [new beneficiaries];
+      this.beneficiaries = [];
     }else{
       this.beneficiaries.push(new beneficiaries);
     }
