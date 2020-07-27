@@ -636,6 +636,7 @@ export class HrprofilesComponent implements OnInit {
     this.beneficiaries[this.beneficiaries.length-1].second_name = this.beneficiaryName.split(" ")[1];
     this.beneficiaries[this.beneficiaries.length-1].first_lastname = this.beneficiaryName.split(" ")[2];
     this.beneficiaries[this.beneficiaries.length-1].second_lastname = this.beneficiaryName.split(" ")[3];
+    this.addBeneficiary = false;
     this.apiService.insertBeneficiaryes(this.beneficiaries[this.beneficiaries.length - 1]).subscribe((str:string)=>{
       this.getBeneficiaries();
     });
