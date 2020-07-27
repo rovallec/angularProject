@@ -233,8 +233,6 @@ export class HrprofilesComponent implements OnInit {
     this.newSuspension = "NO";
 
     this.getInsurances();
-    this.getBeneficiaries();
-
   }
 
   getStaffes() {
