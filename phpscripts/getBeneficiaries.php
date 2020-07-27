@@ -14,11 +14,11 @@
     if($result = mysqli_query($con, $sql)){
         while($res = mysqli_fetch_assoc($result)){
             $return[$i]['idbeneficiaries'] = $res['idinsurances'];
-            $return[$i]['first_name'] = $res['id_process'];
-            $return[$i]['second_name'] = $res['plan'];
-            $return[$i]['first_lastname'] = $res['license'];
-            $return[$i]['second_lastname'] = $res['cert'];
-            $return[$i]['afinity'] = $res['contractor'];
+            $return[$i]['first_name'] = $res['first_name'];
+            $return[$i]['second_name'] = $res['second_name'];
+            $return[$i]['first_lastname'] = $res['first_lastname'];
+            $return[$i]['second_lastname'] = $res['second_lastname'];
+            $return[$i]['afinity'] = $res['afinity'];
             $i++;
         }
         echo(json_encode($return));
