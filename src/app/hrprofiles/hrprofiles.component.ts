@@ -248,7 +248,6 @@ export class HrprofilesComponent implements OnInit {
     })
     this.apiService.getDisciplinaryProcesses({ id: this.route.snapshot.paramMap.get('id') }).subscribe((dp: disciplinary_processes[]) => {
       this.discilplinary_processes = dp;
-      console.log(dp);
     })
   }
 
@@ -543,7 +542,6 @@ export class HrprofilesComponent implements OnInit {
   addDP() {
     this.activeRequest.audience_status = "SCHEDULED";
     this.activeRequest.status = "DISPENSED";
-    console.log(this.newAudience + " " + this.newSuspension);
     if (this.newAudience === "YES" && this.newSuspension === "NO") {
       this.apiService.insertDPA(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
@@ -575,7 +573,8 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getBeneficiaries() {
-    this.apiService.getBeneficiaries({ id: this.insurances.idinsurances }).subscribe((res: beneficiaries[]) => {
+    console.log(this.insurances);
+    this.apiService.getBeneficiaries({id:this.insurances.idinsurances}).subscribe((res: beneficiaries[]) => {
       this.beneficiaries = res;
     });
   }
@@ -609,7 +608,6 @@ export class HrprofilesComponent implements OnInit {
     this.insurances.id_type = '7';
     this.insurances.id_department = '5';
     this.insurances.place = "Guatemala";
-    console.log(this.insurances);
     this.apiService.insertInsurances(this.insurances).subscribe((str: string) => {
       this.getInsurances();
     })
