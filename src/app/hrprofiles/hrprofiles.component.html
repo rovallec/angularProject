@@ -813,7 +813,7 @@
                             <div class="form-group col-md-3">
                                 <label>Plan:</label>
                                 <input type="text" class="form-control" [(ngModel)]="insurances.plan"
-                                    [disabled]="modifyInsurance">
+                                    [disabled]="!modifyInsurance">
                             </div>
                             <div class="form-group col-md-3">
                                 <label>License:</label>
@@ -823,7 +823,7 @@
                             <div class="form-group col-md-3">
                                 <label>Certificate:</label>
                                 <input type="text" class="form-control" [(ngModel)]="insurances.cert"
-                                    [disabled]="modifyInsurance">
+                                    [disabled]="!modifyInsurance">
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Status:</label>
@@ -882,7 +882,7 @@
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertBeneficiary()"
-                                    *ngIf="!modifyInsurance">New</button>
+                                    *ngIf="!modifyInsurance && !addBeneficiary">New</button>
                                 <button class="form-control" (click)="saveInsurance()"
                                     *ngIf="modifyInsurance">Save</button>
                                     <button class="form-control" (click)="saveBeneficiary()" *ngIf="addBeneficiary">Save</button>

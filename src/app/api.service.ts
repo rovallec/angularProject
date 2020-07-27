@@ -306,5 +306,10 @@ getBeneficiaries(str:any){
 insertInsurances(ins:insurances){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertInsurance.php`, ins);
 }
+
+insertBeneficiaryes(str:beneficiaries){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertBeneficiary.php`, str);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
