@@ -621,7 +621,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertBeneficiary(){
     if(isNullOrUndefined(this.beneficiaries)){
-      this.beneficiaries = [];
+      this.beneficiaries = [new beneficiaries];
     }else{
       this.beneficiaries.push(new beneficiaries);
     }
