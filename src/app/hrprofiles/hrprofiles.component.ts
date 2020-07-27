@@ -22,6 +22,7 @@ export class HrprofilesComponent implements OnInit {
   activeVacation: vacations = new vacations;
   activeLeave: leaves = new leaves;
   activeRequest = new disciplinary_processes;
+  idInsurance:string;
 
   beneficiaryName:string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -573,8 +574,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getBeneficiaries() {
-    console.log(this.insurances);
-    this.apiService.getBeneficiaries({id:this.insurances.idinsurances}).subscribe((res: beneficiaries[]) => {
+    this.apiService.getBeneficiaries({id:this.idInsurance}).subscribe((res: beneficiaries[]) => {
       this.beneficiaries = res;
     });
   }
@@ -582,6 +582,7 @@ export class HrprofilesComponent implements OnInit {
   getInsurances() {
     this.apiService.getInsurances({ id: this.route.snapshot.paramMap.get('id') }).subscribe((ins: insurances) => {
       this.insurances = ins;
+      this.idInsurance = this.insurances.idinsurances;
       if(isUndefined(this.insurances)) {
         this.getBeneficiaries;
         this.insuranceNull = false;
