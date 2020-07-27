@@ -584,8 +584,8 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getInsurances({ id: this.route.snapshot.paramMap.get('id') }).subscribe((ins: insurances) => {
       this.insurances = ins;
       if(isUndefined(this.insurances)) {
-        this.insuranceNull = false;
         this.getBeneficiaries;
+        this.insuranceNull = false;
       } else {
         this.insuranceNull = true;
       }
@@ -632,6 +632,10 @@ export class HrprofilesComponent implements OnInit {
   
   saveBeneficiary(){
     this.beneficiaries[this.beneficiaries.length-1].idbeneficiaries = this.insurances.idinsurances;
+    this.beneficiaries[this.beneficiaries.length-1].first_name = this.beneficiaryName.split(" ")[0];
+    this.beneficiaries[this.beneficiaries.length-1].second_name = this.beneficiaryName.split(" ")[1];
+    this.beneficiaries[this.beneficiaries.length-1].first_lastname = this.beneficiaryName.split(" ")[2];
+    this.beneficiaries[this.beneficiaries.length-1].second_lastname = this.beneficiaryName.split(" ")[3];
     this.apiService.insertBeneficiaryes(this.beneficiaries[this.beneficiaries.length - 1]).subscribe((str:string)=>{
       this.getBeneficiaries();
     });
