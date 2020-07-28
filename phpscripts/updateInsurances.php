@@ -15,7 +15,7 @@ $contractor = ($request->contractor);
 $place = ($request->place);
 $reception = "";
 $delivered = "";
-$in_status = ($request->in_status);
+$in_status = ($request->status);
 
 $sql = "UPDATE `insurances` SET `plan` = '$plan', `license` = '$license', `cert` = '$cert', `status` = '$in_status' WHERE `idinsurances` = '$idinsurances';";
 

@@ -4,7 +4,7 @@ header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
 $profiles = [];
-$sql = "SELECT *  FROM `profiles`  where `status` = 'pending' ORDER BY `idprofiles` DESC  LIMIT 25;;
+$sql = "SELECT *  FROM `profiles`  where `status` = 'pending' ORDER BY `idprofiles` DESC  LIMIT 25;";
 
 if($result = mysqli_query($con, $sql))
 {

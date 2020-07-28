@@ -7,6 +7,7 @@ import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
+import { process } from '../process';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -34,7 +35,9 @@ export class HrprofilesComponent implements OnInit {
   discilplinary_processes: disciplinary_processes[] = [];
   insurances: insurances = new insurances;
   beneficiaries: beneficiaries[] = [];
+  process_templates:process[] = [];
 
+  newProcess:boolean = false;
   addBeneficiary:boolean = false;
   modifyInsurance:boolean = false;
   newInsurance: boolean = false;
@@ -233,6 +236,7 @@ export class HrprofilesComponent implements OnInit {
     this.newSuspension = "NO";
 
     this.getInsurances();
+    this.getTemplates();
   }
 
   getStaffes() {
@@ -629,6 +633,7 @@ export class HrprofilesComponent implements OnInit {
   saveInsurance(){
     this.apiService.updateInsurance(this.insurances).subscribe((str:string)=>{
       this.getInsurances();
+      this.cancelView();
     })
   }
   
@@ -642,5 +647,15 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.insertBeneficiaryes(this.beneficiaries[this.beneficiaries.length - 1]).subscribe((str:string)=>{
       this.getBeneficiaries();
     });
+  }
+
+  getTemplates(){
+    this.apiService.getTemplates().subscribe((prs:process[])=>{
+      this.process_templates = prs;
+    });
+  }
+
+  addProcess(){
+    this.newProcess = !this.newProcess;
   }
 }

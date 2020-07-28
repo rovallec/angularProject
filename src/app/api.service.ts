@@ -315,5 +315,9 @@ updateInsurance(ins:insurances){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateInsurances.php`, ins)
 }
 
+getTemplates(){
+  return this.httpClient.get<process[]>(`${this.PHP_API_SERVER}/phpscripts/getTemplates.php`);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
