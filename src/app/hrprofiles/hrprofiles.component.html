@@ -31,7 +31,7 @@
         </td>
     </tr>
     <!------------------------------------------------------------------------------------NAV------------------------------------------------------------------------->
-    <tr>
+    <tr *ngIf="!addProc">
         <td colspan="2" style="padding-top:30px">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
@@ -848,7 +848,7 @@
                                         <td>{{bn.first_name}} {{bn.second_name}} {{bn.first_lastname}}
                                             {{bn.second_lastname}}</td>
                                         <td>{{bn.afinity}}</td>
-                                    </tr>   
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -867,7 +867,8 @@
                                     </tr>
                                     <tr>
                                         <td><input type="text" class="form-control" [(ngModel)]="beneficiaryName"></td>
-                                        <td><input type="text" class="form-control" [(ngModel)]="beneficiaries[beneficiaries.length - 1].afinity"></td>
+                                        <td><input type="text" class="form-control"
+                                                [(ngModel)]="beneficiaries[beneficiaries.length - 1].afinity"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -885,7 +886,8 @@
                                     *ngIf="!modifyInsurance && !addBeneficiary">New</button>
                                 <button class="form-control" (click)="saveInsurance()"
                                     *ngIf="modifyInsurance">Save</button>
-                                    <button class="form-control" (click)="saveBeneficiary()" *ngIf="addBeneficiary">Save</button>
+                                <button class="form-control" (click)="saveBeneficiary()"
+                                    *ngIf="addBeneficiary">Save</button>
                             </div>
                         </div>
                     </div>
@@ -991,6 +993,29 @@
             </div>
         </td>
     </tr>
+    <!---------------------------------------------------------------------------------NEW PROCESS----------------------------------------------------------------------->
+    <tr *ngIf="!addProc">
+        <td colspan="2" style="padding-top:30px">
+            <nav width=100% style="border-top: 4px solid #e3f2fd;">
+                <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
+                    <i class="fas fa-arrow-circle-left" (click)="cancelView()"></i><a class="nav-item nav-link active" id="nav-attendence-tab" data-toggle="tab" href="#nav-newproc"
+                        role="tab" aria-controls="nav-newproc" aria-selected="true">{{actuallProc.name}}</a>
+                </div>
+            </nav>
+
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
+                    aria-labelledby="nav-newproc-tab">
+                    <div class="form-group col-md-12" *ngIf="actuallProc.name = 'Termination'">
+                        <label
+                        style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">TERMINATION</label>
+                        <div class="form-row">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
     <!---------------------------------------------------------------------------------RECORD---------------------------------------------------------------------------->
     <tr>
         <td colspan="2" style="padding-top:20px">
@@ -999,7 +1024,8 @@
                 <tr width="100%">
                     <td
                         style="padding:6px; background-color:rgb(227, 239, 255); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255); height: 15px;">
-                        <b>New Process</b><i class="fas fa-arrow-circle-left" style="margin-left: 90%" (click)="addProcess()"></i>
+                        <b>New Process</b><i class="fas fa-arrow-circle-left" style="margin-left: 90%"
+                            (click)="addProcess()"></i>
                 </tr>
                 <tr>
                     <td
@@ -1012,10 +1038,10 @@
                                 <th>DESCRIPTION</th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let prc of process_templates">
+                                <tr *ngFor="let prc of process_templates" (click)="setProcess(prc)">
                                     <td>{{prc.id}}</td>
                                     <td>{{prc.name}}</td>
-                                    <td>{{prc.description}}</td>
+                                    <td>{{prc.descritpion}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1027,7 +1053,8 @@
                 <tr width="100%">
                     <td
                         style="padding:6px; background-color:rgb(227, 239, 255); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255); height: 15px;">
-                        <b>Process Record</b><i class="fas fa-plus-square" style="margin-left: 90%" (click)="addProcess()"></i>
+                        <b>Process Record</b><i class="fas fa-plus-square" style="margin-left: 90%"
+                            (click)="addProcess()"></i>
                 </tr>
                 <tr>
                     <td

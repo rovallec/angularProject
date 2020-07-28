@@ -37,6 +37,8 @@ export class HrprofilesComponent implements OnInit {
   beneficiaries: beneficiaries[] = [];
   process_templates:process[] = [];
 
+  addProc:boolean = false;
+  actuallProc:process = new process;
   newProcess:boolean = false;
   addBeneficiary:boolean = false;
   modifyInsurance:boolean = false;
@@ -374,6 +376,9 @@ export class HrprofilesComponent implements OnInit {
     this.getLeaves();
     this.getBeneficiaries();
     this.modifyInsurance = false;
+    this.newProcess = false;
+    this.addProc = false;
+    this.actuallProc = new process;
   }
 
   setLeave() {
@@ -657,5 +662,9 @@ export class HrprofilesComponent implements OnInit {
 
   addProcess(){
     this.newProcess = !this.newProcess;
+  }
+
+  setProcess(act:process){
+    this.actuallProc = act;
   }
 }

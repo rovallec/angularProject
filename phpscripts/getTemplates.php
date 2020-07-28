@@ -10,7 +10,7 @@ $i = 0;
 $sql = "select * from process_types WHERE `idprocess_types` > 7;";
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
-            $proccesses[$i]['idprocesses'] = $row['idprocesses'];
+            $proccesses[$i]['idprocesses'] = $row['idprocess_types'];
             $proccesses[$i]['name'] = $row['name'];
             $proccesses[$i]['descritpion'] = $row['description'];
             $i++;
