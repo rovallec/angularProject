@@ -311,5 +311,9 @@ insertBeneficiaryes(str:beneficiaries){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertBeneficiary.php`, str);
 }
 
+updateInsurance(ins:insurances){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateInsurances.php`, ins)
+}
+
   constructor(private httpClient:HttpClient) { }
 }

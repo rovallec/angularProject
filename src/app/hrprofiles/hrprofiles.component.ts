@@ -368,6 +368,7 @@ export class HrprofilesComponent implements OnInit {
     this.newSuspension = "NO";
     this.getVacations();
     this.getLeaves();
+    this.getBeneficiaries();
     this.modifyInsurance = false;
   }
 
@@ -625,7 +626,11 @@ export class HrprofilesComponent implements OnInit {
     this.addBeneficiary = true;
   }
 
-  saveInsurance(){}
+  saveInsurance(){
+    this.apiService.updateInsurance(this.insurances).subscribe((str:string)=>{
+      this.getInsurances();
+    })
+  }
   
   saveBeneficiary(){
     this.beneficiaries[this.beneficiaries.length-1].idbeneficiaries = this.insurances.idinsurances;
