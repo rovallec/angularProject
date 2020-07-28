@@ -665,6 +665,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   setProcess(act:process){
+    this.addProc = true;
     this.actuallProc = act;
   }
 }
