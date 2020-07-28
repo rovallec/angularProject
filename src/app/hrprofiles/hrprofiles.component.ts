@@ -662,6 +662,9 @@ export class HrprofilesComponent implements OnInit {
 
   addProcess(){
     this.newProcess = !this.newProcess;
+    if(this.newProcess == false){
+      this.cancelView();
+    }
   }
 
   setProcess(act:process){
