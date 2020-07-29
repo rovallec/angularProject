@@ -270,7 +270,7 @@ export class leaves {
 
 export class disciplinary_processes {
     //Process
-    id_processes:string;
+    id_processes: string;
     id_user: string;
     id_employee: string;
     id_type: string;
@@ -336,9 +336,9 @@ export class disciplinary_processes {
     }
 }
 
-export class insurances{
+export class insurances {
     //Process
-    id_processes:string;
+    id_processes: string;
     id_user: string;
     id_employee: string;
     id_type: string;
@@ -347,17 +347,17 @@ export class insurances{
     notes: string;
     status: string;
     //Insurances
-    idinsurances:string;
-    id_process:string;
-    plan:string;
-    license:string;
-    cert:string;
-    contractor:string;
-    place:string;
-    reception:string;
-    delivered:string;
-    in_status:string;
-    constructor(){
+    idinsurances: string;
+    id_process: string;
+    plan: string;
+    license: string;
+    cert: string;
+    contractor: string;
+    place: string;
+    reception: string;
+    delivered: string;
+    in_status: string;
+    constructor() {
         this.id_processes = null;
         this.id_user = null;
         this.id_employee = null;
@@ -379,19 +379,48 @@ export class insurances{
     }
 }
 
-export class beneficiaries{
-        idbeneficiaries:string;
-        first_name:string;
-        second_name:string;
-        first_lastname:string;
-        second_lastname:string;
-        afinity:string;
-        constructor(){
-            this.idbeneficiaries = null;
-            this.first_name = null;
-            this.second_name = null;
-            this.first_lastname = null;
-            this.second_lastname = null;
-            this.afinity = null;
-        }
+export class beneficiaries {
+    idbeneficiaries: string;
+    first_name: string;
+    second_name: string;
+    first_lastname: string;
+    second_lastname: string;
+    afinity: string;
+    constructor() {
+        this.idbeneficiaries = null;
+        this.first_name = null;
+        this.second_name = null;
+        this.first_lastname = null;
+        this.second_lastname = null;
+        this.afinity = null;
+    }
+}
+
+export class terminations {
+    motive: string;
+    kind: string;
+    reason: string;
+    rehireable: string;
+    nearsol_experience: string;
+    valid_from: string;
+    comments: string;
+    insurance_notification: String;
+    access_card: string;
+    headsets: string;
+    bank_check: string;
+    period_to_pay: string;
+    constructor(){
+        this.motive = null;
+        this.kind = null;
+        this.reason = null;
+        this.rehireable = null;
+        this.nearsol_experience = null;
+        this.valid_from = null;
+        this.comments = null;
+        this.insurance_notification = null;
+        this.access_card = null;
+        this.headsets = null;
+        this.bank_check = null;
+        this.period_to_pay = null;
+    }
 }

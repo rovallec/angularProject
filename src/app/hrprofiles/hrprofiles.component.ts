@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -15,6 +15,9 @@ import { process } from '../process';
   styleUrls: ['./hrprofiles.component.css']
 })
 export class HrprofilesComponent implements OnInit {
+
+
+  actualTerm:terminations = new terminations;
 
   profile: profiles[] = [new profiles()];
   staffes: users[] = [];
@@ -670,5 +673,18 @@ export class HrprofilesComponent implements OnInit {
   setProcess(act:process){
     this.addProc = true;
     this.actuallProc = act;
+    this.actuallProc.prc_date = this.todayDate;
+    this.actuallProc.status = "CLOSED";
+    this.actuallProc.user_name = this.authUser.getAuthusr().user_name;
+    this.actuallProc.id_profile = this.activeEmp;
+    switch (this.actuallProc.name) {
+      case 'Termination':
+        this.actualTerm.access_card = "YES";
+        this.actualTerm.headsets = "YES";
+        break;
+    
+      default:
+        break;
+    }
   }
 }
