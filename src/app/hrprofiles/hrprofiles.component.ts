@@ -27,6 +27,9 @@ export class HrprofilesComponent implements OnInit {
   activeLeave: leaves = new leaves;
   activeRequest = new disciplinary_processes;
   idInsurance:string;
+  checkDate1:string;
+  checkDate2:string;
+  checkDay:string;
 
   beneficiaryName:string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -676,6 +679,7 @@ export class HrprofilesComponent implements OnInit {
     this.actuallProc.prc_date = this.todayDate;
     this.actuallProc.status = "CLOSED";
     this.actuallProc.user_name = this.authUser.getAuthusr().user_name;
+    this.actuallProc.id_user = this.authUser.getAuthusr().iduser;
     this.actuallProc.id_profile = this.activeEmp;
     switch (this.actuallProc.name) {
       case 'Termination':
@@ -686,5 +690,34 @@ export class HrprofilesComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  setCheckBanck(str:string){
+    this.actualTerm.bank_check = str;
+  }
+
+  setFromDate(str:string){
+    this.checkDate1 = str;
+  }
+
+  setToDate(str:string){
+    this.checkDate2 = str;
+  }
+
+  setValidFrom(str:string){
+    this.actualTerm.valid_from = str;
+  }
+
+  insertProc(){
+    this.apiService.insertProc(this.actuallProc).subscribe((str:string)=>{
+      switch (this.actuallProc.name) {
+        case 'Termination':
+          this.actualTerm.id_process = str;
+          break;
+      
+        default:
+          break;
+      }
+    })
   }
 }

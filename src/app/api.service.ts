@@ -319,5 +319,9 @@ getTemplates(){
   return this.httpClient.get<process[]>(`${this.PHP_API_SERVER}/phpscripts/getTemplates.php`);
 }
 
+insertProc(proc:process){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertHr_Process.php`, proc);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

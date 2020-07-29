@@ -397,6 +397,7 @@ export class beneficiaries {
 }
 
 export class terminations {
+    id_process:string;
     motive: string;
     kind: string;
     reason: string;
@@ -410,6 +411,7 @@ export class terminations {
     bank_check: string;
     period_to_pay: string;
     constructor(){
+        this.id_process = null;
         this.motive = null;
         this.kind = null;
         this.reason = null;
