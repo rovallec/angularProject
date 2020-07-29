@@ -8,7 +8,7 @@ $request = json_decode($postdata);
 
 $id_user = ($request->id_user);
 $id_employee = ($request->id_profile);
-$id_type = ($request->idprocess);
+$id_type = ($request->idprocesses);
 $id_department = '5';
 $date = ($request->prc_date);
 $status = ($request->status);

@@ -410,6 +410,7 @@ export class terminations {
     headsets: string;
     bank_check: string;
     period_to_pay: string;
+    supervisor_experience:string;
     constructor(){
         this.id_process = null;
         this.motive = null;
@@ -424,5 +425,6 @@ export class terminations {
         this.headsets = null;
         this.bank_check = null;
         this.period_to_pay = null;
+        this.supervisor_experience = null;
     }
 }

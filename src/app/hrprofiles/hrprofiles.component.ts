@@ -685,6 +685,8 @@ export class HrprofilesComponent implements OnInit {
       case 'Termination':
         this.actualTerm.access_card = "YES";
         this.actualTerm.headsets = "YES";
+        this.actualTerm.nearsol_experience = '0';
+        this.actualTerm.supervisor_experience = '0';
         break;
     
       default:
@@ -713,6 +715,9 @@ export class HrprofilesComponent implements OnInit {
       switch (this.actuallProc.name) {
         case 'Termination':
           this.actualTerm.id_process = str;
+          this.apiService.insertTerm(this.actualTerm).subscribe((str:string)=>{
+            this.cancelView();
+          })
           break;
       
         default:
