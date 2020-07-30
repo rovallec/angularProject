@@ -332,7 +332,7 @@ getProcRecorded(id:any){
 }
 
 getTerm(proc:process){
-  return this.httpClient.post<terminations>(`${this.PHP_API_SERVER}/phpscritps/getTerm.php`, proc);
+  return this.httpClient.post<terminations>(`${this.PHP_API_SERVER}/phpscripts/getTerm.php`, proc);
 }
 
   constructor(private httpClient:HttpClient) { }
