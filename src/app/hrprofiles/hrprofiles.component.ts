@@ -44,6 +44,7 @@ export class HrprofilesComponent implements OnInit {
   process_templates:process[] = [];
   processRecord:process[] = [];
 
+  viewRecProd:boolean = false;
   addProc:boolean = false;
   actuallProc:process = new process;
   newProcess:boolean = false;
@@ -730,9 +731,13 @@ export class HrprofilesComponent implements OnInit {
 
   getProcessesrecorded(){
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
-      this.apiService.getProcRecorded({id:emp}).subscribe((prc:process[])=>{
+      this.apiService.getProcRecorded({id:emp.idemployees}).subscribe((prc:process[])=>{
         this.processRecord = prc;
       })
     })
+  }
+
+  viewProcess(pr:process){
+
   }
 }

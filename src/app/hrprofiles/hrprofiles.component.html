@@ -32,7 +32,7 @@
     </tr>
     <!------------------------------------------------------------------------------------NAV------------------------------------------------------------------------->
     <tr style="border-bottom: solid 4px #e3f2fd;">
-        <td colspan="2" style="padding-top:30px" *ngIf="!addProc">
+        <td colspan="2" style="padding-top:30px" *ngIf="!addProc && !viewRecProd">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
                     <a class="nav-item nav-link active" id="nav-attendence-tab" data-toggle="tab" href="#nav-attendence"
@@ -1035,7 +1035,7 @@
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
                                         <label>Access Card</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.access_card">
+                                        <select class="form-control" [(ngModel)]="actualTerm.access_card" [disabled]="!viewRecProd">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
@@ -1052,7 +1052,7 @@
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
                                         <label>Headsets</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.headsets">
+                                        <select class="form-control" [(ngModel)]="actualTerm.headsets" [disabled]="!viewRecProd">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
@@ -1072,13 +1072,14 @@
                                         <div class="form-row col-md-12">
                                             <div class="form-group col-md-12">
                                                 <label>Bank Check:</label>
-                                                <input type="date" class="form-control" (change)="setCheckBanck($event.target.value)">
+                                                <input type="date" class="form-control" (change)="setCheckBanck($event.target.value)" *ngIf="!viewRecProd">
+                                                <input type="text" class="form-control" [(ngModel)]="actualTerm.bank_check" [disabled]="true">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-8">
                                         <label>Period To Pay</label>
-                                        <div class="form-row col-md-12">
+                                        <div class="form-row col-md-12" *ngIf="!viewRecProd">
                                             <div class="form-group col-sm-5">
                                                 <label>From:</label>
                                                 <input type="date" class="form-control" (change)="setFromDate($event.target.value)">
@@ -1092,6 +1093,7 @@
                                                 <input type="number" min="0" max="31" class="form-control" [(ngModel)]="checkDay">
                                             </div>
                                         </div>
+                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.period_to_pay" *ngIf="viewRecProd">
                                     </div>
                                 </div>
                             </div>
@@ -1099,50 +1101,50 @@
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-4">
                                         <label>Kind:</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.kind">
+                                        <select class="form-control" [(ngModel)]="actualTerm.kind" [disabled]="!viewRecProd">
                                             <option>Renuncia</option>
                                             <option>Despido</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Motive:</label>
-                                        <select class="form-control" *ngIf="actualTerm.kind === 'Despido'" [(ngModel)]="actualTerm.motive">
+                                        <select class="form-control" *ngIf="actualTerm.kind === 'Despido'" [(ngModel)]="actualTerm.motive" [disabled]="!viewRecProd">
                                             <option>Justificado</option>
                                             <option>Abandono Laboral</option>
                                             <option>Reestructuracion</option>
                                         </select>
-                                        <input class="form-control" *ngIf="actualTerm.kind === 'Renuncia'" [(ngModel)]="actualTerm.motive">
+                                        <input class="form-control" *ngIf="actualTerm.kind === 'Renuncia'" [(ngModel)]="actualTerm.motive" [disabled]="!viewRecProd">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Reason:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.reason">
+                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.reason" [disabled]="!viewRecProd">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-4">
                                         <label>Rehireable</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.rehireable">
+                                        <select class="form-control" [(ngModel)]="actualTerm.rehireable" [disabled]="!viewRecProd">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label>Nearsol's Experience</label>
-                                        <input type="number" class="form-control" min="0" max="10" [(ngModel)]="actualTerm.nearsol_experience">
+                                        <input type="number" class="form-control" min="0" max="10" [(ngModel)]="actualTerm.nearsol_experience" [disabled]="!viewRecProd">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label>Supervisor's Experience</label>
-                                        <input type="number" class="form-control" min="0" max="10" [(ngModel)]="actualTerm.supervisor_experience">
+                                        <input type="number" class="form-control" min="0" max="10" [(ngModel)]="actualTerm.supervisor_experience" [disabled]="!viewRecProd">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Valid From</label>
-                                        <input type="date" class="form-control" (change)="setValidFrom($event.target.value)">
+                                        <input type="date" class="form-control" (change)="setValidFrom($event.target.value)" [disabled]="!viewRecProd">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
                                         <label>Comments:</label>
-                                        <textarea class="form-control" width="100%" [(ngModel)]="actualTerm.comments"></textarea>
+                                        <textarea class="form-control" width="100%" [(ngModel)]="actualTerm.comments" [disabled]="!viewRecProd"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
@@ -1156,7 +1158,7 @@
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
                                         <label>Insurance's Notification</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.insurance_notification">
+                                        <select class="form-control" [(ngModel)]="actualTerm.insurance_notification" [disabled]="!viewRecProd">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
@@ -1164,7 +1166,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-row col-md-12">
+                        <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cance</button>
                             </div>
@@ -1221,7 +1223,7 @@
                 <tr>
                     <td
                         style="padding:15px; background-color:rgb(239, 246, 255);border-color:rgb(187, 208, 255);border-style: solid; border-width: 1px">
-                        <table class="table table-striped table-hover" style="text-align: center; margin-top:20px"
+                        <table class="table table-striped table-hover selectable" style="text-align: center; margin-top:20px"
                             width=100%>
                             <thead>
                                 <th>ID</th>
@@ -1231,8 +1233,8 @@
                                 <th>Status</th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let pr of processRecord">
-                                    <td>{{pr.idprocesses}</td>
+                                <tr *ngFor="let pr of processRecord" (click)="viewProcess(pr)">
+                                    <td>{{pr.idhr_processes}</td>
                                     <td>{{pr.name}}</td>
                                     <td>{{pr.user_name}}</td>
                                     <td>{{pr.descritpion}}</td>
