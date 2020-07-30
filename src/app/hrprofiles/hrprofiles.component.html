@@ -1042,8 +1042,11 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12">
-                            <textarea class="form-control" width="100%" [(ngModel)]="actualAdvance.description"
+                            <div class="form-group col-md-12">
+                                <label>Description:</label>
+                                <textarea class="form-control" width="100%" [(ngModel)]="actualAdvance.description"
                                 [disabled]="viewRecProd"></textarea>
+                            </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">

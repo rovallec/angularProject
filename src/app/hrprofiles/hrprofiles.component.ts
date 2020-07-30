@@ -684,6 +684,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   setProcess(act: process) {
+    this.viewRecProd = false;
     this.addProc = true;
     this.actuallProc = act;
     this.actuallProc.prc_date = this.todayDate;
