@@ -328,7 +328,12 @@ insertTerm(proc:terminations){
 }
 
 getProcRecorded(id:any){
-  return this.httpClient.post<process[]>(`${this.PHP_API_SERVER}/phpscripts/getProcRecroded.php`, id)
+  return this.httpClient.post<process[]>(`${this.PHP_API_SERVER}/phpscripts/getProcRecroded.php`, id);
 }
+
+getTerm(proc:process){
+  return this.httpClient.post<terminations>(`${this.PHP_API_SERVER}/phpscritps/getTerm.php`, proc);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

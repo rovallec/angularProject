@@ -739,8 +739,12 @@ export class HrprofilesComponent implements OnInit {
 
   viewProcess(pr:process){
     this.viewRecProd = true;
+    this.actuallProc = pr;
     switch (this.actuallProc.name) {
       case 'Termination':
+        this.apiService.getTerm(this.actuallProc).subscribe((trm:terminations)=>{
+          this.actualTerm = trm;
+        })
         break;
     
       default:
