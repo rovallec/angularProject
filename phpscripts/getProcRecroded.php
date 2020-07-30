@@ -12,7 +12,7 @@ $i = 0;
 $process = [];
 
 
-$sql = "SELECT * FROM `hr_processes` LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `id_employee` = '$id' && `idprocess_types`` > 7;";
+$sql = "SELECT * FROM `hr_processes` LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `id_employee` = '$id' && `idprocess_types` > 7;";
 
 if($result = mysqli_query($con,$sql)){
 	while($row = mysqli_fetch_assoc($result)){
