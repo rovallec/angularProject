@@ -10,10 +10,11 @@ $id_user = ($request->id_user);
 $id_employee = ($request->id_profile);
 $id_type = ($request->idprocesses);
 $id_department = '5';
+$notes = ($request->descritpion);
 $date = ($request->prc_date);
 $status = ($request->status);
 
-$sql = "INSERT INTO `minearsol`.`hr_processes` (`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '', '$status');";
+$sql = "INSERT INTO `minearsol`.`hr_processes` (`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status');";
 if(mysqli_query($con,$sql)){
     echo(mysqli_insert_id($con));
 }
