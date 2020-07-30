@@ -392,6 +392,7 @@ export class HrprofilesComponent implements OnInit {
     this.viewRecProd = false;
     this.getProcessesrecorded();
     this.actualTerm = new terminations;
+    this.actualReport = new reports;
     this.actuallProc = new process;
   }
 
