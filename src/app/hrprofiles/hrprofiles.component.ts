@@ -729,8 +729,10 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getProcessesrecorded(){
-    this.apiService.getProcRecorded({id:this.activeEmp}).subscribe((prc:process[])=>{
-      this.processRecord = prc;
+    this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+      this.apiService.getProcRecorded({id:emp}).subscribe((prc:process[])=>{
+        this.processRecord = prc;
+      })
     })
   }
 }
