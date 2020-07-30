@@ -1005,6 +1005,78 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
                     aria-labelledby="nav-newproc-tab">
+                    <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Report'">
+                        <label
+                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">REPORT</label>
+                        <div class="form-row col-md-12">
+                            <div class="form-gorup col-md-4">
+                                <label>User:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.user_name" [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Status:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.status" [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Date:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date" [disabled]="true">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-8">
+                                <label>Tittle:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualReport.tittle" [disabled]="viewRecProd">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>classification</label>
+                                <select [(ngModel)]="actualReport.classification" [disabled]="viewRecProd" class="form-control">
+                                    <option>Acusation</option>
+                                    <option>Discontent</option>
+                                    <option>Request</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-12">
+                                <label>Description:</label>
+                                <textarea class="form-control" width="100%" [(ngModel)]="actualReport.description" [disabled]="viewRecProd"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-2"></div>
+                                <div class="form-group col-md-8" style="border-bottom: solid 4px #e3f2fd;">
+                                </div>
+                                <div class="form-group col-md-2"></div>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <label
+                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">SOLUTION</label>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-2">
+                                <label>Approved By:</label>
+                                <select [(ngModel)]="actualReport.approved_by" class="form-control">
+                                    <option *ngFor="let app of approvals" [value]="app.iduser">{{app.user_name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-10">
+                                <label>Description:</label>
+                                <textarea class="form-control" width="100%" [(ngModel)]="actualReport.s_description" [disabled]="viewRecProd"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-2">
+                                <button class="form-control" (click)="cancelView()">Cance</button>
+                            </div>
+                            <div class="form-group col-md-8"></div>
+                            <div class="form-group col-md-2">
+                                <button class="form-control" (click)="insertProc()">Accept</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------TERMINATION-------------------------------------------------------------->
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Termination'">
                         <label
                             style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">TERMINATION</label>
@@ -1139,7 +1211,7 @@
                                     <div class="form-group col-md-4">
                                         <label>Valid From</label>
                                         <input type="date" class="form-control" (change)="setValidFrom($event.target.value)" *ngIf="!viewRecProd">
-                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.valid_from" [disabled]="true" *ngIf="viewRecProd>
+                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.valid_from" [disabled]="true" *ngIf="viewRecProd">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">

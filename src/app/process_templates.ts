@@ -397,7 +397,7 @@ export class beneficiaries {
 }
 
 export class terminations {
-    id_process:string;
+    id_process: string;
     motive: string;
     kind: string;
     reason: string;
@@ -410,8 +410,8 @@ export class terminations {
     headsets: string;
     bank_check: string;
     period_to_pay: string;
-    supervisor_experience:string;
-    constructor(){
+    supervisor_experience: string;
+    constructor() {
         this.id_process = null;
         this.motive = null;
         this.kind = null;
@@ -426,5 +426,32 @@ export class terminations {
         this.bank_check = null;
         this.period_to_pay = null;
         this.supervisor_experience = null;
+    }
+}
+
+export class reports {
+    //reports
+    idreports: string;
+    id_process: string;
+    tittle: string;
+    description: string;
+    classification: string;
+    //solutions
+    idsolutions: string;
+    id_report: string;
+    s_description: string;
+    approved_by: string;
+    constructor() {
+        //reports
+        this.idreports = null;
+        this.id_process = null;
+        this.tittle = null;
+        this.description = null;
+        this.classification = null;
+        //solutions
+        this.idsolutions = null;
+        this.id_report = null;
+        this.s_description = null;
+        this.approved_by = null;
     }
 }

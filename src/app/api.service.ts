@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { profiles } from './profiles';
 import { process } from './process';
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports } from './process_templates';
 
 import { Observable } from 'rxjs'; 
 import { users } from './users';
@@ -335,5 +335,12 @@ getTerm(proc:process){
   return this.httpClient.post<terminations>(`${this.PHP_API_SERVER}/phpscripts/getTerm.php`, proc);
 }
 
+insertReport(rpr:reports){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertRerpot.php`, rpr);
+}
+
+getRerpot(proc:process){
+  return this.httpClient.post<reports>(`${this.PHP_API_SERVER}/phpscripts/getRerport.php`, proc);
+}
   constructor(private httpClient:HttpClient) { }
 }

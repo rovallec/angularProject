@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -17,7 +17,7 @@ import { process } from '../process';
 export class HrprofilesComponent implements OnInit {
 
 
-  actualTerm:terminations = new terminations;
+  actualTerm: terminations = new terminations;
 
   profile: profiles[] = [new profiles()];
   staffes: users[] = [];
@@ -26,12 +26,12 @@ export class HrprofilesComponent implements OnInit {
   activeVacation: vacations = new vacations;
   activeLeave: leaves = new leaves;
   activeRequest = new disciplinary_processes;
-  idInsurance:string;
-  checkDate1:string;
-  checkDate2:string;
-  checkDay:string;
+  idInsurance: string;
+  checkDate1: string;
+  checkDate2: string;
+  checkDay: string;
 
-  beneficiaryName:string;
+  beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
 
   showAttAdjustments: attendences_adjustment[] = [];
@@ -41,15 +41,16 @@ export class HrprofilesComponent implements OnInit {
   discilplinary_processes: disciplinary_processes[] = [];
   insurances: insurances = new insurances;
   beneficiaries: beneficiaries[] = [];
-  process_templates:process[] = [];
-  processRecord:process[] = [];
+  process_templates: process[] = [];
+  processRecord: process[] = [];
+  actualReport: reports = new reports;
 
-  viewRecProd:boolean = false;
-  addProc:boolean = false;
-  actuallProc:process = new process;
-  newProcess:boolean = false;
-  addBeneficiary:boolean = false;
-  modifyInsurance:boolean = false;
+  viewRecProd: boolean = false;
+  addProc: boolean = false;
+  actuallProc: process = new process;
+  newProcess: boolean = false;
+  addBeneficiary: boolean = false;
+  modifyInsurance: boolean = false;
   newInsurance: boolean = false;
   insuranceNull: boolean = true;
   activeEmp: string = null;
@@ -389,6 +390,9 @@ export class HrprofilesComponent implements OnInit {
     this.addProc = false;
     this.actuallProc = new process;
     this.viewRecProd = false;
+    this.getProcessesrecorded();
+    this.actualTerm = new terminations;
+    this.actuallProc = new process;
   }
 
   setLeave() {
@@ -592,7 +596,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getBeneficiaries() {
-    this.apiService.getBeneficiaries({id:this.idInsurance}).subscribe((res: beneficiaries[]) => {
+    this.apiService.getBeneficiaries({ id: this.idInsurance }).subscribe((res: beneficiaries[]) => {
       this.beneficiaries = res;
     });
   }
@@ -600,7 +604,7 @@ export class HrprofilesComponent implements OnInit {
   getInsurances() {
     this.apiService.getInsurances({ id: this.route.snapshot.paramMap.get('id') }).subscribe((ins: insurances) => {
       this.insurances = ins;
-      if(isUndefined(this.insurances)) {
+      if (isUndefined(this.insurances)) {
         this.insuranceNull = false;
       } else {
         this.idInsurance = ins.idinsurances;
@@ -632,52 +636,52 @@ export class HrprofilesComponent implements OnInit {
     })
   }
 
-  activeModify(){
+  activeModify() {
     this.modifyInsurance = true;
   }
 
-  insertBeneficiary(){
-    if(isNullOrUndefined(this.beneficiaries)){
+  insertBeneficiary() {
+    if (isNullOrUndefined(this.beneficiaries)) {
       this.beneficiaries = [new beneficiaries];
-    }else{
+    } else {
       this.beneficiaries.push(new beneficiaries);
     }
     this.addBeneficiary = true;
   }
 
-  saveInsurance(){
-    this.apiService.updateInsurance(this.insurances).subscribe((str:string)=>{
+  saveInsurance() {
+    this.apiService.updateInsurance(this.insurances).subscribe((str: string) => {
       this.getInsurances();
       this.cancelView();
     })
   }
-  
-  saveBeneficiary(){
-    this.beneficiaries[this.beneficiaries.length-1].idbeneficiaries = this.insurances.idinsurances;
-    this.beneficiaries[this.beneficiaries.length-1].first_name = this.beneficiaryName.split(" ")[0];
-    this.beneficiaries[this.beneficiaries.length-1].second_name = this.beneficiaryName.split(" ")[1];
-    this.beneficiaries[this.beneficiaries.length-1].first_lastname = this.beneficiaryName.split(" ")[2];
-    this.beneficiaries[this.beneficiaries.length-1].second_lastname = this.beneficiaryName.split(" ")[3];
+
+  saveBeneficiary() {
+    this.beneficiaries[this.beneficiaries.length - 1].idbeneficiaries = this.insurances.idinsurances;
+    this.beneficiaries[this.beneficiaries.length - 1].first_name = this.beneficiaryName.split(" ")[0];
+    this.beneficiaries[this.beneficiaries.length - 1].second_name = this.beneficiaryName.split(" ")[1];
+    this.beneficiaries[this.beneficiaries.length - 1].first_lastname = this.beneficiaryName.split(" ")[2];
+    this.beneficiaries[this.beneficiaries.length - 1].second_lastname = this.beneficiaryName.split(" ")[3];
     this.addBeneficiary = false;
-    this.apiService.insertBeneficiaryes(this.beneficiaries[this.beneficiaries.length - 1]).subscribe((str:string)=>{
+    this.apiService.insertBeneficiaryes(this.beneficiaries[this.beneficiaries.length - 1]).subscribe((str: string) => {
       this.getBeneficiaries();
     });
   }
 
-  getTemplates(){
-    this.apiService.getTemplates().subscribe((prs:process[])=>{
+  getTemplates() {
+    this.apiService.getTemplates().subscribe((prs: process[]) => {
       this.process_templates = prs;
     });
   }
 
-  addProcess(){
+  addProcess() {
     this.newProcess = !this.newProcess;
-    if(this.newProcess == false){
+    if (this.newProcess == false) {
       this.cancelView();
     }
   }
 
-  setProcess(act:process){
+  setProcess(act: process) {
     this.addProc = true;
     this.actuallProc = act;
     this.actuallProc.prc_date = this.todayDate;
@@ -692,63 +696,73 @@ export class HrprofilesComponent implements OnInit {
         this.actualTerm.nearsol_experience = '0';
         this.actualTerm.supervisor_experience = '0';
         break;
-    
+
       default:
         break;
     }
   }
 
-  setCheckBanck(str:string){
+  setCheckBanck(str: string) {
     this.actualTerm.bank_check = str;
   }
 
-  setFromDate(str:string){
+  setFromDate(str: string) {
     this.checkDate1 = str;
   }
 
-  setToDate(str:string){
+  setToDate(str: string) {
     this.checkDate2 = str;
   }
 
-  setValidFrom(str:string){
+  setValidFrom(str: string) {
     this.actualTerm.valid_from = str;
   }
 
-  insertProc(){
-    this.apiService.insertProc(this.actuallProc).subscribe((str:string)=>{
+  insertProc() {
+    this.apiService.insertProc(this.actuallProc).subscribe((str: string) => {
       switch (this.actuallProc.name) {
         case 'Termination':
           this.actualTerm.id_process = str;
           this.actualTerm.period_to_pay = this.checkDate1 + " - " + this.checkDate2 + " Days:" + this.checkDay;
-          this.apiService.insertTerm(this.actualTerm).subscribe((str:string)=>{
+          this.apiService.insertTerm(this.actualTerm).subscribe((str: string) => {
             this.cancelView();
           })
           break;
-      
+        case 'Report':
+          this.actualReport.id_process = str;
+          this.apiService.insertReport(this.actualReport).subscribe((str:string)=>{
+            this.cancelView();
+          })
+          break;
+
         default:
           break;
       }
     })
   }
 
-  getProcessesrecorded(){
+  getProcessesrecorded() {
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
-      this.apiService.getProcRecorded({id:emp.idemployees}).subscribe((prc:process[])=>{
+      this.apiService.getProcRecorded({ id: emp.idemployees }).subscribe((prc: process[]) => {
         this.processRecord = prc;
       })
     })
   }
 
-  viewProcess(pr:process){
+  viewProcess(pr: process) {
     this.viewRecProd = true;
     this.actuallProc = pr;
     switch (this.actuallProc.name) {
       case 'Termination':
-        this.apiService.getTerm(this.actuallProc).subscribe((trm:terminations)=>{
+        this.apiService.getTerm(this.actuallProc).subscribe((trm: terminations) => {
           this.actualTerm = trm;
         })
         break;
-    
+        case 'Report':
+          this.apiService.getRerpot(this.actuallProc).subscribe((rpr:reports)=>{
+            this.actualReport = rpr;
+          })
+          break;
       default:
         break;
     }
