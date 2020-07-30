@@ -388,6 +388,7 @@ export class HrprofilesComponent implements OnInit {
     this.newProcess = false;
     this.addProc = false;
     this.actuallProc = new process;
+    this.viewRecProd = false;
   }
 
   setLeave() {
