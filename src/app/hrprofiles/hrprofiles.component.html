@@ -1028,7 +1028,7 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Type:</label>
-                                <select class="form-control" [(ngModel)]="actualAdvances.type" [disabled]="viewRecProd">
+                                <select class="form-control" [(ngModel)]="actualAdvance.type" [disabled]="viewRecProd">
                                     <option>Salario</option>
                                     <option>Bono 14</option>
                                     <option>Aguinaldo</option>
@@ -1037,12 +1037,12 @@
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
                                 <label>Classification:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualAdvances.classification"
+                                <input type="text" class="form-control" [(ngModel)]="actualAdvance.classification"
                                     [disabled]="viewRecProd">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
-                            <textarea class="form-control" width="100%" [(ngModel)]="actualAdvances.description"
+                            <textarea class="form-control" width="100%" [(ngModel)]="actualAdvance.description"
                                 [disabled]="viewRecProd"></textarea>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
