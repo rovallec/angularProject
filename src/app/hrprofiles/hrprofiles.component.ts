@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -44,8 +44,10 @@ export class HrprofilesComponent implements OnInit {
   process_templates: process[] = [];
   processRecord: process[] = [];
   actualReport: reports = new reports;
-  actualAdvance:advances = new advances;
+  actualAdvance: advances = new advances;
+  actualRise: rises = new rises;
 
+  editInview: boolean = false;
   viewRecProd: boolean = false;
   addProc: boolean = false;
   actuallProc: process = new process;
@@ -733,16 +735,23 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Report':
           this.actualReport.id_process = str;
-          this.apiService.insertReport(this.actualReport).subscribe((str:string)=>{
+          this.apiService.insertReport(this.actualReport).subscribe((str: string) => {
             this.cancelView();
           })
           break;
-          case 'Advance':
-            this.actualAdvance.id_process = str;
-            this.apiService.insertAdvances(this.actualAdvance).subscribe((str:string)=>{
-              this.cancelView();
-            })
-            break;
+        case 'Advance':
+          this.actualAdvance.id_process = str;
+          this.apiService.insertAdvances(this.actualAdvance).subscribe((str: string) => {
+            this.cancelView();
+          })
+          break;
+        case 'Rise':
+          this.actualRise.id_process = str;
+          this.actualRise.id_employee = this.actuallProc.id_profile;
+          this.apiService.insertRise(this.actualRise).subscribe((rs: rises) => {
+            this.cancelView();
+          })
+          break;
 
         default:
           break;
@@ -767,18 +776,39 @@ export class HrprofilesComponent implements OnInit {
           this.actualTerm = trm;
         })
         break;
-        case 'Report':
-          this.apiService.getRerpot(this.actuallProc).subscribe((rpr:reports)=>{
-            this.actualReport = rpr;
-          })
-          break;
-          case 'Advance':
-            this.apiService.getAdvances(this.actuallProc).subscribe((adv:advances)=>{
-              this.actualAdvance = adv;
-            })
-            break;
+      case 'Report':
+        this.apiService.getRerpot(this.actuallProc).subscribe((rpr: reports) => {
+          this.actualReport = rpr;
+        })
+        break;
+      case 'Advance':
+        this.apiService.getAdvances(this.actuallProc).subscribe((adv: advances) => {
+          this.actualAdvance = adv;
+        })
+        break;
+      case 'Rise':
+        this.apiService.getRises(this.actuallProc).subscribe((rs: rises) => {
+          this.actualRise = rs;
+        })
+        break;
       default:
         break;
     }
+  }
+
+  setApprovalDate(str: string) {
+    this.actualRise.approved_date = str;
+  }
+
+  setEffectiveDate(str: string) {
+    this.actualRise.effective_date = str;
+  }
+
+  setTrialStart(str: string) {
+    this.actualRise.trial_start = str;
+  }
+
+  setTrialEnd(str: string) {
+    this.actualRise.trial_end = str;
   }
 }

@@ -1005,6 +1005,82 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
                     aria-labelledby="nav-newproc-tab">
+                    <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Rise'">
+                        <label
+                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">RISE</label>
+                        <div class="form-row col-md-12">
+                            <div class="form-gorup col-md-4">
+                                <label>User:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.user_name"
+                                    [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Status:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.status"
+                                    [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Date:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-3">
+                                <label>New Position:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.new_position" [disabled]="viewRecProd">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>New Payment:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.new_salary" [disabled]="viewRecProd">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Approved By:</label>
+                                <select class="form-control" [(ngModel)]="actualRise.approved_by" [disabled]="viewRecProd">
+                                    <option *ngFor="let app of approvals" [value]="app.iduser">{{app.user_name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Approved Date:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.approved_date" *ngIf="viewRecProd">
+                                <input type="date" class="form-control" (change)="setApprovalDate($event.target.value)">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-12">
+                                <label>Notes:</label>
+                                <textarea class="form-control" width="100%" [(ngModel)]="actuallProc.notes"
+                                    [disabled]="viewRecProd"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4">
+                                <label>Effectve Date:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.effective_date" *ngIf="viewRecProd">
+                                <input type="date" class="form-control" (change)="setEffectiveDate($event.target.value)">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Trial Start:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.trial_start" *ngIf="viewRecProd">
+                                <input type="date" class="form-control" (change)="setTrialStart($event.target.value)">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Trial End:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.trial_end" *ngIf="viewRecProd">
+                                <input type="date" class="form-control" (change)="setTrialEnd($event.target.value)">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-2">
+                                <button class="form-control" (click)="cancelView()">Cance</button>
+                            </div>
+                            <div class="form-group col-md-8"></div>
+                            <div class="form-group col-md-2">
+                                <button class="form-control" (click)="insertProc()">Accept</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------ADVANCES----------------------------------------------------------------------->
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Advance'">
                         <label
                             style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">ADVANCES</label>
@@ -1045,7 +1121,7 @@
                             <div class="form-group col-md-12">
                                 <label>Description:</label>
                                 <textarea class="form-control" width="100%" [(ngModel)]="actualAdvance.description"
-                                [disabled]="viewRecProd"></textarea>
+                                    [disabled]="viewRecProd"></textarea>
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
@@ -1112,7 +1188,8 @@
                         </div>
                         <div class="form-row col-md-12">
                             <label
-                                style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">SOLUTION</label>
+                                style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">SOLUTION</label><i
+                                class="fas fa-plus" style="margin-left:10px"></i>
                         </div>
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-2">
@@ -1130,11 +1207,11 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-4">
                                 <button class="form-control" (click)="cancelView()">Cance</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-6"></div>
+                            <div class="form-group col-md-4">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
                         </div>

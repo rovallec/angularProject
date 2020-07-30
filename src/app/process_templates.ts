@@ -470,3 +470,51 @@ export class advances{
         this.classification = null;
     }
 }
+
+export class activities{
+    idactivities:string;
+    id_process:string;
+    type:string;
+    account:string;
+    requested_by:string;
+    approved_by:string;
+    description:string;
+    done_date:string;
+    amount:string;
+    document:string;
+    constructor(){
+        this.idactivities = null;
+        this.id_process = null;
+        this.type = null;
+        this.account = null;
+        this.requested_by = null;
+        this.approved_by = null;
+        this.description = null;
+        this.done_date = null;
+        this.amount = null;
+        this.document = null;
+    }
+}
+
+export class rises {
+    id_employee:string;
+    id_process:string;
+    new_position:string;
+    new_salary:string;
+    approved_by:string;
+    approved_date:string;
+    effective_date:string;
+    trial_start:string;
+    trial_end:string;
+    constructor(){
+        this.id_employee = null;
+        this.id_process = null;
+        this.new_position = null;
+        this.new_salary = null;
+        this.approved_by = null;
+        this.approved_date = null;
+        this.effective_date = null;
+        this. trial_start = null;
+        this.trial_end = null;
+    }
+}
