@@ -1231,12 +1231,12 @@
                                 <th>Status</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                <tr *ngFor="let pr of processRecord">
+                                    <td>{{pr.idprocesses}</td>
+                                    <td>{{pr.name}}</td>
+                                    <td>{{pr.user_name}}</td>
+                                    <td>{{pr.descritpion}}</td>
+                                    <td>{{pr.status}}</td>
                                 </tr>
                             </tbody>
                         </table>

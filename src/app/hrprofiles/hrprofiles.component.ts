@@ -42,6 +42,7 @@ export class HrprofilesComponent implements OnInit {
   insurances: insurances = new insurances;
   beneficiaries: beneficiaries[] = [];
   process_templates:process[] = [];
+  processRecord:process[] = [];
 
   addProc:boolean = false;
   actuallProc:process = new process;
@@ -245,6 +246,7 @@ export class HrprofilesComponent implements OnInit {
 
     this.getInsurances();
     this.getTemplates();
+    this.getProcessesrecorded();
   }
 
   getStaffes() {
@@ -723,6 +725,12 @@ export class HrprofilesComponent implements OnInit {
         default:
           break;
       }
+    })
+  }
+
+  getProcessesrecorded(){
+    this.apiService.getProcRecorded({id:this.activeEmp}).subscribe((prc:process[])=>{
+      this.processRecord = prc;
     })
   }
 }
