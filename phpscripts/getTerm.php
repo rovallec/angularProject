@@ -7,7 +7,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $id = ($request->idprocesses);
 
-$users = [];
+$user = [];
 
 $sql = "SELECT * FROM `terminations` WHERE `id_process` = '$id';";
 
