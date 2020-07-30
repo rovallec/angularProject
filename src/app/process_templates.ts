@@ -455,3 +455,18 @@ export class reports {
         this.approved_by = null;
     }
 }
+
+export class advances{
+    idadvances:string;
+    id_process:string;
+    type:string;
+    description:string;
+    classification:string;
+    constructor(){
+        this.idadvances = null;
+        this.id_process = null;
+        this.type = null;
+        this.description = null;
+        this.classification = null;
+    }
+}

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -44,6 +44,7 @@ export class HrprofilesComponent implements OnInit {
   process_templates: process[] = [];
   processRecord: process[] = [];
   actualReport: reports = new reports;
+  actualAdvance:advances = new advances;
 
   viewRecProd: boolean = false;
   addProc: boolean = false;
@@ -735,6 +736,12 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView();
           })
           break;
+          case 'Advance':
+            this.actualAdvance.id_process = str;
+            this.apiService.insertAdvances(this.actualAdvance).subscribe((str:string)=>{
+              this.cancelView();
+            })
+            break;
 
         default:
           break;
@@ -764,6 +771,11 @@ export class HrprofilesComponent implements OnInit {
             this.actualReport = rpr;
           })
           break;
+          case 'Advance':
+            this.apiService.getAdvances(this.actuallProc).subscribe((adv:advances)=>{
+              this.actualAdvance = adv;
+            })
+            break;
       default:
         break;
     }
