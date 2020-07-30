@@ -718,6 +718,7 @@ export class HrprofilesComponent implements OnInit {
       switch (this.actuallProc.name) {
         case 'Termination':
           this.actualTerm.id_process = str;
+          this.actualTerm.period_to_pay = this.checkDate1 + " - " + this.checkDate2 + " Days:" + this.checkDay;
           this.apiService.insertTerm(this.actualTerm).subscribe((str:string)=>{
             this.cancelView();
           })

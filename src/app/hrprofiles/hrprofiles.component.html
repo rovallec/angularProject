@@ -1035,7 +1035,7 @@
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
                                         <label>Access Card</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.access_card" [disabled]="!viewRecProd">
+                                        <select class="form-control" [(ngModel)]="actualTerm.access_card" [disabled]="viewRecProd">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
@@ -1073,7 +1073,7 @@
                                             <div class="form-group col-md-12">
                                                 <label>Bank Check:</label>
                                                 <input type="date" class="form-control" (change)="setCheckBanck($event.target.value)" *ngIf="!viewRecProd">
-                                                <input type="text" class="form-control" [(ngModel)]="actualTerm.bank_check" [disabled]="true">
+                                                <input type="text" class="form-control" [(ngModel)]="actualTerm.bank_check" [disabled]="true" *ngIf="viewRecProd">
                                             </div>
                                         </div>
                                     </div>
@@ -1093,7 +1093,7 @@
                                                 <input type="number" min="0" max="31" class="form-control" [(ngModel)]="checkDay">
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.period_to_pay" *ngIf="viewRecProd">
+                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.period_to_pay" *ngIf="viewRecProd" [disabled]="true">
                                     </div>
                                 </div>
                             </div>
@@ -1101,50 +1101,50 @@
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-4">
                                         <label>Kind:</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.kind" [disabled]="!viewRecProd">
+                                        <select class="form-control" [(ngModel)]="actualTerm.kind" [disabled]="viewRecProd">
                                             <option>Renuncia</option>
                                             <option>Despido</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Motive:</label>
-                                        <select class="form-control" *ngIf="actualTerm.kind === 'Despido'" [(ngModel)]="actualTerm.motive" [disabled]="!viewRecProd">
+                                        <select class="form-control" *ngIf="actualTerm.kind === 'Despido'" [(ngModel)]="actualTerm.motive" [disabled]="viewRecProd">
                                             <option>Justificado</option>
                                             <option>Abandono Laboral</option>
                                             <option>Reestructuracion</option>
                                         </select>
-                                        <input class="form-control" *ngIf="actualTerm.kind === 'Renuncia'" [(ngModel)]="actualTerm.motive" [disabled]="!viewRecProd">
+                                        <input class="form-control" *ngIf="actualTerm.kind === 'Renuncia'" [(ngModel)]="actualTerm.motive" [disabled]="viewRecProd">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Reason:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.reason" [disabled]="!viewRecProd">
+                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.reason" [disabled]="viewRecProd">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-4">
                                         <label>Rehireable</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.rehireable" [disabled]="!viewRecProd">
+                                        <select class="form-control" [(ngModel)]="actualTerm.rehireable" [disabled]="viewRecProd">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label>Nearsol's Experience</label>
-                                        <input type="number" class="form-control" min="0" max="10" [(ngModel)]="actualTerm.nearsol_experience" [disabled]="!viewRecProd">
+                                        <input type="number" class="form-control" min="0" max="10" [(ngModel)]="actualTerm.nearsol_experience" [disabled]="viewRecProd">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label>Supervisor's Experience</label>
-                                        <input type="number" class="form-control" min="0" max="10" [(ngModel)]="actualTerm.supervisor_experience" [disabled]="!viewRecProd">
+                                        <input type="number" class="form-control" min="0" max="10" [(ngModel)]="actualTerm.supervisor_experience" [disabled]="viewRecProd">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Valid From</label>
-                                        <input type="date" class="form-control" (change)="setValidFrom($event.target.value)" [disabled]="!viewRecProd">
+                                        <input type="date" class="form-control" (change)="setValidFrom($event.target.value)" [disabled]="viewRecProd">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
                                         <label>Comments:</label>
-                                        <textarea class="form-control" width="100%" [(ngModel)]="actualTerm.comments" [disabled]="!viewRecProd"></textarea>
+                                        <textarea class="form-control" width="100%" [(ngModel)]="actualTerm.comments" [disabled]="viewRecProd"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
@@ -1158,7 +1158,7 @@
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
                                         <label>Insurance's Notification</label>
-                                        <select class="form-control" [(ngModel)]="actualTerm.insurance_notification" [disabled]="!viewRecProd">
+                                        <select class="form-control" [(ngModel)]="actualTerm.insurance_notification" [disabled]="viewRecProd">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
