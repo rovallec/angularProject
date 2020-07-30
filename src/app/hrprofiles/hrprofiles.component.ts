@@ -738,6 +738,13 @@ export class HrprofilesComponent implements OnInit {
   }
 
   viewProcess(pr:process){
-
+    this.viewRecProd = true;
+    switch (this.actuallProc.name) {
+      case 'Termination':
+        break;
+    
+      default:
+        break;
+    }
   }
 }
