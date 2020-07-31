@@ -50,9 +50,6 @@ echo "
 <td colspan='4' style='height:20px'></td>
 </tr>
 <tr>
-<td colspan='4' style='height:40px'></td>
-</tr>
-<tr>
 <td style=width:30px;></td>
 <td>PUESTO:</td>
 <td style=width:30px;></td>
@@ -60,9 +57,6 @@ echo "
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
-</tr>
-<tr>
-<td colspan='4' style='height:40px'></td>
 </tr>
 <tr>
 <td style=width:30px;></td>
@@ -74,9 +68,6 @@ echo "
 <td colspan='4' style='height:20px'></td>
 </tr>
 <tr>
-<td colspan='4' style='height:40px'></td>
-</tr>
-<tr>
 <td style=width:30px;></td>
 <td>FECHA DE INGRESO:</td>
 <td style=width:30px;></td>
@@ -84,9 +75,6 @@ echo "
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
-</tr>
-<tr>
-<td colspan='4' style='height:40px'></td>
 </tr>
 <tr>
 <td style=width:30px;></td>
@@ -98,9 +86,6 @@ echo "
 <td colspan='4' style='height:20px'></td>
 </tr>
 <tr>
-<td colspan='4' style='height:40px'></td>
-</tr>
-<tr>
 <td style=width:30px;></td>
 <td>BONIFICACION INCENTIVO DECRETO:</td>
 <td style=width:30px;></td>
@@ -110,13 +95,10 @@ echo "
 <td colspan='4' style='height:20px'></td>
 </tr>
 <tr>
-<td colspan='4' style='height:40px'></td>
-</tr>
-<tr>
 <td style=width:30px;></td>
 <td>BONIFICACION INCENTIVO PACTADA:</td>
 <td style=width:30px;></td>
-<td>" . $productivity . "</td>
+<td>Q. " . $productivity . "</td>
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
