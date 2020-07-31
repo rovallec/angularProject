@@ -765,6 +765,10 @@ export class HrprofilesComponent implements OnInit {
             break;
             case 'Letter':
               this.actualLetters.id_process = str;
+              this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp:employees)=>{
+                this.actualLetters.base_salary = emp.base_payment;
+                this.actualLetters.productivity_salary = emp.productivity_payment;
+              })
               this.apiService.insertLetters(this.actualLetters).subscribe((str:string)=>{
                 this.cancelView();
               })
