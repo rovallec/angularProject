@@ -1005,6 +1005,34 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
                     aria-labelledby="nav-newproc-tab">
+                    <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Call Tracker'">
+                        <label
+                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">CALL TRACKER</label>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label>Type:</label>
+                                    <select class="form-control" [(ngModel)]="actualCallTracker.type">
+                                        <option>Certificado de IGSS</option>
+                                        <option>Ausencia</option>
+                                        <option>Llegada Tarde</option>
+                                        <option>Otros</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Reason:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="actualCallTracker.reason">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Channel:</label>
+                                    <select class="form-control" [(ngModel)]="actualCallTracker.channel">
+                                        <option>Call</option>
+                                        <option>Email</option>
+                                        <option>Message</option>
+                                    </select>
+                                </div>
+                            </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------NEW PROCESS----------------------------------------------------------------------->
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Rise'">
                         <label
                             style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">RISE</label>
@@ -1042,7 +1070,7 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Approved Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualRise.approved_date" *ngIf="viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.approved_date" *ngIf="viewRecProd" [disabled]="true">
                                 <input type="date" class="form-control" (change)="setApprovalDate($event.target.value)" *ngIf="!viewRecProd">
                             </div>
                         </div>
@@ -1056,17 +1084,17 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Effectve Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualRise.effective_date" *ngIf="viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.effective_date" *ngIf="viewRecProd" [disabled]="true">
                                 <input type="date" class="form-control" (change)="setEffectiveDate($event.target.value)" *ngIf="!viewRecProd">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Trial Start:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualRise.trial_start" *ngIf="viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.trial_start" *ngIf="viewRecProd" [disabled]="true">
                                 <input type="date" class="form-control" (change)="setTrialStart($event.target.value)" *ngIf="!viewRecProd">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Trial End:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualRise.trial_end" *ngIf="viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.trial_end" *ngIf="viewRecProd" [disabled]="true">
                                 <input type="date" class="form-control" (change)="setTrialEnd($event.target.value)" *ngIf="!viewRecProd">
                             </div>
                         </div>

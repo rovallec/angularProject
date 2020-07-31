@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { profiles } from './profiles';
 import { process } from './process';
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker } from './process_templates';
 
 import { Observable } from 'rxjs'; 
 import { users } from './users';
@@ -352,11 +352,19 @@ getAdvances(proc:process){
 }
 
 insertRise(rs:rises){
-  return this.httpClient.post<rises>(`${this.PHP_API_SERVER}/phpscripts/insertRises.php`, rs);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertRises.php`, rs);
 }
 
 getRises(proc:process){
   return this.httpClient.post<rises>(`${this.PHP_API_SERVER}/phpscripts/getRises.php`, proc);
+}
+
+insertCallTracker(rs:call_tracker){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertCallTracker.php`, rs);
+}
+
+getCallTracker(proc:process){
+  return this.httpClient.post<call_tracker>(`${this.PHP_API_SERVER}/phpscripts/getCallTracker.php`, proc);
 }
 
   constructor(private httpClient:HttpClient) { }

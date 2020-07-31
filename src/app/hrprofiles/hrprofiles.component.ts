@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -46,6 +46,7 @@ export class HrprofilesComponent implements OnInit {
   actualReport: reports = new reports;
   actualAdvance: advances = new advances;
   actualRise: rises = new rises;
+  actualCallTracker:call_tracker = new call_tracker;
 
   editInview: boolean = false;
   viewRecProd: boolean = false;
@@ -748,11 +749,16 @@ export class HrprofilesComponent implements OnInit {
         case 'Rise':
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
-          this.apiService.insertRise(this.actualRise).subscribe((rs: rises) => {
+          this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
             this.cancelView();
           })
           break;
-
+          case 'Call Tracker':
+            this.actualCallTracker.id_process = str;
+            this.apiService.insertCallTracker(this.actualCallTracker).subscribe((str:string)=>{
+              this.cancelView();
+            })
+            break;
         default:
           break;
       }
@@ -791,6 +797,11 @@ export class HrprofilesComponent implements OnInit {
           this.actualRise = rs;
         })
         break;
+        case 'Call Tracker':
+          this.apiService.getCallTracker(this.actuallProc).subscribe((cl: call_tracker) => {
+            this.actualCallTracker = cl;
+          })
+          break;
       default:
         break;
     }

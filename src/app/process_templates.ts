@@ -518,3 +518,18 @@ export class rises {
         this.trial_end = null;
     }
 }
+
+export class call_tracker{
+    idcall_tracks:string;
+    id_process:string;
+    type:string;
+    reason:string;
+    channel:string;
+    constructor(){
+        this.idcall_tracks = null;
+        this.id_process = null;
+        this.type = null;
+        this.reason = null;
+        this.channel = null;
+    }
+}
