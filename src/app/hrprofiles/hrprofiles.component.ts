@@ -894,13 +894,68 @@ export class HrprofilesComponent implements OnInit {
     ]
 
     this.actualLetters.emition_date = numbers[parseInt(str.split("-")[2]) - 1] + " de " + month[parseInt(str.split("-")[1])] + " de " + year[parseInt(str.split("-")[0]) - 2020];
-    console.log(this.actualLetters.emition_date);
   }
+
   getLetter(){
+    var numbers = [
+      "Uno",
+      "Dos",
+      "Tres",
+      "Cuatro",
+      "Cinco",
+      "Seis",
+      "Siete",
+      "Ocho",
+      "Nueve",
+      "Diez",
+      "Once",
+      "Doce",
+      "Trece",
+      "Catroce",
+      "Quince",
+      "Dieciseis",
+      "Diecisiete",
+      "Dieciocho",
+      "Diecinueve",
+      "Veinte",
+      "Veintiuno",
+      "Veintidos",
+      "Veintitres",
+      "Veinticuatro",
+      "Veinticinco",
+      "Veintiseis",
+      "Veintisiete",
+      "Veintiocho",
+      "Veintinueve",
+      "Treinta",
+      "Treinta y uno"
+    ]
+    var month = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    ]
+
+    var year = [
+      "Dos mil veinte",
+      "Dos mil veintiuno",
+      "Dos mil veintidos",
+      "Dos mil veintitres"
+    ]
     var url = "";
     if(this.actualLetters.type == 'Laboral'){
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp:employees)=>{
-        url = "http://168.194.75.13/phpscripts/letterLaboral.php?date=" + this.actualLetters.emition_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company +"&start=" + emp.hiring_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
+        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1])] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
+        url = "http://168.194.75.13/phpscripts/letterLaboral.php?date=" + this.actualLetters.emition_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company +"&start=" + dt + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
         window.open(url, "_blank");
       })
     }
