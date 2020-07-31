@@ -1037,7 +1037,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Emition Date:</label>
-                                <input type="date" (click)="setLetterDate($event.target.value)" class="form-control"
+                                <input type="date" (change)="setLetterDate($event.target.value)" class="form-control"
                                     *ngIf="!viewRecProd">
                                 <input type="text" class="form-control" [(ngModel)]="actualLetters.emition_date"
                                     [disabled]="true" *ngIf="viewRecProd">
