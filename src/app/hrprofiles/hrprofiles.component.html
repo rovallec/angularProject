@@ -1048,6 +1048,15 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                                <div class="form-group col-md-2">
+                                    <button class="form-control" (click)="cancelView()">Cance</button>
+                                </div>
+                                <div class="form-group col-md-8"></div>
+                                <div class="form-group col-md-2">
+                                    <button class="form-control" (click)="insertProc()">Accept</button>
+                                </div>
+                            </div>
                     </div>
                     <!---------------------------------------------------------------------------------NEW PROCESS----------------------------------------------------------------------->
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Rise'">
