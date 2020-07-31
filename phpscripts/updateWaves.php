@@ -20,10 +20,11 @@ require 'database.php';
         $state = ($request->state);
         $account_name = ($request->account_name);
         $job = ($request->job);
-        $payment = ($request->payment);
+        $base_payment = ($request->base_payment);
+        $productivity_payment = ($request->productivity_payment);
 
 
-        $sql = "UPDATE `waves` SET `id_account`= '$id_account',`starting_date`= '$starting_date',`end_date`= '$end_date',`max_recriut`= '$max_recriut',`hires`= '$hires',`name`= '$name', `trainning_schedule` = '$trainning_schedule',`prefix`= '$prefix', `ops_start` = '$ops_start', `state`= '$state', `job` = '$job', `payment` = '$payment' WHERE `idwaves` = '$idwaves'";
+        $sql = "UPDATE `waves` SET `id_account`= '$id_account',`starting_date`= '$starting_date',`end_date`= '$end_date',`max_recriut`= '$max_recriut',`hires`= '$hires',`name`= '$name', `trainning_schedule` = '$trainning_schedule',`prefix`= '$prefix', `ops_start` = '$ops_start', `state`= '$state', `job` = '$job', `base_payment` = '$base_payment', `productivity_payment` = '$productivity_payment' WHERE `idwaves` = '$idwaves'";
         if(mysqli_query($con,$sql)){
             echo("1");
         }else{
