@@ -19,6 +19,7 @@ export class HrhomeComponent implements OnInit {
   makeEmployee:boolean = false;
   toggleDate:boolean = false;
   searching:boolean = false;
+  base_payment:string;
   
   filter:string = null;
   value:string = null;
@@ -156,24 +157,24 @@ export class HrhomeComponent implements OnInit {
   setEmployees(wv:waves_template){
     let employees_col:employees[] = [];
     let actual_emp:employees;
-
+    this.base_payment = wv.base_payment;
     actual_emp = new employees();
     this.hiresToShow.forEach(hire => {
       if(!isUndefined(hire.client_id) && hire.status == "EMPLOYEE"){
         actual_emp = new employees();
-        actual_emp.base_payment = '1';
         actual_emp.id_hire = hire.idhires;
         actual_emp.id_account = wv.id_account;
         actual_emp.reporter = hire.reporter;
         actual_emp.client_id = hire.client_id;
         actual_emp.hiring_date = wv.ops_start;
         actual_emp.job = wv.job;
-        actual_emp.base_payment = wv.base_payment;
+        actual_emp.base_payment = this.base_payment;
         actual_emp.id_user = this.authService.getAuthusr().iduser;
         actual_emp.id_department = this.authService.getAuthusr().department
         actual_emp.state = "EMPLOYEE";
         actual_emp.productivity_payment = wv.productivity_payment;
         employees_col.push(actual_emp);
+        console.log(actual_emp);
       }
     });
 
