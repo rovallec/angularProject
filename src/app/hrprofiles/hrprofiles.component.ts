@@ -48,8 +48,8 @@ export class HrprofilesComponent implements OnInit {
   actualReport: reports = new reports;
   actualAdvance: advances = new advances;
   actualRise: rises = new rises;
-  actualCallTracker:call_tracker = new call_tracker;
-  actualLetters:letters = new letters;
+  actualCallTracker: call_tracker = new call_tracker;
+  actualLetters: letters = new letters;
 
   editInview: boolean = false;
   viewRecProd: boolean = false;
@@ -613,7 +613,7 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getInsurances({ id: this.route.snapshot.paramMap.get('id') }).subscribe((ins: insurances) => {
       this.insurances = ins;
       console.log(this.insurances.id_process);
-      if(isNullOrUndefined(this.insurances.id_process)) {
+      if (isNullOrUndefined(this.insurances.id_process)) {
         this.insuranceNull = false;
       } else {
         this.idInsurance = ins.idinsurances;
@@ -757,22 +757,22 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView();
           })
           break;
-          case 'Call Tracker':
-            this.actualCallTracker.id_process = str;
-            this.apiService.insertCallTracker(this.actualCallTracker).subscribe((str:string)=>{
-              this.cancelView();
-            })
-            break;
-            case 'Letter':
-              this.actualLetters.id_process = str;
-              this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp:employees)=>{
-                this.actualLetters.base_salary = emp.base_payment;
-                this.actualLetters.productivity_salary = emp.productivity_payment;
-              })
-              this.apiService.insertLetters(this.actualLetters).subscribe((str:string)=>{
-                this.cancelView();
-              })
-              break;
+        case 'Call Tracker':
+          this.actualCallTracker.id_process = str;
+          this.apiService.insertCallTracker(this.actualCallTracker).subscribe((str: string) => {
+            this.cancelView();
+          })
+          break;
+        case 'Letter':
+          this.actualLetters.id_process = str;
+          this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+            this.actualLetters.base_salary = emp.base_payment;
+            this.actualLetters.productivity_salary = emp.productivity_payment;
+          })
+          this.apiService.insertLetters(this.actualLetters).subscribe((str: string) => {
+            this.cancelView();
+          })
+          break;
         default:
           break;
       }
@@ -811,16 +811,16 @@ export class HrprofilesComponent implements OnInit {
           this.actualRise = rs;
         })
         break;
-        case 'Call Tracker':
-          this.apiService.getCallTracker(this.actuallProc).subscribe((cl: call_tracker) => {
-            this.actualCallTracker = cl;
-          })
-          break;
-          case 'Letter':
-            this.apiService.getLetters(this.actuallProc).subscribe((lt:letters)=>{
-              this.actualLetters = lt;
-            })
-            break;
+      case 'Call Tracker':
+        this.apiService.getCallTracker(this.actuallProc).subscribe((cl: call_tracker) => {
+          this.actualCallTracker = cl;
+        })
+        break;
+      case 'Letter':
+        this.apiService.getLetters(this.actuallProc).subscribe((lt: letters) => {
+          this.actualLetters = lt;
+        })
+        break;
       default:
         break;
     }
@@ -842,12 +842,12 @@ export class HrprofilesComponent implements OnInit {
     this.actualRise.trial_end = str;
   }
 
-  setLetterDate(str:string){
+  setLetterDate(str: string) {
     this.actualLetters.emition_date = str;
 
   }
 
-  getLetter(){
+  getLetter() {
     var numbers = [
       "Uno",
       "Dos",
@@ -958,22 +958,31 @@ export class HrprofilesComponent implements OnInit {
     var e_date;
 
     var url = "";
-    if(this.actualLetters.type == 'Laboral'){
-      this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp:employees)=>{
-        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1])] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
-        e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1])] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
-        url = "http://168.194.75.13/phpscripts/letterLaboral.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company +"&start=" + dt + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
+    if (this.actualLetters.type == 'Laboral') {
+      this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
+        e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
+        url = "http://168.194.75.13/phpscripts/letterLaboral.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company + "&start=" + dt + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
         window.open(url, "_blank");
       })
     }
-    if(this.actualLetters.type == 'INTECAP'){
-      this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp:employees)=>{
-        e_date = "Guatemela, " + this.actualLetters.emition_date.split("-")[2] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1])] + " del " + year[parseInt(this.actualLetters.emition_date.split("-")[0])-2020];
-        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1])] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
+    if (this.actualLetters.type == 'INTECAP') {
+      this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+        e_date = "Guatemela, " + this.actualLetters.emition_date.split("-")[2] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1])] + " del " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
+        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
         var afiliacion = '266040419';
         var patrono = '145998';
         url = "http://168.194.75.13/phpscripts/letterIntecap.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&id=" + this.profile[0].dpi + "&company=" + this.actualLetters.company + "&hiring=" + dt + "&afiliacion=" + afiliacion + "&patronal=" + patrono + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
         window.open(url, "_blank");
+      })
+    }
+    if (this.actualLetters.type == 'Ingresos') {
+      this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
+        e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
+        var prod = parseFloat(emp.productivity_payment) - 250;
+        var total = parseFloat(emp.base_payment) + parseFloat(emp.productivity_payment);
+        url = "http://168.194.75.13/phpscripts/letterIngresos.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + this.profile[0].position + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&base=" + emp.base_payment + "&productivity=" + prod + "&total=" + total + "&date=" + e_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
       })
     }
   }

@@ -48,6 +48,7 @@ echo "
 <tr>
 <td colspan='4' style='height:40px'></td>
 </tr>
+<tr>
 <td style=width:30px;></td>
 <td>NOMBRE:</td>
 <td style=width:30px;></td>
@@ -56,6 +57,7 @@ echo "
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
+<tr>
 <td style=width:30px;></td>
 <td>IDENTIFICACION:</td>
 <td style=width:30px;></td>
@@ -64,6 +66,7 @@ echo "
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
+<tr>
 <td style=width:30px;></td>
 <td>AFILIACION:</td>
 <td style=width:30px;></td>
@@ -72,6 +75,7 @@ echo "
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
+<tr>
 <td style=width:30px;></td>
 <td>EMPRESA:</td>
 <td style=width:30px;></td>
@@ -80,6 +84,7 @@ echo "
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
+<tr>
 <td style=width:30px;></td>
 <td>NUMERO PATRONAL:</td>
 <td style=width:30px;></td>
@@ -88,6 +93,7 @@ echo "
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
+<tr>
 <td style=width:30px;></td>
 <td>FECHA DE INGRESO:</td>
 <td style=width:30px;></td>
@@ -133,5 +139,6 @@ echo "
 <tr>
 <td colspan='4' style='text-align:center'>PBX: 2504-2700 ext." . $contact ."</td>
 </tr>
+</table>
 "
 ?>
