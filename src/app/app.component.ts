@@ -19,7 +19,8 @@ export class AppComponent {
     user_name:'N/A',
     valid:'N/A',
     password:'N/A',
-    id_role:'N/A'
+    id_role:'N/A',
+    signature:'N/A'
   };
   selectedOption:string = 'HOME';
 

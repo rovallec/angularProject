@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
     user_name:null,
     valid:null,
     password:null,
-    id_role:null
+    id_role:null,
+    signature:null
   };
 
   resUsr: users[] = [{
@@ -30,7 +31,8 @@ export class LoginComponent implements OnInit {
     user_name:null,
     valid:null,
     password:null,
-    id_role:null
+    id_role:null,
+    signature:null
   }];
 
   wrongAuth: boolean = false;

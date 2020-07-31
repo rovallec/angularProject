@@ -6,4 +6,5 @@ export class users{
     valid:string;
     password:string;
     id_role:string;
+    signature:string;
 }

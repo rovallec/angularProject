@@ -10,6 +10,7 @@ $id_employee = ($request->id_employee);
 $id_process = ($request->id_process);
 $new_position = ($request->new_position);
 $new_salary = ($request->new_salary);
+$new_productivity_payment = ($request->new_productivity_payment);
 $approved_by = ($request->approved_by);
 $approved_date = ($request->approved_date);
 $effective_date = ($request->effective_date);
@@ -18,7 +19,7 @@ $trial_end = ($request->trial_end);
 
 $sql = "INSERT INTO `rises` (`idrises`, `id_process`, `new_position`, `new_salary`, `approved_by`, `approved_date`, `effective_date`, `trial_start`, `trial_end`) VALUES (NULL, '$id_process', '$new_position', '$new_salary', '$approved_by', '$approved_date', '$effective_date', '$trial_start', '$trial_end');";
 if(mysqli_query($con,$sql)){
-    $sql2 = "UPDATE `employees` SET `payment` = $new_salary WHERE `idemployees` = $id_employee;";
+    $sql2 = "UPDATE `employees` SET `base_payment` = $new_base_salary, `productivity_payemnt` = $new_productivity_payment WHERE `idemployees` = $id_employee;";
     if(mysqli_query($con,$sql2)){
         http_response_code(200);
     }else{

@@ -21,7 +21,8 @@
             $result['client_id'] = $r['client_id'];
             $result['hiring_date'] = $r['hiring_date'];
             $result['job'] = $r['job'];
-            $result['payment'] = $r['payment'];
+            $result['base_payment'] = $r['base_payment'];
+            $result['productivity_payment'] = $r['productivity_payment'];
             $result['state'] = $r['state'];
         }
         echo(json_encode($result));

@@ -157,7 +157,8 @@ export class employees{
     client_id:string;
     hiring_date:string;
     job:string;
-    payment:string;
+    base_payment:string;
+    productivity_payment:string;
     state:string;
     id_user:string;
     id_department:string;
@@ -172,7 +173,8 @@ export class employees{
         this.client_id = null;
         this.hiring_date = null;
         this.job = null;
-        this.payment = null;
+        this.base_payment = null;
+        this.productivity_payment = null;
         this.state = null;
         this.name = null;
         this.account = null;

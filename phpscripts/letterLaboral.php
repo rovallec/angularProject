@@ -9,6 +9,7 @@ $departamento = $_GET['departamento'];
 $start = $_GET['start'];
 $user = $_GET['user'];
 $contact = $_GET['contact'];
+$job = $_GET['job'];
 
 echo "
 <div style='margin-left:60px'>
@@ -93,7 +94,7 @@ echo "
 <td colspan='4' style=' text-align: center'>" . $user . "
 </tr>
 <tr>
-<td colspan='4' style='text-align:center'>ASISTENTE DE RECURSOS HUMANOS</td>
+<td colspan='4' style='text-align:center'>" . $job . "</td>
 </tr>
 <tr>
 <td colspan='4' style='height:40px; border-bottom:solid 4px'></td>

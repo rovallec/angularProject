@@ -33,6 +33,7 @@ if(!$mysqlc){
 	$authUser[0]['user_name'] = 'N/A';
 	$authUser[0]['valid'] = 'invalid';
 	$authUser[0]['id_role'] = 'N/A';
+	$authUser[0]['signature'] = 'N/A';
 	echo json_encode($authUser);
 }else{
 	$sql = "SELECT * FROM `users` where username = '{$usr}';";
@@ -43,6 +44,7 @@ if(!$mysqlc){
 		$authUser[0]['user_name'] = 'N/A';
 		$authUser[0]['valid'] = 'invalid';
 		$authUser[0]['id_role'] = 'N/A';
+		$authUser[0]['signature'] = 'N/A';
 		echo json_encode($authUser);
 	}else{
 		$i = 0;
@@ -53,6 +55,7 @@ if(!$mysqlc){
 			$authUser[$i]['user_name'] = $row['user_name'];
 			$authUser[$i]['valid'] = $row['valid'];
 			$authUser[$i]['id_role'] = $row['id_role'];
+			$authUser[$i]['signature'] = $row['signature'];
 			$i++;
 		};
 		echo json_encode($authUser);
