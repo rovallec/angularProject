@@ -1006,8 +1006,8 @@
                 <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
                     aria-labelledby="nav-newproc-tab">
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Letter'">
-                        <label
-                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">LETTER<i class="far fa-eye" (click)="getLetter()" *ngIf="viewRecProd"></i></label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">LETTER<i
+                                class="far fa-eye" (click)="getLetter()" *ngIf="viewRecProd"></i></label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
@@ -1037,30 +1037,34 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Emition Date:</label>
-                                <input type="date" (click)="setLetterDate($event.target.value)" class="form-control" *ngIf="!viewRecProd">
-                                <input type="text" class="form-control" [(ngModel)]="actualLetters.emition_date" [disabled]="true" *ngIf="viewRecProd">
+                                <input type="date" (click)="setLetterDate($event.target.value)" class="form-control"
+                                    *ngIf="!viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualLetters.emition_date"
+                                    [disabled]="true" *ngIf="viewRecProd">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Company:</label>
-                                <select class="form-control" [(ngModel)]="actualLetters.company" [disabled]="viewRecProd">
+                                <select class="form-control" [(ngModel)]="actualLetters.company"
+                                    [disabled]="viewRecProd">
                                     <option>Nearsol S.A.</option>
                                     <option>PRG Recurso Humano</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Patronal Number:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualLetters.patronal_number" [disabled]="viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualLetters.patronal_number"
+                                    [disabled]="viewRecProd">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Language:</label>
-                                <select class="form-control" [(ngModel)]="actualLetters.language" [disabled]="viewRecProd">
+                                <select class="form-control" [(ngModel)]="actualLetters.language"
+                                    [disabled]="viewRecProd">
                                     <option>Spanish</option>
                                     <option>English</option>
                                 </select>
                             </div>
-                        </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
