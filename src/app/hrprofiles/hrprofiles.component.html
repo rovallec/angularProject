@@ -1008,10 +1008,27 @@
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Call Tracker'">
                         <label
                             style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">CALL TRACKER</label>
+                            <div class="form-row col-md-12">
+                                <div class="form-gorup col-md-4">
+                                    <label>User:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="actuallProc.user_name"
+                                        [disabled]="true">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Status:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="actuallProc.status"
+                                        [disabled]="true">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Date:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                        [disabled]="true">
+                                </div>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label>Type:</label>
-                                    <select class="form-control" [(ngModel)]="actualCallTracker.type">
+                                    <select class="form-control" [(ngModel)]="actualCallTracker.type" [disabled]="viewRecProd">
                                         <option>Certificado de IGSS</option>
                                         <option>Ausencia</option>
                                         <option>Llegada Tarde</option>
@@ -1020,11 +1037,11 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Reason:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="actualCallTracker.reason">
+                                    <input type="text" class="form-control" [(ngModel)]="actualCallTracker.reason" [disabled]="viewRecProd">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Channel:</label>
-                                    <select class="form-control" [(ngModel)]="actualCallTracker.channel">
+                                    <select class="form-control" [(ngModel)]="actualCallTracker.channel" [disabled]="viewRecProd">
                                         <option>Call</option>
                                         <option>Email</option>
                                         <option>Message</option>
