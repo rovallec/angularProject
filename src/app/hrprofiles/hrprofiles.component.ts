@@ -901,8 +901,8 @@ export class HrprofilesComponent implements OnInit {
     if(this.actualLetters.type == 'Laboral'){
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp:employees)=>{
         url = "http://168.194.75.13/phpscripts/letterLaboral.php?date=" + this.actualLetters.emition_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company +"&start=" + emp.hiring_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=4013 hr@nearsol.gt";
+        window.open(url, "_blank");
       })
     }
-    window.open(url, "_blank");
   }
 }
