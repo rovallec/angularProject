@@ -19,7 +19,8 @@ export class waves_template {
     account_name: string;
     ops_start: string;
     job: string;
-    payment: string;
+    base_payment: string;
+    productivity_payment:string;
     show: string;
     constructor() {
         this.idwaves = null;
@@ -31,6 +32,8 @@ export class waves_template {
         this.name = null;
         this.trainning_schedule = null;
         this.prefix = null;
+        this.base_payment = null;
+        this.productivity_payment = null;
         this.state = null;
         this.account_name = null;
         this.show = '0';
