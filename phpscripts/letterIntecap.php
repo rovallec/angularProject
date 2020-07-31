@@ -7,7 +7,7 @@
     $afiliacion = $_GET['afiliacion'];
     $patronal = $_GET['patronal'];
     $user = $_GET['user'];
-$contact = $_GET['contact'];
+    $contact = $_GET['contact'];
     $job = $_GET['job'];
 
 echo "

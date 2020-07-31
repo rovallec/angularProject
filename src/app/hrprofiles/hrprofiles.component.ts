@@ -844,6 +844,7 @@ export class HrprofilesComponent implements OnInit {
 
   setLetterDate(str:string){
     this.actualLetters.emition_date = str;
+
   }
 
   getLetter(){
@@ -894,14 +895,12 @@ export class HrprofilesComponent implements OnInit {
       "Noviembre",
       "Diciembre"
     ]
-
     var year = [
       "Dos mil veinte",
       "Dos mil veintiuno",
       "Dos mil veintidos",
       "Dos mil veintitres"
     ]
-
     var numbers = [
       "Uno",
       "Dos",
@@ -949,7 +948,6 @@ export class HrprofilesComponent implements OnInit {
       "Noviembre",
       "Diciembre"
     ]
-
     var year = [
       "Dos mil veinte",
       "Dos mil veintiuno",
@@ -974,7 +972,7 @@ export class HrprofilesComponent implements OnInit {
         var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1])] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
         var afiliacion = '266040419';
         var patrono = '145998';
-        url = "http://168.194.75.13/phpscripts/letterLaboral.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&id=" + this.profile[0].dpi + "&company=" + this.actualLetters.company + "&hiring=" + dt + "&afiliacion=" + afiliacion + "&patronal=" + patrono + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
+        url = "http://168.194.75.13/phpscripts/letterIntecap.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&id=" + this.profile[0].dpi + "&company=" + this.actualLetters.company + "&hiring=" + dt + "&afiliacion=" + afiliacion + "&patronal=" + patrono + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
         window.open(url, "_blank");
       })
     }
