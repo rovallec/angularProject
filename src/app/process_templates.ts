@@ -533,3 +533,30 @@ export class call_tracker{
         this.channel = null;
     }
 }
+
+export class letters{
+    idletters:string;
+    id_process:string;
+    type:string;
+    company:string;
+    patronal_number:string;
+    emition_date:string;
+    language:string;
+    position:string;
+    department:string;
+    base_salary:string;
+    productivity_salary:string;
+    constructor(){
+        this.idletters = null;
+        this.id_process = null;
+        this.type = null;
+        this.company = null;
+        this.patronal_number = null;
+        this.emition_date = null;
+        this.language = null;
+        this.position = null;
+        this.department = null;
+        this.base_salary = null;
+        this.productivity_salary = null;
+    }
+}

@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
+import { TranslationWidth } from '@angular/common';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -47,6 +49,7 @@ export class HrprofilesComponent implements OnInit {
   actualAdvance: advances = new advances;
   actualRise: rises = new rises;
   actualCallTracker:call_tracker = new call_tracker;
+  actualLetters:letters = new letters;
 
   editInview: boolean = false;
   viewRecProd: boolean = false;
@@ -759,6 +762,12 @@ export class HrprofilesComponent implements OnInit {
               this.cancelView();
             })
             break;
+            case 'Letter':
+              this.actualLetters.id_process = str;
+              this.apiService.insertLetters(this.actualLetters).subscribe((str:string)=>{
+                this.cancelView();
+              })
+              break;
         default:
           break;
       }
@@ -802,6 +811,11 @@ export class HrprofilesComponent implements OnInit {
             this.actualCallTracker = cl;
           })
           break;
+          case 'Letter':
+            this.apiService.getLetters(this.actuallProc).subscribe((lt:letters)=>{
+              this.actualLetters = lt;
+            })
+            break;
       default:
         break;
     }
@@ -821,5 +835,74 @@ export class HrprofilesComponent implements OnInit {
 
   setTrialEnd(str: string) {
     this.actualRise.trial_end = str;
+  }
+
+  setLetterDate(str:string){
+    var numbers = [
+      "Uno",
+      "Dos",
+      "Tres",
+      "Cuatro",
+      "Cinco",
+      "Seis",
+      "Siete",
+      "Ocho",
+      "Nueve",
+      "Diez",
+      "Once",
+      "Doce",
+      "Trece",
+      "Catroce",
+      "Quince",
+      "Dieciseis",
+      "Diecisiete",
+      "Dieciocho",
+      "Diecinueve",
+      "Veinte",
+      "Veintiuno",
+      "Veintidos",
+      "Veintitres",
+      "Veinticuatro",
+      "Veinticinco",
+      "Veintiseis",
+      "Veintisiete",
+      "Veintiocho",
+      "Veintinueve",
+      "Treinta",
+      "Treinta y uno"
+    ]
+    var month = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    ]
+
+    var year = [
+      "Dos mil veinte",
+      "Dos mil veintiuno",
+      "Dos mil veintidos",
+      "Dos mil veintitres"
+    ]
+
+    this.actualLetters.emition_date = numbers[parseInt(str.split("-")[2]) - 1] + " de " + month[parseInt(str.split("-")[1])] + " de " + year[parseInt(str.split("-")[0]) - 2020];
+    console.log(this.actualLetters.emition_date);
+  }
+  getLetter(){
+    var url = "";
+    if(this.actualLetters.type == 'Laboral'){
+      this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp:employees)=>{
+        url = "http://168.194.75.13/phpscripts/letterLaboral.php?date=" + this.actualLetters.emition_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company +"&start=" + emp.hiring_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=4013 hr@nearsol.gt";
+      })
+    }
+    window.open(url, "_blank");
   }
 }
