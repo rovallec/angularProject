@@ -14,13 +14,19 @@ for ($i=0; $i < count($request); $i++) {
 	$client_id = ($request[$i]->client_id);
 	$hiring_date = ($request[$i]->hiring_date);
 	$job = ($request[$i]->job);
-	$base_salary = ($request[$i]->base_payment);
 	$productivity_payment = ($request[$i]->productivity_payment);
 	$state = ($request[$i]->state);
 	$user = ($request[$i]->id_user);
 	$department = ($request[$i]->id_department);
 
-	$sql = "INSERT INTO `employees`(`idemployees`, `id_hire`, `id_account`, `reporter`, `client_id`, `hiring_date`, `job`, `salary`, `state`, `productivity_payment`) SELECT * FROM ( SELECT null, '$id_hire' AS `1`, '$id_account' AS `2`, '$reporter' AS `3`, '$client_id' AS `4`, '$hiring_date' AS `5`, '$job' AS `6`, '$base_salary' AS `7`, '$state' AS `8`, $productivity_payment AS `9`) AS `tmp` WHERE NOT EXISTS (SELECT `id_hire` FROM `employees` WHERE `id_hire` = '$id_hire');";
+	$sql0="SELECT * FROM `hires` LEFT JOIN `waves` ON `waves`.`idwaves` = `hires`.`id_wave` WHERE `idhires` = $id_hire;";
+	if($result = mysqli_query($con, $sql0)){
+		while($row = mysqli_fetch_assoc($result)){
+			$base_salary = $row['base_payment'];
+		}
+	}
+
+	$sql = "INSERT INTO `employees`(`idemployees`, `id_hire`, `id_account`, `reporter`, `client_id`, `hiring_date`, `job`, `base_payment`, `state`, `productivity_payment`) SELECT * FROM ( SELECT null, '$id_hire' AS `1`, '$id_account' AS `2`, '$reporter' AS `3`, '$client_id' AS `4`, '$hiring_date' AS `5`, '$job' AS `6`, '$base_salary' AS `7`, '$state' AS `8`, $productivity_payment AS `9`) AS `tmp` WHERE NOT EXISTS (SELECT `id_hire` FROM `employees` WHERE `id_hire` = '$id_hire');";
 
 	$sql1 = "UPDATE `profiles` LEFT JOIN `hires` ON `hires`.`id_profile` = `profiles`.`idprofiles` SET `profiles`.`status` = '$state' WHERE `hires`.`idhires` = $id_hire;";
 	if(mysqli_query($con, $sql)){

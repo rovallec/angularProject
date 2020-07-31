@@ -171,9 +171,7 @@ export class HrhomeComponent implements OnInit {
         actual_emp.id_department = this.authService.getAuthusr().department
         actual_emp.state = "EMPLOYEE";
         actual_emp.productivity_payment = wv.productivity_payment;
-        actual_emp.base_payment = "2875";
         employees_col.push(actual_emp);
-        console.log(actual_emp);
       }
     });
 
