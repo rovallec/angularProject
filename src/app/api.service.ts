@@ -374,5 +374,10 @@ insertLetters(lt:letters){
 getLetters(proc:process){
   return this.httpClient.post<letters>(`${this.PHP_API_SERVER}/phpscripts/getLetters.php`, proc);
 }
+
+getTermdt(emp:employees){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/getTermdt.php`, emp);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
