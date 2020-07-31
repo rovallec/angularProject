@@ -7,7 +7,7 @@
     $afiliacion = $_GET['afiliacion'];
     $patronal = $_GET['patronal'];
     $user = $_GET['user'];
-    $contact = $_GET['contact'];
+$contact = $_GET['contact'];
     $job = $_GET['job'];
 
 echo "
@@ -27,19 +27,19 @@ echo "
 <td colspan='4' style='height:40px'></td>
 </tr>
 <tr>
-<td>Señores:</td>
+<td colspan='4'>Señores:</td>
 </tr>
 <tr>
-<td>INTECAP</td>
+<td colspan='4'>INTECAP</td>
 </tr>
 <tr>
-<td>Presente</td>
+<td colspan='4'>Presente</td>
 </tr>
 <tr>
 <td colspan='4'>Estimados presentes</td>
 </tr>
 <tr>
-<td style='width:30px'></td>
+<td style=width:30px></td>
 <td colspan='3'>Se hace constar que la información que se detalla acontinuación es real y fidedigna, por</td>
 </tr>
 <tr>
@@ -48,58 +48,58 @@ echo "
 <tr>
 <td colspan='4' style='height:40px'></td>
 </tr>
-td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>NOMBRE:</td>
-<td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>" . $name . "</td>
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
-td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>IDENTIFICACION:</td>
-<td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>" . $id . "</td>
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
-td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>AFILIACION:</td>
-<td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>" . $afiliacion . "</td>
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
-td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>EMPRESA:</td>
-<td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>" . $company . "</td>
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
-td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>NUMERO PATRONAL:</td>
-<td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>" . $patronal . "</td>
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
-td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>FECHA DE INGRESO:</td>
-<td style='width:30px'></td>
+<td style=width:30px;></td>
 <td>" . $hiring_date . "</td>
 </tr>
 <tr>
 <td colspan='4' style='height:20px'></td>
 </tr>
 <tr>
-<td colspan='4'>Para los usos que a la persona interesada convenga se hace constar que la</td>
+<td></td>
+<td colspan='3'>Para los usos que a la persona interesada convenga se hace constar que la</td>
 </tr>
-<td>
 <td colspan='4'>empresa paga la contidad de Q. 28.25, por concepto de INTECAP por cada uno</td>
 </td>
 <tr>
