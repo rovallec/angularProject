@@ -170,6 +170,8 @@ export class HrhomeComponent implements OnInit {
         actual_emp.id_user = this.authService.getAuthusr().iduser;
         actual_emp.id_department = this.authService.getAuthusr().department
         actual_emp.state = "EMPLOYEE";
+        actual_emp.base_payment = wv.base_payment;
+        actual_emp.productivity_payment = wv.productivity_payment;
         employees_col.push(actual_emp);
       }
     });

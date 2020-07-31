@@ -35,7 +35,8 @@ if($res = mysqli_query($con, $sql)){
 		$waves[$i]['account_name'] = $row['account_name'];
 		$waves[$i]['ops_start'] = $row['ops_start'];
 		$waves[$i]['show'] = "0";
-		$waves[$i]['payment'] = $row['payment'];
+		$waves[$i]['bse_payment'] = $row['base_payment'];
+		$waves[$i]['productivity_payment'] = $row['productivity_payment'];
 		$waves[$i]['job'] = $row['job'];
 		$i++;
 	}
