@@ -7,12 +7,13 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id = ($request->id_employee)
+
 $term = '';
-$sql = "SELECT * FROM `terminations` LEFT JOIN `hr_processes` ON `hr_processes`.`idprocesses` = `terminations`.`id_process` WHERE `id_employee`=$id;";
+$sql = "SELECT * FROM `terminations` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `terminations`.`id_process` WHERE `id_employee`=$id;";
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
-        $term = $row['emition_date'];
+        $term['valid_from'] = $row['valid_from'];
     }
-    echo($term);
+    echo(json_encode($term));
 }
 ?>

@@ -989,7 +989,8 @@ export class HrprofilesComponent implements OnInit {
     if(this.actualLetters.type == 'Baja'){
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
         var trem = "N/A";
-        this.apiService.getTermdt(emp).subscribe((str:string)=>{
+        this.apiService.getTermdt(emp).subscribe((term:terminations)=>{
+          var str = term.valid_from;
           trem = numbers[parseInt(str.split("-")[2]) - 1] + " de " + month[parseInt(str.split("-")[1]) - 1] + " de " + year[parseInt(str.split("-")[0]) - 2020];
           var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
           e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];

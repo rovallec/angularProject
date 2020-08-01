@@ -376,7 +376,7 @@ getLetters(proc:process){
 }
 
 getTermdt(emp:employees){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/getTermdt.php`, emp);
+  return this.httpClient.post<terminations>(`${this.PHP_API_SERVER}/phpscripts/getTermdt.php`, emp);
 }
 
   constructor(private httpClient:HttpClient) { }
