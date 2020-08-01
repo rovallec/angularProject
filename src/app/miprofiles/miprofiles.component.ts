@@ -140,7 +140,7 @@ export class MiprofilesComponent implements OnInit {
     prc_date: null,
     status: null,
     id_user: null,
-    user_name: null
+    user_name: null,
   }];
   templates: process_templates[] = [];
 

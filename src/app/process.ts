@@ -7,5 +7,5 @@ export class process{
     prc_date:string;
     status:string;
     id_user:string;
-    user_name:string
+    user_name:string;
 }

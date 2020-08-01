@@ -20,11 +20,12 @@ if($result = mysqli_query($con,$sql)){
         $process[$i]['id_role'] = $row['id_role'];
         $process[$i]['id_profile'] = $row['id_employee'];
         $process[$i]['name'] = $row['name'];
-        $process[$i]['descritpion'] = $row['description'];
+        $process[$i]['descritpion'] = $row['notes'];
         $process[$i]['prc_date'] = $row['date'];
         $process[$i]['status'] = $row['status'];
         $process[$i]['id_user'] = $row['id_user'];
         $process[$i]['user_name'] = $row['user_name'];
+        $process[$i]['notes'] = $row['notes'];
 		$i++;
 	};
 	echo json_encode($process);
