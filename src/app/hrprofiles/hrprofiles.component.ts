@@ -837,6 +837,7 @@ export class HrprofilesComponent implements OnInit {
           this.actuallProc.descritpion = null;
           break;
           case 'Supervisor Survey':
+            this.actuallProc.descritpion = null;
             this.apiService.getSurvey(this.actuallProc).subscribe((srv:supervisor_survey)=>{
               this.actualSurvey = srv;
             })
