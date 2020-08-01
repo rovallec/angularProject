@@ -565,3 +565,20 @@ export class letters{
         this.productivity_salary = null;
     }
 }
+
+export class supervisor_survey{
+    idsupervisor_survey:string;
+    id_process:string;
+    amount:string;
+    approved_date:string;
+    notification_date:string;
+    score:string;
+    constructor(){
+        this.idsupervisor_survey = null;
+        this.id_process = null;
+        this.amount = null;
+        this.approved_date = null;
+        this.notification_date = null;
+        this.score = null;
+    }
+}

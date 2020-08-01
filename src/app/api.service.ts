@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { profiles } from './profiles';
 import { process } from './process';
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey } from './process_templates';
 
 import { Observable } from 'rxjs'; 
 import { users } from './users';
@@ -379,5 +379,12 @@ getTermdt(emp:employees){
   return this.httpClient.post<terminations>(`${this.PHP_API_SERVER}/phpscripts/getTermdt.php`, emp);
 }
 
+insertSurvey(srv:supervisor_survey){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertSurvey.php`, srv);
+}
+
+getSurvey(proc:process){
+  return this.httpClient.post<supervisor_survey>(`${this.PHP_API_SERVER}/phpscripts/getSurvey.php`, proc);
+}
   constructor(private httpClient:HttpClient) { }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -50,6 +50,7 @@ export class HrprofilesComponent implements OnInit {
   actualRise: rises = new rises;
   actualCallTracker: call_tracker = new call_tracker;
   actualLetters: letters = new letters;
+  actualSurvey:supervisor_survey = new supervisor_survey;
 
   editInview: boolean = false;
   viewRecProd: boolean = false;
@@ -774,8 +775,16 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
           case 'Pay Vacations':
+            this.addVacation("Take", "4");
+            this.insertVacation();
             this.cancelView();
             break;
+            case 'Supervisor Survey':
+              this.actualSurvey.id_process = str;
+              this.apiService.insertSurvey(this.actualSurvey).subscribe((str:string)=>{
+                this.cancelView();
+              })
+              break;
         default:
           break;
       }
@@ -827,6 +836,11 @@ export class HrprofilesComponent implements OnInit {
         case 'Vacations Pay':
           this.actuallProc.descritpion = null;
           break;
+          case 'Supervisor Survey':
+            this.apiService.getSurvey(this.actuallProc).subscribe((srv:supervisor_survey)=>{
+              this.actualSurvey = srv;
+            })
+            break;
       default:
         break;
     }
@@ -1005,5 +1019,13 @@ export class HrprofilesComponent implements OnInit {
         })
       })
     }
+  }
+
+  setApproveddate(str:string){
+    this.actualSurvey.approved_date = str;
+  }
+
+  setNotificationdate(str:string){
+    this.actualSurvey.notification_date = str;
   }
 }

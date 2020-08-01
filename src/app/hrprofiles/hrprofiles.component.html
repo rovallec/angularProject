@@ -1001,13 +1001,74 @@
                             (click)="cancelView()"></i> {{actuallProc.name}}</a>
                 </div>
             </nav>
-
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
                     aria-labelledby="nav-newproc-tab">
+                    <div class="fomr-row col-md-12" *ngIf="actuallProc.name == 'Supervisor survey'">
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">SUPERVISOR
+                            SURVEY</label>
+                        <div class="form-row col-md-12">
+                            <div class="form-gorup col-md-4">
+                                <label>User:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.user_name"
+                                    [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Status:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.status"
+                                    [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Date:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-12">
+                                <label>Notes:</label>
+                                <textarea class="form-control" width="100%" [(ngModel)]="actuallProc.descritpion"
+                                    [disabled]="viewRecProd"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-3">
+                                <label>Amount(Q.):</label>
+                                <input type="text" [(ngModel)]="actualSurvey.amount" class="form-control"
+                                    [disabled]="viewRecProd">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Approved Date:</label>
+                                <input type="date" class="form-control" (change)="setApproveddate($event.target.value)" *ngIf="!viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualSurvey.approved_date" *ngIf="viewRecProd">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Notification Date:</label>
+                                <input type="date" class="form-control"
+                                    (change)="setNotificationdate($event.target.value)" *ngIf="!viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualSurvey.notification_date"
+                                    *ngIf="viewRecProd">
+                            </div>
+                            <div class="form-groop col-md-3">
+                                <label>Score:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualSurvey.score"
+                                    [disabled]="viewRecProd">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-2">
+                                <button class="form-control" (click)="cancelView()">Cance</button>
+                            </div>
+                            <div class="form-group col-md-8"></div>
+                            <div class="form-group col-md-2">
+                                <button class="form-control" (click)="insertProc()">Accept</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!---------------------------------------------------------------------------------PAY VACATIONS----------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Pay Vacations'">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">PAY VACATION<i
-                                class="far fa-eye" (click)="getLetter()" *ngIf="viewRecProd"></i></label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">PAY
+                            VACATION</label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
