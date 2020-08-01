@@ -1028,7 +1028,7 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-12">
                                 <label>Notes:</label>
-                                <textarea class="form-control" width="100%" [(ngModel)]="actuallProc.description"
+                                <textarea class="form-control" width="100%" [(ngModel)]="actuallProc.descritpion"
                                     [disabled]="viewRecProd"></textarea>
                             </div>
                         </div>
@@ -1644,7 +1644,6 @@
                                 <th>ID</th>
                                 <th>Process</th>
                                 <th>User</th>
-                                <th>Description</th>
                                 <th>Status</th>
                             </thead>
                             <tbody>
@@ -1652,7 +1651,6 @@
                                     <td>{{pr.idprocesses}}</td>
                                     <td>{{pr.name}}</td>
                                     <td>{{pr.user_name}}</td>
-                                    <td>{{pr.descritpion}}</td>
                                     <td>{{pr.status}}</td>
                                 </tr>
                             </tbody>
