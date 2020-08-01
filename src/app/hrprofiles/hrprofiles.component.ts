@@ -773,6 +773,9 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView();
           })
           break;
+          case 'Pay Vacations':
+            this.cancelView();
+            break;
         default:
           break;
       }
@@ -821,6 +824,9 @@ export class HrprofilesComponent implements OnInit {
           this.actualLetters = lt;
         })
         break;
+        case 'Vacations Pay':
+          this.actuallProc.descritpion = null;
+          break;
       default:
         break;
     }
