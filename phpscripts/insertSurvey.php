@@ -13,7 +13,7 @@ $approved_date = ($request->approved_date);
 $notification_date = ($request->notification_date);
 $score = ($request->score);
 
-$sql = "INSERT INTO `supervisor_surveis` (`idsupervisor_surveis`, `id_process`, `amount`, `approved_date`, `notification_date`, `notification_date`, `score`) VALUES (NULL, '$id_process', '$amount', '$approved_date', '$notification_date', '$score');";
+$sql = "INSERT INTO `supervisor_surveies` (`idsupervisor_surveies;`, `id_process`, `amount`, `approved_date`, `notification_date`, `score`) VALUES (NULL, '$id_process', '$amount', '$approved_date', '$notification_date', '$score');";
 if(mysqli_query($con,$sql)){
     http_response_code(200);
 }else{

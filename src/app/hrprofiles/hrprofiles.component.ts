@@ -693,6 +693,7 @@ export class HrprofilesComponent implements OnInit {
 
   setProcess(act: process) {
     this.viewRecProd = false;
+    this.actuallProc.descritpion = null;
     this.addProc = true;
     this.actuallProc = act;
     this.actuallProc.prc_date = this.todayDate;
@@ -833,11 +834,7 @@ export class HrprofilesComponent implements OnInit {
           this.actualLetters = lt;
         })
         break;
-        case 'Vacations Pay':
-          this.actuallProc.descritpion = null;
-          break;
           case 'Supervisor Survey':
-            this.actuallProc.descritpion = null;
             this.apiService.getSurvey(this.actuallProc).subscribe((srv:supervisor_survey)=>{
               this.actualSurvey = srv;
             })

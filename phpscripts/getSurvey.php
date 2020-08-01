@@ -9,11 +9,11 @@ $id = ($request->idprocesses);
 
 $user = [];
 
-$sql = "SELECT * FROM `terminations` WHERE `id_process` = '$id';";
+$sql = "SELECT * FROM `supervisor_surveies` WHERE `id_process` = '$id';";
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
-        $user['idsupervisor_survey'] = $row['idsupervisor_survey'];
+        $user['idsupervisor_survey'] = $row['idsupervisor_surveies'];
         $user['id_process'] = $row['id_process'];
         $user['amount'] = $row['amount'];
         $user['approved_date'] = $row['approved_date'];
