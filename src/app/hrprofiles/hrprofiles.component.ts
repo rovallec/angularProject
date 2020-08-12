@@ -299,6 +299,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.id_type = '2';
     this.attAdjudjment.id_employee = att.id_employee;
     this.attAdjudjment.id_department = this.authUser.getAuthusr().department;
+    this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
     this.addJ = true;
   }
 
