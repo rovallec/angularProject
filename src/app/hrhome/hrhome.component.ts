@@ -174,7 +174,7 @@ export class HrhomeComponent implements OnInit {
         employees_col.push(actual_emp);
       }
     });
-
+    console.log(employees_col);
     this.apiService.insertEmployees(employees_col).subscribe((str:string)=>{
     });
     this.cancelEmployeeEdit(wv);
