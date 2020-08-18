@@ -32,7 +32,7 @@ export class HrprofilesComponent implements OnInit {
   checkDate1: string;
   checkDate2: string;
   checkDay: string;
-  vacationsEarned: number;
+  vacationsEarned: number = 0;
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -229,9 +229,10 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
+      this.vacationsEarned = ((new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth()) + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear())*12))*1.25;
     })
 
-    this.earnVacations = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear())*12))*1.25;
+    
 
     this.getAttendences(this.todayDate);
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
@@ -327,7 +328,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getVacations() {
-    this.earnVacations = this.earnVacations;
+    this.earnVacations = this.vacationsEarned;
     this.tookVacations = 0;
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
