@@ -14,17 +14,21 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="txt_name">DPI:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].dpi">
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="txt_birth">Birthday:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].day_of_birth">
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="txt_nationality">Nationality:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].nationality">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Joining Date:</label>
+                        <input type="text" class="from-control" [disabled]="true" [(ngModel)]="profile[0].date_joining">
                     </div>
                 </div>
             </div>
@@ -122,7 +126,6 @@
                                     <select class="form-control" [(ngModel)]="attAdjudjment.reason"
                                         [disabled]="editAdj">
                                         <option>IGSS</option>
-                                        <option>beneficiarierance</option>
                                         <option>Private Doctor</option>
                                         <option>Marital Certificate</option>
                                         <option>Death Certificate</option>
