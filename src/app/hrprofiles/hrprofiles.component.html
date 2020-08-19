@@ -664,7 +664,7 @@
                                 <div class="form-group col-md-4">
                                     <label>Date:</label>
                                     <input class="form-control" type="date"
-                                        (change)="pushAudienceDate($event.target.value)" [disabled]="!editRequest || activeRequest.status == 'ACCEPTED'"
+                                        (change)="pushAudienceDate($event.target.value)"
                                         *ngIf=" activeRequest.status != 'DISPENSED'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.audience_date"
@@ -673,7 +673,7 @@
                                 <div class="form-group col-md-4">
                                     <label>Time:</label>
                                     <input class="form-control" type="time"
-                                        (change)="pushAudienceTime($event.target.value)" [disabled]="!editRequest || activeRequest.status == 'ACCEPTED'"
+                                        (change)="pushAudienceTime($event.target.value)"
                                         *ngIf="activeRequest.status != 'DISPENSED'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.time" *ngIf=" activeRequest.status === 'DISPENSED'">
