@@ -21,7 +21,7 @@ $sql1 = "SELECT `idemployees` FROM `employees` LEFT JOIN `hires` ON `hires`.`idh
 
 if($r = mysqli_query($con, $sql1)){
     $re = mysqli_fetch_assoc($r);
-    $id_employee = $re[0]['idemployees'];
+    $id_employee = $re['idemployees'];
 
     $sql = "INSERT INTO `hr_processes` (`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (null, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status');";
 

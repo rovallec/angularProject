@@ -229,8 +229,8 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
-      console.log(new Date(this.todayDate).getMonth().toString() + " " + new Date(this.profile[0].date_joining).getMonth().toString())
-      this.vacationsEarned = ((new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth()) + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear())*12))*1.25;
+      this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear())*12));
+      this.getVacations();
     })
 
     
@@ -248,7 +248,6 @@ export class HrprofilesComponent implements OnInit {
     this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
     this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
     this.activeVacation.status = 'PENDING';
-    this.getVacations();
 
     this.newRequest = false;
     this.editRequest = true;
@@ -329,7 +328,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getVacations() {
-    this.earnVacations = this.vacationsEarned;
+    this.earnVacations = this.vacationsEarned*1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
@@ -427,6 +426,7 @@ export class HrprofilesComponent implements OnInit {
   insertLeave() {
     this.apiService.insertLeaves(this.activeLeave).subscribe((str: string) => {
       this.getLeaves();
+      this.cancelView();
     })
   }
 
@@ -621,7 +621,6 @@ export class HrprofilesComponent implements OnInit {
   getInsurances() {
     this.apiService.getInsurances({ id: this.route.snapshot.paramMap.get('id') }).subscribe((ins: insurances) => {
       this.insurances = ins;
-      console.log(this.insurances.id_process);
       if (isNullOrUndefined(this.insurances.id_process)) {
         this.insuranceNull = false;
       } else {
