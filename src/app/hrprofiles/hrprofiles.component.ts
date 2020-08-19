@@ -568,6 +568,7 @@ export class HrprofilesComponent implements OnInit {
       this.editRequest = false;
     }else{
       if(dp.status == 'PENDING'){
+        this.editRequest = true;
         this.newAudience = 'NO';
         this.newSuspension = 'NO';
       }
