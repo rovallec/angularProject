@@ -558,6 +558,7 @@ export class HrprofilesComponent implements OnInit {
   insertDPRequest() {
     this.apiService.insertDisciplinary_Request(this.activeRequest).subscribe((str: string) => {
       this.getDisciplinaryProcesses();
+      this.cancelView();
     })
     this.storedRequest = true;
   }

@@ -27,6 +27,8 @@ $audience_status = ($request->audience_status);
 $sql = "UPDATE `hr_processes` SET `status` = '$status' WHERE `idhr_processes` = '$id_process'";
 $sql2 = "INSERT INTO `disciplinary_processes` (`iddisciplinary_processes`,`id_request`,`type`,`cathegory`,`dp_grade`,`motive`,`imposition_date`,`legal_foundament`,`consequences`,`observations`) VALUES (null, '$idrequests', '$type', '$cathegory', '$dp_grade', '$motive', '$imposition_date', '$legal_foundament', '$consequences', '$observations');";
 if(mysqli_query($con,$sql)){
-    echo(mysqli_insert_id($con));
+    if(mysqli_query($con, $sql2)){
+        echo(mysqli_insert_id($con));
+    }
 };
 ?>
