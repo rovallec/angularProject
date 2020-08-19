@@ -651,7 +651,7 @@
                             </div>
 
                             <div class="form-row col-md-12"
-                                *ngIf="storedRequest && activeRequest.status  != 'PENDING' && newAudience === 'YES' || !editRequest">
+                                *ngIf="storedRequest && activeRequest.status  != 'PENDING' && newAudience === 'YES' || !editRequest && activeRequest.status != 'ACCEPTED'">
                                 <div class="form-group col-md-1"></div>
                                 <div class="form-group col-md-8">
                                     <label
@@ -691,11 +691,11 @@
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
-                                *ngIf="storedRequest && activeRequest.status != 'PENDING' && newAudience === 'YES' || !editRequest">
+                                *ngIf="storedRequest && activeRequest.status != 'PENDING' && newAudience === 'YES' || !editRequest && activeRequest != 'ACCEPTED'">
                                 <div class="form-group col-md-12">
                                     <label>Comments:</label>
                                     <textarea class="form-control" width="100%" [(ngModel)]="activeRequest.comments"
-                                        [disabled]="!editRequest || activeRequest.status == 'ACCEPTED'"></textarea>
+                                        [disabled]="!editRequest"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
