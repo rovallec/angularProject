@@ -10,6 +10,7 @@ import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
 import { TranslationWidth } from '@angular/common';
 import { ThrowStmt } from '@angular/compiler';
+import { typeWithParameters } from '@angular/compiler/src/render3/util';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -565,6 +566,11 @@ export class HrprofilesComponent implements OnInit {
   showDp(dp: disciplinary_processes) {
     if (dp.status == 'DISPENSED') {
       this.editRequest = false;
+    }else{
+      if(dp.status == 'PENDING'){
+        this.newAudience = 'NO';
+        this.newSuspension = 'NO';
+      }
     }
     this.newRequest = false;
     this.activeRequest = dp;

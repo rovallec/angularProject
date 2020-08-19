@@ -664,7 +664,7 @@
                                 <div class="form-group col-md-4">
                                     <label>Date:</label>
                                     <input class="form-control" type="date"
-                                        (change)="pushAudienceDate($event.target.value)" [disabled]="!editRequest"
+                                        (change)="pushAudienceDate($event.target.value)" [disabled]="!editRequest || activeRequest.status == 'ACCEPTED'"
                                         *ngIf=" activeRequest.status != 'DISPENSED'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.audience_date"
@@ -673,7 +673,7 @@
                                 <div class="form-group col-md-4">
                                     <label>Time:</label>
                                     <input class="form-control" type="time"
-                                        (change)="pushAudienceTime($event.target.value)" [disabled]="!editRequest"
+                                        (change)="pushAudienceTime($event.target.value)" [disabled]="!editRequest || activeRequest.status == 'ACCEPTED'"
                                         *ngIf="activeRequest.status != 'DISPENSED'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.time" *ngIf=" activeRequest.status === 'DISPENSED'">
@@ -695,7 +695,7 @@
                                 <div class="form-group col-md-12">
                                     <label>Comments:</label>
                                     <textarea class="form-control" width="100%" [(ngModel)]="activeRequest.comments"
-                                        [disabled]="!editRequest"></textarea>
+                                        [disabled]="!editRequest || activeRequest.status == 'ACCEPTED'"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
