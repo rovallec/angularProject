@@ -80,6 +80,7 @@ export class HrprofilesComponent implements OnInit {
   newAudience: string = "NO";
   editRequest: boolean = true;
   newSuspension: string = "NO";
+  accChange:string = null;
 
   earnVacations: number = 0;
   tookVacations: number = 0;
@@ -738,7 +739,9 @@ export class HrprofilesComponent implements OnInit {
         this.actualTerm.nearsol_experience = '0';
         this.actualTerm.supervisor_experience = '0';
         break;
-
+        case 'Transfer':
+          this.accChange = this.accId;
+          break;
       default:
         break;
     }
@@ -815,7 +818,7 @@ export class HrprofilesComponent implements OnInit {
               this.apiService.insertSurvey(this.actualSurvey).subscribe((str:string)=>{
                 this.cancelView();
               })
-              break;
+            break;
         default:
           break;
       }
@@ -1065,5 +1068,9 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getAcconts().subscribe((acc:accounts[])=>{
       this.allAccounts = acc;
     })
+  }
+
+  addDescription(str:string){
+    this.actuallProc.descritpion = str;
   }
 }
