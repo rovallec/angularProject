@@ -34,6 +34,7 @@ export class HrprofilesComponent implements OnInit {
   checkDate2: string;
   checkDay: string;
   vacationsEarned: number = 0;
+  addVac: boolean = true;
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -47,6 +48,7 @@ export class HrprofilesComponent implements OnInit {
   beneficiaries: beneficiaries[] = [];
   process_templates: process[] = [];
   processRecord: process[] = [];
+  allAccounts:accounts[] = [];
   actualReport: reports = new reports;
   actualAdvance: advances = new advances;
   actualRise: rises = new rises;
@@ -263,6 +265,9 @@ export class HrprofilesComponent implements OnInit {
     this.getInsurances();
     this.getTemplates();
     this.getProcessesrecorded();
+
+    this.getAllaccounts();
+
   }
 
   getStaffes() {
@@ -718,6 +723,13 @@ export class HrprofilesComponent implements OnInit {
     this.actuallProc.id_user = this.authUser.getAuthusr().iduser;
     this.actuallProc.id_profile = this.activeEmp;
     switch (this.actuallProc.name) {
+      case 'Pay Vacations':
+        this.getVacations();
+        if(this.availableVacations < 1){
+          this.addVac = false;
+        }
+        this.actuallProc.descritpion = null;
+        break;
       case 'Termination':
         this.actualTerm.access_card = "YES";
         this.actualTerm.headsets = "YES";
@@ -1041,5 +1053,15 @@ export class HrprofilesComponent implements OnInit {
 
   setNotificationdate(str:string){
     this.actualSurvey.notification_date = str;
+  }
+
+  showAlert(str: string){
+    alert(str);
+  }
+
+  getAllaccounts(){
+    this.apiService.getAcconts().subscribe((acc:accounts[])=>{
+      this.allAccounts = acc;
+    })
   }
 }

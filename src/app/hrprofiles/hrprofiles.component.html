@@ -1008,6 +1008,37 @@
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
                     aria-labelledby="nav-newproc-tab">
+                    <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Transfer'">
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">TRANSFER</label>
+                        <div class="form-row col-md-12">
+                            <div class="form-gorup col-md-4">
+                                <label>User:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.user_name"
+                                    [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Status:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.status"
+                                    [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Date:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-4">
+                                <label>Transfer To:</label>
+                                <select class="form-control">
+                                    <option  *ngFor="let ac of allAccounts">{{acc}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                        </div>
+                    </div>
+
                     <div class="fomr-row col-md-12" *ngIf="actuallProc.name == 'Supervisor Survey'">
                         <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">SUPERVISOR
                             SURVEY</label>
@@ -1103,7 +1134,8 @@
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="insertProc()">Accept</button>
+                                <button class="form-control" (click)="insertProc()" *ngIf="addVac">Accept</button>
+                                <button class="form-control" (click)="showAlert('Not enough vacations to take')" *ngIf="!addVac">Accept</button>
                             </div>
                         </div>
                     </div>
