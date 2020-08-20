@@ -386,5 +386,10 @@ insertSurvey(srv:supervisor_survey){
 getSurvey(proc:process){
   return this.httpClient.post<supervisor_survey>(`${this.PHP_API_SERVER}/phpscripts/getSurvey.php`, proc);
 }
+
+getfilteredAccounts(id:any){
+  return this.httpClient.post<accounts[]>(`${this.PHP_API_SERVER}/phpscripts/getfilteredAccounts.php`, id);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

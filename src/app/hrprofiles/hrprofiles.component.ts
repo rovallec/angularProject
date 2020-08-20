@@ -1065,8 +1065,8 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getAllaccounts(){
-    this.apiService.getAcconts().subscribe((acc:accounts[])=>{
-      this.allAccounts = acc;
+    this.apiService.getfilteredAccounts({id:this.accId}).subscribe((ac:accounts[])=>{
+      this.allAccounts = ac;
     })
   }
 
