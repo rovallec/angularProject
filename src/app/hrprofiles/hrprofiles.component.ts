@@ -237,6 +237,7 @@ export class HrprofilesComponent implements OnInit {
       this.accId = emp.account;
       this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear())*12));
       this.getVacations();
+      this.getAllaccounts();
     })
 
     
@@ -268,8 +269,6 @@ export class HrprofilesComponent implements OnInit {
     this.getInsurances();
     this.getTemplates();
     this.getProcessesrecorded();
-
-    this.getAllaccounts();
 
   }
 
