@@ -818,7 +818,10 @@ export class HrprofilesComponent implements OnInit {
               this.apiService.insertSurvey(this.actualSurvey).subscribe((str:string)=>{
                 this.cancelView();
               })
-            break;
+          break;
+          case 'Transfer':
+            this.cancelView();
+          break;
         default:
           break;
       }
