@@ -17,6 +17,7 @@
             $result['idemployees']= $r['idemployees'];
             $result['id_hire'] = $r['id_hire'];
             $result['id_account'] = $r['acc_name'];
+            $result['account'] = $r['id_account'];
             $result['reporter'] = $r['reporter'];
             $result['client_id'] = $r['client_id'];
             $result['hiring_date'] = $r['hiring_date'];

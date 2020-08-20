@@ -233,7 +233,7 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
-      this.accId = emp.id_account;
+      this.accId = emp.account;
       this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear())*12));
       this.getVacations();
     })
