@@ -1032,7 +1032,7 @@
                             <div class="form-group col-md-4">
                                 <label>Transfer To:</label>
                                 <select class="form-control" [(ngModel)]="accId" *ngIf="!viewRecProd">
-                                    <option  *ngFor="let ac of allAccounts" [value]="ac.idaccounts" (change)="addDescription(ac.name)">{{ac.name}}</option>
+                                    <option  *ngFor="let ac of allAccounts" [value]="ac.idaccounts" (onchange)="addDescription(ac.name)">{{ac.name}}</option>
                                 </select>
                                 <input [disabled]='true' [(ngModel)]="actuallProc.descritpion" class="form-control" *ngIf="viewRecProd">
                             </div>
@@ -1048,7 +1048,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <!---------------------------------------------------------- SUPERVISOR SURVEY --------------------------------------------------------------------->
                     <div class="fomr-row col-md-12" *ngIf="actuallProc.name == 'Supervisor Survey'">
                         <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">SUPERVISOR
                             SURVEY</label>
