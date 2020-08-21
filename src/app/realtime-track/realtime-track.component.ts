@@ -113,6 +113,6 @@ export class RealtimeTrackComponent implements OnInit {
     if(this.selectedValue == 'IS NULL'){
       this.selectedValue = 'IS_NULL';
     }
-    window.open("http://168.194.75.13/phpscripts/exportRealTrack.php?filter=" + this.selectedOption + "&value=" + this.selectedValue, "_blank");
+    window.open("http://200.94.251.67/phpscripts/exportRealTrack.php?filter=" + this.selectedOption + "&value=" + this.selectedValue, "_blank");
   }
 }

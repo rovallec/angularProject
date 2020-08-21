@@ -64,7 +64,7 @@ export class CalllistreportComponent implements OnInit {
     if(isUndefined(this.selectedWave)){
       this.errorHandle = true;
     }else{
-    window.open("http://168.194.75.13/phpscripts/exportClasslist.php?wave=" + this.selectedWave.idwaves);
+    window.open("http://200.94.251.67/phpscripts/exportClasslist.php?wave=" + this.selectedWave.idwaves);
     }
   }
 }
