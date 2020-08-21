@@ -17,7 +17,8 @@ import { RealtimeTrackComponent } from './realtime-track/realtime-track.componen
 import { RecDailyconvergentReportComponent } from './rec-dailyconvergent-report/rec-dailyconvergent-report.component';
 import { CalllistreportComponent } from './calllistreport/calllistreport.component';
 import { HrhomeComponent } from './hrhome/hrhome.component';
-import { HrprofilesComponent } from './hrprofiles/hrprofiles.component'
+import { HrprofilesComponent } from './hrprofiles/hrprofiles.component';
+import { HrdailyComponent } from './hrdaily/hrdaily.component'
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { HrprofilesComponent } from './hrprofiles/hrprofiles.component'
     RecDailyconvergentReportComponent,
     CalllistreportComponent,
     HrhomeComponent,
-    HrprofilesComponent
+    HrprofilesComponent,
+    HrdailyComponent
   ],
   imports: [
     BrowserModule,

@@ -9,6 +9,10 @@ $request = json_decode($postdata);
 $employee = ($request->employee);
 $account_id = ($request->account);
 
-$sql = "UPDATE FROM `employees` SET `id_account` = '$account_id' WHERE `idemployees` = '$employee'";
-echo($sql);
+$sql = "UPDATE `employees` SET `id_account` = '$account_id' WHERE `idemployees` = '$employee'";
+if(mysqli_query($con, $sql)){
+    http_response_code(200);
+}else{
+    http_response_code(404);
+}
 ?>

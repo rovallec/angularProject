@@ -11,6 +11,7 @@ import { RecDailyconvergentReportComponent } from './rec-dailyconvergent-report/
 import { CalllistreportComponent } from './calllistreport/calllistreport.component';
 import { HrhomeComponent } from './hrhome/hrhome.component';
 import { HrprofilesComponent } from './hrprofiles/hrprofiles.component';
+import { HrdailyComponent } from './hrdaily/hrdaily.component';
 
 const routes:Routes = [
   {
@@ -54,6 +55,11 @@ const routes:Routes = [
   {
     path:'hrprofiles/:id',
     component: HrprofilesComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'hrdaily',
+    component: HrdailyComponent,
     canActivate:[AuthGuard]
   },
   {
