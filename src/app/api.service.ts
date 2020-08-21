@@ -391,5 +391,9 @@ getfilteredAccounts(id:any){
   return this.httpClient.post<accounts[]>(`${this.PHP_API_SERVER}/phpscripts/getfilteredAccounts.php`, id);
 }
 
+insertTransfer(employee:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertTransfer.php`, employee);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

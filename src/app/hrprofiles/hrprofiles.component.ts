@@ -726,6 +726,9 @@ export class HrprofilesComponent implements OnInit {
     this.actuallProc.id_user = this.authUser.getAuthusr().iduser;
     this.actuallProc.id_profile = this.activeEmp;
     switch (this.actuallProc.name) {
+      case 'Supervisor Survey':
+        this.actuallProc.descritpion = null;
+      break;
       case 'Pay Vacations':
         this.getVacations();
         if(this.availableVacations < 1){
@@ -820,7 +823,9 @@ export class HrprofilesComponent implements OnInit {
               })
           break;
           case 'Transfer':
-            this.cancelView();
+            this.apiService.insertTransfer({employee:this.activeEmp, account:this.accId}).subscribe((str:string)=>{
+              this.cancelView();
+            })
           break;
         default:
           break;
