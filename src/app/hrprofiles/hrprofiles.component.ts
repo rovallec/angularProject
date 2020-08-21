@@ -1075,6 +1075,5 @@ export class HrprofilesComponent implements OnInit {
 
   addDescription(str:string){
     this.actuallProc.descritpion = str;
-    console.log(str);
   }
 }
