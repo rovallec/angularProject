@@ -88,10 +88,14 @@ export class HrdailyComponent implements OnInit {
   }
 
   generateReprot(){
+    let acId:string = '';
     if(!this.isExportable){
       alert("Missing information to generate the report");
     }else{
-      window.open("http://200.94.251.67/phpscripts/exportHRDaily.php")
+      this.exportAccounts.forEach((itm:accounts)=>{
+        acId = acId + itm + ",";
+      })
+      window.open("http://200.94.251.67/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId)
     }
   }
 }
