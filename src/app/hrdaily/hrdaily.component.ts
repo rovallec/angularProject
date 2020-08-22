@@ -93,7 +93,10 @@ export class HrdailyComponent implements OnInit {
       alert("Missing information to generate the report");
     }else{
       this.exportAccounts.forEach((itm:accounts)=>{
-        acId = acId + itm.idaccounts + ",";
+        if(this.exportAccounts.indexOf(itm)!=0){
+          acId = acId + ",";
+        }
+        acId = acId + itm.idaccounts;
       })
       window.open("http://200.94.251.67/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId)
     }
