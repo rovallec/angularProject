@@ -7,7 +7,7 @@ require 'database.php';
 
 $from = $_GET['from'];
 $to = $_GET['to'];
-$accounts = $_GET['accounts']
+$accounts = $_GET['accounts'];
 
 $spliter = [];
 

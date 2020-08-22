@@ -14,7 +14,7 @@ export class HrdailyComponent implements OnInit {
   accounts:accounts[] = [];
   minDate:string = null;
   todayDate = new Date();
-  maxDate:string = this.todayDate.getFullYear().toString() + "-" +  (this.todayDate.getMonth() + 1).toString().padStart(2,"0") + "-" +  this.todayDate.getUTCDate().toString();
+  maxDate:string = this.todayDate.getFullYear().toString() + "-" +  (this.todayDate.getMonth() + 1).toString().padStart(2,"0") + "-" +  (this.todayDate.getUTCDate()-1).toString();
   dateFrom:string = null;
   dateTo:string = null;
   accountAdd:string = null;
@@ -93,7 +93,7 @@ export class HrdailyComponent implements OnInit {
       alert("Missing information to generate the report");
     }else{
       this.exportAccounts.forEach((itm:accounts)=>{
-        acId = acId + itm + ",";
+        acId = acId + itm.idaccounts + ",";
       })
       window.open("http://200.94.251.67/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId)
     }
