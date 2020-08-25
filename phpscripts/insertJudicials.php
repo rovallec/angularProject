@@ -6,10 +6,10 @@
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata);
 
-    $idjudicials = $request['idjudicials'];
-    $id_process = $request['id_process'];
-    $amount = $request['amount'];
-    $max = $request['max'];
+    $idjudicials = ($request->idjudicials);
+    $id_process = ($request->id_process);
+    $amount = ($request->amount);
+    $max = ($request->max);
     
     $sql = "INSERT INTO `judicials` (`idjudicials`, `id_process`, `amount`, `max`) VALUES (null, '$id_process', '$amount', '$max');";
 
