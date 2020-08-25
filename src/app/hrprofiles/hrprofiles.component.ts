@@ -238,7 +238,6 @@ export class HrprofilesComponent implements OnInit {
       this.accId = emp.account;
       this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear()) * 12));
       this.getVacations();
-      console.log(this.accId);
       this.getAllaccounts();
     })
 
@@ -829,7 +828,7 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Legal Discount':
-          this.actualJudicial.id_process = this.actuallProc.idprocesses;
+          this.actualJudicial.id_process = str;
           this.apiService.insertJudicials(this.actualJudicial).subscribe((str:string)=>{
             this.cancelView;
           })
