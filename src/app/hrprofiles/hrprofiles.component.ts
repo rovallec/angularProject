@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -34,7 +34,7 @@ export class HrprofilesComponent implements OnInit {
   checkDate2: string;
   checkDay: string;
   vacationsEarned: number = 0;
-  accId:string = '';
+  accId: string = '';
   addVac: boolean = true;
 
   beneficiaryName: string;
@@ -49,13 +49,14 @@ export class HrprofilesComponent implements OnInit {
   beneficiaries: beneficiaries[] = [];
   process_templates: process[] = [];
   processRecord: process[] = [];
-  allAccounts:accounts[] = [];
+  allAccounts: accounts[] = [];
+  actualJudicial:judicials = new judicials;
   actualReport: reports = new reports;
   actualAdvance: advances = new advances;
   actualRise: rises = new rises;
   actualCallTracker: call_tracker = new call_tracker;
   actualLetters: letters = new letters;
-  actualSurvey:supervisor_survey = new supervisor_survey;
+  actualSurvey: supervisor_survey = new supervisor_survey;
 
   editInview: boolean = false;
   viewRecProd: boolean = false;
@@ -80,7 +81,7 @@ export class HrprofilesComponent implements OnInit {
   newAudience: string = "NO";
   editRequest: boolean = true;
   newSuspension: string = "NO";
-  accChange:string = null;
+  accChange: string = null;
 
   earnVacations: number = 0;
   tookVacations: number = 0;
@@ -235,13 +236,13 @@ export class HrprofilesComponent implements OnInit {
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
       this.accId = emp.account;
-      this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear())*12));
+      this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear()) * 12));
       this.getVacations();
       console.log(this.accId);
       this.getAllaccounts();
     })
 
-    
+
 
     this.getAttendences(this.todayDate);
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
@@ -337,7 +338,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getVacations() {
-    this.earnVacations = this.vacationsEarned*1.25;
+    this.earnVacations = this.vacationsEarned * 1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
@@ -574,8 +575,8 @@ export class HrprofilesComponent implements OnInit {
   showDp(dp: disciplinary_processes) {
     if (dp.status == 'DISPENSED') {
       this.editRequest = false;
-    }else{
-      if(dp.status == 'PENDING'){
+    } else {
+      if (dp.status == 'PENDING') {
         this.editRequest = true;
         this.newAudience = 'NO';
         this.newSuspension = 'NO';
@@ -728,10 +729,10 @@ export class HrprofilesComponent implements OnInit {
     switch (this.actuallProc.name) {
       case 'Supervisor Survey':
         this.actuallProc.descritpion = null;
-      break;
+        break;
       case 'Pay Vacations':
         this.getVacations();
-        if(this.availableVacations < 1){
+        if (this.availableVacations < 1) {
           this.addVac = false;
         }
         this.actuallProc.descritpion = null;
@@ -742,9 +743,9 @@ export class HrprofilesComponent implements OnInit {
         this.actualTerm.nearsol_experience = '0';
         this.actualTerm.supervisor_experience = '0';
         break;
-        case 'Transfer':
-          this.accChange = this.accId;
-          break;
+      case 'Transfer':
+        this.accChange = this.accId;
+        break;
       default:
         break;
     }
@@ -811,21 +812,27 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView();
           })
           break;
-          case 'Pay Vacations':
-            this.addVacation("Take", "4");
-            this.insertVacation();
-            this.cancelView();
-            break;
-            case 'Supervisor Survey':
-              this.actualSurvey.id_process = str;
-              this.apiService.insertSurvey(this.actualSurvey).subscribe((str:string)=>{
-                this.cancelView();
-              })
+        case 'Pay Vacations':
+          this.addVacation("Take", "4");
+          this.insertVacation();
+          this.cancelView();
           break;
-          case 'Transfer':
-            this.apiService.insertTransfer({employee:this.activeEmp, account:this.accId}).subscribe((str:string)=>{
-              this.cancelView();
-            })
+        case 'Supervisor Survey':
+          this.actualSurvey.id_process = str;
+          this.apiService.insertSurvey(this.actualSurvey).subscribe((str: string) => {
+            this.cancelView();
+          })
+          break;
+        case 'Transfer':
+          this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
+            this.cancelView();
+          })
+          break;
+        case 'Legal Discount':
+          this.actualJudicial.id_process = this.actuallProc.idprocesses;
+          this.apiService.insertJudicials(this.actualJudicial).subscribe((str:string)=>{
+            this.cancelView;
+          })
           break;
         default:
           break;
@@ -875,11 +882,16 @@ export class HrprofilesComponent implements OnInit {
           this.actualLetters = lt;
         })
         break;
-          case 'Supervisor Survey':
-            this.apiService.getSurvey(this.actuallProc).subscribe((srv:supervisor_survey)=>{
-              this.actualSurvey = srv;
-            })
-            break;
+      case 'Supervisor Survey':
+        this.apiService.getSurvey(this.actuallProc).subscribe((srv: supervisor_survey) => {
+          this.actualSurvey = srv;
+        })
+        break;
+      case 'Legal Discount':
+        this.apiService.getJudicials(this.actuallProc).subscribe((jdc:judicials)=>{
+          this.actualJudicial = jdc;
+        })
+        break;
       default:
         break;
     }
@@ -1042,43 +1054,43 @@ export class HrprofilesComponent implements OnInit {
         var prod = parseFloat(emp.productivity_payment) - 250;
         var total = parseFloat(emp.base_payment) + parseFloat(emp.productivity_payment);
         url = "http://168.194.75.13/phpscripts/letterIngresos.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + emp.job + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&base=" + emp.base_payment + "&productivity=" + prod + "&total=" + total + "&date=" + e_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0];
-        window.open(url,"_blank");
+        window.open(url, "_blank");
       })
     }
-    if(this.actualLetters.type == 'Baja'){
+    if (this.actualLetters.type == 'Baja') {
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
         var trem = "N/A";
-        this.apiService.getTermdt(emp).subscribe((term:terminations)=>{
+        this.apiService.getTermdt(emp).subscribe((term: terminations) => {
           var str = term.valid_from;
           trem = numbers[parseInt(str.split("-")[2]) - 1] + " de " + month[parseInt(str.split("-")[1]) - 1] + " de " + year[parseInt(str.split("-")[0]) - 2020];
           var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
           e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
-          var url = "http://168.194.75.13/phpscripts/letterBaja.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + emp.job + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&date=" + e_date +"&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&id=" + emp.idemployees + "&term=" + trem;
-          window.open(url,"_blank");
+          var url = "http://168.194.75.13/phpscripts/letterBaja.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + emp.job + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&date=" + e_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&id=" + emp.idemployees + "&term=" + trem;
+          window.open(url, "_blank");
         })
       })
     }
   }
 
-  setApproveddate(str:string){
+  setApproveddate(str: string) {
     this.actualSurvey.approved_date = str;
   }
 
-  setNotificationdate(str:string){
+  setNotificationdate(str: string) {
     this.actualSurvey.notification_date = str;
   }
 
-  showAlert(str: string){
+  showAlert(str: string) {
     alert(str);
   }
 
-  getAllaccounts(){
-    this.apiService.getfilteredAccounts({id:this.accId}).subscribe((ac:accounts[])=>{
+  getAllaccounts() {
+    this.apiService.getfilteredAccounts({ id: this.accId }).subscribe((ac: accounts[]) => {
       this.allAccounts = ac;
     })
   }
 
-  addDescription(){
+  addDescription() {
     this.actuallProc.descritpion = this.accId;
   }
 }

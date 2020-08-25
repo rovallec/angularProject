@@ -582,3 +582,16 @@ export class supervisor_survey{
         this.score = null;
     }
 }
+
+export class judicials{
+    idjudicials:string;
+    id_process:string;
+    amount:string;
+    max:string;
+    constructor(){
+        this.idjudicials = null;
+        this.id_process = null;
+        this.amount = null;
+        this.max = null;
+    }
+}
