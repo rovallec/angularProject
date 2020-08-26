@@ -14,8 +14,7 @@
     $sql = "INSERT INTO `judicials` (`idjudicials`, `id_process`, `amount`, `max`) VALUES (null, '$id_process', '$amount', '$max');";
 
     if(mysqli_query($con, $sql)){
-        $idprocesses = mysqli_insert_id($con);
-            echo(mysqli_insert_id($con));
+            http_response_code(200);
         }else{
             http_response_code(404);
     }

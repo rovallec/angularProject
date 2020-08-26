@@ -831,7 +831,7 @@ export class HrprofilesComponent implements OnInit {
         case 'Legal Discount':
           this.actualJudicial.id_process = str;
           this.apiService.insertJudicials(this.actualJudicial).subscribe((str:string)=>{
-            this.cancelView;
+            this.cancelView();
           })
           break;
         case 'Irtra Request':
