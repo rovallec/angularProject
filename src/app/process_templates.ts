@@ -595,3 +595,14 @@ export class judicials{
         this.max = null;
     }
 }
+
+export class irtra_requests{
+    idprocess:string;
+    idirtra_requests:string;
+    type:string;
+    constructor(){
+        this.idirtra_requests = null;
+        this.idprocess = null;
+        this.type = null;
+    }
+}

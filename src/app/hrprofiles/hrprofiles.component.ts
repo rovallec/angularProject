@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -50,6 +50,7 @@ export class HrprofilesComponent implements OnInit {
   process_templates: process[] = [];
   processRecord: process[] = [];
   allAccounts: accounts[] = [];
+  actualIrtrarequests:irtra_requests = new irtra_requests;
   actualJudicial:judicials = new judicials;
   actualReport: reports = new reports;
   actualAdvance: advances = new advances;
@@ -833,6 +834,12 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView;
           })
           break;
+        case 'Irtra Request':
+          this.actualIrtrarequests.idprocess = str;
+          this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str:string)=>{
+            this.cancelView()
+          })
+        break;
         default:
           break;
       }
@@ -891,6 +898,11 @@ export class HrprofilesComponent implements OnInit {
           this.actualJudicial = jdc;
         })
         break;
+      case 'Irtra Request':
+        this.apiService.getIrtra_request(this.actuallProc).subscribe((irt:irtra_requests)=>{
+          this.actualIrtrarequests = irt;
+        })
+      break;
       default:
         break;
     }
