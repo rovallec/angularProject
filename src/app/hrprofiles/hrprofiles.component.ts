@@ -840,7 +840,6 @@ export class HrprofilesComponent implements OnInit {
           this.actualIrtrarequests.idprocess = str;
           this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str:string)=>{
             this.getIrtra();
-            this.cancelView();
           })
         break;
         default:

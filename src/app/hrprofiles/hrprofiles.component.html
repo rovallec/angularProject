@@ -1030,8 +1030,8 @@
 
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
-                                <label *ngIf="viewRecProd">Company:</label>
-                                <select [(ngModel)]="useCompany" *ngIf="!viewRecProd" class="from-control">
+                                <label *ngIf="!viewRecProd">Company:</label>
+                                <select [(ngModel)]="useCompany" *ngIf="!viewRecProd" class="form-control">
                                     <option>Nearsol S.A.</option>
                                     <option>PRG Recurso Humanos</option>
                                 </select>
@@ -1046,7 +1046,7 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
-                                <label *ngIf="viewRecProd">Patronal:</label>
+                                <label *ngIf="!viewRecProd">Patronal:</label>
                                 <input type="text" [(ngModel)]="igss_patronal" class="form-control" *ngIf="!viewRecProd">
                             </div>
                         </div>
