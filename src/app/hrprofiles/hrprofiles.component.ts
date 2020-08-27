@@ -36,6 +36,8 @@ export class HrprofilesComponent implements OnInit {
   vacationsEarned: number = 0;
   accId: string = '';
   addVac: boolean = true;
+  useCompany:string = null;
+  igss_patronal:string = null;
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -1106,8 +1108,20 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getIrtra(){
+    let m:string;
+    let f:string;
+    let married:string;
+
+    if(this.profile[0].tittle == 'MR'){
+      f = null;
+      m = "x";
+    }else{
+      m = null;
+      f = "x";
+    }
+
     if(this.actualIrtrarequests.type != "Nuevo Carnet"){
-      window.open("");
+      window.open('http://200.94.251.67/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0]+'&afiliacion=' + this.profile[0].irtra +'&birthday_day=' + this.profile[0].day_of_birth.split('-')[1] +'&birthday_month=' + this.profile[0].day_of_birth.split('-')[0] +'&birthday_year=' + this.profile[0].day_of_birth.split('-')[2] +'&book=' +  +'&cedula=' +  +'&company=' + this.igss_patronal +'&conyuge_firstname=' +  +'&conyuge_lastname=' +  +'&department=' + this.profile[0].address.split(',')[2] +'&dpi=' + this.profile[0].dpi +'&extended=' +  +'&f=' + f +'&first_lastname=' + this.profile[0].first_lastname +'&first_name=' + this.profile[0].first_name +'&fold=' +  +'&m=' + m +'&married=' +  +'&municipio=' + this.profile[0].address.split(',')[1] +'&partida=' +  +'&pasaport=' +  +'&patronal=' + this.igss_patronal +'&phone=' + this.profile[0].phone +'&reg=' +  +'&second_lastname=' + this.profile[0].second_lastname +'&second_name=' + this.profile[0].second_name +'&zone=' + this.profile[0].address.split(',')[1]);
     }
   }
 

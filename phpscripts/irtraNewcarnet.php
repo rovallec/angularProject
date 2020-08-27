@@ -1,82 +1,245 @@
 <?php
+$address = $_GET['address'];
+$afiliacion = $_GET['afiliacion'];
+$birthday_day = $_GET['birthday_day'];
+$birthday_month = $_GET['birthday_month'];
+$birthday_year = $_GET['birthday_year'];
+$book = $_GET['book'];
+$cedula = $_GET['cedula'];
+$company = $_GET['company'];
+$conyuge_firstname = $_GET['conyuge_firstname'];
+$conyuge_lastname = $_GET['conyuge_lastname'];
+$department = $_GET['department'];
+$dpi = $_GET['dpi'];
+$extended = $_GET['extended'];
+$f = $_GET['f'];
+$first_lastname = $_GET['first_lastname'];
+$first_name = $_GET['first_name'];
+$fold = $_GET['fold'];
+$m = $_GET['m'];
+$married = $_GET['married'];
+$municipio = $_GET['municipio'];
+$partida = $_GET['partida'];
+$pasaport = $_GET['pasaport'];
+$patronal = $_GET['patronal'];
+$phone = $_GET['phone'];
+$reg = $_GET['reg'];
+$second_lastname = $_GET['second_lastname'];
+$second_name = $_GET['second_name'];
+$zone = $_GET['zone'];
+
 echo("
-<div style='margin-left:50px;'>
+<div style='margin-left:50px; width:900px'>
+<table style='width:100%>
+<tr>
     <table style='width:100%'>
-        <tr style='border-bottom: solid 3px #000000'>
-            <td><img src='http://200.94.251.67/assets/irtra.png' style='height:50px; width:120px'></td>
-            <td>
-                <table>
+        <tr>
+            <td style='border-bottom:solid 3px black;'>
+                <table style='width:100%'>
                     <tr>
-                        <td style='text-align: center'>INSTITUTO DE RECREACION DE LOS TRABAJADORES</td>
-                    </tr>
-                    <tr>
-                        <td style='text-align: center'>DE LA EMPRESA PRIVADA DE GUATEMALA</td>
-                    </tr>
-                    <tr>
-                        <td style='text-align: center'>7ma. Avenida 7-24, Zona 9, Ciudad de Guatemala</td>
-                    </tr>
-                    <tr>
-                        <td style='text-align: center'>PBX:2423-9000 / 2423-9100</td>
-                    </tr>
-                    <tr>
-                        <td style='font-size:8px'>e-mail: afiliaciones@irtra.org.gt</td>
+                        <td><img src='http://200.94.251.67/assets/irtra.png' style='height:50px; width:120px'>
+                        </td>
+                        <td>
+                            <table style='width:100%'>
+                                <tr>
+                                    <td style='text-align: center'>INSTITUTO DE RECREACION DE LOS TRABAJADORES
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style='text-align: center'>DE LA EMPRESA PRIVADA DE GUATEMALA</td>
+                                </tr>
+                                <tr>
+                                    <td style='text-align: center'>7ma. Avenida 7-24, Zona 9, Ciudad de
+                                        Guatemala</td>
+                                </tr>
+                                <tr>
+                                    <td style='text-align: center'>PBX:2423-9000 / 2423-9100</td>
+                                </tr>
+                                <tr>
+                                    <td style='font-size:10px'>e-mail: afiliaciones@irtra.org.gt</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table style='width:100%'>
+                                <tr>
+                                    <td>B/T6461014003</td>
+                                </tr>
+                                <tr>
+                                    <td>NO LLENAR A MANO</td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 </table>
             </td>
-            <td>
-                <table>
+        </tr>
+        <tr style='height:25px'></tr>
+        <tr>
+            <td colspan='3'>Señor Afiliado:</td>
+        </tr>
+        <tr style='height:10px'></tr>
+        <tr>
+            <td colspan='3' style='  text-align: justify;text-justify: inter-word;'>EN VIRTUD DE ESTAR SISTEMATIZANDO NUESTROS REGISTROS SOBRE PATRONOS Y TRABAJADORES MUCHO LE AGRADECEMOS SE SIRVA PROPORCIONARNOS LA INFORMACION SOLICITADA, LA CUAL SERÁ DE MUCHA IMPORTANCIA PARA PODER BRINDARLE UN MEJOR SERVICIO. *SI DESEA  UE SU ESPOSO (A) PUEDA INGRESAR A NUESTROS PAR UES CON SU CARNET, ANOTELO EN ESTA BOLETA.</td>
+        </tr>
+        <tr style='height:15px'></tr>
+        <tr>
+            <td colspan='3'>
+                <table style='width:100%'>
                     <tr>
-                        <td>B/T6461014003</td>
-                    </tr>
-                    <tr>
-                        <td>NO LLENAR A MANO</td>
+                        <td>Nombre Empresa:<td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center;'>$company<td>
+                        <td>No. Patronal IGSS:<td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$patronal<td>
+                        <td>No. Afiliacion IGSS:<td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$afiliacion<td>
                     </tr>
                 </table>
             </td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>Señor Afiliado:</td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr>
+                        <td>Nombre del Trabajador: Primer Nombre:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$first_name</td>
+                        <td>Segundo Nombre:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$second_name</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>EN VIRTUD DE ESTAR SISTEMATIZANDO NUESTROS REGISTROS SOBRE PATRONOS Y TRABAJADORES MUCHO LE AGRADECEMOS SE SIRVA PROPORCIONARNOS</td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr>
+                        <td>Primer Apellido:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$first_lastname</td>
+                        <td>Segundo Apellido:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$second_lastname</td>
+                        <td>De casada:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$married</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>LA INFORMACION SOLICITADA, LA CUAL SERÁ DE MUCHA IMPORTANCIA PARA PODER BRINDARLE UN MEJOR SERVICIO. *SI DESEA  UE SU ESPOSO (A) PUEDA</td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr>
+                        <td>Sexo:</td>
+                        <td>M</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$m</td>
+                        <td>F</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$f</td>
+                        <td>Cédula No. Orden:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$cedula</td>
+                        <td>Registro:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$reg</td>
+                        <td>Extendida:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$extended</td>
+                    </tr>
+                </table>
+            <td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>INGRESAR A NUESTROS PAR UES CON SU CARNET, ANOTELO EN ESTA BOLETA.</td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr>
+                        <td>DPI:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$dpi</td>
+                        <td>fecha de Nacimiento:</td>
+                        <td>dia:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$birthday_day</td>
+                        <td>mes:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$birthday_month</td>
+                        <td>Año:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$birthday_year</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>Nombre Empresa: PRG Recurso Humano, S.A No. Patronal IGSS 145998 No. Afiliacion IGSS: 171556806</td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr>
+                        <td>(Menores de Edad):Libro No.:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$book</td>
+                        <td>Folio:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$fold</td>
+                        <td>Partida:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$partida</td>
+                        <td>Pasaporte:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$pasaport</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>Nombre del Trabajador: Primer Nombre: EDY Segundo Nombre: ALFREDO</td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr>
+                        <td>Dirección:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:600px;text-align:center'>$address</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>Primer Apellido: MORALES Segundo Apellido: CORONADO De casada 0</td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr>
+                        <td>Departamento:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$department</td>
+                        <td>Municipio:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$municipio</td>
+                        <td>Zona:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$zone</td>
+                        <td>Teléfono:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$phone</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>Sexo: M  F  Cédula No. Orden:      Registro:       Extendida:   </td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr>
+                        <td>Nombre del Cónyuge:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$conyuge_firstname</td>
+                        <td>Apellidos del Cónyuge:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$conyuge_lastname</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
+        <tr style='height:25px'></tr>
         <tr>
-            <td colspan='3' style='text-align: justify'>DPI: 1764 58891 0101 fecha de Nacimiento: dia 8	mes 1 Año 1971</td>
-        </tr>
-        <tr>
-            <td colspan='3' style='text-align: justify'>(Menores de Edad):Libro No.:    Folio:      Partida:    Pasaporte:      </td>
-        </tr>
-        <tr>
-            <td colspan='3' style='text-align: justify'>Dirección: 7ma Avenida B 23-72 Zona 5 de Mixco Colonia 1ro de  Julio</td>
-        </tr>
-        <tr>
-            <td colspan='3' style='text-align: justify'>Departamento: GUATEMALA Municipio: MIXCO Zona: 5 Telefono: 5019-9234</td>
-        </tr>
-        <tr>
-            <td colspan='3' style='text-align: justify'>Nombre del Cónyuge: 0 Apellidos del Cónyuge: 0</td>
-        </tr>
-        <tr>
-            <td>FIRMA</td>
-            <td></td>
-            <td>IMAGEN</td>
+            <td colspan='3'>
+                <table style='width:100%'>
+                    <tr style='height:153'>
+                    <td style='width:100'></td>
+                        <td>
+                            <table style='width:100%'>
+                                <tr style='height:96px'>
+                                    <td style='border:solid 2px black;width:210px'></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style='width:320'></td>
+                        <td style='width:152px;heihgt:153px;border:solid 2px black'></td>
+                        <td style='width:100'></td>
+                    </tr>       
+                <table>
+            </td>
         </tr>
     </table>
 </div>
