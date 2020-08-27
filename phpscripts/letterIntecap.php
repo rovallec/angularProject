@@ -14,7 +14,7 @@ echo "
 <div style='margin-left:60px'>
 <table>
 <tr>
-<td colspan='4'><img src='http://168.194.75.13/assets/Nearsol.png' style='height:60px; width:250px'></td>
+<td colspan='4'><img src='http://200.94.251.67/assets/Nearsol.png' style='height:60px; width:250px'></td>
 </tr>
 <tr>
 <td colspan='4' style='height:40px'></td>

@@ -10,7 +10,7 @@ $idprocess = ($request->idprocess);
 $idirtra_requests = ($request->idirtra_requests);
 $type = ($request->type);
 
-$sql = "INSERT INTO `irtra_requests` (`idirtra_requests`, `id_process`, `type` VALUES (NULL, '$idprocess', '$type');";
+$sql = "INSERT INTO `irtra_requests` (`idirtra_requests`, `id_process`, `type`) VALUES (NULL, '$idprocess', '$type');";
 if(mysqli_query($con,$sql)){
     http_response_code(200);
 }else{

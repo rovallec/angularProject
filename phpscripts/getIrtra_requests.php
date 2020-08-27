@@ -13,7 +13,7 @@ $sql = "SELECT * FROM `irtra_requests` WHERE `id_process` = '$id';";
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
-        $user['idprocess'] = $row['idletters'];
+        $user['idprocess'] = $row['idprocess'];
         $user['idirtra_requests'] = $row['id_process'];
         $user['type'] = $row['type'];
     };

@@ -1009,7 +1009,8 @@
                 <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
                     aria-labelledby="nav-newproc-tab">
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Irtra Request'">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">IRTRA REQUEST</label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">IRTRA REQUEST<i
+                            class="far fa-eye" (click)="getIrtra()" *ngIf="viewRecProd"></i></label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
