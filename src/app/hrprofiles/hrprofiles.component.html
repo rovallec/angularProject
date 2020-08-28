@@ -925,10 +925,18 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-4">
                                     <label for="txt_email">Email Address:</label>
                                     <input type="text" class="form-control" [(ngModel)]="profile[0].email"
                                         [disabled]="true">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>IRTRA:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].irtra">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>IGSS:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].iggs">
                                 </div>
                             </div>
                         </div>
