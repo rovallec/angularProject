@@ -840,6 +840,7 @@ export class HrprofilesComponent implements OnInit {
           this.actualIrtrarequests.idprocess = str;
           this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str:string)=>{
             this.getIrtra();
+            this.cancelView();
           })
         break;
         default:
@@ -1121,7 +1122,7 @@ export class HrprofilesComponent implements OnInit {
     }
 
     if(this.actualIrtrarequests.type == "Nuevo Carnet"){
-      window.open('http://200.94.251.67/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0]+'&afiliacion=' + this.profile[0].irtra+'&birthday_day=' + this.profile[0].day_of_birth.split('-')[1]+'&birthday_month=' + this.profile[0].day_of_birth.split('-')[0]+'&birthday_year=' + this.profile[0].day_of_birth.split('-')[2]+'&book= ' +  '&cedula= ' +  '&company=' + this.useCompany+'&conyuge_firstname= ' +  '&conyuge_lastname= ' +  '&department=' + this.profile[0].address.split(',')[2]+'&dpi=' + this.profile[0].dpi+'&extended= ' +  '&f=' + f+'&first_lastname=' + this.profile[0].first_lastname+'&first_name=' + this.profile[0].first_name+'&fold= ' +  '&m=' + m+'&married= ' +  '&municipio=' + this.profile[0].address.split(',')[1]+'&partida= ' +  '&pasaport= ' +  '&patronal=' + this.igss_patronal+'&phone=' + this.profile[0].phone+'&reg= ' + '&second_lastname=' + this.profile[0].second_lastname+'&second_name=' + this.profile[0].second_name+'&zone=' + this.profile[0].address.split(",")[3].split(" ")[1]);
+      window.open('http://200.94.251.67/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0]+'&afiliacion=' + this.profile[0].irtra+'&birthday_day=' + this.profile[0].day_of_birth.split('-')[2]+'&birthday_month=' + this.profile[0].day_of_birth.split('-')[1]+'&birthday_year=' + this.profile[0].day_of_birth.split('-')[0]+'&book= ' +  '&cedula= ' +  '&company=' + this.useCompany+'&conyuge_firstname= ' +  '&conyuge_lastname= ' +  '&department=' + this.profile[0].address.split(',')[2]+'&dpi=' + this.profile[0].dpi+'&extended= ' +  '&f=' + f+'&first_lastname=' + this.profile[0].first_lastname+'&first_name=' + this.profile[0].first_name+'&fold= ' +  '&m=' + m+'&married= ' +  '&municipio=' + this.profile[0].address.split(',')[1]+'&partida= ' +  '&pasaport= ' +  '&patronal=' + this.igss_patronal+'&phone=' + this.profile[0].phone+'&reg= ' + '&second_lastname=' + this.profile[0].second_lastname+'&second_name=' + this.profile[0].second_name+'&zone=' + this.profile[0].address.split(",")[3].split(" ")[2]);
     }
   }
 
