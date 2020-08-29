@@ -8,6 +8,9 @@ $rnd =  rand(99,99999);
 if($_POST['process']=="updateSignature"){
     $actualName = $user  . "_Signatures_" . ".jpeg";
     $targetPath = "uploads/" . basename($actualName);
+    if (file_exists("uploads/$actualNamee")){
+        unlink("uploads/$actualNamee");
+    }
 
     $res = [];
 
