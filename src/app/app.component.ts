@@ -47,6 +47,7 @@ export class AppComponent {
     formData.append('process', 'updateSignature');
     formData.append('file1', event.target.files[0]);
     formData.append('user', this.authSrv.getAuthusr().iduser);
+    formData.append('profile', 'null');
     this.apiService.insDocProc_doc(formData).subscribe((str:any)=>{
 
     })
