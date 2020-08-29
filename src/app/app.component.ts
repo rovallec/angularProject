@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthServiceService } from './auth-service.service';
 import {Form} from '@angular/forms'
 import { users } from './users';
+import { ApiService } from './api.service';
 
 
 @Component({
@@ -23,8 +24,9 @@ export class AppComponent {
     signature:'N/A'
   };
   selectedOption:string = 'HOME';
+  uploadFile:string = null;
 
-  constructor(private authSrv:AuthServiceService){
+  constructor(private authSrv:AuthServiceService, private apiService:ApiService){
   }
 
   getAuth(){
@@ -38,5 +40,14 @@ export class AppComponent {
   };
   SetSel(sel:string){
     this.selectedOption = sel;
+  }
+
+  onChange(event){
+    let formData = new FormData;
+    formData.append('process', 'updateSignature');
+    formData.append('file1', event.target.files[0]);
+    this.apiService.insDocProc_doc(formData).subscribe((str:any)=>{
+      
+    })
   }
 }
