@@ -411,5 +411,13 @@ getIrtra_request(proc:process){
   return this.httpClient.post<irtra_requests>(`${this.PHP_API_SERVER}/phpscripts/getIrtra_requests.php`, proc);
 }
 
+updateIrtra(prof:profiles){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateIrtra.php`, prof);
+}
+
+updateIgss(prof:profiles){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateIgss.php`, prof);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

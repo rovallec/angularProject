@@ -85,6 +85,8 @@ export class HrprofilesComponent implements OnInit {
   editRequest: boolean = true;
   newSuspension: string = "NO";
   accChange: string = null;
+  editableIrtra:boolean = false;
+  editableIgss:boolean = false;
 
   earnVacations: number = 0;
   tookVacations: number = 0;
@@ -1128,4 +1130,17 @@ export class HrprofilesComponent implements OnInit {
     }
   }
 
+  editIrtra(){
+    if(this.editableIrtra){
+      this.apiService.updateIrtra(this.profile[0]).subscribe((str:string)=>{})
+    }
+    this.editableIrtra = !this.editableIrtra;
+  }
+
+  editIgss(){
+    if(this.editableIrtra){
+      this.apiService.updateIgss(this.profile[0]).subscribe((str:string)=>{})
+    }
+    this.editableIgss = !this.editableIgss;
+  }
 }
