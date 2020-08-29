@@ -44,7 +44,7 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="#">Log Out</a>
             <a class="dropdown-item" href="#">My Profile</a>
-            <a class="dropdown-item" href="#" *ngIf="getSaved().department == 5"><input type="file" class="form-control" placeholder="Update Signature" (change)="onChange($event)"></a>
+            <a class="dropdown-item" href="#" *ngIf="getSaved().department == '5'"><input type="file" class="form-control" placeholder="Update Signature" (change)="onChange($event)"></a>
           </div>
       </div>
     </form>
