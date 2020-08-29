@@ -12,6 +12,7 @@ $status = ($request->iggs);
 
 $sql = "UPDATE `profiles` SET `iggs`='{$status}' WHERE `idprofiles`='{$id}' LIMIT 1";
 
+
 if(mysqli_query($con, $sql)){
 	echo $id;
 	http_response_code(204);

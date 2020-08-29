@@ -1138,7 +1138,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   editIgss(){
-    if(this.editableIrtra){
+    if(this.editableIgss){
       this.apiService.updateIgss(this.profile[0]).subscribe((str:string)=>{})
     }
     this.editableIgss = !this.editableIgss;
