@@ -92,7 +92,13 @@ echo "
 <td colspan='4' style='height:50px'></td>
 </tr>
 <tr>
-<td coslpan='4' style='text-aligns:center'><img style='width:100px;height:50px' src='http://200.94.251.67/uploads/" . $iduser . "_Signatures_.jpeg'</td>
+<td colspan='4' style='text-alignt:center'>
+<table styel='width:100%'>
+<tr>
+<td><img style='width:100px;height:50px;margin-left:250px' src='http://200.94.251.67/uploads/" . $iduser . "_Signatures_.jpeg'></td>
+</tr>
+</table>
+</td>
 </tr>
 <tr>
 <td colspan='4' style=' text-align: center'>" . $user . "
