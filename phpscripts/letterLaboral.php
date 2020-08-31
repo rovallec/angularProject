@@ -10,6 +10,7 @@ $start = $_GET['start'];
 $user = $_GET['user'];
 $contact = $_GET['contact'];
 $job = $_GET['job'];
+$iduser = $_GET['iduser'];
 
 echo "
 <div style='margin-left:60px'>
@@ -88,7 +89,10 @@ echo "
 <td colspan='4' style=' text-align: center'>Atentamente,</td>
 </tr>
 <tr>
-<td colspan='4' style='height:150px'></td>
+<td colspan='4' style='height:50px'></td>
+</tr>
+<tr>
+<td coslpan='4' style='text-aligns:center'><img style='width:100px;height:50px' src='http://200.94.251.67/uploads/'" . $userid . "_Signatures_.jpg</td>
 </tr>
 <tr>
 <td colspan='4' style=' text-align: center'>" . $user . "

@@ -908,7 +908,7 @@ export class MiprofilesComponent implements OnInit {
   };
 
   view_doc(doc_no: number) {
-    window.open("http://168.194.75.13/phpscripts/uploads/" + this.prof_doc[doc_no].doc_path, '_blank');
+    window.open("http://200.94.251.67/uploads/" + this.prof_doc[doc_no].doc_path, '_blank');
   }
 
   getTemplates() {
