@@ -7,9 +7,10 @@ $rnd =  rand(99,99999);
 
 if($_POST['process']=="updateSignature"){
     $actualName = $user  . "_Signatures_" . ".jpeg";
-    $targetPath = "uploads/" . basename($actualName);
-    if (file_exists("uploads/$actualName")){
-        unlink("uploads/$actualName");
+    $targetPath = "/var/www/html/uploads/" . basename($actualName);
+
+    if (file_exists($targetPath)){
+        unlink($targetPath);
     }
 
     $res = [];
@@ -34,7 +35,7 @@ if($_POST['process']=="secondInterview"){
 
     try {
         $nameNow[0] = $user . "_" . $profile . $names[0] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[0] = "uploads/" . basename($nameNow[0]);
+        $storeName[0] = "/var/www/html/uploads/" . basename($nameNow[0]);
        if(!isset($_FILES['file1']['error']) || is_array($_FILES['file1']['error'])){
             $nameNow[0] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -51,7 +52,7 @@ if($_POST['process']=="secondInterview"){
      
     try {
         $nameNow[1] = $user . "_" . $profile . $names[1] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[1] = "uploads/" . basename($nameNow[1]);
+        $storeName[1] = "/var/www/html/uploads/" . basename($nameNow[1]);
        if(!isset($_FILES['file2']['error']) || is_array($_FILES['file2']['error'])){
             $nameNow[1] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -68,7 +69,7 @@ if($_POST['process']=="secondInterview"){
 
     try {
         $nameNow[2] = $user . "_" . $profile . $names[2] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[2] = "uploads/" . basename($nameNow[2]);
+        $storeName[2] = "/var/www/html/uploads/" . basename($nameNow[2]);
        if(!isset($_FILES['file3']['error']) || is_array($_FILES['file3']['error'])){
             $nameNow[2] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile');
@@ -100,7 +101,7 @@ if($_POST['process']=="drugTest"){
 
     try {
         $nameNow[0] = $user . "_" . $profile . $names[0] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[0] = "uploads/" . basename($nameNow[0]);
+        $storeName[0] = "/var/www/html/uploads/" . basename($nameNow[0]);
        if(!isset($_FILES['file1']['error']) || is_array($_FILES['file1']['error'])){
             $nameNow[0] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -123,7 +124,7 @@ if($_POST['process']=="drugTest"){
 
 if($_POST['process']=="legalDocumentation"){
     $actualName = $user . "_" . $profile . "_InfonetAuthorization_" . $rnd . ".jpeg";
-    $targetPath = "uploads/" . basename($actualName);
+    $targetPath = "/var/www/html/uploads/" . basename($actualName);
 
     $res = [];
 
@@ -151,7 +152,7 @@ if($_POST['process']=="backgroundCheck"){
 
     try {
         $nameNow[0] = $user . "_" . $profile . $names[0] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[0] = "uploads/" . basename($nameNow[0]);
+        $storeName[0] = "/var/www/html/uploads/" . basename($nameNow[0]);
        if(!isset($_FILES['file1']['error']) || is_array($_FILES['file1']['error'])){
             $nameNow[0] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -168,7 +169,7 @@ if($_POST['process']=="backgroundCheck"){
      
     try {
         $nameNow[1] = $user . "_" . $profile . $names[1] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[1] = "uploads/" . basename($nameNow[1]);
+        $storeName[1] = "/var/www/html/uploads/" . basename($nameNow[1]);
        if(!isset($_FILES['file2']['error']) || is_array($_FILES['file2']['error'])){
             $nameNow[1] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -185,7 +186,7 @@ if($_POST['process']=="backgroundCheck"){
 
     try {
         $nameNow[2] = $user . "_" . $profile . $names[2] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[2] = "uploads/" . basename($nameNow[2]);
+        $storeName[2] = "/var/www/html/uploads/" . basename($nameNow[2]);
        if(!isset($_FILES['file3']['error']) || is_array($_FILES['file3']['error'])){
             $nameNow[2] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile');
@@ -201,7 +202,7 @@ if($_POST['process']=="backgroundCheck"){
 
     try {
         $nameNow[3] = $user . "_" . $profile . $names[3] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[3] = "uploads/" . basename($nameNow[3]);
+        $storeName[3] = "/var/www/html/uploads/" . basename($nameNow[3]);
        if(!isset($_FILES['file4']['error']) || is_array($_FILES['file4']['error'])){
             $nameNow[3] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -217,7 +218,7 @@ if($_POST['process']=="backgroundCheck"){
 
     try {
         $nameNow[4] = $user . "_" . $profile . $names[4] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[4] = "uploads/" . basename($nameNow[4]);
+        $storeName[4] = "/var/www/html/uploads/" . basename($nameNow[4]);
        if(!isset($_FILES['file5']['error']) || is_array($_FILES['file5']['error'])){
             $nameNow[4] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -233,7 +234,7 @@ if($_POST['process']=="backgroundCheck"){
 
     try {
         $nameNow[5] = $user . "_" . $profile . $names[5] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[5] = "uploads/" . basename($nameNow[5]);
+        $storeName[5] = "/var/www/html/uploads/" . basename($nameNow[5]);
        if(!isset($_FILES['file6']['error']) || is_array($_FILES['file6']['error'])){
             $nameNow[5] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -280,7 +281,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[0] = $user . "_" . $profile . $names[0] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[0] = "uploads/" . basename($nameNow[0]);
+        $storeName[0] = "/var/www/html/uploads/" . basename($nameNow[0]);
        if(!isset($_FILES['file1']['error']) || is_array($_FILES['file1']['error'])){
             $nameNow[0] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -297,7 +298,7 @@ if($_POST['process']=="statalDocumentation"){
      
     try {
         $nameNow[1] = $user . "_" . $profile . $names[1] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[1] = "uploads/" . basename($nameNow[1]);
+        $storeName[1] = "/var/www/html/uploads/" . basename($nameNow[1]);
        if(!isset($_FILES['file2']['error']) || is_array($_FILES['file2']['error'])){
             $nameNow[1] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -314,7 +315,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[2] = $user . "_" . $profile . $names[2] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[2] = "uploads/" . basename($nameNow[2]);
+        $storeName[2] = "/var/www/html/uploads/" . basename($nameNow[2]);
        if(!isset($_FILES['file3']['error']) || is_array($_FILES['file3']['error'])){
             $nameNow[2] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile');
@@ -330,7 +331,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[3] = $user . "_" . $profile . $names[3] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[3] = "uploads/" . basename($nameNow[3]);
+        $storeName[3] = "/var/www/html/uploads/" . basename($nameNow[3]);
        if(!isset($_FILES['file4']['error']) || is_array($_FILES['file4']['error'])){
             $nameNow[3] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -346,7 +347,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[4] = $user . "_" . $profile . $names[4] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[4] = "uploads/" . basename($nameNow[4]);
+        $storeName[4] = "/var/www/html/uploads/" . basename($nameNow[4]);
        if(!isset($_FILES['file5']['error']) || is_array($_FILES['file5']['error'])){
             $nameNow[4] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -362,7 +363,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[5] = $user . "_" . $profile . $names[5] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[5] = "uploads/" . basename($nameNow[5]);
+        $storeName[5] = "/var/www/html/uploads/" . basename($nameNow[5]);
        if(!isset($_FILES['file6']['error']) || is_array($_FILES['file6']['error'])){
             $nameNow[5] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -378,7 +379,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[6] = $user . "_" . $profile . $names[6] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[6] = "uploads/" . basename($nameNow[6]);
+        $storeName[6] = "/var/www/html/uploads/" . basename($nameNow[6]);
        if(!isset($_FILES['file7']['error']) || is_array($_FILES['file7']['error'])){
             $nameNow[6] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -394,7 +395,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[7] = $user . "_" . $profile . $names[7] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[7] = "uploads/" . basename($nameNow[7]);
+        $storeName[7] = "/var/www/html/uploads/" . basename($nameNow[7]);
        if(!isset($_FILES['file8']['error']) || is_array($_FILES['file8']['error'])){
             $nameNow[7] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -410,7 +411,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[8] = $user . "_" . $profile . $names[8] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[8] = "uploads/" . basename($nameNow[8]);
+        $storeName[8] = "/var/www/html/uploads/" . basename($nameNow[8]);
        if(!isset($_FILES['file9']['error']) || is_array($_FILES['file9']['error'])){
             $nameNow[8] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -426,7 +427,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[9] = $user . "_" . $profile . $names[9] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[9] = "uploads/" . basename($nameNow[9]);
+        $storeName[9] = "/var/www/html/uploads/" . basename($nameNow[9]);
        if(!isset($_FILES['file10']['error']) || is_array($_FILES['file10']['error'])){
             $nameNow[9] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -442,7 +443,7 @@ if($_POST['process']=="statalDocumentation"){
 
     try {
         $nameNow[10] = $user . "_" . $profile . $names[10] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[10] = "uploads/" . basename($nameNow[10]);
+        $storeName[10] = "/var/www/html/uploads/" . basename($nameNow[10]);
        if(!isset($_FILES['file11']['error']) || is_array($_FILES['file11']['error'])){
             $nameNow[10] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -486,7 +487,7 @@ if($_POST['process']=="firstInterview"){
 
     try {
         $nameNow[0] = $user . "_" . $profile . $names[0] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[0] = "uploads/" . basename($nameNow[0]);
+        $storeName[0] = "/var/www/html/uploads/" . basename($nameNow[0]);
        if(!isset($_FILES['file1']['error']) || is_array($_FILES['file1']['error'])){
             $nameNow[0] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -503,7 +504,7 @@ if($_POST['process']=="firstInterview"){
      
     try {
         $nameNow[1] = $user . "_" . $profile . $names[1] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[1] = "uploads/" . basename($nameNow[1]);
+        $storeName[1] = "/var/www/html/uploads/" . basename($nameNow[1]);
        if(!isset($_FILES['file2']['error']) || is_array($_FILES['file2']['error'])){
             $nameNow[1] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -520,7 +521,7 @@ if($_POST['process']=="firstInterview"){
 
     try {
         $nameNow[2] = $user . "_" . $profile . $names[2] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[2] = "uploads/" . basename($nameNow[2]);
+        $storeName[2] = "/var/www/html/uploads/" . basename($nameNow[2]);
        if(!isset($_FILES['file3']['error']) || is_array($_FILES['file3']['error'])){
             $nameNow[2] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile');
@@ -557,7 +558,7 @@ if($_POST['process']=="testResult"){
 
     try {
         $nameNow[0] = $user . "_" . $profile . $names[0] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[0] = "uploads/" . basename($nameNow[0]);
+        $storeName[0] = "/var/www/html/uploads/" . basename($nameNow[0]);
        if(!isset($_FILES['file1']['error']) || is_array($_FILES['file1']['error'])){
             $nameNow[0] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -574,7 +575,7 @@ if($_POST['process']=="testResult"){
      
     try {
         $nameNow[1] = $user . "_" . $profile . $names[1] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[1] = "uploads/" . basename($nameNow[1]);
+        $storeName[1] = "/var/www/html/uploads/" . basename($nameNow[1]);
        if(!isset($_FILES['file2']['error']) || is_array($_FILES['file2']['error'])){
             $nameNow[1] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile.jpeg');
@@ -591,7 +592,7 @@ if($_POST['process']=="testResult"){
 
     try {
         $nameNow[2] = $user . "_" . $profile . $names[2] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[2] = "uploads/" . basename($nameNow[2]);
+        $storeName[2] = "/var/www/html/uploads/" . basename($nameNow[2]);
        if(!isset($_FILES['file3']['error']) || is_array($_FILES['file3']['error'])){
             $nameNow[2] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile');
@@ -607,7 +608,7 @@ if($_POST['process']=="testResult"){
 
     try {
         $nameNow[3] = $user . "_" . $profile . $names[3] . "_" . rand(99,9999) . ".jpeg";
-        $storeName[3] = "uploads/" . basename($nameNow[3]);
+        $storeName[3] = "/var/www/html/uploads/" . basename($nameNow[3]);
        if(!isset($_FILES['file4']['error']) || is_array($_FILES['file4']['error'])){
             $nameNow[3] = 'NoFile.jpeg';
            throw new RuntimeException('uploads/NoFile');
