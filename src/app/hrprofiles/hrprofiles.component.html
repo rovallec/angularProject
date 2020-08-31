@@ -596,7 +596,7 @@
                                     <label>Imposition Date:</label>
                                     <input type="date" (change)="pushRequestDate($event.target.value)"
                                         class="form-control"
-                                        *ngIf="activeRequest.status != 'DISPENSED' || activeRequest.status != 'CLOSED'">
+                                        *ngIf="activeRequest.status != 'DISPENSED' && activeRequest.status != 'CLOSED'">
                                     <input type="text" class="form-control" [(ngModel)]="activeRequest.imposition_date"
                                         *ngIf="activeRequest.status === 'DISPENSED' || activeRequest.status !='ACCEPTED'" [disabled]="true">
                                 </div>
