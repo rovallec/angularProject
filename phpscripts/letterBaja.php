@@ -8,7 +8,7 @@ $term = $_GET['term'];
 $user = $_GET['user'];
 $job = $_GET['job'];
 $contact = $_GET['contact'];
-$userid = $_GET['iduser'];
+$iduser = $_GET['iduser'];
 
 echo "
 <div style='margin-left:50px;'>
@@ -98,7 +98,7 @@ echo "
 <td colspan='4' style='height:50px'></td>
 </tr>
 <tr>
-<td coslpan='4' style='text-aligns:center'><img style='width:100px;height:50px' src='http://200.94.251.67/uploads/'" . $userid . "_Signatures_.jpg</td>
+<td coslpan='4' style='text-aligns:center'><img style='width:100px;height:50px' src='http://200.94.251.67/uploads/'" . $iduser . "_Signatures_.jpg</td>
 </tr>
 <tr>
 <td colspan='4' style=' text-align: center'>" . $user . "
