@@ -179,6 +179,8 @@ export class HrhomeComponent implements OnInit {
     });
     this.cancelEmployeeEdit(wv);
     this.getShow(wv);
+    this.hideWave();
+    this.start();
   }
 
   changeDate(a:string, wv:waves_template){
