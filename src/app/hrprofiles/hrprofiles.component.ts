@@ -1144,4 +1144,8 @@ export class HrprofilesComponent implements OnInit {
     }
     this.editableIgss = !this.editableIgss;
   }
+
+  printDP(){
+    
+  }
 }
