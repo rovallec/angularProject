@@ -571,7 +571,6 @@ export class HrprofilesComponent implements OnInit {
   insertDPRequest() {
     this.apiService.insertDisciplinary_Request(this.activeRequest).subscribe((str: string) => {
       this.getDisciplinaryProcesses();
-      this.storedRequest = true;
       this.cancelView();
     })
   }
@@ -626,6 +625,7 @@ export class HrprofilesComponent implements OnInit {
           let act:process = new process;
           act.idprocesses = "8";
           act.name = 'Termination';
+          act.descritpion = 'Employee Termination';
           this.actualTerm.kind = 'Despido';
           this.actualTerm.motive = 'Justificado';
           this.actualTerm.reason = 'Completar Proceso Disiciplinario';
