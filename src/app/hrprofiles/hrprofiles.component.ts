@@ -577,7 +577,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   showDp(dp: disciplinary_processes) {
-    if (dp.status == 'DISPENSED') {
+    if (dp.status == 'DISPATCHED') {
       this.editRequest = false;
     } else {
       if (dp.status == 'PENDING') {
@@ -601,7 +601,7 @@ export class HrprofilesComponent implements OnInit {
 
   addDP() {
     this.activeRequest.audience_status = "SCHEDULED";
-    this.activeRequest.status = "DISPENSED";
+    this.activeRequest.status = "DISPATCHED";
     if (this.newAudience === "YES" && this.newSuspension === "NO") {
       this.apiService.insertDPA(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
