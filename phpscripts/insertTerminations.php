@@ -24,8 +24,14 @@ $period_to_pay = ($request->period_to_pay);
 $sql = "INSERT INTO `terminations` (`idterminations`, `id_process`, `motive`, `kind`, `reason`, `rehireable`, `nearsol_experience`, `supervisor_experience`, `comments`, `valid_from`, `access_card`, `headsets`, `bank_check`, `insurance_notification`, `period_to_pay`) VALUES (NULL, '$id_process', '$motive', '$kind', '$reason', '$rehireable', '$nearsol_experience', '$supervisor_experience', '$comments', '$valid_from', '$access_card', '$headsets', '$bank_check', '$insurance_notification', '$period_to_pay');";
 
 if(mysqli_query($con,$sql)){
-    http_response_code(200);
-}else{
-    http_response_code(400);
+    $sql2 = "UPDATE `employees` SET `active` = '0';";
+    if(mysqli_query($con, $sql2)){
+        $sql3 = "UPDATE `profiles` SET `status` = '$rehireable';";
+        if(mysqli_query($con, $sql3)){
+            http_response_code(200);
+        }else{
+            http_response_code(400);
+        }
+    }
 }
 ?>
