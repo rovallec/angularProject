@@ -621,6 +621,8 @@ export class HrprofilesComponent implements OnInit {
       this.apiService.insertDP(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
         if(this.activeRequest.dp_grade == 'Terminacion Laboral'){
+          this.newRequest = false;
+          this.storedRequest = false;
           let act:process = new process;
           act.idprocesses = "8";
           act.name = 'Termination';
