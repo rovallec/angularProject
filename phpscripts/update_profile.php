@@ -68,7 +68,6 @@ header('Access-Control-Allow-Headers: *');
 
 						if(mysqli_query($con,$sql5)){
 								http_response_code(200);
-								echo json_encode($request);
 						}else{
 							http_response_code(400);
 						}

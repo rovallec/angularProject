@@ -1161,6 +1161,6 @@ export class HrprofilesComponent implements OnInit {
   }
 
   printDP(){
-
+    window.open("http://200.94.251.67/phpscripts/disciplinariProcess.php", "_blank");
   }
 }
