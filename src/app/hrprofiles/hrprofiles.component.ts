@@ -605,33 +605,26 @@ export class HrprofilesComponent implements OnInit {
     if (this.newAudience === "YES" && this.newSuspension === "NO") {
       this.apiService.insertDPA(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
-        this.newRequest = false;
-        this.storedRequest = false;
       })
     }
     if (this.newSuspension === "YES" && this.newAudience === "NO") {
       this.apiService.insertDPS(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
-        this.newRequest = false;
-        this.storedRequest = false;
       })
     }
     if (this.newSuspension === "YES" && this.newAudience === "YES") {
       this.apiService.insertDPSA(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
-        this.newRequest = false;
-        this.storedRequest = false;
       })
     }
     if (this.newSuspension === "NO" && this.newAudience === "NO") {
       this.apiService.insertDP(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
-        this.newRequest = false;
-        this.storedRequest = false;
       })
     }
     this.newRequest = false;
-    this.editRequest = false;
+    this.storedRequest = false;
+    console.log(this.newRequest + " " + this.storedRequest)
   }
 
   pushSuspensionStart(str: any) {
