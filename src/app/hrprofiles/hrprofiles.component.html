@@ -1739,7 +1739,7 @@
                                     <div class="form-group col-md-4">
                                         <label>Kind:</label>
                                         <select class="form-control" [(ngModel)]="actualTerm.kind"
-                                            [disabled]="viewRecProd">
+                                            [disabled]="viewRecProd || dpTerm">
                                             <option>Renuncia</option>
                                             <option>Despido</option>
                                         </select>
@@ -1747,45 +1747,45 @@
                                     <div class="form-group col-md-4">
                                         <label>Motive:</label>
                                         <select class="form-control" *ngIf="actualTerm.kind === 'Despido'"
-                                            [(ngModel)]="actualTerm.motive" [disabled]="viewRecProd">
+                                            [(ngModel)]="actualTerm.motive" [disabled]="viewRecProd  || dpTerm">
                                             <option>Justificado</option>
                                             <option>Abandono Laboral</option>
                                             <option>Reestructuracion</option>
                                         </select>
                                         <input class="form-control" *ngIf="actualTerm.kind === 'Renuncia'"
-                                            [(ngModel)]="actualTerm.motive" [disabled]="viewRecProd">
+                                            [(ngModel)]="actualTerm.motive" [disabled]="viewRecProd  || dpTerm">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Reason:</label>
                                         <input type="text" class="form-control" [(ngModel)]="actualTerm.reason"
-                                            [disabled]="viewRecProd">
+                                            [disabled]="viewRecProd  || dpTerm">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-4">
                                         <label>Rehireable</label>
                                         <select class="form-control" [(ngModel)]="actualTerm.rehireable"
-                                            [disabled]="viewRecProd">
+                                            [disabled]="viewRecProd  || dpTerm">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Nearsol's Experience</label>
+                                        <label>Nearsol's Exp.</label>
                                         <input type="number" class="form-control" min="0" max="10"
                                             [(ngModel)]="actualTerm.nearsol_experience" [disabled]="viewRecProd">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Supervisor's Experience</label>
+                                        <label>Sup's Exp.</label>
                                         <input type="number" class="form-control" min="0" max="10"
                                             [(ngModel)]="actualTerm.supervisor_experience" [disabled]="viewRecProd">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Valid From</label>
                                         <input type="date" class="form-control"
-                                            (change)="setValidFrom($event.target.value)" *ngIf="!viewRecProd">
+                                            (change)="setValidFrom($event.target.value)" *ngIf="!viewRecProd &&  !dpTerm">
                                         <input type="text" class="form-control" [(ngModel)]="actualTerm.valid_from"
-                                            [disabled]="true" *ngIf="viewRecProd">
+                                            [disabled]="true" *ngIf="viewRecProd  || dpTerm">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">

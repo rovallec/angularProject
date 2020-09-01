@@ -38,6 +38,7 @@ export class HrprofilesComponent implements OnInit {
   addVac: boolean = true;
   useCompany:string = null;
   igss_patronal:string = null;
+  dpTerm:boolean = false;
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -407,8 +408,6 @@ export class HrprofilesComponent implements OnInit {
     this.setNewRequest = false;
     this.reasonRequiered = false;
     this.storedRequest = false;
-    this.activeRequest.status = "PENDING";
-    this.activeRequest.audience_status = 'PENDING';
     this.newAudience = "NO";
     this.newSuspension = "NO";
     this.getVacations();
@@ -624,7 +623,17 @@ export class HrprofilesComponent implements OnInit {
     }
     this.newRequest = false;
     this.storedRequest = false;
-    console.log(this.newRequest + " " + this.storedRequest)
+    if(this.activeRequest.dp_grade == 'Terminacion Laboral'){
+      let act:process;
+      act.name = 'Termination';
+      this.actualTerm.kind = 'Despido';
+      this.actualTerm.motive = 'Justificado';
+      this.actualTerm.reason = 'Completar Proceso Disiciplinario';
+      this.actualTerm.rehireable = 'NO';
+      this.actualTerm.valid_from = this.activeRequest.imposition_date;
+      this.dpTerm = true;
+      this.setProcess(act);
+    }
   }
 
   pushSuspensionStart(str: any) {
@@ -1146,6 +1155,6 @@ export class HrprofilesComponent implements OnInit {
   }
 
   printDP(){
-    
+
   }
 }
