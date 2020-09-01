@@ -243,8 +243,10 @@
                                 </div>
                                 <div class="form-group col-md-4"></div>
                                 <div class="form-group col-md-3">
-                                    <button class="form-control" (click)="addVacation('Take', '4')" *ngIf="availableVacations > 0">Take</button>
-                                    <button [disabled]="true" class="form-control" (click)="addVacation('Take', '4')" *ngIf="availableVacations === 0">Take</button>
+                                    <button class="form-control" (click)="addVacation('Take', '4')"
+                                        *ngIf="availableVacations > 0">Take</button>
+                                    <button [disabled]="true" class="form-control" (click)="addVacation('Take', '4')"
+                                        *ngIf="availableVacations === 0">Take</button>
                                 </div>
                                 <div class="form-group col-md-1"></div>
                             </div>
@@ -462,7 +464,7 @@
                                 <div class="form-group col-md-5"></div>
                             </div>
                         </div>
-                        <di v class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;"
+                        <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;"
                             *ngIf="newRequest || storedRequest">
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-1"></div>
@@ -598,7 +600,8 @@
                                         class="form-control"
                                         *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'CLOSED'">
                                     <input type="text" class="form-control" [(ngModel)]="activeRequest.imposition_date"
-                                        *ngIf="activeRequest.status === 'DISPATCHED' || activeRequest.status !='ACCEPTED'" [disabled]="true">
+                                        *ngIf="activeRequest.status === 'DISPATCHED' || activeRequest.status !='ACCEPTED'"
+                                        [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Type:</label>
@@ -730,7 +733,8 @@
                                     <input type="date" (change)="pushSuspensionStart($event.target.value)"
                                         class="form-control" *ngIf="activeRequest.status != 'DISPATCHED'">
                                     <input class="form-control" type="text" [disabled]="true"
-                                        [(ngModel)]="activeRequest.start" *ngIf=" activeRequest.status === 'DISPATCHED'">
+                                        [(ngModel)]="activeRequest.start"
+                                        *ngIf=" activeRequest.status === 'DISPATCHED'">
 
                                 </div>
                                 <div class="form-group col-md-6">
@@ -931,12 +935,16 @@
                                         [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label>IRTRA:<i class="far fa-edit" (click)="editIrtra()" style="margin-left:5px;"></i></label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].irtra" [disabled]="!editableIrtra">
+                                    <label>IRTRA:<i class="far fa-edit" (click)="editIrtra()"
+                                            style="margin-left:5px;"></i></label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].irtra"
+                                        [disabled]="!editableIrtra">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label>IGSS:<i class="far fa-edit" (click)="editIgss()" style="margin-left:5px;"></i></label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].iggs" [disabled]="!editableIgss">
+                                    <label>IGSS:<i class="far fa-edit" (click)="editIgss()"
+                                            style="margin-left:5px;"></i></label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].iggs"
+                                        [disabled]="!editableIgss">
                                 </div>
                             </div>
                         </div>
@@ -1017,7 +1025,9 @@
                 <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
                     aria-labelledby="nav-newproc-tab">
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Irtra Request'">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">IRTRA REQUEST<i class="far fa-eye" *ngIf="actualIrtrarequests.type != 'Nuevo Carnet'" (click)="getIrtra()"></i></label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">IRTRA
+                            REQUEST<i class="far fa-eye" *ngIf="actualIrtrarequests.type != 'Nuevo Carnet'"
+                                (click)="getIrtra()"></i></label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
@@ -1046,7 +1056,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Reuqest Type:</label>
-                                <select class="form-control" [(ngModel)]="actualIrtrarequests.type" [disabled]="viewRecProd">
+                                <select class="form-control" [(ngModel)]="actualIrtrarequests.type"
+                                    [disabled]="viewRecProd">
                                     <option>Nuevo Carnet</option>
                                     <option>Renovación Anual</option>
                                     <option>Cambio de plástico</option>
@@ -1055,7 +1066,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label *ngIf="!viewRecProd">Patronal:</label>
-                                <input type="text" [(ngModel)]="igss_patronal" class="form-control" *ngIf="!viewRecProd">
+                                <input type="text" [(ngModel)]="igss_patronal" class="form-control"
+                                    *ngIf="!viewRecProd">
                             </div>
                         </div>
 
@@ -1069,9 +1081,10 @@
                             </div>
                         </div>
                     </div>
-        <!---------------------------------------------------------------------------------LEGAL DESCOUNT-------------------------------------------------------------------->
+                    <!---------------------------------------------------------------------------------LEGAL DESCOUNT-------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Legal Discount'">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">LEGAL</label>
+                        <label
+                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">LEGAL</label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
@@ -1093,11 +1106,13 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-6">
                                 <label>Amount(%):</label>
-                                <input type="number" class="form-control" [(ngModel)]="actualJudicial.amount" [disabled]="viewRecProd" min="0.01" max="100" step="0.01">
+                                <input type="number" class="form-control" [(ngModel)]="actualJudicial.amount"
+                                    [disabled]="viewRecProd" min="0.01" max="100" step="0.01">
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Max(Q):</label>
-                                <input type="number" class="form-control" [(ngModel)]="actualJudicial.max" [disabled]="viewRecProd" min="0" step="0.01">
+                                <input type="number" class="form-control" [(ngModel)]="actualJudicial.max"
+                                    [disabled]="viewRecProd" min="0" step="0.01">
                             </div>
                         </div>
 
@@ -1111,9 +1126,10 @@
                             </div>
                         </div>
                     </div>
-        <!---------------------------------------------------------------------------------TRANSFER---------------------------------------------------------------------------->
+                    <!---------------------------------------------------------------------------------TRANSFER---------------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Transfer'">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">TRANSFER</label>
+                        <label
+                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">TRANSFER</label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
@@ -1135,11 +1151,13 @@
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
                                 <label>Transfer To:</label>
-                                <select class="form-control" [(ngModel)]="accId" *ngIf="!viewRecProd" (change)="addDescription()">
-                                    <option  *ngFor="let ac of allAccounts" [value]="ac.idaccounts">{{ac.name}}</option>
+                                <select class="form-control" [(ngModel)]="accId" *ngIf="!viewRecProd"
+                                    (change)="addDescription()">
+                                    <option *ngFor="let ac of allAccounts" [value]="ac.idaccounts">{{ac.name}}</option>
                                 </select>
-                                <select class="form-control" [(ngModel)]="actuallProc.descritpion" *ngIf="viewRecProd" [disabled]="true">
-                                    <option  *ngFor="let ac of allAccounts" [value]="ac.idaccounts">{{ac.name}}</option>
+                                <select class="form-control" [(ngModel)]="actuallProc.descritpion" *ngIf="viewRecProd"
+                                    [disabled]="true">
+                                    <option *ngFor="let ac of allAccounts" [value]="ac.idaccounts">{{ac.name}}</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-4"></div>
@@ -1190,8 +1208,10 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Approved Date:</label>
-                                <input type="date" class="form-control" (change)="setApproveddate($event.target.value)" *ngIf="!viewRecProd">
-                                <input type="text" class="form-control" [(ngModel)]="actualSurvey.approved_date" *ngIf="viewRecProd" [disabled]="true">
+                                <input type="date" class="form-control" (change)="setApproveddate($event.target.value)"
+                                    *ngIf="!viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualSurvey.approved_date"
+                                    *ngIf="viewRecProd" [disabled]="true">
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Notification Date:</label>
@@ -1251,7 +1271,8 @@
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()" *ngIf="addVac">Accept</button>
-                                <button class="form-control" (click)="showAlert('Not enough vacations to take')" *ngIf="!addVac">Accept</button>
+                                <button class="form-control" (click)="showAlert('Not enough vacations to take')"
+                                    *ngIf="!addVac">Accept</button>
                             </div>
                         </div>
                     </div>
