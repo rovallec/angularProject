@@ -24,9 +24,9 @@ $period_to_pay = ($request->period_to_pay);
 $sql = "INSERT INTO `terminations` (`idterminations`, `id_process`, `motive`, `kind`, `reason`, `rehireable`, `nearsol_experience`, `supervisor_experience`, `comments`, `valid_from`, `access_card`, `headsets`, `bank_check`, `insurance_notification`, `period_to_pay`) VALUES (NULL, '$id_process', '$motive', '$kind', '$reason', '$rehireable', '$nearsol_experience', '$supervisor_experience', '$comments', '$valid_from', '$access_card', '$headsets', '$bank_check', '$insurance_notification', '$period_to_pay');";
 
 if(mysqli_query($con,$sql)){
-    $sql2 = "UPDATE `employees` SET `active` = '0';";
+    $sql2 = "UPDATE `employees` SET `active` = '0' WHERE `idemployees` = (SELECT id_employee FROM `hr_processes` WHERE idhr_processes = '$id_process');";
     if(mysqli_query($con, $sql2)){
-        $sql3 = "UPDATE `profiles` SET `status` = '$rehireable';";
+        $sql3 = "UPDATE `profiles` SET `status` = '$rehireable' WHERE idprofiles = (SELECT id_profile FROM `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` WHERE `idemployees` = (SELECT id_employee  FROM `hr_processes` WHERE idhr_processes = '$id_process'));";
         if(mysqli_query($con, $sql3)){
             http_response_code(200);
         }else{

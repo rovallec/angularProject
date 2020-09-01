@@ -629,7 +629,7 @@ export class HrprofilesComponent implements OnInit {
           this.actualTerm.kind = 'Despido';
           this.actualTerm.motive = 'Justificado';
           this.actualTerm.reason = 'Completar Proceso Disiciplinario';
-          this.actualTerm.rehireable = 'NO';
+          this.actualTerm.rehireable = 'NO REHIREABLE';
           this.actualTerm.valid_from = this.activeRequest.imposition_date;
           this.dpTerm = true;
           this.setProcess(act);
