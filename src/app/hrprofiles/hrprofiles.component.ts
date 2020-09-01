@@ -571,8 +571,9 @@ export class HrprofilesComponent implements OnInit {
   insertDPRequest() {
     this.apiService.insertDisciplinary_Request(this.activeRequest).subscribe((str: string) => {
       this.getDisciplinaryProcesses();
+      this.storedRequest = true;
+      this.cancelView();
     })
-    this.storedRequest = true;
   }
 
   showDp(dp: disciplinary_processes) {
@@ -619,21 +620,22 @@ export class HrprofilesComponent implements OnInit {
     if (this.newSuspension === "NO" && this.newAudience === "NO") {
       this.apiService.insertDP(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
+        if(this.activeRequest.dp_grade == 'Terminacion Laboral'){
+          let act:process = new process;
+          act.idprocesses = "8";
+          act.name = 'Termination';
+          this.actualTerm.kind = 'Despido';
+          this.actualTerm.motive = 'Justificado';
+          this.actualTerm.reason = 'Completar Proceso Disiciplinario';
+          this.actualTerm.rehireable = 'NO';
+          this.actualTerm.valid_from = this.activeRequest.imposition_date;
+          this.dpTerm = true;
+          this.setProcess(act);
+        }
       })
     }
     this.newRequest = false;
     this.storedRequest = false;
-    if(this.activeRequest.dp_grade == 'Terminacion Laboral'){
-      let act:process;
-      act.name = 'Termination';
-      this.actualTerm.kind = 'Despido';
-      this.actualTerm.motive = 'Justificado';
-      this.actualTerm.reason = 'Completar Proceso Disiciplinario';
-      this.actualTerm.rehireable = 'NO';
-      this.actualTerm.valid_from = this.activeRequest.imposition_date;
-      this.dpTerm = true;
-      this.setProcess(act);
-    }
   }
 
   pushSuspensionStart(str: any) {
@@ -731,6 +733,8 @@ export class HrprofilesComponent implements OnInit {
   }
 
   setProcess(act: process) {
+    this.newRequest = false;
+    this.storedRequest = false;
     this.viewRecProd = false;
     this.actuallProc.descritpion = null;
     this.addProc = true;
