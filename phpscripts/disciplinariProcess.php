@@ -5,14 +5,39 @@ $employee = $_GET['employee'];
 $position = $_GET['pos'];
 $reportsTo = $_GET['sup'];
 $account = $_GET['acc'];
-$retroalimentacion = $_GET['Retroalimentacion'];
-$verbal = $_GET['Advertencia Verbal'];
-$escrita = $_GET['Advertencia Escrita'];
-$final = $_GET['Advertencia Final'];
-$dosDias = $_GET['Suspencion 2 Dias'];
-$cuatroDias = $_GET['Suspencion 4 Dias'];
-$term = $_GET[' Terminacion Laboral '];
-$late = $_GET['Entrada Tarde/Salida Temprano'];
+$grade = $_GET['grade'];
+$retroalimentacion = '';
+$verbal = '';
+$escrita = '';
+$final = '';
+$dosDias = '';
+$cuatroDias = '';
+$term = '';
+switch ($grade) {
+    case 'Retroalimentacion':
+        $retroalimentacion = 'checked'
+    break;
+    case 'Advertencia Verbal';
+        $verbal = 'checked';
+    break;
+    case 'Advertencia Escrita':
+        $escrita = 'checked';
+    break;
+    case 'Advertencia Final':
+        $final = 'checked';
+    break;
+    case 'Suspencion 2 Dias':
+        $dosDias = 'checked';
+    break;
+    case 'Suspencion 4 Dias':
+        $cuatroDias = 'checked';
+    break;
+    case 'Terminacion Laboral':
+        $term = 'checked';
+    break;
+}
+
+$late = $_GET['Entrada/Salida Tarde/Temprano'];
 $attendence = $_GET['Ausencia Injustificada'];
 $abuse = $_GET['Abuso de Receso/Almuerzo/Auxiliares'];
 $rules = $_GET['Violacion de Reglas de la Compañia'];
@@ -24,7 +49,7 @@ $description = $_GET['description'];
 $foundament = $_GET['mot'];
 $article = $_GET['legal'];
 $consequences = $_GET['consequences'];
-$observatios = $_GET['observations'];
+$observatinos = $_GET['observations'];
 
 echo("
     <div style='margin-left:50px; width:900px'>
@@ -216,7 +241,7 @@ echo("
                 <td style='font-weight:bold'>Observaciones:</td>
             </tr>
             <tr>
-                <td style='border:dotted black 1px>$observations<td>
+                <td style='border:dotted black 1px'><label>$observatinos</label><td>
             </tr>
         </table>
     </div>
