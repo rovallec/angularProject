@@ -9,7 +9,7 @@
     $id = ($request->id);
     $result = [];
 
-    $sql = "SELECT `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name` FROM `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account` WHERE `id_profile` = $id;";
+    $sql = "SELECT `users`.`user_name` `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name` FROM `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account` LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `id_profile` = $id;";
 
     if($res = mysqli_query($con, $sql)){
         while($r = mysqli_fetch_assoc($res)){
