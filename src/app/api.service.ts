@@ -424,7 +424,7 @@ insertMessagings(msg:messagings){
 }
 
 getMessagings(proc:process){
-  return this.httpClient.post<messagings>(`${this.PHP_API_SERVER}/phpscripts/getMessagings`, proc);
+  return this.httpClient.post<messagings>(`${this.PHP_API_SERVER}/phpscripts/getMessagings.php`, proc);
 }
 
   constructor(private httpClient:HttpClient) { }

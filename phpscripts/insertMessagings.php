@@ -7,11 +7,11 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $idmessagings = ($request->idmessagings);
-$id_process = ($request->id_process);
+$id_process = ($request->idprocess);
 $type = ($request->type);
 $notes = ($request->notes);
 
-$sql = "INSERT INTO `messagings` (`idmessagings;`, `id_process`, `type`, `notes`) VALUES (NULL, '$id_process', '$type', '$notes');";
+$sql = "INSERT INTO `messagings` (`idmessagings`, `id_process`, `type`, `notes`) VALUES (NULL, '$id_process', '$type', '$notes');";
 if(mysqli_query($con,$sql)){
     http_response_code(200);
 }else{
