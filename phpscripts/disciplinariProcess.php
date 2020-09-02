@@ -15,7 +15,7 @@ $cuatroDias = '';
 $term = '';
 switch ($grade) {
     case 'Retroalimentacion':
-        $retroalimentacion = 'checked'
+        $retroalimentacion = 'checked';
     break;
     case 'Advertencia Verbal';
         $verbal = 'checked';
@@ -37,14 +37,43 @@ switch ($grade) {
     break;
 }
 
-$late = $_GET['Entrada/Salida Tarde/Temprano'];
-$attendence = $_GET['Ausencia Injustificada'];
-$abuse = $_GET['Abuso de Receso/Almuerzo/Auxiliares'];
-$rules = $_GET['Violacion de Reglas de la Compañia'];
-$performance = $_GET['Desempeño'];
-$conduct = $_GET['Conducta'];
-$fraud = $_GET['Fraude'];
-$other = $_GET['Otro'];
+$type = $_GET['type'];
+$late = '';
+$attendence = '';
+$abuse = '';
+$rules = '';
+$performance = '';
+$conduct = '';
+$fraud = '';
+$other = '';
+
+switch ($type) {
+    case 'Entrada/Salida Tarde/Temprano':
+        $late = 'checked';
+    break;
+    case 'Ausencia Injustificada':
+        $attendence = 'checked';
+    break;
+    case 'Abuso de Receso/Almuerzo/Auxiliares':
+        $abuse = 'checked';
+    break;
+    case 'Violacion de Reglas de la Compañia':
+        $rules = 'checked';
+    break;
+    case 'Desempeño':
+        $performance = 'checked';
+    break;
+    case 'Conducta':
+        $conduct = 'checked';
+    break;
+    case 'Fraude':
+        $fraud = 'checked';
+    break;
+    case 'Otro':
+        $other = 'checked';
+    break;
+}
+
 $description = $_GET['description'];
 $foundament = $_GET['mot'];
 $article = $_GET['legal'];
