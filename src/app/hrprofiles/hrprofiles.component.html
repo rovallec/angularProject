@@ -1062,9 +1062,10 @@
                         <div class="form-row  col-md-12">
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
+                                <label>Action</label>
                                 <select class="form-control" [(ngModel)]="actualMessagings.type" [disabled]="viewRecProd">
                                     <option>Recepcion</option>
-                                    <option>Entrega</option>
+                                    <option>Envio</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-4"></div>
@@ -1084,7 +1085,7 @@
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="insertProc()">Generate</button>
+                                <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
                         </div>
                     </div>
