@@ -39,6 +39,7 @@ export class HrprofilesComponent implements OnInit {
   useCompany:string = null;
   igss_patronal:string = null;
   dpTerm:boolean = false;
+  workingEmployee:employees = new employees;
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -239,6 +240,7 @@ export class HrprofilesComponent implements OnInit {
     });
 
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
+      this.workingEmployee = emp;
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
       this.accId = emp.account;
