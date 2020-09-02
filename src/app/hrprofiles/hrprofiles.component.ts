@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -54,6 +54,7 @@ export class HrprofilesComponent implements OnInit {
   process_templates: process[] = [];
   processRecord: process[] = [];
   allAccounts: accounts[] = [];
+  actualMessagings:messagings = new messagings;
   actualIrtrarequests:irtra_requests = new irtra_requests;
   actualJudicial:judicials = new judicials;
   actualReport: reports = new reports;
@@ -863,6 +864,12 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView();
           })
         break;
+        case 'Messaging':
+            this.actualMessagings.idprocess = str;
+            this.apiService.insertMessagings(this.actualMessagings).subscribe((str:string)=>{
+              this.cancelView();
+            })
+          break;
         default:
           break;
       }
@@ -881,6 +888,11 @@ export class HrprofilesComponent implements OnInit {
     this.viewRecProd = true;
     this.actuallProc = pr;
     switch (this.actuallProc.name) {
+      case 'Messaging':
+        this.apiService.getMessagings(this.actuallProc).subscribe((msg:messagings)=>{
+          this.actualMessagings = msg;
+        })
+      break;
       case 'Termination':
         this.apiService.getTerm(this.actuallProc).subscribe((trm: terminations) => {
           this.actualTerm = trm;

@@ -606,3 +606,16 @@ export class irtra_requests{
         this.type = null;
     }
 }
+
+export class messagings{
+    idmessagings:string;
+    idprocess:string;
+    type:string;
+    notes:string;
+    constructor(){
+        this.idmessagings = null;
+        this.idprocess = null;
+        this.type = null;
+        this.notes = null;
+    }
+}

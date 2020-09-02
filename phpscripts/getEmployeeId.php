@@ -9,7 +9,7 @@
     $id = ($request->id);
     $result = [];
 
-    $sql = "SELECT `users`.`user_name` `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name` FROM `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account` LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `id_profile` = $id;";
+    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name` FROM `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account` LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `id_profile` = $id;";
 
     if($res = mysqli_query($con, $sql)){
         while($r = mysqli_fetch_assoc($res)){
@@ -18,7 +18,7 @@
             $result['id_hire'] = $r['id_hire'];
             $result['id_account'] = $r['acc_name'];
             $result['account'] = $r['id_account'];
-            $result['reporter'] = $r['reporter'];
+            $result['reporter'] = $r['rep'];
             $result['client_id'] = $r['client_id'];
             $result['hiring_date'] = $r['hiring_date'];
             $result['job'] = $r['job'];
