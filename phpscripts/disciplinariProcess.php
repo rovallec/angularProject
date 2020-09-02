@@ -1,20 +1,39 @@
 <?php
-$avaya_id = '7137937';
-$date = '1 de septiembre de 2020';
-$employee = 'Raul Alejandro Ovalle Castillo';
-$position = 'Arquitecto de Sistemas';
-$reportsTo = 'Ulises Orozco';
-$account = 'IT';
-$retroalimentacion = 'false';
-$verbal = 'false';
+$avaya_id = $_GET['avaya'];
+$date = $_GET['date'];
+$employee = $_GET['employee'];
+$position = $_GET['pos'];
+$reportsTo = $_GET['sup'];
+$account = $_GET['acc'];
+$retroalimentacion = $_GET['Retroalimentacion'];
+$verbal = $_GET['Advertencia Verbal'];
+$escrita = $_GET['Advertencia Escrita'];
+$final = $_GET['Advertencia Final'];
+$dosDias = $_GET['Suspencion 2 Dias'];
+$cuatroDias = $_GET['Suspencion 4 Dias'];
+$term = $_GET[' Terminacion Laboral '];
+$late = $_GET['Entrada Tarde/Salida Temprano'];
+$attendence = $_GET['Ausencia Injustificada'];
+$abuse = $_GET['Abuso de Receso/Almuerzo/Auxiliares'];
+$rules = $_GET['Violacion de Reglas de la Compañia'];
+$performance = $_GET['Desempeño'];
+$conduct = $_GET['Conducta'];
+$fraud = $_GET['Fraude'];
+$other = $_GET['Otro'];
+$description = $_GET['description'];
+$foundament = $_GET['mot'];
+$article = $_GET['legal'];
+$consequences = $_GET['consequences'];
+$observatios = $_GET['observations'];
+
 echo("
     <div style='margin-left:50px; width:900px'>
         <table style='width:100%; margin-top:50px'>
             <tr>
-                <td>Forma de Disciplina del Empleado</td> 
+                <td style='font-weight:bold; text-align:center;'>Forma de Disciplina del Empleado</td> 
             </tr>
             <tr>
-                <td style='background:black; font-color:white; font-weight:bold'>Información del Empleado</td>
+                <td style='background:black; color:white; font-weight:bold; text-align:center;'>Información del Empleado</td>
             </tr>
             <tr>
                 <td>
@@ -42,19 +61,89 @@ echo("
             </tr>
 
             <tr>
-                <td style='background:black; font-color:white; font-weight:bold'>Grado de Indisciplina</td>
+                <td style='background:black; color:white; font-weight:bold; text-align:center'>Grado de Indisciplina</td>
             </tr>
             <tr>
                 <td>
                     <table style='width:100%'>
                         <tr>
                             <td>
-                                <input type='radio' checked=$retroalimentacion>
+                                <input type='radio' $retroalimentacion>
                                 <label>Retroalimentacion</label>
                             </td>
                             <td>
-                                <input type='radio' checked=$verbal>
+                                <input type='radio' $verbal>
                                 <label>Advertencia Verbal</label>
+                            </td>
+                            <td>
+                                <input type='radio' $escrita>
+                                <label>Advertencia Escrita</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type='radio' $final>
+                                <label>Advertencia Final</label>
+                            </td>
+                            <td>
+                                <input type='radio' $dosDias>
+                                <label>Suspencion 2 Dias</label>
+                            </td>
+                            <td>
+                                <input type='radio' $cuatroDias>
+                                <label>Suspencion 4 Dias</label>
+                            </td>
+                        </tr>
+                        <td>
+                            <input type='radio' $term>
+                            <label>Terminacion Laboral</label>
+                        </td>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+            <td style='background:black; color:white; font-weight:bold; text-align:center'>Motivo de la Sancion</td>
+            </tr>
+            <tr>
+                <td>
+                    <table style='width:100%'>
+                        <tr>
+                            <td>
+                                <input type='radio' $late>
+                                <label>Entrada Tarde/Salida Temprano</label>
+                            </td>
+                            <td>
+                                <input type='radio' $attendence>
+                                <label>Ausencia Injustificada</label>
+                            </td>
+                            <td>
+                                <input type='radio' $abuse>
+                                <label>Abuso de Receso/Almuerzo/Auxiliares</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type='radio' $rules>
+                                <label>Violacion de Reglas de la Compañia</label>
+                            </td>
+                            <td>
+                                <input type='radio' $performance>
+                                <label>Desempeño</label>
+                            </td>
+                            <td>
+                                <input type='radio' $conduct>
+                                <label>Conducta</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type='radio' $fraud>
+                                <label>Fraude</label>
+                            </td>
+                            <td>
+                                <input type='radio' $other>
+                                <label>Otro</label>
                             </td>
                         </tr>
                     </table>
@@ -62,11 +151,72 @@ echo("
             </tr>
 
             <tr>
-            <td style='background:black; font-color:white; font-weight:bold'>Motivo de la Sancion</td>
+            <td style='background:black; color:white; font-weight:bold; text-align:center'>Detalles</td>
+            </tr>
+            <tr>
+                <td>
+                    <table style='width:100%'>
+                        <tr>
+                            <td style='width:140px;font-weight:bold;'>Descripcion de la Infraccion</td>
+                            <td>$description</td>
+                        </tr>
+                        <tr>
+                            <td style='width:140px;font-weight:bold;'>Fundamento Legal</td>
+                            <td>
+                                <table style='width'100%'>
+                                    <tr>
+                                        <td style='font-weight:bold;'>$article</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Se prohibe a los trabajadores:</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$foundament</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style='width:140px;font-weight:bold;'>Consecuencias Futuras</td>
+                            <td>$consequences</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
 
             <tr>
-            <td style='background:black; font-color:white; font-weight:bold'>Detalles</td>
+                <td style='background:black; color:white; font-weight:bold; text-align:center'>Reconocimiento de la Advertencia</td>
+            </tr>
+            <tr>
+                <td>Firmando esta forma, se confirma el entendimiento completo de la advertencia.  Además se confirma que el empleado y su supervisor han discutido la sanción y el plan para mejorar. </td>
+            </tr>
+            <tr style='height:60px'></tr>
+            <tr>
+                <td>
+                    <table style='width:100%'>
+                        <tr>
+                            <td style='width:46px'></td>
+                            <td style='width:200px;border-bottom:solid 2px black'></td>
+                            <td style='width:200px'></td>
+                            <td style='width:200px;border-bottom:solid 2px black'></td>
+                            <td style='width:46px'></td>
+                        </tr>
+                        <tr>
+                            <td style='width:46px'></td>
+                            <td style='width:200px;text-align:center'>Firma del Empleado</td>
+                            <td style='width:200px'></td>
+                            <td style='width:200px;text-align:center'>Firma del Supervisor</td>
+                            <td style='width:46px'></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr style='height:25px'></tr>
+            <tr>
+                <td style='font-weight:bold'>Observaciones:</td>
+            </tr>
+            <tr>
+                <td style='border:dotted black 1px>$observations<td>
             </tr>
         </table>
     </div>
