@@ -402,6 +402,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   cancelView() {
+    this.addJ = false;
     this.addBeneficiary = false;
     this.editRequest = true;
     this.vacationAdd = false;
