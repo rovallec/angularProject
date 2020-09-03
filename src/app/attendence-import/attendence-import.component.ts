@@ -16,11 +16,11 @@ export class AttendenceImportComponent implements OnInit {
   filelist: any;
   failCount: number = 0;
   checkedCount: number = 0;
-  importCompleted:boolean = false;
-  completed:boolean = false;
+  importCompleted: boolean = false;
+  completed: boolean = false;
 
-  correct:attendences[] = [];
-  fail:attendences[] = [];
+  correct: attendences[] = [];
+  fail: attendences[] = [];
 
   attendences: attendences[] = [];
   constructor(private apiService: ApiService) { }
@@ -34,7 +34,7 @@ export class AttendenceImportComponent implements OnInit {
     let nwAtt: attendences
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
-      if(!this.completed){
+      if (!this.completed) {
         this.arrayBuffer = fileReader.result;
         var data = new Uint8Array(this.arrayBuffer);
         var arr = new Array();
@@ -55,7 +55,7 @@ export class AttendenceImportComponent implements OnInit {
             nwAtt.second_name = nm.split(" ")[1];
             nwAtt.first_lastname = nm.split(" ")[2];
             nwAtt.second_lastname = nm.split(" ")[3];
-  
+
             if (element['Scheduled'] == 'OFF') {
               nwAtt.scheduled = 'OFF';
             } else {
@@ -69,20 +69,20 @@ export class AttendenceImportComponent implements OnInit {
             }
             this.attendences.push(nwAtt);
           } catch (error) {
-  
+
           }
         });
         let att: attendences[] = [];
-  
+
         this.attendences.forEach(elem => {
           elem.day_off1 = "FAIL";
-          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id }).subscribe((emp: employees[]) => {          
+          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id }).subscribe((emp: employees[]) => {
             if (!isNullOrUndefined(emp[0])) {
-              this.apiService.getAttendences({id:emp[0].idemployees, date:elem.date}).subscribe((att:attendences[])=>{
+              this.apiService.getAttendences({ date:elem.date + ";" + emp[0].idemployees , id:'NULL' }).subscribe((att: attendences[]) => {
                 console.log(att);
-                if(isNullOrUndefined(att)){
+                if (isNullOrUndefined(att)) {
                   elem.day_off1 = "FAIL";
-                }else{
+                } else {
                   elem.day_off1 = "CORRECT";
                 }
               })
@@ -92,7 +92,7 @@ export class AttendenceImportComponent implements OnInit {
           })
           att.push(elem);
         });
-  
+
         this.attendences = att;
         this.failCount = this.attendences.length - this.checkedCount;
         this.completed = true;
@@ -100,16 +100,16 @@ export class AttendenceImportComponent implements OnInit {
     }
   }
 
-  uploadAttendences(){
+  uploadAttendences() {
     this.attendences.forEach(element => {
-      if(element.day_off1 == 'FAIL'){
+      if (element.day_off1 == 'FAIL') {
         this.fail.push(element);
-      }else{
+      } else {
         this.correct.push(element);
       }
     });
 
-    this.apiService.insertAttendences(this.correct).subscribe((att:attendences[])=>{
+    this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {
       this.importCompleted = true;
     });
   }

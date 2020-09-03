@@ -7,8 +7,10 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $id = ($request->id);
 $date = ($request->date);
-
+$id_emp = [];
 $hires = [];
+$dt = '';
+$exp_id = '';
 
 if(explode(" ", $date)[0] === "<="){
 	$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
@@ -18,12 +20,19 @@ if(explode(" ", $date)[0] === "<="){
 		LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires`
 		LEFT JOIN (SELECT * FROM `attendences` WHERE `date` $date) AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `idprofiles` = $id";	
 }else{
-	$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
+	if($id == 'NULL'){
+		$id_emp = explode(";", $date);
+		$dt = $id_emp[0];
+		$exp_id = $id_emp[1];
+		$sql = "SELECT * FROM `attendences` WHERE `date` = '$dt' AND `id_employee` = '$exp_id'";
+	}else{
+		$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
 	FROM `hires`
 		LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`
 		LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule`
 		LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires`
 		LEFT JOIN (SELECT * FROM `attendences` WHERE `date` = '$date') AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `id_wave` = $id";
+	}
 }
 
 if($result = mysqli_query($con, $sql))
