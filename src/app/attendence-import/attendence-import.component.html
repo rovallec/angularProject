@@ -21,16 +21,26 @@
         </div>
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-1">
-            <button class="form-control" (click)="uploadAttendences()">Import</button>
+            <button class="form-control" (click)="uploadAttendences()" *ngIf="!importCompleted">Import</button>
         </div>
         <div class="form-group col-md-1"></div>
     </div>
     <div class="form-row col-md-12" *ngIf="importCompleted">
         <div class="form-group col-md-6">
+            <lable style="text-align:center">Completed</lable>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center"
                     *ngFor="let att of correct">
                     {{att.first_name}} {{att.second_name}} {{att.first_lastname}} {{att.second_lastname}}
+                </li>
+            </ul>
+        </div>
+        <div class="form-group col-md-6">
+            <lable style="text-align:center">Fail</lable>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    *ngFor="let fl of fail">
+                    {{fl.first_name}} {{fl.second_name}} {{fl.first_lastname}} {{fl.second_lastname}}
                 </li>
             </ul>
         </div>

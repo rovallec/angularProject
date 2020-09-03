@@ -328,7 +328,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertAdjustment() {
     this.apiService.insertAttJustification(this.attAdjudjment).subscribe((str: string) => {
-      this.getAttAdjustemt();
+      this.getAttendences(this.todayDate);
       this.cancelView();
     });
   }
