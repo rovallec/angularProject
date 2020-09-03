@@ -16,6 +16,7 @@ export class AttendenceImportComponent implements OnInit {
   failCount: number = 0;
   checkedCount: number = 0;
   importCompleted:boolean = false;
+  completed:boolean = false;
 
   correct:attendences[] = [];
   fail:attendences[] = [];
@@ -32,65 +33,68 @@ export class AttendenceImportComponent implements OnInit {
     let nwAtt: attendences
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
-      this.arrayBuffer = fileReader.result;
-      var data = new Uint8Array(this.arrayBuffer);
-      var arr = new Array();
-      let nm: string = null;
-      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-      var bstr = arr.join("");
-      var workbook = XLSX.read(bstr, { type: "binary" });
-      var first_sheet_name = workbook.SheetNames[0];
-      var worksheet = workbook.Sheets[first_sheet_name];
-      let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-      sheetToJson.forEach(element => {
-        try {
-          nm = element['Name'];
-          nwAtt = new attendences;
-          nwAtt.date = element['Date'];
-          nwAtt.client_id = element['Client ID'];
-          nwAtt.first_name = nm.split(" ")[0];
-          nwAtt.second_name = nm.split(" ")[1];
-          nwAtt.first_lastname = nm.split(" ")[2];
-          nwAtt.second_lastname = nm.split(" ")[3];
-
-          if (element['Scheduled'] == 'OFF') {
-            nwAtt.scheduled = 'OFF';
-          } else {
-            nwAtt.scheduled = parseFloat(element['Scheduled']).toFixed(2);
+      if(!this.completed){
+        this.arrayBuffer = fileReader.result;
+        var data = new Uint8Array(this.arrayBuffer);
+        var arr = new Array();
+        let nm: string = null;
+        for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+        var bstr = arr.join("");
+        var workbook = XLSX.read(bstr, { type: "binary" });
+        var first_sheet_name = workbook.SheetNames[0];
+        var worksheet = workbook.Sheets[first_sheet_name];
+        let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+        sheetToJson.forEach(element => {
+          try {
+            nm = element['Name'];
+            nwAtt = new attendences;
+            nwAtt.date = element['Date'];
+            nwAtt.client_id = element['Client ID'];
+            nwAtt.first_name = nm.split(" ")[0];
+            nwAtt.second_name = nm.split(" ")[1];
+            nwAtt.first_lastname = nm.split(" ")[2];
+            nwAtt.second_lastname = nm.split(" ")[3];
+  
+            if (element['Scheduled'] == 'OFF') {
+              nwAtt.scheduled = 'OFF';
+            } else {
+              nwAtt.scheduled = parseFloat(element['Scheduled']).toFixed(2);
+            }
+            nwAtt.worked_time = parseFloat(element['Worked']).toFixed(2);
+            if (nwAtt.scheduled == 'OFF') {
+              nwAtt.balance = nwAtt.worked_time;
+            } else {
+              nwAtt.balance = parseFloat((parseFloat(nwAtt.worked_time) - parseFloat(nwAtt.scheduled)).toString()).toFixed(2);
+            }
+            this.attendences.push(nwAtt);
+          } catch (error) {
+  
           }
-          nwAtt.worked_time = parseFloat(element['Worked']).toFixed(2);
-          if (nwAtt.scheduled == 'OFF') {
-            nwAtt.balance = nwAtt.worked_time;
-          } else {
-            nwAtt.balance = parseFloat((parseFloat(nwAtt.worked_time) - parseFloat(nwAtt.scheduled)).toString()).toFixed(2);
-          }
-          this.attendences.push(nwAtt);
-        } catch (error) {
-
-        }
-      });
-      let att: attendences[] = [];
-
-      this.attendences.forEach(elem => {
-        elem.day_off1 = "FAIL";
-        this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id }).subscribe((emp: employees[]) => {          
-          if (emp.length > 0) {
-            this.apiService.getAttendences({id:emp[0].idemployees, date:elem.date}).subscribe((att:attendences[])=>{
-              if(att.length > 0){
-                elem.day_off1 = "FAIL";
-              }else{
-                elem.day_off1 = "CORRECT";
-              }
-            })
-            elem.id_employee = emp[0].idemployees;
-            this.checkedCount++;
-          }
-        })
-        att.push(elem);
-      });
-
-      this.attendences = att;
-      this.failCount = this.attendences.length - this.checkedCount;
+        });
+        let att: attendences[] = [];
+  
+        this.attendences.forEach(elem => {
+          elem.day_off1 = "FAIL";
+          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id }).subscribe((emp: employees[]) => {          
+            if (emp.length > 0) {
+              this.apiService.getAttendences({id:emp[0].idemployees, date:elem.date}).subscribe((att:attendences[])=>{
+                if(att.length > 0){
+                  elem.day_off1 = "FAIL";
+                }else{
+                  elem.day_off1 = "CORRECT";
+                }
+              })
+              elem.id_employee = emp[0].idemployees;
+              this.checkedCount++;
+            }
+          })
+          att.push(elem);
+        });
+  
+        this.attendences = att;
+        this.failCount = this.attendences.length - this.checkedCount;
+        this.completed = true;
+      }
     }
   }
 
