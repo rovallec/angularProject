@@ -3,6 +3,7 @@ import * as XLSX from 'xlsx';
 import { attendences } from '../process_templates';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
+import { isNullOrUndefined, isNull } from 'util';
 
 @Component({
   selector: 'app-attendence-import',
@@ -76,9 +77,10 @@ export class AttendenceImportComponent implements OnInit {
         this.attendences.forEach(elem => {
           elem.day_off1 = "FAIL";
           this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id }).subscribe((emp: employees[]) => {          
-            if (emp.length > 0) {
+            if (!isNullOrUndefined(emp[0])) {
               this.apiService.getAttendences({id:emp[0].idemployees, date:elem.date}).subscribe((att:attendences[])=>{
-                if(att.length > 0){
+                console.log(att);
+                if(isNullOrUndefined(att)){
                   elem.day_off1 = "FAIL";
                 }else{
                   elem.day_off1 = "CORRECT";
