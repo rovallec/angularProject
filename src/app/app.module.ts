@@ -18,7 +18,8 @@ import { RecDailyconvergentReportComponent } from './rec-dailyconvergent-report/
 import { CalllistreportComponent } from './calllistreport/calllistreport.component';
 import { HrhomeComponent } from './hrhome/hrhome.component';
 import { HrprofilesComponent } from './hrprofiles/hrprofiles.component';
-import { HrdailyComponent } from './hrdaily/hrdaily.component'
+import { HrdailyComponent } from './hrdaily/hrdaily.component';
+import { AttendenceImportComponent } from './attendence-import/attendence-import.component'
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { HrdailyComponent } from './hrdaily/hrdaily.component'
     CalllistreportComponent,
     HrhomeComponent,
     HrprofilesComponent,
-    HrdailyComponent
+    HrdailyComponent,
+    AttendenceImportComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,69 @@
+<div class="width:90%;margin-left:5%; margin-top:50px">
+    <div class="col-md-12 form-row">
+        <div class="form-group col-md-4"></div>
+        <div class="form-group col-md-4">
+            <label>Import Attendences:</label>
+            <input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file"
+                accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+        </div>
+        <div class="form-group col-md-4"></div>
+    </div>
+    <div class="form-row col-md-12">
+        <div class="form-group col-md-3"></div>
+        <div class="form-group col-md-2">
+            <label>Correct:</label>
+            <input type="text" [disabled]='true' class="form-control" [(ngModel)]='checkedCount'>
+        </div>
+        <div class="form-group col-md-2"></div>
+        <div class="form-group col-md-2">
+            <label>Fail:</label>
+            <input type="text" [disabled]='true' class="form-control" [(ngModel)]='failCount'>
+        </div>
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-1">
+            <button class="form-control" (click)="uploadAttendences()">Import</button>
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+    <div class="form-row col-md-12" *ngIf="importCompleted">
+        <div class="form-group col-md-6">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    *ngFor="let att of correct">
+                    {{att.first_name}} {{att.second_name}} {{att.first_lastname}} {{att.second_lastname}}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="form-row col-md-12" *ngIf="!importCompleted">
+        <table class="table table-striped table-hover selectable" style="text-align:center;margin-left:5%;width:90%">
+            <thead>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Client ID</th>
+                <th>Name</th>
+                <th>Scheduled</th>
+                <th>Worked</th>
+                <th>Balance</th>
+                <th>Status</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let att of attendences">
+                    <td>{{att.id_employee}}</td>
+                    <td>{{att.date}}</td>
+                    <td>{{att.client_id}}</td>
+                    <td>{{att.first_name}} {{att.second_name}} {{att.first_lastname}} {{att.second_lastname}}</td>
+                    <td>{{att.scheduled}}</td>
+                    <td>{{att.worked_time}}</td>
+                    <td>{{att.balance}}</td>
+                    <td>
+                        <select [(ngModel)]="att.day_off1" [disabled]="true" class="form-control">
+                            <option>CORRECT</option>
+                            <option>FAIL</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -12,6 +12,7 @@ import { CalllistreportComponent } from './calllistreport/calllistreport.compone
 import { HrhomeComponent } from './hrhome/hrhome.component';
 import { HrprofilesComponent } from './hrprofiles/hrprofiles.component';
 import { HrdailyComponent } from './hrdaily/hrdaily.component';
+import { AttendenceImportComponent } from './attendence-import/attendence-import.component';
 
 const routes:Routes = [
   {
@@ -60,6 +61,11 @@ const routes:Routes = [
   {
     path:'hrdaily',
     component: HrdailyComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'attImport',
+    component: AttendenceImportComponent,
     canActivate:[AuthGuard]
   },
   {
