@@ -79,7 +79,6 @@ export class AttendenceImportComponent implements OnInit {
           this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id }).subscribe((emp: employees[]) => {
             if (!isNullOrUndefined(emp[0])) {
               this.apiService.getAttendences({ date:elem.date + ";" + emp[0].idemployees , id:'NULL' }).subscribe((att: attendences[]) => {
-                console.log(att);
                 if (isNullOrUndefined(att)) {
                   elem.day_off1 = "FAIL";
                 } else {
