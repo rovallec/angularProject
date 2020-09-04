@@ -2,6 +2,8 @@
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
 
+    $idwave = $_GET['id'];
+    
     $name = 'Raul ALejandro Ovalle Castillo';
     $birthday = '1996-10-27';
     $year = explode("-",$birthday);

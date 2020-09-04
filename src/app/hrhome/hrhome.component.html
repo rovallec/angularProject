@@ -100,6 +100,9 @@
                                             <i class="fas fa-save"
                                                 *ngIf="showEmployeeDetails[this.wavesToShow.indexOf(wv)] && makeEmployee"
                                                 style="margin-left:5px" (click)="setEmployees(wv)"></i>
+                                            <i class="fas fa-file-contract"
+                                                *ngIf="showEmployeeDetails[this.wavesToShow.indexOf(wv)] && makeEmployee"
+                                                style="margin-left:5px" (click)="makeContracts()"></i>
                                             <i class="fas fa-window-close"
                                                 *ngIf="showEmployeeDetails[this.wavesToShow.indexOf(wv)] && makeEmployee"
                                                 style="margin-left:5px" (click)="cancelEmployeeEdit(wv)"></i>
@@ -118,6 +121,7 @@
                                         <th>CLIENT ID</th>
                                         <th>NAME</th>
                                         <th>STATE</th>
+                                        <th *ngIf="makeEmployee">PLATFORM</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let emp of hiresToShow">
@@ -139,6 +143,14 @@
                                                     <option *ngIf="!makeEmployee">APPROVED</option>
                                                     <option *ngIf="!makeEmployee">PENDING</option>
                                                 </select></td>
+                                                <td *ngIf="makeEmployee" style="padding:0px; vertical-align: middle;">
+                                                    <select [disabled]="emp.status != 'EMPLOYEE'" style="height:20px; width:100px;     border: 1px solid #3e3e3e;
+                                                    border-radius: 5px 5px 5px 5px;
+                                                    box-shadow: 0 0 10px #E8E8E8 inset;  padding: 2px;   background: none repeat scroll 0 0 #FFFFFF;" [(ngModel)]="platforms[this.hiresToShow.indexOf(emp)]">
+                                                        <option>ON SITE</option>
+                                                        <option>WAH</option>
+                                                    </select>
+                                                </td>
                                         </tr>
                                     </tbody>
                                 </table>

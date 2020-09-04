@@ -164,6 +164,7 @@ export class employees{
     id_department:string;
     name:string;
     account:string;
+    platform:string;
     constructor(){
         this.id_profile = null;
         this.idemployees = null;
@@ -178,6 +179,7 @@ export class employees{
         this.state = null;
         this.name = null;
         this.account = null;
+        this.platform = null;
     }
 }
 

@@ -427,5 +427,9 @@ getMessagings(proc:process){
   return this.httpClient.post<messagings>(`${this.PHP_API_SERVER}/phpscripts/getMessagings.php`, proc);
 }
 
+updateEmployee(emp:employees){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateEmployees.php`, emp);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

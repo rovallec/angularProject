@@ -16,6 +16,7 @@ export class HrhomeComponent implements OnInit {
   showWaveDetails:boolean = false;
   showEmployeeDetails:boolean[] = [];
   showAttendenceDetails:boolean[] = [];
+  platforms:string[] = [];
   makeEmployee:boolean = false;
   toggleDate:boolean = false;
   searching:boolean = false;
@@ -232,4 +233,23 @@ export class HrhomeComponent implements OnInit {
     this.searching = false;
     this.start();
   }
+
+  makeContracts(){
+    let employee:employees;
+    this.hiresToShow.forEach(element => {
+      if(element.status == 'EMPLOYEE' || element.status == 'HIRED'){
+        employee = new employees;
+        employee.id_profile = element.id_profile;
+        employee.idemployees = element.idemployees;
+        employee.name = element.first_name + " " + element.second_name + " " + element.first_lastname + " " + element.second_lastname;
+        employee.platform = this.platforms[this.hiresToShow.indexOf(element)];
+        this.apiService.updateEmployee(employee).subscribe((str:string)=>{
+
+        })
+      }
+    });
+    window.open("http://200.94.251.67/contract.php?id=" + this.hiresToShow[0].id_wave, "_blank");
+  }
+
+
 }
