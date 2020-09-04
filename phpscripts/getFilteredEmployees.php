@@ -29,6 +29,7 @@ if($filter === 'name'){
 
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
+        $res[$i]['id_profile'] = $row['id_profile'];
         $res[$i]['idemployees'] = $row['idemployees'];
         $res[$i]['id_hire'] = $row['id_hire'];
         $res[$i]['id_account'] = $row['id_account'];
