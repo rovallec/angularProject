@@ -36,6 +36,7 @@ export class waves_template {
         this.productivity_payment = null;
         this.state = null;
         this.account_name = null;
+        this.job = null;
         this.show = '0';
     }
 }

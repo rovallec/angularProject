@@ -476,6 +476,7 @@ export class HomeComponent implements OnInit {
   }
 
   insertWave(){
+    console.log(this.wave_ToEdit);
     this.wave_ToEdit.starting_date = this.year_toEdit_st + "/" + this.month_toEdit_st +  "/" + this.day_toEdit_st;
     this.wave_ToEdit.end_date = this.year_toEdit_e +  "/" + this.month_toEdit_e +  "/" + this.day_toEdit_e;
     this.wave_ToEdit.trainning_schedule = this.trainning_schedule_hr_st + ":" + this.trainning_schedule_mn_st + " - " + this.trainning_schedule_hr_end + ":" + this.trainning_schedule_mn_end;
