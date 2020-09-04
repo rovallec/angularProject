@@ -248,7 +248,7 @@ export class HrhomeComponent implements OnInit {
         })
       }
     });
-    window.open("http://200.94.251.67/contract.php?id=" + this.hiresToShow[0].id_wave, "_blank");
+    window.open("http://200.94.251.67/phpscripts/contract.php?id=" + this.hiresToShow[0].id_wave, "_blank");
   }
 
 

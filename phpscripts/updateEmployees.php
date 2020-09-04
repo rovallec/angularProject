@@ -7,9 +7,9 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $platform = ($request->platform);
-$employee = ($request->idemployees);
+$id = ($request->id_profile);
 
-$sql = "UPDATE `employees` SET `platform` = $platform WHERE `idemployees` = $employee";
+$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `platform` = '$platform' WHERE `id_profile` = '$id';";
 
 if($result = mysqli_query($con, $sql))
 {
