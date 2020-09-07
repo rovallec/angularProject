@@ -646,7 +646,7 @@
                                 <div class="form-group col-md-12">
                                     <label>Observations:</label>
                                     <textarea class="form-control" width="100%" [(ngModel)]="activeRequest.observations"
-                                        [disabled]="storedRequest"></textarea>
+                                        [disabled]="activeRequest.status === 'DISPATCHED'"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
