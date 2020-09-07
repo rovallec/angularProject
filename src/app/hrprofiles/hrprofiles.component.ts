@@ -644,12 +644,20 @@ export class HrprofilesComponent implements OnInit {
     this.storedRequest = false;
   }
 
-  pushSuspensionStart(str: any) {
-    this.activeRequest.start = str;
+  pushDay1(str: any) {
+    this.activeRequest.day_1 = str;
   }
 
-  pushSuspensionEnd(str: any) {
-    this.activeRequest.end = str;
+  pushDay2(str: any) {
+    this.activeRequest.day_2 = str;
+  }
+
+  pushDay3(str: any) {
+    this.activeRequest.day_3 = str;
+  }
+
+  pushDay4(str: any) {
+    this.activeRequest.day_4 = str;
   }
 
   getBeneficiaries() {
