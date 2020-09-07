@@ -41,8 +41,10 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['time'] = $res['time'];
         $return[$i]['comments'] = $res['comments'];
         $return[$i]['audience_status'] = $res['audience_status'];
-        $return[$i]['start'] = $res['start'];
-        $return[$i]['end'] = $res['end'];
+        $return[$i]['day_1'] = $res['day_1'];
+        $return[$i]['day_2'] = $res['day_2'];
+        $return[$i]['day_3'] = $res['day_3'];
+        $return[$i]['day_4'] = $res['day_4'];
         $i++;
     }
     echo(json_encode($return));

@@ -19,15 +19,17 @@ $legal_foundament = ($request->legal_foundament);
 $consequences = ($request->consequences);
 $observations = ($request->observations);
 //Suspensions
-$start = ($request->start);
-$end = ($request->end);
+$day_1 = ($request->day_1);
+$day_2 = ($request->day_2);
+$day_3 = ($request->day_3);
+$day_4 = ($request->day_4);
 
 $sql = "UPDATE `hr_processes` SET `status` = '$status' WHERE `idhr_processes` = '$id_process'";
 $sql2 = "INSERT INTO `disciplinary_processes` (`iddisciplinary_processes`,`id_request`,`type`,`cathegory`,`dp_grade`,`motive`,`imposition_date`,`legal_foundament`,`consequences`,`observations`) VALUES (null, '$idrequests', '$type', '$cathegory', '$dp_grade', '$motive', '$imposition_date', '$legal_foundament', '$consequences', '$observations');";
 if(mysqli_query($con,$sql)){
     if(mysqli_query($con,$sql2)){
         $iddp = mysqli_insert_id($con);
-        $sql3 = "INSERT INTO `suspensions` (`idsuspensions`, `id_disciplinary_process`, `start`, `end`) VALUES (null, '$iddp', '$start', '$end');";
+        $sql3 = "INSERT INTO `suspensions` (`idsuspensions`, `id_disciplinary_process`, `day_1`, `day_2`, `day_3`, `day_4`) VALUES (null, '$iddp', '$day_1', '$day_2', '$day_3', '$day_4');";
         if(mysqli_query($con,$sql3)){
             http_response_code(200);
         }else{

@@ -305,8 +305,10 @@ export class disciplinary_processes {
     comments: string;
     audience_status: string;
     //Suspensions
-    start: string;
-    end: string;
+    day_1:string;
+    day_2:string;
+    day_3:string;
+    day_4:string;
 
     constructor() {
         this.id_user = null;
@@ -335,8 +337,10 @@ export class disciplinary_processes {
         this.time = null;
         this.comments = null;
         this.audience_status = null;
-        this.start = null;
-        this.end = null;
+        this.day_1 = null;
+        this.day_2 = null;
+        this.day_3 = null;
+        this.day_4 = null; 
     }
 }
 
