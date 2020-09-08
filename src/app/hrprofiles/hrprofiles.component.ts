@@ -1086,7 +1086,7 @@ export class HrprofilesComponent implements OnInit {
     var url = "";
     if (this.actualLetters.type == 'Laboral') {
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
-        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
+        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de; " + parseInt(emp.hiring_date.split("-")[0]);
         e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
         url = "http://200.94.251.67/phpscripts/letterLaboral.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company + "&start=" + dt + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
         window.open(url, "_blank");
@@ -1095,7 +1095,7 @@ export class HrprofilesComponent implements OnInit {
     if (this.actualLetters.type == 'INTECAP') {
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
         e_date = "Guatemela, " + this.actualLetters.emition_date.split("-")[2] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1])] + " del " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
-        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
+        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de; " + parseInt(emp.hiring_date.split("-")[0]);
         var afiliacion = '266040419';
         var patrono = '145998';
         url = "http://200.94.251.67/phpscripts/letterIntecap.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&id=" + this.profile[0].dpi + "&company=" + this.actualLetters.company + "&hiring=" + dt + "&afiliacion=" + afiliacion + "&patronal=" + patrono + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
@@ -1104,7 +1104,7 @@ export class HrprofilesComponent implements OnInit {
     }
     if (this.actualLetters.type == 'Ingresos') {
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
-        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
+        var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de; " + parseInt(emp.hiring_date.split("-")[0]);
         e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
         var prod = parseFloat(emp.productivity_payment) - 250;
         var total = parseFloat(emp.base_payment) + parseFloat(emp.productivity_payment);
@@ -1118,7 +1118,7 @@ export class HrprofilesComponent implements OnInit {
         this.apiService.getTermdt(emp).subscribe((term: terminations) => {
           var str = term.valid_from;
           trem = numbers[parseInt(str.split("-")[2]) - 1] + " de " + month[parseInt(str.split("-")[1]) - 1] + " de " + year[parseInt(str.split("-")[0]) - 2020];
-          var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + year[parseInt(emp.hiring_date.split("-")[0]) - 2020];
+          var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + parseInt(emp.hiring_date.split("-")[0]);
           e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
           var url = "http://200.94.251.67/phpscripts/letterBaja.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + emp.job + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&date=" + e_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&id=" + emp.idemployees + "&term=" + trem + "&iduser=" + this.authUser.getAuthusr().iduser;
           window.open(url, "_blank");
@@ -1162,7 +1162,7 @@ export class HrprofilesComponent implements OnInit {
       f = "x";
     }
 
-    if(this.actualIrtrarequests.type == "Nuevo Carnet"){
+    if(this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico"){
       window.open('http://200.94.251.67/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0]+'&afiliacion=' + this.profile[0].irtra+'&birthday_day=' + this.profile[0].day_of_birth.split('-')[2]+'&birthday_month=' + this.profile[0].day_of_birth.split('-')[1]+'&birthday_year=' + this.profile[0].day_of_birth.split('-')[0]+'&book= ' +  '&cedula= ' +  '&company=' + this.useCompany+'&conyuge_firstname= ' +  '&conyuge_lastname= ' +  '&department=' + this.profile[0].address.split(',')[2]+'&dpi=' + this.profile[0].dpi+'&extended= ' +  '&f=' + f+'&first_lastname=' + this.profile[0].first_lastname+'&first_name=' + this.profile[0].first_name+'&fold= ' +  '&m=' + m+'&married= ' +  '&municipio=' + this.profile[0].address.split(',')[1]+'&partida= ' +  '&pasaport= ' +  '&patronal=' + this.igss_patronal+'&phone=' + this.profile[0].phone+'&reg= ' + '&second_lastname=' + this.profile[0].second_lastname+'&second_name=' + this.profile[0].second_name+'&zone=' + this.profile[0].address.split(",")[3].split(" ")[2], "_blank");
     }else{
       window.open('http://200.94.251.67/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type,"_blank");

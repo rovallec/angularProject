@@ -10,6 +10,9 @@
     $contact = $_GET['contact'];
     $job = $_GET['job'];
     $iduser = $_GET['iduser'];
+    $f = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+    $t = explode(";", $hiring_date);
+    $hiring_date = $t[0] . $f->format($t[1]);
 
 echo "
 <div style='margin-left:60px'>
