@@ -5,7 +5,6 @@
 
     $postdata = file_get_contents("php://input");
 
-    $sql = "INSERT INTO `attendences`(`idattendences`, `id_employee`, `date`, `scheduled`, `worked_time`) VALUES ";
     $att = [];
     $id = "";
     $date = "";
@@ -14,9 +13,7 @@
     if(isset($postdata) && !empty($postdata)){
         $request = json_decode($postdata);
         for ($i=0; $i < count($request); $i++) {
-            if($i > 0){
-                $sql = $sql . ",";
-            }
+            $sql = $sql . "INSERT INTO `attendences`(`idattendences`, `id_employee`, `date`, `scheduled`, `worked_time`) VALUES ";
             $en = json_encode($request[$i]);
             $de = json_decode($en);
             $id_employee = ($de->id_employee);
@@ -25,7 +22,7 @@
             $worked = ($de->worked_time);
             $id = ($de->id_wave);
             $d_off = ($de->day_off1);
-            $sql = $sql . "(NULL, '$id_employee', '$date', '$scheduled', '$worked')";
+            $sql = $sql . "(NULL, '$id_employee', '$date', '$scheduled', '$worked');";
         }
         if(mysqli_query($con, $sql)){
             if($d_off == "CORRECT"){

@@ -11,7 +11,7 @@ $sql = "SELECT `hr_processes`.*, `users`.`user_name`, `profiles`.`first_name`, `
         LEFT JOIN `employees` ON `employees`.`idemployees` = `hr_processes`.`id_employee` 
         LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` 
         LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`
-        LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` LIMIT 20;";
+        LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` ORDER BY `idhr_processes` DESC LIMIT 20;";
 
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
