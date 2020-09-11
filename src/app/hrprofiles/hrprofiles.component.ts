@@ -848,6 +848,12 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Pay Vacations':
           this.addVacation("Take", "4");
+          this.activeVacation.id_employee = this.activeEmp;
+          this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
+          this.activeVacation.id_department = this.workingEmployee.account;
+          this.activeVacation.date = this.todayDate;
+          this.activeVacation.notes = this.actuallProc.descritpion;
+          this.activeVacation.took_date = this.todayDate;
           this.insertVacation();
           this.cancelView();
           break;
