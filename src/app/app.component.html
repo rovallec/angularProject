@@ -31,10 +31,11 @@
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/dilyconvergent" style="color: white"  [ngClass]="{'act':selectedOption=='DAILY'}" (click)="SetSel('DAILY')">DAILY CONVERGENT</a>
-        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/attritionReport" style="color: white"  [ngClass]="{'act':selectedOption=='ATTREP'}" (click)="SetSel('ATTREP')">Attrition Report</a>
+        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/attritionReport" style="color: white"  [ngClass]="{'act':selectedOption=='ATTREP'}" (click)="SetSel('ATTREP')">ATTRITION REPORT</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/classlist" style="color: white" [ngClass]="{'act':selectedOption=='CLASS'}" (click)="SetSel('CLASS')">CLASS LIST</a>
+        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/attritionReport" style="color: white"  [ngClass]="{'act':selectedOption=='ACTVR'}" (click)="SetSel('ACTVR')">ACTIVE AGENTS REPORT</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">

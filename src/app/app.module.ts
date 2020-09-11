@@ -20,7 +20,8 @@ import { HrhomeComponent } from './hrhome/hrhome.component';
 import { HrprofilesComponent } from './hrprofiles/hrprofiles.component';
 import { HrdailyComponent } from './hrdaily/hrdaily.component';
 import { AttendenceImportComponent } from './attendence-import/attendence-import.component';
-import { AttritionReportComponent } from './attrition-report/attrition-report.component'
+import { AttritionReportComponent } from './attrition-report/attrition-report.component';
+import { ActiveAnalysisComponent } from './active-analysis/active-analysis.component'
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AttritionReportComponent } from './attrition-report/attrition-report.co
     HrprofilesComponent,
     HrdailyComponent,
     AttendenceImportComponent,
-    AttritionReportComponent
+    AttritionReportComponent,
+    ActiveAnalysisComponent
   ],
   imports: [
     BrowserModule,
