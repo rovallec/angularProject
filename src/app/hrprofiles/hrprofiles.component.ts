@@ -763,6 +763,7 @@ export class HrprofilesComponent implements OnInit {
         this.actuallProc.descritpion = null;
         break;
       case 'Pay Vacations':
+        console.log(this.availableVacations);
         if (this.availableVacations << 1) {
           this.addVac = false;
         }
