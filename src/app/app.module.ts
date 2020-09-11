@@ -19,7 +19,8 @@ import { CalllistreportComponent } from './calllistreport/calllistreport.compone
 import { HrhomeComponent } from './hrhome/hrhome.component';
 import { HrprofilesComponent } from './hrprofiles/hrprofiles.component';
 import { HrdailyComponent } from './hrdaily/hrdaily.component';
-import { AttendenceImportComponent } from './attendence-import/attendence-import.component'
+import { AttendenceImportComponent } from './attendence-import/attendence-import.component';
+import { AttritionReportComponent } from './attrition-report/attrition-report.component'
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AttendenceImportComponent } from './attendence-import/attendence-import
     HrhomeComponent,
     HrprofilesComponent,
     HrdailyComponent,
-    AttendenceImportComponent
+    AttendenceImportComponent,
+    AttritionReportComponent
   ],
   imports: [
     BrowserModule,
