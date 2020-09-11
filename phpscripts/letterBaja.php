@@ -10,8 +10,8 @@ $job = $_GET['job'];
 $contact = $_GET['contact'];
 $iduser = $_GET['iduser'];
 $f = new NumberFormatter("es", NumberFormatter::SPELLOUT);
-$t = explode(";", $hire);
-$hire = $t[0] . " " . $f->format($t[1]);
+$t = explode("de", $hire);
+$hire = $t[0] . " de " . $t[1] . " de " . $f->format($t[2]);
 
 echo "
 <div style='margin-left:50px;'>

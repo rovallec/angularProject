@@ -44,6 +44,6 @@ export class AttritionReportComponent implements OnInit {
     if(!this.isExportable){
       alert("Missing information to generate the report");
     }
-      window.open("http://200.94.251.67/phpscripts/exportHRDaily.php?date='" + this.dateFrom + "' AND '" + this.dateTo)
+      window.open("http://200.94.251.67/phpscripts/exportAttritionReport.php?date='" + this.dateFrom + "' AND '" + this.dateTo)
     }
 }

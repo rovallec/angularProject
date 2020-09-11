@@ -31,7 +31,7 @@
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/dilyconvergent" style="color: white"  [ngClass]="{'act':selectedOption=='DAILY'}" (click)="SetSel('DAILY')">DAILY CONVERGENT</a>
-        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/attritionReport" style="color: white"  [ngClass]="{'act':selectedOption=='HRDAILY'}" (click)="SetSel('HRDAILY')">Attrition Report</a>
+        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/attritionReport" style="color: white"  [ngClass]="{'act':selectedOption=='ATTREP'}" (click)="SetSel('ATTREP')">Attrition Report</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/classlist" style="color: white" [ngClass]="{'act':selectedOption=='CLASS'}" (click)="SetSel('CLASS')">CLASS LIST</a>
