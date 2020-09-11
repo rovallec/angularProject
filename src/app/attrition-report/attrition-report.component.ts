@@ -43,7 +43,8 @@ export class AttritionReportComponent implements OnInit {
   generateReprot(){
     if(!this.isExportable){
       alert("Missing information to generate the report");
+    }else{
+      window.open("http://200.94.251.67/phpscripts/exportAttritionReport.php?date=" + this.dateFrom + " AND " + this.dateTo, "_blank")
     }
-      window.open("http://200.94.251.67/phpscripts/exportAttritionReport.php?date='" + this.dateFrom + "' AND '" + this.dateTo)
     }
 }
