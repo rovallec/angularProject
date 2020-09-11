@@ -11,7 +11,7 @@ $i = 0;
 $sql = "SELECT `education_details`.`further_education`, `education_details`.`currently_studing`, `education_details`.`institution_name`, `contact_details`.`address`, `profiles`.`marital_status`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `profiles`.`tittle`, `profiles`.`day_of_birth`, `employees`.`hiring_date`, `employees`.`job`, `exp`.`company` AS `experience`, `accounts`.`name` AS `LOB`, `education_details`.`current_level` FROM `profiles` LEFT JOIN `hires` ON `hires`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires`
 LEFT JOIN (SELECT `company`, `id_profile` FROM `job_histories` LIMIT 1) AS `exp` ON `exp`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account` LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `contact_details` ON `contact_details`.`id_profile` = `profiles`.`idprofiles` WHERE `employees`.`active` = 1;";
 $output = fopen("php://output", "w");
-fputcsv($output, array("No.", "Name", "Gender", "Birth Date", "Nearsol ID", "Hire Date", "Position", "Account",  "Last Job", "Current Education Level", "University", "Studying", "Institution", "Address"));
+fputcsv($output, array("No.", "Name", "Gender", "Birth Date", "Hire Date", "Account",  "Last Job", "Current Education Level", "University", "Studying", "Institution", "Address"));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $exportRow[0] = $i;
