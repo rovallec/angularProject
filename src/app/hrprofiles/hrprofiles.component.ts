@@ -764,7 +764,7 @@ export class HrprofilesComponent implements OnInit {
         break;
       case 'Pay Vacations':
         if (this.availableVacations < 1) {
-          console.logt(this.availableVacations);
+          console.log(this.availableVacations);
           this.addVac = false;
         }else{
           this.addVac = true;
