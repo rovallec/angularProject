@@ -763,7 +763,8 @@ export class HrprofilesComponent implements OnInit {
         this.actuallProc.descritpion = null;
         break;
       case 'Pay Vacations':
-        if (this.availableVacations << 1) {
+        if (this.availableVacations < 1) {
+          console.logt(this.availableVacations);
           this.addVac = false;
         }else{
           this.addVac = true;
@@ -1097,7 +1098,7 @@ export class HrprofilesComponent implements OnInit {
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
         e_date = "Guatemela, " + this.actualLetters.emition_date.split("-")[2] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1])] + " del " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
         var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de; " + parseInt(emp.hiring_date.split("-")[0]);
-        var afiliacion = '266040419';
+        var afiliacion = this.profile[0].iggs;
         var patrono = '145998';
         url = "http://200.94.251.67/phpscripts/letterIntecap.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&id=" + this.profile[0].dpi + "&company=" + this.actualLetters.company + "&hiring=" + dt + "&afiliacion=" + afiliacion + "&patronal=" + patrono + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
         window.open(url, "_blank");
