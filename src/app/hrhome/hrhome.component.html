@@ -25,7 +25,7 @@
             <tr *ngIf="!searching">
                 <td
                     style="padding:6px; background-color:rgb(209, 225, 247); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255)">
-                    EMPLOYEES IN TRAINING <i class="fas fa-sync" style="margin-left:85vw;" (click)="start()"></i></td>
+                    NEW EMPLOYEES<i class="fas fa-sync" style="margin-left:85vw;" (click)="start()"></i></td>
             </tr>
             <table style="width: 100%; padding-top:15px" *ngIf="!searching">
                 <tr>
@@ -57,12 +57,12 @@
                                                     [(ngModel)]="wv.account_name">
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label>Starting Date:</label>
+                                                <label>Start Date:</label>
                                                 <input class="form-control" [disabled]="true"
                                                     [(ngModel)]="wv.ops_start">
                                             </div>
                                             <div class="form-group col-md-2">
-                                                <label>State</label>
+                                                <label>Status</label>
                                                 <select class="form-control" [(ngModel)]="wv.state" [disabled]="!getWvView(wv)">
                                                     <option value="0">TRAINING</option>
                                                     <option value="2">NESTING</option>
@@ -120,7 +120,7 @@
                                         <th>NEARSOL ID</th>
                                         <th>CLIENT ID</th>
                                         <th>NAME</th>
-                                        <th>STATE</th>
+                                        <th>STATUS</th>
                                         <th *ngIf="makeEmployee">PLATFORM</th>
                                     </thead>
                                     <tbody>
@@ -164,7 +164,7 @@
                                 <td>
                                     <div class="form-group row" style="margin-top:15px">
                                         <label class="col-sm-2 col-form-label"
-                                            style="margin-left:4%">ATTENDENCE:</label>
+                                            style="margin-left:4%">ATTENDANCE:</label>
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" (change)="changeDate($event.target.value,wv)" [value]="stringDate" [disabled]="!toggleDate">
                                         </div>
@@ -191,8 +191,8 @@
                                         <th>CLIENT ID</th>
                                         <th>NAME</th>
                                         <th>SCHEDULE</th>
-                                        <th>ATTENDENCE</th>
-                                        <th>STATE</th>
+                                        <th>ATTENDANCE</th>
+                                        <th>STATUS</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let hire of emplAttendences">
@@ -256,8 +256,8 @@
                         <th>NEARSOL ID</th>
                         <th>CLIENT ID</th>
                         <th>NAME</th>
-                        <th>JOB</th>
-                        <th>TEAM</th>
+                        <th>POSITION</th>
+                        <th>ACCOUNT</th>
                     </thead>
                     <tbody>
                         <tr *ngFor="let employee of allEmployees" (click)="gotoProfile(employee)">
@@ -287,7 +287,7 @@
                         <th>PROCESS NAME</th>
                         <th>USER</th>
                         <th>DATE</th>
-                        <th>STATE</th>
+                        <th>STATUS</th>
                     </thead>
                     <tbody>
                         <tr *ngFor="let process of allProcesses">

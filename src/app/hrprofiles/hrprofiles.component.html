@@ -18,7 +18,7 @@
                             [(ngModel)]='workingEmployee.id_account'>
                     </div>
                     <div class="form-group col-md-2">
-                        <label>Suppervisor:</label>
+                        <label>Supervisor:</label>
                         <input type="text" class="form-control" [disabled]='true'
                             [(ngModel)]="workingEmployee.reporter">
                     </div>
@@ -50,7 +50,7 @@
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
                     <a class="nav-item nav-link active" id="nav-attendence-tab" data-toggle="tab" href="#nav-attendence"
-                        role="tab" aria-controls="nav-attendence" aria-selected="true">Attendence</a>
+                        role="tab" aria-controls="nav-attendence" aria-selected="true">Attendance</a>
                     <a class="nav-item nav-link" id="nav-leavs-tab" data-toggle="tab" href="#nav-leavs" role="tab"
                         aria-controls="nav-leavs" aria-selected="false">Leave</a>
                     <a class="nav-item nav-link" id="nav-dp-tab" data-toggle="tab" href="#nav-dp" role="tab"
@@ -72,7 +72,7 @@
                     aria-labelledby="nav-attendence-tab">
                     <div class="form-row col-sm-12">
                         <label
-                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">ATTENDENCE</label>
+                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">ATTENDANCE</label>
                         <div class="form-group col-sm-6">
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-6">
@@ -112,7 +112,7 @@
                                     <thead>
                                         <th>DATE</th>
                                         <th>USER</th>
-                                        <th>STATE</th>
+                                        <th>Status</th>
                                         <th>AMOUNT</th>
                                     </thead>
                                     <tbody>
@@ -137,7 +137,7 @@
                                         [disabled]="editAdj">
                                         <option>IGSS</option>
                                         <option>Private Doctor</option>
-                                        <option>Marital Certificate</option>
+                                        <option>Marriage Certificate</option>
                                         <option>Death Certificate</option>
                                         <option>Birth Certificate</option>
                                     </select>
@@ -181,7 +181,7 @@
                                         class="form-control">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label>State:</label>
+                                    <label>Status:</label>
                                     <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.state"
                                         class="form-control">
                                 </div>
@@ -201,9 +201,8 @@
 
                 <div class="tab-pane fade" id="nav-leavs" role="tabpanel" aria-labelledby="nav-leavs-tab">
                     <div class="form-row col-md-12">
-                        <label
-                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">VACATIONS</label>
                         <div class="form-group col-sm-6">
+                            <label style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Vacations</label>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-4">
                                     <label>Earned:</label>
@@ -309,7 +308,7 @@
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2"></div>
                                 <div class="form-group col-md-8">
-                                    <label>Cathegory:</label>
+                                    <label>Category:</label>
                                     <select class="form-control" [(ngModel)]="activeLeave.motive"
                                         [disabled]="showLeave">
                                         <option *ngFor="let motive of motives">{{motive}}</option>
@@ -356,7 +355,7 @@
                                         [(ngModel)]="activeLeave.date">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label>State:</label>
+                                    <label>Status:</label>
                                     <input type="text" [disabled]="true" class="form-control"
                                         [(ngModel)]="activeLeave.status">
                                 </div>
@@ -573,7 +572,7 @@
                             </div>
                             <div class="form-row col-md-12" *ngIf="storedRequest  && activeRequest.status != 'PENDING'">
                                 <div class="form-group col-md-4">
-                                    <label>Cathegory:</label>
+                                    <label>Category:</label>
                                     <select class="form-control" (change)="reasonChange()"
                                         [(ngModel)]="activeRequest.cathegory"
                                         [disabled]="activeRequest.status === 'DISPATCHED'">
@@ -627,11 +626,11 @@
                                         <option>Cumplimiento</option>
                                         <option>Abuso de Receso/Almuerzo/Auxiliares</option>
                                         <option>Conducta</option>
-                                        <option>Otros</option>
+                                        <option>Otro</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Consequences:</label>
+                                    <label>Consequence:</label>
                                     <input type="text" class="form-control" [(ngModel)]="activeRequest.consequences"
                                         [disabled]="activeRequest.status === 'DISPATCHED'">
                                 </div>
@@ -1792,7 +1791,7 @@
                                         <label>Payment:</label>
                                         <div class="form-row col-md-12">
                                             <div class="form-group col-md-12">
-                                                <label>Bank Check:</label>
+                                                <label>Check Delivery:</label>
                                                 <input type="date" class="form-control"
                                                     (change)="setCheckBanck($event.target.value)" *ngIf="!viewRecProd">
                                                 <input type="text" class="form-control"
@@ -1932,7 +1931,7 @@
                 <tr width="100%">
                     <td
                         style="padding:6px; background-color:rgb(227, 239, 255); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255); height: 15px;">
-                        <b>New Process</b><i class="fas fa-arrow-circle-left" style="margin-left: 90%"
+                        <b>New Action</b><i class="fas fa-arrow-circle-left" style="margin-left: 90%"
                             (click)="addProcess()"></i>
                 </tr>
                 <tr>
@@ -1961,7 +1960,7 @@
                 <tr width="100%">
                     <td
                         style="padding:6px; background-color:rgb(227, 239, 255); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255); height: 15px;">
-                        <b>Process Record</b><i class="fas fa-plus-square" style="margin-left: 90%"
+                        <b>Action Log</b><i class="fas fa-plus-square" style="margin-left: 90%"
                             (click)="addProcess()"></i>
                 </tr>
                 <tr>
@@ -1971,7 +1970,7 @@
                             style="text-align: center; margin-top:20px" width=100%>
                             <thead>
                                 <th>ID</th>
-                                <th>Process</th>
+                                <th>Actvivity</th>
                                 <th>User</th>
                                 <th>Status</th>
                             </thead>
