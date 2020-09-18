@@ -456,10 +456,10 @@ export class HrprofilesComponent implements OnInit {
   setRequest() {
     this.editRequest = true;
     this.activeRequest = new disciplinary_processes;
-    this.activeRequest.day_1 = "NULL";
-    this.activeRequest.day_2 = "NULL";
-    this.activeRequest.day_3 = "NULL";
-    this.activeRequest.day_4 = "NULL";
+    this.activeRequest.day_1 = "nul";
+    this.activeRequest.day_2 = "nul";
+    this.activeRequest.day_3 = "nul";
+    this.activeRequest.day_4 = "nul";
     this.activeRequest.id_user = this.authUser.getAuthusr().iduser;
     this.activeRequest.id_employee = this.activeEmp;
     this.activeRequest.id_type = "6";

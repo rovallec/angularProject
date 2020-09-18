@@ -41,6 +41,7 @@ if(mysqli_query($con,$sql)){
                 http_response_code(200);
             }else{
                 http_response_code(404);
+                echo($sql4);
             }
         }
     }
