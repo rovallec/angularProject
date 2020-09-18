@@ -27,26 +27,27 @@ $audience_status = ($request->audience_status);
 try {
     $day_1 = ($request->day_1);
 } catch (\Throwable $th) {
-    $day_1 = '';
+    $day_1 = 'NULL';
 }
 
 try {
-    $day_2 = ($request->day_2);
+    $day_2 = "'" . ($request->day_2) . "'";
 } catch (\Throwable $th) {
-    $day_2 = '';
+    $day_2 = 'NULL';
 }
 
 try {
-    $day_3 = ($request->day_3);
+    $day_3 =  "'" .  ($request->day_3) . "'";
 } catch (\Throwable $th) {
-    $day_3 = '';
+    $day_3 = 'NULL';
 }
 
 try {
-    $day_4 = ($request->day_4);
+    $day_4 =  "'" .  ($request->day_4) . "'";
 } catch (\Throwable $th) {
-    $day_4 = '';
+    $day_4 = 'NULL';
 }
+
 $sql = "UPDATE `hr_processes` SET `status` = '$status' WHERE `idhr_processes` = '$id_process'";
 $sql2 = "INSERT INTO `disciplinary_processes` (`iddisciplinary_processes`,`id_request`,`type`,`cathegory`,`dp_grade`,`motive`,`imposition_date`,`legal_foundament`,`consequences`,`observations`) VALUES (null, '$idrequests', '$type', '$cathegory', '$dp_grade', '$motive', '$imposition_date', '$legal_foundament', '$consequences', '$observations');";
 if(mysqli_query($con,$sql)){
@@ -54,7 +55,7 @@ if(mysqli_query($con,$sql)){
         $iddp = mysqli_insert_id($con);
         $sql3 = "INSERT INTO `audiences` (`idaudiences`, `id_disciplinary_process`, `date`, `time`, `comments`, `status`) VALUES (null, '$iddp', '$audience_date', '$time', '$comments', '$status');";
         if(mysqli_query($con,$sql3)){
-            $sql4 = "INSERT INTO `suspensions` (`idsuspensions`, `id_disciplinary_process`, `day_1`, `day_2`, `day_3`, `day_4`) VALUES (null, '$iddp', '$day_1', '$day_2', '$day_3', '$day_4');";
+            $sql4 = "INSERT INTO `suspensions` (`idsuspensions`, `id_disciplinary_process`, `day_1`, `day_2`, `day_3`, `day_4`) VALUES (null, '$iddp', $day_1, $day_2, $day_3, $day_4);";
             if(mysqli_query($con,$sql4)){
                 http_response_code(200);
             }else{
