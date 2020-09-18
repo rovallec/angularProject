@@ -23,6 +23,15 @@ $day_1 = ($request->day_1);
 $day_2 = ($request->day_2);
 $day_3 = ($request->day_3);
 $day_4 = ($request->day_4);
+if($day_2==''){
+    $day_2 = 'null';
+}
+if($day_3==''){
+    $day_3 = 'null';
+}
+if($day_4==''){
+    $day_4 = 'null';
+}
 
 $sql = "UPDATE `hr_processes` SET `status` = '$status' WHERE `idhr_processes` = '$id_process'";
 $sql2 = "INSERT INTO `disciplinary_processes` (`iddisciplinary_processes`,`id_request`,`type`,`cathegory`,`dp_grade`,`motive`,`imposition_date`,`legal_foundament`,`consequences`,`observations`) VALUES (null, '$idrequests', '$type', '$cathegory', '$dp_grade', '$motive', '$imposition_date', '$legal_foundament', '$consequences', '$observations');";
