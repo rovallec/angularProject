@@ -40,6 +40,7 @@ export class HrprofilesComponent implements OnInit {
   igss_patronal:string = null;
   dpTerm:boolean = false;
   workingEmployee:employees = new employees;
+  riseIncrease:string = null;
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -830,6 +831,7 @@ export class HrprofilesComponent implements OnInit {
         case 'Rise':
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
+          this.workingEmployee.productivity_payment =  (parseFloat(this.workingEmployee.productivity_payment) + parseFloat(this.riseIncrease)).toString();
           this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
             this.cancelView();
           })

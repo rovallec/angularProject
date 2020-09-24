@@ -25,7 +25,6 @@
             $d_off = ($de->day_off1);
             $sql = $sql . "(NULL, '$id_employee', '$date', '$scheduled', '$worked');";
         }
-        echo($sql);
         if(mysqli_query($con, $sql)){
             if($d_off == "CORRECT"){
                 $sql2 = "SELECT * FROM (SELECT `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`

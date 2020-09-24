@@ -26,13 +26,13 @@ switch ($grade) {
     case 'Advertencia Final':
         $final = 'checked';
     break;
-    case 'Suspencion 2 Dias':
+    case 'Suspensión 2 Dias':
         $dosDias = 'checked';
     break;
-    case 'Suspencion 4 Dias':
+    case 'Suspensión 4 Dias':
         $cuatroDias = 'checked';
     break;
-    case 'Terminacion Laboral':
+    case 'Terminación Laboral':
         $term = 'checked';
     break;
 }
