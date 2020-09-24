@@ -20,6 +20,8 @@ export class HrhomeComponent implements OnInit {
   makeEmployee:boolean = false;
   toggleDate:boolean = false;
   searching:boolean = false;
+  contract_type:string = "Default";
+  bonusHire:string = '0';
   
   filter:string = null;
   value:string = null;
@@ -248,8 +250,11 @@ export class HrhomeComponent implements OnInit {
         })
       }
     });
-    window.open("http://200.94.251.67/phpscripts/contract.php?id=" + this.hiresToShow[0].id_wave, "_blank");
-    
+    if(this.contract_type == 'Default'){
+      window.open("http://200.94.251.67/phpscripts/contract.php?id=" + this.hiresToShow[0].id_wave, "_blank");
+    }else{
+      window.open("http://200.94.251.67/phpscripts/staffContract.php?id=" + this.hiresToShow[0].id_wave + "&other=" + this.bonusHire, "_blank");
+    }
   }
 
 
