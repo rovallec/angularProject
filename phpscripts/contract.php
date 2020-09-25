@@ -194,11 +194,27 @@
                         <td>
                             <table style='width:100%'>
                                 <tr>
-                                    <td style='width:33%'><td>
-                                    <td style='width:33%'><td>
-                                    <td style='width:33%'><td>
-                                    <td style='width:33%'><td>
-                                    
+                                    <td style='width:20%'><td>
+                                    <td style='width:20%'>
+                                        <table style='width:100%'>
+                                            <tr style='height:80px'>
+                                            </tr>
+                                            <tr>
+                                                <td style='margin-top:2px solid black'>NANCY LUCRECIA SALAZAR ESCOBAR</td>
+                                            </tr>
+                                        </table>
+                                    <td>
+                                    <td style='width:20%'><td>
+                                    <td style='width:20%'>
+                                        <table style='width:100%'>
+                                            <tr style='height:80px'>
+                                            </tr>
+                                            <tr>
+                                                <td style='margin-top:2px solid black'>$name</td>
+                                            </tr>
+                                        </table>
+                                    <td>
+                                    <td style='width:20%'><td>
                                 </tr>
                             </table>
                         </td>

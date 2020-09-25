@@ -2,12 +2,14 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require  'database.php';
+
+$postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-$nm = ($request->nm);
+$nm = ($request->department);
 $res = [];
 $i = 0;
 
-if($nm == '2'){
+if($nm=='27'){
     $sql = "SELECT `profiles`.`idprofiles`, `employees`.*, `hires`.`id_profile`, `hires`.`nearsol_id`, `users`.`user_name`, `accounts`.`name`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname` 
         FROM `employees`
         LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter`

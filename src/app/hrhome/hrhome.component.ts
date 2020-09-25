@@ -66,8 +66,7 @@ export class HrhomeComponent implements OnInit {
       this.editWave.push(false);
     }
     this.weekday = this.weekdays[new Date().getDay()];
-    
-    this.apiService.getallEmployees({nm:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
+    this.apiService.getallEmployees(this.authService.getAuthusr()).subscribe((emp:employees[])=>{
       this.allEmployees = emp;
     });
 
@@ -225,7 +224,7 @@ export class HrhomeComponent implements OnInit {
   }
 
   searchEmployee(){
-    this.apiService.getSearchEmployees({filter:this.filter, value:this.value}).subscribe((emp:employees[])=>{
+    this.apiService.getSearchEmployees({filter:this.filter, value:this.value, dp:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
       this.allEmployees = emp;
     });
     this.searching = true;

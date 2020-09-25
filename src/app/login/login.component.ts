@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
             if(this.resUsr[0].department == "4"){
               this._router.navigate(['/achome']);
             }else{
-              if(this.resUsr[0].department == "5"){
+              if(this.resUsr[0].department == "5" || this.resUsr[0].department == "27"){
                 this._router.navigate(['/hrhome']);
               }
             }
