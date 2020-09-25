@@ -192,17 +192,13 @@
                     <tr style='height:20px'></tr>
                     <tr>
                         <td>
-                            <table>
+                            <table style='width:100%'>
                                 <tr>
-                                    <div class='form-row col-md-12'>
-                                        <div class='form-group col-md-2'></div>
-                                        <div class='form-group col-md-3'>
-                                            <label>NANCY LUCRECIA SALAZAR ESCOBAR</label>
-                                        </div>
-                                        <div class='form-group col-md-2'></div>
-                                        <div class='form-group col-md-3'></div>
-                                        <div class='form-group col-md-2'></div>
-                                    </div>
+                                    <td style='width:33%'><td>
+                                    <td style='width:33%'><td>
+                                    <td style='width:33%'><td>
+                                    <td style='width:33%'><td>
+                                    
                                 </tr>
                             </table>
                         </td>

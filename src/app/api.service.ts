@@ -215,8 +215,8 @@ updateWaveState(wv:waves_template){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateWaveState.php`, wv);
 }
 
-getallEmployees(){
-  return this.httpClient.get<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getallEmployees.php`);
+getallEmployees(nm:any){
+  return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getallEmployees.php`,nm);
 }
 
 getallHrProcesses(){

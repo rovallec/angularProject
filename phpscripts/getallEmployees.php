@@ -2,14 +2,28 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require  'database.php';
+$request = json_decode($postdata);
+$nm = ($request->nm);
 $res = [];
 $i = 0;
-$sql = "SELECT `profiles`.`idprofiles`, `employees`.*, `hires`.`id_profile`, `hires`.`nearsol_id`, `users`.`user_name`, `accounts`.`name`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname` 
+
+if($nm == '2'){
+    $sql = "SELECT `profiles`.`idprofiles`, `employees`.*, `hires`.`id_profile`, `hires`.`nearsol_id`, `users`.`user_name`, `accounts`.`name`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname` 
         FROM `employees`
         LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter`
         LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
         LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
-        LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LIMIT 20;";
+        LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` WHERE `employees`.`id_account` = '13' OR `employees`.`id_account` = '25' OR `employees`.`id_account` = '23' OR `employees`.`id_account` = '26' OR `employees`.`id_account` = '12' LIMIT 20;";
+}else{
+    if($nm== '5'){
+        $sql = "SELECT `profiles`.`idprofiles`, `employees`.*, `hires`.`id_profile`, `hires`.`nearsol_id`, `users`.`user_name`, `accounts`.`name`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname` 
+        FROM `employees`
+        LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter`
+        LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
+        LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
+        LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`  WHERE `employees`.`id_account` = '1' OR `employees`.`id_account` = '3' OR `employees`.`id_account` = '6' OR `employees`.`id_account` = '7' OR `employees`.`id_account` = '8' OR `employees`.`id_account` = '9' OR `employees`.`id_account` = '10' OR `employees`.`id_account` = '14' OR `employees`.`id_account` = '15' OR `employees`.`id_account` = '16' OR `employees`.`id_account` = '17' OR `employees`.`id_account` = '18' OR `employees`.`id_account` = '19' OR `employees`.`id_account` = '20' OR `employees`.`id_account` = '21' OR `employees`.`id_account` = '22' OR `employees`.`id_account` = '24' LIMIT 20;";
+    }
+}
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
         $res[$i]['id_profile'] = $row['idprofiles'];

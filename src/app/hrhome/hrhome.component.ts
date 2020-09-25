@@ -67,7 +67,7 @@ export class HrhomeComponent implements OnInit {
     }
     this.weekday = this.weekdays[new Date().getDay()];
     
-    this.apiService.getallEmployees().subscribe((emp:employees[])=>{
+    this.apiService.getallEmployees({nm:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
       this.allEmployees = emp;
     });
 
