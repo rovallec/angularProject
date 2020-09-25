@@ -261,6 +261,36 @@
             <tr style="height:15px;">
 
             </tr>
+            <tr *ngIf="!searching">
+                <td
+                    style="padding:6px; background-color:rgb(209, 225, 247); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255)">
+                    RECENT ACTIONS<i class="fas fa-sync" style="margin-left:90.5vw;" (click)="start()"></i></td>
+            </tr>
+            <tr 
+            style="padding:6px; background-color:#fafcfd;border-left:solid 1px rgb(173, 199, 255); border:solid 1px rgb(173, 199, 255);" *ngIf="!searching">
+                <table class="table table-striped table-hover"
+                style="text-align: center; margin:1%; width:98%">
+                    <thead>
+                        <th>EMPLOYEE</th>
+                        <th>PROCESS NAME</th>
+                        <th>USER</th>
+                        <th>DATE</th>
+                        <th>STATUS</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let process of allProcesses" (click)="gotoProfile(employee)">
+                           <td>{{process.employee}}</td>
+                           <td>{{process.name}}</td>
+                           <td>{{process.user_name}}</td>
+                           <td>{{process.date}}</td>
+                           <td>{{process.status}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </tr>
+            <tr style="height:15px;">
+
+            </tr>
             <tr>
                 <td
                     style="padding:6px; background-color:rgb(209, 225, 247); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255)">
@@ -284,36 +314,6 @@
                            <td>{{employee.name}}</td>
                            <td>{{employee.job}}</td>
                            <td>{{employee.account}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </tr>
-            <tr style="height:15px;">
-
-            </tr>
-            <tr *ngIf="!searching">
-                <td
-                    style="padding:6px; background-color:rgb(209, 225, 247); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255)">
-                    RECENT ACTIONS<i class="fas fa-sync" style="margin-left:90.5vw;" (click)="start()"></i></td>
-            </tr>
-            <tr 
-            style="padding:6px; background-color:#fafcfd;border-left:solid 1px rgb(173, 199, 255); border:solid 1px rgb(173, 199, 255);" *ngIf="!searching">
-                <table class="table table-striped table-hover"
-                style="text-align: center; margin:1%; width:98%">
-                    <thead>
-                        <th>EMPLOYEE</th>
-                        <th>PROCESS NAME</th>
-                        <th>USER</th>
-                        <th>DATE</th>
-                        <th>STATUS</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let process of allProcesses">
-                           <td>{{process.employee}}</td>
-                           <td>{{process.name}}</td>
-                           <td>{{process.user_name}}</td>
-                           <td>{{process.date}}</td>
-                           <td>{{process.status}}</td>
                         </tr>
                     </tbody>
                 </table>
