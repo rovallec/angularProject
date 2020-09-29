@@ -44,86 +44,48 @@
         </table>
     </div>
 
-    <div class="form-row col-md-12" *ngIf="eval">
+    <div class="form-group col-md-12" *ngIf="eval">
         <div class="form-row">
             <div class="form-group col-md-5">
-                <label style="margin-left:40%; font-weight: bold; font-size:16px;">Changes</label>
-                <div class="form-group col-md-2"></div>
-                <div class="form-group col-md-3">
-                    <label>Active:</label>
-                    <input class="form-control" [(ngModel)]="active" [disabled]='true'>
-                </div>
-                <div class="form-group col-md-2"></div>
-                <div class="form-group col-md-3">
-                    <label>Inactive</label>
-                    <input class="form-control" [(ngModel)]="inactive" [disabled]='true'>
-                </div>
-                <div class="form-group col-md-2"></div>
-            </div>
-
-            <div class="form-group col-md-5">
-                <label style="margin-left:40%; font-weight: bold; font-size:16px;">Actual</label>
                 <div class="form-row">
-                    <div class="form-group col-md-4"></div>
-                    <div class="form-group col-md-4">
-                        <label>Total:</label>
-                        <input class="from-control" [(ngModel)]='dps.length' [disabled]='true'>
+                    <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Actual</label>
+                    <div class="form-group">
+                        <div class="form-row">
+                            <table style="width:100%" class="table table-striped table-hover">
+                                <thead>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>GRADE</th>
+                                    <th>TYPE</th>
+                                    <th>DATE</th>
+                                    <th>STATUS</th>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
-                    <div class="form-group col-md-4"></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="from-row">
-            <div class="form-group col-md-5">
-                <table class="table table-striped table-hover" style="width:100%;">
-                    <thead>
-                        <th>ID</th>
-                        <th>NAME</th>
-                        <th>GRADE</th>
-                        <th>TYPE</th>
-                        <th>DATE</th>
-                        <th>STATUS</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let dp of dps">
-                            <td>{{dp.type}}</td>
-                            <td>{{dp.name}}</td>
-                            <td>{{dp.dp_grade}}</td>
-                            <td>{{dp.type}}</td>
-                            <td>{{dp.imposition_date}}</td>
-                            <td>{{dp.status}}</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
             <div class="form-group col-md-1">
                 <div style="height: 100%;width: 6px;border-right: solid 4px #e3f2fd;"></div>
             </div>
-
             <div class="form-group col-md-5">
-                <table class="table table-striped table-hover" style="width:100%;">
-                    <thead>
-                        <th>ID</th>
-                        <th>NAME</th>
-                        <th>GRADE</th>
-                        <th>TYPE</th>
-                        <th>DATE</th>
-                        <th>DIFFERENCE</th>
-                        <th>STATUS</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let dp of dps_ch">
-                            <td>{{dp.type}}</td>
-                            <td>{{dp.name}}</td>
-                            <td>{{dp.dp_grade}}</td>
-                            <td>{{dp.type}}</td>
-                            <td>{{dp.imposition_date}}</td>
-                            <td>{{dp.id_department}}</td>
-                            <td>{{dp.status}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="form-row">
+                    <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Actual</label>
+                    <div class="form-group">
+                        <div class="form-row">
+                            <table style="width:100%" class="table table-striped table-hover">
+                                <thead>
+                                    <th>ID</th>
+                                    <th>NAME</th>
+                                    <th>GRADE</th>
+                                    <th>TYPE</th>
+                                    <th>DATE</th>
+                                    <th>STATUS</th>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
