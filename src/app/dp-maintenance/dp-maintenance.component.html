@@ -1,18 +1,22 @@
 <div style="margin-top:30px">
     <div class="form-row col-md-12">
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-1">
             <button class="form-control" (click)="getActive()">Get Active</button>
         </div>
-        <div class="form-group col-md-1"></div>
-        <div class="form-group col-md-2">
+
+        <div class="form-group col-md-2"></div>
+        <div class="form-group col-md-1">
             <button class="form-control" (click)="getAll()">Get All</button>
         </div>
-        <div class="form-group col-md-1"></div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-2"></div>
+
+        <div class="form-group col-md-1">
             <button class="form-control" (click)="setEvaluation()">Evaluate</button>
         </div>
-        <div class="form-group col-md-1"></div>
-        <div class="from-group col-md-2">
+        <div class="form-group col-md-2"></div>
+
+        <div class="from-group col-md-1">
             <button class="form-control">Print</button>
         </div>
         <div class="form-group col-md-1"></div>
@@ -50,6 +54,7 @@
                     <th>GRADE</th>
                     <th>TYPE</th>
                     <th>DATE</th>
+                    <th>DIFFERENCE</th>
                     <th>STATUS</th>
                 </thead>
                 <tbody>
@@ -59,6 +64,7 @@
                         <td>{{dp.grade}}</td>
                         <td>{{dp.type}}</td>
                         <td>{{dp.date}}</td>
+                        <td>{{dp.id_department}}</td>
                         <td>{{dp.status}}</td>
                     </tr>
                 </tbody>

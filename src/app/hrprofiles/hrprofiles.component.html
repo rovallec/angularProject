@@ -533,7 +533,7 @@
                                     <label>Status:</label>
                                     <input type="text" class="form-control" [disabled]=true
                                         [(ngModel)]="activeRequest.status"
-                                        *ngIf="activeRequest.status === 'ACCEPTED' || activeRequest.status === 'REJECTED' || activeRequest.status === 'DISPATCHED'">
+                                        *ngIf="activeRequest.status === 'ACCEPTED' || activeRequest.status === 'REJECTED' || activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                     <select class="form-control" [disabled]="!storedRequest"
                                         [(ngModel)]="activeRequest.status"
                                         *ngIf="storedRequest && activeRequest.status === 'PENDING'">
@@ -575,7 +575,7 @@
                                     <label>Category:</label>
                                     <select class="form-control" (change)="reasonChange()"
                                         [(ngModel)]="activeRequest.cathegory"
-                                        [disabled]="activeRequest.status === 'DISPATCHED'">
+                                        [disabled]="activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                         <option *ngFor="let reason of reasons">{{reason}}</option>
                                     </select>
                                 </div>
@@ -587,14 +587,14 @@
                                         <option *ngFor="let moti of motive_select">{{moti}}</option>
                                     </select>
                                     <input type="text" [disabled]="true" class="form-control"
-                                        [(ngModel)]="activeRequest.motive" *ngIf="activeRequest.status === 'DISPATCHED'"
+                                        [(ngModel)]="activeRequest.motive" *ngIf="activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'"
                                         style="font: 8px">
                                 </div>
                                 <div class="form-group col-md-4"
                                     *ngIf="storedRequest  && activeRequest.status != 'PENDING'">
                                     <label>Grade:</label>
                                     <select class="form-control" [(ngModel)]="activeRequest.dp_grade"
-                                        [disabled]="activeRequest.status === 'DISPATCHED'">
+                                        [disabled]="activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                         <option>Retroalimentacion</option>
                                         <option>Advertencia Verbal</option>
                                         <option>Advertencia Escrita</option>
@@ -610,15 +610,15 @@
                                     <label>Imposition Date:</label>
                                     <input type="date" (change)="pushRequestDate($event.target.value)"
                                         class="form-control"
-                                        *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'CLOSED'">
+                                        *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'CLOSED' &&  activeRequest.status != 'INACTIVE'">
                                     <input type="text" class="form-control" [(ngModel)]="activeRequest.imposition_date"
-                                        *ngIf="activeRequest.status === 'DISPATCHED' || activeRequest.status !='ACCEPTED'"
+                                        *ngIf="activeRequest.status === 'DISPATCHED' || activeRequest.status !='ACCEPTED' || activeRequest.status === 'INACTIVE'"
                                         [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Type:</label>
                                     <select class="form-control" [(ngModel)]="activeRequest.type"
-                                        [disabled]="activeRequest.status === 'DISPATCHED'">
+                                        [disabled]="activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                         <option>Entrada/Salida Tarde/Temprano</option>
                                         <option>Violacion a Reglas de la Empresa</option>
                                         <option>Fraude</option>
@@ -632,7 +632,7 @@
                                 <div class="form-group col-md-3">
                                     <label>Consequence:</label>
                                     <input type="text" class="form-control" [(ngModel)]="activeRequest.consequences"
-                                        [disabled]="activeRequest.status === 'DISPATCHED'">
+                                        [disabled]="activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Legal Bases</label>
@@ -641,11 +641,11 @@
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
-                                *ngIf="storedRequest && activeRequest.status === 'ACCEPTED' || activeRequest.status === 'DISPATCHED'">
+                                *ngIf="storedRequest && activeRequest.status === 'ACCEPTED' || activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                 <div class="form-group col-md-12">
                                     <label>Observations:</label>
                                     <textarea class="form-control" width="100%" [(ngModel)]="activeRequest.observations"
-                                        [disabled]="activeRequest.status === 'DISPATCHED'"></textarea>
+                                        [disabled]="activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
@@ -680,18 +680,18 @@
                                     <label>Date:</label>
                                     <input class="form-control" type="date"
                                         (change)="pushAudienceDate($event.target.value)"
-                                        *ngIf=" activeRequest.status != 'DISPATCHED'">
+                                        *ngIf=" activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.audience_date"
-                                        *ngIf=" activeRequest.status === 'DISPATCHED'">
+                                        *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Time:</label>
                                     <input class="form-control" type="time"
                                         (change)="pushAudienceTime($event.target.value)"
-                                        *ngIf="activeRequest.status != 'DISPATCHED'">
+                                        *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
-                                        [(ngModel)]="activeRequest.time" *ngIf=" activeRequest.status === 'DISPATCHED'">
+                                        [(ngModel)]="activeRequest.time" *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Status:</label>
@@ -743,16 +743,16 @@
                                 <div class="form-group col-md-6">
                                     <label>Day 1:</label>
                                     <input type="date" (change)="pushDay1($event.target.value)"
-                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED'">
+                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_1"
-                                        *ngIf=" activeRequest.status === 'DISPATCHED'">
+                                        *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
 
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Day 2:</label>
                                     <input type="date" (change)="pushDay2($event.target.value)"
-                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED'">
+                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_2" *ngIf=" activeRequest.status === 'DISPATCHED'">
                                 </div>
@@ -762,22 +762,22 @@
                                 <div class="form-group col-md-6">
                                     <label>Day 3:</label>
                                     <input type="date" (change)="pushDay3($event.target.value)"
-                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED'">
+                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_3"
-                                        *ngIf=" activeRequest.status === 'DISPATCHED'">
+                                        *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
 
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Day 4:</label>
                                     <input type="date" (change)="pushDay4($event.target.value)"
-                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED'">
+                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
-                                        [(ngModel)]="activeRequest.day_4" *ngIf=" activeRequest.status === 'DISPATCHED'">
+                                        [(ngModel)]="activeRequest.day_4" *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
-                                *ngIf="storedRequest &&  activeRequest.status != 'DISPATCHED'">
+                                *ngIf="storedRequest &&  activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                 <div class="form-group col-md-3">
                                     <button class="form-control" (click)="cancelView()">Cancel</button>
                                 </div>

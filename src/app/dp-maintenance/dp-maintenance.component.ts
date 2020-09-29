@@ -58,8 +58,13 @@ export class DpMaintenanceComponent implements OnInit {
         }
         let dt:any = new Date(el.imposition_date);
         let da:any = new Date();
-        let days = Math.floor((da - dt));
-        el.date = days.toString();
+        let days = Math.floor((da - dt)/(1000*60*60*24));
+        el.id_department = days.toString();
+        if(move > 1){
+          if(days > move){
+            el.status = 'INACTIVE';
+          }
+        }
       });
     })
   }
