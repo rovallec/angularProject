@@ -11,6 +11,7 @@ import { disciplinary_processes } from '../process_templates';
 export class DpMaintenanceComponent implements OnInit {
 
   dps:disciplinary_processes[] = [];
+  eval:boolean = false;
 
   constructor(private apiService:ApiService) { }
 
@@ -30,7 +31,7 @@ export class DpMaintenanceComponent implements OnInit {
   }
 
   setEvaluation(){
-    
+
   }
 
 }

@@ -84,8 +84,8 @@ export class HrhomeComponent implements OnInit {
     let emplo:employees[] = [];
     this.apiService.getSearchEmployees({filter:'idemployees', value:proc.employee}).subscribe((emp:employees[])=>{
       emplo = emp;
+      this.route.navigate(['./hrprofiles', emplo[0].id_profile]);
     })
-    this.route.navigate(['./hrprofiles', emplo[0].id_profile]);
   }
 
   showWave(wv:waves_template){
