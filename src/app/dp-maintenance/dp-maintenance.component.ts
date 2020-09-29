@@ -66,10 +66,10 @@ export class DpMaintenanceComponent implements OnInit {
         el.id_department = days.toString();
         if(move > 1){
           if(days > move){
-            this.inactive = this.inactive++
+            this.inactive = this.inactive + this.inactive;
             el.status = 'INACTIVE';
           }else{
-            this.active = this.active++
+            this.active = this.active + this.active;
           }
         }
       });
