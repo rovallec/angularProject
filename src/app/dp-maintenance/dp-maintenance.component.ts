@@ -54,6 +54,7 @@ export class DpMaintenanceComponent implements OnInit {
         this.percent = (this.completed/this.inactive) * 100;
       }
     });
+    this.getAll();
   }
 
   setEvaluation() {
