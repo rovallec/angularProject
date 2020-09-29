@@ -81,8 +81,8 @@ export class HrhomeComponent implements OnInit {
   }
   
   gotoProfileP(proc:hrProcess){
-    let emplo:employees[] = [];
-    this.apiService.getSearchEmployees({filter:'idemployees', value:proc.employee, dp:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
+    let emplo:employees[] = [new employees];
+    this.apiService.getSearchEmployees({filter:'idemployees', value:proc.id_employee, dp:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
       emplo = emp;
       this.route.navigate(['./hrprofiles', emplo[0].id_profile]);
     })

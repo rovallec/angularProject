@@ -34,6 +34,16 @@ export class DpMaintenanceComponent implements OnInit {
   setEvaluation(){
     this.apiService.getDisciplinaryProcesses({id:'all'}).subscribe((dp:disciplinary_processes[])=>{
       this.dps = dp;
+      this.dps.forEach(el => {
+        switch (el.cathegory) {
+          case '1*No adherirse a su horario por mas de 15% del tiempo total estipulado de trabajo.' && 'Asistencia':
+            
+            break;
+        
+          default:
+            break;
+        }
+      });
     })
   }
 
