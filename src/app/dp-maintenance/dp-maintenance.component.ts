@@ -56,7 +56,7 @@ export class DpMaintenanceComponent implements OnInit {
             move = 180;
             break;
         }
-        let dt:any = new Date(el.date);
+        let dt:any = new Date(el.imposition_date);
         let da:any = new Date();
         let days = Math.floor((da - dt));
         el.date = days.toString();
