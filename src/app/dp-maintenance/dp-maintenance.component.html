@@ -48,8 +48,16 @@
         <div class="form-row">
             <div class="form-group col-md-5">
                 <div class="form-row">
-                    <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Actual</label>
                     <div class="form-group">
+                        <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Actual</label>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-4">
+                                <label>TOTAL:</label>
+                                <input class="form-control" [(ngModel)]='dps.length' [disabled]='true'>
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                        </div>
                         <div class="form-row">
                             <table style="width:100%" class="table table-striped table-hover">
                                 <thead>
@@ -60,6 +68,16 @@
                                     <th>DATE</th>
                                     <th>STATUS</th>
                                 </thead>
+                                <tbody>
+                                    <tr *ngFor="let dp of dps">
+                                        <td>{{dp.iddisciplinary_process}}</td>
+                                        <td>{{dp.id_employee}}</td>
+                                        <td>{{dp.dp_grade}}</td>
+                                        <td>{{dp.type}}</td>
+                                        <td>{{dp.imposition_date}}</td>
+                                        <td>{{dp.status}}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -70,8 +88,21 @@
             </div>
             <div class="form-group col-md-5">
                 <div class="form-row">
-                    <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Actual</label>
                     <div class="form-group">
+                        <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Change</label>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-md-3">
+                                <label>ACTIVE:</label>
+                                <input class="form-control" [(ngModel)]='active' [disabled]='true'>
+                            </div>
+                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-md-3">
+                                <label>INACTIVE:</label>
+                                <input class="form-control" [(ngModel)]='inactive' [disabled]='true'>
+                            </div>
+                            <div class="form-group col-md-2"></div>
+                        </div>
                         <div class="form-row">
                             <table style="width:100%" class="table table-striped table-hover">
                                 <thead>
@@ -80,8 +111,19 @@
                                     <th>GRADE</th>
                                     <th>TYPE</th>
                                     <th>DATE</th>
+                                    <th>ELAPSED</th>
                                     <th>STATUS</th>
                                 </thead>
+                                <tbody>
+                                    <tr *ngFor="let dp of dps">
+                                        <td>{{dp.iddisciplinary_process}}</td>
+                                        <td>{{dp.id_employee}}</td>
+                                        <td>{{dp.dp_grade}}</td>
+                                        <td>{{dp.type}}</td>
+                                        <td>{{dp.imposition_date}}</td>
+                                        <td>{{dp.status}}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
