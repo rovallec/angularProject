@@ -32,6 +32,7 @@ export class DpMaintenanceComponent implements OnInit {
   }
 
   setEvaluation() {
+    this.eval = true;
     this.apiService.getDisciplinaryProcesses({ id: 'active' }).subscribe((dp: disciplinary_processes[]) => {
       let move: number = 0;
       this.dps = dp;
