@@ -13,6 +13,8 @@ export class DpMaintenanceComponent implements OnInit {
   dps: disciplinary_processes[] = [];
   dps_ch: disciplinary_processes[] = [];
   eval: boolean = false;
+  inactive:number = 0;
+  active:number = 0;
 
   constructor(private apiService: ApiService) { }
 
@@ -64,7 +66,10 @@ export class DpMaintenanceComponent implements OnInit {
         el.id_department = days.toString();
         if(move > 1){
           if(days > move){
+            this.inactive = this.inactive++
             el.status = 'INACTIVE';
+          }else{
+            this.active = this.active++
           }
         }
       });
