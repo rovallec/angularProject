@@ -104,6 +104,7 @@ export class HrprofilesComponent implements OnInit {
     "Calidad",
     "Conducta",
     "Cumplimiento",
+    "Desempeño",
     "Fraude"
   ]
 

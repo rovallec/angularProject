@@ -37,6 +37,9 @@
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/classlist" style="color: white" [ngClass]="{'act':selectedOption=='CLASS'}" (click)="SetSel('CLASS')">CLASS LIST</a>
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link" routerLink="/activeReport" style="color: white"  [ngClass]="{'act':selectedOption=='ACTVR'}" (click)="SetSel('ACTVR')">ACTIVE AGENTS REPORT</a>
       </li>
+      <li *ngIf="getAuth()" class="nav-item active">
+        <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link" routerLink="/dpMaintenance" style="color: white"  [ngClass]="{'act':selectedOption=='DPM'}" (click)="SetSel('DPM')">DP MAINTENANCE</a>
+      </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
       <div class="dropdown">

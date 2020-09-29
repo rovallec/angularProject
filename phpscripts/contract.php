@@ -139,6 +139,37 @@
                         <tr>
                             <td colspan='2' style='font-family:Calibri;font-size:11px;  text-align: justify;text-justify: inter-word;line-height:1.6'><p style='margin:0px;padding:0px'>GUATEMALA, $day de $mn de $yr</p><td>
                         </tr>
+                        <tr style='height:20px'></tr>
+                        <tr>
+                        <td>
+                            <table style='width:100%'>
+                                <tr>
+                                    <td style='width:10%'><td>
+                                    <td style='width:35%'>
+                                        <table style='width:100%'>
+                                            <tr style='height:80px'>
+                                            <td><img src='http://200.94.251.67/assets/nSalazar.png' style='width:100%; height:75px'></td>
+                                            </tr>
+                                            <tr>
+                                                <td style='border-top:2px solid black;font-size:12px;text-align:center'>NANCY LUCRECIA SALAZAR ESCOBAR</td>
+                                            </tr>
+                                        </table>
+                                    <td>
+                                    <td style='width:10%'><td>
+                                    <td style='width:35%'>
+                                        <table style='width:100%'>
+                                            <tr style='height:80px'>
+                                            </tr>
+                                            <tr>
+                                                <td style='border-top:2px solid black;font-size:12px;text-align:center'>$name</td>
+                                            </tr>
+                                        </table>
+                                    <td>
+                                    <td style='width:10%'><td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                     </table>
                     <div style='page-break-after:always;'></div>
                 </body>
@@ -194,27 +225,28 @@
                         <td>
                             <table style='width:100%'>
                                 <tr>
-                                    <td style='width:20%'><td>
-                                    <td style='width:20%'>
+                                    <td style='width:10%'><td>
+                                    <td style='width:35%'>
+                                        <table style='width:100%'>
+                                            <tr style='height:80px'>
+                                            <td><img src='http://200.94.251.67/assets/nSalazar.png' style='width:100%; height:75px'></td>
+                                            </tr>
+                                            <tr>
+                                                <td style='border-top:2px solid black;font-size:12px;text-align:center'>NANCY LUCRECIA SALAZAR ESCOBAR</td>
+                                            </tr>
+                                        </table>
+                                    <td>
+                                    <td style='width:10%'><td>
+                                    <td style='width:35%'>
                                         <table style='width:100%'>
                                             <tr style='height:80px'>
                                             </tr>
                                             <tr>
-                                                <td style='margin-top:2px solid black'>NANCY LUCRECIA SALAZAR ESCOBAR</td>
+                                                <td style='border-top:2px solid black;font-size:12px;text-align:center'>$name</td>
                                             </tr>
                                         </table>
                                     <td>
-                                    <td style='width:20%'><td>
-                                    <td style='width:20%'>
-                                        <table style='width:100%'>
-                                            <tr style='height:80px'>
-                                            </tr>
-                                            <tr>
-                                                <td style='margin-top:2px solid black'>$name</td>
-                                            </tr>
-                                        </table>
-                                    <td>
-                                    <td style='width:20%'><td>
+                                    <td style='width:10%'><td>
                                 </tr>
                             </table>
                         </td>

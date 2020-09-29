@@ -15,6 +15,7 @@ import { HrdailyComponent } from './hrdaily/hrdaily.component';
 import { AttendenceImportComponent } from './attendence-import/attendence-import.component';
 import { AttritionReportComponent } from './attrition-report/attrition-report.component';
 import { ActiveAnalysisComponent } from './active-analysis/active-analysis.component';
+import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.component';
 
 const routes:Routes = [
   {
@@ -78,6 +79,11 @@ const routes:Routes = [
   {
     path:'activeReport',
     component: ActiveAnalysisComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'dpMaintenance',
+    component: DpMaintenanceComponent,
     canActivate:[AuthGuard]
   },
   {

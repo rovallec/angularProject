@@ -456,10 +456,10 @@
                                     <tbody>
                                         <tr *ngFor="let dp of discilplinary_processes" class="selectable"
                                             (click)="showDp(dp)">
-                                            <td>{{dp.id_type}}</td>
+                                            <td>{{dp.cathegory}}</td>
                                             <td>{{dp.id_user}}</td>
-                                            <td>{{dp.date}}</td>
-                                            <td>{{dp.reason}}</td>
+                                            <td>{{dp.imposition_date}}</td>
+                                            <td>{{dp.dp_grade}}</td>
                                             <td>{{dp.status}}</td>
                                         </tr>
                                     </tbody>
@@ -622,7 +622,7 @@
                                         <option>Entrada/Salida Tarde/Temprano</option>
                                         <option>Violacion a Reglas de la Empresa</option>
                                         <option>Fraude</option>
-                                        <option>Ausencia Injustificasa</option>
+                                        <option>Ausencia Injustificada</option>
                                         <option>Desempeño</option>
                                         <option>Abuso de Receso/Almuerzo/Auxiliares</option>
                                         <option>Conducta</option>

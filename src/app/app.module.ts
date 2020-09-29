@@ -21,7 +21,8 @@ import { HrprofilesComponent } from './hrprofiles/hrprofiles.component';
 import { HrdailyComponent } from './hrdaily/hrdaily.component';
 import { AttendenceImportComponent } from './attendence-import/attendence-import.component';
 import { AttritionReportComponent } from './attrition-report/attrition-report.component';
-import { ActiveAnalysisComponent } from './active-analysis/active-analysis.component'
+import { ActiveAnalysisComponent } from './active-analysis/active-analysis.component';
+import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.component'
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ActiveAnalysisComponent } from './active-analysis/active-analysis.compo
     HrdailyComponent,
     AttendenceImportComponent,
     AttritionReportComponent,
-    ActiveAnalysisComponent
+    ActiveAnalysisComponent,
+    DpMaintenanceComponent
   ],
   imports: [
     BrowserModule,
