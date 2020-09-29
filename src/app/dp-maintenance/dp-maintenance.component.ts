@@ -13,8 +13,11 @@ export class DpMaintenanceComponent implements OnInit {
   dps: disciplinary_processes[] = [];
   dps_ch: disciplinary_processes[] = [];
   eval: boolean = false;
+  working:boolean = false;
+  completed:number = 0;
   inactive:number = 0;
   active:number = 0;
+  percent:number = 0;
 
   constructor(private apiService: ApiService) { }
 
@@ -22,6 +25,9 @@ export class DpMaintenanceComponent implements OnInit {
   }
 
   getActive() {
+    this.active = 0;
+    this.inactive = 0;
+    this.completed = 0;
     this.eval = false;
     this.apiService.getDisciplinaryProcesses({ id: 'active' }).subscribe((dp: disciplinary_processes[]) => {
       this.dps = dp;
@@ -29,6 +35,9 @@ export class DpMaintenanceComponent implements OnInit {
   }
 
   getAll() {
+    this.active = 0;
+    this.inactive = 0;
+    this.completed = 0;
     this.eval = false;
     this.apiService.getDisciplinaryProcesses({ id: 'all' }).subscribe((dp: disciplinary_processes[]) => {
       this.dps = dp;
@@ -36,9 +45,13 @@ export class DpMaintenanceComponent implements OnInit {
   }
 
   saveChanges(){
-    this.apiService.updateDP(this.dps_ch).subscribe((str:string)=>{
-      this.getAll();
-    })
+    this.working = true;
+    this.dps_ch.forEach(element => {
+      this.apiService.updateDP(element).subscribe((str:string)=>{
+      })
+      this.completed = this.completed + 1;
+      this.percent = (this.completed/this.inactive) * 100;
+    });
   }
 
   setEvaluation() {
