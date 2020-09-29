@@ -47,10 +47,12 @@ export class DpMaintenanceComponent implements OnInit {
   saveChanges(){
     this.working = true;
     this.dps_ch.forEach(element => {
-      this.apiService.updateDP(element).subscribe((str:string)=>{
-      })
-      this.completed = this.completed + 1;
-      this.percent = (this.completed/this.inactive) * 100;
+      if(element.status == 'INACTIVE'){
+        this.apiService.updateDP(element).subscribe((str:string)=>{
+        })
+        this.completed = this.completed + 1;
+        this.percent = (this.completed/this.inactive) * 100;
+      }
     });
   }
 
