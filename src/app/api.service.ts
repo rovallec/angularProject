@@ -431,5 +431,8 @@ updateEmployee(emp:employees){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateEmployees.php`, emp);
 }
 
+updateDP(dp:disciplinary_processes[]){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateDP.php`, dp);
+}
   constructor(private httpClient:HttpClient) { }
 }

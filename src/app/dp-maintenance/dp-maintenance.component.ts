@@ -22,14 +22,22 @@ export class DpMaintenanceComponent implements OnInit {
   }
 
   getActive() {
+    this.eval = false;
     this.apiService.getDisciplinaryProcesses({ id: 'active' }).subscribe((dp: disciplinary_processes[]) => {
       this.dps = dp;
     })
   }
 
   getAll() {
+    this.eval = false;
     this.apiService.getDisciplinaryProcesses({ id: 'all' }).subscribe((dp: disciplinary_processes[]) => {
       this.dps = dp;
+    })
+  }
+
+  saveChanges(){
+    this.apiService.updateDP(this.dps_ch).subscribe((str:string)=>{
+      this.getAll();
     })
   }
 
