@@ -278,7 +278,7 @@
                         <th>STATUS</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let process of allProcesses" (click)="gotoProfile(employee)">
+                        <tr *ngFor="let process of allProcesses" (click)="gotoProfileP(process)">
                            <td>{{process.employee}}</td>
                            <td>{{process.name}}</td>
                            <td>{{process.user_name}}</td>

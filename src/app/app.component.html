@@ -27,6 +27,7 @@
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/realtime" style="color: white"  [ngClass]="{'act':selectedOption=='REAL'}" (click)="SetSel('REAL')">REAL TIME</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/attImport" (click)="SetSel('IMP')">Attendance</a>
+          <a class="dropdown-item" routerLink="/supExceptions" (click)="SetSel('IMP')">Sup. Exceptions</a>
         </div>
       </li>
       <li *ngIf="getAuth()" class="nav-item active">

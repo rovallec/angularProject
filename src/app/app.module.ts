@@ -22,7 +22,8 @@ import { HrdailyComponent } from './hrdaily/hrdaily.component';
 import { AttendenceImportComponent } from './attendence-import/attendence-import.component';
 import { AttritionReportComponent } from './attrition-report/attrition-report.component';
 import { ActiveAnalysisComponent } from './active-analysis/active-analysis.component';
-import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.component'
+import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.component';
+import { SupExceptionsComponent } from './sup-exceptions/sup-exceptions.component'
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.componen
     AttendenceImportComponent,
     AttritionReportComponent,
     ActiveAnalysisComponent,
-    DpMaintenanceComponent
+    DpMaintenanceComponent,
+    SupExceptionsComponent
   ],
   imports: [
     BrowserModule,

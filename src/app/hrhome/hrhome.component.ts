@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { waves_template, hires_template, attendences } from '../process_templates';
-import { employees, hrProcess } from '../fullProcess';
+import { waves_template, hires_template, attendences, disciplinary_processes, process_templates } from '../process_templates';
+import { employees, hrProcess, vew_hire_process } from '../fullProcess';
 import { isUndefined, isNull } from 'util';
 import { AuthServiceService } from '../auth-service.service'
 import { Router } from '@angular/router';
@@ -78,6 +78,14 @@ export class HrhomeComponent implements OnInit {
 
   gotoProfile(emp:employees){
     this.route.navigate(['./hrprofiles', emp.id_profile]);
+  }
+  
+  gotoProfileP(proc:hrProcess){
+    let emplo:employees[] = [];
+    this.apiService.getSearchEmployees({filter:'idemployees', value:proc.employee}).subscribe((emp:employees[])=>{
+      emplo = emp;
+    })
+    this.route.navigate(['./hrprofiles', emplo[0].id_profile]);
   }
 
   showWave(wv:waves_template){
