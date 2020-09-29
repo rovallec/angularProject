@@ -11,6 +11,7 @@ import { disciplinary_processes } from '../process_templates';
 export class DpMaintenanceComponent implements OnInit {
 
   dps:disciplinary_processes[] = [];
+  dps_ch:disciplinary_processes[] = [];
   eval:boolean = false;
 
   constructor(private apiService:ApiService) { }
@@ -31,7 +32,9 @@ export class DpMaintenanceComponent implements OnInit {
   }
 
   setEvaluation(){
-
+    this.apiService.getDisciplinaryProcesses({id:'all'}).subscribe((dp:disciplinary_processes[])=>{
+      this.dps = dp;
+    })
   }
 
 }
