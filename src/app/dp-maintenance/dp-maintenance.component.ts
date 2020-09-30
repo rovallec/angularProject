@@ -100,4 +100,7 @@ export class DpMaintenanceComponent implements OnInit {
     })
   }
 
+  printReport(){
+    window.open("http://200.94.251.67/phpscripts/mintrab.php", '_blank');
+  }
 }
