@@ -45,7 +45,7 @@ echo("
             <tr>
                 <td colspan='3'><b>Estimado Inspector General de Trabajo:</b></td>
             </tr>
-            <tr style='height:10px>
+            <tr style='height:10px'>
             </tr>
             <tr>
                 <td colspan='3'>Es un gusto saludarlo nuevamente y le deseo éxitos en sus labores cotidianas.</td>
@@ -61,12 +61,12 @@ echo("
             <tr style='height:10px'>
             </tr>
             <tr>
-                    <table style='width:100%'>
-                        <tr>
-                            <td>Nombre Completo</td>
-                            <td>Tipo de Sansión</td>
-                            <td>Fecha</td>
-                            <td>Descripción<td>
+                    <table style='width:100%;border-collapse:collapse;border:solid 2px black'>
+                        <tr style='width:100%'>
+                            <td style='border:solid 2px black; text-align:center'><b>Nombre Completo</b></td>
+                            <td style='border:solid 2px black; text-align:center'><b>Tipo de Sansión</b></td>
+                            <td style='border:solid 2px black; text-align:center'><b>Fecha</b></td>
+                            <td style='border:solid 2px black; text-align:center'><b>Descripción</b></td>
                         </tr>
 ");
 
@@ -86,12 +86,27 @@ if($res1 = mysqli_query($con, $sql)){
             $rw4 = $row['type'];
             echo("
                 <tr>
-                    <td>$rw1</td>
-                    <td>$rw2</td>
-                    <td>$rw3</td>
-                    <td>$rw4</td>
+                    <td style='border:solid 1px black; text-align:center'>$rw1</td>
+                    <td style='border:solid 1px black; text-align:center'>$rw2</td>
+                    <td style='border:solid 1px black; text-align:center'>$rw3</td>
+                    <td style='border:solid 1px black; text-align:center'>$rw4</td>
                 </tr>
-            ")
+            ");
+        }
+
+        while($row2 = mysqli_fetch_assoc($res2)){
+            $rw1 = $row['first_name'] . ' ' . $row['second_name'] . ' ' . $row['first_lastname'] . ' ' . $row['second_lastname'];
+            $rw2 = $row['kind'];
+            $rw3 = $row['valid_from'];
+            $rw4 = $rw['reason'];
+            echo("
+                <tr>
+                    <td style='border:solid 1px black; text-align:center'>$rw1</td>
+                    <td style='border:solid 1px black; text-align:center'>$rw2</td>
+                    <td style='border:solid 1px black; text-align:center'>$rw3</td>
+                    <td style='border:solid 1px black; text-align:center'>$rw4</td>
+                </tr>
+            ");
         }
     }
 }
