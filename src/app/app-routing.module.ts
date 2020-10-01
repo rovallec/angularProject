@@ -16,6 +16,7 @@ import { AttendenceImportComponent } from './attendence-import/attendence-import
 import { AttritionReportComponent } from './attrition-report/attrition-report.component';
 import { ActiveAnalysisComponent } from './active-analysis/active-analysis.component';
 import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.component';
+import { SupExceptionsComponent } from './sup-exceptions/sup-exceptions.component';
 
 const routes:Routes = [
   {
@@ -84,6 +85,11 @@ const routes:Routes = [
   {
     path:'dpMaintenance',
     component: DpMaintenanceComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'supExceptions',
+    component: SupExceptionsComponent,
     canActivate:[AuthGuard]
   },
   {
