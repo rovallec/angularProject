@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ApiService} from '../api.service';
 import {AuthServiceService} from '../auth-service.service';
 import {Router} from '@angular/router';
-import {waves_template, schedules, hires_template} from '../process_templates'
+import {waves_template, schedules, hires_template, periods} from '../process_templates'
 
 @Component({
   selector: 'app-accdashboard',
@@ -21,15 +21,28 @@ export class AccdashboardComponent implements OnInit {
   sch_hrs_e:string;
   sch_min_e:string;
   includeAll:boolean = false;
+  periods:periods[] = [];
 
   constructor(private apiService: ApiService, public router:Router, private authSrv:AuthServiceService) { }
 
   ngOnInit() {
     this.getWavesAll();
+    this.getPeriods();
+  }
+
+  getPeriods(){
+    this.apiService.getPeriods().subscribe((prd:periods[])=>{
+      this.periods = prd;
+    });
+  }
+
+  gotoPeriod(id:string){
+    this.router.navigate(['./periods', id]);
   }
 
   getWavesAll(){
-    this.apiService.getWaves().subscribe((readWaves:waves_template[])=>{
+    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate() + " AND `state` = 0";
+    this.apiService.getfilteredWaves(date).subscribe((readWaves:waves_template[])=>{
       this.waves = readWaves;
       this.wave_ToEdit = readWaves[0];
     })

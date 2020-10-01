@@ -91,13 +91,17 @@
                 <table class="table table-striped table-hover" style="text-align: center" width=100%>
                     <thead>
                         <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Client</th>
-                        <th scope="col">Starts</th>
-                        <th scope="col">Ends</th>
+                        <th scope="col">Start</th>
+                        <th scope="col">End</th>
                         <th scope="col">Status</th>
                     </thead>
                     <tbody>
+                        <tr *ngFor="let period of periods" (click)="gotoPeriod(period.idperiod)">
+                            <td>{{period.idperiod}}</td>
+                            <td>{{period.start}}</td>
+                            <td>{{period.end}}</td>
+                            <td>{{period.status}}</td>
+                        </tr>
                     </tbody>
                 </table>
             </td>

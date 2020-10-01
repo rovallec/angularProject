@@ -17,6 +17,8 @@ import { AttritionReportComponent } from './attrition-report/attrition-report.co
 import { ActiveAnalysisComponent } from './active-analysis/active-analysis.component';
 import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.component';
 import { SupExceptionsComponent } from './sup-exceptions/sup-exceptions.component';
+import { periods } from './process_templates';
+import { PeriodsComponent } from './periods/periods.component';
 
 const routes:Routes = [
   {
@@ -55,6 +57,11 @@ const routes:Routes = [
   {
     path:'profiles/:id',
     component: MiprofilesComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'periods/:id',
+    component: PeriodsComponent,
     canActivate:[AuthGuard]
   },
   {

@@ -624,3 +624,16 @@ export class messagings{
         this.notes = null;
     }
 }
+
+export class periods{
+    idperiods:string;
+    start:string;
+    end:string;
+    status:string;
+    constructor(){
+        this.idperiods = null;
+        this.start = null;
+        this.end = null;
+        this.status = null;
+    }
+}
