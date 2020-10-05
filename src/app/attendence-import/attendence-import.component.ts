@@ -76,7 +76,7 @@ export class AttendenceImportComponent implements OnInit {
 
         this.attendences.forEach(elem => {
           elem.day_off1 = "FAIL";
-          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp:'4'}).subscribe((emp: employees[]) => {
             if (!isNullOrUndefined(emp[0])) {
               this.apiService.getAttendences({ date:elem.date + ";" + emp[0].idemployees , id:'NULL' }).subscribe((att: attendences[]) => {
                 if (isNullOrUndefined(att)) {
