@@ -96,8 +96,8 @@
                         <th scope="col">Status</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let period of periods" (click)="gotoPeriod(period.idperiod)">
-                            <td>{{period.idperiod}}</td>
+                        <tr *ngFor="let period of periods" (click)="gotoPeriod(period.idperiods)">
+                            <td>{{period.idperiods}}</td>
                             <td>{{period.start}}</td>
                             <td>{{period.end}}</td>
                             <td>{{period.status}}</td>
