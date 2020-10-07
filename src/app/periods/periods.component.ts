@@ -26,7 +26,7 @@ export class PeriodsComponent implements OnInit {
   diff:number = 0;
   totalDebits:number = 0;
   totalCredits:number = 0;
-  filter:string = null;
+  filter:string = 'name';
   value:string = null;
 
   constructor(public apiService:ApiService, public route:ActivatedRoute) { }
