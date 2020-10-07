@@ -25,24 +25,19 @@ if(explode(" ", $date)[0] === "<="){
 		$dt = $id_emp[0];
 		$exp_id = $id_emp[1];
 		$sql = "SELECT * FROM `attendences` WHERE `date` = '$dt' AND `id_employee` = '$exp_id'";
-	}else{
-		$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
-	FROM `hires`
-		LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`
-		LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule`
-		LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires`
-		LEFT JOIN (SELECT * FROM `attendences` WHERE `date` = '$date') AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `id_wave` = $id";
-	}else{
-		if(explode($id, " ")[0] == 'BETWEEN'){
-			$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
+		}else{
+			if(strpos($date,"BETWEEN") !== false){
+				$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status` FROM `hires` LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN (SELECT * FROM `attendences` WHERE `date` $date) AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `idprofiles` = $id";
+			}else{
+				$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
 			FROM `hires`
-				LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`
-				LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule`
-				LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires`
-				LEFT JOIN (SELECT * FROM `attendences` WHERE `date` $date) AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `id_wave` = $id";
+			LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`
+			LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule`
+			LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires`
+			LEFT JOIN (SELECT * FROM `attendences` WHERE `date` = '$date') AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `id_wave` = $id";
+			}
 		}
 	}
-}
 
 if($result = mysqli_query($con, $sql))
 {

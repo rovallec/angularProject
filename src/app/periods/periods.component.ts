@@ -38,6 +38,7 @@ export class PeriodsComponent implements OnInit {
   setReg(de:deductions){
     this.apiService.getAttendences({id:de.idemployees,date:"BETWEEN '"  + this.period.start + "' AND '" + this.period.end + "'"}).subscribe((att:attendences[])=>{
       this.attendances = att;
+      console.log(attendences);
       this.selectedEmployee = true;
     })
   }
