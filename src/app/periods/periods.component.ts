@@ -2,7 +2,7 @@ import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
-import { attendences, credits, debits, deductions } from '../process_templates';
+import { attendences, credits, debits, deductions, periods } from '../process_templates';
 
 @Component({
   selector: 'app-periods',
@@ -17,12 +17,16 @@ export class PeriodsComponent implements OnInit {
   attendances:attendences[] = [];
   deductions:deductions[] = [];
   debits:debits[] = [];
-  credits:credits[] = []
+  credits:credits[] = [];
+  period:periods = new periods;
 
   constructor(public apiService:ApiService, public route:ActivatedRoute) { }
 
   ngOnInit() {
     this.getDeductions();
+    this.apiService.getFilteredPeriods({id:this.route.snapshot.paramMap.get('id')}).subscribe((p:periods)=>{
+      this.period = p;
+    });
   }
 
   getDeductions(){
@@ -31,8 +35,11 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
-  setReg(id:string){
-    this.selectedEmployee = true;
+  setReg(de:deductions){
+    this.apiService.getAttendences({id:de.idemployees,date:"BETWEEN '"  + this.period.start + "' AND '" + this.period.end + "'"}).subscribe((att:attendences[])=>{
+      this.attendances = att;
+      this.selectedEmployee = true;
+    })
   }
 
 }

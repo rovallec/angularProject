@@ -443,5 +443,9 @@ getDeductions(any:any){
   return this.httpClient.post<deductions[]>(`${this.PHP_API_SERVER}/phpscripts/getDeductions.php`,any);
 }
 
+getFilteredPeriods(any:any){
+  return this.httpClient.post<periods>(`${this.PHP_API_SERVER}/phpscripts/getFilteredPeriods.php`, any);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
