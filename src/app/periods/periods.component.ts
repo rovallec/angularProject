@@ -26,6 +26,8 @@ export class PeriodsComponent implements OnInit {
   diff:number = 0;
   totalDebits:number = 0;
   totalCredits:number = 0;
+  filter:string = null;
+  value:string = null;
 
   constructor(public apiService:ApiService, public route:ActivatedRoute) { }
 
@@ -48,7 +50,24 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
+  cancelSearch(){
+    this.daysOff = 0;
+    this.roster = 0;
+    this.attended = 0;
+    this.diff= 0;
+    this.totalDebits = 0;
+    this.totalCredits = 0;
+    this.getDeductions();
+    this.selectedEmployee = false;
+  }
+
   setReg(de:deductions){
+    this.daysOff = 0;
+    this.roster = 0;
+    this.attended = 0;
+    this.diff= 0;
+    this.totalDebits = 0;
+    this.totalCredits = 0;
     this.apiService.getAttendences({id:de.idprofiles,date:"BETWEEN '"  + this.period.start + "' AND '" + this.period.end + "'"}).subscribe((att:attendences[])=>{
       this.attendances = att;
       this.attendances.forEach(element => {
@@ -82,4 +101,7 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
+  searchEmployee(){
+    this.apiService.getFilteredDeductions({id:this.period.idperiods, filter:this.filter, value:this.value})
+  }
 }

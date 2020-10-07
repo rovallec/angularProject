@@ -2,15 +2,25 @@
     <div class="form-row col-md-12">
         <div class="form-group col-md-3"></div>
         <div class="form-group col-md-2">
-            <select class="form-control">
-                <option>NAME</option>
-                <option>TYPE</option>
-                <option>AMOUNT</option>
+            <select class="form-control" [(ngModel)}="filter">
+                <option value='name'>NAME</option>
+                <option value='type'>TYPE</option>
+                <option value='reason'>REASON</option>
+                <option value='amount'>AMOUNT</option>
             </select>
         </div>
-        <div class="form-group col-md-1"></div>
-        <div class="form-group col-md-3">
-            <input type="text" class="form-control">
+        <div class="form-group col-md-2">
+            <input type="text" class="form-control" *ngIf="filter === 'name' || filter === 'reason' || filter === 'amount'" [(ngModel)]='value'>
+            <select class="form-control" *ngIf="filter === 'type'" [(ngModel)]='value'>
+                <option>DEBIT</option>
+                <option>CREDIT</option>
+            </select>
+        </div>
+        <div class="form-group col-md-1; text-align:left">
+            <i class="fas fa-search" aria-hidden="true" style="margin-top:255%" (click)="searchEmployee()"></i>
+        </div>
+        <div class="form-group col-md-1; text-align:left">
+            <i class="fas fa-minus-circle" style="margin-top:250%" (click)="cancelSearch()"></i>
         </div>
     </div>
     <div class="from-row col-md-12">
@@ -50,7 +60,7 @@
                             <th>BALANCE</th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let att of attendances">
+                            <tr *ngFor="let att of attendances" class="selectable">
                                 <td>{{att.date}}</td>
                                 <td>{{att.scheduled}}</td>
                                 <td>{{att.worked_time}}</td>
@@ -90,7 +100,7 @@
                             <th>AMOUNT</th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let debit of debits">
+                            <tr *ngFor="let debit of debits" class="selectable">
                                 <td>{{debit.iddebits}}</td>
                                 <td>{{debit.type}}</td>
                                 <td>{{debit.amount}}</td>
@@ -111,15 +121,15 @@
             <div class="form-group col-md-4" style="padding:10px; margin-top:15px; margin-bottom:15px;">
                 <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">CREDITS</label>
                 <div class="from-row col-md-12">
-                    <table style="width: 100;" class="table table-striped table-hover">
-                        <thead style="text-align:center" style="width: 100%;text-align:center">
+                    <table style="width: 100;" class="table table-striped table-hover" style="width: 100%;text-align:center">
+                        <thead style="text-align:center">
                             <th>ID</th>
                             <th>TYPE</th>
                             <th>AMOUNT</th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let cred of credits">
-                                <td>{{cred.iddebits}}</td>
+                            <tr *ngFor="let cred of credits" class="selectable">
+                                <td>{{cred.idcredits}}</td>
                                 <td>{{cred.type}}</td>
                                 <td>{{cred.amount}}</td>
                             </tr>
@@ -128,7 +138,7 @@
                 </div>
                 <div class="form-row col-md-12">
                     <div class="form-group col-md-5"></div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-2" style="text-align:center">
                         <label>TOTAL</label>
                         <input type="text" class="form-control" [disabled]='true' [(ngModel)]="totalCredits">
                     </div>
