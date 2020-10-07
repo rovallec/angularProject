@@ -22,6 +22,7 @@ export class PeriodsComponent implements OnInit {
   constructor(public apiService:ApiService, public route:ActivatedRoute) { }
 
   ngOnInit() {
+    this.getDeductions();
   }
 
   getDeductions(){
