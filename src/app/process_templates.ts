@@ -637,3 +637,26 @@ export class periods{
         this.status = null;
     }
 }
+
+export class deductions{
+    iddeductions:string;
+    idemployees:string;
+    name:string;
+    type:string;
+    reason:string;
+    amount:string;
+}
+
+export class debits{
+    iddebits:string;
+    idpayments:string;
+    type:string;
+    amount:string;
+}
+
+export class credits{
+    iddebits:string;
+    idpayments:string;
+    type:string;
+    amount:string;
+}
