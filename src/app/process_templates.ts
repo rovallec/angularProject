@@ -640,6 +640,7 @@ export class periods{
 
 export class deductions{
     iddeductions:string;
+    idprofiles:string;
     idemployees:string;
     name:string;
     type:string;

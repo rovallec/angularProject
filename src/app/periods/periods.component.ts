@@ -47,19 +47,26 @@ export class PeriodsComponent implements OnInit {
   }
 
   setReg(de:deductions){
-    this.apiService.getAttendences({id:de.idemployees,date:"BETWEEN '"  + this.period.start + "' AND '" + this.period.end + "'"}).subscribe((att:attendences[])=>{
+    this.apiService.getAttendences({id:de.idprofiles,date:"BETWEEN '"  + this.period.start + "' AND '" + this.period.end + "'"}).subscribe((att:attendences[])=>{
       this.attendances = att;
       this.attendances.forEach(element => {
-        element.balance = ((parseFloat(element.worked_time) - parseFloat(element.scheduled))).toString()
-        this.attended = this.attended + parseFloat(element.worked_time);
-        this.roster = this.roster + parseFloat(element.scheduled);
-        this.diff = this.diff + parseFloat(element.balance)
         if(element.scheduled == 'OFF'){
+          element.balance = '0';
           this.roster = this.roster + 8;
           this.attended = this.attended + 8;
           this.daysOff = this.daysOff + 1;
+        }else{
+          element.balance = ((parseFloat(element.worked_time) - parseFloat(element.scheduled))).toString()
+          this.attended = this.attended + parseFloat(element.worked_time);
+          this.roster = this.roster + parseFloat(element.scheduled);
+          this.diff = this.diff + parseFloat(element.balance)
         }
       });
+
+      this.apiService.getDebits({id:de.idemployees, period:this.period.idperiods}).subscribe((db:debits[])=>{
+        this.debits = db;
+      })
+      
       this.selectedEmployee = true;
     })
   }
