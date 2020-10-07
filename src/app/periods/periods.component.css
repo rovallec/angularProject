@@ -37,3 +37,7 @@ tbody tr{
 i{
     cursor: pointer;
 }
+
+input{
+    text-align:center;
+}

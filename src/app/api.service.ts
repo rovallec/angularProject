@@ -451,5 +451,8 @@ getDebits(any:any){
   return this.httpClient.post<debits[]>(`${this.PHP_API_SERVER}/phpscripts/getDebits.php`, any);
 }
 
+getCredits(any:any){
+  return this.httpClient.post<credits[]>(`${this.PHP_API_SERVER}/phpscripts/getCredits.php`, any);
+}
   constructor(private httpClient:HttpClient) { }
 }

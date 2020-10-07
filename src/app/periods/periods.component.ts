@@ -23,8 +23,9 @@ export class PeriodsComponent implements OnInit {
   daysOff:number = 0;
   roster:number = 0;
   attended:number = 0;
-  total:number = 0;
   diff:number = 0;
+  totalDebits:number = 0;
+  totalCredits:number = 0;
 
   constructor(public apiService:ApiService, public route:ActivatedRoute) { }
 
@@ -36,8 +37,9 @@ export class PeriodsComponent implements OnInit {
     this.daysOff = 0;
     this.roster = 0;
     this.attended = 0;
-    this.total = 0;
     this.diff= 0;
+    this.totalDebits = 0;
+    this.totalCredits = 0;
   }
 
   getDeductions(){
@@ -65,8 +67,17 @@ export class PeriodsComponent implements OnInit {
 
       this.apiService.getDebits({id:de.idemployees, period:this.period.idperiods}).subscribe((db:debits[])=>{
         this.debits = db;
+        this.debits.forEach(element => {
+          this.totalDebits = this.totalDebits + parseFloat(element.amount)
+        });
+      });
+
+      this.apiService.getCredits({id:de.idemployees, period:this.period.idperiods}).subscribe((cd:credits[])=>{
+        this.credits = cd;
+        this.credits.forEach(el => {
+          this.totalCredits = this.totalCredits + parseFloat(el.amount);
+        })
       })
-      
       this.selectedEmployee = true;
     })
   }

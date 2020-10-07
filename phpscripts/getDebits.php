@@ -15,12 +15,10 @@ $sql = "select profiles.idprofiles, debits.iddebits, profiles.first_name, profil
 
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
-        $res[$i]['iddeductions'] = $row['iddebits'];
-        $res[$i]['idemployees'] = $row['idprofiles'];
-        $res[$i]['name'] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
-        $res[$i]['type'] = 'DEBIT';
-        $res[$i]['reason'] = $row['type'];
-        $res[$i]['amount'] = number_format(((float)$row['amount']), 2);
+        $res[$i]['iddebits'] = $row['iddebits'];
+        $res[$i]['idpayments'] = $row['idprofiles'];
+        $res[$i]['type'] = $row['type'];
+        $res[$i]['amount'] = $row['amount'];
         $i++;
     }
     echo(json_encode($res));
