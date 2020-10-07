@@ -24,6 +24,7 @@ export class PeriodsComponent implements OnInit {
   roster:number = 0;
   attended:number = 0;
   total:number = 0;
+  diff:number = 0;
 
   constructor(public apiService:ApiService, public route:ActivatedRoute) { }
 
@@ -36,6 +37,7 @@ export class PeriodsComponent implements OnInit {
     this.roster = 0;
     this.attended = 0;
     this.total = 0;
+    this.diff= 0;
   }
 
   getDeductions(){
@@ -48,9 +50,10 @@ export class PeriodsComponent implements OnInit {
     this.apiService.getAttendences({id:de.idemployees,date:"BETWEEN '"  + this.period.start + "' AND '" + this.period.end + "'"}).subscribe((att:attendences[])=>{
       this.attendances = att;
       this.attendances.forEach(element => {
-        element.balance = Math.round((parseFloat(element.worked_time) - parseFloat(element.scheduled))*10^2/10^2).toString()
+        element.balance = ((parseFloat(element.worked_time) - parseFloat(element.scheduled))).toString()
         this.attended = this.attended + parseFloat(element.worked_time);
         this.roster = this.roster + parseFloat(element.scheduled);
+        this.diff = this.diff + parseFloat(element.balance)
         if(element.scheduled == 'OFF'){
           this.roster = this.roster + 8;
           this.attended = this.attended + 8;
