@@ -4,9 +4,10 @@
         <div class="form-group col-md-2">
             <select class="form-control" [(ngModel)]="filter">
                 <option value='name'>NAME</option>
-                <option value='type'>TYPE</option>
-                <option value='reason'>REASON</option>
-                <option value='amount'>AMOUNT</option>
+                <option value='type' *ngIf="ded">TYPE</option>
+                <option value='reason' *ngIf="ded">REASON</option>
+                <option value='amount' *ngIf="ded">AMOUNT</option>
+                <option value='DPI' *ngIf="!ded">DPI</option>
             </select>
         </div>
         <div class="form-group col-md-2">
@@ -57,7 +58,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let emp of employees" (click)="setRegE(emp)">
-                        <td>{{emp.idprofiles}}</td>
+                        <td>{{emp.id_profile}}</td>
                         <td>{{emp.name}}</td>
                         <td>{{emp.account}}</td>
                     </tr>
