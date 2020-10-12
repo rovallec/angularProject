@@ -241,5 +241,6 @@ export class PeriodsComponent implements OnInit {
     this.apiService.getallEmployees({department:'all'}).subscribe((emp:employees[])=>{
       this.employees = emp;
     })
+    this.ded = true;
   }
 }
