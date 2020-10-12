@@ -238,7 +238,7 @@ export class PeriodsComponent implements OnInit {
   }
 
   showAll(){
-    this.apiService.getallEmployees('all').subscribe((emp:employees[])=>{
+    this.apiService.getallEmployees({department:'all'}).subscribe((emp:employees[])=>{
       this.employees = emp;
     })
   }
