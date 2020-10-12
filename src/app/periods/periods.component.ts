@@ -237,7 +237,9 @@ export class PeriodsComponent implements OnInit {
         this.deductions = db;
       })
     }else{
-      this.apiService.getSearchEmployees({dp:'all', filter:this.filter, value:this.value})
+      this.apiService.getSearchEmployees({dp:'all', filter:this.filter, value:this.value}).subscribe((emp:employees[])=>{
+        this.employees = emp;
+      })
     }
   }
 
