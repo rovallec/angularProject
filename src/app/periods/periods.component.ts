@@ -192,6 +192,21 @@ export class PeriodsComponent implements OnInit {
                   if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
                     non_show = true;
                   }
+                  if(parseFloat((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2)) < 0){
+                    this.apiService.getAttAdjustments(emp.idemployees).subscribe((adj:attendences_adjustment[])=>{
+                      if(!non_show){
+                        let partial_nonshow:boolean = false;
+                        adj.forEach(adjustment=>{
+                          if(adjustment.id_attendence != attendance.idattendences){
+                            partial_nonshow = true;
+                          }else{
+                            partial_nonshow = false;
+                          }
+                        })
+                        non_show = partial_nonshow;
+                      }
+                    })
+                  }
                 }
               }
             }
@@ -343,6 +358,21 @@ export class PeriodsComponent implements OnInit {
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
                     non_show = true;
+                  }
+                  if(parseFloat((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2)) < 0){
+                    this.apiService.getAttAdjustments(de.idemployees).subscribe((adj:attendences_adjustment[])=>{
+                      if(!non_show){
+                        let partial_nonshow:boolean = false;
+                        adj.forEach(adjustment=>{
+                          if(adjustment.id_attendence != attendance.idattendences){
+                            partial_nonshow = true;
+                          }else{
+                            partial_nonshow = false;
+                          }
+                        })
+                        non_show = partial_nonshow;
+                      }
+                    })
                   }
                 }
               }
