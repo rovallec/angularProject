@@ -171,11 +171,12 @@ export class PeriodsComponent implements OnInit {
 
       this.apiService.getAttendences({ id: de.idprofiles, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
         this.attendances = att;
+
         this.attendances.forEach(element => {
 
           this.vacations.forEach(el => {
             if (element.date == el.took_date) {
-              this.attended = this.attended + 8;
+              this.attended = this.attended + parseFloat(element.scheduled);
               this.roster = this.roster + parseFloat(element.scheduled);
               vacs = true;
             } else {
@@ -221,6 +222,7 @@ export class PeriodsComponent implements OnInit {
               this.roster = this.roster + parseFloat(element.scheduled);
               this.diff = this.diff + parseFloat(element.balance);
               if (element.worked_time == '0.00' || element.worked_time == '0') {
+                console.log("hey");
                 this.apiService.getAttAdjustments({ id: de.idemployees }).subscribe((ad: attendences_adjustment[]) => {
                   ad.forEach(adjustment => {
                     if (adjustment.id_attendence != element.idattendences) {
@@ -233,23 +235,23 @@ export class PeriodsComponent implements OnInit {
           }
         })
       });
+    });
 
-      this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-        this.debits = db;
-        this.debits.forEach(element => {
-          this.totalDebits = this.totalDebits + parseFloat(element.amount)
-        });
+    this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+      this.debits = db;
+      this.debits.forEach(element => {
+        this.totalDebits = this.totalDebits + parseFloat(element.amount)
       });
+    });
 
-      this.apiService.getCredits({ id: de.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
-        this.credits = cd;
-        this.credits.forEach(el => {
-          this.totalCredits = this.totalCredits + parseFloat(el.amount);
-        })
+    this.apiService.getCredits({ id: de.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
+      this.credits = cd;
+      this.credits.forEach(el => {
+        this.totalCredits = this.totalCredits + parseFloat(el.amount);
       })
-
-      this.selectedEmployee = true;
     })
+
+    this.selectedEmployee = true;
   }
 
   searchEmployee() {
