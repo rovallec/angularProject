@@ -397,6 +397,23 @@ export class PeriodsComponent implements OnInit {
       })
     })
 
+    if(this.period.status == '1'){
+      let cred:credits = new credits;
+      let deb:debits = new debits;
+
+      this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:de.idemployees}).subscribe((emplo:employees[])=>{
+        let hour:number = parseFloat(emplo[0].base_payment)/((this.roster/this.attendances.length)*15);
+        cred.amount = (this.attended*hour).toFixed(2);
+        cred.type = "Apportionment Payment";
+
+        deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
+        deb.type = "Apportioment IGSS";
+
+        this.credits.push(cred);
+        this.debits.push(deb);
+      })
+    }
+
     this.selectedEmployee = true;
   }
 
