@@ -185,6 +185,7 @@ export class PeriodsComponent implements OnInit {
 
         this.leaves.forEach(e=>{
           if((new Date(element.date)) <= (new Date(e.end)) && (new Date(element.date)) >= (new Date(e.start))){
+            console.log(element.date + "<=" + e.end + "&&" + element.date + '>=' + e.start);
             if(!vacs){
               if(e.motive == "Leave of Absence Unpaid" || e.motive == "Others Unpaid"){
                 this.roster = this.roster + parseFloat(element.scheduled);
