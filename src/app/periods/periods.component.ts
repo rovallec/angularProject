@@ -72,6 +72,7 @@ export class PeriodsComponent implements OnInit {
     let vacs: boolean = false;
     let leavs: boolean = false;
     let non_show: boolean = false;
+    let cnt:number = 0;
 
     this.daysOff = 0;
     this.roster = 0;
@@ -92,6 +93,8 @@ export class PeriodsComponent implements OnInit {
 
           att.forEach(attendance => {
             vacs = false;
+            leavs = false;
+            cnt = cnt + 1;
 
             vac.forEach(vacation => {
               if ((new Date(vacation.took_date)) == (new Date(attendance.date)) || attendance.date == vacation.took_date) {
@@ -107,8 +110,8 @@ export class PeriodsComponent implements OnInit {
                 if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
                   if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
                     if (attendance.scheduled == 'OFF') {
-                      this.roster = this.roster + 8;
-                      this.diff = this.diff + 8;
+                      this.roster = this.roster + (this.roster/cnt);
+                      this.diff = this.diff + (this.roster/cnt);
                       attendance.balance = 'UNPAID';
                     } else {
                       this.roster = this.roster + parseFloat(attendance.scheduled);
@@ -122,12 +125,12 @@ export class PeriodsComponent implements OnInit {
                     leavs = true;
                     if(attendance.scheduled = 'OFF'){
                       if(non_show){
-                        this.roster = this.roster + 8;
-                        this.diff = this.diff + 8;
+                        this.roster = this.roster + (this.roster/cnt);
+                        this.diff = this.diff + (this.roster/cnt);
                         attendance.balance = 'NON_SHOW'
                       }else{
-                        this.roster = this.roster + 8;
-                        this.attended = this.attended + 8;
+                        this.roster = this.roster + (this.roster/cnt);
+                        this.attended = this.attended + (this.roster/cnt);
                         attendance.balance = '0';
                       }
                       this.daysOff = this.daysOff + 1;
@@ -149,12 +152,12 @@ export class PeriodsComponent implements OnInit {
               if(!leavs){
                 if(attendance.scheduled == 'OFF'){
                   if(non_show){
-                    this.roster = this.roster + 8;
-                    this.diff = this.diff + 8;
+                    this.roster = this.roster + (this.roster/cnt);
+                    this.diff = this.diff + (this.roster/cnt);
                     attendance.balance = "NON_SHOW";
                   }else{
-                    this.roster = this.roster + 8;
-                    this.attended = this.attended + 8;
+                    this.roster = this.roster + (this.roster/cnt);
+                    this.attended = this.attended + (this.roster/cnt);
                     attendance.balance = '0';
                   }
 
@@ -170,10 +173,10 @@ export class PeriodsComponent implements OnInit {
                     non_show = false;
                   }
                 }else{
-                  this.roster = this.roster + parseFloat(attendance.scheduled);
-                  this.attended = this.attended + parseFloat(attendance.worked_time);
+                  this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
+                  this.attended = parseFloat((this.attended + parseFloat(attendance.worked_time)).toFixed(2));
                   this.diff = this.roster - this.attended;
-                  attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toString();
+                  attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
                     non_show = true;
                   }
@@ -209,6 +212,7 @@ export class PeriodsComponent implements OnInit {
     let vacs: boolean = false;
     let leavs: boolean = false;
     let non_show: boolean = false;
+    let cnt:number = 0;
 
     this.daysOff = 0;
     this.roster = 0;
@@ -229,11 +233,13 @@ export class PeriodsComponent implements OnInit {
 
           att.forEach(attendance => {
             vacs = false;
+            leavs = false;
+            cnt = cnt + 1;
 
             vac.forEach(vacation => {
               if ((new Date(vacation.took_date)) == (new Date(attendance.date)) || attendance.date == vacation.took_date) {
-                this.attended = this.attended + 8;
-                this.roster = this.roster + 8;
+                this.attended = this.attended + (this.roster/cnt);
+                this.roster = this.roster + (this.roster/cnt);
                 attendance.balance = 'VAC';
                 vacs = true;
               }
@@ -244,8 +250,8 @@ export class PeriodsComponent implements OnInit {
                 if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
                   if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
                     if (attendance.scheduled == 'OFF') {
-                      this.roster = this.roster + 8;
-                      this.diff = this.diff + 8;
+                      this.roster = this.roster + (this.roster/cnt);
+                      this.diff = this.diff + (this.roster/cnt);
                       attendance.balance = 'UNPAID';
                     } else {
                       this.roster = this.roster + parseFloat(attendance.scheduled);
@@ -259,12 +265,12 @@ export class PeriodsComponent implements OnInit {
                     leavs = true;
                     if(attendance.scheduled = 'OFF'){
                       if(non_show){
-                        this.roster = this.roster + 8;
-                        this.diff = this.diff + 8;
+                        this.roster = this.roster + (this.roster/cnt);
+                        this.diff = this.diff + (this.roster/cnt);
                         attendance.balance = 'NON_SHOW'
                       }else{
-                        this.roster = this.roster + 8;
-                        this.attended = this.attended + 8;
+                        this.roster = this.roster + (this.roster/cnt);
+                        this.attended = this.attended + (this.roster/cnt);
                         attendance.balance = '0';
                       }
                       this.daysOff = this.daysOff + 1;
@@ -286,12 +292,12 @@ export class PeriodsComponent implements OnInit {
               if(!leavs){
                 if(attendance.scheduled == 'OFF'){
                   if(non_show){
-                    this.roster = this.roster + 8;
-                    this.diff = this.diff + 8;
+                    this.roster = this.roster + (this.roster/cnt);
+                    this.diff = this.diff + (this.roster/cnt);
                     attendance.balance = "NON_SHOW";
                   }else{
-                    this.roster = this.roster + 8;
-                    this.attended = this.attended + 8;
+                    this.roster = this.roster + (this.roster/cnt);
+                    this.attended = this.attended + (this.roster/cnt);
                     attendance.balance = '0';
                   }
 
@@ -307,10 +313,10 @@ export class PeriodsComponent implements OnInit {
                     non_show = false;
                   }
                 }else{
-                  this.roster = this.roster + parseFloat(attendance.scheduled);
-                  this.attended = this.attended + parseFloat(attendance.worked_time);
+                  this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
+                  this.attended = parseFloat((this.attended + parseFloat(attendance.worked_time)).toFixed(2));
                   this.diff = this.roster - this.attended;
-                  attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toString();
+                  attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
                     non_show = true;
                   }
