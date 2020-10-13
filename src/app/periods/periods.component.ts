@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
-import { attendences, credits, debits, deductions, leaves, periods, vacations } from '../process_templates';
+import { attendences, attendences_adjustment, credits, debits, deductions, leaves, periods, vacations } from '../process_templates';
 
 @Component({
   selector: 'app-periods',
@@ -152,6 +152,7 @@ export class PeriodsComponent implements OnInit {
   setReg(de:deductions){
 
     let vacs:boolean = false;
+    let non_show:boolean = false;
 
     this.daysOff = 0;
     this.roster = 0;
@@ -183,16 +184,18 @@ export class PeriodsComponent implements OnInit {
         })
 
         this.leaves.forEach(e=>{
-          if(element.date == e.date){
-            if(e.motive == "Leave of Absence Unpaid" || e.motive == "Others Unpaid"){
-              this.roster = this.roster + parseFloat(element.scheduled);
-            }else{
-              if(e.motive == "Maternity" || e.motive == "Others Paid"){
-                this.attended = this.attended + 8;
+          if((new Date(element.date)) <= (new Date(e.end)) && (new Date(element.date)) >= (new Date(e.start))){
+            if(!vacs){
+              if(e.motive == "Leave of Absence Unpaid" || e.motive == "Others Unpaid"){
                 this.roster = this.roster + parseFloat(element.scheduled);
+              }else{
+                if(e.motive == "Maternity" || e.motive == "Others Paid"){
+                  this.attended = this.attended + 8;
+                  this.roster = this.roster + parseFloat(element.scheduled);
+                }
               }
+              vacs = true;
             }
-            vacs = true;
           }else{
             vacs = false;
           }
@@ -200,15 +203,31 @@ export class PeriodsComponent implements OnInit {
 
         if(vacs == false){
           if(element.scheduled == 'OFF'){
-            element.balance = '0';
-            this.roster = this.roster + 8;
-            this.attended = this.attended + 8;
-            this.daysOff = this.daysOff + 1;
+            if(non_show){
+              non_show = !non_show;
+              this.roster = this.roster + 8;
+              element.balance = '-8';
+              this.daysOff = this.daysOff + 1;
+            }else{
+              element.balance = '0';
+              this.roster = this.roster + 8;
+              this.attended = this.attended + 8;
+              this.daysOff = this.daysOff + 1;
+            }
           }else{
             element.balance = ((parseFloat(element.worked_time) - parseFloat(element.scheduled))).toString()
             this.attended = this.attended + parseFloat(element.worked_time);
             this.roster = this.roster + parseFloat(element.scheduled);
-            this.diff = this.diff + parseFloat(element.balance)
+            this.diff = this.diff + parseFloat(element.balance);
+            if(element.worked_time == '0'){
+              this.apiService.getAttAdjustments({id:de.idemployees}).subscribe((ad:attendences_adjustment[])=>{
+                ad.forEach(adjustment=>{
+                  if(adjustment.id_attendence != element.idattendences){
+                    non_show = true
+                  }
+                })
+              })
+            }
           }
         }
       });
