@@ -184,7 +184,7 @@ export class PeriodsComponent implements OnInit {
             })
 
             if (!vacs) {
-
+              console.log(attendance.date + " | ");
               leave.forEach(leav => {
                 if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
                   if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
@@ -255,6 +255,7 @@ export class PeriodsComponent implements OnInit {
                   this.roster = this.roster + parseFloat(attendance.scheduled);
                   this.attended = this.attended + parseFloat(attendance.worked_time);
                   this.diff = this.roster - this.attended;
+                  attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toString();
                   if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
                     non_show = true;
                   }
