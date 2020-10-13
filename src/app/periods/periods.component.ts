@@ -152,6 +152,7 @@ export class PeriodsComponent implements OnInit {
   setReg(de: deductions) {
 
     let vacs: boolean = false;
+    let leavs: boolean = false;
     let non_show: boolean = false;
 
     this.daysOff = 0;
@@ -163,79 +164,108 @@ export class PeriodsComponent implements OnInit {
 
     this.apiService.getVacations({ id: de.idprofiles }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
-    })
 
-    this.apiService.getLeaves({ id: de.idprofiles }).subscribe((leave: leaves[]) => {
-      this.leaves = leave;
+      this.apiService.getLeaves({ id: de.idprofiles }).subscribe((leave: leaves[]) => {
+        this.leaves = leave;
 
 
-      this.apiService.getAttendences({ id: de.idprofiles, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
-        this.attendances = att;
+        this.apiService.getAttendences({ id: de.idprofiles, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
+          this.attendances = att;
 
-        this.attendances.forEach(element => {
+          att.forEach(attendance => {
 
-          this.vacations.forEach(el => {
-            if (element.date == el.took_date) {
-              this.attended = this.attended + parseFloat(element.scheduled);
-              this.roster = this.roster + parseFloat(element.scheduled);
-              vacs = true;
-            } else {
-              vacs = false;
-            }
-          })
-
-          this.leaves.forEach(e => {
-            console.log((new Date(element.date)) + "<=" + (new Date(e.end)) + "&&" + (new Date(element.date)) + ">=" + (new Date(e.start)))
-            if ((new Date(element.date)) <= (new Date(e.end)) && (new Date(element.date)) >= (new Date(e.start))) {
-              if (!vacs) {
-                if (e.motive == "Leave of Absence Unpaid" || e.motive == "Others Unpaid") {
-                  this.roster = this.roster + parseFloat(element.scheduled);
-                } else {
-                  if (e.motive == "Maternity" || e.motive == "Others Paid") {
-                    this.attended = this.attended + 8;
-                    this.roster = this.roster + parseFloat(element.scheduled);
-                  }
-                }
+            vac.forEach(vacation => {
+              if ((new Date(vacation.took_date)) === (new Date(attendance.date))) {
+                this.attended = this.attended + parseFloat(attendance.scheduled);
+                this.roster = this.roster + parseFloat(attendance.scheduled);
+                attendance.balance = '0';
                 vacs = true;
               }
-            } else {
-              vacs = false;
+            })
+
+            if (!vacs) {
+
+              leave.forEach(leav => {
+                if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
+                  if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
+                    if (attendance.scheduled == 'OFF') {
+                      this.roster = this.roster + 8;
+                      this.diff = this.diff + 8;
+                      attendance.balance = 'UNPAID';
+                    } else {
+                      this.roster = this.roster + parseFloat(attendance.scheduled);
+                      this.diff = this.diff + parseFloat(attendance.scheduled);
+                      attendance.balance = 'UNPAID';
+                    }
+                    leavs = true;
+                  }
+                }else{
+                  if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
+                    leavs = true;
+                    if(attendance.scheduled = 'OFF'){
+                      if(non_show){
+                        this.roster = this.roster + 8;
+                        this.diff = this.diff + 8;
+                        attendance.balance = 'NON_SHOW'
+                      }else{
+                        this.roster = this.roster + 8;
+                        this.attended = this.attended + 8;
+                        attendance.balance = '0';
+                      }
+                      this.daysOff = this.daysOff + 1;
+                      
+                      let variable:number = this.daysOff;
+
+                      while(variable >= 0){
+                        variable = variable - 2;
+                      }
+
+                      if(variable = 0){
+                        non_show = false;
+                      }
+                    }
+                  }
+                }
+              })
+
+              if(!leavs){
+                if(attendance.scheduled == 'OFF'){
+                  if(non_show){
+                    this.roster = this.roster + 8;
+                    this.diff = this.diff + 8;
+                    attendance.balance = "NON_SHOW";
+                  }else{
+                    this.roster = this.roster + 8;
+                    this.attended = this.attended + 8;
+                    attendance.balance = '0';
+                  }
+
+                  this.daysOff = this.daysOff + 1;
+                 
+                  let variable:number = this.daysOff;
+
+                  while(variable >= 0){
+                    variable = variable - 2;
+                  }
+
+                  if(variable = 0){
+                    non_show = false;
+                  }
+                }else{
+                  this.roster = this.roster + parseFloat(attendance.scheduled);
+                  this.attended = this.attended + parseFloat(attendance.worked_time);
+                  this.diff = this.roster - this.attended;
+                  if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
+                    non_show = true;
+                  }
+                }
+              }
             }
           })
 
-          if (vacs == false) {
-            if (element.scheduled == 'OFF') {
-              if (non_show) {
-                non_show = !non_show;
-                this.roster = this.roster + 8;
-                element.balance = '-8';
-                this.daysOff = this.daysOff + 1;
-              } else {
-                element.balance = '0';
-                this.roster = this.roster + 8;
-                this.attended = this.attended + 8;
-                this.daysOff = this.daysOff + 1;
-              }
-            } else {
-              element.balance = ((parseFloat(element.worked_time) - parseFloat(element.scheduled))).toString()
-              this.attended = this.attended + parseFloat(element.worked_time);
-              this.roster = this.roster + parseFloat(element.scheduled);
-              this.diff = this.diff + parseFloat(element.balance);
-              if (element.worked_time == '0.00' || element.worked_time == '0') {
-                console.log("hey");
-                this.apiService.getAttAdjustments({ id: de.idemployees }).subscribe((ad: attendences_adjustment[]) => {
-                  ad.forEach(adjustment => {
-                    if (adjustment.id_attendence != element.idattendences) {
-                      non_show = true
-                    }
-                  })
-                })
-              }
-            }
-          }
         })
-      });
-    });
+      })
+    })
 
     this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
       this.debits = db;
