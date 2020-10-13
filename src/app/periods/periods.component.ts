@@ -3,6 +3,7 @@ import { ThrowStmt } from '@angular/compiler';
 import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AttachSession } from 'protractor/built/driverProviders';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
 import { attendences, attendences_adjustment, credits, debits, deductions, leaves, periods, vacations } from '../process_templates';
@@ -29,6 +30,7 @@ export class PeriodsComponent implements OnInit {
   roster: number = 0;
   attended: number = 0;
   diff: number = 0;
+  absence: number = 0;
   totalDebits: number = 0;
   totalCredits: number = 0;
   filter: string = 'name';
@@ -72,8 +74,8 @@ export class PeriodsComponent implements OnInit {
     let vacs: boolean = false;
     let leavs: boolean = false;
     let non_show: boolean = false;
-    let cnt:number = 0;
-    let average:number = 0;
+    let cnt: number = 0;
+    let average: number = 0;
 
     this.daysOff = 0;
     this.roster = 0;
@@ -92,14 +94,14 @@ export class PeriodsComponent implements OnInit {
         this.apiService.getAttendences({ id: emp.id_profile, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
           this.attendances = att;
 
-          att.forEach(atte =>{
-            if(atte.scheduled != 'OFF'){
+          att.forEach(atte => {
+            if (atte.scheduled != 'OFF') {
               average = average + parseFloat(atte.scheduled);
               cnt = cnt + 1;
             }
           })
 
-          average = average/cnt;
+          average = average / cnt;
 
           att.forEach(attendance => {
             vacs = false;
@@ -110,7 +112,7 @@ export class PeriodsComponent implements OnInit {
                 this.attended = this.attended + average;
                 this.roster = this.roster + average;
                 attendance.balance = 'VAC';
-                if(attendance.scheduled == 'OFF'){
+                if (attendance.scheduled == 'OFF') {
                   this.daysOff = this.daysOff + 1;
                 }
                 vacs = true;
@@ -132,28 +134,28 @@ export class PeriodsComponent implements OnInit {
                     }
                     leavs = true;
                   }
-                }else{
+                } else {
                   if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
                     leavs = true;
-                    if(attendance.scheduled = 'OFF'){
-                      if(non_show){
+                    if (attendance.scheduled = 'OFF') {
+                      if (non_show) {
                         this.roster = this.roster + average;
                         this.diff = this.diff + average;
                         attendance.balance = 'NON_SHOW'
-                      }else{
+                      } else {
                         this.roster = this.roster + average;
                         this.attended = this.attended + average;
                         attendance.balance = '0';
                       }
                       this.daysOff = this.daysOff + 1;
-                      
-                      let variable:number = this.daysOff;
 
-                      while(variable >= 0){
+                      let variable: number = this.daysOff;
+
+                      while (variable >= 0) {
                         variable = variable - 2;
                       }
 
-                      if(variable = 0){
+                      if (variable = 0) {
                         non_show = false;
                       }
                     }
@@ -161,45 +163,43 @@ export class PeriodsComponent implements OnInit {
                 }
               })
 
-              if(!leavs){
-                if(attendance.scheduled == 'OFF'){
-                  if(non_show){
+              if (!leavs) {
+                if (attendance.scheduled == 'OFF') {
+                  if (non_show) {
                     this.roster = this.roster + average;
                     this.diff = this.diff + average;
                     attendance.balance = "NON_SHOW";
-                  }else{
+                  } else {
                     this.roster = this.roster + average;
                     this.attended = this.attended + average;
                     attendance.balance = '0';
                   }
 
                   this.daysOff = this.daysOff + 1;
-                 
-                  let variable:number = this.daysOff;
 
-                  while(variable >= 0){
+                  let variable: number = this.daysOff;
+
+                  while (variable >= 0) {
                     variable = variable - 2;
                   }
 
-                  if(variable = 0){
+                  if (variable = 0) {
                     non_show = false;
                   }
-                }else{
+                } else {
                   this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
                   this.attended = parseFloat((this.attended + parseFloat(attendance.worked_time)).toFixed(2));
                   this.diff = parseFloat((this.roster - this.attended).toFixed(2));
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
-                  if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
+                  if ((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0) {
                     non_show = true;
-                  }
-                  if(parseFloat((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2)) < 0){
-                    this.apiService.getAttAdjustments(emp.idemployees).subscribe((adj:attendences_adjustment[])=>{
-                      if(!non_show){
-                        let partial_nonshow:boolean = false;
-                        adj.forEach(adjustment=>{
-                          if(adjustment.id_attendence != attendance.idattendences){
+                    this.apiService.getAttAdjustments(emp.idemployees).subscribe((adj: attendences_adjustment[]) => {
+                      if (!non_show) {
+                        let partial_nonshow: boolean = false;
+                        adj.forEach(adjustment => {
+                          if (adjustment.id_attendence != attendance.idattendences) {
                             partial_nonshow = true;
-                          }else{
+                          } else {
                             partial_nonshow = false;
                           }
                         })
@@ -216,6 +216,17 @@ export class PeriodsComponent implements OnInit {
       })
     })
 
+    
+    this.attendances.forEach(attendance => {
+      if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
+        this.absence = this.absence + (parseFloat(attendance.balance) * -1);
+      }else{
+        if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
+          this.absence = this.absence + 8;
+        }
+      }
+    });
+
     this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
       this.debits = db;
       this.debits.forEach(element => {
@@ -230,6 +241,23 @@ export class PeriodsComponent implements OnInit {
       })
     })
 
+    if (this.period.status == '1') {
+      let cred: credits = new credits;
+      let deb: debits = new debits;
+
+      this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp.idemployees }).subscribe((emplo: employees[]) => {
+        let hour: number = parseFloat(emplo[0].base_payment) / ((this.roster / this.attendances.length) * 15);
+        cred.amount = (this.attended * hour).toFixed(2);
+        cred.type = "Apportionment Payment";
+
+        deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
+        deb.type = "Apportioment IGSS";
+
+        this.credits.push(cred);
+        this.debits.push(deb);
+      })
+    }
+
     this.selectedEmployee = true;
   }
 
@@ -239,8 +267,8 @@ export class PeriodsComponent implements OnInit {
     let vacs: boolean = false;
     let leavs: boolean = false;
     let non_show: boolean = false;
-    let cnt:number = 0;
-    let average:number = 0;
+    let cnt: number = 0;
+    let average: number = 0;
 
     this.daysOff = 0;
     this.roster = 0;
@@ -259,14 +287,14 @@ export class PeriodsComponent implements OnInit {
         this.apiService.getAttendences({ id: de.idprofiles, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
           this.attendances = att;
 
-          att.forEach(atte =>{
-            if(atte.scheduled != 'OFF'){
+          att.forEach(atte => {
+            if (atte.scheduled != 'OFF') {
               average = average + parseFloat(atte.scheduled);
               cnt = cnt + 1;
             }
           })
 
-          average = average/cnt;
+          average = average / cnt;
 
           att.forEach(attendance => {
             vacs = false;
@@ -277,7 +305,7 @@ export class PeriodsComponent implements OnInit {
                 this.attended = this.attended + average;
                 this.roster = this.roster + average;
                 attendance.balance = 'VAC';
-                if(attendance.scheduled == 'OFF'){
+                if (attendance.scheduled == 'OFF') {
                   this.daysOff = this.daysOff + 1;
                 }
                 vacs = true;
@@ -299,74 +327,77 @@ export class PeriodsComponent implements OnInit {
                     }
                     leavs = true;
                   }
-                }else{
+                } else {
                   if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
                     leavs = true;
-                    if(attendance.scheduled = 'OFF'){
-                      if(non_show){
+                    if (attendance.scheduled = 'OFF') {
+                      if (non_show) {
                         this.roster = this.roster + average;
                         this.diff = this.diff + average;
                         attendance.balance = 'NON_SHOW'
-                      }else{
+                      } else {
                         this.roster = this.roster + average;
                         this.attended = this.attended + average;
                         attendance.balance = '0';
                       }
                       this.daysOff = this.daysOff + 1;
-                      
-                      let variable:number = this.daysOff;
 
-                      while(variable >= 0){
+                      let variable: number = this.daysOff;
+
+                      while (variable >= 0) {
                         variable = variable - 2;
                       }
 
-                      if(variable = 0){
+                      if (variable = 0) {
                         non_show = false;
                       }
+                    }else{
+                      this.roster = this.roster + parseFloat(attendance.scheduled);
+                      this.attended = this.attended + parseFloat(attendance.scheduled);
+                      this.diff = this.diff + parseFloat(attendance.scheduled);
+                      attendance.balance = "PAID";
                     }
                   }
                 }
               })
 
-              if(!leavs){
-                if(attendance.scheduled == 'OFF'){
-                  if(non_show){
+              if (!leavs) {
+                if (attendance.scheduled == 'OFF') {
+                  if (non_show) {
                     this.roster = this.roster + average;
                     this.diff = this.diff + average;
                     attendance.balance = "NON_SHOW";
-                  }else{
+                  } else {
                     this.roster = this.roster + average;
                     this.attended = this.attended + average;
                     attendance.balance = '0';
                   }
 
                   this.daysOff = this.daysOff + 1;
-                 
-                  let variable:number = this.daysOff;
 
-                  while(variable >= 0){
+                  let variable: number = this.daysOff;
+
+                  while (variable >= 0) {
                     variable = variable - 2;
                   }
 
-                  if(variable = 0){
+                  if (variable = 0) {
                     non_show = false;
                   }
-                }else{
+                } else {
                   this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
                   this.attended = parseFloat((this.attended + parseFloat(attendance.worked_time)).toFixed(2));
                   this.diff = parseFloat((this.roster - this.attended).toFixed(2));
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
-                  if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
+                  if (parseFloat(attendance.worked_time) == 0) {
                     non_show = true;
-                  }
-                  if(parseFloat((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2)) < 0){
-                    this.apiService.getAttAdjustments(de.idemployees).subscribe((adj:attendences_adjustment[])=>{
-                      if(!non_show){
-                        let partial_nonshow:boolean = false;
-                        adj.forEach(adjustment=>{
-                          if(adjustment.id_attendence != attendance.idattendences){
+                    this.apiService.getAttAdjustments(de.idemployees).subscribe((adj: attendences_adjustment[]) => {
+                      if (!non_show) {
+                        let partial_nonshow: boolean = false;
+                        adj.forEach(adjustment => {
+                          if (adjustment.id_attendence != attendance.idattendences) {
                             partial_nonshow = true;
-                          }else{
+                          } else {
                             partial_nonshow = false;
                           }
                         })
@@ -383,6 +414,16 @@ export class PeriodsComponent implements OnInit {
       })
     })
 
+    this.attendances.forEach(attendance => {
+      if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
+        this.absence = this.absence + (parseFloat(attendance.balance) * -1);
+      }else{
+        if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
+          this.absence = this.absence + 8;
+        }
+      }
+    });
+
     this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
       this.debits = db;
       this.debits.forEach(element => {
@@ -397,13 +438,13 @@ export class PeriodsComponent implements OnInit {
       })
     })
 
-    if(this.period.status == '1'){
-      let cred:credits = new credits;
-      let deb:debits = new debits;
+    if (this.period.status == '1') {
+      let cred: credits = new credits;
+      let deb: debits = new debits;
 
-      this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:de.idemployees}).subscribe((emplo:employees[])=>{
-        let hour:number = parseFloat(emplo[0].base_payment)/((this.roster/this.attendances.length)*15);
-        cred.amount = (this.attended*hour).toFixed(2);
+      this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: de.idemployees }).subscribe((emplo: employees[]) => {
+        let hour: number = parseFloat(emplo[0].base_payment) / ((this.roster / this.attendances.length) * 15);
+        cred.amount = (this.attended * hour).toFixed(2);
         cred.type = "Apportionment Payment";
 
         deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
