@@ -183,7 +183,7 @@ export class PeriodsComponent implements OnInit {
                 }else{
                   this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
                   this.attended = parseFloat((this.attended + parseFloat(attendance.worked_time)).toFixed(2));
-                  this.diff = this.roster - this.attended;
+                  this.diff = parseFloat((this.roster - this.attended).toFixed(2));
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
                     non_show = true;
@@ -335,7 +335,7 @@ export class PeriodsComponent implements OnInit {
                 }else{
                   this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
                   this.attended = parseFloat((this.attended + parseFloat(attendance.worked_time)).toFixed(2));
-                  this.diff = this.roster - this.attended;
+                  this.diff = parseFloat((this.roster - this.attended).toFixed(2));
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0){
                     non_show = true;
