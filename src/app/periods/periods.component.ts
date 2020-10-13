@@ -175,16 +175,15 @@ export class PeriodsComponent implements OnInit {
           att.forEach(attendance => {
 
             vac.forEach(vacation => {
-              if ((new Date(vacation.took_date)) === (new Date(attendance.date))) {
-                this.attended = this.attended + parseFloat(attendance.scheduled);
-                this.roster = this.roster + parseFloat(attendance.scheduled);
-                attendance.balance = '0';
+              if ((new Date(vacation.took_date)) == (new Date(attendance.date)) || attendance.date == vacation.took_date) {
+                this.attended = this.attended + 8;
+                this.roster = this.roster + 8;
+                attendance.balance = 'VAC';
                 vacs = true;
               }
             })
 
             if (!vacs) {
-              console.log(attendance.date + " | ");
               leave.forEach(leav => {
                 if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
                   if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
