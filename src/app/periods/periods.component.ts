@@ -98,17 +98,21 @@ export class PeriodsComponent implements OnInit {
               cnt = cnt + 1;
             }
           })
-          
+
+          average = average/cnt;
+
           att.forEach(attendance => {
             vacs = false;
             leavs = false;
-            cnt = cnt + 1;
 
             vac.forEach(vacation => {
               if ((new Date(vacation.took_date)) == (new Date(attendance.date)) || attendance.date == vacation.took_date) {
-                this.attended = this.attended + 8;
-                this.roster = this.roster + 8;
+                this.attended = this.attended + average;
+                this.roster = this.roster + average;
                 attendance.balance = 'VAC';
+                if(attendance.scheduled == 'OFF'){
+                  this.daysOff = this.daysOff + 1;
+                }
                 vacs = true;
               }
             })
