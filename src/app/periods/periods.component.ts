@@ -73,6 +73,7 @@ export class PeriodsComponent implements OnInit {
     let leavs: boolean = false;
     let non_show: boolean = false;
     let cnt:number = 0;
+    let average:number = 0;
 
     this.daysOff = 0;
     this.roster = 0;
@@ -91,6 +92,13 @@ export class PeriodsComponent implements OnInit {
         this.apiService.getAttendences({ id: emp.id_profile, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
           this.attendances = att;
 
+          att.forEach(atte =>{
+            if(atte.scheduled != 'OFF'){
+              average = average + parseFloat(atte.scheduled);
+              cnt = cnt + 1;
+            }
+          })
+          
           att.forEach(attendance => {
             vacs = false;
             leavs = false;
@@ -110,8 +118,8 @@ export class PeriodsComponent implements OnInit {
                 if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
                   if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
                     if (attendance.scheduled == 'OFF') {
-                      this.roster = this.roster + (this.roster/cnt);
-                      this.diff = this.diff + (this.roster/cnt);
+                      this.roster = this.roster + average;
+                      this.diff = this.diff + average;
                       attendance.balance = 'UNPAID';
                     } else {
                       this.roster = this.roster + parseFloat(attendance.scheduled);
@@ -125,12 +133,12 @@ export class PeriodsComponent implements OnInit {
                     leavs = true;
                     if(attendance.scheduled = 'OFF'){
                       if(non_show){
-                        this.roster = this.roster + (this.roster/cnt);
-                        this.diff = this.diff + (this.roster/cnt);
+                        this.roster = this.roster + average;
+                        this.diff = this.diff + average;
                         attendance.balance = 'NON_SHOW'
                       }else{
-                        this.roster = this.roster + (this.roster/cnt);
-                        this.attended = this.attended + (this.roster/cnt);
+                        this.roster = this.roster + average;
+                        this.attended = this.attended + average;
                         attendance.balance = '0';
                       }
                       this.daysOff = this.daysOff + 1;
@@ -152,12 +160,12 @@ export class PeriodsComponent implements OnInit {
               if(!leavs){
                 if(attendance.scheduled == 'OFF'){
                   if(non_show){
-                    this.roster = this.roster + (this.roster/cnt);
-                    this.diff = this.diff + (this.roster/cnt);
+                    this.roster = this.roster + average;
+                    this.diff = this.diff + average;
                     attendance.balance = "NON_SHOW";
                   }else{
-                    this.roster = this.roster + (this.roster/cnt);
-                    this.attended = this.attended + (this.roster/cnt);
+                    this.roster = this.roster + average;
+                    this.attended = this.attended + average;
                     attendance.balance = '0';
                   }
 
@@ -213,6 +221,7 @@ export class PeriodsComponent implements OnInit {
     let leavs: boolean = false;
     let non_show: boolean = false;
     let cnt:number = 0;
+    let average:number = 0;
 
     this.daysOff = 0;
     this.roster = 0;
@@ -231,16 +240,27 @@ export class PeriodsComponent implements OnInit {
         this.apiService.getAttendences({ id: de.idprofiles, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
           this.attendances = att;
 
+          att.forEach(atte =>{
+            if(atte.scheduled != 'OFF'){
+              average = average + parseFloat(atte.scheduled);
+              cnt = cnt + 1;
+            }
+          })
+
+          average = average/cnt;
+
           att.forEach(attendance => {
             vacs = false;
             leavs = false;
-            cnt = cnt + 1;
 
             vac.forEach(vacation => {
               if ((new Date(vacation.took_date)) == (new Date(attendance.date)) || attendance.date == vacation.took_date) {
-                this.attended = this.attended + (this.roster/cnt);
-                this.roster = this.roster + (this.roster/cnt);
+                this.attended = this.attended + average;
+                this.roster = this.roster + average;
                 attendance.balance = 'VAC';
+                if(attendance.scheduled == 'OFF'){
+                  this.daysOff = this.daysOff + 1;
+                }
                 vacs = true;
               }
             })
@@ -250,8 +270,8 @@ export class PeriodsComponent implements OnInit {
                 if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
                   if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
                     if (attendance.scheduled == 'OFF') {
-                      this.roster = this.roster + (this.roster/cnt);
-                      this.diff = this.diff + (this.roster/cnt);
+                      this.roster = this.roster + average;
+                      this.diff = this.diff + average;
                       attendance.balance = 'UNPAID';
                     } else {
                       this.roster = this.roster + parseFloat(attendance.scheduled);
@@ -265,12 +285,12 @@ export class PeriodsComponent implements OnInit {
                     leavs = true;
                     if(attendance.scheduled = 'OFF'){
                       if(non_show){
-                        this.roster = this.roster + (this.roster/cnt);
-                        this.diff = this.diff + (this.roster/cnt);
+                        this.roster = this.roster + average;
+                        this.diff = this.diff + average;
                         attendance.balance = 'NON_SHOW'
                       }else{
-                        this.roster = this.roster + (this.roster/cnt);
-                        this.attended = this.attended + (this.roster/cnt);
+                        this.roster = this.roster + average;
+                        this.attended = this.attended + average;
                         attendance.balance = '0';
                       }
                       this.daysOff = this.daysOff + 1;
@@ -292,12 +312,12 @@ export class PeriodsComponent implements OnInit {
               if(!leavs){
                 if(attendance.scheduled == 'OFF'){
                   if(non_show){
-                    this.roster = this.roster + (this.roster/cnt);
-                    this.diff = this.diff + (this.roster/cnt);
+                    this.roster = this.roster + average;
+                    this.diff = this.diff + average;
                     attendance.balance = "NON_SHOW";
                   }else{
-                    this.roster = this.roster + (this.roster/cnt);
-                    this.attended = this.attended + (this.roster/cnt);
+                    this.roster = this.roster + average;
+                    this.attended = this.attended + average;
                     attendance.balance = '0';
                   }
 
