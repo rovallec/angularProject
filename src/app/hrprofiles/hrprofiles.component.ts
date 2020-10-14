@@ -369,8 +369,11 @@ export class HrprofilesComponent implements OnInit {
     this.vacationAdd = true;
     this.editVac = true;
     this.activeVacation = new vacations;
+    this.activeVacation.date = this.todayDate;
+    this.activeVacation.id_department = this.authUser.getAuthusr().department;
     this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
-    this.activeVacation.notes = null;
+    this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
+    this.activeVacation.status = 'PENDING';
     this.activeVacation.count = '1';
     this.activeVacation.action = action;
     this.activeVacation.id_type = type;
