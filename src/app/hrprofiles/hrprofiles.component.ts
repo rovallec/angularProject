@@ -368,6 +368,8 @@ export class HrprofilesComponent implements OnInit {
   addVacation(action: string, type: string) {
     this.vacationAdd = true;
     this.editVac = true;
+    this.activeVacation = new vacations;
+    this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
     this.activeVacation.notes = null;
     this.activeVacation.count = '1';
     this.activeVacation.action = action;
