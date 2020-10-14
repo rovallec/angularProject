@@ -193,7 +193,7 @@ export class PeriodsComponent implements OnInit {
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if ((parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)) < 0) {
                     non_show = true;
-                    this.apiService.getAttAdjustments({id:emp.idemployees}).subscribe((adj: attendences_adjustment[]) => {
+                    this.apiService.getAttAdjustments({id:"id;"+emp.idemployees}).subscribe((adj: attendences_adjustment[]) => {
                       if (!non_show) {
                         let partial_nonshow: boolean = false;
                         adj.forEach(adjustment => {
@@ -391,7 +391,7 @@ export class PeriodsComponent implements OnInit {
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if (parseFloat(attendance.worked_time) == 0) {
                     non_show = true;
-                    this.apiService.getAttAdjustments({id:de.idemployees}).subscribe((adj: attendences_adjustment[]) => {
+                    this.apiService.getAttAdjustments({id:"id;"+de.idemployees}).subscribe((adj: attendences_adjustment[]) => {
                       if (!non_show) {
                         let partial_nonshow: boolean = false;
                         adj.forEach(adjustment => {

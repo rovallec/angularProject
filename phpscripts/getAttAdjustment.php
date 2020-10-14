@@ -8,7 +8,12 @@
     $id = ($request->justify);
     $resp = [];
 
+    if($id == explode(";", $id)[0] == 'id'){
+        $emp =  explode(";", $id)[1];
+        $sql = "SELECT * FROM attendence_adjustemnt LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp";
+    }
     $sql = "SELECT * FROM attendence_adjustemnt LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE attendence_justifications.idattendence_justifications  = $id";
+
     if($result = mysqli_query($con,$sql)){
         while($res = mysqli_fetch_assoc($result)){
             $resp['idattendence_adjustemnt'] = $res['idattendence_adjustemnt'];
