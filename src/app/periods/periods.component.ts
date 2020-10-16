@@ -223,10 +223,7 @@ export class PeriodsComponent implements OnInit {
             console.log(this.absence);
           });
 
-        })
-      })
-    })
-
+          
     this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
       this.debits = db;
       this.debits.forEach(element => {
@@ -258,6 +255,10 @@ export class PeriodsComponent implements OnInit {
       })
     }
 
+
+        })
+      })
+    })
     this.selectedEmployee = true;
   }
 
