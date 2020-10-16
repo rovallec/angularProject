@@ -246,9 +246,9 @@ export class PeriodsComponent implements OnInit {
       let deb: debits = new debits;
 
       this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp.idemployees }).subscribe((emplo: employees[]) => {
-        let hour: number = parseFloat(emplo[0].base_payment) / ((this.roster / this.attendances.length) * 15);
-        cred.amount = (this.attended * hour).toFixed(2);
-        cred.type = "Apportionment Payment";
+        let hour: number = parseFloat(emplo[0].base_payment) / 120;
+        cred.amount = ((120 - this.absence) * hour).toFixed(2);
+        cred.type = "Apportionment Base Payment";
 
         deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
         deb.type = "Apportioment IGSS";
@@ -332,12 +332,12 @@ export class PeriodsComponent implements OnInit {
                     leavs = true;
                     if (attendance.scheduled = 'OFF') {
                       if (non_show) {
-                        this.roster = this.roster + average;
-                        this.diff = this.diff + average;
+                        this.roster = this.roster + 8;
+                        this.diff = this.diff + 8;
                         attendance.balance = 'NON_SHOW'
                       } else {
-                        this.roster = this.roster + average;
-                        this.attended = this.attended + average;
+                        this.roster = this.roster + 8;
+                        this.attended = this.attended + 8;
                         attendance.balance = '0';
                       }
                       this.daysOff = this.daysOff + 1;
@@ -364,12 +364,12 @@ export class PeriodsComponent implements OnInit {
               if (!leavs) {
                 if (attendance.scheduled == 'OFF') {
                   if (non_show) {
-                    this.roster = this.roster + average;
-                    this.diff = this.diff + average;
+                    this.roster = this.roster + 8;
+                    this.diff = this.diff + 8;
                     attendance.balance = "NON_SHOW";
                   } else {
-                    this.roster = this.roster + average;
-                    this.attended = this.attended + average;
+                    this.roster = this.roster + 8;
+                    this.attended = this.attended + 8;
                     attendance.balance = '0';
                   }
 
