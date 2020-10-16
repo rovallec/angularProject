@@ -219,12 +219,13 @@ export class PeriodsComponent implements OnInit {
     
     this.attendances.forEach(attendance => {
       if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
-        this.absence = this.absence + (parseFloat(attendance.balance) * -1);
+        this.absence = this.absence + (parseFloat(attendance.balance));
       }else{
         if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
           this.absence = this.absence + 8;
         }
       }
+      console.log(this.absence);
     });
 
     this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
@@ -246,7 +247,7 @@ export class PeriodsComponent implements OnInit {
       let deb: debits = new debits;
 
       this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp.idemployees }).subscribe((emplo: employees[]) => {
-        let hour: number = parseFloat(emplo[0].base_payment) / 120;
+        let hour: number = parseFloat(emplo[0].base_payment) / 240;
         cred.amount = ((120 - this.absence) * hour).toFixed(2);
         cred.type = "Apportionment Base Payment";
 
@@ -420,7 +421,8 @@ export class PeriodsComponent implements OnInit {
       }else{
         if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
           this.absence = this.absence + 8;
-        }
+        }else
+        this.absence = parseFloat(attendance.balance) 
       }
     });
 
