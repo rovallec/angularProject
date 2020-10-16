@@ -212,21 +212,20 @@ export class PeriodsComponent implements OnInit {
             }
           })
 
+          att.forEach(attendance => {
+            if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
+              this.absence = this.absence + (parseFloat(attendance.balance));
+            }else{
+              if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
+                this.absence = this.absence - 8;
+              }
+            }
+            console.log(this.absence);
+          });
+
         })
       })
     })
-
-    
-    this.attendances.forEach(attendance => {
-      if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
-        this.absence = this.absence + (parseFloat(attendance.balance));
-      }else{
-        if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
-          this.absence = this.absence + 8;
-        }
-      }
-      console.log(this.absence);
-    });
 
     this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
       this.debits = db;
@@ -248,7 +247,7 @@ export class PeriodsComponent implements OnInit {
 
       this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp.idemployees }).subscribe((emplo: employees[]) => {
         let hour: number = parseFloat(emplo[0].base_payment) / 240;
-        cred.amount = ((120 - this.absence) * hour).toFixed(2);
+        cred.amount = ((120 + this.absence) * hour).toFixed(2);
         cred.type = "Apportionment Base Payment";
 
         deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
