@@ -33,6 +33,7 @@ export class PeriodsComponent implements OnInit {
   absence: number = 0;
   totalDebits: number = 0;
   totalCredits: number = 0;
+  seventh:number = 0;
   filter: string = 'name';
   value: string = null;
   ded: boolean = true;
@@ -83,6 +84,7 @@ export class PeriodsComponent implements OnInit {
     this.diff = 0;
     this.totalDebits = 0;
     this.totalCredits = 0;
+    this.absence = 0;
 
     this.apiService.getVacations({ id: emp.id_profile }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
@@ -252,8 +254,6 @@ export class PeriodsComponent implements OnInit {
         this.credits.push(cred);
         this.debits.push(deb);
       })
-      console.log(this.absence);
-      console.log(120 + this.absence);
     }
 
 
@@ -278,6 +278,7 @@ export class PeriodsComponent implements OnInit {
     this.diff = 0;
     this.totalDebits = 0;
     this.totalCredits = 0;
+    this.absence = 0;
 
     this.apiService.getVacations({ id: de.idprofiles }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
@@ -334,12 +335,12 @@ export class PeriodsComponent implements OnInit {
                     leavs = true;
                     if (attendance.scheduled = 'OFF') {
                       if (non_show) {
-                        this.roster = this.roster + 8;
-                        this.diff = this.diff + 8;
+                        this.roster = this.roster + average;
+                        this.diff = this.diff + average;
                         attendance.balance = 'NON_SHOW'
                       } else {
-                        this.roster = this.roster + 8;
-                        this.attended = this.attended + 8;
+                        this.roster = this.roster + average;
+                        this.attended = this.attended + average;
                         attendance.balance = '0';
                       }
                       this.daysOff = this.daysOff + 1;
@@ -353,11 +354,6 @@ export class PeriodsComponent implements OnInit {
                       if (variable = 0) {
                         non_show = false;
                       }
-                    }else{
-                      this.roster = this.roster + parseFloat(attendance.scheduled);
-                      this.attended = this.attended + parseFloat(attendance.scheduled);
-                      this.diff = this.diff + parseFloat(attendance.scheduled);
-                      attendance.balance = "PAID";
                     }
                   }
                 }
@@ -366,12 +362,12 @@ export class PeriodsComponent implements OnInit {
               if (!leavs) {
                 if (attendance.scheduled == 'OFF') {
                   if (non_show) {
-                    this.roster = this.roster + 8;
-                    this.diff = this.diff + 8;
+                    this.roster = this.roster + average;
+                    this.diff = this.diff + average;
                     attendance.balance = "NON_SHOW";
                   } else {
-                    this.roster = this.roster + 8;
-                    this.attended = this.attended + 8;
+                    this.roster = this.roster + average;
+                    this.attended = this.attended + average;
                     attendance.balance = '0';
                   }
 
@@ -412,21 +408,17 @@ export class PeriodsComponent implements OnInit {
             }
           })
 
-        })
-      })
-    })
+          att.forEach(attendance => {
+            if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
+              this.absence = this.absence + (parseFloat(attendance.balance));
+            }else{
+              if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
+                this.absence = this.absence - 8;
+              }
+            }
+          });
 
-    this.attendances.forEach(attendance => {
-      if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
-        this.absence = this.absence + (parseFloat(attendance.balance) * -1);
-      }else{
-        if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
-          this.absence = this.absence + 8;
-        }else
-        this.absence = parseFloat(attendance.balance) 
-      }
-    });
-
+          
     this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
       this.debits = db;
       this.debits.forEach(element => {
@@ -446,9 +438,9 @@ export class PeriodsComponent implements OnInit {
       let deb: debits = new debits;
 
       this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: de.idemployees }).subscribe((emplo: employees[]) => {
-        let hour: number = parseFloat(emplo[0].base_payment) / ((this.roster / this.attendances.length) * 15);
-        cred.amount = (this.attended * hour).toFixed(2);
-        cred.type = "Apportionment Payment";
+        let hour: number = parseFloat(emplo[0].base_payment) / 240;
+        cred.amount = ((120 + this.absence) * hour).toFixed(2);
+        cred.type = "Apportionment Base Payment";
 
         deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
         deb.type = "Apportioment IGSS";
@@ -458,6 +450,10 @@ export class PeriodsComponent implements OnInit {
       })
     }
 
+
+        })
+      })
+    })
     this.selectedEmployee = true;
   }
 
