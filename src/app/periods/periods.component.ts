@@ -220,7 +220,6 @@ export class PeriodsComponent implements OnInit {
                 this.absence = this.absence - 8;
               }
             }
-            console.log(this.absence);
           });
 
           
@@ -253,6 +252,8 @@ export class PeriodsComponent implements OnInit {
         this.credits.push(cred);
         this.debits.push(deb);
       })
+      console.log(this.absence);
+      console.log(120 + this.absence);
     }
 
 
