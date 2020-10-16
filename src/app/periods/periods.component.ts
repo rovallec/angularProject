@@ -261,6 +261,7 @@ export class PeriodsComponent implements OnInit {
       })
     })
     this.selectedEmployee = true;
+    this.absence = parseFloat(this.absence.toFixed(2));
   }
 
 
@@ -455,6 +456,7 @@ export class PeriodsComponent implements OnInit {
       })
     })
     this.selectedEmployee = true;
+    this.absence = parseFloat(this.absence.toFixed(2));
   }
 
   searchEmployee() {
