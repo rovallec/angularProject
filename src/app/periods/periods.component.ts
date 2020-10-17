@@ -231,9 +231,7 @@ export class PeriodsComponent implements OnInit {
 
 
           this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-            this.debits = db;
             this.apiService.getCredits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
-              this.credits = cd;
 
               if (this.period.status == '1') {
                 let cred: credits = new credits;
@@ -251,6 +249,15 @@ export class PeriodsComponent implements OnInit {
                   this.debits.push(deb);
                 })
               }
+
+              db.forEach(db_p => {
+                this.debits.push(db_p);
+              });
+
+              cd.forEach(cd_p => {
+                this.credits.push(cd_p)
+              });
+
               this.debits.forEach(element => {
                 this.totalDebits = this.totalDebits + parseFloat(element.amount);
                 console.log(this.totalDebits);
@@ -428,9 +435,7 @@ export class PeriodsComponent implements OnInit {
 
 
           this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-            this.debits = db;
             this.apiService.getCredits({ id: de.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
-              this.credits = cd;
 
               if (this.period.status == '1') {
                 let cred: credits = new credits;
@@ -448,6 +453,16 @@ export class PeriodsComponent implements OnInit {
                   this.debits.push(deb);
                 })
               }
+
+              db.forEach(db_p => {
+                this.debits.push(db_p);
+              });
+
+              cd.forEach(cd_p => {
+                this.credits.push(cd_p)
+              });
+
+              
               this.debits.forEach(element => {
                 this.totalDebits = this.totalDebits + parseFloat(element.amount);
                 console.log(this.totalDebits);
