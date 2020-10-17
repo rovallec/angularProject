@@ -226,6 +226,7 @@ export class PeriodsComponent implements OnInit {
                 }
               }
             }
+            this.absence_fixed = this.absence.toFixed(2);
           });
 
 
@@ -251,11 +252,12 @@ export class PeriodsComponent implements OnInit {
                 })
               }
               this.debits.forEach(element => {
-                this.totalDebits = this.totalDebits + parseFloat(element.amount)
+                this.totalDebits = this.totalDebits + parseFloat(element.amount);
+                console.log(this.totalDebits);
               })
               this.credits.forEach(el => {
                 this.totalCredits = this.totalCredits + parseFloat(el.amount);
-
+                console.log(this.totalCredits);
               })
             });
           });
@@ -263,7 +265,6 @@ export class PeriodsComponent implements OnInit {
       })
     })
     this.selectedEmployee = true;
-    this.absence_fixed = this.absence.toFixed(2);
   }
 
 
@@ -422,6 +423,7 @@ export class PeriodsComponent implements OnInit {
                 }
               }
             }
+            this.absence_fixed = this.absence.toFixed(2);
           });
 
 
@@ -447,11 +449,12 @@ export class PeriodsComponent implements OnInit {
                 })
               }
               this.debits.forEach(element => {
-                this.totalDebits = this.totalDebits + parseFloat(element.amount)
+                this.totalDebits = this.totalDebits + parseFloat(element.amount);
+                console.log(this.totalDebits);
               })
               this.credits.forEach(el => {
                 this.totalCredits = this.totalCredits + parseFloat(el.amount);
-
+                console.log(this.totalCredits);
               })
             });
           });
@@ -459,7 +462,6 @@ export class PeriodsComponent implements OnInit {
       })
     })
     this.selectedEmployee = true;
-    this.absence_fixed = this.absence.toFixed(2);
   }
 
   searchEmployee() {
