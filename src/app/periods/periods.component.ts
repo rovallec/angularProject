@@ -33,8 +33,9 @@ export class PeriodsComponent implements OnInit {
   absence: number = 0;
   totalDebits: number = 0;
   totalCredits: number = 0;
-  seventh:number = 0;
+  seventh: number = 0;
   filter: string = 'name';
+  absence_fixed: string = null;
   value: string = null;
   ded: boolean = true;
 
@@ -195,7 +196,7 @@ export class PeriodsComponent implements OnInit {
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if (parseFloat(attendance.worked_time) == 0) {
                     non_show = true;
-                    this.apiService.getAttAdjustments({id:"id;"+emp.idemployees}).subscribe((adj: attendences_adjustment[]) => {
+                    this.apiService.getAttAdjustments({ id: "id;" + emp.idemployees }).subscribe((adj: attendences_adjustment[]) => {
                       if (!non_show) {
                         let partial_nonshow: boolean = false;
                         adj.forEach(adjustment => {
@@ -215,53 +216,54 @@ export class PeriodsComponent implements OnInit {
           })
 
           att.forEach(attendance => {
-            if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
+            if (attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW") {
               this.absence = this.absence + (parseFloat(attendance.balance));
-            }else{
-              if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
+            } else {
+              if (attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW") {
                 this.absence = this.absence - 8;
+                if (attendance.balance == 'NON_SHOW') {
+                  this.seventh = this.seventh + 1;
+                }
               }
             }
           });
 
-          
-    this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-      this.debits = db;
-      this.debits.forEach(element => {
-        this.totalDebits = this.totalDebits + parseFloat(element.amount)
-      });
-    });
 
-    this.apiService.getCredits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
-      this.credits = cd;
-      this.credits.forEach(el => {
-        this.totalCredits = this.totalCredits + parseFloat(el.amount);
-      })
-    })
+          this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+            this.debits = db;
+            this.apiService.getCredits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
+              this.credits = cd;
 
-    if (this.period.status == '1') {
-      let cred: credits = new credits;
-      let deb: debits = new debits;
+              if (this.period.status == '1') {
+                let cred: credits = new credits;
+                let deb: debits = new debits;
 
-      this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp.idemployees }).subscribe((emplo: employees[]) => {
-        let hour: number = parseFloat(emplo[0].base_payment) / 240;
-        cred.amount = ((120 + this.absence) * hour).toFixed(2);
-        cred.type = "Apportionment Base Payment";
+                this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp.idemployees }).subscribe((emplo: employees[]) => {
+                  let hour: number = parseFloat(emplo[0].base_payment) / 240;
+                  cred.amount = ((120 + this.absence) * hour).toFixed(2);
+                  cred.type = "Apportionment Base Payment";
 
-        deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
-        deb.type = "Apportioment IGSS";
+                  deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
+                  deb.type = "Apportioment IGSS";
 
-        this.credits.push(cred);
-        this.debits.push(deb);
-      })
-    }
+                  this.credits.push(cred);
+                  this.debits.push(deb);
+                })
+              }
+              this.debits.forEach(element => {
+                this.totalDebits = this.totalDebits + parseFloat(element.amount)
+              })
+              this.credits.forEach(el => {
+                this.totalCredits = this.totalCredits + parseFloat(el.amount);
 
-
+              })
+            });
+          });
         })
       })
     })
     this.selectedEmployee = true;
-    this.absence = parseFloat(this.absence.toFixed(2));
+    this.absence_fixed = this.absence.toFixed(2);
   }
 
 
@@ -390,7 +392,7 @@ export class PeriodsComponent implements OnInit {
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if (parseFloat(attendance.worked_time) == 0) {
                     non_show = true;
-                    this.apiService.getAttAdjustments({id:"id;"+de.idemployees}).subscribe((adj: attendences_adjustment[]) => {
+                    this.apiService.getAttAdjustments({ id: "id;" + de.idemployees }).subscribe((adj: attendences_adjustment[]) => {
                       if (!non_show) {
                         let partial_nonshow: boolean = false;
                         adj.forEach(adjustment => {
@@ -410,53 +412,53 @@ export class PeriodsComponent implements OnInit {
           })
 
           att.forEach(attendance => {
-            if(attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW"){
+            if (attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW") {
               this.absence = this.absence + (parseFloat(attendance.balance));
-            }else{
-              if(attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW"){
+            } else {
+              if (attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW") {
                 this.absence = this.absence - 8;
+                if (attendance.balance == 'NON_SHOW') {
+                  this.seventh = this.seventh + 1;
+                }
               }
             }
           });
 
-          
-    this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-      this.debits = db;
-      this.debits.forEach(element => {
-        this.totalDebits = this.totalDebits + parseFloat(element.amount)
-      });
-    });
 
-    this.apiService.getCredits({ id: de.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
-      this.credits = cd;
-      this.credits.forEach(el => {
-        this.totalCredits = this.totalCredits + parseFloat(el.amount);
-      })
-    })
+          this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+            this.debits = db;
+            this.apiService.getCredits({ id: de.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
+              this.credits = cd;
 
-    if (this.period.status == '1') {
-      let cred: credits = new credits;
-      let deb: debits = new debits;
+              if (this.period.status == '1') {
+                let cred: credits = new credits;
+                let deb: debits = new debits;
 
-      this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: de.idemployees }).subscribe((emplo: employees[]) => {
-        let hour: number = parseFloat(emplo[0].base_payment) / 240;
-        cred.amount = ((120 + this.absence) * hour).toFixed(2);
-        cred.type = "Apportionment Base Payment";
+                this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: de.idemployees }).subscribe((emplo: employees[]) => {
+                  let hour: number = parseFloat(emplo[0].base_payment) / 240;
+                  cred.amount = ((120 + this.absence) * hour).toFixed(2);
+                  cred.type = "Apportionment Base Payment";
 
-        deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
-        deb.type = "Apportioment IGSS";
+                  deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
+                  deb.type = "Apportioment IGSS";
 
-        this.credits.push(cred);
-        this.debits.push(deb);
-      })
-    }
-
-
+                  this.credits.push(cred);
+                  this.debits.push(deb);
+                })
+              }
+              this.debits.forEach(element => {
+                this.totalDebits = this.totalDebits + parseFloat(element.amount);
+              })
+              this.credits.forEach(el => {
+                this.totalCredits = this.totalCredits + parseFloat(el.amount);
+              })
+            });
+          });
         })
       })
     })
     this.selectedEmployee = true;
-    this.absence = parseFloat(this.absence.toFixed(2));
+    this.absence_fixed = this.absence.toFixed(2);
   }
 
   searchEmployee() {
