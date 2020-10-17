@@ -268,7 +268,7 @@ export class PeriodsComponent implements OnInit {
 
 
   setReg(de: deductions) {
-
+    
     let vacs: boolean = false;
     let leavs: boolean = false;
     let non_show: boolean = false;
@@ -447,10 +447,11 @@ export class PeriodsComponent implements OnInit {
                 })
               }
               this.debits.forEach(element => {
-                this.totalDebits = this.totalDebits + parseFloat(element.amount);
+                this.totalDebits = this.totalDebits + parseFloat(element.amount)
               })
               this.credits.forEach(el => {
                 this.totalCredits = this.totalCredits + parseFloat(el.amount);
+
               })
             });
           });
