@@ -87,8 +87,6 @@ export class PeriodsComponent implements OnInit {
     this.totalDebits = 0;
     this.totalCredits = 0;
     this.absence = 0;
-    this.debits = [];
-    this.credits = [];
 
     this.apiService.getVacations({ id: emp.id_profile }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
@@ -288,8 +286,7 @@ export class PeriodsComponent implements OnInit {
     this.totalDebits = 0;
     this.totalCredits = 0;
     this.absence = 0;
-    this.debits = [];
-    this.credits = [];
+
 
     this.apiService.getVacations({ id: de.idprofiles }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
