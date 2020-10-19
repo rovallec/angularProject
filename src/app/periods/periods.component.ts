@@ -455,17 +455,17 @@ export class PeriodsComponent implements OnInit {
                   this.debits.push(deb);
                 })
               }
-
-              db.forEach(db_p => {
-                this.debits.push(db_p);
-                this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
-              });
-
-              cd.forEach(cd_p => {
-                this.credits.push(cd_p);
-                this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
-              });
             });
+          });
+
+          this.debits.forEach(db_p => {
+            this.debits.push(db_p);
+            this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
+          });
+
+          this.credits.forEach(cd_p => {
+            this.credits.push(cd_p);
+            this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
           });
         })
       })
