@@ -87,6 +87,8 @@ export class PeriodsComponent implements OnInit {
     this.totalDebits = 0;
     this.totalCredits = 0;
     this.absence = 0;
+    this.debits = null;
+    this.credits = null;
 
     this.apiService.getVacations({ id: emp.id_profile }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
@@ -242,9 +244,11 @@ export class PeriodsComponent implements OnInit {
                   let hour: number = parseFloat(emplo[0].base_payment) / 240;
                   cred.amount = ((120 + this.absence) * hour).toFixed(2);
                   cred.type = "Apportionment Base Payment";
+                  cred.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 1).toString();
 
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
                   deb.type = "Apportioment IGSS";
+                  deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
 
                   this.credits.push(cred);
                   this.debits.push(deb);
@@ -253,20 +257,13 @@ export class PeriodsComponent implements OnInit {
 
               db.forEach(db_p => {
                 this.debits.push(db_p);
+                this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
               });
 
               cd.forEach(cd_p => {
-                this.credits.push(cd_p)
+                this.credits.push(cd_p);
+                this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
               });
-
-              this.debits.forEach(element => {
-                this.totalDebits = this.totalDebits + parseFloat(element.amount);
-                console.log(this.totalDebits);
-              })
-              this.credits.forEach(el => {
-                this.totalCredits = this.totalCredits + parseFloat(el.amount);
-                console.log(this.totalCredits);
-              })
             });
           });
         })
@@ -291,6 +288,8 @@ export class PeriodsComponent implements OnInit {
     this.totalDebits = 0;
     this.totalCredits = 0;
     this.absence = 0;
+    this.debits = null;
+    this.credits = null;
 
     this.apiService.getVacations({ id: de.idprofiles }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
@@ -459,21 +458,13 @@ export class PeriodsComponent implements OnInit {
 
               db.forEach(db_p => {
                 this.debits.push(db_p);
+                this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
               });
 
               cd.forEach(cd_p => {
-                this.credits.push(cd_p)
+                this.credits.push(cd_p);
+                this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
               });
-
-              
-              this.debits.forEach(element => {
-                this.totalDebits = this.totalDebits + parseFloat(element.amount);
-                console.log(this.totalDebits);
-              })
-              this.credits.forEach(el => {
-                this.totalCredits = this.totalCredits + parseFloat(el.amount);
-                console.log(this.totalCredits);
-              })
             });
           });
         })
