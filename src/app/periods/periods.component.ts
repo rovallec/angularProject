@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AttachSession } from 'protractor/built/driverProviders';
 import { parse } from 'querystring';
+import { isNull } from 'util';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
 import { attendences, attendences_adjustment, credits, debits, deductions, leaves, periods, vacations } from '../process_templates';
@@ -447,11 +448,23 @@ export class PeriodsComponent implements OnInit {
                   let hour: number = parseFloat(emplo[0].base_payment) / 240;
                   cred.amount = ((120 + this.absence) * hour).toFixed(2);
                   cred.type = "Apportionment Base Payment";
-                  cred.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 1).toString();
+                  
 
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
                   deb.type = "Apportioment IGSS";
-                  deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
+
+                  if(isNull(this.debits)){
+                    deb.iddebits = '1';
+                  }else{
+                      deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
+                  }
+                    
+                  if(isNull(this.credits)){
+                    cred.iddebits = '1';
+                  }else{
+                    cred.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 1).toString();
+                  }
+                  
 
                   this.credits.push(cred);
                   this.debits.push(deb);
