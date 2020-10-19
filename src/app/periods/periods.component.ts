@@ -40,6 +40,7 @@ export class PeriodsComponent implements OnInit {
   absence_fixed: string = null;
   value: string = null;
   ded: boolean = true;
+  non_show_2: boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
@@ -176,12 +177,19 @@ export class PeriodsComponent implements OnInit {
                     this.roster = this.roster + average;
                     this.diff = this.diff + average;
                     attendance.balance = "NON_SHOW";
+                    non_show = false;
                   } else {
-                    this.roster = this.roster + average;
-                    this.attended = this.attended + average;
-                    attendance.balance = '0';
+                    if (this.non_show_2) {
+                      this.roster = this.roster + average;
+                      this.diff = this.diff + average;
+                      attendance.balance = "NON_SHOW";
+                      this.non_show_2 = false;
+                    } else {
+                      this.roster = this.roster + average;
+                      this.attended = this.attended + average;
+                      attendance.balance = '0';
+                    }
                   }
-
                   this.daysOff = this.daysOff + 1;
 
                   let variable: number = this.daysOff;
@@ -192,6 +200,7 @@ export class PeriodsComponent implements OnInit {
 
                   if (variable = 0) {
                     non_show = false;
+                    this.non_show_2 = false;
                   }
                 } else {
                   this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
@@ -199,7 +208,11 @@ export class PeriodsComponent implements OnInit {
                   this.diff = parseFloat((this.roster - this.attended).toFixed(2));
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if (parseFloat(attendance.worked_time) == 0) {
-                    non_show = true;
+                    if (non_show) {
+                      this.non_show_2 = true;
+                    } else {
+                      non_show = true;
+                    }
                     this.apiService.getAttAdjustments({ id: "id;" + emp.idemployees }).subscribe((adj: attendences_adjustment[]) => {
                       if (!non_show) {
                         let partial_nonshow: boolean = false;
@@ -210,7 +223,11 @@ export class PeriodsComponent implements OnInit {
                             partial_nonshow = false;
                           }
                         })
-                        non_show = partial_nonshow;
+                        if (this.non_show_2) {
+                          this.non_show_2 = partial_nonshow;
+                        } else {
+                          non_show = partial_nonshow;
+                        }
                       }
                     })
                   }
@@ -253,22 +270,22 @@ export class PeriodsComponent implements OnInit {
                   this.credits.push(cred);
                   this.debits.push(deb);
 
-                  if(isNullOrUndefined(this.debits)){
+                  if (isNullOrUndefined(this.debits)) {
                     deb.iddebits = '1';
-                  }else{
-                      deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
+                  } else {
+                    deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
                   }
-                    
-                  if(isNullOrUndefined(this.credits)){
+
+                  if (isNullOrUndefined(this.credits)) {
                     cred.iddebits = '1';
-                  }else{
+                  } else {
                     cred.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 1).toString();
                   }
 
                   db.forEach(db_p => {
                     this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
                   });
-    
+
                   cd.forEach(cd_p => {
                     this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
                   });
@@ -284,7 +301,7 @@ export class PeriodsComponent implements OnInit {
 
 
   setReg(de: deductions) {
-    
+
     let vacs: boolean = false;
     let leavs: boolean = false;
     let non_show: boolean = false;
@@ -386,12 +403,19 @@ export class PeriodsComponent implements OnInit {
                     this.roster = this.roster + average;
                     this.diff = this.diff + average;
                     attendance.balance = "NON_SHOW";
+                    non_show = false;
                   } else {
-                    this.roster = this.roster + average;
-                    this.attended = this.attended + average;
-                    attendance.balance = '0';
+                    if (this.non_show_2) {
+                      this.roster = this.roster + average;
+                      this.diff = this.diff + average;
+                      attendance.balance = "NON_SHOW";
+                      this.non_show_2 = false;
+                    } else {
+                      this.roster = this.roster + average;
+                      this.attended = this.attended + average;
+                      attendance.balance = '0';
+                    }
                   }
-
                   this.daysOff = this.daysOff + 1;
 
                   let variable: number = this.daysOff;
@@ -402,6 +426,7 @@ export class PeriodsComponent implements OnInit {
 
                   if (variable = 0) {
                     non_show = false;
+                    this.non_show_2 = false;
                   }
                 } else {
                   this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
@@ -409,7 +434,11 @@ export class PeriodsComponent implements OnInit {
                   this.diff = parseFloat((this.roster - this.attended).toFixed(2));
                   attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                   if (parseFloat(attendance.worked_time) == 0) {
-                    non_show = true;
+                    if (non_show) {
+                      this.non_show_2 = true;
+                    } else {
+                      non_show = true;
+                    }
                     this.apiService.getAttAdjustments({ id: "id;" + de.idemployees }).subscribe((adj: attendences_adjustment[]) => {
                       if (!non_show) {
                         let partial_nonshow: boolean = false;
@@ -420,7 +449,11 @@ export class PeriodsComponent implements OnInit {
                             partial_nonshow = false;
                           }
                         })
-                        non_show = partial_nonshow;
+                        if(this.non_show_2){
+                          this.non_show_2 = partial_nonshow;
+                        }else{
+                          non_show = partial_nonshow;
+                        }
                       }
                     })
                   }
@@ -458,20 +491,20 @@ export class PeriodsComponent implements OnInit {
                   let hour: number = parseFloat(emplo[0].base_payment) / 240;
                   cred.amount = ((120 + this.absence) * hour).toFixed(2);
                   cred.type = "Apportionment Base Payment";
-                  
+
 
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
                   deb.type = "Apportioment IGSS";
 
-                  if(isNullOrUndefined(this.debits)){
+                  if (isNullOrUndefined(this.debits)) {
                     deb.iddebits = '1';
-                  }else{
-                      deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
+                  } else {
+                    deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
                   }
-                    
-                  if(isNullOrUndefined(this.credits)){
+
+                  if (isNullOrUndefined(this.credits)) {
                     cred.iddebits = '1';
-                  }else{
+                  } else {
                     cred.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 1).toString();
                   }
 
@@ -481,7 +514,7 @@ export class PeriodsComponent implements OnInit {
                   this.debits.forEach(db_p => {
                     this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
                   });
-        
+
                   this.credits.forEach(cd_p => {
                     this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
                   });
