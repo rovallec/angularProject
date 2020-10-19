@@ -251,13 +251,14 @@ export class PeriodsComponent implements OnInit {
                   deb.type = "Apportioment IGSS";
                   deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
 
+                  this.credits.push(cred);
+                  this.debits.push(deb);
+
                   db.forEach(db_p => {
-                    this.debits.push(db_p);
                     this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
                   });
     
                   cd.forEach(cd_p => {
-                    this.credits.push(cd_p);
                     this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
                   });
                 })
@@ -452,13 +453,14 @@ export class PeriodsComponent implements OnInit {
                   deb.type = "Apportioment IGSS";
                   deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
 
+                  this.credits.push(cred);
+                  this.debits.push(deb);
+
                   this.debits.forEach(db_p => {
-                    this.debits.push(db_p);
                     this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
                   });
         
                   this.credits.forEach(cd_p => {
-                    this.credits.push(cd_p);
                     this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
                   });
                 })
