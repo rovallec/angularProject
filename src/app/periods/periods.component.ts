@@ -87,6 +87,8 @@ export class PeriodsComponent implements OnInit {
     this.totalDebits = 0;
     this.totalCredits = 0;
     this.absence = 0;
+    this.credits = [];
+    this.debits = [];
 
     this.apiService.getVacations({ id: emp.id_profile }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
@@ -233,7 +235,8 @@ export class PeriodsComponent implements OnInit {
 
           this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
             this.apiService.getCredits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
-
+              this.credits = cd;
+              this.debits = db;
               if (this.period.status == '1') {
                 let cred: credits = new credits;
                 let deb: debits = new debits;
@@ -286,7 +289,8 @@ export class PeriodsComponent implements OnInit {
     this.totalDebits = 0;
     this.totalCredits = 0;
     this.absence = 0;
-
+    this.credits = [];
+    this.debits = [];
 
     this.apiService.getVacations({ id: de.idprofiles }).subscribe((vac: vacations[]) => {
       this.vacations = vac;
@@ -433,6 +437,9 @@ export class PeriodsComponent implements OnInit {
 
           this.apiService.getDebits({ id: de.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
             this.apiService.getCredits({ id: de.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
+
+              this.credits = cd;
+              this.debits = db;
 
               if (this.period.status == '1') {
                 let cred: credits = new credits;
