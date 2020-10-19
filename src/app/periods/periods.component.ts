@@ -251,9 +251,6 @@ export class PeriodsComponent implements OnInit {
                   deb.type = "Apportioment IGSS";
                   deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
 
-                  this.credits.push(cred);
-                  this.debits.push(deb);
-
                   db.forEach(db_p => {
                     this.debits.push(db_p);
                     this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
@@ -454,9 +451,6 @@ export class PeriodsComponent implements OnInit {
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
                   deb.type = "Apportioment IGSS";
                   deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
-
-                  this.credits.push(cred);
-                  this.debits.push(deb);
 
                   this.debits.forEach(db_p => {
                     this.debits.push(db_p);
