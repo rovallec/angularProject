@@ -531,6 +531,7 @@ export class PeriodsComponent implements OnInit {
                   deb.type = "Prorrateo IGSS";
 
                   this.credits.push(cred);
+                  this.credits.push(cred2);
                   this.debits.push(deb);
 
                   this.debits.forEach(db_p => {
