@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AttachSession } from 'protractor/built/driverProviders';
 import { parse } from 'querystring';
-import { isNull, isNullOrUndefined } from 'util';
+import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
 import { attendences, attendences_adjustment, credits, debits, deductions, leaves, payments, periods, vacations } from '../process_templates';
@@ -278,13 +278,13 @@ export class PeriodsComponent implements OnInit {
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
                   deb.type = "Prorrateo IGSS";
 
-                  if (isNullOrUndefined(this.debits)) {
+                  if (isUndefined(this.debits)) {
                     deb.iddebits = '1';
                   } else {
                     deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
                   }
 
-                  if (isNullOrUndefined(this.credits)) {
+                  if (isUndefined(this.credits)) {
                     cred.iddebits = '1';
                     cred2.iddebits = '2';
                     cred3.iddebits = '3';
@@ -591,7 +591,7 @@ export class PeriodsComponent implements OnInit {
     this.apiService.getPayments(this.period).subscribe((payments:payments[])=>{
       this.payments = payments;
       console.log(payments);
-      payments.forEach(payment => {
+      this.payments.forEach(payment => {
         this.apiService.getSearchEmployees({dp:'all', filter:'idemplopyees', value:payment.id_employee}).subscribe((employee:employees[])=>{
           this.setRegE(employee[0], false);
         })
