@@ -579,6 +579,7 @@ export class PeriodsComponent implements OnInit {
         totalDeb = 0;
         this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:pay.id_employee}).subscribe((emp:employees[])=>{
           this.setRegE(emp[0], true, pay.idpayments);
+          console.log(this.credits);
           pay.employee_name = emp[0].name;
           this.credits.forEach(cred=>{
             totalCred = totalCred + parseFloat(cred.amount);
@@ -592,7 +593,7 @@ export class PeriodsComponent implements OnInit {
         pay.total = (totalCred - totalDeb).toFixed(2);
         pay.date = new Date().getFullYear() + "-" + new Date().getMonth() + "-" + new Date().getDate();
       })
-      
+
       this.payments = payments;
     })
 
