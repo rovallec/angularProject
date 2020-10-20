@@ -592,6 +592,7 @@ export class PeriodsComponent implements OnInit {
         pay.total = (totalCred - totalDeb).toFixed(2);
         pay.date = new Date().getFullYear() + "-" + new Date().getMonth() + "-" + new Date().getDate();
       })
+      
       this.payments = payments;
     })
 
