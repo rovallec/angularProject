@@ -28,4 +28,5 @@ if($result = mysqli_query($con, $sql)){
         $i++;
     }
     echo(json_encode($return));
+}
 ?>
