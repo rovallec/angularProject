@@ -78,7 +78,7 @@ export class PeriodsComponent implements OnInit {
     this.selectedEmployee = false;
   }
 
-  setRegE(emp: employees, set?:boolean, payment?:number) {
+  setRegE(emp: employees, set?:boolean, payment?:string) {
     let vacs: boolean = false;
     let leavs: boolean = false;
     let non_show: boolean = false;
@@ -282,7 +282,7 @@ export class PeriodsComponent implements OnInit {
                   cred2.iddebits = (this.credits.length + 1).toString();
                   cred3.iddebits = (this.credits.length + 2).toString();
 
-                  if(payment > 0){
+                  if(parseInt(payment) > 0){
                     cred.idpayments = payment.toString();
                     cred2.idpayments = payment.toString();
                     cred3.idpayments = payment.toString();
@@ -570,12 +570,11 @@ export class PeriodsComponent implements OnInit {
 
   closePeriod(){
     this.apiService.getPayments(this.period).subscribe((payments:payments[])=>{
-      this.payments = payments;
-      let cnt:number = 0;
-      cnt = payments.length;
-      for (let i = 0; i < cnt; i++) {
-        console.log(payments[i]);
-      }
+      payments.forEach(pay=>{
+        this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:pay.id_employee}).subscribe((emp:employees[])=>{
+          this.setRegE(emp[0], false, pay.idpayments);
+        })
+      })
     })
   }
 }

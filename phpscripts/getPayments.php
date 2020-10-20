@@ -18,13 +18,13 @@ $sql = "SELECT * FROM `payments` WHERE `id_period` = $idperiods";
 
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){
-        $return['idpayments'] = $res['idpayments'];
-        $return['id_employee'] = $res['id_employee'];
-        $return['id_paymentmethod'] = $res['id_paymentmethod'];
-        $return['id_period'] = $res['id_period'];
-        $return['credits'] = $res['credits'];
-        $return['debits'] = $res['debits'];
-        $return['date'] = $res['date'];
+        $return[$i]['idpayments'] = $res['idpayments'];
+        $return[$i]['id_employee'] = $res['id_employee'];
+        $return[$i]['id_paymentmethod'] = $res['id_paymentmethod'];
+        $return[$i]['id_period'] = $res['id_period'];
+        $return[$i]['credits'] = $res['credits'];
+        $return[$i]['debits'] = $res['debits'];
+        $return[$i]['date'] = $res['date'];
         $i++;
     }
     echo(json_encode($return));
