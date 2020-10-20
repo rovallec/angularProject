@@ -7,7 +7,7 @@
                 <option value='type' *ngIf="ded">TYPE</option>
                 <option value='reason' *ngIf="ded">REASON</option>
                 <option value='amount' *ngIf="ded">AMOUNT</option>
-                <option value='DPI' *ngIf="!ded">DPI</option>
+                <option value='DPI' *ngIf="!ded && !showPaymentes">DPI</option>
             </select>
         </div>
         <div class="form-group col-md-2">
@@ -19,13 +19,16 @@
             </select>
         </div>
         <div class="form-group col-md-1; text-align:left">
-            <i class="fas fa-search" aria-hidden="true" style="margin-top:100%" (click)="searchEmployee()"></i>
+            <i class="fas fa-search" aria-hidden="true" style="margin-top:100%" (click)="searchCloseEmployee()" *ngIf="showPaymentes"></i>
+            <i class="fas fa-search" aria-hidden="true" style="margin-top:100%" (click)="searchEmployee()" *ngIf="!showPaymentes"></i>
         </div>
-        <div class="form-group col-md-1; text-align:left" *ngIf="!showPaymentes">
-            <i class="fas fa-minus-circle" style="margin-top:100%" (click)="cancelSearch()"></i>
+        <div class="form-group col-md-1; text-align:left">
+            <i class="fas fa-minus-circle" style="margin-top:100%" (click)="cancelCloseSearch()"  *ngIf="showPaymentes && searchClosed"></i>
+            <i class="fas fa-minus-circle" style="margin-top:100%" (click)="cancelSearch()"  *ngIf="!showPaymentes"></i>
         </div>
-        <div class="form-group col-md-1; text-align:left" *ngIf="!showPaymentes">
-            <i class="fas fa-globe-americas"  style="margin-top:100%" (click)="showAll()"></i>
+        <div class="form-group col-md-1; text-align:left">
+            <i class="far fa-window-close" style="margin-top:100%" (click)="closeClose()" *ngIf="showPaymentes"></i>
+            <i class="fas fa-globe-americas"  style="margin-top:100%" (click)="showAll()" *ngIf="!showPaymentes"></i>
         </div>
         <div class="form-group col-md-1 textalign:left" *ngIf="!showPaymentes">
             <i class="fas fa-store-slash" style="margin-top:10%" (click)="closePeriod()"></i>

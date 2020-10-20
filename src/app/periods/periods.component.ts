@@ -30,6 +30,7 @@ export class PeriodsComponent implements OnInit {
   payments: payments[] = [];
   global_credits: credits[] = [];
   global_debits: debits[] = [];
+  backUp_payments:payments[];
   period: periods = new periods;
   daysOff: number = 0;
   roster: number = 0;
@@ -45,6 +46,7 @@ export class PeriodsComponent implements OnInit {
   ded: boolean = true;
   non_show_2: boolean = false;
   showPaymentes: boolean = false;
+  searchClosed:boolean = false;
   count_payments: number = 0;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
@@ -734,7 +736,35 @@ export class PeriodsComponent implements OnInit {
         })
       })
       this.payments = payments;
+      this.ded = false;
       this.showPaymentes = true;
     })
+  }
+
+  searchCloseEmployee(){
+    this.showPaymentes = false;
+    if(!this.searchClosed){
+      this.backUp_payments = this.payments;
+    }
+    this.payments = [];
+    this.payments.forEach(pay=>{
+      if(pay.employee_name.includes(this.value)){
+        this.payments.push(pay);
+      }
+    })
+    this.showPaymentes = true;
+  }
+
+
+  cancelCloseSearch(){
+    this.showPaymentes = false;
+    this.searchClosed = false;
+    this.payments = this.backUp_payments;
+    this.showPaymentes = true;
+  }
+
+  closeClose(){
+    this.showPaymentes = false;
+    this.searchClosed = false;
   }
 }
