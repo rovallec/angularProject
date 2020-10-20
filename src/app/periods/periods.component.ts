@@ -815,10 +815,10 @@ export class PeriodsComponent implements OnInit {
                         cd.forEach(cd_p => {
                           this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
                         });
-
                         pay.credits = this.totalCredits.toFixed(2);
                         pay.debits = this.totalDebits.toFixed(2);
                         pay.total = (this.totalCredits - this.totalDebits).toFixed(2);
+                        setTimeout(()=>{console.log("timeOut")},2000);
                       })
                     }
                   });
