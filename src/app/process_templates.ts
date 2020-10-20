@@ -661,3 +661,22 @@ export class credits{
     type:string;
     amount:string;
 }
+
+export class payments{
+    idpayments:string;
+    id_employee:string;
+    id_paymentmethod:string;
+    id_period:string;
+    credits:string;
+    debits:string;
+    date:string;
+    constructor(){
+        this.idpayments = null;
+        this.id_employee = null;
+        this.id_paymentmethod = null;
+        this.id_period = null;
+        this.credits = null;
+        this.debits = null;
+        this.date = null;
+    }
+}

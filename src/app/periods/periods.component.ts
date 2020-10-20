@@ -8,7 +8,7 @@ import { parse } from 'querystring';
 import { isNull, isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, debits, deductions, leaves, periods, vacations } from '../process_templates';
+import { attendences, attendences_adjustment, credits, debits, deductions, leaves, payments, periods, vacations } from '../process_templates';
 
 @Component({
   selector: 'app-periods',
@@ -27,6 +27,9 @@ export class PeriodsComponent implements OnInit {
   vacations: vacations[] = [];
   leaves: leaves[] = [];
   employees: employees[] = [];
+  payments:payments[] = [];
+  global_credits:credits[] = [];
+  global_debits:debits[] = [];
   period: periods = new periods;
   daysOff: number = 0;
   roster: number = 0;
@@ -41,6 +44,7 @@ export class PeriodsComponent implements OnInit {
   value: string = null;
   ded: boolean = true;
   non_show_2: boolean = false;
+  count_payments:number = 0;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
@@ -74,8 +78,7 @@ export class PeriodsComponent implements OnInit {
     this.selectedEmployee = false;
   }
 
-  setRegE(emp: employees) {
-
+  setRegE(emp: employees, set?:boolean, payment?:number) {
     let vacs: boolean = false;
     let leavs: boolean = false;
     let non_show: boolean = false;
@@ -258,17 +261,22 @@ export class PeriodsComponent implements OnInit {
               if (this.period.status == '1') {
                 let cred: credits = new credits;
                 let deb: debits = new debits;
+                let cred2:credits = new credits;
+                let cred3:credits = new credits;
 
+                
                 this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp.idemployees }).subscribe((emplo: employees[]) => {
                   let hour: number = parseFloat(emplo[0].base_payment) / 240;
+                  let p_hour: number = parseFloat(emplo[0].productivity_payment) / 240;
+
                   cred.amount = ((120 + this.absence) * hour).toFixed(2);
-                  cred.type = "Apportionment Base Payment";
+                  cred.type = "Prorrateo Sueldo Base";
+
+                  cred2.amount = ((120 + this.absence) * p_hour).toFixed(2);
+                  cred2.type = "Prorrateo Bono De Productividad";
 
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
-                  deb.type = "Apportioment IGSS";
-
-                  this.credits.push(cred);
-                  this.debits.push(deb);
+                  deb.type = "Prorrateo IGSS";
 
                   if (isNullOrUndefined(this.debits)) {
                     deb.iddebits = '1';
@@ -278,9 +286,37 @@ export class PeriodsComponent implements OnInit {
 
                   if (isNullOrUndefined(this.credits)) {
                     cred.iddebits = '1';
+                    cred2.iddebits = '2';
+                    cred3.iddebits = '3';
                   } else {
                     cred.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 1).toString();
+                    cred2.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 2).toString();
+                    cred3.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 3).toString();
                   }
+
+                  if(payment > 0){
+                    cred.idpayments = payment.toString();
+                    cred2.idpayments = payment.toString();
+                    cred3.idpayments = payment.toString();
+                    deb.idpayments = payment.toString();
+                    deb.type = "IGSS";
+                    cred.type = "Sueldo Base";
+                    cred2.type = "Bonificacion De Productividad";
+
+                    cred3.amount = "250.00";
+                    cred3.type = "Bonificacion Incentivo";
+                    this.credits.push(cred3);
+
+                    this.global_credits.push(cred);
+                    this.global_credits.push(cred2);
+                    this.global_credits.push(cred3);
+
+                    this.global_debits.push(deb);
+                  }
+
+                  this.credits.push(cred);
+                  this.credits.push(cred2);
+                  this.debits.push(deb);
 
                   db.forEach(db_p => {
                     this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
@@ -296,7 +332,11 @@ export class PeriodsComponent implements OnInit {
         })
       })
     })
-    this.selectedEmployee = true;
+    if(set){
+      this.selectedEmployee = false;
+    }else{
+      this.selectedEmployee = true;
+    }
   }
 
 
@@ -545,5 +585,17 @@ export class PeriodsComponent implements OnInit {
       this.employees = emp;
     })
     this.ded = false;
+  }
+
+  closePeriod(){
+    this.apiService.getPayments(this.period).subscribe((payments:payments[])=>{
+      this.payments = payments;
+      payments.forEach(payment => {
+        this.apiService.getSearchEmployees({dp:'all', filter:'idemplopyees', value:payment.id_employee}).subscribe((employee:employees[])=>{
+          this.setRegE(employee[0], false);
+        })
+        console.log(this.global_credits);
+      });
+    })
   }
 }
