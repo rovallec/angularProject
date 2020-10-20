@@ -670,6 +670,8 @@ export class payments{
     credits:string;
     debits:string;
     date:string;
+    employee_name:string;
+    total:string;
     constructor(){
         this.idpayments = null;
         this.id_employee = null;
@@ -678,5 +680,7 @@ export class payments{
         this.credits = null;
         this.debits = null;
         this.date = null;
+        this.employee_name = null;
+        this.total = null;
     }
 }

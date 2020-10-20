@@ -44,6 +44,7 @@ export class PeriodsComponent implements OnInit {
   value: string = null;
   ded: boolean = true;
   non_show_2: boolean = false;
+  showPaymentes:boolean = false;
   count_payments:number = 0;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
@@ -569,12 +570,30 @@ export class PeriodsComponent implements OnInit {
   }
 
   closePeriod(){
+    let totalCred:number = 0;
+    let totalDeb:number = 0;
+
     this.apiService.getPayments(this.period).subscribe((payments:payments[])=>{
       payments.forEach(pay=>{
+        totalCred = 0;
+        totalDeb = 0;
         this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:pay.id_employee}).subscribe((emp:employees[])=>{
           this.setRegE(emp[0], true, pay.idpayments);
+          pay.employee_name = emp[0].name;
+          this.credits.forEach(cred=>{
+            totalCred = totalCred + parseFloat(cred.amount);
+          })
+          pay.credits = totalCred.toFixed(2);
+          this.debits.forEach(deb=>{
+            totalDeb = totalDeb + parseFloat(deb.amount);
+          })
+          pay.debits = totalDeb.toFixed(2);
         })
+        pay.total = (totalCred - totalDeb).toFixed(2);
+        pay.date = new Date().getFullYear() + "-" + new Date().getMonth() + "-" + new Date().getDate();
       })
     })
+
+    this.showPaymentes = true;
   }
 }

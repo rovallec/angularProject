@@ -21,17 +21,40 @@
         <div class="form-group col-md-1; text-align:left">
             <i class="fas fa-search" aria-hidden="true" style="margin-top:100%" (click)="searchEmployee()"></i>
         </div>
-        <div class="form-group col-md-1; text-align:left">
+        <div class="form-group col-md-1; text-align:left" *ngIf="!showPaymentes">
             <i class="fas fa-minus-circle" style="margin-top:100%" (click)="cancelSearch()"></i>
         </div>
-        <div class="form-group col-md-1; text-align:left">
+        <div class="form-group col-md-1; text-align:left" *ngIf="!showPaymentes">
             <i class="fas fa-globe-americas"  style="margin-top:100%" (click)="showAll()"></i>
         </div>
-        <div class="form-group col-md-1 textalign:left">
+        <div class="form-group col-md-1 textalign:left" *ngIf="!showPaymentes">
             <i class="fas fa-store-slash" style="margin-top:10%" (click)="closePeriod()"></i>
         </div>
     </div>
-    <div class="from-row col-md-12">
+    <div class="from-row col-md-12" *ngIf="showPaymentes">
+        <div class="form-group col-md-12">
+            <table class="table table-striped table-hover" style="width: 100%;text-align:center">
+                <thead>
+                    <th>ID</th>
+                    <th>NAME</th>
+                    <th>CREDITS</th>
+                    <th>DEBITS</th>
+                    <th>DATE</th>
+                    <th>TOTAL</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pay of payments">
+                        <td>{{pay.idpayments}}</td>
+                        <td>{{pay.employee_name}}</td>
+                        <td>{{pay.credits}}</td>
+                        <td>{{pay.debits}}</td>
+                        <td>{{pay.total}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="from-row col-md-12" *ngIf="!showPaymentes">
         <div class="form-group col-md-12" *ngIf="ded">
             <table class="table table-striped table-hover" style="width: 100%;text-align:center">
                 <thead>
@@ -72,7 +95,7 @@
 
     <div class="form-row col-md-12"
         style="border:solid 3px#adc7ff; border-radius:10px; margin-left:1%;width:98%;background-color:#f4f8ff"
-        *ngIf="selectedEmployee">
+        *ngIf="selectedEmployee && !showPaymentes">
         <div class="form-group col-md-4"
             style="padding:10px; border-right:4px #adc7ff solid; margin-top:15px; margin-bottom:15px;">
             <label style="font-size: 20px; font-weight: bold; margin-left:40%;margin-top: 10px;">ATTENDANCES</label>
