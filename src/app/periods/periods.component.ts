@@ -572,7 +572,7 @@ export class PeriodsComponent implements OnInit {
     this.apiService.getPayments(this.period).subscribe((payments:payments[])=>{
       this.payments = payments;
       console.log(payments);
-      this.payments.forEach(pay => {
+      payments.forEach(pay => {
         this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:pay.id_employee}).subscribe((empl:employees[])=>{
           this.setRegE(empl[0], false);
         })
