@@ -618,13 +618,8 @@ export class PeriodsComponent implements OnInit {
                         }
                       });
 
-                      ad.forEach(adjustment => {
-                        if (adjustment.date == attendance.date) {
-                          activeAdjustment = true;
-                        }
-                      });
-
-                      if (!activeAdjustment && !activeLeav && !activeVac && !activeDp) {
+                      if (!activeLeav && !activeVac && !activeDp) {
+                        let partial_non_show:boolean = false;
                         if (attendance.scheduled == 'OFF') {
                           offCount = offCount + 1;
                           while (offCount > 0) {
@@ -640,11 +635,25 @@ export class PeriodsComponent implements OnInit {
                             }
                           }
                         } else {
-                          if (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled) == -8) {
+                          if (parseFloat(attendance.worked_time)  == 0) {
                             if (non_show1) {
-                              non_show2 = true;
+                              ad.forEach(adjustment => {
+                                if (adjustment.date == attendance.date) {
+                                  partial_non_show = true;
+                                }
+                              });
+                              if(!partial_non_show){
+                                non_show2 = true;
+                              }
                             } else {
-                              non_show1 = true;
+                              ad.forEach(adjustment => {
+                                if(adjustment.date == attendance.date){
+                                  partial_non_show = true;
+                                }
+                              })
+                              if(!partial_non_show){
+                                non_show1 = true;
+                              }
                             }
                           }
                           discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
@@ -709,6 +718,9 @@ export class PeriodsComponent implements OnInit {
                     totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                     totalDeb = totalDeb + parseFloat(igss_debit.amount);
 
+                    console.log(pushCredits);
+                    console.log(base_hour);
+                    console.log(productivity_hour);
                     pay.credits = (totalCred).toFixed(2);
                     pay.debits = (totalDeb).toFixed(2);
                     pay.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
