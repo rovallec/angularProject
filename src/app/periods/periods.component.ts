@@ -809,16 +809,13 @@ export class PeriodsComponent implements OnInit {
                         this.debits.push(deb);
       
                         db.forEach(db_p => {
-                          this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
+                          pay.debits = (this.totalDebits + parseFloat(db_p.amount)).toFixed(2);
                         });
       
                         cd.forEach(cd_p => {
-                          this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
+                          pay.credits = (this.totalCredits + parseFloat(cd_p.amount)).toFixed(2);
                         });
-                        pay.credits = this.totalCredits.toFixed(2);
-                        pay.debits = this.totalDebits.toFixed(2);
                         pay.total = (this.totalCredits - this.totalDebits).toFixed(2);
-                        setTimeout(()=>{console.log("timeOut")},2000);
                       })
                     }
                   });
