@@ -278,13 +278,13 @@ export class PeriodsComponent implements OnInit {
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
                   deb.type = "Prorrateo IGSS";
 
-                  if (isUndefined(this.debits)) {
+                  if (isUndefined(db)) {
                     deb.iddebits = '1';
                   } else {
                     deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
                   }
 
-                  if (isUndefined(this.credits)) {
+                  if (isUndefined(cd)) {
                     cred.iddebits = '1';
                     cred2.iddebits = '2';
                     cred3.iddebits = '3';
