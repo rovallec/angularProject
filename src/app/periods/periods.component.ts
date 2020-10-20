@@ -293,7 +293,11 @@ export class PeriodsComponent implements OnInit {
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
                   deb.type = "Prorrateo IGSS";
 
-                  
+                  deb.iddebits = this.debits.length.toString();
+                  cred.iddebits = this.credits.length.toString();
+                  cred2.iddebits = (this.credits.length + 1).toString();
+                  cred3.iddebits = (this.credits.length + 2).toString();
+
                   if(payment > 0){
                     cred.idpayments = payment.toString();
                     cred2.idpayments = payment.toString();
