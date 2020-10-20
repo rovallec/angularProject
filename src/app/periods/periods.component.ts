@@ -717,6 +717,7 @@ export class PeriodsComponent implements OnInit {
         pay.debits = (totalDeb).toFixed(2);
         pay.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
       })
+      this.payments = payments;
       this.showPaymentes = true;
     })
   }
