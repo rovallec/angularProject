@@ -579,10 +579,252 @@ export class PeriodsComponent implements OnInit {
         totalCred = 0;
         totalDeb = 0;
         this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:pay.id_employee}).subscribe((emp:employees[])=>{
-          console.log('HELLO');
-          this.setRegE(emp[0], true, pay.idpayments);
           pay.employee_name = emp[0].name;
-         this.getCredits(emp[0],pay.idpayments).forEach(cred=>{
+          
+          let vacs: boolean = false;
+          let leavs: boolean = false;
+          let non_show: boolean = false;
+          let cnt: number = 0;
+          let average: number = 0;
+      
+          this.daysOff = 0;
+          this.roster = 0;
+          this.attended = 0;
+          this.diff = 0;
+          this.totalDebits = 0;
+          this.totalCredits = 0;
+          this.absence = 0;
+          this.credits = [];
+          this.debits = [];
+      
+          this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
+            this.vacations = vac;
+      
+            this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
+              this.leaves = leave;
+      
+      
+              this.apiService.getAttendences({ id: emp[0].id_profile, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
+                this.attendances = att;
+      
+                att.forEach(atte => {
+                  if (atte.scheduled != 'OFF') {
+                    average = average + parseFloat(atte.scheduled);
+                    cnt = cnt + 1;
+                  }
+                })
+      
+                average = average / cnt;
+      
+                att.forEach(attendance => {
+                  vacs = false;
+                  leavs = false;
+      
+                  vac.forEach(vacation => {
+                    if ((new Date(vacation.took_date)) == (new Date(attendance.date)) || attendance.date == vacation.took_date) {
+                      this.attended = this.attended + average;
+                      this.roster = this.roster + average;
+                      attendance.balance = 'VAC';
+                      if (attendance.scheduled == 'OFF') {
+                        this.daysOff = this.daysOff + 1;
+                      }
+                      vacs = true;
+                    }
+                  })
+      
+                  if (!vacs) {
+                    leave.forEach(leav => {
+                      if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
+                        if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
+                          if (attendance.scheduled == 'OFF') {
+                            this.roster = this.roster + average;
+                            this.diff = this.diff + average;
+                            attendance.balance = 'UNPAID';
+                          } else {
+                            this.roster = this.roster + parseFloat(attendance.scheduled);
+                            this.diff = this.diff + parseFloat(attendance.scheduled);
+                            attendance.balance = 'UNPAID';
+                          }
+                          leavs = true;
+                        }
+                      } else {
+                        if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
+                          leavs = true;
+                          if (attendance.scheduled = 'OFF') {
+                            if (non_show) {
+                              this.roster = this.roster + average;
+                              this.diff = this.diff + average;
+                              attendance.balance = 'NON_SHOW'
+                            } else {
+                              this.roster = this.roster + average;
+                              this.attended = this.attended + average;
+                              attendance.balance = '0';
+                            }
+                            this.daysOff = this.daysOff + 1;
+      
+                            let variable: number = this.daysOff;
+      
+                            while (variable >= 0) {
+                              variable = variable - 2;
+                            }
+      
+                            if (variable = 0) {
+                              non_show = false;
+                            }
+                          }
+                        }
+                      }
+                    })
+      
+                    if (!leavs) {
+                      if (attendance.scheduled == 'OFF') {
+                        if (non_show) {
+                          this.roster = this.roster + average;
+                          this.diff = this.diff + average;
+                          attendance.balance = "NON_SHOW";
+                          non_show = false;
+                        } else {
+                          if (this.non_show_2) {
+                            this.roster = this.roster + average;
+                            this.diff = this.diff + average;
+                            attendance.balance = "NON_SHOW";
+                            this.non_show_2 = false;
+                          } else {
+                            this.roster = this.roster + average;
+                            this.attended = this.attended + average;
+                            attendance.balance = '0';
+                          }
+                        }
+                        this.daysOff = this.daysOff + 1;
+      
+                        let variable: number = this.daysOff;
+      
+                        while (variable >= 0) {
+                          variable = variable - 2;
+                        }
+      
+                        if (variable = 0) {
+                          non_show = false;
+                          this.non_show_2 = false;
+                        }
+                      } else {
+                        this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
+                        this.attended = parseFloat((this.attended + parseFloat(attendance.worked_time)).toFixed(2));
+                        this.diff = parseFloat((this.roster - this.attended).toFixed(2));
+                        attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
+                        if (parseFloat(attendance.worked_time) == 0) {
+                          if (non_show) {
+                            this.non_show_2 = true;
+                          } else {
+                            non_show = true;
+                          }
+                          this.apiService.getAttAdjustments({ id: "id;" + emp[0].idemployees }).subscribe((adj: attendences_adjustment[]) => {
+                            if (!non_show) {
+                              let partial_nonshow: boolean = false;
+                              adj.forEach(adjustment => {
+                                if (adjustment.id_attendence != attendance.idattendences) {
+                                  partial_nonshow = true;
+                                } else {
+                                  partial_nonshow = false;
+                                }
+                              })
+                              if (this.non_show_2) {
+                                this.non_show_2 = partial_nonshow;
+                              } else {
+                                non_show = partial_nonshow;
+                              }
+                            }
+                          })
+                        }
+                      }
+                    }
+                  }
+                })
+      
+                att.forEach(attendance => {
+                  if (attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW") {
+                    this.absence = this.absence + (parseFloat(attendance.balance));
+                  } else {
+                    if (attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW") {
+                      this.absence = this.absence - 8;
+                      if (attendance.balance == 'NON_SHOW') {
+                        this.seventh = this.seventh + 1;
+                      }
+                    }
+                  }
+                  this.absence_fixed = this.absence.toFixed(2);
+                });
+      
+      
+                this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+                  this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
+                    this.credits = cd;
+                    this.debits = db;
+                    if (this.period.status == '1') {
+                      let cred: credits = new credits;
+                      let deb: debits = new debits;
+                      let cred2:credits = new credits;
+                      let cred3:credits = new credits;              
+                      
+                      this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp[0].idemployees }).subscribe((emplo: employees[]) => {
+                        let hour: number = parseFloat(emplo[0].base_payment) / 240;
+                        let p_hour: number = parseFloat(emplo[0].productivity_payment) / 240;
+      
+                        cred.amount = (((this.attendances.length*8) + this.absence) * hour).toFixed(2);
+                        cred.type = "Prorrateo Sueldo Base";
+      
+                        cred2.amount = (((this.attendances.length*8) + this.absence) * p_hour).toFixed(2);
+                        cred2.type = "Prorrateo Bono De Productividad";
+      
+                        deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
+                        deb.type = "Prorrateo IGSS";
+      
+                        deb.iddebits = this.debits.length.toString();
+                        cred.iddebits = this.credits.length.toString();
+                        cred2.iddebits = (this.credits.length + 1).toString();
+                        cred3.iddebits = (this.credits.length + 2).toString();
+      
+                        if(parseInt(pay.idpayments) > 0){
+                          cred.idpayments = pay.idpayments.toString();
+                          cred2.idpayments = pay.idpayments.toString();
+                          cred3.idpayments = pay.idpayments.toString();
+                          deb.idpayments = pay.idpayments.toString();
+                          deb.type = "IGSS";
+                          cred.type = "Sueldo Base";
+                          cred2.type = "Bonificacion De Productividad";
+      
+                          cred3.amount = "250.00";
+                          cred3.type = "Bonificacion Incentivo";
+                          this.credits.push(cred3);
+      
+                          this.global_credits.push(cred);
+                          this.global_credits.push(cred2);
+                          this.global_credits.push(cred3);
+      
+                          this.global_debits.push(deb);
+                        }
+      
+                        this.credits.push(cred);
+                        this.credits.push(cred2);
+                        this.debits.push(deb);
+      
+                        db.forEach(db_p => {
+                          this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
+                        });
+      
+                        cd.forEach(cd_p => {
+                          this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
+                        });
+                      })
+                    }
+                  });
+                });
+              })
+            })
+          })
+
+          
+         this.credits.forEach(cred=>{
             totalCred = totalCred + parseFloat(cred.amount);
           })
           pay.credits = totalCred.toFixed(2);
@@ -601,249 +843,4 @@ export class PeriodsComponent implements OnInit {
     this.showPaymentes = true;
   }
 
-
-  getCredits(emp:employees, payment:string):credits[]{
-    let vacs: boolean = false;
-    let leavs: boolean = false;
-    let non_show: boolean = false;
-    let cnt: number = 0;
-    let average: number = 0;
-
-    this.daysOff = 0;
-    this.roster = 0;
-    this.attended = 0;
-    this.diff = 0;
-    this.totalDebits = 0;
-    this.totalCredits = 0;
-    this.absence = 0;
-    this.credits = [];
-    this.debits = [];
-
-    this.apiService.getVacations({ id: emp.id_profile }).subscribe((vac: vacations[]) => {
-      this.vacations = vac;
-
-      this.apiService.getLeaves({ id: emp.id_profile }).subscribe((leave: leaves[]) => {
-        this.leaves = leave;
-
-
-        this.apiService.getAttendences({ id: emp.id_profile, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
-          this.attendances = att;
-
-          att.forEach(atte => {
-            if (atte.scheduled != 'OFF') {
-              average = average + parseFloat(atte.scheduled);
-              cnt = cnt + 1;
-            }
-          })
-
-          average = average / cnt;
-
-          att.forEach(attendance => {
-            vacs = false;
-            leavs = false;
-
-            vac.forEach(vacation => {
-              if ((new Date(vacation.took_date)) == (new Date(attendance.date)) || attendance.date == vacation.took_date) {
-                this.attended = this.attended + average;
-                this.roster = this.roster + average;
-                attendance.balance = 'VAC';
-                if (attendance.scheduled == 'OFF') {
-                  this.daysOff = this.daysOff + 1;
-                }
-                vacs = true;
-              }
-            })
-
-            if (!vacs) {
-              leave.forEach(leav => {
-                if (leav.motive == 'Leave of Absence Unpaid' || leav.motive == 'Others Unpaid') {
-                  if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
-                    if (attendance.scheduled == 'OFF') {
-                      this.roster = this.roster + average;
-                      this.diff = this.diff + average;
-                      attendance.balance = 'UNPAID';
-                    } else {
-                      this.roster = this.roster + parseFloat(attendance.scheduled);
-                      this.diff = this.diff + parseFloat(attendance.scheduled);
-                      attendance.balance = 'UNPAID';
-                    }
-                    leavs = true;
-                  }
-                } else {
-                  if ((new Date(attendance.date)) >= (new Date(leav.start)) && (new Date(attendance.date)) <= (new Date(leav.end))) {
-                    leavs = true;
-                    if (attendance.scheduled = 'OFF') {
-                      if (non_show) {
-                        this.roster = this.roster + average;
-                        this.diff = this.diff + average;
-                        attendance.balance = 'NON_SHOW'
-                      } else {
-                        this.roster = this.roster + average;
-                        this.attended = this.attended + average;
-                        attendance.balance = '0';
-                      }
-                      this.daysOff = this.daysOff + 1;
-
-                      let variable: number = this.daysOff;
-
-                      while (variable >= 0) {
-                        variable = variable - 2;
-                      }
-
-                      if (variable = 0) {
-                        non_show = false;
-                      }
-                    }
-                  }
-                }
-              })
-
-              if (!leavs) {
-                if (attendance.scheduled == 'OFF') {
-                  if (non_show) {
-                    this.roster = this.roster + average;
-                    this.diff = this.diff + average;
-                    attendance.balance = "NON_SHOW";
-                    non_show = false;
-                  } else {
-                    if (this.non_show_2) {
-                      this.roster = this.roster + average;
-                      this.diff = this.diff + average;
-                      attendance.balance = "NON_SHOW";
-                      this.non_show_2 = false;
-                    } else {
-                      this.roster = this.roster + average;
-                      this.attended = this.attended + average;
-                      attendance.balance = '0';
-                    }
-                  }
-                  this.daysOff = this.daysOff + 1;
-
-                  let variable: number = this.daysOff;
-
-                  while (variable >= 0) {
-                    variable = variable - 2;
-                  }
-
-                  if (variable = 0) {
-                    non_show = false;
-                    this.non_show_2 = false;
-                  }
-                } else {
-                  this.roster = parseFloat((this.roster + parseFloat(attendance.scheduled)).toFixed(2));
-                  this.attended = parseFloat((this.attended + parseFloat(attendance.worked_time)).toFixed(2));
-                  this.diff = parseFloat((this.roster - this.attended).toFixed(2));
-                  attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
-                  if (parseFloat(attendance.worked_time) == 0) {
-                    if (non_show) {
-                      this.non_show_2 = true;
-                    } else {
-                      non_show = true;
-                    }
-                    this.apiService.getAttAdjustments({ id: "id;" + emp.idemployees }).subscribe((adj: attendences_adjustment[]) => {
-                      if (!non_show) {
-                        let partial_nonshow: boolean = false;
-                        adj.forEach(adjustment => {
-                          if (adjustment.id_attendence != attendance.idattendences) {
-                            partial_nonshow = true;
-                          } else {
-                            partial_nonshow = false;
-                          }
-                        })
-                        if (this.non_show_2) {
-                          this.non_show_2 = partial_nonshow;
-                        } else {
-                          non_show = partial_nonshow;
-                        }
-                      }
-                    })
-                  }
-                }
-              }
-            }
-          })
-
-          att.forEach(attendance => {
-            if (attendance.balance != "VAC" && attendance.balance != 'UNPAID' && attendance.balance != "PAID" && attendance.balance != "NON_SHOW") {
-              this.absence = this.absence + (parseFloat(attendance.balance));
-            } else {
-              if (attendance.balance == "UNPAID" || attendance.balance == "NON_SHOW") {
-                this.absence = this.absence - 8;
-                if (attendance.balance == 'NON_SHOW') {
-                  this.seventh = this.seventh + 1;
-                }
-              }
-            }
-            this.absence_fixed = this.absence.toFixed(2);
-          });
-
-
-          this.apiService.getDebits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-            this.apiService.getCredits({ id: emp.idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
-              this.credits = cd;
-              this.debits = db;
-              if (this.period.status == '1') {
-                let cred: credits = new credits;
-                let deb: debits = new debits;
-                let cred2:credits = new credits;
-                let cred3:credits = new credits;              
-                
-                this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: emp.idemployees }).subscribe((emplo: employees[]) => {
-                  let hour: number = parseFloat(emplo[0].base_payment) / 240;
-                  let p_hour: number = parseFloat(emplo[0].productivity_payment) / 240;
-
-                  cred.amount = (((this.attendances.length*8) + this.absence) * hour).toFixed(2);
-                  cred.type = "Prorrateo Sueldo Base";
-
-                  cred2.amount = (((this.attendances.length*8) + this.absence) * p_hour).toFixed(2);
-                  cred2.type = "Prorrateo Bono De Productividad";
-
-                  deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
-                  deb.type = "Prorrateo IGSS";
-
-                  deb.iddebits = this.debits.length.toString();
-                  cred.iddebits = this.credits.length.toString();
-                  cred2.iddebits = (this.credits.length + 1).toString();
-                  cred3.iddebits = (this.credits.length + 2).toString();
-
-                  if(parseInt(payment) > 0){
-                    cred.idpayments = payment.toString();
-                    cred2.idpayments = payment.toString();
-                    cred3.idpayments = payment.toString();
-                    deb.idpayments = payment.toString();
-                    deb.type = "IGSS";
-                    cred.type = "Sueldo Base";
-                    cred2.type = "Bonificacion De Productividad";
-
-                    cred3.amount = "250.00";
-                    cred3.type = "Bonificacion Incentivo";
-                    this.credits.push(cred3);
-
-                    this.global_credits.push(cred);
-                    this.global_credits.push(cred2);
-                    this.global_credits.push(cred3);
-
-                    this.global_debits.push(deb);
-                  }
-
-                  this.credits.push(cred);
-                  this.credits.push(cred2);
-                  this.debits.push(deb);
-
-                  db.forEach(db_p => {
-                    this.totalDebits = this.totalDebits + parseFloat(db_p.amount);
-                  });
-
-                  cd.forEach(cd_p => {
-                    this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
-                  });
-                })
-              }
-            });
-          });
-        })
-      })
-    })
-    return this.credits;
-  }
 }
