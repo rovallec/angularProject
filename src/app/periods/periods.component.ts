@@ -822,19 +822,11 @@ export class PeriodsComponent implements OnInit {
               })
             })
           })
-
-          
-         this.credits.forEach(cred=>{
-            totalCred = totalCred + parseFloat(cred.amount);
-          })
-          pay.credits = totalCred.toFixed(2);
-          this.debits.forEach(deb=>{
-            totalDeb = totalDeb + parseFloat(deb.amount);
-          })
-          pay.debits = totalDeb.toFixed(2);
+          pay.credits = this.totalCredits.toFixed(2);
+          pay.debits = this.totalDebits.toFixed(2);
         })
-        pay.total = (totalCred - totalDeb).toFixed(2);
-        pay.date = new Date().getFullYear() + "-" + new Date().getMonth() + "-" + new Date().getDate();
+        pay.total = (this.totalCredits - this.totalDebits).toFixed(2);
+        pay.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
       })
 
       this.payments = payments;
