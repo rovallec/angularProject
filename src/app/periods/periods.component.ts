@@ -707,15 +707,18 @@ export class PeriodsComponent implements OnInit {
 
                     totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                     totalDeb = totalDeb + parseFloat(igss_debit.amount);
+
+                    pay.credits = (totalCred).toFixed(2);
+                    pay.debits = (totalDeb).toFixed(2);
+                    pay.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
+                    pay.employee_name = emp[0].name;
+                    pay.total = (totalCred - totalDeb).toFixed(2);
                   })
                 })
               })
             })
           })
         })
-        pay.credits = (totalCred).toFixed(2);
-        pay.debits = (totalDeb).toFixed(2);
-        pay.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
       })
       this.payments = payments;
       this.showPaymentes = true;
