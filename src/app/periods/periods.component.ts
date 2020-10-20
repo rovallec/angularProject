@@ -268,10 +268,10 @@ export class PeriodsComponent implements OnInit {
                   let hour: number = parseFloat(emplo[0].base_payment) / 240;
                   let p_hour: number = parseFloat(emplo[0].productivity_payment) / 240;
 
-                  cred.amount = ((120 + this.absence) * hour).toFixed(2);
+                  cred.amount = (((this.attendances.length*8) + this.absence) * hour).toFixed(2);
                   cred.type = "Prorrateo Sueldo Base";
 
-                  cred2.amount = ((120 + this.absence) * p_hour).toFixed(2);
+                  cred2.amount = (((this.attendances.length*8) + this.absence) * p_hour).toFixed(2);
                   cred2.type = "Prorrateo Bono De Productividad";
 
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
@@ -513,16 +513,21 @@ export class PeriodsComponent implements OnInit {
 
               if (this.period.status == '1') {
                 let cred: credits = new credits;
+                let cred2:credits = new credits;
                 let deb: debits = new debits;
 
                 this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: de.idemployees }).subscribe((emplo: employees[]) => {
                   let hour: number = parseFloat(emplo[0].base_payment) / 240;
-                  cred.amount = ((120 + this.absence) * hour).toFixed(2);
-                  cred.type = "Apportionment Base Payment";
+                  let p_hour: number = parseFloat(emplo[0].productivity_payment) / 240;
 
+                  cred.amount = (((this.attendances.length*8) + this.absence) * hour).toFixed(2);
+                  cred.type = "Prorrateo Sueldo Base";
+
+                  cred2.amount = (((this.attendances.length*8) + this.absence) * p_hour).toFixed(2);
+                  cred2.type = "Prorrateo Bono De Productividad";
 
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
-                  deb.type = "Apportioment IGSS";
+                  deb.type = "Prorrateo IGSS";
 
                   this.credits.push(cred);
                   this.debits.push(deb);
@@ -567,12 +572,11 @@ export class PeriodsComponent implements OnInit {
     this.apiService.getPayments(this.period).subscribe((payments:payments[])=>{
       this.payments = payments;
       console.log(payments);
-      this.payments.forEach(payment => {
-        this.apiService.getSearchEmployees({dp:'all', filter:'idemplopyees', value:payment.id_employee}).subscribe((employee:employees[])=>{
-          this.setRegE(employee[0], false);
+      this.payments.forEach(pay => {
+        this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:pay.id_employee}).subscribe((empl:employees[])=>{
+          this.setRegE(empl[0], false);
         })
-        console.log(this.global_credits);
-      });
+      })
     })
   }
 }
