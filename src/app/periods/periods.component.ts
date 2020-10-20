@@ -815,6 +815,11 @@ export class PeriodsComponent implements OnInit {
                         cd.forEach(cd_p => {
                           this.totalCredits = this.totalCredits + parseFloat(cd_p.amount);
                         });
+
+                        pay.credits = this.totalCredits.toFixed(2);
+                        pay.debits = this.totalDebits.toFixed(2);
+                        console.log(pay.credits);
+                        console.log(pay.debits);
                       })
                     }
                   });
@@ -822,10 +827,6 @@ export class PeriodsComponent implements OnInit {
               })
             })
           })
-          pay.credits = this.totalCredits.toFixed(2);
-          pay.debits = this.totalDebits.toFixed(2);
-          console.log(pay.credits);
-          console.log(pay.debits);
         })
         pay.total = (this.totalCredits - this.totalDebits).toFixed(2);
         pay.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
