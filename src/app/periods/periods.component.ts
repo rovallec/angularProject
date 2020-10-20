@@ -572,10 +572,9 @@ export class PeriodsComponent implements OnInit {
     this.apiService.getPayments(this.period).subscribe((payments:payments[])=>{
       this.payments = payments;
       let cnt:number = 0;
-      console.log(payments);
       cnt = payments.length;
       for (let i = 0; i < cnt; i++) {
-        console.log(payments[cnt]);
+        console.log(payments[i]);
       }
     })
   }
