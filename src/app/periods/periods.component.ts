@@ -571,12 +571,12 @@ export class PeriodsComponent implements OnInit {
   closePeriod(){
     this.apiService.getPayments(this.period).subscribe((payments:payments[])=>{
       this.payments = payments;
+      let cnt:number = 0;
       console.log(payments);
-      payments.forEach(pay => {
-        this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:pay.id_employee}).subscribe((empl:employees[])=>{
-          this.setRegE(empl[0], false);
-        })
-      })
+      cnt = payments.length;
+      for (let i = 0; i < cnt; i++) {
+        console.log(payments[cnt]);
+      }
     })
   }
 }
