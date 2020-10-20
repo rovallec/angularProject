@@ -540,16 +540,16 @@ export class PeriodsComponent implements OnInit {
                   deb.amount = (0.0483 * (parseFloat(cred.amount))).toFixed(2);
                   deb.type = "Apportioment IGSS";
 
-                  if (isNullOrUndefined(this.debits)) {
-                    deb.iddebits = '1';
-                  } else {
+                  if (!isNullOrUndefined(this.debits)) {
                     deb.iddebits = (parseInt(this.debits[this.debits.length - 1].iddebits) + 1).toString();
+                  } else {
+                    deb.iddebits = '1';
                   }
 
-                  if (isNullOrUndefined(this.credits)) {
-                    cred.iddebits = '1';
-                  } else {
+                  if (!isNullOrUndefined(this.credits)) {
                     cred.iddebits = (parseInt(this.credits[this.credits.length - 1].iddebits) + 1).toString();
+                  } else {
+                    cred.iddebits = '1';
                   }
 
                   this.credits.push(cred);
