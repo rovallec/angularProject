@@ -704,6 +704,7 @@ export class PeriodsComponent implements OnInit {
                       }
                       ot_credit.idpayments = pay.idpayments;
                       pushCredits.push(ot_credit);
+                      this.global_credits.push(ot_credit);
                     }
                     decreto_credit.amount = '250.00';
                     igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
@@ -717,6 +718,10 @@ export class PeriodsComponent implements OnInit {
                     pushCredits.push(productivity_credit);
                     pushCredits.push(decreto_credit);
                     pusDebits.push(igss_debit);
+                    this.global_credits.push(base_credit);
+                    this.global_credits.push(productivity_credit);
+                    this.global_credits.push(decreto_credit);
+                    this.global_debits.push(igss_debit);
 
                     this.apiService.getCredits({id:emp[0].idemployees, period:this.period.idperiods}).subscribe((cd:credits[])=>{
                       cd.forEach(credit => {
@@ -728,14 +733,6 @@ export class PeriodsComponent implements OnInit {
                       db.forEach(debit=>{
                         totalDeb = totalDeb + parseFloat(debit.amount);
                       })
-                    })
-
-                    pushCredits.forEach(cred=>{
-                      this.global_credits.push(cred);
-                    })
-
-                    pusDebits.forEach(deb=>{
-                      this.global_debits.push(deb);
                     })
 
                     totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
