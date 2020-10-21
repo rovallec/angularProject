@@ -696,8 +696,8 @@ export class PeriodsComponent implements OnInit {
 
   pushDeductions(str: string, credits?: credits[], debits?: debits[]) {
     if (str == 'debits') {
-      debits.forEach(debit => {
-        this.apiService.insertDebits(debit).subscribe((str: string) => { });
+      credits.forEach(cred => {
+        this.apiService.insertDebits(cred).subscribe((str: string) => { });
       });
     } else {
       if (str == 'credits') {
