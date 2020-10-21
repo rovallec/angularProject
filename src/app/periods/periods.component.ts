@@ -723,14 +723,6 @@ export class PeriodsComponent implements OnInit {
                       })
                     })
 
-                    pushCredits.forEach(cred=>{
-                      this.global_credits.push(cred);
-                    })
-
-                    pusDebits.forEach(deb=>{
-                      this.global_debits.push(deb);
-                    })
-
                     totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                     totalDeb = totalDeb + parseFloat(igss_debit.amount);
 
@@ -745,6 +737,13 @@ export class PeriodsComponent implements OnInit {
             })
           })
         })
+      })
+      pushCredits.forEach(cred=>{
+        this.global_credits.push(cred);
+      })
+
+      pusDebits.forEach(deb=>{
+        this.global_debits.push(deb);
       })
       this.payments = payments;
       this.ded = false;
