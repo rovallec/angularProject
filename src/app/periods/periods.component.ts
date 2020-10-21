@@ -744,6 +744,7 @@ export class PeriodsComponent implements OnInit {
 
                         this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
                           adjustments.forEach(adjustment => {
+                            console.log(adjustment);
                             let new_credit: credits = new credits;
                             let new_debit: debits = new debits;
                             new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * productivity_hour)).toFixed(2);
