@@ -27,11 +27,12 @@
             <i class="fas fa-minus-circle" style="margin-top:100%" (click)="cancelSearch()"  *ngIf="!showPaymentes"></i>
         </div>
         <div class="form-group col-md-1; text-align:left">
-            <i class="far fa-window-close" style="margin-top:100%" (click)="closeClose()" *ngIf="showPaymentes && searchClosed"></i>
+            <i class="fas fa-times-circle" style="margin-top:100%" (click)="closeClose()" *ngIf="showPaymentes && searchClosed"></i>
             <i class="fas fa-globe-americas"  style="margin-top:100%" (click)="showAll()" *ngIf="!showPaymentes"></i>
         </div>
-        <div class="form-group col-md-1 textalign:left" *ngIf="!showPaymentes">
-            <i class="fas fa-store-slash" style="margin-top:10%" (click)="closePeriod()"></i>
+        <div class="form-group col-md-1 textalign:left">
+            <i class="fas fa-check-circle" style="margin-top:10%" (click)="completePeriod()" *ngIf="showPaymentes"></i>
+            <i class="fas fa-store-slash" style="margin-top:10%" (click)="closePeriod()" *ngIf="!showPaymentes"></i>
         </div>
     </div>
     <div class="from-row col-md-12" *ngIf="showPaymentes">
