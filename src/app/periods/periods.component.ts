@@ -3,6 +3,7 @@ import { formattedError, ThrowStmt } from '@angular/compiler';
 import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { timeStamp } from 'console';
 import { AttachSession } from 'protractor/built/driverProviders';
 import { parse } from 'querystring';
 import { isNull, isNullOrUndefined, isUndefined } from 'util';
@@ -617,9 +618,16 @@ export class PeriodsComponent implements OnInit {
                           activeDp = false;
                           activeVac = false;
                           activeLeav = false;
-
+                          
                           vac.forEach(vacation => {
                             if (vacation.took_date == attendance.date) {
+                              if(attendance.scheduled != "OFF"){
+                                this.roster = this.roster + parseFloat(attendance.scheduled);
+                                this.attended = this.attended + parseFloat(attendance.scheduled);
+                                attendance.balance = 'VAC';
+                              }else{
+                                this.daysOff = this.daysOff + 1;
+                              }
                               activeVac = true;
                             }
                           })
@@ -643,7 +651,8 @@ export class PeriodsComponent implements OnInit {
                           if (!activeLeav && !activeVac && !activeDp) {
                             let partial_non_show: boolean = false;
                             if (attendance.scheduled == 'OFF') {
-                              offCount = offCount + 1;
+                              this.daysOff = this.daysOff + 1;
+                              offCount = this.daysOff;
                               while (offCount > 0) {
                                 offCount = offCount - 2;
                               }
@@ -869,8 +878,13 @@ export class PeriodsComponent implements OnInit {
 
                           vac.forEach(vacation => {
                             if (vacation.took_date == attendance.date) {
-                              this.roster = this.roster + parseFloat(attendance.scheduled);
-                              this.attended = this.attended + parseFloat(attendance.scheduled);
+                              if(attendance.scheduled != "OFF"){
+                                this.roster = this.roster + parseFloat(attendance.scheduled);
+                                this.attended = this.attended + parseFloat(attendance.scheduled);
+                                attendance.balance = 'VAC';
+                              }else{
+                                this.daysOff = this.daysOff + 1;
+                              }
                               activeVac = true;
                             }
                           })
@@ -906,7 +920,8 @@ export class PeriodsComponent implements OnInit {
                           if (!activeLeav && !activeVac && !activeDp) {
                             let partial_non_show: boolean = false;
                             if (attendance.scheduled == 'OFF') {
-                              offCount = offCount + 1;
+                              this.daysOff = this.daysOff + 1;
+                              offCount = this.daysOff;
                               while (offCount > 0) {
                                 offCount = offCount - 2;
                               }
@@ -1023,8 +1038,8 @@ export class PeriodsComponent implements OnInit {
                             new_debit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) * 0.0483).toFixed(2);
                             new_debit.type = "Auto Ajuste IGSS";
 
-                            this.credits.push(new_debit);
-                            this.debits.push(new_credit);
+                            this.debits.push(new_debit);
+                            this.credits.push(new_credit);
                             totalCred = totalCred + parseFloat(new_credit.amount);
                             totalDeb = totalDeb + parseFloat(new_debit.amount);
                           });
@@ -1047,7 +1062,6 @@ export class PeriodsComponent implements OnInit {
 
                           this.totalCredits = parseFloat((totalCred).toFixed(2));
                           this.totalDebits = parseFloat((totalDeb).toFixed(2));
-                          this.daysOff = offCount;
                           this.absence = parseFloat((this.absence).toFixed(2));
                           this.roster = parseFloat((this.roster).toFixed(2));
                           this.attended = parseFloat((this.attended).toFixed(2));

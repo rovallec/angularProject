@@ -23,6 +23,7 @@ if($result = mysqli_query($con,$sql)){
         $adjustes[$i]['time_after'] = $res['time_after'];
         $adjustes[$i]['amount'] = $res['amount'];
         $adjustes[$i]['state'] = $res['state'];
+        $adjustes[$i]['date'] = $res['date'];
         $i++;
     }
 }
