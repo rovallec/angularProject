@@ -882,10 +882,12 @@ export class PeriodsComponent implements OnInit {
                               if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                 discounted = discounted - 8;
                                 this.absence = this.absence + 8;
+                                attendance.balance = 'JANP';
                               }else{
                                 if(leav.motive == 'Maternity' || leav.motive == 'Others Paid'){
                                   this.roster = this.roster + parseFloat(attendance.scheduled);
                                   this.attended = this.attended + parseFloat(attendance.scheduled);
+                                  attendance.balance = 'JAP';
                                 }
                               }
                             }
@@ -896,6 +898,7 @@ export class PeriodsComponent implements OnInit {
                               this.roster = this.roster + parseFloat(attendance.scheduled);
                               this.absence = this.absence + parseFloat(attendance.scheduled);
                               discounted = discounted - 8;
+                              attendance.balance = "SUSPENSION"
                               activeDp = true;
                             }
                           });
@@ -908,20 +911,25 @@ export class PeriodsComponent implements OnInit {
                                 offCount = offCount - 2;
                               }
                               if (non_show1) {
+                                attendance.balance = "NON_SHOW";
                                 this.seventh = this.seventh + 1;
                                 discounted = discounted - 8;
                                 non_show1 = false;
                               } else {
                                 if (non_show2 = true && offCount == 0) {
+                                  attendance.balance = "NON_SHOW";
                                   this.seventh = this.seventh + 1;
                                   discounted = discounted - 8;
                                   non_show2 = false;
+                                }else{
+                                  attendance.balance = "OFF";
                                 }
                               }
                             } else {
                               this.roster = this.roster + parseFloat(attendance.scheduled);
                               if (parseFloat(attendance.worked_time) == 0) {
                                 this.absence = this.absence + parseFloat(attendance.scheduled);
+                                attendance.balance = "0.00";
                                 if (non_show1) {
                                   ad.forEach(adjustment => {
                                     if (adjustment.date == attendance.date) {
@@ -944,12 +952,14 @@ export class PeriodsComponent implements OnInit {
                                 discounted = discounted - 8;
                               } else {
                                 this.absence = this.absence + (parseFloat(attendance.scheduled) - parseFloat(attendance.worked_time));
-                                discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
+                                attendance.balance = (parseFloat(attendance.scheduled) - parseFloat(attendance.worked_time)).toFixed(2);
+                                discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
                               }
                             }
                           }
                         });
 
+                        this.attendances = att;
                         let base_hour: number = parseFloat(emp[0].base_payment) / 240;
                         let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
                         let base_credit: credits = new credits;
@@ -1042,6 +1052,8 @@ export class PeriodsComponent implements OnInit {
                           this.roster = parseFloat((this.roster).toFixed(2));
                           this.attended = parseFloat((this.attended).toFixed(2));
                           this.diff = parseFloat((this.roster - this.attended).toFixed(2));
+
+                          this.selectedEmployee = true;
                         })
                       })
                     })
