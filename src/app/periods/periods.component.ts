@@ -626,7 +626,9 @@ export class PeriodsComponent implements OnInit {
   }
 
   completeImport() {
-
+    if(this.importType == 'Bono'){
+      this.pushDeductions('credits', this.credits);
+    }
   }
 
   addfile(event) {
@@ -660,9 +662,7 @@ export class PeriodsComponent implements OnInit {
                   }
                 })
               })
-              if(this.importType == "Bono"){
-               this.pushDeductions('credits', this.credits);
-              }
+              this.completed = true;
             })
           } catch (error) {
 
