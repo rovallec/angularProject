@@ -679,7 +679,7 @@ export class PeriodsComponent implements OnInit {
                     });
 
                     let base_hour: number = parseFloat(emp[0].base_payment) / 240;
-                    let productivity_hour: number = parseFloat(emp[0].productivity_payment) / 240;
+                    let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
                     let base_credit: credits = new credits;
                     let productivity_credit: credits = new credits;
                     let decreto_credit: credits = new credits;
@@ -741,7 +741,7 @@ export class PeriodsComponent implements OnInit {
                     totalDeb = totalDeb + parseFloat(igss_debit.amount);
 
                     this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((adj: attendences_adjustment[]) => {
-                      this.apiService.getAttendences({ id: emp[0].id_profile, date: "<= " + this.period.start }).subscribe((ajdAttendance: attendences[]) => {
+                      this.apiService.getAttendences({ id: emp[0].id_profile, date: "< '" + this.period.start + "'" }).subscribe((ajdAttendance: attendences[]) => {
                         ajdAttendance.forEach(adjAttend => {
                           adj.forEach(adjustment => {
                             if (adjustment.id_attendence == adjAttend.idattendences && adjustment.status == 'PENDING') {
@@ -781,7 +781,7 @@ export class PeriodsComponent implements OnInit {
 
                     pay.credits = (totalCred).toFixed(2);
                     pay.debits = (totalDeb).toFixed(2);
-                    pay.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
+                    pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
                     pay.employee_name = emp[0].name;
                     pay.total = (totalCred - totalDeb).toFixed(2);
                   })
