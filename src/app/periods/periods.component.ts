@@ -661,7 +661,7 @@ export class PeriodsComponent implements OnInit {
                                 discounted = discounted - 8;
                                 non_show1 = false;
                               } else {
-                                if (non_show2 = true && offCount == 0) {
+                                if (non_show2 && offCount == 0) {
                                   discounted = discounted - 8;
                                   non_show2 = false;
                                 }
@@ -755,8 +755,6 @@ export class PeriodsComponent implements OnInit {
 
                         this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
                           adjustments.forEach(adjustment => {
-                            console.log(adjustment);
-                            console.log(totalCred);
                             let new_credit: credits = new credits;
                             let new_debit: debits = new debits;
                             new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * productivity_hour)).toFixed(2);
@@ -771,8 +769,6 @@ export class PeriodsComponent implements OnInit {
                             this.global_credits.push(new_credit);
                             totalCred = totalCred + parseFloat(new_credit.amount);
                             totalDeb = totalDeb + parseFloat(new_debit.amount);
-                            console.log(totalCred);
-                            console.log(new_credit.amount);
                           });
 
                           vac.forEach(vacat => {
@@ -970,6 +966,7 @@ export class PeriodsComponent implements OnInit {
                                 }
                                 discounted = discounted - 8;
                               } else {
+                                this.attended = this.attended + parseFloat(attendance.worked_time);
                                 this.absence = this.absence + (parseFloat(attendance.scheduled) - parseFloat(attendance.worked_time));
                                 attendance.balance = (parseFloat(attendance.scheduled) - parseFloat(attendance.worked_time)).toFixed(2);
                                 discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
@@ -1032,8 +1029,6 @@ export class PeriodsComponent implements OnInit {
 
                         this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
                           adjustments.forEach(adjustment => {
-                            console.log(adjustment);
-                            console.log(totalCred);
                             let new_credit: credits = new credits;
                             let new_debit: debits = new debits;
                             new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * productivity_hour)).toFixed(2);
@@ -1066,7 +1061,7 @@ export class PeriodsComponent implements OnInit {
 
                           this.totalCredits = parseFloat((totalCred).toFixed(2));
                           this.totalDebits = parseFloat((totalDeb).toFixed(2));
-                          this.absence = parseFloat((this.absence).toFixed(2));
+                          this.absence_fixed = (this.absence).toFixed(2);
                           this.roster = parseFloat((this.roster).toFixed(2));
                           this.attended = parseFloat((this.attended).toFixed(2));
                           this.diff = parseFloat((this.roster - this.attended).toFixed(2));
