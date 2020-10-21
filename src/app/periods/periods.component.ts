@@ -53,7 +53,7 @@ export class PeriodsComponent implements OnInit {
   non_show_2: boolean = false;
   showPaymentes: boolean = false;
   searchClosed: boolean = false;
-  importActive: boolean = true;
+  importActive: boolean = false;
   count_payments: number = 0;
   importType: string = null;
   importString: string = null;
@@ -656,6 +656,7 @@ export class PeriodsComponent implements OnInit {
                     cred.amount = element['amount'];
                     cred.type = this.importString;
                     cred.idpayments = pay.idpayments;
+                    this.credits.push(cred);
                   }
                 })
               })
