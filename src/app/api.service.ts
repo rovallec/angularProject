@@ -462,5 +462,9 @@ getFilteredDeductions(any:any){
 getPayments(period:periods){
   return this.httpClient.post<payments[]>(`${this.PHP_API_SERVER}/phpscripts/getPayments.php`, period);
 }
+
+getAutoAdjustments(any:any){
+  return this.httpClient.post<attendences_adjustment[]>(`${this.PHP_API_SERVER}/phpscripts/getAutoAdjustments.php`, any);
+}
   constructor(private httpClient:HttpClient) { }
 }
