@@ -584,7 +584,10 @@ export class PeriodsComponent implements OnInit {
     this.global_debits = [];
     this.global_credits = [];
 
+    let end:number = 0;
+
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
+
       payments.forEach(pay => {
         let totalCred:number = 0;
         let totalDeb:number = 0;
@@ -737,14 +740,17 @@ export class PeriodsComponent implements OnInit {
             })
           })
         })
+        end++;
       })
-      pushCredits.forEach(cred=>{
-        this.global_credits.push(cred);
-      })
-
-      pusDebits.forEach(deb=>{
-        this.global_debits.push(deb);
-      })
+      while(end != payments.length){
+        pushCredits.forEach(cred=>{
+          this.global_credits.push(cred);
+        })
+  
+        pusDebits.forEach(deb=>{
+          this.global_debits.push(deb);
+        })
+      }
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
