@@ -872,6 +872,8 @@ export class PeriodsComponent implements OnInit {
                   this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                     this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+                         non_show1 = false;
+                         non_show2 = false;
                         att.forEach(attendance => {
                           activeDp = false;
                           activeVac = false;
@@ -886,6 +888,7 @@ export class PeriodsComponent implements OnInit {
                               }else{
                                 this.daysOff = this.daysOff + 1;
                               }
+                              attendance.balance = "OFF";
                               activeVac = true;
                             }
                           })
@@ -931,7 +934,7 @@ export class PeriodsComponent implements OnInit {
                                 discounted = discounted - 8;
                                 non_show1 = false;
                               } else {
-                                if (non_show2 = true && offCount == 0) {
+                                if (non_show2 = true && offCount === 0) {
                                   attendance.balance = "NON_SHOW_2";
                                   this.seventh = this.seventh + 1;
                                   discounted = discounted - 8;
