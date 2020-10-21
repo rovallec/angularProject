@@ -635,7 +635,7 @@ export class PeriodsComponent implements OnInit {
     if (this.importType == 'Bono') {
       this.pushDeductions('credits', this.credits);
     } else {
-      this.pushDeductions('debits', this.debits);
+      this.pushDeductions('debits', this.credits);
     }
     this.completed = false;
     this.importActive = false;
@@ -661,7 +661,6 @@ export class PeriodsComponent implements OnInit {
         let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
         sheetToJson.forEach(element => {
           let cred: credits = new credits;
-          let deb: debits = new debits;
           try {
             this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
               payments.forEach(pay => {
@@ -674,11 +673,11 @@ export class PeriodsComponent implements OnInit {
                       cred.idpayments = pay.idpayments;
                       this.credits.push(cred);
                     } else {
-                      deb.iddebits = emp[0].name;
-                      deb.amount = (parseFloat(element['Amount'])).toFixed(2);
-                      deb.type = this.importType + " " + this.importString;
-                      deb.idpayments = pay.idpayments;
-                      this.debits.push(cred);
+                      cred.iddebits = emp[0].name;
+                      cred.amount = (parseFloat(element['Amount'])).toFixed(2);
+                      cred.type = this.importType + " " + this.importString;
+                      cred.idpayments = pay.idpayments;
+                      this.credits.push(cred);
                     }
                   }
                 })

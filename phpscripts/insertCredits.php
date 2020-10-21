@@ -13,7 +13,7 @@ $amount = ($request->amount);
 
 $sql = "INSERT INTO `credits` (`idcredits`, `id_payment`, `type`, `amount`) VALUES (null, $idpayments, '$type', '$amount');";
 echo($sql);
-#if(mysqli_query($con,$sql)){
-#    echo(mysqli_insert_id($con));
-#}
+if(mysqli_query($con,$sql)){
+    echo(mysqli_insert_id($con));
+}
 ?>

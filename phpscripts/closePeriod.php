@@ -10,7 +10,7 @@ $id = ($request->idperiods);
 
 $sql = "UPDATE `periods` SET `status` = 0 WHERE `idperiods` = $id";
 echo($sql);
-#if(mysqli_query($con,$sql)){
-#    echo(mysqli_insert_id($con));
-#}
+if(mysqli_query($con,$sql)){
+    echo(mysqli_insert_id($con));
+}
 ?>
