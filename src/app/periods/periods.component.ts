@@ -673,6 +673,7 @@ export class PeriodsComponent implements OnInit {
                       cred.idpayments = pay.idpayments;
                       this.credits.push(cred);
                     } else {
+                      console.log(cred);
                       cred.iddebits = emp[0].name;
                       cred.amount = (parseFloat(element['Amount'])).toFixed(2);
                       cred.type = this.importType + " " + this.importString;
