@@ -611,6 +611,10 @@ export class PeriodsComponent implements OnInit {
                 this.apiService.getAttendences({ id: emp[0].id_profile, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
                   this.apiService.getAttAdjustments({ id: "id;" + emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                     att.forEach(attendance => {
+                      activeDp = false;
+                      activeVac = false;
+                      activeLeav = false;
+                      
                       vac.forEach(vacation => {
                         if (vacation.took_date == attendance.date) {
                           activeVac = true;
@@ -673,7 +677,6 @@ export class PeriodsComponent implements OnInit {
                             discounted = discounted - 8;
                           }else{
                             discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
-                            console.log(discounted);
                           }
                         }
                       }
