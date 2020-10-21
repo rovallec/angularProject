@@ -934,7 +934,7 @@ export class PeriodsComponent implements OnInit {
                                 discounted = discounted - 8;
                                 non_show1 = false;
                               } else {
-                                if (non_show2 = true && offCount === 0) {
+                                if (non_show2 && offCount == 0) {
                                   attendance.balance = "NON_SHOW_2";
                                   this.seventh = this.seventh + 1;
                                   discounted = discounted - 8;
