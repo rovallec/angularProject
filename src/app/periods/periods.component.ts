@@ -121,6 +121,9 @@ export class PeriodsComponent implements OnInit {
     this.global_debits = [];
     this.global_credits = [];
 
+    this.credits = [];
+    this.debits = [];
+
     let end: number = 0;
 
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
@@ -629,6 +632,10 @@ export class PeriodsComponent implements OnInit {
     if(this.importType == 'Bono'){
       this.pushDeductions('credits', this.credits);
     }
+    this.completed = false;
+    this.importActive = false;
+    this.closePeriod();
+    this.showPaymentes = true;
   }
 
   addfile(event) {
