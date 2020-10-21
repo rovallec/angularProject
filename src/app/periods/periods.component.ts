@@ -388,6 +388,9 @@ export class PeriodsComponent implements OnInit {
         let non_show1: boolean = false;
         let non_show2: boolean = false;
 
+        this.credits = [];
+        this.debits = [];
+
         this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: id_employee }).subscribe((emp: employees[]) => {
           this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
             this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
@@ -396,6 +399,8 @@ export class PeriodsComponent implements OnInit {
                   this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                     this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+                        this.vacations = vac;
+                        this.leaves = leave;
                          non_show1 = false;
                          non_show2 = false;
                         att.forEach(attendance => {
@@ -453,13 +458,13 @@ export class PeriodsComponent implements OnInit {
                                 offCount = offCount - 2;
                               }
                               if (non_show1) {
-                                attendance.balance = "NON_SHOW_1";
+                                attendance.balance = "NON_SHOW";
                                 this.seventh = this.seventh + 1;
                                 discounted = discounted - 8;
                                 non_show1 = false;
                               } else {
                                 if (non_show2 && offCount == 0) {
-                                  attendance.balance = "NON_SHOW_2";
+                                  attendance.balance = "NON_SHOW";
                                   this.seventh = this.seventh + 1;
                                   discounted = discounted - 8;
                                   non_show2 = false;
@@ -471,7 +476,6 @@ export class PeriodsComponent implements OnInit {
                               this.roster = this.roster + parseFloat(attendance.scheduled);
                               if (parseFloat(attendance.worked_time) == 0) {
                                 let partial_non_show: boolean = false;
-                                this.absence = this.absence + parseFloat(attendance.scheduled);
                                 attendance.balance = "0.00";
                                 if (non_show1) {
                                   ad.forEach(adjustment => {
@@ -492,6 +496,7 @@ export class PeriodsComponent implements OnInit {
                                     non_show1 = true;
                                   }
                                 }
+                                this.absence = this.absence - 8;
                                 discounted = discounted - 8;
                               } else {
                                 this.attended = this.attended + parseFloat(attendance.worked_time);
