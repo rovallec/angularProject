@@ -648,16 +648,14 @@ export class PeriodsComponent implements OnInit {
         sheetToJson.forEach(element => {
           let cred: credits = new credits;
           try {
-            this.apiService.getSearchEmployees({ dp: 'all', filter: 'nearsol_id', value: element['Nearsol ID'] }).subscribe((emp: employees[]) => {
-              this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
-                payments.forEach(pay => {
-                  if (pay.employee_name == emp[0].name) {
-                    cred.iddebits = emp[0].name;
-                    cred.amount = element['amount'];
-                    cred.type = this.importString;
-                    cred.idpayments = pay.idpayments;
-                    this.credits.push(cred);
-                  }
+            this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
+              payments.forEach(pay => {
+                this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
+                  cred.iddebits = emp[0].name;
+                  cred.amount = element['Amount'];
+                  cred.type = this.importString;
+                  cred.idpayments = pay.idpayments;
+                  this.credits.push(cred);
                 })
               })
             })
