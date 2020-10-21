@@ -70,7 +70,7 @@
                     <th>AMOUNT</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let deduction of deductions" (click)="setReg(deduction)">
+                    <tr *ngFor="let deduction of deductions" (click)="setPayTime(deduction.idemployees ,deduction.idprofiles)">
                         <td>{{deduction.iddeductions}}</td>
                         <td>{{deduction.name}}</td>
                         <td>{{deduction.type}}</td>
