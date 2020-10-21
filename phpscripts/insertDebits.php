@@ -11,9 +11,8 @@ $idpayments = ($request->idpayments);
 $type = ($request->type);
 $amount = ($request->amount);
 
-$sql = "INSERT INTO `debits` (`idcredits`, `id_payment`, `type`, `amount`) VALUES (null, $idpayments, '$type', '$amount');";
-echo($sql);
-#if(mysqli_query($con,$sql)){
-#    echo(mysqli_insert_id($con));
-#}
+$sql = "INSERT INTO `debits` (`iddebits`, `id_payment`, `type`, `amount`) VALUES (null, $idpayments, '$type', '$amount');";
+if(mysqli_query($con,$sql)){
+    echo(mysqli_insert_id($con));
+}
 ?>

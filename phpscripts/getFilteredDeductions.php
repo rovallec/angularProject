@@ -82,5 +82,6 @@ if($value != 'CREDIT' && $value != 'DEBIT'){
             }
     }
 }
+}
 echo(json_encode($res));
 ?>
