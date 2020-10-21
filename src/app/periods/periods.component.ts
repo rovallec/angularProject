@@ -600,6 +600,10 @@ export class PeriodsComponent implements OnInit {
         let non_show1: boolean = false;
         let non_show2: boolean = false;
 
+        
+        pushCredits = [];
+        pusDebits = [];
+
         this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
           this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
             this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
@@ -726,6 +730,14 @@ export class PeriodsComponent implements OnInit {
                       })
                     })
 
+                    pushCredits.forEach(cred=>{
+                      this.global_credits.push(cred);
+                    })
+
+                    pusDebits.forEach(deb=>{
+                      this.global_debits.push(deb);
+                    })
+
                     totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                     totalDeb = totalDeb + parseFloat(igss_debit.amount);
 
@@ -740,17 +752,7 @@ export class PeriodsComponent implements OnInit {
             })
           })
         })
-        end++;
       })
-      while(end != payments.length){
-        pushCredits.forEach(cred=>{
-          this.global_credits.push(cred);
-        })
-  
-        pusDebits.forEach(deb=>{
-          this.global_debits.push(deb);
-        })
-      }
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
