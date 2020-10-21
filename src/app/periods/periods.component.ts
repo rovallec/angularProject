@@ -631,6 +631,8 @@ export class PeriodsComponent implements OnInit {
   completeImport() {
     if(this.importType == 'Bono'){
       this.pushDeductions('credits', this.credits);
+    }else{
+      this.pushDeductions('debits', this.debits);
     }
     this.completed = false;
     this.importActive = false;
@@ -656,16 +658,25 @@ export class PeriodsComponent implements OnInit {
         let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
         sheetToJson.forEach(element => {
           let cred: credits = new credits;
+          let deb:debits = new debits;
           try {
             this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
               payments.forEach(pay => {
                 this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
                   if (emp[0].nearsol_id == element['Nearsol ID']) {
-                    cred.iddebits = emp[0].name;
-                    cred.amount = (parseFloat(element['Amount'])).toFixed(2);
-                    cred.type = this.importType + " " + this.importString;
-                    cred.idpayments = pay.idpayments;
-                    this.credits.push(cred);
+                    if(this.importType == 'Bono'){
+                      cred.iddebits = emp[0].name;
+                      cred.amount = (parseFloat(element['Amount'])).toFixed(2);
+                      cred.type = this.importType + " " + this.importString;
+                      cred.idpayments = pay.idpayments;
+                      this.credits.push(cred);
+                    }else{
+                      deb.iddebits = emp[0].name;
+                      deb.amount = (parseFloat(element['Amount'])).toFixed(2);
+                      deb.type = this.importType + " " + this.importString;
+                      deb.idpayments = pay.idpayments;
+                      this.debits.push(cred);
+                    }
                   }
                 })
               })
