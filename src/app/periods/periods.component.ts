@@ -52,6 +52,10 @@ export class PeriodsComponent implements OnInit {
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.start();
+  }
+
+  start(){
     this.getDeductions();
     this.apiService.getFilteredPeriods({ id: this.route.snapshot.paramMap.get('id') }).subscribe((p: periods) => {
       this.period = p;
@@ -720,9 +724,6 @@ export class PeriodsComponent implements OnInit {
                     totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                     totalDeb = totalDeb + parseFloat(igss_debit.amount);
 
-                    console.log(pushCredits);
-                    console.log(base_hour);
-                    console.log(productivity_hour);
                     pay.credits = (totalCred).toFixed(2);
                     pay.debits = (totalDeb).toFixed(2);
                     pay.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
@@ -742,29 +743,34 @@ export class PeriodsComponent implements OnInit {
   }
 
   searchCloseEmployee(){
+    let partial_payments:payments[] = [];
     this.showPaymentes = false;
     if(!this.searchClosed){
       this.backUp_payments = this.payments;
     }
-    this.payments = [];
     this.payments.forEach(pay=>{
+      console.log(pay.employee_name);
+      console.log(this.value);
+      console.log(pay.employee_name.includes(this.value));
       if(pay.employee_name.includes(this.value)){
-        this.payments.push(pay);
+        partial_payments.push(pay);
       }
     })
+    this.searchClosed = false;
     this.showPaymentes = true;
   }
 
 
   cancelCloseSearch(){
     this.showPaymentes = false;
-    this.searchClosed = false;
+    this.searchClosed = true;
     this.payments = this.backUp_payments;
     this.showPaymentes = true;
   }
 
   closeClose(){
     this.showPaymentes = false;
-    this.searchClosed = false;
+    this.searchClosed = true;
+    this.start();
   }
 }
