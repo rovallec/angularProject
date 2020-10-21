@@ -30,7 +30,7 @@ export class PeriodsComponent implements OnInit {
   payments: payments[] = [];
   global_credits: credits[] = [];
   global_debits: debits[] = [];
-  backUp_payments:payments[];
+  backUp_payments: payments[];
   period: periods = new periods;
   daysOff: number = 0;
   roster: number = 0;
@@ -46,7 +46,7 @@ export class PeriodsComponent implements OnInit {
   ded: boolean = true;
   non_show_2: boolean = false;
   showPaymentes: boolean = false;
-  searchClosed:boolean = false;
+  searchClosed: boolean = false;
   count_payments: number = 0;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
@@ -55,7 +55,7 @@ export class PeriodsComponent implements OnInit {
     this.start();
   }
 
-  start(){
+  start() {
     this.getDeductions();
     this.apiService.getFilteredPeriods({ id: this.route.snapshot.paramMap.get('id') }).subscribe((p: periods) => {
       this.period = p;
@@ -578,29 +578,29 @@ export class PeriodsComponent implements OnInit {
 
 
   closePeriod() {
-    let pushCredits:credits[] = [];
-    let pusDebits:debits[] = [];
-    
+    let pushCredits: credits[] = [];
+    let pusDebits: debits[] = [];
+
     this.global_debits = [];
     this.global_credits = [];
 
-    let end:number = 0;
+    let end: number = 0;
 
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
 
       payments.forEach(pay => {
-        let totalCred:number = 0;
-        let totalDeb:number = 0;
+        let totalCred: number = 0;
+        let totalDeb: number = 0;
         let discounted: number = 0;
         let offCount: number = 0;
         let activeVac: boolean = false;
         let activeLeav: boolean = false;
-        let activeDp:boolean = false;
+        let activeDp: boolean = false;
 
         let non_show1: boolean = false;
         let non_show2: boolean = false;
 
-        
+
         pushCredits = [];
         pusDebits = [];
 
@@ -627,14 +627,14 @@ export class PeriodsComponent implements OnInit {
                       })
 
                       dp.forEach(disciplinary => {
-                        if(disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date){
+                        if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
                           discounted = discounted - 8;
                           activeDp = true;
                         }
                       });
 
                       if (!activeLeav && !activeVac && !activeDp) {
-                        let partial_non_show:boolean = false;
+                        let partial_non_show: boolean = false;
                         if (attendance.scheduled == 'OFF') {
                           offCount = offCount + 1;
                           while (offCount > 0) {
@@ -650,57 +650,59 @@ export class PeriodsComponent implements OnInit {
                             }
                           }
                         } else {
-                          if (parseFloat(attendance.worked_time)  == 0) {
+                          if (parseFloat(attendance.worked_time) == 0) {
                             if (non_show1) {
                               ad.forEach(adjustment => {
                                 if (adjustment.date == attendance.date) {
                                   partial_non_show = true;
                                 }
                               });
-                              if(!partial_non_show){
+                              if (!partial_non_show) {
                                 non_show2 = true;
                               }
                             } else {
                               ad.forEach(adjustment => {
-                                if(adjustment.date == attendance.date){
+                                if (adjustment.date == attendance.date) {
                                   partial_non_show = true;
                                 }
                               })
-                              if(!partial_non_show){
+                              if (!partial_non_show) {
                                 non_show1 = true;
                               }
                             }
+                            discounted = discounted - 8;
+                          }else{
+                            discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
                           }
-                          discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
                         }
                       }
                     });
-                    
-                    let base_hour:number = parseFloat(emp[0].base_payment) / 240;
-                    let productivity_hour:number = parseFloat(emp[0].productivity_payment) / 240;
-                    let base_credit:credits = new credits;
-                    let productivity_credit:credits = new credits;
-                    let decreto_credit:credits = new credits;
-                    let ot_credit:credits = new credits;
-                    let igss_debit:debits = new debits;
+
+                    let base_hour: number = parseFloat(emp[0].base_payment) / 240;
+                    let productivity_hour: number = parseFloat(emp[0].productivity_payment) / 240;
+                    let base_credit: credits = new credits;
+                    let productivity_credit: credits = new credits;
+                    let decreto_credit: credits = new credits;
+                    let ot_credit: credits = new credits;
+                    let igss_debit: debits = new debits;
 
                     base_credit.type = "Salario Base";
                     productivity_credit.type = "Bonificacion Productividad";
                     decreto_credit.type = "Bonificacion Decreto";
 
-                    if(discounted < 0){
-                      base_credit.amount = (((att.length*8) + (discounted)) * base_hour).toFixed(2);
-                      productivity_credit.amount = (((att.length * 8) + (discounted) ) * productivity_hour).toFixed(2);
+                    if (discounted < 0) {
+                      base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
+                      productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                       ot_credit.amount = '0';
-                    }else{
+                    } else {
                       productivity_credit.amount = (120 * productivity_hour).toFixed(2);
                       base_credit.amount = (120 * base_hour).toFixed(2);
-                      productivity_credit.amount = (120*productivity_hour).toFixed(2);
+                      productivity_credit.amount = (120 * productivity_hour).toFixed(2);
                       ot_credit.type = "Horas Extra Laboradas: " + discounted;
-                      if(emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12'){
-                        ot_credit.amount = ((base_hour + productivity_hour)*2*discounted).toFixed(2);
-                      }else{
-                        ot_credit.amount = ((base_hour + productivity_hour)*1.5*discounted).toFixed(2);
+                      if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12') {
+                        ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
+                      } else {
+                        ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
                       }
                       ot_credit.idpayments = pay.idpayments;
                       pushCredits.push(ot_credit);
@@ -723,20 +725,59 @@ export class PeriodsComponent implements OnInit {
                     this.global_credits.push(decreto_credit);
                     this.global_debits.push(igss_debit);
 
-                    this.apiService.getCredits({id:emp[0].idemployees, period:this.period.idperiods}).subscribe((cd:credits[])=>{
+                    this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                       cd.forEach(credit => {
                         totalCred = totalCred + parseFloat(credit.amount)
                       });
                     })
 
-                    this.apiService.getDebits({id:emp[0].idemployees, period:this.period.idperiods}).subscribe((db:debits[])=>{
-                      db.forEach(debit=>{
+                    this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+                      db.forEach(debit => {
                         totalDeb = totalDeb + parseFloat(debit.amount);
                       })
                     })
 
                     totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                     totalDeb = totalDeb + parseFloat(igss_debit.amount);
+
+                    this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((adj: attendences_adjustment[]) => {
+                      this.apiService.getAttendences({ id: emp[0].id_profile, date: " <= " + this.period.start }).subscribe((ajdAttendance: attendences[]) => {
+                        ajdAttendance.forEach(adjAttend => {
+                          adj.forEach(adjustment => {
+                            if (adjustment.id_attendence == adjAttend.idattendences && adjustment.status == 'PENDING') {
+                              let new_credit: credits = new credits;
+                              let new_debit:debits = new debits;
+                              new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * productivity_hour)).toFixed(2);
+                              new_credit.idpayments = pay.idpayments;
+                              new_credit.type = "Auto Ajuste " + adjAttend.date;
+
+                              new_debit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) * 0.0483).toFixed(2);
+                              new_debit.idpayments = pay.idpayments;
+                              new_debit.type = "Auto Ajuste IGSS";
+
+                              this.global_debits.push(new_debit);
+                              this.global_credits.push(new_credit);
+                              totalCred = totalCred + parseFloat(new_credit.amount);
+                              totalDeb = totalDeb + parseFloat(new_debit.amount);
+                            }
+                          });
+
+                          vac.forEach(vacat=>{
+                            if(vacat.took_date == adjAttend.date && vacat.status == 'PENDING'){
+                              let new_credit2:credits = new credits;
+                              let new_debit2:debits = new debits;
+                              new_credit2.amount = ((parseFloat(adjAttend.scheduled) * base_hour) + (parseFloat(adjAttend.scheduled)*productivity_hour)).toFixed(2);
+                              new_credit2.idpayments = pay.idpayments;
+                              new_credit2.type = "Auto Ajuste Vacaciones " + vacat.took_date;
+
+                              new_debit2.amount = ((parseFloat(adjAttend.scheduled) * base_hour) * 0.0483).toFixed(2);
+                              new_debit2.idpayments = pay.idpayments;
+                              new_debit2.type = "Auto Ajuste IGSS";
+                            }
+                          })
+                        })
+                      })
+                    })
 
                     pay.credits = (totalCred).toFixed(2);
                     pay.debits = (totalDeb).toFixed(2);
@@ -756,14 +797,14 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
-  searchCloseEmployee(){
-    let partial_payments:payments[] = [];
+  searchCloseEmployee() {
+    let partial_payments: payments[] = [];
     this.showPaymentes = false;
-    if(!this.searchClosed){
+    if (!this.searchClosed) {
       this.backUp_payments = this.payments;
     }
-    this.payments.forEach(pay=>{
-      if(pay.employee_name.includes(this.value)){
+    this.payments.forEach(pay => {
+      if (pay.employee_name.includes(this.value)) {
         partial_payments.push(pay);
       }
     })
@@ -773,21 +814,21 @@ export class PeriodsComponent implements OnInit {
   }
 
 
-  cancelCloseSearch(){
+  cancelCloseSearch() {
     this.showPaymentes = false;
     this.searchClosed = true;
     this.payments = this.backUp_payments;
     this.showPaymentes = true;
   }
 
-  closeClose(){
+  closeClose() {
     this.searchClosed = true;
     this.start();
     this.ded = true;
     this.showPaymentes = false;
   }
 
-  completePeriod(){
+  completePeriod() {
     console.log(this.global_credits);
     console.log(this.global_debits);
     console.log(this.payments);

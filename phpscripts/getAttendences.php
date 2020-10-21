@@ -12,7 +12,7 @@ $hires = [];
 $dt = '';
 $exp_id = '';
 
-if(explode(" ", $date)[0] === "<="){
+if(explode(" ", $date)[0] === "<=" || explode(" ", $date)[0] ===  "<"{
 	$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
 	FROM `hires`
 		LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`
