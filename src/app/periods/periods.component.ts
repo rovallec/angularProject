@@ -162,7 +162,7 @@ export class PeriodsComponent implements OnInit {
                           })
 
                           leave.forEach(leav => {
-                            if (leav.date == attendance.date) {
+                            if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
                               activeLeav = true;
                               if (leav.motive == 'UNPAID' || leav.motive == 'Leave of Absence Unpaid') {
                                 discounted = discounted - 8;
@@ -428,7 +428,7 @@ export class PeriodsComponent implements OnInit {
                               activeLeav = true;
                               if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                 discounted = discounted - 8;
-                                this.absence = this.absence + 8;
+                                this.absence = this.absence - 8;
                                 attendance.balance = 'JANP';
                               }else{
                                 if(leav.motive == 'Maternity' || leav.motive == 'Others Paid'){
@@ -443,7 +443,7 @@ export class PeriodsComponent implements OnInit {
                           dp.forEach(disciplinary => {
                             if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
                               this.roster = this.roster + parseFloat(attendance.scheduled);
-                              this.absence = this.absence + parseFloat(attendance.scheduled);
+                              this.absence = this.absence - parseFloat(attendance.scheduled);
                               discounted = discounted - 8;
                               attendance.balance = "SUSPENSION"
                               activeDp = true;
