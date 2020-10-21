@@ -618,7 +618,7 @@ export class PeriodsComponent implements OnInit {
                           activeDp = false;
                           activeVac = false;
                           activeLeav = false;
-                          
+
                           vac.forEach(vacation => {
                             if (vacation.took_date == attendance.date) {
                               if(attendance.scheduled != "OFF"){
@@ -627,6 +627,7 @@ export class PeriodsComponent implements OnInit {
                                 attendance.balance = 'VAC';
                               }else{
                                 this.daysOff = this.daysOff + 1;
+                                attendance.balance = "OFF"
                               }
                               activeVac = true;
                             }
@@ -918,7 +919,6 @@ export class PeriodsComponent implements OnInit {
                           });
 
                           if (!activeLeav && !activeVac && !activeDp) {
-                            let partial_non_show: boolean = false;
                             if (attendance.scheduled == 'OFF') {
                               this.daysOff = this.daysOff + 1;
                               offCount = this.daysOff;
@@ -926,13 +926,13 @@ export class PeriodsComponent implements OnInit {
                                 offCount = offCount - 2;
                               }
                               if (non_show1) {
-                                attendance.balance = "NON_SHOW";
+                                attendance.balance = "NON_SHOW_1";
                                 this.seventh = this.seventh + 1;
                                 discounted = discounted - 8;
                                 non_show1 = false;
                               } else {
                                 if (non_show2 = true && offCount == 0) {
-                                  attendance.balance = "NON_SHOW";
+                                  attendance.balance = "NON_SHOW_2";
                                   this.seventh = this.seventh + 1;
                                   discounted = discounted - 8;
                                   non_show2 = false;
@@ -943,6 +943,7 @@ export class PeriodsComponent implements OnInit {
                             } else {
                               this.roster = this.roster + parseFloat(attendance.scheduled);
                               if (parseFloat(attendance.worked_time) == 0) {
+                                let partial_non_show: boolean = false;
                                 this.absence = this.absence + parseFloat(attendance.scheduled);
                                 attendance.balance = "0.00";
                                 if (non_show1) {
