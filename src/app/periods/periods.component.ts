@@ -653,13 +653,16 @@ export class PeriodsComponent implements OnInit {
                 this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
                   if (emp[0].nearsol_id == element['Nearsol ID']) {
                     cred.iddebits = emp[0].name;
-                    cred.amount = element['Amount'];
-                    cred.type = this.importString;
+                    cred.amount = (parseFloat(element['Amount'])).toFixed(2);
+                    cred.type = this.importType + " " + this.importString;
                     cred.idpayments = pay.idpayments;
                     this.credits.push(cred);
                   }
                 })
               })
+              if(this.importType == "Bono"){
+               this.pushDeductions('credits', this.credits);
+              }
             })
           } catch (error) {
 
@@ -670,9 +673,23 @@ export class PeriodsComponent implements OnInit {
 
   }
 
+  pushDeductions(str:string, credits?:credits[], debits?:debits[]){
+    if(str == 'debits'){
+      debits.forEach(debit => {
+        this.apiService.insertDebits(debit).subscribe((str:string)=>{});
+      });
+    }else{
+      if(str=='credits'){
+        credits.forEach(cred =>{
+          this.apiService.insertCredits(cred).subscribe((str:string)=>{});
+        })
+      }
+    }
+  }
+
   setType() {
     if (this.importType == 'ISR') {
-      this.importString = 'ISR';
+      this.importString = 'Mensual';
     }
   }
 }

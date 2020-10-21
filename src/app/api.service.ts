@@ -466,5 +466,13 @@ getPayments(period:periods){
 getAutoAdjustments(any:any){
   return this.httpClient.post<attendences_adjustment[]>(`${this.PHP_API_SERVER}/phpscripts/getAutoAdjustments.php`, any);
 }
+
+insertCredits(credits:credits){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertCredits.php`, credits);
+}
+
+insertDebits(debits:credits){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertDebits.php`, debits);
+}
   constructor(private httpClient:HttpClient) { }
 }
