@@ -763,27 +763,27 @@ export class PeriodsComponent implements OnInit {
                             console.log(totalCred);
                             console.log(new_credit.amount);
                           });
+
+                          vac.forEach(vacat => {
+                            if (new Date(vacat.took_date) < new Date(this.period.start) && vacat.status == 'PENDING') {
+                              let new_credit2: credits = new credits;
+                              let new_debit2: debits = new debits;
+                              new_credit2.amount = ((8 * base_hour) + (8 * productivity_hour)).toFixed(2);
+                              new_credit2.idpayments = pay.idpayments;
+                              new_credit2.type = "Auto Ajuste Vacaciones " + vacat.took_date;
+
+                              new_debit2.amount = ((8 * base_hour) * 0.0483).toFixed(2);
+                              new_debit2.idpayments = pay.idpayments;
+                              new_debit2.type = "Auto Ajuste IGSS";
+                            }
+                          })
+
+                          pay.credits = (totalCred).toFixed(2);
+                          pay.debits = (totalDeb).toFixed(2);
+                          pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
+                          pay.employee_name = emp[0].name;
+                          pay.total = (totalCred - totalDeb).toFixed(2);
                         })
-
-                        vac.forEach(vacat => {
-                          if (new Date(vacat.took_date) < new Date(this.period.start) && vacat.status == 'PENDING') {
-                            let new_credit2: credits = new credits;
-                            let new_debit2: debits = new debits;
-                            new_credit2.amount = ((8 * base_hour) + (8 * productivity_hour)).toFixed(2);
-                            new_credit2.idpayments = pay.idpayments;
-                            new_credit2.type = "Auto Ajuste Vacaciones " + vacat.took_date;
-
-                            new_debit2.amount = ((8 * base_hour) * 0.0483).toFixed(2);
-                            new_debit2.idpayments = pay.idpayments;
-                            new_debit2.type = "Auto Ajuste IGSS";
-                          }
-                        })
-
-                        pay.credits = (totalCred).toFixed(2);
-                        pay.debits = (totalDeb).toFixed(2);
-                        pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
-                        pay.employee_name = emp[0].name;
-                        pay.total = (totalCred - totalDeb).toFixed(2);
                       })
                     })
                   })
