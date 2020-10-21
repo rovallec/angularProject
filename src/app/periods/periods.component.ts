@@ -580,6 +580,9 @@ export class PeriodsComponent implements OnInit {
   closePeriod() {
     let pushCredits:credits[] = [];
     let pusDebits:debits[] = [];
+    
+    this.global_debits = [];
+    this.global_credits = [];
 
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
       payments.forEach(pay => {
@@ -589,7 +592,6 @@ export class PeriodsComponent implements OnInit {
         let offCount: number = 0;
         let activeVac: boolean = false;
         let activeLeav: boolean = false;
-        let activeAdjustment: boolean = false;
         let activeDp:boolean = false;
 
         let non_show1: boolean = false;
