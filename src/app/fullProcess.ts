@@ -165,6 +165,7 @@ export class employees{
     name:string;
     account:string;
     platform:string;
+    nearsol_id:string;
     constructor(){
         this.id_profile = null;
         this.idemployees = null;
@@ -180,6 +181,7 @@ export class employees{
         this.name = null;
         this.account = null;
         this.platform = null;
+        this.nearsol_id = null;
     }
 }
 
