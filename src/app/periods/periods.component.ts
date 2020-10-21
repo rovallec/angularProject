@@ -610,184 +610,186 @@ export class PeriodsComponent implements OnInit {
               this.apiService.getDisciplinaryProcesses({ id: emp[0].id_profile }).subscribe((dp: disciplinary_processes[]) => {
                 this.apiService.getAttendences({ id: emp[0].id_profile, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
                   this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
-                    att.forEach(attendance => {
-                      activeDp = false;
-                      activeVac = false;
-                      activeLeav = false;
-
-                      vac.forEach(vacation => {
-                        if (vacation.took_date == attendance.date) {
-                          activeVac = true;
-                        }
-                      })
-
-                      leave.forEach(leav => {
-                        if (leav.date == attendance.date) {
-                          activeLeav = true;
-                          if (leav.motive == 'UNPAID' || leav.motive == 'Leave of Absence Unpaid') {
-                            discounted = discounted - 8;
-                          }
-                        }
-                      })
-
-                      dp.forEach(disciplinary => {
-                        if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
-                          discounted = discounted - 8;
-                          activeDp = true;
-                        }
-                      });
-
-                      if (!activeLeav && !activeVac && !activeDp) {
-                        let partial_non_show: boolean = false;
-                        if (attendance.scheduled == 'OFF') {
-                          offCount = offCount + 1;
-                          while (offCount > 0) {
-                            offCount = offCount - 2;
-                          }
-                          if (non_show1) {
-                            discounted = discounted - 8;
-                            non_show1 = false;
-                          } else {
-                            if (non_show2 = true && offCount == 0) {
-                              discounted = discounted - 8;
-                              non_show2 = false;
-                            }
-                          }
-                        } else {
-                          if (parseFloat(attendance.worked_time) == 0) {
-                            if (non_show1) {
-                              ad.forEach(adjustment => {
-                                if (adjustment.date == attendance.date) {
-                                  partial_non_show = true;
-                                }
-                              });
-                              if (!partial_non_show) {
-                                non_show2 = true;
-                              }
-                            } else {
-                              ad.forEach(adjustment => {
-                                if (adjustment.date == attendance.date) {
-                                  partial_non_show = true;
-                                }
-                              })
-                              if (!partial_non_show) {
-                                non_show1 = true;
-                              }
-                            }
-                            discounted = discounted - 8;
-                          } else {
-                            discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
-                          }
-                        }
-                      }
-                    });
-
-                    let base_hour: number = parseFloat(emp[0].base_payment) / 240;
-                    let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
-                    let base_credit: credits = new credits;
-                    let productivity_credit: credits = new credits;
-                    let decreto_credit: credits = new credits;
-                    let ot_credit: credits = new credits;
-                    let igss_debit: debits = new debits;
-
-                    base_credit.type = "Salario Base";
-                    productivity_credit.type = "Bonificacion Productividad";
-                    decreto_credit.type = "Bonificacion Decreto";
-
-                    if (discounted < 0) {
-                      base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
-                      productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
-                      ot_credit.amount = '0';
-                    } else {
-                      productivity_credit.amount = (120 * productivity_hour).toFixed(2);
-                      base_credit.amount = (120 * base_hour).toFixed(2);
-                      productivity_credit.amount = (120 * productivity_hour).toFixed(2);
-                      ot_credit.type = "Horas Extra Laboradas: " + discounted;
-                      if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12') {
-                        ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
-                      } else {
-                        ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
-                      }
-                      ot_credit.idpayments = pay.idpayments;
-                      pushCredits.push(ot_credit);
-                      this.global_credits.push(ot_credit);
-                    }
-                    decreto_credit.amount = '250.00';
-                    igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
-
-                    base_credit.idpayments = pay.idpayments;
-                    productivity_credit.idpayments = pay.idpayments;
-                    decreto_credit.idpayments = pay.idpayments;
-                    igss_debit.idpayments = pay.idpayments;
-
-                    pushCredits.push(base_credit);
-                    pushCredits.push(productivity_credit);
-                    pushCredits.push(decreto_credit);
-                    pusDebits.push(igss_debit);
-                    this.global_credits.push(base_credit);
-                    this.global_credits.push(productivity_credit);
-                    this.global_credits.push(decreto_credit);
-                    this.global_debits.push(igss_debit);
-
                     this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+                        att.forEach(attendance => {
+                          activeDp = false;
+                          activeVac = false;
+                          activeLeav = false;
+
+                          vac.forEach(vacation => {
+                            if (vacation.took_date == attendance.date) {
+                              activeVac = true;
+                            }
+                          })
+
+                          leave.forEach(leav => {
+                            if (leav.date == attendance.date) {
+                              activeLeav = true;
+                              if (leav.motive == 'UNPAID' || leav.motive == 'Leave of Absence Unpaid') {
+                                discounted = discounted - 8;
+                              }
+                            }
+                          })
+
+                          dp.forEach(disciplinary => {
+                            if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
+                              discounted = discounted - 8;
+                              activeDp = true;
+                            }
+                          });
+
+                          if (!activeLeav && !activeVac && !activeDp) {
+                            let partial_non_show: boolean = false;
+                            if (attendance.scheduled == 'OFF') {
+                              offCount = offCount + 1;
+                              while (offCount > 0) {
+                                offCount = offCount - 2;
+                              }
+                              if (non_show1) {
+                                discounted = discounted - 8;
+                                non_show1 = false;
+                              } else {
+                                if (non_show2 = true && offCount == 0) {
+                                  discounted = discounted - 8;
+                                  non_show2 = false;
+                                }
+                              }
+                            } else {
+                              if (parseFloat(attendance.worked_time) == 0) {
+                                if (non_show1) {
+                                  ad.forEach(adjustment => {
+                                    if (adjustment.date == attendance.date) {
+                                      partial_non_show = true;
+                                    }
+                                  });
+                                  if (!partial_non_show) {
+                                    non_show2 = true;
+                                  }
+                                } else {
+                                  ad.forEach(adjustment => {
+                                    if (adjustment.date == attendance.date) {
+                                      partial_non_show = true;
+                                    }
+                                  })
+                                  if (!partial_non_show) {
+                                    non_show1 = true;
+                                  }
+                                }
+                                discounted = discounted - 8;
+                              } else {
+                                discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
+                              }
+                            }
+                          }
+                        });
+
+                        let base_hour: number = parseFloat(emp[0].base_payment) / 240;
+                        let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
+                        let base_credit: credits = new credits;
+                        let productivity_credit: credits = new credits;
+                        let decreto_credit: credits = new credits;
+                        let ot_credit: credits = new credits;
+                        let igss_debit: debits = new debits;
+
+                        base_credit.type = "Salario Base";
+                        productivity_credit.type = "Bonificacion Productividad";
+                        decreto_credit.type = "Bonificacion Decreto";
+
+                        if (discounted < 0) {
+                          base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
+                          productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
+                          ot_credit.amount = '0';
+                        } else {
+                          productivity_credit.amount = (120 * productivity_hour).toFixed(2);
+                          base_credit.amount = (120 * base_hour).toFixed(2);
+                          productivity_credit.amount = (120 * productivity_hour).toFixed(2);
+                          ot_credit.type = "Horas Extra Laboradas: " + discounted;
+                          if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12') {
+                            ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
+                          } else {
+                            ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
+                          }
+                          ot_credit.idpayments = pay.idpayments;
+                          pushCredits.push(ot_credit);
+                          this.global_credits.push(ot_credit);
+                        }
+                        decreto_credit.amount = '250.00';
+                        igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
+
+                        base_credit.idpayments = pay.idpayments;
+                        productivity_credit.idpayments = pay.idpayments;
+                        decreto_credit.idpayments = pay.idpayments;
+                        igss_debit.idpayments = pay.idpayments;
+
+                        pushCredits.push(base_credit);
+                        pushCredits.push(productivity_credit);
+                        pushCredits.push(decreto_credit);
+                        pusDebits.push(igss_debit);
+                        this.global_credits.push(base_credit);
+                        this.global_credits.push(productivity_credit);
+                        this.global_credits.push(decreto_credit);
+                        this.global_debits.push(igss_debit);
+
                         db.forEach(debit => {
                           totalDeb = totalDeb + parseFloat(debit.amount);
                         })
                         cd.forEach(credit => {
                           totalCred = totalCred + parseFloat(credit.amount)
                         });
+
+
                         totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                         totalDeb = totalDeb + parseFloat(igss_debit.amount);
-                      })
-                    })
 
-                    this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((adj: attendences_adjustment[]) => {
-                      this.apiService.getAttendences({ id: emp[0].id_profile, date: "< '" + this.period.start + "'" }).subscribe((ajdAttendance: attendences[]) => {
-                        console.log(ajdAttendance);
-                        console.log(adj);
-                        ajdAttendance.forEach(adjAttend => {
-                          adj.forEach(adjustment => {
-                            if (adjustment.id_attendence == adjAttend.idattendences && adjustment.status == 'PENDING') {
-                              let new_credit: credits = new credits;
-                              let new_debit: debits = new debits;
-                              new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * productivity_hour)).toFixed(2);
-                              new_credit.idpayments = pay.idpayments;
-                              new_credit.type = "Auto Ajuste " + adjAttend.date;
+                        this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((adj: attendences_adjustment[]) => {
+                          this.apiService.getAttendences({ id: emp[0].id_profile, date: "< '" + this.period.start + "'" }).subscribe((ajdAttendance: attendences[]) => {
+                            console.log(ajdAttendance);
+                            console.log(adj);
+                            ajdAttendance.forEach(adjAttend => {
+                              adj.forEach(adjustment => {
+                                if (adjustment.id_attendence == adjAttend.idattendences && adjustment.status == 'PENDING') {
+                                  let new_credit: credits = new credits;
+                                  let new_debit: debits = new debits;
+                                  new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * productivity_hour)).toFixed(2);
+                                  new_credit.idpayments = pay.idpayments;
+                                  new_credit.type = "Auto Ajuste " + adjAttend.date;
 
-                              new_debit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) * 0.0483).toFixed(2);
-                              new_debit.idpayments = pay.idpayments;
-                              new_debit.type = "Auto Ajuste IGSS";
+                                  new_debit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) * 0.0483).toFixed(2);
+                                  new_debit.idpayments = pay.idpayments;
+                                  new_debit.type = "Auto Ajuste IGSS";
 
-                              this.global_debits.push(new_debit);
-                              this.global_credits.push(new_credit);
-                              totalCred = totalCred + parseFloat(new_credit.amount);
-                              totalDeb = totalDeb + parseFloat(new_debit.amount);
-                            }
-                          });
+                                  this.global_debits.push(new_debit);
+                                  this.global_credits.push(new_credit);
+                                  totalCred = totalCred + parseFloat(new_credit.amount);
+                                  totalDeb = totalDeb + parseFloat(new_debit.amount);
+                                }
+                              });
 
-                          vac.forEach(vacat => {
-                            if (vacat.took_date == adjAttend.date && vacat.status == 'PENDING') {
-                              let new_credit2: credits = new credits;
-                              let new_debit2: debits = new debits;
-                              new_credit2.amount = ((parseFloat(adjAttend.scheduled) * base_hour) + (parseFloat(adjAttend.scheduled) * productivity_hour)).toFixed(2);
-                              new_credit2.idpayments = pay.idpayments;
-                              new_credit2.type = "Auto Ajuste Vacaciones " + vacat.took_date;
+                              vac.forEach(vacat => {
+                                if (vacat.took_date == adjAttend.date && vacat.status == 'PENDING') {
+                                  let new_credit2: credits = new credits;
+                                  let new_debit2: debits = new debits;
+                                  new_credit2.amount = ((parseFloat(adjAttend.scheduled) * base_hour) + (parseFloat(adjAttend.scheduled) * productivity_hour)).toFixed(2);
+                                  new_credit2.idpayments = pay.idpayments;
+                                  new_credit2.type = "Auto Ajuste Vacaciones " + vacat.took_date;
 
-                              new_debit2.amount = ((parseFloat(adjAttend.scheduled) * base_hour) * 0.0483).toFixed(2);
-                              new_debit2.idpayments = pay.idpayments;
-                              new_debit2.type = "Auto Ajuste IGSS";
-                            }
+                                  new_debit2.amount = ((parseFloat(adjAttend.scheduled) * base_hour) * 0.0483).toFixed(2);
+                                  new_debit2.idpayments = pay.idpayments;
+                                  new_debit2.type = "Auto Ajuste IGSS";
+                                }
+                              })
+                            })
                           })
                         })
+
+                        pay.credits = (totalCred).toFixed(2);
+                        pay.debits = (totalDeb).toFixed(2);
+                        pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
+                        pay.employee_name = emp[0].name;
+                        pay.total = (totalCred - totalDeb).toFixed(2);
                       })
                     })
-
-                    pay.credits = (totalCred).toFixed(2);
-                    pay.debits = (totalDeb).toFixed(2);
-                    pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
-                    pay.employee_name = emp[0].name;
-                    pay.total = (totalCred - totalDeb).toFixed(2);
                   })
                 })
               })
