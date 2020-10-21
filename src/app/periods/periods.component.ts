@@ -675,7 +675,7 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
                             discounted = discounted - 8;
-                          }else{
+                          } else {
                             discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
                           }
                         }
@@ -730,27 +730,27 @@ export class PeriodsComponent implements OnInit {
                     this.global_debits.push(igss_debit);
 
                     this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
-                      cd.forEach(credit => {
-                        totalCred = totalCred + parseFloat(credit.amount)
-                      });
-                    })
-
-                    this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-                      db.forEach(debit => {
-                        totalDeb = totalDeb + parseFloat(debit.amount);
+                      this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
+                        db.forEach(debit => {
+                          totalDeb = totalDeb + parseFloat(debit.amount);
+                        })
+                        cd.forEach(credit => {
+                          totalCred = totalCred + parseFloat(credit.amount)
+                        });
+                        totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
+                        totalDeb = totalDeb + parseFloat(igss_debit.amount);
                       })
                     })
 
-                    totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
-                    totalDeb = totalDeb + parseFloat(igss_debit.amount);
-
                     this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((adj: attendences_adjustment[]) => {
                       this.apiService.getAttendences({ id: emp[0].id_profile, date: "< '" + this.period.start + "'" }).subscribe((ajdAttendance: attendences[]) => {
+                        console.log(ajdAttendance);
+                        console.log(adj);
                         ajdAttendance.forEach(adjAttend => {
                           adj.forEach(adjustment => {
                             if (adjustment.id_attendence == adjAttend.idattendences && adjustment.status == 'PENDING') {
                               let new_credit: credits = new credits;
-                              let new_debit:debits = new debits;
+                              let new_debit: debits = new debits;
                               new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * productivity_hour)).toFixed(2);
                               new_credit.idpayments = pay.idpayments;
                               new_credit.type = "Auto Ajuste " + adjAttend.date;
@@ -766,11 +766,11 @@ export class PeriodsComponent implements OnInit {
                             }
                           });
 
-                          vac.forEach(vacat=>{
-                            if(vacat.took_date == adjAttend.date && vacat.status == 'PENDING'){
-                              let new_credit2:credits = new credits;
-                              let new_debit2:debits = new debits;
-                              new_credit2.amount = ((parseFloat(adjAttend.scheduled) * base_hour) + (parseFloat(adjAttend.scheduled)*productivity_hour)).toFixed(2);
+                          vac.forEach(vacat => {
+                            if (vacat.took_date == adjAttend.date && vacat.status == 'PENDING') {
+                              let new_credit2: credits = new credits;
+                              let new_debit2: debits = new debits;
+                              new_credit2.amount = ((parseFloat(adjAttend.scheduled) * base_hour) + (parseFloat(adjAttend.scheduled) * productivity_hour)).toFixed(2);
                               new_credit2.idpayments = pay.idpayments;
                               new_credit2.type = "Auto Ajuste Vacaciones " + vacat.took_date;
 
