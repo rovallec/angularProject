@@ -746,11 +746,11 @@ export class PeriodsComponent implements OnInit {
                           adjustments.forEach(adjustment => {
                             let new_credit: credits = new credits;
                             let new_debit: debits = new debits;
-                            new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * productivity_hour)).toFixed(2);
+                            new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * productivity_hour)).toFixed(2);
                             new_credit.idpayments = pay.idpayments;
                             new_credit.type = "Auto Ajuste " + adjustment.date;
 
-                            new_debit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_after)) * base_hour) * 0.0483).toFixed(2);
+                            new_debit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) * 0.0483).toFixed(2);
                             new_debit.idpayments = pay.idpayments;
                             new_debit.type = "Auto Ajuste IGSS";
 
