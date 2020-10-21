@@ -741,7 +741,7 @@ export class PeriodsComponent implements OnInit {
                     totalDeb = totalDeb + parseFloat(igss_debit.amount);
 
                     this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((adj: attendences_adjustment[]) => {
-                      this.apiService.getAttendences({ id: emp[0].id_profile, date: " <= " + this.period.start }).subscribe((ajdAttendance: attendences[]) => {
+                      this.apiService.getAttendences({ id: emp[0].id_profile, date: "<= " + this.period.start }).subscribe((ajdAttendance: attendences[]) => {
                         ajdAttendance.forEach(adjAttend => {
                           adj.forEach(adjustment => {
                             if (adjustment.id_attendence == adjAttend.idattendences && adjustment.status == 'PENDING') {
