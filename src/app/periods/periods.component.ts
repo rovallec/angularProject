@@ -423,7 +423,7 @@ export class PeriodsComponent implements OnInit {
                           })
 
                           leave.forEach(leav => {
-                            if (leav.date == attendance.date) {
+                            if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
                               this.roster = this.roster + parseFloat(attendance.scheduled);
                               activeLeav = true;
                               if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
@@ -461,12 +461,14 @@ export class PeriodsComponent implements OnInit {
                                 attendance.balance = "NON_SHOW";
                                 this.seventh = this.seventh + 1;
                                 discounted = discounted - 8;
+                                this.absence = this.absence - 8;
                                 non_show1 = false;
                               } else {
                                 if (non_show2 && offCount == 0) {
                                   attendance.balance = "NON_SHOW";
                                   this.seventh = this.seventh + 1;
                                   discounted = discounted - 8;
+                                  this.absence = this.absence - 8;
                                   non_show2 = false;
                                 }else{
                                   attendance.balance = "OFF";
@@ -500,7 +502,7 @@ export class PeriodsComponent implements OnInit {
                                 discounted = discounted - 8;
                               } else {
                                 this.attended = this.attended + parseFloat(attendance.worked_time);
-                                this.absence = this.absence + (parseFloat(attendance.scheduled) - parseFloat(attendance.worked_time));
+                                this.absence = this.absence + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
                                 attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
                                 discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
                               }
