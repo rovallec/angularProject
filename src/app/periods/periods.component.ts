@@ -385,6 +385,7 @@ export class PeriodsComponent implements OnInit {
   completePeriod() {
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
+    this.apiService.closePeriod(this.period).subscribe((str:string)=>{})
     this.closePeriod();
   }
 

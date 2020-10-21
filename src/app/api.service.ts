@@ -474,5 +474,9 @@ insertCredits(credits:credits){
 insertDebits(debits:credits){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertDebits.php`, debits);
 }
+
+closePeriod(period:periods){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/closePeriod.php`, period);
+}
   constructor(private httpClient:HttpClient) { }
 }
