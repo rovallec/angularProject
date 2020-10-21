@@ -673,6 +673,7 @@ export class PeriodsComponent implements OnInit {
                             discounted = discounted - 8;
                           }else{
                             discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
+                            console.log(discounted);
                           }
                         }
                       }
