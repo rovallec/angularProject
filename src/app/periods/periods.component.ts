@@ -349,6 +349,8 @@ export class PeriodsComponent implements OnInit {
                               this.global_debits.pop();
                               this.credits = [];
                               this.debits = [];
+                              pay.credits = "0.00";
+                              pay.debits = "0.00";
                             }
                           });
                       })
