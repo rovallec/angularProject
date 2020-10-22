@@ -339,11 +339,9 @@ export class PeriodsComponent implements OnInit {
                               pay.employee_name = emp[0].name;
                               pay.total = (totalCred - totalDeb).toFixed(2);
                             })
-                            console.log(cnt);
                           }
                           this.global_credits.forEach(testCred => {
-                            console.log(testCred.amount + " | " + cnt);
-                            if(testCred.amount == '1412.55' && cnt <= 1){
+                            if(testCred.amount === '1412.55' && cnt <= 1){
                               this.global_credits.pop();
                               this.global_credits.pop();
                               this.global_credits.pop();
