@@ -340,7 +340,7 @@ export class PeriodsComponent implements OnInit {
                               pay.total = (totalCred - totalDeb).toFixed(2);
                             })
                           }
-                          this.credits.forEach(testCred => {
+                          this.global_credits.forEach(testCred => {
                             console.log(testCred.amount + " | " + cnt);
                             if(testCred.amount == '1412.55' && cnt <= 1){
                               this.global_credits.pop();
