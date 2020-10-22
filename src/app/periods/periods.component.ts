@@ -266,6 +266,7 @@ export class PeriodsComponent implements OnInit {
                           }
                           decreto_credit.amount = '125.00';
                           igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
+                          igss_debit.type = "Descuento IGSS";
 
                           base_credit.idpayments = pay.idpayments;
                           productivity_credit.idpayments = pay.idpayments;
