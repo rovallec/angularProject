@@ -342,14 +342,14 @@ export class PeriodsComponent implements OnInit {
                                   }
                                 })
                               }
-                              pay.credits = (totalCred).toFixed(2);
-                              pay.debits = (totalDeb).toFixed(2);
-                              pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
-                              pay.employee_name = emp[0].name;
-                              pay.total = (totalCred - totalDeb).toFixed(2);
                             })
                           }
                         }
+                        pay.credits = (totalCred).toFixed(2);
+                        pay.debits = (totalDeb).toFixed(2);
+                        pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
+                        pay.employee_name = emp[0].name;
+                        pay.total = (totalCred - totalDeb).toFixed(2);
                       })
                     })
                   })
@@ -632,10 +632,9 @@ export class PeriodsComponent implements OnInit {
                         this.roster = parseFloat((this.roster).toFixed(2));
                         this.attended = parseFloat((this.attended).toFixed(2));
                         this.diff = parseFloat((this.roster - this.attended).toFixed(2));
-
-                        this.selectedEmployee = true;
                       })
                     }
+                    this.selectedEmployee = true;
                   })
                 })
               })
