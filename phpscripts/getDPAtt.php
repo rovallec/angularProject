@@ -9,6 +9,7 @@ $request = json_decode($postdata);
 $id = ($request->id);
 $date_1 = ($request->date_1);
 $date_2 = ($request->date_2);
+$return = [];
 
 $sql = "SELECT id_employee, day_1, day_2, day_3, day_4, imposition_date FROM suspensions 
         LEFT JOIN disciplinary_processes on disciplinary_processes.iddisciplinary_processes = suspensions.id_disciplinary_process 
