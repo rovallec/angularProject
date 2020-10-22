@@ -156,7 +156,7 @@ export class PeriodsComponent implements OnInit {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                           if (this.period.status == '1') {
                             att.forEach(attendance => {
-                              cnt = cnt++;
+                              cnt = cnt + 1;
                               activeDp = false;
                               activeVac = false;
                               activeLeav = false;
@@ -339,6 +339,7 @@ export class PeriodsComponent implements OnInit {
                               pay.employee_name = emp[0].name;
                               pay.total = (totalCred - totalDeb).toFixed(2);
                             })
+                            console.log(cnt);
                           }
                           this.global_credits.forEach(testCred => {
                             console.log(testCred.amount + " | " + cnt);
