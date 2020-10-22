@@ -141,6 +141,7 @@ export class PeriodsComponent implements OnInit {
         let non_show2: boolean = false;
 
         let cnt:number = 0;
+        let err:boolean = false;
 
 
         pushCredits = [];
@@ -341,8 +342,11 @@ export class PeriodsComponent implements OnInit {
                             })
                           }
                           this.global_credits.forEach(testCred => {
-                            if(testCred.amount === '1412.55' && cnt === 1){
+                            if((testCred.amount === '1412.55' && cnt === 1) || err){
                               console.log(testCred.amount + " | " + cnt);
+                              err = true;
+                              console.log(this.global_credits);
+                              console.log(this.global_debits);
                               this.credits = [];
                               this.debits = [];
                               pay.credits = "0.00";
