@@ -279,13 +279,8 @@ export class PeriodsComponent implements OnInit {
                             igss_debit.idpayments = pay.idpayments;
 
                             this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
-                              if (cnt = 0 && parseFloat(base_credit.amount) >= 1412.55) {
-                                base_credit.amount = "0.00";
-                                productivity_credit.amount = "0.00";
-                                decreto_credit.amount = "0.00";
-                                ot_credit.amount = "0.00";
-                                igss_debit.amount = "0.00";
-                              } else {
+
+
                                 pushCredits.push(base_credit);
                                 pushCredits.push(productivity_credit);
                                 pushCredits.push(decreto_credit);
@@ -341,7 +336,6 @@ export class PeriodsComponent implements OnInit {
                                     totalDeb = totalDeb + parseFloat(new_debit2.amount);
                                   }
                                 })
-                              }
                             })
                           }
                           pay.credits = (totalCred).toFixed(2);
