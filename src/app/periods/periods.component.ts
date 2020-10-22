@@ -341,7 +341,7 @@ export class PeriodsComponent implements OnInit {
                             })
                           }
                           this.credits.forEach(testCred => {
-                            if(testCred.amount == '1412.55' && cnt < 1){
+                            if(testCred.amount >= '1412.55' && cnt <= 1){
                               this.global_credits.pop();
                               this.global_credits.pop();
                               this.global_credits.pop();
