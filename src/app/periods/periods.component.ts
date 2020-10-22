@@ -343,15 +343,30 @@ export class PeriodsComponent implements OnInit {
                           }
                           this.global_credits.forEach(testCred => {
                             if((testCred.amount === '1412.55' && cnt === 1) || err){
-                              console.log(testCred.amount + " | " + cnt);
-                              err = true;
-                              console.log(this.global_credits);
-                              console.log(this.global_debits);
-                              this.credits = [];
-                              this.debits = [];
-                              pay.credits = "0.00";
-                              pay.debits = "0.00";
+                              payments.forEach(py=>{
+                                if(py.idpayments == testCred.idpayments){
+                                  py.credits = "0.00";
+                                  py.debits = "0.00";
+                                }
+                                let partial_cred:credits[];
+                                let partial_deb:debits[];
+                                this.global_credits.forEach(pop=>{
+                                  if(pop.idpayments != testCred.idpayments){
+                                    partial_cred.push(pop);
+                                  }
+                                })
+                                this.global_credits = partial_cred;
+
+                                this.global_debits.forEach(pop_deb=>{
+                                  if(pop_deb.idpayments != testCred.idpayments){
+                                    partial_deb.push(pop_deb);
+                                  }
+                                })
+                                this.global_debits = partial_deb;
+                              })
                             }
+                            console.log(this.global_credits);
+                            console.log(this.global_debits);
                           });
                       })
                     })
