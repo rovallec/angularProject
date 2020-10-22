@@ -140,6 +140,8 @@ export class PeriodsComponent implements OnInit {
         let non_show1: boolean = false;
         let non_show2: boolean = false;
 
+        let cnt:number = 0;
+
 
         pushCredits = [];
         pusDebits = [];
@@ -152,9 +154,9 @@ export class PeriodsComponent implements OnInit {
                   this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                     this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-                        if(att.length > 1){
                           if (this.period.status == '1') {
                             att.forEach(attendance => {
+                              cnt = cnt++;
                               activeDp = false;
                               activeVac = false;
                               activeLeav = false;
@@ -338,14 +340,12 @@ export class PeriodsComponent implements OnInit {
                               pay.total = (totalCred - totalDeb).toFixed(2);
                             })
                           }
-                        }else{
-                          this.roster = 0;
-                          this.attended = 0;
-                          this.diff = 0;
-                          this.absence = 0;
-                          this.absence_fixed = '0';
-                          this.seventh = 0;
-                        }
+                          this.credits.forEach(testCred => {
+                            if(testCred.amount == '1412.55' && cnt < 1){
+                              this.credits = [];
+                              this.debits = [];
+                            }
+                          });
                       })
                     })
                   })
