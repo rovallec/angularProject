@@ -150,7 +150,7 @@ export class PeriodsComponent implements OnInit {
         this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
           this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
             this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
-              this.apiService.getDisciplinaryProcesses({ id: emp[0].id_profile }).subscribe((dp: disciplinary_processes[]) => {
+              this.apiService.getDPAtt({ id: emp[0].id_profile, date_1:this.period.start, date_2:this.period.end }).subscribe((dp: disciplinary_processes[]) => {
                 this.apiService.getAttendences({ id: emp[0].id_profile, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
                   this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                     this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
@@ -419,7 +419,7 @@ export class PeriodsComponent implements OnInit {
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: id_employee }).subscribe((emp: employees[]) => {
       this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
         this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
-          this.apiService.getDisciplinaryProcesses({ id: emp[0].id_profile }).subscribe((dp: disciplinary_processes[]) => {
+          this.apiService.getDPAtt({ id: emp[0].id_profile }).subscribe((dp: disciplinary_processes[]) => {
             this.apiService.getAttendences({ id: emp[0].id_profile, date: "BETWEEN '" + this.period.start + "' AND '" + this.period.end + "'" }).subscribe((att: attendences[]) => {
               this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                 this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
@@ -563,17 +563,20 @@ export class PeriodsComponent implements OnInit {
                       } else {
                         ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
                       }
+                      if(base_credit.amount != 'NaN'){
                       this.credits.push(ot_credit);
                       this.global_credits.push(ot_credit);
+                      }
                     }
                     decreto_credit.amount = '125.00';
                     igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
 
-
+                    if(base_credit.amount != 'NaN'){
                     this.credits.push(base_credit);
                     this.credits.push(productivity_credit);
                     this.credits.push(decreto_credit);
                     this.debits.push(igss_debit);
+                    }
 
                     db.forEach(debit => {
                       totalDeb = totalDeb + parseFloat(debit.amount);

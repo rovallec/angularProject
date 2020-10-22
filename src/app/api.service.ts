@@ -478,5 +478,9 @@ insertDebits(debits:credits){
 closePeriod(period:periods){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/closePeriod.php`, period);
 }
+
+getDPAtt(any:any){
+  return this.httpClient.post<disciplinary_processes[]>(`${this.PHP_API_SERVER}/phpscripts/getDPAtt.php`, any);
+}
   constructor(private httpClient:HttpClient) { }
 }
