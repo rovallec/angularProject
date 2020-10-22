@@ -15,7 +15,7 @@ $sql = "SELECT id_employee, day_1, day_2, day_3, day_4, imposition_date FROM sus
         LEFT JOIN disciplinary_processes on disciplinary_processes.iddisciplinary_processes = suspensions.id_disciplinary_process 
         LEFT JOIN disciplinary_requests on disciplinary_requests.iddisciplinary_requests = disciplinary_processes.id_request 
         LEFT JOIN hr_processes on hr_processes.idhr_processes = disciplinary_requests.id_process 
-        WHERE id_employee = $id AND (imposition_date BETWEEN '$date_1' AND '$date_2');";
+        WHERE id_employee = $id AND ((day_1 between '$date_1' AND '$date_2') OR (day_2 between '$date_1' AND '$date_2') OR (day_3 between '$date_1' AND '$date_2') OR (day_4 between '$date_1' AND '$date_2'));";
 
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){
