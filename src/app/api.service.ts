@@ -482,5 +482,9 @@ closePeriod(period:periods){
 getDPAtt(any:any){
   return this.httpClient.post<disciplinary_processes[]>(`${this.PHP_API_SERVER}/phpscripts/getDPAtt.php`, any);
 }
+
+getAttPeriod(any:any){
+  return this.httpClient.post<attendences[]>(`${this.PHP_API_SERVER}/phpscripts/getAttendancesPeriod.php`, any);
+}
   constructor(private httpClient:HttpClient) { }
 }
