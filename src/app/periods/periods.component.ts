@@ -365,9 +365,11 @@ export class PeriodsComponent implements OnInit {
                                 this.global_debits = partial_deb;
                               })
                             }
-                            console.log(this.global_credits);
-                            console.log(this.global_debits);
                           });
+                          
+                          console.log(payments);
+                          console.log(this.global_credits);
+                          console.log(this.global_debits);
                       })
                     })
                   })
