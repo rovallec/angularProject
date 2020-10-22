@@ -344,12 +344,12 @@ export class PeriodsComponent implements OnInit {
                               }
                             })
                           }
+                          pay.credits = (totalCred).toFixed(2);
+                          pay.debits = (totalDeb).toFixed(2);
+                          pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
+                          pay.employee_name = emp[0].name;
+                          pay.total = (totalCred - totalDeb).toFixed(2);
                         }
-                        pay.credits = (totalCred).toFixed(2);
-                        pay.debits = (totalDeb).toFixed(2);
-                        pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
-                        pay.employee_name = emp[0].name;
-                        pay.total = (totalCred - totalDeb).toFixed(2);
                       })
                     })
                   })

@@ -14,7 +14,7 @@ $status = ($request->status);
 $return = [];
 $i = 0;
 
-$sql = "SELECT * FROM `payments` WHERE `id_period` = $idperiods";
+$sql = "SELECT * FROM `payments` LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_period` = $idperiods";
 
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){
@@ -24,6 +24,7 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['id_period'] = $res['id_period'];
         $return[$i]['credits'] = $res['credits'];
         $return[$i]['debits'] = $res['debits'];
+        $return[$i]['employee_name'] = $res['first_name'] . " " . $res['second_name'] . " " . $res['first_lastname'] . " " . $res['second_lastname'];
         $return[$i]['date'] = $res['date'];
         $i++;
     }

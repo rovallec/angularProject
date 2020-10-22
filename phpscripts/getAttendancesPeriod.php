@@ -10,6 +10,7 @@ $id = ($request->id);
 $date_1 = ($request->date_1);
 $date_2 = ($request->date_2);
 $return = [];
+$i = 0;
 
 $sql = "SELECT * FROM attendences where id_employee = $id AND (`date` BETWEEN '$date_1' AND '$date_2');";
 
