@@ -12,7 +12,7 @@ $date_2 = ($request->date_2);
 $return = [];
 $i = 0;
 
-$sql = "SELECT * FROM attendences where id_employee = $id AND (`date` BETWEEN '$date_1' AND '$date_2');";
+$sql = "SELECT * FROM attendences where id_employee = $id AND (`date` BETWEEN '$date_1' AND '$date_2') ORDER BY `date` ASC;";
 
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){

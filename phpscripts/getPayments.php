@@ -14,7 +14,7 @@ $status = ($request->status);
 $return = [];
 $i = 0;
 
-$sql = "SELECT * FROM `payments` LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_period` = $idperiods";
+$sql = "SELECT * FROM `payments` LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_period` = $idperiods AND active = 1;";
 
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){

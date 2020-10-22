@@ -157,7 +157,6 @@ export class PeriodsComponent implements OnInit {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                         if (this.period.status == '1') {
                           if (att.length != 0) {
-                            console.log("hello");
                             att.forEach(attendance => {
                               activeDp = false;
                               activeVac = false;
@@ -330,8 +329,8 @@ export class PeriodsComponent implements OnInit {
                                     new_debit2.idpayments = pay.idpayments;
                                     new_debit2.type = "Auto Ajuste IGSS";
 
-                                    this.credits.push(new_debit2);
-                                    this.debits.push(new_credit2);
+                                    this.credits.push(new_credit2);
+                                    this.debits.push(new_debit2);
                                     totalCred = totalCred + parseFloat(new_credit2.amount);
                                     totalDeb = totalDeb + parseFloat(new_debit2.amount);
                                   }
@@ -342,6 +341,11 @@ export class PeriodsComponent implements OnInit {
                                 pay.employee_name = emp[0].name;
                                 pay.total = (totalCred - totalDeb).toFixed(2);
                             })
+                          }else{
+                            pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();;
+                            pay.credits = "0.00";
+                            pay.debits = "0.00";
+                            pay.total = "0.00";
                           }
                         }
                       })
