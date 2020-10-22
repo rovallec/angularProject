@@ -397,8 +397,13 @@ export class PeriodsComponent implements OnInit {
   completePeriod() {
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
-    this.apiService.closePeriod(this.period).subscribe((str: string) => { })
-    this.closePeriod();
+    this.apiService.closePeriod(this.period).subscribe((str: string) => { 
+      this.payments.forEach(pay=>{
+        this.apiService.insertPayment(pay).subscribe((str:string)=>{})
+      })
+        this.start();
+        this.closePeriod();
+    });
   }
 
   setPayTime(id_employee: string, id_profile: string) {
@@ -617,8 +622,8 @@ export class PeriodsComponent implements OnInit {
 
                             new_debit2.amount = ((8 * base_hour) * 0.0483).toFixed(2);
                             new_debit2.type = "Auto Ajuste IGSS";
-                            this.credits.push(new_debit2);
-                            this.debits.push(new_credit2);
+                            this.credits.push(new_credit2);
+                            this.debits.push(new_debit2);
                             totalCred = totalCred + parseFloat(new_credit2.amount);
                             totalDeb = totalDeb + parseFloat(new_debit2.amount);
                           }

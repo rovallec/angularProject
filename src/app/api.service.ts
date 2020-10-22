@@ -486,5 +486,9 @@ getDPAtt(any:any){
 getAttPeriod(any:any){
   return this.httpClient.post<attendences[]>(`${this.PHP_API_SERVER}/phpscripts/getAttendancesPeriod.php`, any);
 }
+
+insertPayment(payments:payments){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPayments.php`, payments);
+}
   constructor(private httpClient:HttpClient) { }
 }
