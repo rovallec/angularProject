@@ -347,6 +347,10 @@ export class PeriodsComponent implements OnInit {
                             pay.debits = "0.00";
                             pay.total = "0.00";
                           }
+                        }else{
+                          payments.forEach((py)=>{
+                            py.total = (parseFloat(py.credits) - parseFloat(py.debits)).toFixed(2);
+                          })
                         }
                       })
                     })
@@ -429,7 +433,11 @@ export class PeriodsComponent implements OnInit {
               this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                 this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                   this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-                    this.vacations = vac;
+                    vac.forEach(vacc=>{
+                      if(vacc.status === 'PENDING'){
+                        this.vacations.push(vacc);
+                      }
+                    })
                     this.leaves = leave;
                     non_show1 = false;
                     non_show2 = false;
@@ -542,47 +550,48 @@ export class PeriodsComponent implements OnInit {
                       });
 
                       this.attendances = att;
-                      let base_hour: number = parseFloat(emp[0].base_payment) / 240;
-                      let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
-                      let base_credit: credits = new credits;
-                      let productivity_credit: credits = new credits;
-                      let decreto_credit: credits = new credits;
-                      let ot_credit: credits = new credits;
-                      let igss_debit: debits = new debits;
-
-                      base_credit.type = "Salario Base";
-                      productivity_credit.type = "Bonificacion Productividad";
-                      decreto_credit.type = "Bonificacion Decreto";
-                      igss_debit.type = "IGSS";
-
-                      if (discounted < 0) {
-                        base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
-                        productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
-                        ot_credit.amount = '0';
-                      } else {
-                        productivity_credit.amount = (120 * productivity_hour).toFixed(2);
-                        base_credit.amount = (120 * base_hour).toFixed(2);
-                        productivity_credit.amount = (120 * productivity_hour).toFixed(2);
-                        ot_credit.type = "Horas Extra Laboradas: " + discounted;
-                        if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12') {
-                          ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
+                      if(this.period.status == '1'){
+                        let base_hour: number = parseFloat(emp[0].base_payment) / 240;
+                        let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
+                        let base_credit: credits = new credits;
+                        let productivity_credit: credits = new credits;
+                        let decreto_credit: credits = new credits;
+                        let ot_credit: credits = new credits;
+                        let igss_debit: debits = new debits;
+  
+                        base_credit.type = "Salario Base";
+                        productivity_credit.type = "Bonificacion Productividad";
+                        decreto_credit.type = "Bonificacion Decreto";
+                        igss_debit.type = "IGSS";
+  
+                        if (discounted < 0) {
+                          base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
+                          productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
+                          ot_credit.amount = '0';
                         } else {
-                          ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
+                          productivity_credit.amount = (120 * productivity_hour).toFixed(2);
+                          base_credit.amount = (120 * base_hour).toFixed(2);
+                          productivity_credit.amount = (120 * productivity_hour).toFixed(2);
+                          ot_credit.type = "Horas Extra Laboradas: " + discounted;
+                          if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12') {
+                            ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
+                          } else {
+                            ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
+                          }
+                          if (base_credit.amount != 'NaN') {
+                            this.credits.push(ot_credit);
+                            this.global_credits.push(ot_credit);
+                          }
                         }
+                        decreto_credit.amount = '125.00';
+                        igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
+  
                         if (base_credit.amount != 'NaN') {
-                          this.credits.push(ot_credit);
-                          this.global_credits.push(ot_credit);
+                          this.credits.push(base_credit);
+                          this.credits.push(productivity_credit);
+                          this.credits.push(decreto_credit);
+                          this.debits.push(igss_debit);
                         }
-                      }
-                      decreto_credit.amount = '125.00';
-                      igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
-
-                      if (base_credit.amount != 'NaN') {
-                        this.credits.push(base_credit);
-                        this.credits.push(productivity_credit);
-                        this.credits.push(decreto_credit);
-                        this.debits.push(igss_debit);
-                      }
 
                       db.forEach(debit => {
                         totalDeb = totalDeb + parseFloat(debit.amount);
@@ -628,7 +637,6 @@ export class PeriodsComponent implements OnInit {
                             totalDeb = totalDeb + parseFloat(new_debit2.amount);
                           }
                         })
-
                         this.totalCredits = parseFloat((totalCred).toFixed(2));
                         this.totalDebits = parseFloat((totalDeb).toFixed(2));
                         this.absence_fixed = (this.absence).toFixed(2);
@@ -637,6 +645,23 @@ export class PeriodsComponent implements OnInit {
                         this.diff = parseFloat((this.roster - this.attended).toFixed(2));
                       })
                     }
+                  }else{
+                    db.forEach(debit => {
+                      totalDeb = totalDeb + parseFloat(debit.amount);
+                      this.debits.push(debit);
+                    })
+                    cd.forEach(credit => {
+                      totalCred = totalCred + parseFloat(credit.amount)
+                      this.credits.push(credit);
+                    });
+
+                    this.totalCredits = parseFloat((totalCred).toFixed(2));
+                    this.totalDebits = parseFloat((totalDeb).toFixed(2));
+                    this.absence_fixed = (this.absence).toFixed(2);
+                    this.roster = parseFloat((this.roster).toFixed(2));
+                    this.attended = parseFloat((this.attended).toFixed(2));
+                    this.diff = parseFloat((this.roster - this.attended).toFixed(2));
+                  }
                     this.selectedEmployee = true;
                   })
                 })
