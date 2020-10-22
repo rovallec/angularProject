@@ -151,7 +151,7 @@ export class PeriodsComponent implements OnInit {
           this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
             this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
               this.apiService.getDPAtt({ id: emp[0].id_profile, date_1: this.period.start, date_2: this.period.end }).subscribe((dp: disciplinary_processes[]) => {
-                this.apiService.getAttPeriod({ id: emp[0].id_profile, date_1: this.period.start, date_2: this.period.end }).subscribe((att: attendences[]) => {
+                this.apiService.getAttPeriod({ id: emp[0].idemployees, date_1: this.period.start, date_2: this.period.end }).subscribe((att: attendences[]) => {
                   this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                     this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
@@ -422,7 +422,7 @@ export class PeriodsComponent implements OnInit {
       this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
         this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
           this.apiService.getDPAtt({ id: emp[0].id_profile, date_1: this.period.start, date_2: this.period.end }).subscribe((dp: disciplinary_processes[]) => {
-            this.apiService.getAttPeriod({ id: emp[0].id_profile, date_1: this.period.start, date_2: this.period.end }).subscribe((att: attendences[]) => {
+            this.apiService.getAttPeriod({ id: emp[0].idemployees, date_1: this.period.start, date_2: this.period.end }).subscribe((att: attendences[]) => {
               this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                 this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                   this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
