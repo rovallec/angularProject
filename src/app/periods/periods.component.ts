@@ -152,7 +152,7 @@ export class PeriodsComponent implements OnInit {
                   this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                     this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
-                        if(!isNullOrUndefined(att[0].id_employee)){
+                        if(parseFloat(att[0].id_employee) > 0){
                           if (this.period.status == '1') {
                             att.forEach(attendance => {
                               activeDp = false;
