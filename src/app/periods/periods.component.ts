@@ -369,6 +369,7 @@ export class PeriodsComponent implements OnInit {
 
                                   judicials.forEach(judicial => {
                                     let partial_debit: debits = new debits;
+                                    console.log((parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current))).toFixed(2));
                                     if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
                                       partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
                                       judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
@@ -696,7 +697,7 @@ export class PeriodsComponent implements OnInit {
                                 if (service.max = '0') {
                                   partial_service.amount = service.amount;
                                 } else {
-                                  if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) < 0) {
+                                  if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) > 0) {
                                     partial_service.amount = service.amount;
                                     service.current = (parseFloat(service.current) + parseFloat(service.amount)).toFixed(2);
                                   } else {
@@ -712,7 +713,8 @@ export class PeriodsComponent implements OnInit {
 
                               judicials.forEach(judicial => {
                                 let partial_debit: debits = new debits;
-                                if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) < 0) {
+                                console.log((parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current))).toFixed(2));
+                                if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
                                   partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred-totalDeb)).toFixed(2);
                                   judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
                                 } else {
