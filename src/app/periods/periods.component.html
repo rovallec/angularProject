@@ -28,9 +28,9 @@
             <i class="fas fa-minus-circle" style="margin-left:5px" (click)="cancelSearch()"  *ngIf="!showPaymentes"></i>
             <i class="fas fa-times-circle" style="margin-left:5px" (click)="closeClose()" *ngIf="showPaymentes && searchClosed"></i>
             <i class="fas fa-globe-americas"  style="margin-left:5px" (click)="showAll()" *ngIf="!showPaymentes"></i>
-            <i class="fas fa-check-circle" style="margin-left:5px" (click)="completePeriod()" *ngIf="showPaymentes && !completed && periods.status == '1'"></i>
+            <i class="fas fa-check-circle" style="margin-left:5px" (click)="completePeriod()" *ngIf="showPaymentes && !completed && period.status == '1'"></i>
             <i class="fas fa-store-slash" style="margin-left:5px" (click)="closePeriod()" *ngIf="!showPaymentes"></i>
-            <i class="fas fa-arrow-circle-up" style="margin-left:5px" (click)="activeImport()" *ngIf="showPaymentes && periods.status == '1'"></i>
+            <i class="fas fa-arrow-circle-up" style="margin-left:5px" (click)="activeImport()" *ngIf="showPaymentes && period.status == '1'"></i>
         </div>
     </div>
 
