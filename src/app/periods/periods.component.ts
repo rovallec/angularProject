@@ -136,7 +136,14 @@ export class PeriodsComponent implements OnInit {
 
     let end: number = 0;
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
-      if(payments.length = 0){
+      console.log(payments.length);
+      if(payments.length === 0){
+        this.working = false;
+      }
+      if(payments.length == 0){
+        this.working = false;
+      }
+      if(payments.length < 1){
         this.working = false;
       }
       payments.forEach(pay => {
