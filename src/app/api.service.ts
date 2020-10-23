@@ -498,5 +498,7 @@ getJudicialDiscounts(any:any){
 getServicesDiscounts(any:any){
   return this.httpClient.post<services[]>(`${this.PHP_API_SERVER}/phpscripts/getServicesDiscounts.php`, any);
 }
+
+
   constructor(private httpClient:HttpClient) { }
 }

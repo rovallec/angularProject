@@ -1,8 +1,10 @@
 <div style="margin-top:100px">
     <div class="form-row col-md-12" *ngIf="working">
+        <div class="form-group col-md-2"></div>
         <div class="form-group col-md-8">
-            <progress id="file" [value]="progress" [max]="payments.length">{{progress}}%</progress>
+            <progress id="file" [value]="progress" [max]="payments.length" style="width:100%;">{{progress}}%</progress>
         </div>
+        <div class="form-group col-md-2"></div>
     </div>
     <div class="form-row col-md-12" *ngIf="!importActive && !working">
         <div class="form-group col-md-3"></div>

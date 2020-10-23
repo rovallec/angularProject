@@ -12,6 +12,9 @@ import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
 import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, payments, periods, services, vacations } from '../process_templates';
 import * as XLSX from 'xlsx';
+import { Observable, of } from 'rxjs'; 
+import { promise } from 'protractor';
+import { resolve } from 'url';
 
 @Component({
   selector: 'app-periods',
@@ -132,7 +135,6 @@ export class PeriodsComponent implements OnInit {
     this.debits = [];
 
     let end: number = 0;
-
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
 
       payments.forEach(pay => {
@@ -416,17 +418,31 @@ export class PeriodsComponent implements OnInit {
             })
           })
         })
-        this.progress = this.progress + 1;
-        if(payments.indexOf(pay) == payments.length){
-          this.working = false;
-        }
       })
 
+
+      this.getProgress().subscribe((str:string)=>{
+        this.working = false;
+      })
 
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
     })
+  }
+
+  getProgress():Observable<string>{
+    let str:string = "done";
+    let work:boolean = false;
+    while(work){
+      if(this.payments[this.progress].date.length > 0){
+        this.progress = this.progress + 1;
+        if(this.progress = this.payments.length){
+          work = false;
+        }
+      }
+    }
+    return of(str);
   }
 
   searchCloseEmployee() {
