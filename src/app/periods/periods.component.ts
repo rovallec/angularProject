@@ -422,20 +422,18 @@ export class PeriodsComponent implements OnInit {
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
-      this.getProgress().subscribe((str:string)=>{
-        this.working = false;
-      })
+      this.getProgress().subscribe((str:string)=>{});
     })
   }
 
   getProgress():Observable<string>{
     let str:string = "done";
     let work:boolean = false;
-    while(work){
+    while(this.working){
       if(this.payments[this.progress].date.length > 0){
         this.progress = this.progress + 1;
         if(this.progress = this.payments.length){
-          work = false;
+          this.working = false;
         }
       }
     }
