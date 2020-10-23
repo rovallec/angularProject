@@ -48,6 +48,7 @@ export class PeriodsComponent implements OnInit {
   totalDebits: number = 0;
   totalCredits: number = 0;
   seventh: number = 0;
+  progress:number = 0;
   filter: string = 'name';
   absence_fixed: string = null;
   value: string = null;
@@ -56,6 +57,7 @@ export class PeriodsComponent implements OnInit {
   showPaymentes: boolean = false;
   searchClosed: boolean = false;
   importActive: boolean = false;
+  working:boolean = false;
   count_payments: number = 0;
   importType: string = null;
   importString: string = null;
@@ -117,6 +119,7 @@ export class PeriodsComponent implements OnInit {
 
 
   closePeriod() {
+    this.working = true;
     let pushCredits: credits[] = [];
     let pusDebits: debits[] = [];
 
@@ -419,6 +422,7 @@ export class PeriodsComponent implements OnInit {
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
+      this.working = false;
     })
   }
 
@@ -605,7 +609,6 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
                           });
-
                           this.attendances = att;
                           if (this.period.status == '1') {
                             let base_hour: number = parseFloat(emp[0].base_payment) / 240;
