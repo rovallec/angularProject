@@ -12,7 +12,7 @@ import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
 import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, payments, periods, services, vacations } from '../process_templates';
 import * as XLSX from 'xlsx';
-import { Observable, of } from 'rxjs'; 
+import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
 import { resolve } from 'url';
 
@@ -51,7 +51,7 @@ export class PeriodsComponent implements OnInit {
   totalDebits: number = 0;
   totalCredits: number = 0;
   seventh: number = 0;
-  progress:number = 0;
+  progress: number = 0;
   filter: string = 'name';
   absence_fixed: string = null;
   value: string = null;
@@ -60,7 +60,7 @@ export class PeriodsComponent implements OnInit {
   showPaymentes: boolean = false;
   searchClosed: boolean = false;
   importActive: boolean = false;
-  working:boolean = false;
+  working: boolean = false;
   count_payments: number = 0;
   importType: string = null;
   importString: string = null;
@@ -122,7 +122,6 @@ export class PeriodsComponent implements OnInit {
 
 
   closePeriod() {
-    this.working = true;
     let pushCredits: credits[] = [];
     let pusDebits: debits[] = [];
 
@@ -167,6 +166,11 @@ export class PeriodsComponent implements OnInit {
                         this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                           this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
                             if (this.period.status == '1') {
+                              this.working = true;
+                              this.progress = this.progress + 1;
+                              if (this.progress == payments.length) {
+                                this.working = false;
+                              }
                               if (att.length != 0) {
                                 att.forEach(attendance => {
                                   activeDp = false;
@@ -349,7 +353,7 @@ export class PeriodsComponent implements OnInit {
                                     }
                                   })
 
-                                  
+
                                   services.forEach(service => {
                                     let partial_service: debits = new debits;
                                     if (service.max = '0') {
@@ -407,10 +411,6 @@ export class PeriodsComponent implements OnInit {
                               payments.forEach((py) => {
                                 py.total = (parseFloat(py.credits) - parseFloat(py.debits)).toFixed(2);
                               })
-                            }
-                            this.progress = this.progress + 1;
-                            if(this.progress == payments.length){
-                              this.working = false;
                             }
                           })
                         })
@@ -723,7 +723,7 @@ export class PeriodsComponent implements OnInit {
                                 let partial_debit: debits = new debits;
                                 console.log((parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current))).toFixed(2));
                                 if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
-                                  partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred-totalDeb)).toFixed(2);
+                                  partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
                                   judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
                                 } else {
                                   partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
