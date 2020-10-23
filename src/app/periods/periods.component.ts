@@ -136,7 +136,6 @@ export class PeriodsComponent implements OnInit {
 
     let end: number = 0;
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
-      console.log(payments.length);
       if(payments.length === 0){
         this.working = false;
       }
@@ -383,7 +382,6 @@ export class PeriodsComponent implements OnInit {
 
                                   judicials.forEach(judicial => {
                                     let partial_debit: debits = new debits;
-                                    console.log((parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current))).toFixed(2));
                                     if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
                                       partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
                                       judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
@@ -730,7 +728,6 @@ export class PeriodsComponent implements OnInit {
 
                               judicials.forEach(judicial => {
                                 let partial_debit: debits = new debits;
-                                console.log((parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current))).toFixed(2));
                                 if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
                                   partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
                                   judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
@@ -830,7 +827,6 @@ export class PeriodsComponent implements OnInit {
                       cred.idpayments = pay.idpayments;
                       this.credits.push(cred);
                     } else {
-                      console.log(cred);
                       cred.iddebits = emp[0].name;
                       cred.amount = (parseFloat(element['Amount'])).toFixed(2);
                       cred.type = this.importType + " " + this.importString;
