@@ -256,7 +256,7 @@ export class PeriodsComponent implements OnInit {
                                 productivity_credit.type = "Bonificacion Productividad";
                                 decreto_credit.type = "Bonificacion Decreto";
 
-                                if (discounted < 0) {
+                                if (discounted <= 0) {
                                   base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
                                   productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
@@ -414,6 +414,8 @@ export class PeriodsComponent implements OnInit {
           })
         })
       })
+
+
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
@@ -619,7 +621,7 @@ export class PeriodsComponent implements OnInit {
                             decreto_credit.type = "Bonificacion Decreto";
                             igss_debit.type = "IGSS";
 
-                            if (discounted < 0) {
+                            if (discounted <= 0) {
                               base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
                               productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                               ot_credit.amount = '0';
