@@ -685,3 +685,25 @@ export class payments{
         this.total = null;
     }
 }
+
+export class services{
+    idservices:string;
+    id_process:string;
+    id_employee:string;
+    name:string;
+    amount:string;
+    max:string;
+    frecuency:string;
+    status:string;
+    current:string;
+    constructor(){
+        this.idservices = null;
+        this.id_process = null;
+        this.id_employee = null;
+        this.name = null;
+        this.amount = null;
+        this.max = null;
+        this.frecuency = null;
+        this.status = null;
+    }
+}

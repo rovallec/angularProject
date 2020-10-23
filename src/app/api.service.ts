@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { profiles } from './profiles';
 import { process } from './process';
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services } from './process_templates';
 
 import { Observable } from 'rxjs'; 
 import { users } from './users';
@@ -493,6 +493,10 @@ insertPayment(payments:payments){
 
 getJudicialDiscounts(any:any){
   return this.httpClient.post<judicials[]>(`${this.PHP_API_SERVER}/phpscripts/getJudicialDiscounts.php`, any);
+}
+
+getServicesDiscounts(any:any){
+  return this.httpClient.post<services[]>(`${this.PHP_API_SERVER}/phpscripts/getServicesDiscounts.php`, any);
 }
   constructor(private httpClient:HttpClient) { }
 }
