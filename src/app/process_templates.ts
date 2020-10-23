@@ -592,6 +592,7 @@ export class judicials{
     idjudicials:string;
     id_process:string;
     amount:string;
+    current:string;
     max:string;
     constructor(){
         this.idjudicials = null;

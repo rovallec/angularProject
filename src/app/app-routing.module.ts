@@ -19,6 +19,7 @@ import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.componen
 import { SupExceptionsComponent } from './sup-exceptions/sup-exceptions.component';
 import { periods } from './process_templates';
 import { PeriodsComponent } from './periods/periods.component';
+import { PyhomeComponent } from './pyhome/pyhome.component';
 
 const routes:Routes = [
   {
@@ -97,6 +98,11 @@ const routes:Routes = [
   {
     path:'supExceptions',
     component: SupExceptionsComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'pyhome',
+    component: PyhomeComponent,
     canActivate:[AuthGuard]
   },
   {

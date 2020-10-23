@@ -490,5 +490,9 @@ getAttPeriod(any:any){
 insertPayment(payments:payments){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPayments.php`, payments);
 }
+
+getJudicialDiscounts(any:any){
+  return this.httpClient.post<judicials[]>(`${this.PHP_API_SERVER}/phpscripts/getJudicialDiscounts.php`, any);
+}
   constructor(private httpClient:HttpClient) { }
 }

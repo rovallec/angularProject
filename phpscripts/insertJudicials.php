@@ -11,7 +11,7 @@
     $amount = ($request->amount);
     $max = ($request->max);
     
-    $sql = "INSERT INTO `judicials` (`idjudicials`, `id_process`, `amount`, `max`) VALUES (null, '$id_process', '$amount', '$max');";
+    $sql = "INSERT INTO `judicials` (`idjudicials`, `id_process`, `amount`, `current`, `max`) VALUES (null, '$id_process', '$amount', '$max', 0);";
 
     if(mysqli_query($con, $sql)){
             http_response_code(200);

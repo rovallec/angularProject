@@ -24,7 +24,8 @@ import { AttritionReportComponent } from './attrition-report/attrition-report.co
 import { ActiveAnalysisComponent } from './active-analysis/active-analysis.component';
 import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.component';
 import { SupExceptionsComponent } from './sup-exceptions/sup-exceptions.component';
-import { PeriodsComponent } from './periods/periods.component'
+import { PeriodsComponent } from './periods/periods.component';
+import { PyhomeComponent } from './pyhome/pyhome.component'
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { PeriodsComponent } from './periods/periods.component'
     ActiveAnalysisComponent,
     DpMaintenanceComponent,
     SupExceptionsComponent,
-    PeriodsComponent
+    PeriodsComponent,
+    PyhomeComponent
   ],
   imports: [
     BrowserModule,
