@@ -665,22 +665,6 @@ export class PeriodsComponent implements OnInit {
                             })
 
 
-                            judicials.forEach(judicial => {
-                              let partial_debit: debits = new debits;
-                              if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
-                                partial_debit.amount = (parseFloat(judicial.max) - ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
-                                judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
-                              } else {
-                                partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
-                                judicial.current = judicial.max;
-                              }
-                              partial_debit.type = "Acuerdo Judicial";
-                              this.credits.push(partial_debit);
-                              this.global_judicials.push(judicial);
-                              totalDeb = totalDeb + parseFloat(partial_debit.amount);
-                            })
-
-
                             this.totalCredits = parseFloat((totalCred).toFixed(2));
                             this.totalDebits = parseFloat((totalDeb).toFixed(2));
                             this.absence_fixed = (this.absence).toFixed(2);

@@ -21,11 +21,11 @@
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link" routerLink="/hrhome" style="color: white" [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
       </li>
       <li class="nav-item dropdown" *ngIf="getAuth()">
-        <a [ngClass]="{'act':selectedOption=='IMP'}" *ngIf="getSaved().department == '4'" style="color: white;cursor:pointer" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a [ngClass]="{'act':selectedOption=='IMP'}" *ngIf="getSaved().department == '28'" style="color: white;cursor:pointer" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           IMPORT
         </a>
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link" routerLink="/hrdaily" style="color: white"  [ngClass]="{'act':selectedOption=='HRDAILY'}" (click)="SetSel('HRDAILY')">EXCEPTIONS</a>
-        <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/realtime" style="color: white; cursor:pointer"  [ngClass]="{'act':selectedOption=='REAL'}" (click)="SetSel('REAL')">REAL TIME</a>
+        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/realtime" style="color: white; cursor:pointer"  [ngClass]="{'act':selectedOption=='REAL'}" (click)="SetSel('REAL')">REAL TIME</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/attImport" (click)="SetSel('IMP')">Attendance</a>
           <a class="dropdown-item" routerLink="/supExceptions" (click)="SetSel('IMP')">Sup. Exceptions</a>
