@@ -344,23 +344,7 @@ export class PeriodsComponent implements OnInit {
                                     }
                                   })
 
-                                  judicials.forEach(judicial => {
-                                    let partial_debit: debits = new debits;
-                                    if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
-                                      partial_debit.amount = (parseFloat(judicial.max) - ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
-                                      judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
-                                    } else {
-                                      partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
-                                      judicial.current = judicial.max;
-                                    }
-                                    partial_debit.idpayments = pay.idpayments;
-                                    partial_debit.type = "Acuerdo Judicial";
-                                    this.global_debits.push(partial_debit);
-                                    this.debits.push(partial_debit);
-                                    this.global_judicials.push(judicial);
-                                    totalDeb = totalDeb + parseFloat(partial_debit.amount);
-                                  })
-
+                                  
                                   services.forEach(service => {
                                     let partial_service: debits = new debits;
                                     if (service.max = '0') {
@@ -381,6 +365,23 @@ export class PeriodsComponent implements OnInit {
                                     this.global_debits.push(partial_service);
                                     this.global_services.push(service);
                                     totalDeb = totalDeb + parseFloat(partial_service.amount);
+                                  })
+
+                                  judicials.forEach(judicial => {
+                                    let partial_debit: debits = new debits;
+                                    if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
+                                      partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
+                                      judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
+                                    } else {
+                                      partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
+                                      judicial.current = judicial.max;
+                                    }
+                                    partial_debit.idpayments = pay.idpayments;
+                                    partial_debit.type = "Acuerdo Judicial";
+                                    this.global_debits.push(partial_debit);
+                                    this.debits.push(partial_debit);
+                                    this.global_judicials.push(judicial);
+                                    totalDeb = totalDeb + parseFloat(partial_debit.amount);
                                   })
 
 
@@ -690,21 +691,6 @@ export class PeriodsComponent implements OnInit {
                                 }
                               })
 
-                              judicials.forEach(judicial => {
-                                let partial_debit: debits = new debits;
-                                if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) < 0) {
-                                  partial_debit.amount = (parseFloat(judicial.max) - ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
-                                  judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
-                                } else {
-                                  partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
-                                  judicial.current = judicial.max;
-                                }
-
-                                partial_debit.type = "Acuerdo Judicial";
-                                this.debits.push(partial_debit);
-                                totalDeb = totalDeb + parseFloat(partial_debit.amount);
-                              });
-
                               services.forEach(service => {
                                 let partial_service: debits = new debits;
                                 if (service.max = '0') {
@@ -723,6 +709,22 @@ export class PeriodsComponent implements OnInit {
                                 this.credits.push(partial_service);
                                 totalDeb = totalDeb + parseFloat(partial_service.amount);
                               })
+
+                              judicials.forEach(judicial => {
+                                let partial_debit: debits = new debits;
+                                if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) < 0) {
+                                  partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred-totalDeb)).toFixed(2);
+                                  judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
+                                } else {
+                                  partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
+                                  judicial.current = judicial.max;
+                                }
+
+                                partial_debit.type = "Acuerdo Judicial";
+                                this.debits.push(partial_debit);
+                                totalDeb = totalDeb + parseFloat(partial_debit.amount);
+                              });
+
 
 
                               this.totalCredits = parseFloat((totalCred).toFixed(2));
