@@ -416,13 +416,16 @@ export class PeriodsComponent implements OnInit {
             })
           })
         })
+        this.progress = this.progress + 1;
+        if(payments.indexOf(pay) == payments.length){
+          this.working = false;
+        }
       })
 
 
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
-      this.working = false;
     })
   }
 

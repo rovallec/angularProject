@@ -1,5 +1,10 @@
 <div style="margin-top:100px">
-    <div class="form-row col-md-12" *ngIf="!importActive">
+    <div class="form-row col-md-12" *ngIf="working">
+        <div class="form-group col-md-8">
+            <progress id="file" [value]="progress" [max]="payments.length">{{progress}}%</progress>
+        </div>
+    </div>
+    <div class="form-row col-md-12" *ngIf="!importActive && !working">
         <div class="form-group col-md-3"></div>
         <div class="form-group col-md-2">
             <select class="form-control" [(ngModel)]="filter">
@@ -18,19 +23,22 @@
                 <option>CREDIT</option>
             </select>
         </div>
-        <div class="form-group col-md-5" *ngIf="working">
-            <progress id="file" [value]="progress" [max]="attendances.length">{{progress}}%</progress>
-        </div>
-        <div class="form-group col-md-5" *ngIf="!working">  
-            <i class="fas fa-search" aria-hidden="true" style="margin-left:5px" (click)="searchCloseEmployee()" *ngIf="showPaymentes"></i>
-            <i class="fas fa-search" aria-hidden="true" style="margin-left:5px" (click)="searchEmployee()" *ngIf="!showPaymentes"></i>
-            <i class="fas fa-minus-circle" style="margin-left:5px" (click)="cancelCloseSearch()"  *ngIf="showPaymentes && !searchClosed"></i>
-            <i class="fas fa-minus-circle" style="margin-left:5px" (click)="cancelSearch()"  *ngIf="!showPaymentes"></i>
-            <i class="fas fa-times-circle" style="margin-left:5px" (click)="closeClose()" *ngIf="showPaymentes && searchClosed"></i>
-            <i class="fas fa-globe-americas"  style="margin-left:5px" (click)="showAll()" *ngIf="!showPaymentes"></i>
-            <i class="fas fa-check-circle" style="margin-left:5px" (click)="completePeriod()" *ngIf="showPaymentes && !completed && period.status == '1'"></i>
+        <div class="form-group col-md-5">
+            <i class="fas fa-search" aria-hidden="true" style="margin-left:5px" (click)="searchCloseEmployee()"
+                *ngIf="showPaymentes"></i>
+            <i class="fas fa-search" aria-hidden="true" style="margin-left:5px" (click)="searchEmployee()"
+                *ngIf="!showPaymentes"></i>
+            <i class="fas fa-minus-circle" style="margin-left:5px" (click)="cancelCloseSearch()"
+                *ngIf="showPaymentes && !searchClosed"></i>
+            <i class="fas fa-minus-circle" style="margin-left:5px" (click)="cancelSearch()" *ngIf="!showPaymentes"></i>
+            <i class="fas fa-times-circle" style="margin-left:5px" (click)="closeClose()"
+                *ngIf="showPaymentes && searchClosed"></i>
+            <i class="fas fa-globe-americas" style="margin-left:5px" (click)="showAll()" *ngIf="!showPaymentes"></i>
+            <i class="fas fa-check-circle" style="margin-left:5px" (click)="completePeriod()"
+                *ngIf="showPaymentes && !completed && period.status == '1'"></i>
             <i class="fas fa-store-slash" style="margin-left:5px" (click)="closePeriod()" *ngIf="!showPaymentes"></i>
-            <i class="fas fa-arrow-circle-up" style="margin-left:5px" (click)="activeImport()" *ngIf="showPaymentes && period.status == '1'"></i>
+            <i class="fas fa-arrow-circle-up" style="margin-left:5px" (click)="activeImport()"
+                *ngIf="showPaymentes && period.status == '1'"></i>
         </div>
     </div>
 
@@ -110,7 +118,8 @@
                     <th>AMOUNT</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let deduction of deductions" (click)="setPayTime(deduction.idemployees, deduction.idprofiles)">
+                    <tr *ngFor="let deduction of deductions"
+                        (click)="setPayTime(deduction.idemployees, deduction.idprofiles)">
                         <td>{{deduction.iddeductions}}</td>
                         <td>{{deduction.name}}</td>
                         <td>{{deduction.type}}</td>
