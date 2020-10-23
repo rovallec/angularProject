@@ -122,6 +122,7 @@ export class PeriodsComponent implements OnInit {
 
 
   closePeriod() {
+    this.working = true;
     let pushCredits: credits[] = [];
     let pusDebits: debits[] = [];
 
@@ -135,7 +136,9 @@ export class PeriodsComponent implements OnInit {
 
     let end: number = 0;
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
-
+      if(payments.length = 0){
+        this.working = false;
+      }
       payments.forEach(pay => {
         let totalCred: number = 0;
         let totalDeb: number = 0;
@@ -166,11 +169,6 @@ export class PeriodsComponent implements OnInit {
                         this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                           this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
                             if (this.period.status == '1') {
-                              this.working = true;
-                              this.progress = this.progress + 1;
-                              if (this.progress == payments.length) {
-                                this.working = false;
-                              }
                               if (att.length != 0) {
                                 att.forEach(attendance => {
                                   activeDp = false;
@@ -411,6 +409,10 @@ export class PeriodsComponent implements OnInit {
                               payments.forEach((py) => {
                                 py.total = (parseFloat(py.credits) - parseFloat(py.debits)).toFixed(2);
                               })
+                            }
+                            this.progress = this.progress + 1;
+                            if (this.progress == payments.length) {
+                              this.working = false;
                             }
                           })
                         })
