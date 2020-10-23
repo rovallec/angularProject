@@ -408,6 +408,10 @@ export class PeriodsComponent implements OnInit {
                                 py.total = (parseFloat(py.credits) - parseFloat(py.debits)).toFixed(2);
                               })
                             }
+                            this.progress = this.progress + 1;
+                            if(this.progress == payments.length){
+                              this.working = false;
+                            }
                           })
                         })
                       })
@@ -422,23 +426,7 @@ export class PeriodsComponent implements OnInit {
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
-      this.getProgress().subscribe((str:string)=>{});
     })
-  }
-
-  getProgress():Observable<string>{
-    let str:string = "done";
-    let work:boolean = false;
-    while(this.working){
-      if(this.payments[this.progress].date.length > 0){
-        this.progress = this.progress + 1;
-        console.log(this.progress);
-        if(this.progress = this.payments.length){
-          this.working = false;
-        }
-      }
-    }
-    return of(str);
   }
 
   searchCloseEmployee() {
