@@ -419,15 +419,12 @@ export class PeriodsComponent implements OnInit {
           })
         })
       })
-
-
-      this.getProgress().subscribe((str:string)=>{
-        this.working = false;
-      })
-
       this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
+      this.getProgress().subscribe((str:string)=>{
+        this.working = false;
+      })
     })
   }
 
