@@ -432,6 +432,7 @@ export class PeriodsComponent implements OnInit {
     while(this.working){
       if(this.payments[this.progress].date.length > 0){
         this.progress = this.progress + 1;
+        console.log(this.progress);
         if(this.progress = this.payments.length){
           this.working = false;
         }
