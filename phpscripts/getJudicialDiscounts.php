@@ -7,16 +7,17 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $id = ($request->id);
 $user = [];
+$i = 0;
 
 $sql = "SELECT * FROM `judicials` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `judicials`.`id_process` WHERE `max` > `current` AND `id_employee` = $id;";
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
-        $user['idjudicials'] = $row['idjudicials'];
-        $user['id_process'] = $row['id_process'];
-        $user['amount'] = $row['amount'];
-        $user['current'] = $row['current'];
-        $user['max'] = $row['max'];
+        $user[$i]['idjudicials'] = $row['idjudicials'];
+        $user[$i]['id_process'] = $row['id_process'];
+        $user[$i]['amount'] = $row['amount'];
+        $user[$i]['current'] = $row['current'];
+        $user[$i]['max'] = $row['max'];
     };
     echo json_encode($user);
 }else{
