@@ -514,6 +514,11 @@ export class PeriodsComponent implements OnInit {
                         non_show2 = false;
                         if (att.length != 0) {
                           att.forEach(attendance => {
+
+                            let dt:Date = new Date(attendance.date);
+                            if(dt.getDay() == 0){
+                              this.non_show_2 = true;
+                            }
                             activeDp = false;
                             activeVac = false;
                             activeLeav = false;
@@ -562,54 +567,19 @@ export class PeriodsComponent implements OnInit {
 
                             if (!activeLeav && !activeVac && !activeDp) {
                               if (attendance.scheduled == 'OFF') {
-                                this.daysOff = this.daysOff + 1;
-                                offCount = this.daysOff;
-                                while (offCount > 0) {
-                                  offCount = offCount - 2;
-                                }
-                                if (non_show1) {
-                                  attendance.balance = "NON_SHOW";
-                                  this.seventh = this.seventh + 1;
-                                  discounted = discounted - 8;
-                                  this.absence = this.absence - 8;
-                                  non_show1 = false;
-                                } else {
-                                  if (non_show2 && offCount == 0) {
-                                    attendance.balance = "NON_SHOW";
-                                    this.seventh = this.seventh + 1;
-                                    discounted = discounted - 8;
-                                    this.absence = this.absence - 8;
-                                    non_show2 = false;
-                                  } else {
-                                    attendance.balance = "OFF";
-                                  }
-                                }
+                                this.daysOff = this.daysOff + 1; 
                               } else {
                                 this.roster = this.roster + parseFloat(attendance.scheduled);
                                 if (parseFloat(attendance.worked_time) == 0) {
-                                  let partial_non_show: boolean = false;
-                                  attendance.balance = "0.00";
-                                  if (non_show1) {
-                                    ad.forEach(adjustment => {
-                                      if (adjustment.date == attendance.date) {
-                                        partial_non_show = true;
-                                      }
-                                    });
-                                    if (!partial_non_show) {
-                                      non_show2 = true;
-                                    }
-                                  } else {
-                                    ad.forEach(adjustment => {
-                                      if (adjustment.date == attendance.date) {
-                                        partial_non_show = true;
-                                      }
-                                    })
-                                    if (!partial_non_show) {
-                                      non_show1 = true;
-                                    }
+                                  if(this.non_show_2){
+                                    this.absence = this.absence - 16;
+                                    discounted = discounted - 16;
+                                    this.seventh = this.seventh + 1;
+                                    this.non_show_2 = false;
+                                  }else{
+                                    this.absence = this.absence - 8;
+                                    discounted = discounted - 8;
                                   }
-                                  this.absence = this.absence - 8;
-                                  discounted = discounted - 8;
                                 } else {
                                   this.attended = this.attended + parseFloat(attendance.worked_time);
                                   this.absence = this.absence + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
