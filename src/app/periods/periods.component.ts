@@ -491,6 +491,13 @@ export class PeriodsComponent implements OnInit {
     let non_show1: boolean = false;
     let non_show2: boolean = false;
 
+    this.seventh = 0;
+    this.absence = 0;
+    this.diff = 0;
+    this.attended = 0;
+    this.roster = 0;
+    this.daysOff = 0;
+    
     this.credits = [];
     this.debits = [];
 
@@ -519,7 +526,8 @@ export class PeriodsComponent implements OnInit {
 
                             let dt:Date = new Date(attendance.date);
 
-                            if(dt.getDay() == 0){
+                            if(dt.getDay() === 0){
+                              console.log(attendance.date);
                               this.non_show_2 = true;
                             }
 
@@ -581,6 +589,7 @@ export class PeriodsComponent implements OnInit {
                                     discounted = discounted - 16;
                                     this.seventh = this.seventh + 1;
                                     this.non_show_2 = false;
+                                    attendance.balance = "NS";
                                   }else{
                                     this.absence = this.absence - 8;
                                     discounted = discounted - 8;
