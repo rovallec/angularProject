@@ -22,6 +22,8 @@ export class AccdashboardComponent implements OnInit {
   sch_min_e:string;
   includeAll:boolean = false;
   periods:periods[] = [];
+  filter:string = null;
+  value:string = null;
 
   constructor(private apiService: ApiService, public router:Router, private authSrv:AuthServiceService) { }
 
@@ -35,6 +37,10 @@ export class AccdashboardComponent implements OnInit {
       this.periods = prd;
     });
   }
+  
+  searchEmployee(){}
+
+  cancelSearch(){}
 
   gotoPeriod(id:string){
     this.router.navigate(['./periods', id]);
