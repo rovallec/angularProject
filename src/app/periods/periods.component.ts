@@ -490,6 +490,7 @@ export class PeriodsComponent implements OnInit {
 
     let non_show1: boolean = false;
     let non_show2: boolean = false;
+    this.non_show_2 = true;
 
     this.seventh = 0;
     this.absence = 0;
@@ -497,7 +498,7 @@ export class PeriodsComponent implements OnInit {
     this.attended = 0;
     this.roster = 0;
     this.daysOff = 0;
-    
+
     this.credits = [];
     this.debits = [];
 
@@ -591,6 +592,7 @@ export class PeriodsComponent implements OnInit {
                                     this.non_show_2 = false;
                                     attendance.balance = "NS";
                                   }else{
+                                    attendance.balance = "NS"
                                     this.absence = this.absence - 8;
                                     discounted = discounted - 8;
                                   }
