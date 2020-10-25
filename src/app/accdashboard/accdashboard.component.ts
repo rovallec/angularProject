@@ -3,6 +3,7 @@ import {ApiService} from '../api.service';
 import {AuthServiceService} from '../auth-service.service';
 import {Router} from '@angular/router';
 import {waves_template, schedules, hires_template, periods} from '../process_templates'
+import { employees } from '../fullProcess';
 
 @Component({
   selector: 'app-accdashboard',
@@ -16,6 +17,7 @@ export class AccdashboardComponent implements OnInit {
   schedules:schedules[] = [new schedules];
   schedule_to_edit:schedules = new schedules;
   hires:hires_template[] = [new hires_template];
+  employees:employees[] = [];
   sch_hrs_st:string;
   sch_min_st:string;
   sch_hrs_e:string;
@@ -24,12 +26,14 @@ export class AccdashboardComponent implements OnInit {
   periods:periods[] = [];
   filter:string = null;
   value:string = null;
+  searching:boolean = false;
 
   constructor(private apiService: ApiService, public router:Router, private authSrv:AuthServiceService) { }
 
   ngOnInit() {
     this.getWavesAll();
     this.getPeriods();
+    this.getAllEmployees();
   }
 
   getPeriods(){
@@ -37,10 +41,27 @@ export class AccdashboardComponent implements OnInit {
       this.periods = prd;
     });
   }
-  
-  searchEmployee(){}
 
-  cancelSearch(){}
+  getAllEmployees(){
+    this.apiService.getallEmployees({nm:'all'}).subscribe((emp:employees[])=>{
+      this.employees = emp;
+    })
+  }
+  
+  searchEmployee(){
+    this.searching = true;
+    this.apiService.getSearchEmployees({filter:this.filter, value:this.value, dp:'all'}).subscribe((emp:employees[])=>{
+      this.employees = emp;
+    })
+  }
+
+  cancelSearch(){
+    this.getWavesAll();
+    this.getPeriods();
+    this.getAllEmployees();
+    this.searching = false;
+
+  }
 
   gotoPeriod(id:string){
     this.router.navigate(['./periods', id]);

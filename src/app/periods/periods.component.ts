@@ -189,7 +189,7 @@ export class PeriodsComponent implements OnInit {
                                         attendance.balance = 'VAC';
                                       } else {
                                         this.daysOff = this.daysOff + 1;
-                                        attendance.balance = "OFF"
+                                        attendance.balance = "OFF";
                                       }
                                       activeVac = true;
                                     }
@@ -212,46 +212,33 @@ export class PeriodsComponent implements OnInit {
                                   });
 
                                   if (!activeLeav && !activeVac && !activeDp) {
-                                    let partial_non_show: boolean = false;
                                     if (attendance.scheduled == 'OFF') {
-                                      this.daysOff = this.daysOff + 1;
-                                      offCount = this.daysOff;
-                                      while (offCount > 0) {
-                                        offCount = offCount - 2;
-                                      }
-                                      if (non_show1) {
-                                        discounted = discounted - 8;
-                                        non_show1 = false;
-                                      } else {
-                                        if (non_show2 && offCount == 0) {
-                                          discounted = discounted - 8;
-                                          non_show2 = false;
-                                        }
-                                      }
+                                      this.daysOff = this.daysOff + 1; 
+                                      attendance.balance = "OFF";
                                     } else {
+                                      this.roster = this.roster + parseFloat(attendance.scheduled);
                                       if (parseFloat(attendance.worked_time) == 0) {
-                                        if (non_show1) {
-                                          ad.forEach(adjustment => {
-                                            if (adjustment.date == attendance.date) {
-                                              partial_non_show = true;
-                                            }
-                                          });
-                                          if (!partial_non_show) {
-                                            non_show2 = true;
+                                        ad.forEach(adjustment=>{
+                                          if(adjustment.id_attendence === attendance.idattendences){
+                                            this.non_show_2 = false;
                                           }
-                                        } else {
-                                          ad.forEach(adjustment => {
-                                            if (adjustment.date == attendance.date) {
-                                              partial_non_show = true;
-                                            }
-                                          })
-                                          if (!partial_non_show) {
-                                            non_show1 = true;
-                                          }
+                                        })
+                                        if(this.non_show_2){
+                                          this.absence = this.absence - 16;
+                                          discounted = discounted - 16;
+                                          this.seventh = this.seventh + 1;
+                                          this.non_show_2 = false;
+                                          attendance.balance = "NS";
+                                        }else{
+                                          attendance.balance = "NS"
+                                          this.absence = this.absence - 8;
+                                          discounted = discounted - 8;
                                         }
-                                        discounted = discounted - 8;
                                       } else {
-                                        discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled))
+                                        this.attended = this.attended + parseFloat(attendance.worked_time);
+                                        this.absence = this.absence + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
+                                        attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
+                                        discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
                                       }
                                     }
                                   }
@@ -585,6 +572,11 @@ export class PeriodsComponent implements OnInit {
                               } else {
                                 this.roster = this.roster + parseFloat(attendance.scheduled);
                                 if (parseFloat(attendance.worked_time) == 0) {
+                                  ad.forEach(adjustment=>{
+                                    if(adjustment.id_attendence === attendance.idattendences){
+                                      this.non_show_2 = false;
+                                    }
+                                  })
                                   if(this.non_show_2){
                                     this.absence = this.absence - 16;
                                     discounted = discounted - 16;
@@ -605,6 +597,7 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
                           });
+                          
                           this.attendances = att;
                           if (this.period.status == '1') {
                             let base_hour: number = parseFloat(emp[0].base_payment) / 240;
