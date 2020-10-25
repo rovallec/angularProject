@@ -158,6 +158,14 @@
                         <th scope="col">Status</th>
                     </thead>
                     <tbody>
+                        <tr *ngFor="let employee of employees">
+                            <td>{{employee.idemployees}}</td>
+                            <td>{{employee.nearsol_id}}</td>
+                            <td>{{employee.name}}</td>
+                            <td>{{employee.account}}</td>
+                            <td>{{employee.hiring_date}}</td>
+                            <td>{{employee.state}}</td>
+                        </tr>
                     </tbody>
                 </table>
             </td>

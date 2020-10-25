@@ -43,7 +43,7 @@ export class AccdashboardComponent implements OnInit {
   }
 
   getAllEmployees(){
-    this.apiService.getallEmployees({nm:'all'}).subscribe((emp:employees[])=>{
+    this.apiService.getallEmployees({department:'all'}).subscribe((emp:employees[])=>{
       this.employees = emp;
     })
   }

@@ -701,7 +701,7 @@ export class PeriodsComponent implements OnInit {
                                 }
 
                                 partial_service.type = "Descuento Por Servicio " + service.name;
-                                this.credits.push(partial_service);
+                                this.debits.push(partial_service);
                                 totalDeb = totalDeb + parseFloat(partial_service.amount);
                               })
 
