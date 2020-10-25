@@ -24,7 +24,7 @@
         <a [ngClass]="{'act':selectedOption=='IMP'}" *ngIf="getSaved().department == '28'" style="color: white;cursor:pointer" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           IMPORT
         </a>
-        <a *ngIf="getSaved().department == '4' || getSaved().department == '27'" class="nav-link" routerLink="/hrdaily" style="color: white"  [ngClass]="{'act':selectedOption=='HRDAILY'}" (click)="SetSel('HRDAILY')">EXCEPTIONS</a>
+        <a *ngIf="getSaved().department == '29' || getSaved().department == '27'" class="nav-link" routerLink="/hrdaily" style="color: white"  [ngClass]="{'act':selectedOption=='HRDAILY'}" (click)="SetSel('HRDAILY')">EXCEPTIONS</a>
         <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/realtime" style="color: white; cursor:pointer"  [ngClass]="{'act':selectedOption=='REAL'}" (click)="SetSel('REAL')">REAL TIME</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/attImport" (click)="SetSel('IMP')">Attendance</a>
