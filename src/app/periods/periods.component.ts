@@ -509,16 +509,20 @@ export class PeriodsComponent implements OnInit {
                             this.vacations.push(vacc);
                           }
                         })
+                        
                         this.leaves = leave;
                         non_show1 = false;
                         non_show2 = false;
+
                         if (att.length != 0) {
                           att.forEach(attendance => {
 
                             let dt:Date = new Date(attendance.date);
+
                             if(dt.getDay() == 0){
                               this.non_show_2 = true;
                             }
+
                             activeDp = false;
                             activeVac = false;
                             activeLeav = false;
@@ -531,8 +535,8 @@ export class PeriodsComponent implements OnInit {
                                   attendance.balance = 'VAC';
                                 } else {
                                   this.daysOff = this.daysOff + 1;
+                                  attendance.balance = "OFF";
                                 }
-                                attendance.balance = "OFF";
                                 activeVac = true;
                               }
                             })
@@ -568,6 +572,7 @@ export class PeriodsComponent implements OnInit {
                             if (!activeLeav && !activeVac && !activeDp) {
                               if (attendance.scheduled == 'OFF') {
                                 this.daysOff = this.daysOff + 1; 
+                                attendance.balance = "OFF";
                               } else {
                                 this.roster = this.roster + parseFloat(attendance.scheduled);
                                 if (parseFloat(attendance.worked_time) == 0) {
