@@ -59,6 +59,7 @@ export class hires_template {
     day_off2: string;
     bank:string;
     account:string;
+    payType:string;
 }
 
 export class accounts {

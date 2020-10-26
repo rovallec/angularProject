@@ -127,6 +127,10 @@
                                             <td>{{hr.first_name}} {{hr.second_name}} {{hr.first_lastname}}
                                                 {{hr.second_lastname}}</td>
                                             <td>{{hr.status}}</td>
+                                            <td><select class="form-control" [(ngModel)]="hr.payType">
+                                                <option>BANK ACCOUNT</option>
+                                                <option>BANK CHECK</option>
+                                            </select></td>
                                             <td><input type="text" class="form-control" [(ngModel)]="hr.bank"></td>
                                             <td><input type="text" class="form-control" [(ngModel)]="hr.account"></td>
                                         </tr>
