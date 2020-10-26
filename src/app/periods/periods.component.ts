@@ -136,13 +136,13 @@ export class PeriodsComponent implements OnInit {
 
     let end: number = 0;
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
-      if(payments.length === 0){
+      if (payments.length === 0) {
         this.working = false;
       }
-      if(payments.length == 0){
+      if (payments.length == 0) {
         this.working = false;
       }
-      if(payments.length < 1){
+      if (payments.length < 1) {
         this.working = false;
       }
       payments.forEach(pay => {
@@ -213,23 +213,23 @@ export class PeriodsComponent implements OnInit {
 
                                   if (!activeLeav && !activeVac && !activeDp) {
                                     if (attendance.scheduled == 'OFF') {
-                                      this.daysOff = this.daysOff + 1; 
+                                      this.daysOff = this.daysOff + 1;
                                       attendance.balance = "OFF";
                                     } else {
                                       this.roster = this.roster + parseFloat(attendance.scheduled);
                                       if (parseFloat(attendance.worked_time) == 0) {
-                                        ad.forEach(adjustment=>{
-                                          if(adjustment.id_attendence === attendance.idattendences){
+                                        ad.forEach(adjustment => {
+                                          if (adjustment.id_attendence === attendance.idattendences) {
                                             this.non_show_2 = false;
                                           }
                                         })
-                                        if(this.non_show_2){
+                                        if (this.non_show_2) {
                                           this.absence = this.absence - 16;
                                           discounted = discounted - 16;
                                           this.seventh = this.seventh + 1;
                                           this.non_show_2 = false;
                                           attendance.balance = "NS";
-                                        }else{
+                                        } else {
                                           attendance.balance = "NS"
                                           this.absence = this.absence - 8;
                                           discounted = discounted - 8;
@@ -346,42 +346,46 @@ export class PeriodsComponent implements OnInit {
 
 
                                   services.forEach(service => {
-                                    let partial_service: debits = new debits;
-                                    if (service.max = '0') {
-                                      partial_service.amount = service.amount;
-                                    } else {
-                                      if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) < 0) {
+                                    if (service.max != service.current) {
+                                      let partial_service: debits = new debits;
+                                      if (service.max = '0') {
                                         partial_service.amount = service.amount;
-                                        service.current = (parseFloat(service.current) + parseFloat(service.amount)).toFixed(2);
                                       } else {
-                                        partial_service.amount = (parseFloat(service.max) - parseFloat(service.current)).toFixed(2);
-                                        service.current = service.max;
-                                        service.status = '0';
+                                        if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) < 0) {
+                                          partial_service.amount = service.amount;
+                                          service.current = (parseFloat(service.current) + parseFloat(service.amount)).toFixed(2);
+                                        } else {
+                                          partial_service.amount = (parseFloat(service.max) - parseFloat(service.current)).toFixed(2);
+                                          service.current = service.max;
+                                          service.status = '0';
+                                        }
                                       }
+                                      partial_service.idpayments = pay.idpayments;
+                                      partial_service.type = "Descuento Por Servicio " + service.name;
+                                      this.debits.push(partial_service);
+                                      this.global_debits.push(partial_service);
+                                      this.global_services.push(service);
+                                      totalDeb = totalDeb + parseFloat(partial_service.amount);
                                     }
-                                    partial_service.idpayments = pay.idpayments;
-                                    partial_service.type = "Descuento Por Servicio " + service.name;
-                                    this.debits.push(partial_service);
-                                    this.global_debits.push(partial_service);
-                                    this.global_services.push(service);
-                                    totalDeb = totalDeb + parseFloat(partial_service.amount);
                                   })
 
                                   judicials.forEach(judicial => {
-                                    let partial_debit: debits = new debits;
-                                    if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
-                                      partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
-                                      judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
-                                    } else {
-                                      partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
-                                      judicial.current = judicial.max;
+                                    if (judicial.max != judicial.current) {
+                                      let partial_debit: debits = new debits;
+                                      if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
+                                        partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
+                                        judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
+                                      } else {
+                                        partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
+                                        judicial.current = judicial.max;
+                                      }
+                                      partial_debit.idpayments = pay.idpayments;
+                                      partial_debit.type = "Acuerdo Judicial";
+                                      this.global_debits.push(partial_debit);
+                                      this.debits.push(partial_debit);
+                                      this.global_judicials.push(judicial);
+                                      totalDeb = totalDeb + parseFloat(partial_debit.amount);
                                     }
-                                    partial_debit.idpayments = pay.idpayments;
-                                    partial_debit.type = "Acuerdo Judicial";
-                                    this.global_debits.push(partial_debit);
-                                    this.debits.push(partial_debit);
-                                    this.global_judicials.push(judicial);
-                                    totalDeb = totalDeb + parseFloat(partial_debit.amount);
                                   })
 
 
@@ -457,6 +461,9 @@ export class PeriodsComponent implements OnInit {
   completePeriod() {
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
+    this.global_services.forEach(service => {
+      this.apiService.updateServices(service).subscribe((str:string)=>{});
+    });
     this.apiService.closePeriod(this.period).subscribe((str: string) => {
       this.payments.forEach(pay => {
         this.apiService.insertPayment(pay).subscribe((str: string) => { })
@@ -504,7 +511,7 @@ export class PeriodsComponent implements OnInit {
                             this.vacations.push(vacc);
                           }
                         })
-                        
+
                         this.leaves = leave;
                         non_show1 = false;
                         non_show2 = false;
@@ -512,9 +519,9 @@ export class PeriodsComponent implements OnInit {
                         if (att.length != 0) {
                           att.forEach(attendance => {
 
-                            let dt:Date = new Date(attendance.date);
+                            let dt: Date = new Date(attendance.date);
 
-                            if(dt.getDay() === 0){
+                            if (dt.getDay() === 0) {
                               console.log(attendance.date);
                               this.non_show_2 = true;
                             }
@@ -567,23 +574,23 @@ export class PeriodsComponent implements OnInit {
 
                             if (!activeLeav && !activeVac && !activeDp) {
                               if (attendance.scheduled == 'OFF') {
-                                this.daysOff = this.daysOff + 1; 
+                                this.daysOff = this.daysOff + 1;
                                 attendance.balance = "OFF";
                               } else {
                                 this.roster = this.roster + parseFloat(attendance.scheduled);
                                 if (parseFloat(attendance.worked_time) == 0) {
-                                  ad.forEach(adjustment=>{
-                                    if(adjustment.id_attendence === attendance.idattendences){
+                                  ad.forEach(adjustment => {
+                                    if (adjustment.id_attendence === attendance.idattendences) {
                                       this.non_show_2 = false;
                                     }
                                   })
-                                  if(this.non_show_2){
+                                  if (this.non_show_2) {
                                     this.absence = this.absence - 16;
                                     discounted = discounted - 16;
                                     this.seventh = this.seventh + 1;
                                     this.non_show_2 = false;
                                     attendance.balance = "NS";
-                                  }else{
+                                  } else {
                                     attendance.balance = "NS"
                                     this.absence = this.absence - 8;
                                     discounted = discounted - 8;
@@ -597,7 +604,7 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
                           });
-                          
+
                           this.attendances = att;
                           if (this.period.status == '1') {
                             let base_hour: number = parseFloat(emp[0].base_payment) / 240;
@@ -687,37 +694,41 @@ export class PeriodsComponent implements OnInit {
                               })
 
                               services.forEach(service => {
-                                let partial_service: debits = new debits;
-                                if (service.max = '0') {
-                                  partial_service.amount = service.amount;
-                                } else {
-                                  if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) > 0) {
+                                if (service.max != service.current) {
+                                  let partial_service: debits = new debits;
+                                  if (service.max = '0') {
                                     partial_service.amount = service.amount;
-                                    service.current = (parseFloat(service.current) + parseFloat(service.amount)).toFixed(2);
                                   } else {
-                                    partial_service.amount = (parseFloat(service.max) - parseFloat(service.current)).toFixed(2);
-                                    service.current = service.max;
+                                    if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) > 0) {
+                                      partial_service.amount = service.amount;
+                                      service.current = (parseFloat(service.current) + parseFloat(service.amount)).toFixed(2);
+                                    } else {
+                                      partial_service.amount = (parseFloat(service.max) - parseFloat(service.current)).toFixed(2);
+                                      service.current = service.max;
+                                    }
                                   }
-                                }
 
-                                partial_service.type = "Descuento Por Servicio " + service.name;
-                                this.debits.push(partial_service);
-                                totalDeb = totalDeb + parseFloat(partial_service.amount);
+                                  partial_service.type = "Descuento Por Servicio " + service.name;
+                                  this.debits.push(partial_service);
+                                  totalDeb = totalDeb + parseFloat(partial_service.amount);
+                                }
                               })
 
                               judicials.forEach(judicial => {
-                                let partial_debit: debits = new debits;
-                                if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
-                                  partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
-                                  judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
-                                } else {
-                                  partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
-                                  judicial.current = judicial.max;
-                                }
+                                if (judicial.max != judicial.current) {
+                                  let partial_debit: debits = new debits;
+                                  if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
+                                    partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
+                                    judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
+                                  } else {
+                                    partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
+                                    judicial.current = judicial.max;
+                                  }
 
-                                partial_debit.type = "Acuerdo Judicial";
-                                this.debits.push(partial_debit);
-                                totalDeb = totalDeb + parseFloat(partial_debit.amount);
+                                  partial_debit.type = "Acuerdo Judicial";
+                                  this.debits.push(partial_debit);
+                                  totalDeb = totalDeb + parseFloat(partial_debit.amount);
+                                }
                               });
 
 

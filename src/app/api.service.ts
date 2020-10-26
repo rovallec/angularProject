@@ -499,6 +499,16 @@ getServicesDiscounts(any:any){
   return this.httpClient.post<services[]>(`${this.PHP_API_SERVER}/phpscripts/getServicesDiscounts.php`, any);
 }
 
+updateServices(service:services){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateServices.php`, service);
+}
 
+insertPushedCredit(credit:credits){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPushedCredit`, credit);
+}
+
+insertPushedDebit(debit:credits){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPushedDebit`, debit);
+}
   constructor(private httpClient:HttpClient) { }
 }

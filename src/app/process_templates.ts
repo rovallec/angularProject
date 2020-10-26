@@ -20,7 +20,7 @@ export class waves_template {
     ops_start: string;
     job: string;
     base_payment: string;
-    productivity_payment:string;
+    productivity_payment: string;
     show: string;
     constructor() {
         this.idwaves = null;
@@ -305,10 +305,10 @@ export class disciplinary_processes {
     comments: string;
     audience_status: string;
     //Suspensions
-    day_1:string;
-    day_2:string;
-    day_3:string;
-    day_4:string;
+    day_1: string;
+    day_2: string;
+    day_3: string;
+    day_4: string;
 
     constructor() {
         this.id_user = null;
@@ -340,7 +340,7 @@ export class disciplinary_processes {
         this.day_1 = null;
         this.day_2 = null;
         this.day_3 = null;
-        this.day_4 = null; 
+        this.day_4 = null;
     }
 }
 
@@ -464,13 +464,13 @@ export class reports {
     }
 }
 
-export class advances{
-    idadvances:string;
-    id_process:string;
-    type:string;
-    description:string;
-    classification:string;
-    constructor(){
+export class advances {
+    idadvances: string;
+    id_process: string;
+    type: string;
+    description: string;
+    classification: string;
+    constructor() {
         this.idadvances = null;
         this.id_process = null;
         this.type = null;
@@ -479,18 +479,18 @@ export class advances{
     }
 }
 
-export class activities{
-    idactivities:string;
-    id_process:string;
-    type:string;
-    account:string;
-    requested_by:string;
-    approved_by:string;
-    description:string;
-    done_date:string;
-    amount:string;
-    document:string;
-    constructor(){
+export class activities {
+    idactivities: string;
+    id_process: string;
+    type: string;
+    account: string;
+    requested_by: string;
+    approved_by: string;
+    description: string;
+    done_date: string;
+    amount: string;
+    document: string;
+    constructor() {
         this.idactivities = null;
         this.id_process = null;
         this.type = null;
@@ -505,17 +505,17 @@ export class activities{
 }
 
 export class rises {
-    id_employee:string;
-    id_process:string;
-    new_position:string;
-    new_base_salary:string;
-    new_productivity_payment:string;
-    approved_by:string;
-    approved_date:string;
-    effective_date:string;
-    trial_start:string;
-    trial_end:string;
-    constructor(){
+    id_employee: string;
+    id_process: string;
+    new_position: string;
+    new_base_salary: string;
+    new_productivity_payment: string;
+    approved_by: string;
+    approved_date: string;
+    effective_date: string;
+    trial_start: string;
+    trial_end: string;
+    constructor() {
         this.id_employee = null;
         this.id_process = null;
         this.new_position = null;
@@ -524,18 +524,18 @@ export class rises {
         this.approved_by = null;
         this.approved_date = null;
         this.effective_date = null;
-        this. trial_start = null;
+        this.trial_start = null;
         this.trial_end = null;
     }
 }
 
-export class call_tracker{
-    idcall_tracks:string;
-    id_process:string;
-    type:string;
-    reason:string;
-    channel:string;
-    constructor(){
+export class call_tracker {
+    idcall_tracks: string;
+    id_process: string;
+    type: string;
+    reason: string;
+    channel: string;
+    constructor() {
         this.idcall_tracks = null;
         this.id_process = null;
         this.type = null;
@@ -544,19 +544,19 @@ export class call_tracker{
     }
 }
 
-export class letters{
-    idletters:string;
-    id_process:string;
-    type:string;
-    company:string;
-    patronal_number:string;
-    emition_date:string;
-    language:string;
-    position:string;
-    department:string;
-    base_salary:string;
-    productivity_salary:string;
-    constructor(){
+export class letters {
+    idletters: string;
+    id_process: string;
+    type: string;
+    company: string;
+    patronal_number: string;
+    emition_date: string;
+    language: string;
+    position: string;
+    department: string;
+    base_salary: string;
+    productivity_salary: string;
+    constructor() {
         this.idletters = null;
         this.id_process = null;
         this.type = null;
@@ -571,14 +571,14 @@ export class letters{
     }
 }
 
-export class supervisor_survey{
-    idsupervisor_survey:string;
-    id_process:string;
-    amount:string;
-    approved_date:string;
-    notification_date:string;
-    score:string;
-    constructor(){
+export class supervisor_survey {
+    idsupervisor_survey: string;
+    id_process: string;
+    amount: string;
+    approved_date: string;
+    notification_date: string;
+    score: string;
+    constructor() {
         this.idsupervisor_survey = null;
         this.id_process = null;
         this.amount = null;
@@ -588,13 +588,13 @@ export class supervisor_survey{
     }
 }
 
-export class judicials{
-    idjudicials:string;
-    id_process:string;
-    amount:string;
-    current:string;
-    max:string;
-    constructor(){
+export class judicials {
+    idjudicials: string;
+    id_process: string;
+    amount: string;
+    current: string;
+    max: string;
+    constructor() {
         this.idjudicials = null;
         this.id_process = null;
         this.amount = null;
@@ -602,23 +602,23 @@ export class judicials{
     }
 }
 
-export class irtra_requests{
-    idprocess:string;
-    idirtra_requests:string;
-    type:string;
-    constructor(){
+export class irtra_requests {
+    idprocess: string;
+    idirtra_requests: string;
+    type: string;
+    constructor() {
         this.idirtra_requests = null;
         this.idprocess = null;
         this.type = null;
     }
 }
 
-export class messagings{
-    idmessagings:string;
-    idprocess:string;
-    type:string;
-    notes:string;
-    constructor(){
+export class messagings {
+    idmessagings: string;
+    idprocess: string;
+    type: string;
+    notes: string;
+    constructor() {
         this.idmessagings = null;
         this.idprocess = null;
         this.type = null;
@@ -626,12 +626,12 @@ export class messagings{
     }
 }
 
-export class periods{
-    idperiods:string;
-    start:string;
-    end:string;
-    status:string;
-    constructor(){
+export class periods {
+    idperiods: string;
+    start: string;
+    end: string;
+    status: string;
+    constructor() {
         this.idperiods = null;
         this.start = null;
         this.end = null;
@@ -639,41 +639,80 @@ export class periods{
     }
 }
 
-export class deductions{
-    iddeductions:string;
-    idprofiles:string;
-    idemployees:string;
-    name:string;
-    type:string;
-    reason:string;
-    amount:string;
+export class deductions {
+    iddeductions: string;
+    idprofiles: string;
+    idemployees: string;
+    name: string;
+    type: string;
+    reason: string;
+    amount: string;
 }
 
-export class debits{
-    iddebits:string;
-    idpayments:string;
-    type:string;
-    amount:string;
+export class debits {
+    iddebits: string;
+    idpayments: string;
+    type: string;
+    amount: string;
+    //process
+    id_process: string;
+    id_user: string;
+    id_employee: string;
+    id_action: string;
+    date: string;
+    notes: string;
+    constructor() {
+        this.iddebits = null;
+        this.idpayments = null;
+        this.type = null;
+        this.amount = null;
+        //process
+        this.id_process = null;
+        this.id_user = null;
+        this.id_employee = null;
+        this.id_action = null;
+        this.date = null;
+        this.notes = null;
+    }
 }
 
-export class credits{
-    iddebits:string;
-    idpayments:string;
-    type:string;
-    amount:string;
+export class credits {
+    iddebits: string;
+    idpayments: string;
+    type: string;
+    amount: string;
+    //process
+    id_process: string;
+    id_user: string;
+    id_employee: string;
+    date: string;
+    notes: string;
+    constructor() {
+        this.iddebits = null;
+        this.idpayments = null;
+        this.type = null;
+        this.amount = null;
+        //process
+        this.id_process = null;
+        this.id_user = null;
+        this.id_employee = null;
+        this.date = null;
+        this.notes = null;
+    }
 }
 
-export class payments{
-    idpayments:string;
-    id_employee:string;
-    id_paymentmethod:string;
-    id_period:string;
-    credits:string;
-    debits:string;
-    date:string;
-    employee_name:string;
-    total:string;
-    constructor(){
+export class payments {
+    idpayments: string;
+    id_employee: string;
+    id_paymentmethod: string;
+    id_period: string;
+    credits: string;
+    debits: string;
+    date: string;
+    employee_name: string;
+    total: string;
+    status: string;
+    constructor() {
         this.idpayments = null;
         this.id_employee = null;
         this.id_paymentmethod = null;
@@ -686,17 +725,17 @@ export class payments{
     }
 }
 
-export class services{
-    idservices:string;
-    id_process:string;
-    id_employee:string;
-    name:string;
-    amount:string;
-    max:string;
-    frecuency:string;
-    status:string;
-    current:string;
-    constructor(){
+export class services {
+    idservices: string;
+    id_process: string;
+    id_employee: string;
+    name: string;
+    amount: string;
+    max: string;
+    frecuency: string;
+    status: string;
+    current: string;
+    constructor() {
         this.idservices = null;
         this.id_process = null;
         this.id_employee = null;
