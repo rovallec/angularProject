@@ -20,8 +20,12 @@ header('Access-Control-Allow-Headers: *');
 		$igss = ($request->igss);
 		$irtra = ($request->irtra);
 		$status = ($request->status);
+		$gender = ($request->gender);
+		$etnia = ($request->etnia);
+		$bank = ($request->bank);
+		$account = ($request->account);
 
-		$sql = "INSERT INTO `profiles`(`tittle`, `first_name`, `second_name`, `first_lastname`, `second_lastname`, `day_of_birth`, `nationality`, `marital_status`, `dpi`, `nit`, `iggs`, `irtra`, `status`) VALUE ('{$tittle}','{$first_name}','{$second_name}','{$first_lastname}','{$second_lastname}','{$day_of_birthday}' ,'{$nationality}','{$marital_status}','{$dpi}','{$nit}','{$igss}','{$irtra}','{$status}');";
+		$sql = "INSERT INTO `profiles`(`tittle`, `first_name`, `second_name`, `first_lastname`, `second_lastname`, `day_of_birth`, `nationality`, `marital_status`, `dpi`, `nit`, `iggs`, `irtra`, `status`, `gender`, `etnia`, `bank`, `account`) VALUE ('{$tittle}','{$first_name}','{$second_name}','{$first_lastname}','{$second_lastname}','{$day_of_birthday}' ,'{$nationality}','{$marital_status}','{$dpi}','{$nit}','{$igss}','{$irtra}','{$status}', '{$gender}', '{$etnia}', '{$bank}', '{$account}');";
 
 		if(mysqli_query($con,$sql)){
 			$id_profile = mysqli_insert_id($con);
