@@ -26,6 +26,7 @@ export class AccprofilesComponent implements OnInit {
   insertN:string = null;
   insertNew:boolean = false;
   activeCred:credits = new credits;
+  totalPayment:string = null;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -37,6 +38,7 @@ export class AccprofilesComponent implements OnInit {
       this.employee = emp[0];
       peridos.idperiods = 'all';
       peridos.status = this.employe_id;
+      this.totalPayment = (parseFloat(emp[0].productivity_payment) + parseFloat(emp[0].base_payment)).toFixed(2);
   
       this.apiService.getPayments(peridos).subscribe((pym: payments[]) => {
         this.payments = pym;

@@ -35,7 +35,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label>Base Payment:</label>
-                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="employee.hiring_date">
+                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="totalPayment">
                     </div>
                 </div>
             </div>
@@ -90,9 +90,9 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let cred of credits" class="selectable">
-                                                <td>{{cred.iddebits}}</td>
-                                                <td>{{cred.type}}</td>
-                                                <td>{{cred.amount}}</td>
+                                                <td style="text-align: center;">{{cred.iddebits}}</td>
+                                                <td style="text-align: center;">{{cred.type}}</td>
+                                                <td style="text-align: center;">{{cred.amount}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -123,9 +123,9 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let deb of debits" class="selectable">
-                                                <td>{{deb.idcredits}}</td>
-                                                <td>{{deb.type}}</td>
-                                                <td>{{deb.amount}}</td>
+                                                <td style="text-align: center;">{{deb.iddebits}}</td>
+                                                <td style="text-align: center;">{{deb.type}}</td>
+                                                <td style="text-align: center;">{{deb.amount}}</td>
                                             </tr>
                                         </tbody>
                                     </table>

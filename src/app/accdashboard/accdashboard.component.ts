@@ -114,4 +114,12 @@ export class AccdashboardComponent implements OnInit {
       w.show = '0';
     })
   }
+
+  cancelEdit(){
+    this.edit_bank = false;
+    this.hideSchedules();
+    this.getWavesAll();
+    this.getPeriods();
+    this.getAllEmployees();
+  }
 }
