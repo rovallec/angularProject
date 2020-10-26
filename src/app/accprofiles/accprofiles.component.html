@@ -90,9 +90,9 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let cred of credits" class="selectable">
-                                                <td>{{debit.iddebits}}</td>
-                                                <td>{{debit.type}}</td>
-                                                <td>{{debit.amount}}</td>
+                                                <td>{{cred.iddebits}}</td>
+                                                <td>{{cred.type}}</td>
+                                                <td>{{cred.amount}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -123,9 +123,9 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let deb of debits" class="selectable">
-                                                <td>{{cred.idcredits}}</td>
-                                                <td>{{cred.type}}</td>
-                                                <td>{{cred.amount}}</td>
+                                                <td>{{deb.idcredits}}</td>
+                                                <td>{{deb.type}}</td>
+                                                <td>{{deb.amount}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
