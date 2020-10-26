@@ -13,7 +13,7 @@ $date = ($request->date);
 $notes = ($request->notes);
 
 
-$sql = "INSERT INTO `minearsol`.`pushed_debits` (`idacc_processes`, `id_debit`, `id_user`, `id_employee`, `name`, `date`, `notes`) VALUES (NULL, $id_debit, $id_user, $id_employee, 'Debit', $date, $notes);";
+$sql = "INSERT INTO `minearsol`.`pushed_debits` (`idacc_processes`, `id_debit`, `id_user`, `id_employee`, `name`, `date`, `notes`) VALUES (NULL, $id_debit, $id_user, $id_employee, 'Debit', '$date', '$notes');";
 
 if(mysqli_query($con,$sql)){
     echo(mysqli_insert_id($con));

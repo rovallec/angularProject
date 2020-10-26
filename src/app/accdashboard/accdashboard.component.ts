@@ -89,44 +89,9 @@ export class AccdashboardComponent implements OnInit {
     this.waves[this.waves.indexOf(wv)].show = "1";
   }
 
-  set_edit_schedule(){
-    this.sch_hrs_st = this.schedule_to_edit.start_time.split(":")[0];
-    this.sch_min_st = this.schedule_to_edit.start_time.split(":")[1];
-    this.sch_hrs_e = this.schedule_to_edit.end_time.split(":")[0];
-    this.sch_min_e = this.schedule_to_edit.end_time.split(":")[1];
-  }
-
-  getHires(sch:schedules){
-    this.schedules.forEach(sch => {
-      sch.show = '0';
-    })
-
-  }
-
   hideSchedules(){
     this.waves.forEach(w => {
       w.show = '0';
     })
-  }
-
-  hideHires(){
-   this.schedules.forEach(sch => {
-     sch.show = '0';
-   })
-  }
-
-  includeIn(toInclude:hires_template){
-    this.hires[this.hires.indexOf(toInclude)].status = "EMPLOYEE";
-  }
-
-  selectAll(){
-    this.includeAll = !this.includeAll;
-    if(this.includeAll == true){
-      this.hires.forEach(el => {
-        el.status = "EMPLOYEE";
-      });
-    }else{
-      this.getSchedules(this.wave_ToEdit);
-    }
   }
 }
