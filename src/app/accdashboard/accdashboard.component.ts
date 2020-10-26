@@ -56,9 +56,7 @@ export class AccdashboardComponent implements OnInit {
   }
 
   gotoProfile(emp:employees){
-    let ids:string = null;
-    ids = emp.idemployees + ";" + emp.id_profile;
-    this.router.navigate(['./accProfile',ids]);
+    this.router.navigate(['./accProfile',emp.idemployees]);
   }
 
   cancelSearch(){
