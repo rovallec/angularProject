@@ -9,18 +9,15 @@
                 <div class="form-row">
                     <div class="form-group col-md-8">
                         <label for="txt_name">Name:</label>
-                        <input type="text" class="form-control" [disabled]="true"
-                            [(ngModel)]="employee.name">
+                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="employee.name">
                     </div>
                     <div class="form-group col-md-2">
                         <label>Account:</label>
-                        <input type="text" class="form-control" [disabled]='true'
-                            [(ngModel)]='employee.account'>
+                        <input type="text" class="form-control" [disabled]='true' [(ngModel)]='employee.account'>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Supervisor:</label>
-                        <input type="text" class="form-control" [disabled]='true'
-                            [(ngModel)]="employee.user_name">
+                        <input type="text" class="form-control" [disabled]='true' [(ngModel)]="employee.user_name">
                     </div>
                 </div>
                 <div class="form-row">
@@ -49,45 +46,81 @@
         <td colspan="2" style="padding-top:30px">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
-                    <a class="nav-item nav-link active" id="nav-attendence-tab" data-toggle="tab" href="#nav-attendence"
-                        role="tab" aria-controls="nav-attendence" aria-selected="true">Credits</a>
-                    <a class="nav-item nav-link" id="nav-leavs-tab" data-toggle="tab" href="#nav-leavs" role="tab"
-                        aria-controls="nav-leavs" aria-selected="false">Debits</a>
-                    <a class="nav-item nav-link" id="nav-dp-tab" data-toggle="tab" href="#nav-dp" role="tab"
+                    <a class="nav-item nav-link active" id="nav-dp-tab" data-toggle="tab" href="#nav-dp" role="tab"
                         aria-controls="nav-dp" aria-selected="false">Payments</a>
+                    <a class="nav-item nav-link" id="nav-dp-tab" data-toggle="tab" href="#nav-dp" role="tab"
+                        aria-controls="nav-beneficiarierance" aria-selected="false">Payment Methods</a>
                 </div>
             </nav>
 
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-attendence" role="tabpanel"
-                    aria-labelledby="nav-attendence-tab">
+                <div class="tab-pane fade" id="nav-dp" role="tabpanel" aria-labelledby="nav-dp-tab">
                     <div class="form-row col-sm-12">
                         <label
-                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">CREDITS</label>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-leavs" role="tabpanel" aria-labelledby="nav-leavs-tab">
-                    <div class="form-row col-md-12">
-                        <div class="form-group col-sm-6">
-                            <label
-                                style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">DEBITS</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-dp" role="tabpanel" aria-labelledby="nav-dp-tab">
-                    <div class="form-row col-md-12">
-                        <label
                             style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">PAYMENTS</label>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-4">
+                                <select class="form-control" [(ngModel)]="active_payment" (onChange)="setPayment()">
+                                    <option *ngFor="let payment of payments">{{payment.start}} - {{payment.end}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-md-8" style="margin-bottom:solid 3px #f4f8ff;"></div>
+                            <div class="form-group col-md-2"></div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-1"></div>
+                            <div class="form-group col-md-5">
+                                <label
+                                    style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">CREDITS</label>
+                                    <table class="table table-striped table-hover" style="margin-right:solid 2px #f4f8ff">
+                                        <thead style="text-align:center">
+                                            <th>ID</th>
+                                            <th>CONCEPT</th>
+                                            <th>AMOUNT</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let debit of debits" class="selectable">
+                                                <td>{{debit.iddebits}}</td>
+                                                <td>{{debit.type}}</td>
+                                                <td>{{debit.amount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label
+                                    style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">DEBITS</label>
+                                    <table class="table table-striped table-hover" style="margin-right:solid 2px #f4f8ff">
+                                        <thead style="text-align:center">
+                                            <th>ID</th>
+                                            <th>CONCEPT</th>
+                                            <th>AMOUNT</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let cred of credits" class="selectable">
+                                                <td>{{cred.idcredits}}</td>
+                                                <td>{{cred.type}}</td>
+                                                <td>{{cred.amount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <div class="form-group col-md-1"></div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="tab-pane fade" id="nav-beneficiarierance" role="tabpanel"
                     aria-labelledby="nav-beneficiarierance-tab">
-                    <div class="form-row col-md-12">
-                        <label
-                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">PAYMENT METHODS</label>
+                    <div class="form-row col-sm-12">
+                        <label style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">PAYMENT
+                            METHODS</label>
                     </div>
                 </div>
             </div>
@@ -97,7 +130,8 @@
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs" id="nav-tb" role="tablist" width=100% style="padding-top:15px">
                     <a class="nav-item nav-link active" id="nav-newproc-tab" data-toggle="tab" href="#nav-newproc"
-                        role="tab" aria-controls="nav-newproc" aria-selected="true"><i class="fas fa-arrow-circle-left"></i></a>
+                        role="tab" aria-controls="nav-newproc" aria-selected="true"><i
+                            class="fas fa-arrow-circle-left"></i></a>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">

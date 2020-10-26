@@ -212,3 +212,21 @@ export class hrProcess{
         this.status = null;
     }
 }
+
+export class payment_methods{
+    idpaymentmethod:string = null;
+    id_employee:string = null;
+    type:string = null;
+    number:string = null;
+    bank:string = null;
+    predeterm:string = null;
+    constructor(){
+        this.idpaymentmethod = null;
+        this.id_employee = null;
+        this.type = null;
+        this.number = null;
+        this.number = null;
+        this.bank = null;
+        this.predeterm = null;
+    }
+}
