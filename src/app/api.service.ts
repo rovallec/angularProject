@@ -510,5 +510,10 @@ insertPushedCredit(credit:credits){
 insertPushedDebit(debit:credits){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPushedDebit.php`, debit);
 }
+
+updateBank(hire:hires_template){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateBank.php`, hire);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

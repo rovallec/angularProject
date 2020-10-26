@@ -8,7 +8,7 @@ $request = json_decode($postdata);
 $id = ($request->idwaves);
 
 $hires = [];
-$sql = "SELECT * FROM (SELECT `hires`.*, `users`.`user_name` AS `username`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `profiles`.`status` FROM `hires` LEFT JOIN `profiles` ON `hires`.`id_profile` = `profiles`.`idprofiles`LEFT JOIN `users` ON `hires`.`reports_to` = `users`.`idUser`) AS `hires_full` WHERE `hires_full`.`id_wave` = '$id'";
+$sql = "SELECT * FROM (SELECT `hires`.*, `users`.`user_name` AS `username`, `profiles`.`bank`, `profiles`.`account`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `profiles`.`status` FROM `hires` LEFT JOIN `profiles` ON `hires`.`id_profile` = `profiles`.`idprofiles`LEFT JOIN `users` ON `hires`.`reports_to` = `users`.`idUser`) AS `hires_full` WHERE `hires_full`.`id_wave` = '$id'";
 if($result = mysqli_query($con, $sql))
 {
 	$i = 0;
@@ -25,6 +25,8 @@ if($result = mysqli_query($con, $sql))
 		$hires[$i]['second_lastname'] = $row['second_lastname'];
 		$hires[$i]['status'] = $row['status'];
 		$hires[$i]['id_schedule'] = $row['id_schedule'];
+		$hires[$i]['bank'] = $row['bank'];
+		$hires[$i]['account'] = $row['account'];
 		$i++;
 	}
 	

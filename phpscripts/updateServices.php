@@ -17,9 +17,9 @@ $status = ($request->status);
 $current = ($request->current);
 
 if($current != $amount){
-    $sql = "UPDATE `services` SET `current` = $current";
+    $sql = "UPDATE `services` SET `current` = $current WHERE `id_employee` = $id_employee";
 }else{
-    $sql = "UPDATE `services` SET `current` = $current, `status` = 0";
+    $sql = "UPDATE `services` SET `current` = $current, `status` = 0 WHERE `id_employee` = $id_employee";
 }
 
 if(mysqli_query($con,$sql)){

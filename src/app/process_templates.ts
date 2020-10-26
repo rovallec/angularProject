@@ -57,6 +57,8 @@ export class hires_template {
     reporter: string;
     day_off1: string;
     day_off2: string;
+    bank:string;
+    account:string;
 }
 
 export class accounts {

@@ -65,7 +65,7 @@ export class AccprofilesComponent implements OnInit {
     this.activeCred.id_user = this.authUser.getAuthusr().iduser;
     this.activeCred.idpayments = this.active_payment.idpayments;
     this.activeCred.id_employee = this.employe_id;
-    if(this.insertN === 'Debit'){
+    if(this.insertN == 'Debit'){
       this.apiService.insertDebits(this.activeCred).subscribe((str:string)=>{
         this.activeCred.iddebits = str;
         this.apiService.insertPushedDebit(this.activeCred).subscribe((str:string)=>{
