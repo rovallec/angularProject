@@ -504,11 +504,11 @@ updateServices(service:services){
 }
 
 insertPushedCredit(credit:credits){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPushedCredit`, credit);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPushedCredit.php`, credit);
 }
 
 insertPushedDebit(debit:credits){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPushedDebit`, debit);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPushedDebit.php`, debit);
 }
   constructor(private httpClient:HttpClient) { }
 }

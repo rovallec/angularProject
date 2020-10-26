@@ -80,4 +80,9 @@ export class AccprofilesComponent implements OnInit {
     }
     this.insertNew = false;
   }
+
+  cancelDeduction(){
+    this.insertNew = false;
+    this.setPayment();
+  }
 }
