@@ -27,7 +27,7 @@ export class AccprofilesComponent implements OnInit {
   insertNew:boolean = false;
   activeCred:credits = new credits;
 
-  constructor(public apiService: ApiService, public route: ActivatedRoute, private authUser: AuthServiceService) { }
+  constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
   ngOnInit() {
     let peridos: periods = new periods;
