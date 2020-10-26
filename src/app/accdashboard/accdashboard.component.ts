@@ -78,25 +78,19 @@ export class AccdashboardComponent implements OnInit {
   }
 
   finishEdit() {
-    let cnt: number = 0;
     this.hires.forEach(hire => {
       if (hire.status == 'EMPLOYEE') {
         this.apiService.updateBank(hire).subscribe((str: string) => {
-          cnt = cnt + 1;
-          console.log(cnt);
-          if (cnt === ( this.hires.length - 1)) {
-            this.hideSchedules();
-            this.getWavesAll();
-            this.getPeriods();
-            this.getAllEmployees();
-          }
         });
+        this.hideSchedules();
+        this.getWavesAll();
+        this.getPeriods();
+        this.getAllEmployees();
       }
     })
   }
 
   completeWave(){
-    let cnt: number = 0;
     this.hires.forEach(hire=>{
       if(hire.status == 'EMPLOYEE'){
         let paymentMethod:payment_methods = new payment_methods;
@@ -105,16 +99,13 @@ export class AccdashboardComponent implements OnInit {
         paymentMethod.number = hire.account;
         paymentMethod.predeterm = '1';
         this.apiService.insertPaymentMethod(paymentMethod).subscribe((str:string)=>{
-          cnt = cnt + 1;
-          if (cnt == (this.hires.length - 1)) {
-            this.hideSchedules();
-            this.getWavesAll();
-            this.getPeriods();
-            this.getAllEmployees();
-          }
         })
       }
     })
+    this.hideSchedules();
+    this.getWavesAll();
+    this.getPeriods();
+    this.getAllEmployees();
   }
 
   getWavesAll() {
