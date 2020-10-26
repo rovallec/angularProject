@@ -27,6 +27,7 @@ export class AccprofilesComponent implements OnInit {
   insertNew:boolean = false;
   activeCred:credits = new credits;
   totalPayment:string = null;
+  record:boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -88,5 +89,23 @@ export class AccprofilesComponent implements OnInit {
   cancelDeduction(){
     this.insertNew = false;
     this.setPayment();
+  }
+
+  setDeduction(str:string, deb?:debits, cred?:credits){
+    if(str == 'Debit'){
+      this.apiService.getPushedDebits(deb).subscribe((de:credits)=>{
+        this.activeCred = de;
+        this.insertNew = true;
+        this.insertN = 'Debit';
+        this.record = true;
+      })
+    }else{
+      this.apiService.getPushedCredits(cred).subscribe((de:credits)=>{
+        this.activeCred = de;
+        this.insertNew = true;
+        this.insertN = 'Credit';
+        this.record = true;
+      })
+    }
   }
 }

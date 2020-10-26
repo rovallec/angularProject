@@ -519,5 +519,12 @@ insertPaymentMethod(payment_methods:payment_methods){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPaymentMethod.php`, payment_methods);
 }
 
+getPushedCredits(credit:credits){
+  return this.httpClient.post<credits>(`${this.PHP_API_SERVER}/phpscripts/getPushedCredits.php`, credit);
+}
+
+getPushedDebits(debit:debits){
+  return this.httpClient.post<credits>(`${this.PHP_API_SERVER}/phpscripts/getPushedDebitss.php`, debit);
+}
   constructor(private httpClient:HttpClient) { }
 }

@@ -89,7 +89,7 @@
                                             <th>AMOUNT</th>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let cred of credits" class="selectable">
+                                            <tr *ngFor="let cred of credits" class="selectable" (click)="setDeduction('Credit')">
                                                 <td style="text-align: center;">{{cred.iddebits}}</td>
                                                 <td style="text-align: center;">{{cred.type}}</td>
                                                 <td style="text-align: center;">{{cred.amount}}</td>
@@ -122,7 +122,7 @@
                                             <th>AMOUNT</th>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let deb of debits" class="selectable">
+                                            <tr *ngFor="let deb of debits" class="selectable" (click)="setDeduction('Debit', deb)">
                                                 <td style="text-align: center;">{{deb.iddebits}}</td>
                                                 <td style="text-align: center;">{{deb.type}}</td>
                                                 <td style="text-align: center;">{{deb.amount}}</td>
@@ -156,19 +156,19 @@
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-3">
                                     <label style="text-align: center;">Concept:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="activeCred.type">
+                                    <input type="text" class="form-control" [(ngModel)]="activeCred.type" [disabled]="record">
                                 </div>
                                 <div class="form-group col-md-6"></div>
                                 <div class="form-group col-md-3">
                                     <label style="text-align: center;">Amount:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="activeCred.amount">
+                                    <input type="text" class="form-control" [(ngModel)]="activeCred.amount" [disabled]="record">
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-12">
                                     <label style="text-align: center;">Notes:</label>
                                     <textarea class="form-control" width="100%"
-                                        [(ngModel)]="activeCred.notes"></textarea>
+                                        [(ngModel)]="activeCred.notes" [disabled]="record"></textarea>
                                 </div>
                             </div>
                             <div class="form-row col-md-12" style="padding-bottom: 25px;">
