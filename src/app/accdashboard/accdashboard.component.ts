@@ -80,14 +80,16 @@ export class AccdashboardComponent implements OnInit {
   finishEdit() {
     let cnt: number = 0;
     this.hires.forEach(hire => {
-      this.apiService.updateBank(hire).subscribe((str: string) => {
-        cnt = cnt + 1;
-        if (cnt == this.hires.length) {
-          this.getWavesAll();
-          this.getPeriods();
-          this.getAllEmployees();
-        }
-      });
+      if (hire.status == 'EMPLOYEE') {
+        this.apiService.updateBank(hire).subscribe((str: string) => {
+          cnt = cnt + 1;
+          if (cnt == this.hires.length) {
+            this.getWavesAll();
+            this.getPeriods();
+            this.getAllEmployees();
+          }
+        });
+      }
     })
   }
 
@@ -115,7 +117,7 @@ export class AccdashboardComponent implements OnInit {
     })
   }
 
-  cancelEdit(){
+  cancelEdit() {
     this.edit_bank = false;
     this.hideSchedules();
     this.getWavesAll();
