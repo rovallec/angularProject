@@ -118,12 +118,22 @@ export class AccdashboardComponent implements OnInit {
   }
 
   getWavesAll() {
-    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate() + " AND `state` = 0";
+    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate() + " AND (`state` = 0 OR `state` = '2')";
     this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
       this.waves = readWaves;
       this.wave_ToEdit = readWaves[0];
     })
   }
+
+  editW(wv:waves_template){
+      this.apiService.updateWaveState(wv).subscribe((st:string)=>{
+        this.hideSchedules();
+        this.getWavesAll();
+        this.getPeriods();
+        this.getAllEmployees();
+      });
+  }
+
 
   getSchedules(wv: waves_template) {
     this.waves.forEach(wa => {

@@ -56,7 +56,7 @@ export class HrhomeComponent implements OnInit {
   }
 
   start(){
-    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate() + " AND `state` = 0";
+    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate() + " AND (`state` = 0 OR `state` = '3')";
     this.apiService.getfilteredWaves({str: date}).subscribe((wv:waves_template[])=>{
       this.wavesToShow = wv;
     })
