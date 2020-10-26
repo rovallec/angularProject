@@ -11,7 +11,7 @@ $bank = ($request->bank);
 $account = ($request->account);
 
 
-$sql = "UPDATE `profiles` SET `bank` = $bank, `account` = $account WHERE `idprofiles` = $id_profile";
+$sql = "UPDATE `profiles` SET `bank` = '$bank', `account` = '$account' WHERE `idprofiles` = $id_profile";
 
 if(mysqli_query($con,$sql)){
     echo(mysqli_insert_id($con));
