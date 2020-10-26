@@ -15,7 +15,7 @@ $sql = "select profiles.idprofiles, credits.idcredits, profiles.first_name, prof
 
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
-        $res[$i]['idcredits'] = $row['idcredits'];
+        $res[$i]['  '] = $row['idcredits'];
         $res[$i]['idpayments'] = $row['idprofiles'];
         $res[$i]['type'] = $row['type'];
         $res[$i]['amount'] = $row['amount'];

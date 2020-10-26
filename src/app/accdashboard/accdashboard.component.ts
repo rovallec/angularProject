@@ -83,7 +83,8 @@ export class AccdashboardComponent implements OnInit {
       if (hire.status == 'EMPLOYEE') {
         this.apiService.updateBank(hire).subscribe((str: string) => {
           cnt = cnt + 1;
-          if (cnt == ( this.hires.length - 1)) {
+          console.log(cnt);
+          if (cnt === ( this.hires.length - 1)) {
             this.hideSchedules();
             this.getWavesAll();
             this.getPeriods();

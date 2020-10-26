@@ -524,7 +524,7 @@ getPushedCredits(credit:credits){
 }
 
 getPushedDebits(debit:debits){
-  return this.httpClient.post<credits>(`${this.PHP_API_SERVER}/phpscripts/getPushedDebitss.php`, debit);
+  return this.httpClient.post<credits>(`${this.PHP_API_SERVER}/phpscripts/getPushedDebits.php`, debit);
 }
   constructor(private httpClient:HttpClient) { }
 }
