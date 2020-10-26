@@ -55,6 +55,10 @@ export class AccdashboardComponent implements OnInit {
     })
   }
 
+  gotoProfile(emp:employees){
+    this.router.navigate(['./accProfile', emp.idemployees + ";" + emp.id_profile]);
+  }
+
   cancelSearch(){
     this.getWavesAll();
     this.getPeriods();

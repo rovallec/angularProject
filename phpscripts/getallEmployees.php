@@ -47,6 +47,8 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['name'] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         $res[$i]['client_id'] = $row['client_id'];
         $res[$i]['nearsol_id'] = $row['nearsol_id'];
+        $res[$i]['hiring_date'] = $row['hiring_date'];
+        $res[$i]['state'] = $row['state'];
         $i++;
     }
     echo(json_encode($res));

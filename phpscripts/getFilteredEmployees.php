@@ -49,6 +49,7 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['nearsol_id'] = $row['nearsol_id'];
         $res[$i]['base_payment'] = $row['base_payment'];
         $res[$i]['productivity_payment'] = $row['productivity_payment'];
+        $res[$i]['hiring_date'] = $row['hiring_date'];
         $i++;
     }
     echo(json_encode($res));

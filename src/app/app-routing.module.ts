@@ -20,6 +20,7 @@ import { SupExceptionsComponent } from './sup-exceptions/sup-exceptions.componen
 import { periods } from './process_templates';
 import { PeriodsComponent } from './periods/periods.component';
 import { PyhomeComponent } from './pyhome/pyhome.component';
+import { AccprofilesComponent } from './accprofiles/accprofiles.component';
 
 const routes:Routes = [
   {
@@ -103,6 +104,11 @@ const routes:Routes = [
   {
     path:'pyhome',
     component: PyhomeComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'accProfile/:id',
+    component: AccprofilesComponent,
     canActivate:[AuthGuard]
   },
   {

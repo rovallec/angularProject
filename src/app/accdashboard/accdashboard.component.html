@@ -158,7 +158,7 @@
                         <th scope="col">Status</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let employee of employees">
+                        <tr *ngFor="let employee of employees" (click)="gotoProfile(employee)">
                             <td>{{employee.idemployees}}</td>
                             <td>{{employee.nearsol_id}}</td>
                             <td>{{employee.name}}</td>
