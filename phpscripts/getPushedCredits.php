@@ -23,5 +23,6 @@ if($res = mysqli_query($con,$sql)){
         $return['type'] = $row['type'];
         $return['amount'] = $row['amount'];
     }
+echo(json_encode($return));
 }
 ?>

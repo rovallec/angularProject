@@ -522,7 +522,6 @@ export class PeriodsComponent implements OnInit {
                             let dt: Date = new Date(attendance.date);
 
                             if (dt.getDay() === 0) {
-                              console.log(attendance.date);
                               this.non_show_2 = true;
                             }
 
