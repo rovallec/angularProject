@@ -3,7 +3,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 import { profiles } from './profiles';
 import { process } from './process';
-import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess } from './fullProcess';
+import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
 import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services } from './process_templates';
 
 import { Observable } from 'rxjs'; 
@@ -513,6 +513,10 @@ insertPushedDebit(debit:credits){
 
 updateBank(hire:hires_template){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateBank.php`, hire);
+}
+
+insertPaymentMethod(payment_methods:payment_methods){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPaymentMethod.php`, payment_methods);
 }
 
   constructor(private httpClient:HttpClient) { }

@@ -3,7 +3,7 @@ import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { Router } from '@angular/router';
 import { waves_template, schedules, hires_template, periods } from '../process_templates'
-import { employees } from '../fullProcess';
+import { employees, payment_methods } from '../fullProcess';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
@@ -83,12 +83,35 @@ export class AccdashboardComponent implements OnInit {
       if (hire.status == 'EMPLOYEE') {
         this.apiService.updateBank(hire).subscribe((str: string) => {
           cnt = cnt + 1;
-          if (cnt == this.hires.length) {
+          if (cnt == ( this.hires.length - 1)) {
+            this.hideSchedules();
             this.getWavesAll();
             this.getPeriods();
             this.getAllEmployees();
           }
         });
+      }
+    })
+  }
+
+  completeWave(){
+    let cnt: number = 0;
+    this.hires.forEach(hire=>{
+      if(hire.status == 'EMPLOYEE'){
+        let paymentMethod:payment_methods = new payment_methods;
+        paymentMethod.id_employee = hire.idemployees;
+        paymentMethod.bank = hire.bank;
+        paymentMethod.number = hire.account;
+        paymentMethod.predeterm = '1';
+        this.apiService.insertPaymentMethod(paymentMethod).subscribe((str:string)=>{
+          cnt = cnt + 1;
+          if (cnt == (this.hires.length - 1)) {
+            this.hideSchedules();
+            this.getWavesAll();
+            this.getPeriods();
+            this.getAllEmployees();
+          }
+        })
       }
     })
   }
