@@ -43,12 +43,12 @@
     </tr>
     <!------------------------------------------------------------------------------------NAV------------------------------------------------------------------------->
     <tr style="border-bottom: solid 4px #e3f2fd;">
-        <td colspan="2" style="padding-top:30px">
+        <td colspan="2" style="padding-top:30px" ngIf="!newProc">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
                     <a class="nav-item nav-link active" id="nav-dp-tab" data-toggle="tab" href="#nav-dp" role="tab"
                         aria-controls="nav-dp" aria-selected="false">Payments</a>
-                    <a class="nav-item nav-link" id="nav-dp-tab" data-toggle="tab" href="#nav-dp" role="tab"
+                    <a class="nav-item nav-link" id="nav-beneficiarierance-tab" data-toggle="tab" href="#nav-dp" role="tab"
                         aria-controls="nav-beneficiarierance" aria-selected="false">Payment Methods</a>
                 </div>
             </nav>
@@ -61,8 +61,8 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
-                                <select class="form-control" [(ngModel)]="active_payment" (onChange)="setPayment()">
-                                    <option *ngFor="let payment of payments">{{payment.start}} - {{payment.end}}
+                                <select class="form-control" [(ngModel)]="active_payment" (Change)="setPayment()">
+                                    <option *ngFor="let payment of payments" [value]="payment">{{payment.start}} TO {{payment.end}}
                                     </option>
                                 </select>
                             </div>
@@ -128,7 +128,7 @@
         <!---------------------------------------------------------------------------------NEW PROCESS----------------------------------------------------------------------->
         <td colspan="2" style="padding-top:30px">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
-                <div class="nav nav-tabs" id="nav-tb" role="tablist" width=100% style="padding-top:15px">
+                <div class="nav nav-tabs" id="nav-tb" role="tablist" width=100% style="padding-top:15px" *ngIf="newProc">
                     <a class="nav-item nav-link active" id="nav-newproc-tab" data-toggle="tab" href="#nav-newproc"
                         role="tab" aria-controls="nav-newproc" aria-selected="true"><i
                             class="fas fa-arrow-circle-left"></i></a>

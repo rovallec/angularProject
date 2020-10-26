@@ -15,9 +15,9 @@ $return = [];
 $i = 0;
 
 if($idperiods != 'all'){
-        $sql = "SELECT * FROM `payments` LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_period` = $idperiods AND active = 1;";
+    $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_period` = $idperiods AND active = 1;";
 }else{
-    $sql = "SELECT * FROM `payments` LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status;";
+    $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status;";
 }
 
 if($result = mysqli_query($con, $sql)){
@@ -30,6 +30,8 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['debits'] = $res['debits'];
         $return[$i]['employee_name'] = $res['first_name'] . " " . $res['second_name'] . " " . $res['first_lastname'] . " " . $res['second_lastname'];
         $return[$i]['date'] = $res['date'];
+        $return[$i]['start'] = $res['start'];
+        $return[$i]['end'] = $res['end'];
         $i++;
     }
     echo(json_encode($return));

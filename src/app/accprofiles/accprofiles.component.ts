@@ -21,6 +21,7 @@ export class AccprofilesComponent implements OnInit {
   debits: debits[] = [];
   payment_methods: payment_methods[] = [];
   active_payment: payments = new payments;
+  newProc:boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
