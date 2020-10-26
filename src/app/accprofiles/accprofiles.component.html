@@ -80,7 +80,7 @@
                             <div class="form-group col-md-5">
                                 <label
                                     style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">CREDITS</label>
-                                <div class="form-row col-md-12">
+                                <div class="form-row col-md-12" style="padding-bottom:25px">
                                     <table class="table table-striped table-hover"
                                         style="border-right:solid 4px #e3f2fd">
                                         <thead style="text-align:center">
@@ -102,7 +102,7 @@
                                     <div class="form-group col-md-8" style="border-bottom:solid 4px #e3f2fd"></div>
                                     <div class="form-group col-md-2"></div>
                                 </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew">
+                                <div class="form-row col-md-12" *ngIf="!insertNew" style="margin-top:25px">
                                     <div class="form-group col-md-5"></div>
                                     <div class="form-group col-md-2">
                                         <button class="form-control" (click)="newDeduction('Credit')">Insert</button>
@@ -113,7 +113,7 @@
                             <div class="form-group col-md-5">
                                 <label
                                     style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">DEBITS</label>
-                                <div class="form-row col-md-12" style="margin-bottom:25px;">
+                                <div class="form-row col-md-12" style="padding-bottom:25px;">
                                     <table class="table table-striped table-hover"
                                         style="margin-right:solid 4px #f4f8ff">
                                         <thead style="text-align:center">
@@ -135,7 +135,7 @@
                                     <div class="form-group col-md-8" style="border-bottom:solid 4px #e3f2fd"></div>
                                     <div class="form-group col-md-2"></div>
                                 </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew">
+                                <div class="form-row col-md-12" *ngIf="!insertNew" style="margin-top:25px">
                                     <div class="form-group col-md-5"></div>
                                     <div class="form-group col-md-2">
                                         <button class="form-control" (click)="newDeduction('Debit')">Insert</button>
@@ -171,7 +171,7 @@
                                         [(ngModel)]="activeCred.notes"></textarea>
                                 </div>
                             </div>
-                            <div class="form-row col-md-12" style="margin-bottom: 25px;">
+                            <div class="form-row col-md-12" style="padding-bottom: 25px;">
                                 <div class="form-group col-md-4">
                                     <label style="text-align: center;">User:</label>
                                     <input type="text" [disabled]="true" class="form-control"

@@ -63,6 +63,7 @@ export class AccprofilesComponent implements OnInit {
 
   insertDeduction(){
     this.activeCred.id_user = this.authUser.getAuthusr().iduser;
+    this.activeCred.idpayments = this.active_payment.idpayments;
     if(this.insertN === 'Debit'){
       this.apiService.insertDebits(this.activeCred).subscribe((str:string)=>{
         this.activeCred.iddebits = str;
@@ -73,7 +74,7 @@ export class AccprofilesComponent implements OnInit {
     }else{
       this.apiService.insertCredits(this.activeCred).subscribe((str:string)=>{
         this.activeCred.iddebits = str;
-        this.apiService.insertPushedDebit(this.activeCred).subscribe((str:string)=>{
+        this.apiService.insertPushedCredit(this.activeCred).subscribe((str:string)=>{
           this.setPayment();
         })
       })
