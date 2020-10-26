@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="form-group col-md-2" *ngIf="wave.show === '0' && !edit_bank">
                                             <label>Status</label>
-                                            <select class="form-control" [(ngModel)]="wv.state">
+                                            <select class="form-control" [(ngModel)]="wave.state">
                                                 <option value="0">PENDING</option>
                                                 <option value="3">EMPLOYEES</option>
                                             </select>
@@ -76,7 +76,7 @@
                                                 *ngIf="wave.show === '1' && edit_bank" (click)="cancelEdit()"></i>
                                             <i class="fas fa-vote-yea" style="margin-left:5px; cursor: pointer;"
                                                 *ngIf="wave.show === '1' && edit_bank" (click)="completeWave()"></i>
-                                            <i class="fas fa-edit" (click)="editW(wv);" *ngIf="wv.show === '0' && !edit_bank"
+                                            <i class="fas fa-edit" (click)="editW(wave);" *ngIf="wv.show === '0' && !edit_bank"
                                             style="margin-left:5px; cursor: pointer;"></i>
                                         </div>
                                     </div>
