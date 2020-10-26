@@ -96,28 +96,29 @@
                                             <td>{{hr.account}}</td>
                                         </tr>
                                     </tbody>
-                                    <table class="table table-striped table-hover" *ngIf="edit_bank">
-                                        <thead>
-                                            <th>ID</th>
-                                            <th>NEARSOL ID</th>
-                                            <th>REPORT TO</th>
-                                            <th>NAME</th>
-                                            <th>STATUS</th>
-                                            <th>BANK</th>
-                                            <th>ACCOUNT</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let hr of hires">
-                                                <td>{{hr.idhires}}</td>
-                                                <td>{{hr.nearsol_id}}</td>
-                                                <td>{{hr.reports_to}}</td>
-                                                <td>{{hr.first_name}} {{hr.second_name}} {{hr.first_lastname}}
-                                                    {{hr.second_lastname}}</td>
-                                                <td>{{hr.status}}</td>
-                                                <td><input type="text" class="form-control" [(ngModel)]="hire.bank"></td>
-                                                <td><input type="text" class="form-control" [(ngModel)]="hire.account"></td>
-                                            </tr>
-                                        </tbody>
+                                </table>
+                                <table class="table table-striped table-hover" *ngIf="edit_bank">
+                                    <thead>
+                                        <th>ID</th>
+                                        <th>NEARSOL ID</th>
+                                        <th>REPORT TO</th>
+                                        <th>NAME</th>
+                                        <th>STATUS</th>
+                                        <th>BANK</th>
+                                        <th>ACCOUNT</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let hr of hires">
+                                            <td>{{hr.idhires}}</td>
+                                            <td>{{hr.nearsol_id}}</td>
+                                            <td>{{hr.reports_to}}</td>
+                                            <td>{{hr.first_name}} {{hr.second_name}} {{hr.first_lastname}}
+                                                {{hr.second_lastname}}</td>
+                                            <td>{{hr.status}}</td>
+                                            <td><input type="text" class="form-control" [(ngModel)]="hire.bank"></td>
+                                            <td><input type="text" class="form-control" [(ngModel)]="hire.account"></td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </td>
                         </tr>
