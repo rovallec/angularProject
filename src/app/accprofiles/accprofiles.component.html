@@ -89,7 +89,7 @@
                                             <th>AMOUNT</th>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let cred of credits" class="selectable" (click)="setDeduction('Credit', cred)">
+                                            <tr *ngFor="let cred of credits" class="selectable" (click)="setCredit(cred)">
                                                 <td style="text-align: center;">{{cred.iddebits}}</td>
                                                 <td style="text-align: center;">{{cred.type}}</td>
                                                 <td style="text-align: center;">{{cred.amount}}</td>
@@ -122,7 +122,7 @@
                                             <th>AMOUNT</th>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let deb of debits" class="selectable" (click)="setDeduction('Debit', deb)">
+                                            <tr *ngFor="let deb of debits" class="selectable" (click)="setDeduction(deb)">
                                                 <td style="text-align: center;">{{deb.iddebits}}</td>
                                                 <td style="text-align: center;">{{deb.type}}</td>
                                                 <td style="text-align: center;">{{deb.amount}}</td>

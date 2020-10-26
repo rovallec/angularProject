@@ -91,21 +91,21 @@ export class AccprofilesComponent implements OnInit {
     this.setPayment();
   }
 
-  setDeduction(str:string, deb?:debits, cred?:credits){
-    if(str == 'Debit'){
+  setCredit(cred:credits){
+    this.apiService.getPushedCredits(cred).subscribe((de:credits)=>{
+      this.activeCred = de;
+      this.insertNew = true;
+      this.insertN = 'Credit';
+      this.record = true;
+    })
+  }
+
+  setDeduction(deb:debits){
       this.apiService.getPushedDebits(deb).subscribe((de:credits)=>{
         this.activeCred = de;
         this.insertNew = true;
         this.insertN = 'Debit';
         this.record = true;
       })
-    }else{
-      this.apiService.getPushedCredits(cred).subscribe((de:credits)=>{
-        this.activeCred = de;
-        this.insertNew = true;
-        this.insertN = 'Credit';
-        this.record = true;
-      })
-    }
   }
 }
