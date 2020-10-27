@@ -143,6 +143,7 @@ export class AccdashboardComponent implements OnInit {
               hire.id_schedule = '0';
             }
           })
+          this.hires = hires;
         })
       });
     });
