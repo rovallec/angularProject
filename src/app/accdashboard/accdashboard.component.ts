@@ -94,11 +94,12 @@ export class AccdashboardComponent implements OnInit {
     this.hires.forEach(hire=>{
       if(hire.status == 'EMPLOYEE'){
         let paymentMethod:payment_methods = new payment_methods;
-        paymentMethod.id_employee = hire.idemployees;
-        paymentMethod.bank = hire.bank;
-        paymentMethod.number = hire.account;
-        paymentMethod.predeterm = '1';
-        this.apiService.insertPaymentMethod(paymentMethod).subscribe((str:string)=>{
+        this.apiService.getSearchEmployees({filter:'id_profile', value:hire.id_profile, dp:'all'}).subscribe((emp:employees[])=>{
+          paymentMethod.bank = hire.bank;
+          paymentMethod.number = hire.account;
+          paymentMethod.predeterm = '1';
+          this.apiService.insertPaymentMethod(paymentMethod).subscribe((str:string)=>{
+          })
         })
       }
     })

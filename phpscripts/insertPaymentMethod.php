@@ -12,7 +12,5 @@ $bank = ($request->bank);
 
 $sql = "INSERT INTO `minearsol`.`payment_methods` (`idpayment_methods`, `id_employee`, `type`, `number`, `bank`) VALUES (NULL, $id_employee, 'BANK ACCOUNT', '$number', '$bank');";
 
-if(mysqli_query($con,$sql)){
-    echo(mysqli_insert_id($con));
-}
+echo($sql);
 ?>
