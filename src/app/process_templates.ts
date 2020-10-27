@@ -60,6 +60,7 @@ export class hires_template {
     bank:string;
     account:string;
     payType:string;
+    bool:boolean;
 }
 
 export class accounts {

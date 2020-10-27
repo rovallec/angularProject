@@ -126,8 +126,8 @@
                                             <td>{{hr.first_name}} {{hr.second_name}} {{hr.first_lastname}}
                                                 {{hr.second_lastname}}</td>
                                             <td>{{hr.status}}</td>
-                                            <td><input type="text" class="form-control" [(ngModel)]="hr.bank" [disabled]="hr.id_schedule == '0'"></td>
-                                            <td><input type="text" class="form-control" [(ngModel)]="hr.account" [disabled]="hr.id_schedule == '0'"></td>
+                                            <td><input type="text" class="form-control" [(ngModel)]="hr.bank" [disabled]="hr.bool"></td>
+                                            <td><input type="text" class="form-control" [(ngModel)]="hr.account" [disabled]="hr.bool"></td>
                                         </tr>
                                     </tbody>
                                 </table>

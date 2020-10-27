@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { waves_template, schedules, hires_template, periods } from '../process_templates'
 import { employees, payment_methods } from '../fullProcess';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-accdashboard',
@@ -139,8 +140,10 @@ export class AccdashboardComponent implements OnInit {
       hires.forEach(hire => {
         this.apiService.getSearchEmployees({dp:'all', filter:'id_profile', value:hire.id_profile}).subscribe((emp:employees[])=>{
           this.apiService.getPaymentMethods(emp[0]).subscribe((pym:payment_methods[])=>{
-            if(pym.length > 0){
-              hire.id_schedule = '0';
+            if(isNullOrUndefined(pym)){
+              hire.bool = true;
+            }else{
+              hire.bool = false;
             }
           })
           this.hires = hires;
