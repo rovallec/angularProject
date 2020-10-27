@@ -90,23 +90,27 @@ export class AccdashboardComponent implements OnInit {
     })
   }
 
-  completeWave(){
-    this.hires.forEach(hire=>{
-      if(hire.status == 'EMPLOYEE'){
-        let paymentMethod:payment_methods = new payment_methods;
-        this.apiService.getSearchEmployees({filter:'id_profile', value:hire.id_profile, dp:'all'}).subscribe((emp:employees[])=>{
-          paymentMethod.bank = hire.bank;
-          paymentMethod.number = hire.account;
-          paymentMethod.predeterm = '1';
-          this.apiService.insertPaymentMethod(paymentMethod).subscribe((str:string)=>{
+  completeWave() {
+    this.hires.forEach(hire => {
+      if (hire.status == 'EMPLOYEE') {
+        if (parseFloat(hire.account) > 0) {
+          let paymentMethod: payment_methods = new payment_methods;
+          this.apiService.getSearchEmployees({ filter: 'id_profile', value: hire.id_profile, dp: 'all' }).subscribe((emp: employees[]) => {
+            paymentMethod.bank = hire.bank;
+            paymentMethod.number = hire.account;
+            paymentMethod.predeterm = '1';
+            paymentMethod.id_employee = emp[0].idemployees;
+            this.apiService.insertPaymentMethod(paymentMethod).subscribe((str: string) => {
+            })
           })
-        })
+        }
       }
     })
     this.hideSchedules();
     this.getWavesAll();
     this.getPeriods();
     this.getAllEmployees();
+    this.cancelEdit();
   }
 
   getWavesAll() {
@@ -117,13 +121,13 @@ export class AccdashboardComponent implements OnInit {
     })
   }
 
-  editW(wv:waves_template){
-      this.apiService.updateWaveState(wv).subscribe((st:string)=>{
-        this.hideSchedules();
-        this.getWavesAll();
-        this.getPeriods();
-        this.getAllEmployees();
-      });
+  editW(wv: waves_template) {
+    this.apiService.updateWaveState(wv).subscribe((st: string) => {
+      this.hideSchedules();
+      this.getWavesAll();
+      this.getPeriods();
+      this.getAllEmployees();
+    });
   }
 
 
@@ -132,7 +136,15 @@ export class AccdashboardComponent implements OnInit {
       wa.show = '0';
     });
     this.apiService.getFilteredHires(wv).subscribe((hires: hires_template[]) => {
-      this.hires = hires
+      hires.forEach(hire => {
+        this.apiService.getSearchEmployees({dp:'all', filter:'id_profile', value:hire.id_profile}).subscribe((emp:employees[])=>{
+          this.apiService.getPaymentMethods(emp[0]).subscribe((pym:payment_methods[])=>{
+            if(pym.length > 0){
+              hire.id_schedule = '0';
+            }
+          })
+        })
+      });
     });
     this.waves[this.waves.indexOf(wv)].show = "1";
   }

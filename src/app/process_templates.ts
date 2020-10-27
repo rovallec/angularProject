@@ -749,3 +749,20 @@ export class services {
         this.status = null;
     }
 }
+
+export class payment_methods{
+    idpayment_methods:string;
+    id_employee:string;
+    type:string
+    number:string
+    bank:string;
+    predeterm:string;
+    constructor(){
+        this.idpayment_methods = null;
+        this.id_employee = null;
+        this.type = null;
+        this.number = null;
+        this.bank = null;
+        this.predeterm = null;
+    }
+}

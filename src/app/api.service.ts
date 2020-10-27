@@ -526,5 +526,10 @@ getPushedCredits(credit:credits){
 getPushedDebits(debit:debits){
   return this.httpClient.post<credits>(`${this.PHP_API_SERVER}/phpscripts/getPushedDebits.php`, debit);
 }
+
+getPaymentMethods(employee:employees){
+  return this.httpClient.post<payment_methods[]>(`${this.PHP_API_SERVER}/phpscripts/getPaymentMethods.php`, employee);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
