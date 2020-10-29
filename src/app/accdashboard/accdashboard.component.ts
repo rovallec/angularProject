@@ -97,6 +97,7 @@ export class AccdashboardComponent implements OnInit {
         if (parseFloat(hire.account) > 0) {
           let paymentMethod: payment_methods = new payment_methods;
           this.apiService.getSearchEmployees({ filter: 'id_profile', value: hire.id_profile, dp: 'all' }).subscribe((emp: employees[]) => {
+            paymentMethod.type = "BANK ACCOUNT";
             paymentMethod.bank = hire.bank;
             paymentMethod.number = hire.account;
             paymentMethod.predeterm = '1';

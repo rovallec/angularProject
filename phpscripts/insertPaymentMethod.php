@@ -16,7 +16,7 @@ $sql = "INSERT INTO `minearsol`.`payment_methods` (`idpayment_methods`, `id_empl
 $sql1 = "SELECT * FROM `payment_methods` WHERE `id_employee` = $id_employee;";
 if($res=mysqli_query($con, $sql1)){
     while($row = mysqli_fetch_assoc($res)){
-        $id_paymentMethod = $res['idpayment_methods']
+        $id_paymentMethod = $res['idpayment_methods'];
         $sql2 = "UPDATE `payment_methods` SET `predeterm` = 0 WHERE `idpayment_methods` = $id_paymentMethod;";
         if(mysqli_query($con, $sql2)){}else{
             http_response_code(404);
