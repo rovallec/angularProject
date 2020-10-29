@@ -9,9 +9,10 @@ $request = json_decode($postdata);
 $id_employee = ($request->id_employee);
 $number = ($request->number);
 $bank = ($request->bank);
+$predeterm = ($request->predeterm);
 $t = 1;
 
-$sql = "INSERT INTO `minearsol`.`payment_methods` (`idpayment_methods`, `id_employee`, `type`, `number`, `bank`) VALUES (NULL, $id_employee, 'BANK ACCOUNT', '$number', '$bank');";
+$sql = "INSERT INTO `minearsol`.`payment_methods` (`idpayment_methods`, `id_employee`, `type`, `number`, `bank`, `predeterm`) VALUES (NULL, $id_employee, 'BANK ACCOUNT', '$number', '$bank');";
 
 $sql1 = "SELECT * FROM `payment_methods` WHERE `id_employee` = $id_employee;";
 if($res=mysqli_query($con, $sql1)){
