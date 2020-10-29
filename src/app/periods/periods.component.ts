@@ -474,6 +474,7 @@ export class PeriodsComponent implements OnInit {
   }
 
   setPayTime(id_employee: string, id_profile: string) {
+    this.vacations = [];
     let totalCred: number = 0;
     let totalDeb: number = 0;
     let discounted: number = 0;

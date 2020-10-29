@@ -10,7 +10,7 @@ $id_employee = ($request->idemployees);
 
 $result = [];
 $i = 0;
-$sql = "SELECT * FROM payment_methods WHERE `idemployees` = $id_employee;";
+$sql = "SELECT * FROM payment_methods WHERE `id_employee` = $id_employee;";
 
 if($res = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($res)){

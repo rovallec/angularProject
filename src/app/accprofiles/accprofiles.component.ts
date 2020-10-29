@@ -15,11 +15,13 @@ import { credits, debits, payments, periods } from '../process_templates';
 export class AccprofilesComponent implements OnInit {
 
   employee: employees = new employees;
+  activePaymentMethod:payment_methods = new payment_methods;
   employe_id: string = null;
   payment: string = null;
   payments: payments[] = [];
   credits: credits[] = [];
   debits: debits[] = [];
+  paymentMethods:payment_methods[] = [];
   payment_methods: payment_methods[] = [];
   active_payment: payments = new payments;
   newProc:boolean = false;
@@ -28,14 +30,24 @@ export class AccprofilesComponent implements OnInit {
   activeCred:credits = new credits;
   totalPayment:string = null;
   record:boolean = false;
+  newPaymentMethod:boolean  = false;
+  recordPaymentMethod:boolean = false;
+
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
   ngOnInit() {
+    this.start();
+  }
+
+  start(){
     let peridos: periods = new periods;
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
+      this.apiService.getPaymentMethods(emp[0]).subscribe((pymM:payment_methods[])=>{
+        this.paymentMethods = pymM;
+      })
       this.employee = emp[0];
       peridos.idperiods = 'all';
       peridos.status = this.employe_id;
@@ -58,10 +70,37 @@ export class AccprofilesComponent implements OnInit {
     })
   }
 
+  cancelNewpaymentMethod(){
+    this.newPaymentMethod = false;
+  }
+
+  insertNewPaymentMethod(){
+    this.activePaymentMethod.id_user = this.authUser.getAuthusr().iduser;
+    this.apiService.insertPaymentMethod(this.activePaymentMethod).subscribe((str:string)=>{
+      this.newPaymentMethod = false;
+      this.start();
+    })
+  }
+
+
+  setNewpaymentMethod(){
+    this.activePaymentMethod = new payment_methods;
+    this.activePaymentMethod.id_employee = this.employee.idemployees;
+    this.activePaymentMethod.predeterm = "1";
+    this.activePaymentMethod.id_user = this.authUser.getAuthusr().user_name;
+    this.activePaymentMethod.date = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString());
+    this.newPaymentMethod = true;
+  }
+
   newDeduction(str:string){
     this.activeCred.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
     this.insertN = str;
     this.insertNew = true;
+  }
+
+  setPaymentMethod(paymentMethod:payment_methods){
+    this.activePaymentMethod = paymentMethod;
+    this.recordPaymentMethod = true;
   }
 
   insertDeduction(){

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { waves_template, schedules, hires_template, periods } from '../process_templates'
 import { employees, payment_methods } from '../fullProcess';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { isNullOrUndefined } from 'util';
+import { isNull, isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-accdashboard',
@@ -18,7 +18,7 @@ export class AccdashboardComponent implements OnInit {
   wave_ToEdit: waves_template = new waves_template;
   schedules: schedules[] = [new schedules];
   schedule_to_edit: schedules = new schedules;
-  hires: hires_template[] = [new hires_template];
+  hires: hires_template[] = [];
   employees: employees[] = [];
   sch_hrs_st: string;
   sch_min_st: string;
@@ -124,15 +124,16 @@ export class AccdashboardComponent implements OnInit {
 
   editW(wv: waves_template) {
     this.apiService.updateWaveState(wv).subscribe((st: string) => {
-      this.hideSchedules();
       this.getWavesAll();
       this.getPeriods();
       this.getAllEmployees();
+      this.hideSchedules();
     });
   }
 
 
   getSchedules(wv: waves_template) {
+    this.hires = [];
     this.waves.forEach(wa => {
       wa.show = '0';
     });
@@ -140,13 +141,17 @@ export class AccdashboardComponent implements OnInit {
       hires.forEach(hire => {
         this.apiService.getSearchEmployees({dp:'all', filter:'id_profile', value:hire.id_profile}).subscribe((emp:employees[])=>{
           this.apiService.getPaymentMethods(emp[0]).subscribe((pym:payment_methods[])=>{
-            if(isNullOrUndefined(pym)){
-              hire.bool = true;
-            }else{
+            if(isNull(pym)){
               hire.bool = false;
+            }else{
+              if(pym.length>0){
+                hire.bool = true;
+              }else{
+                hire.bool = false;
+              }
             }
+            this.hires.push(hire);
           })
-          this.hires = hires;
         })
       });
     });

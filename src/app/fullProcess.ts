@@ -214,19 +214,28 @@ export class hrProcess{
 }
 
 export class payment_methods{
-    idpaymentmethod:string = null;
-    id_employee:string = null;
-    type:string = null;
-    number:string = null;
-    bank:string = null;
-    predeterm:string = null;
+    idpayment_methods:string;
+    id_employee:string;
+    type:string
+    number:string
+    bank:string;
+    predeterm:string;
+    //process
+    id_process: string;
+    id_user: string;
+    date: string;
+    notes: string;
     constructor(){
-        this.idpaymentmethod = null;
+        this.idpayment_methods = null;
         this.id_employee = null;
         this.type = null;
         this.number = null;
-        this.number = null;
         this.bank = null;
         this.predeterm = null;
+        this.id_process = null;
+        this.id_user = null;
+        this.id_employee = null;
+        this.date = null;
+        this.notes = null;
     }
 }
