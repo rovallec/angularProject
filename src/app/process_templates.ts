@@ -1,3 +1,5 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 export class process_templates {
     idprocess_templates: string;
     name: string;
@@ -747,6 +749,27 @@ export class services {
         this.amount = null;
         this.max = null;
         this.frecuency = null;
+        this.status = null;
+    }
+}
+
+export class sup_exception{
+    avaya:string;
+    name:string;
+    date:string;
+    reason:string;
+    time:string;
+    notes:string;
+    supervisor:string;
+    status:string;
+    constructor(){
+        this.avaya = null;
+        this.name = null;
+        this.date = null;
+        this.reason = null;
+        this.time = null;
+        this.notes = null;
+        this.supervisor = null;
         this.status = null;
     }
 }

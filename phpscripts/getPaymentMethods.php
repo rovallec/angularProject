@@ -10,7 +10,7 @@ $id_employee = ($request->idemployees);
 
 $result = [];
 $i = 0;
-$sql = "SELECT * FROM payment_methods WHERE `id_employee` = $id_employee;";
+$sql = "SELECT * FROM payment_methods LEFT JOIN modify_payment_methods ON modify_payment_methods.id_payment_method = payment_methods.idpayment_methods WHERE `id_employee` =  $id_employee;";
 
 if($res = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($res)){
@@ -20,7 +20,8 @@ if($res = mysqli_query($con,$sql)){
         $result[$i]['number'] = $row{'number'};
         $result[$i]['bank'] = $row{'bank'};
         $result[$i]['predeterm'] = $row{'predeterm'};
+        $i = $i + 1;
     }
     echo(json_encode($result));
 }
-?>
+?> 

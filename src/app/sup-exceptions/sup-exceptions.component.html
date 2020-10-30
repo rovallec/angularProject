@@ -1,1 +1,40 @@
-<p>sup-exceptions works!</p>
+<div class="form-row col-md-12">
+    <div class="form-row col-md-12">
+        <div class="form-group col-md-5"></div>
+        <div class="form-group col-md-2">
+            <input type="file" class="from-control" (change)="importFile($event)">
+        </div>
+        <div   class="form-group col-md-5"></div>
+    </div>
+    <div class="form-row col-md-12">
+        <div class="form-group col-md-2"></div>
+        <div class="form-group col-md-8" style="border-bottom:solid 3px #e3f2fd;"></div>
+        <div class="form-group col-md-2"></div>
+    </div>
+    <div class="form-row col-md-12" *ngIf="activeCheck">
+        <table class="table table-striped table-hover">
+            <thead>
+                <th>AVAYA</th>
+                <th>NAME</th>
+                <th>DATE</th>
+                <th>REASON</th>
+                <th>TIME</th>
+                <th>NOTES</th>
+                <th>SUPERVISOR</th>
+                <th>STATUS</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let sup of sups">
+                    <td>{{sup.avaya}}</td>
+                    <td>{{sup.name}}</td>
+                    <td>{{sup.date>></td>
+                    <td>{{sup.reason}}</td>
+                    <td>{{sup.time}}</td>
+                    <td>{{sup.notes}}</td>
+                    <td>{{sup.supervisor}}</td>
+                    <td>{{status}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
