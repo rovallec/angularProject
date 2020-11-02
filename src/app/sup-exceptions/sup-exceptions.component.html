@@ -3,6 +3,7 @@
         <div class="form-group col-md-5"></div>
         <div class="form-group col-md-2">
             <input type="file" class="from-control" (change)="importFile($event)">
+            <i class="fas fa-check-circle" (click)="completeImport()" *ngIf="activeCheck"></i>
         </div>
         <div   class="form-group col-md-5"></div>
     </div>
@@ -27,7 +28,7 @@
                 <tr *ngFor="let sup of sups">
                     <td>{{sup.avaya}}</td>
                     <td>{{sup.name}}</td>
-                    <td>{{sup.date>></td>
+                    <td>{{sup.date}}</td>
                     <td>{{sup.reason}}</td>
                     <td>{{sup.time}}</td>
                     <td>{{sup.notes}}</td>

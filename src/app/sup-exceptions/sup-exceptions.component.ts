@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { supervisor_survey, sup_exception } from '../process_templates';
+import { attendences, attendences_adjustment, supervisor_survey, sup_exception } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
 import { isNull } from 'util';
+import { AuthServiceService } from '../auth-service.service';
 
 @Component({
   selector: 'app-sup-exceptions',
@@ -18,9 +19,42 @@ export class SupExceptionsComponent implements OnInit {
   arrayBuffer: any;
   filelist: any;
 
-  constructor(public apiService:ApiService) { }
+  constructor(public apiService:ApiService, public authService:AuthServiceService) { }
 
   ngOnInit() {
+  }
+
+  completeImport(){
+    let adjustments:attendences_adjustment[] = [];
+    let i:number = 0;
+    this.sups.forEach(sup=>{
+      i = i + 1;
+      if(sup.status == 'TRUE'){
+        this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:sup.avaya}).subscribe((emp:employees[])=>{
+          this.apiService.getAttendences({date:sup.date, id:emp[0].idemployees}).subscribe((attendance:attendences[])=>{
+            let adjustment:attendences_adjustment = new attendences_adjustment;
+            adjustment.id_employee = emp[0].idemployees;
+            adjustment.id_user = this.authService.getAuthusr().iduser;
+            adjustment.id_type = '2';
+            adjustment.id_department = '28';
+            adjustment.date = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString());
+            adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
+            adjustment.status = 'PENDING';
+            adjustment.reason = sup.reason;
+            adjustment.id_attendence = attendance[0].idattendences;
+            adjustment.time_before = attendance[0].worked_time;
+            adjustment.time_after = (parseFloat(sup.time) + parseFloat(attendance[0].worked_time)).toFixed(2);
+            adjustment.amount = sup.time;
+            adjustment.state = "PENDING";
+            this.apiService.insertAttJustification(adjustment).subscribe((str:string)=>{
+              if(i == this.sups.length){
+                this.activeCheck = false;
+              }
+            })
+          })
+        })
+      }
+    })
   }
 
   importFile(event) {
