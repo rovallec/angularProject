@@ -62,6 +62,10 @@ export class LoginComponent implements OnInit {
               }else{
                 if(this.resUsr[0].department == "28"){
                   this._router.navigate(['/pyhome']);
+                }else{
+                  if(this.resUsr[0].department == "29"){
+                    this._router.navigate(['/fhome']);
+                  }
                 }
               }
             }
