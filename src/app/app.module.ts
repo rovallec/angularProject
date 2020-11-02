@@ -26,7 +26,8 @@ import { DpMaintenanceComponent } from './dp-maintenance/dp-maintenance.componen
 import { SupExceptionsComponent } from './sup-exceptions/sup-exceptions.component';
 import { PeriodsComponent } from './periods/periods.component';
 import { PyhomeComponent } from './pyhome/pyhome.component';
-import { AccprofilesComponent } from './accprofiles/accprofiles.component'
+import { AccprofilesComponent } from './accprofiles/accprofiles.component';
+import { FhomeComponent } from './fhome/fhome.component'
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { AccprofilesComponent } from './accprofiles/accprofiles.component'
     SupExceptionsComponent,
     PeriodsComponent,
     PyhomeComponent,
-    AccprofilesComponent
+    AccprofilesComponent,
+    FhomeComponent
   ],
   imports: [
     BrowserModule,

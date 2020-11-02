@@ -314,7 +314,6 @@ export class HrprofilesComponent implements OnInit {
     this.editAdj = false;
     this.apiService.getAttAdjustments({ id: this.activeEmp }).subscribe((adj: attendences_adjustment[]) => {
       this.showAttAdjustments = adj;
-      console.log(adj);
     })
   }
 
@@ -776,7 +775,6 @@ export class HrprofilesComponent implements OnInit {
         break;
       case 'Pay Vacations':
         if (this.availableVacations < 1) {
-          console.log(this.availableVacations);
           this.addVac = false;
         }else{
           this.addVac = true;

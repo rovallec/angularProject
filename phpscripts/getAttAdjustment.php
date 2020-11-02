@@ -11,13 +11,13 @@
 
     if(explode(";", $id)[0] == 'id'){
         $emp =  explode(";", $id)[1];
-        $sql = "SELECT * FROM attendence_adjustemnt LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp";
+        $sql = "SELECT *,  `attendences`.`date` AS `attdate` FROM attendence_adjustemnt LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp";
     }else{
         $emp = explode(";",$id)[0];
-        $sql =  "SELECT * FROM attendence_adjustemnt LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp;";
+        $sql =  "SELECT *,  `attendences`.`date` AS `attdate` FROM attendence_adjustemnt LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp;";
     }
        
-    $sql = "SELECT * FROM attendence_adjustemnt LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE attendence_justifications.idattendence_justifications  = $id";
+    $sql = "SELECT *,  `attendences`.`date` AS `attdate` FROM attendence_adjustemnt LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE attendence_justifications.idattendence_justifications  = $id";
 
     if($result = mysqli_query($con,$sql)){
         while($res = mysqli_fetch_assoc($result)){
@@ -38,6 +38,7 @@
             $resp['notes'] = $res['notes'];
             $resp['status'] = $res['status'];
             $resp['id_user'] = $res['user_name'];
+            $resp['attendance_date'] = $res['attdate'];
         }
         echo(json_encode($resp));
     }else{
