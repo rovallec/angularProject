@@ -25,7 +25,7 @@ export class FprofilesComponent implements OnInit {
     this.apiService.getSearchEmployees({dp:this.authUser.getAuthusr().department, filter:'idemployees', value:this.route.snapshot.paramMap.get('id')}).subscribe((emp:employees[])=>{
       this.employee = emp[0]
       let prof:profiles = new profiles;
-      prof.id_profile = emp[0].id_profile;
+      prof.idprofiles = emp[0].id_profile;
       this.apiService.getProfile(prof).subscribe((profile:profiles[])=>{
         this.profile = profile[0];
       })
