@@ -10,7 +10,7 @@ $id = ($request->id);
 $i = 0;
 $adjustes = [];
 
-$sql = "SELECT `users`.*, `hr_processes`.*, `attendence_justifications`.*, `attendence_adjustemnt`.* FROM `hr_processes` LEFT JOIN `attendence_justifications` ON `attendence_justifications`.`id_process` = `hr_processes`.`idhr_processes` LEFT JOIN `attendence_adjustemnt` ON `attendence_adjustemnt`.`id_justification` = `attendence_justifications`.`idattendence_justifications` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `hr_processes`.`id_employee` = '$id' AND `id_type` = '2';";
+$sql = "SELECT `attendences`.`date` AS `attdate`, `users`.*, `hr_processes`.*, `attendence_justifications`.*, `attendence_adjustemnt`.* FROM `hr_processes` LEFT JOIN `attendence_justifications` ON `attendence_justifications`.`id_process` = `hr_processes`.`idhr_processes` LEFT JOIN `attendence_adjustemnt` ON `attendence_adjustemnt`.`id_justification` = `attendence_justifications`.`idattendence_justifications` LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `hr_processes`.`id_employee` = '$id' AND `id_type` = '2';";
 
 
 if($result = mysqli_query($con,$sql)){

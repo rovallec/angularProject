@@ -18,10 +18,17 @@ export class SupExceptionsComponent implements OnInit {
   file: any;
   arrayBuffer: any;
   filelist: any;
+  completed:boolean = false;
 
   constructor(public apiService:ApiService, public authService:AuthServiceService) { }
 
   ngOnInit() {
+  }
+  
+  closeImport(){
+    this.activeCheck = false;
+    this.completed = false;
+    this.sups = [];
   }
 
   completeImport(){
@@ -48,7 +55,7 @@ export class SupExceptionsComponent implements OnInit {
             adjustment.state = "PENDING";
             this.apiService.insertAttJustification(adjustment).subscribe((str:string)=>{
               if(i == this.sups.length){
-                this.activeCheck = false;
+                this.completed = true;
               }
             })
           })
@@ -58,6 +65,7 @@ export class SupExceptionsComponent implements OnInit {
   }
 
   importFile(event) {
+    this.sups = [];
     this.activeCheck = true;
     let end:number = 0;
     this.file = event.target.files[0];

@@ -184,6 +184,7 @@ export class attendences_adjustment {
     idattendence_adjustemnt: string;
     id_attendence: string;
     id_justification: string;
+    attendance_date:string;
     time_before: string;
     time_after: string;
     amount: string;
@@ -204,6 +205,7 @@ export class attendences_adjustment {
         this.idattendence_adjustemnt = null;
         this.id_attendence = null;
         this.id_justification = null;
+        this.attendance_date = null;
         this.time_before = null;;
         this.time_after = null;
         this.amount = null;

@@ -1,9 +1,11 @@
-<div class="form-row col-md-12">
+<div class="form-row col-md-12" style="margin-top:25px">
     <div class="form-row col-md-12">
         <div class="form-group col-md-5"></div>
         <div class="form-group col-md-2">
-            <input type="file" class="from-control" (change)="importFile($event)">
-            <i class="fas fa-check-circle" (click)="completeImport()" *ngIf="activeCheck"></i>
+            <input type="file" class="from-control" (change)="importFile($event)" *ngIf="!completed">
+            <input type="text" class="form-control" [disabled]="true" value="COMPLETED" *ngIf="conpleted">
+            <i class="fas fa-check-circle" (click)="completeImport()" *ngIf="activeCheck && !completed"></i>
+            <i class="fas fa-times-circle" (click)="closeImport()" *ngIf="completed"></i>
         </div>
         <div   class="form-group col-md-5"></div>
     </div>
