@@ -3,7 +3,7 @@
         <div class="form-group col-md-5"></div>
         <div class="form-group col-md-2">
             <input type="file" class="from-control" (change)="importFile($event)" *ngIf="!completed">
-            <input type="text" class="form-control" [disabled]="true" value="COMPLETED" *ngIf="conpleted">
+            <input type="text" class="form-control" [disabled]="true" value="COMPLETED" *ngIf="completed">
             <i class="fas fa-check-circle" (click)="completeImport()" *ngIf="activeCheck && !completed"></i>
             <i class="fas fa-times-circle" (click)="closeImport()" *ngIf="completed"></i>
         </div>
