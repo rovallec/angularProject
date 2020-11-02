@@ -22,6 +22,7 @@ import { PeriodsComponent } from './periods/periods.component';
 import { PyhomeComponent } from './pyhome/pyhome.component';
 import { AccprofilesComponent } from './accprofiles/accprofiles.component';
 import { FhomeComponent } from './fhome/fhome.component';
+import { FprofilesComponent } from './fprofiles/fprofiles.component';
 
 const routes:Routes = [
   {
@@ -115,6 +116,11 @@ const routes:Routes = [
   {
     path:'fhome',
     component: FhomeComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'fProfile/:id',
+    component: FprofilesComponent,
     canActivate:[AuthGuard]
   },
   {

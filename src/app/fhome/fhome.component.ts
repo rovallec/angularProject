@@ -1,4 +1,6 @@
+import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
@@ -10,7 +12,7 @@ import { employees } from '../fullProcess';
 })
 export class FhomeComponent implements OnInit {
 
-  constructor(public apiService:ApiService, public authService:AuthServiceService) { }
+  constructor(public apiService:ApiService, public authService:AuthServiceService, public route:Router) { }
 
   filter:string = null;
   value:string = null;
@@ -19,6 +21,10 @@ export class FhomeComponent implements OnInit {
 
 
   ngOnInit() {
+  }
+
+  gotoProfile(emp:employees){
+    this.route.navigate(['./fProfile', emp.idemployees]);
   }
 
   start(){
