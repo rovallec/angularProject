@@ -31,6 +31,7 @@ if($result = mysqli_query($con,$sql)){
         $adjustes[$i]['date'] = $res['date'];
         $adjustes[$i]['notes'] = $res['notes'];
         $adjustes[$i]['status'] = $res['status'];
+        $adjustes[$i]['attendance_date'] = $res['attdate'];
         $i++;
     }
 }
