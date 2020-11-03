@@ -5,13 +5,13 @@
   </a>
   <a class="navbar-brand" *ngIf="getAuth()">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
-      alt="" style="margin-left: 30px" routerLink="/rehome" *ngIf="getSaved().department == '2'">
+      alt="" style="margin-left: 30px" routerLink="/rehome" *ngIf="getSaved().department == '2'" (click)="SetSel('HOME')">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
-      alt="" style="margin-left: 30px" routerLink="/achome" *ngIf="getSaved().department == '4'">
+      alt="" style="margin-left: 30px" routerLink="/achome" *ngIf="getSaved().department == '4'" (click)="SetSel('HOME')">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
-      alt="" style="margin-left: 30px" routerLink="/pyhome" *ngIf="getSaved().department == '28'">
+      alt="" style="margin-left: 30px" routerLink="/pyhome" *ngIf="getSaved().department == '28'" (click)="SetSel('HOME')">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
-      alt="" style="margin-left: 30px" routerLink="/fhome" *ngIf="getSaved().department == '29'">
+      alt="" style="margin-left: 30px" routerLink="/fhome" *ngIf="getSaved().department == '29'" (click)="SetSel('HOME')">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/hrhome"
       *ngIf="getSaved().department == '5' || getSaved().department == '27'">

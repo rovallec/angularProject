@@ -768,6 +768,35 @@ export class services {
     }
 }
 
+export class card_assignation{
+    idcard_assignations:string;
+    id_employee:string;
+    id_process:string;
+    code:string;
+    status:string;
+    //processes
+    idinternal_process:string;
+    id_user:string;
+    proc_name:string;
+    date:string;
+    proc_status:string;
+    notes:string;
+    constructor(){
+        this.idcard_assignations = null;
+        this.id_employee = null;
+        this.id_process = null;
+        this.code = null;
+        this.status = null;
+        //processes
+        this.idinternal_process = null;
+        this.id_user = null;
+        this.proc_name = null;
+        this.date = null;
+        this.proc_status = null;
+        this.notes = null;
+    }
+}
+
 export class sup_exception{
     avaya:string;
     name:string;

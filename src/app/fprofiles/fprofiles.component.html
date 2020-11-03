@@ -163,7 +163,8 @@
                             <div class="form-group col-md-3"></div>
                             <div class="form-group col-md-6">
                                 <label>Type:</label>
-                                <select class="form-control" [(ngModel)]="activeService.name" (change)="setBus()" [disabled]="storedBus">
+                                <select class="form-control" [(ngModel)]="activeService.name" (change)="setBus()"
+                                    [disabled]="storedBus">
                                     <option>Daily Bus {{todayDate}}</option>
                                     <option>Monthly Bus</option>
                                 </select>
@@ -173,13 +174,16 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Amount:</label>
-                                <input type="text" [(ngModel)]="activeService.amount" class="form-control" [disabled]="storedBus">
+                                <input type="text" [(ngModel)]="activeService.amount" class="form-control"
+                                    [disabled]="storedBus">
                             </div>
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
                                 <label>Frecuency:</label>
-                                <input type="text" class="form-control" *ngIf="activeService.name != 'Monthly Bus'" [disabled]="true" [(ngModel)]="activeService.frecuency" [disabled]="storedBus">
-                                <select class="form-control" *ngIf="activeService.name == 'Monthly Bus'" [(ngModel)]="activeService.frecuency" [disabled]="storedBus">
+                                <input type="text" class="form-control" *ngIf="activeService.name != 'Monthly Bus'"
+                                    [disabled]="true" [(ngModel)]="activeService.frecuency" [disabled]="storedBus">
+                                <select class="form-control" *ngIf="activeService.name == 'Monthly Bus'"
+                                    [(ngModel)]="activeService.frecuency" [disabled]="storedBus">
                                     <option>BIWEEKLY</option>
                                     <option>MONTHLY</option>
                                 </select>
@@ -193,15 +197,18 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.date">
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeService.date">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>User:</label>
-                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.id_user">
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeService.id_user">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Status:</label>
-                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.proc_status">
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeService.proc_status">
                             </div>
                         </div>
                         <div class="form-row col-md-12" style="margin-top:15px" *ngIf="!storedBus">
@@ -223,14 +230,14 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="nav-parking" role="tabpanel"
-                    aria-labelledby="nav-parking-tab">
+                <div class="tab-pane fade" id="nav-parking" role="tabpanel" aria-labelledby="nav-parking-tab">
                     <div class="form-row col-md-12" *ngIf="parking" style="margin-top:25px">
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-3"></div>
                             <div class="form-group col-md-6">
                                 <label>Type:</label>
-                                <select class="form-control" [(ngModel)]="activeService.name" [disabled]="storedParking">
+                                <select class="form-control" [(ngModel)]="activeService.name"
+                                    [disabled]="storedParking">
                                     <option>Car Parking</option>
                                     <option>Motorcycle Parking</option>
                                 </select>
@@ -240,12 +247,14 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Amount:</label>
-                                <input type="text" [(ngModel)]="activeService.amount" class="form-control" [disabled]="storedParking">
+                                <input type="text" [(ngModel)]="activeService.amount" class="form-control"
+                                    [disabled]="storedParking">
                             </div>
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
                                 <label>Frecuency:</label>
-                                <select class="form-control" [(ngModel)]="activeService.frecuency" [disabled]="storedParking">
+                                <select class="form-control" [(ngModel)]="activeService.frecuency"
+                                    [disabled]="storedParking">
                                     <option>BIWEEKLY</option>
                                     <option>MONTHLY</option>
                                 </select>
@@ -259,15 +268,18 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.date">
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeService.date">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>User:</label>
-                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.id_user">
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeService.id_user">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Status:</label>
-                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.status">
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeService.status">
                             </div>
                         </div>
                         <div class="form-row col-md-12" style="margin-top:15px" *ngIf="!storedParking">
@@ -290,5 +302,77 @@
                 </div>
             </div>
         </td>
+        <!--------------------------------------------------------------------------- PROCESSES ---------------------------------------------------------------------->
+        <td colspan="2" style="padding-top:30px" *ngIf="addProc || viewRecProd">
+            <nav width=100% style="border-top: 4px solid #e3f2fd;">
+                <div class="nav nav-tabs" id="nav-tb" role="tablist" width=100% style="padding-top:15px">
+                    <a class="nav-item nav-link active" id="nav-newproc-tab" data-toggle="tab" href="#nav-newproc"
+                        role="tab" aria-controls="nav-newproc" aria-selected="true"><i class="fas fa-arrow-circle-left"
+                            (click)="cancelView()"></i> {{activeProc.name}}</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-newproc" role="tabpanel"
+                    aria-labelledby="nav-newproc-tab">
+                    <div class="form-row col-md-12" *ngIf="activeProc.name == 'Access Card Assignation'">
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4">
+                                <label>Code:</label>
+                                <input type="text" class="form-control" [(ngModel)]="activeCardAssignation.code">
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-4">
+                                <label>Status:</label>
+                                <input type="text" class="fomr-control" [(ngModel)]="activeCardAssignation.status">
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-12">
+                                <label>Notes:</label>
+                                <textarea class="form-control" width="100%" [(ngModel)]="activeCardAssignation.notes"
+                                    #message='ngModel'></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4">
+                                <label>Date:</label>
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeCardAssignation.date">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>User:</label>
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeCardAssignation.id_user">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Status:</label>
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeCardAssignation.proc_status">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+
+        <!--------------------------------------------------------------------------- TEMPLATES ---------------------------------------------------------------------->
+    <tr style="border-bottom: solid 4px #e3f2fd;">
+        <div class="form-row col-md-12">
+            <table>
+                <thead>
+                    <th>ID</th>
+                    <th>NAME</th>
+                    <th>DESCRIPTION</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let process of processes_template" (click)="setTemplate(process)">
+                        <td>{{process.id}}</td>
+                        <td>{{process.name}}</td>
+                        <td>{{process.description}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </tr>
 </table>

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
+import { process } from '../process';
+import { card_assignation, process_templates } from '../process_templates';
 
 @Component({
   selector: 'app-fhome',
@@ -17,8 +19,7 @@ export class FhomeComponent implements OnInit {
   filter:string = null;
   value:string = null;
   searching:boolean = null;
-  allEmployees:employees[] = []
-
+  allEmployees:employees[] = [];
 
   ngOnInit() {
   }

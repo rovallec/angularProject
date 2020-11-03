@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
-import { services } from '../process_templates';
+import { card_assignation, process_templates, services } from '../process_templates';
 import { profiles } from '../profiles';
 
 @Component({
@@ -26,6 +26,10 @@ export class FprofilesComponent implements OnInit {
   activeStoredparking:services = new services;
   storedBus:boolean = false;
   storedParking:boolean = false;
+  processes_template:process_templates[] = [];
+  activeProc:process_templates = new process_templates;
+  activeCardAssignation:card_assignation = new card_assignation;
+
 
   ngOnInit() {
     this.todayDate = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString())
@@ -108,6 +112,9 @@ export class FprofilesComponent implements OnInit {
             this.bus = true;
             this.storedBus = true;
           }
+          this.apiService.getFacilitesTemplate().subscribe((temp:process_templates[])=>{
+            this.processes_template = temp;
+          })
           if((service.name == "Car Parking" || service.name == "Motorcycle Parking") && service.status == "1"){
             this.activeStoredparking = service;
             this.parking = true;
@@ -116,6 +123,13 @@ export class FprofilesComponent implements OnInit {
         })
       })
     })
+  }
+
+  setTemplate(process:process_templates){
+    this.activeProc = process;
+    this.activeCardAssignation = new card_assignation;
+    this.activeCardAssignation.date = this.todayDate;
+    this.activeCardAssignation.id_user = this.authUser.getAuthusr().user_name;
   }
 
 }

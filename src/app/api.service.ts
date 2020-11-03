@@ -538,5 +538,9 @@ getServices(any:any){
 insertService(service:services){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertService.php`, service);
 }
+
+getFacilitesTemplate(){
+  return this.httpClient.get<process_templates[]>(`${this.PHP_API_SERVER}/phpscripts/getFacilitiesTemplates.php`);
+}
   constructor(private httpClient:HttpClient) { }
 }
