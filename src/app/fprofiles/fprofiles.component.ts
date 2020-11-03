@@ -58,6 +58,7 @@ export class FprofilesComponent implements OnInit {
   }
 
   insertService(str:string){
+    this.activeService.proc_status = "COMPLETED";
     if(str == 'bus'){
       this.activeService.proc_name = "Active Bus";
       if(this.activeService.name != "Monthly Bus"){
