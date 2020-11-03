@@ -346,7 +346,7 @@ export class PeriodsComponent implements OnInit {
 
 
                                   services.forEach(service => {
-                                    if (service.max != service.current) {
+                                    if (service.status === '0') {
                                       let partial_service: debits = new debits;
                                       if (service.max = '0') {
                                         partial_service.amount = service.amount;
@@ -361,7 +361,7 @@ export class PeriodsComponent implements OnInit {
                                         }
                                       }
                                       partial_service.idpayments = pay.idpayments;
-                                      partial_service.type = "Descuento Por Servicio " + service.name;
+                                      partial_service.type = "Descuento Por Servicio de " + service.name;
                                       this.debits.push(partial_service);
                                       this.global_debits.push(partial_service);
                                       this.global_services.push(service);
@@ -462,6 +462,9 @@ export class PeriodsComponent implements OnInit {
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
     this.global_services.forEach(service => {
+      if(parseFloat(service.max) === parseFloat(service.current)){
+        service.status = '0';
+      }
       this.apiService.updateServices(service).subscribe((str:string)=>{});
     });
     this.apiService.closePeriod(this.period).subscribe((str: string) => {
@@ -694,7 +697,7 @@ export class PeriodsComponent implements OnInit {
                               })
 
                               services.forEach(service => {
-                                if (service.max != service.current) {
+                                if (service.status === '1') {
                                   let partial_service: debits = new debits;
                                   if (parseFloat(service.max) === 0) {
                                     partial_service.amount = service.amount;
