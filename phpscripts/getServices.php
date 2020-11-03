@@ -27,6 +27,7 @@
             $r[$i]['proc_name'] = $result['proc_name'];
             $r[$i]['date'] = $result['date'];
             $r[$i]['proc_status'] = $result['proc_status'];
+            $r[$i]['notes'] = $result['notes'];
             $i++;
         };
         echo(json_encode($r));
