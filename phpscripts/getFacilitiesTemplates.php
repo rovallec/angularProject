@@ -10,7 +10,7 @@ $i = 0;
 $sql = "SELECT * FROM internal_templates WHERE `id_role` = 9;";
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
-            $proccesses[$i]['idprocesses'] = $row['idprocess_types'];
+            $proccesses[$i]['idprocesses'] = $row['idinternal_templates'];
             $proccesses[$i]['name'] = $row['name'];
             $proccesses[$i]['descritpion'] = $row['description'];
             $i++;
