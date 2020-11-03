@@ -358,7 +358,8 @@
 
         <!--------------------------------------------------------------------------- TEMPLATES ---------------------------------------------------------------------->
     <tr style="border-bottom: solid 4px #e3f2fd;">
-            <table class="table table-striped table-hove" style="width:100%;">
+        <td colspan="2">
+            <table class="table table-striped table-hove" style="width:100%; margin-top:25px">
                 <thead>
                     <th>ID</th>
                     <th>NAME</th>
@@ -366,11 +367,12 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let process of processes_template" (click)="setTemplate(process)">
-                        <td>{{process.id}}</td>
+                        <td>{{process.idprocesses}}</td>
                         <td>{{process.name}}</td>
-                        <td>{{process.description}}</td>
+                        <td>{{process.descritpion}}</td>
                     </tr>
                 </tbody>
             </table>
+        </td>
     </tr>
 </table>
