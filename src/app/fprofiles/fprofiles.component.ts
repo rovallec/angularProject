@@ -18,11 +18,26 @@ export class FprofilesComponent implements OnInit {
   employee:employees = new employees;
   profile:profiles = new profiles;
   services:services[] = [];
+  activeService:services = new services;
   bus:boolean;
   parking:boolean;
 
   ngOnInit() {
     this.start();
+  }
+
+  activeBus(){
+    this.bus = true;
+    this.activeService = new services;
+    this.activeService.id_user = this.authUser.getAuthusr().user_name;
+    this.activeService.date = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString());
+    this.activeService.status = "PENDING";
+    
+  }
+
+  activeParking(){
+    this.parking = true;
+    this.activeService = new services;
   }
 
   start(){
