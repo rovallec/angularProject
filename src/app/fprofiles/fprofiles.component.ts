@@ -35,6 +35,7 @@ export class FprofilesComponent implements OnInit {
     this.activeService.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
     this.activeService.proc_status = "PENDING";
     this.activeService.status = '1';
+    this.activeService.current = '0';
   }
 
   activeParking(){
@@ -45,6 +46,7 @@ export class FprofilesComponent implements OnInit {
     this.activeService.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
     this.activeService.proc_status = "PENDING";
     this.activeService.status = "1";
+    this.activeService.current = '0';
   }
 
   insertService(str:string){
