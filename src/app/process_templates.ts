@@ -749,6 +749,7 @@ export class services {
     proc_name:string;
     date:string;
     proc_status:string;
+    notes:string;
     constructor() {
         this.idservices = null;
         this.id_process = null;
@@ -763,6 +764,7 @@ export class services {
         this.proc_name = null;
         this.date = null;
         this.proc_status = null;
+        this.notes = null
     }
 }
 
