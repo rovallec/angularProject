@@ -21,8 +21,10 @@ export class FprofilesComponent implements OnInit {
   activeService:services = new services;
   bus:boolean;
   parking:boolean;
+  todayDate:string = null;
 
   ngOnInit() {
+    this.todayDate = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString())
     this.start();
   }
 
@@ -38,6 +40,10 @@ export class FprofilesComponent implements OnInit {
   activeParking(){
     this.parking = true;
     this.activeService = new services;
+    this.activeService = new services;
+    this.activeService.id_user = this.authUser.getAuthusr().user_name;
+    this.activeService.date = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString());
+    this.activeService.status = "PENDING";
   }
 
   start(){
@@ -51,7 +57,7 @@ export class FprofilesComponent implements OnInit {
       this.apiService.getServices({id:this.employee.idemployees}).subscribe((srv:services[])=>{
         this.services = srv;
         this.services.forEach(service=>{
-          if(service.name == "Bus" && service.status == '1'){
+          if((service.name == "Monthly Bus" || service.name == "Daily Bus " + (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString())) && service.status == '1'){
             this.bus = true;
           }
           if((service.name == "Car Parking" || service.name == "Motorcycle Parking") && service.status == "1"){

@@ -158,6 +158,62 @@
                 </div>
 
                 <div class="tab-pane fade" id="nav-bus" role="tabpanel" aria-labelledby="nav-bus-tab">
+                    <div class="form-row col-md-12" *ngIf="parking" style="margin-top:25px">
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-3"></div>
+                            <div class="form-group col-md-6">
+                                <label>Type:</label>
+                                <select class="form-control">
+                                    <option>Daily Bus {{todayDate}}</option>
+                                    <option>Monthly Bus</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3"></div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4">
+                                <label>Amount:</label>
+                                <input type="text" [(ngModel)]="activeService.amount" class="form-control">
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-4">
+                                <label>Frecuency:</label>
+                                <input type="text" class="fomr-control" *ngIf="activeService.name != Monthly Bus" [disabled]="true" [(ngModel)]="activeService.frecuency">
+                                <select class="form-control" *ngIf="activeService.name == Monthly Bus" [(ngModel)]="activeService.frecuency">
+                                    <option>BIWEEKLY</option>
+                                    <option>MONTHLY</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Notes:</label>
+                            <textarea class="form-control" width="100%" [(ngModel)]="activeService.notes"
+                                #message='ngModel'></textarea>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4">
+                                <label>Date:</label>
+                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.date">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>User:</label>
+                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.id_user">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Status:</label>
+                                <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.proc_status">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12" style="margin-top:15px">
+                            <div class="form-group col-md-2">
+                                <button class="form-control">Cancel</button>
+                            </div>
+                            <div class="form-group col-md-8"></div>
+                            <div class="form-group col-md-2">
+                                <button class="form-control">Accept</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-row col-md-12" *ngIf="!bus" style="margin-top:25px">
                         <div class="form-group col-md-5"></div>
                         <div class="form-group col-md-2">
@@ -173,8 +229,11 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-3"></div>
                             <div class="form-group col-md-6">
-                                <label>Name:</label>
-                                <input type="text" [(ngModel)]="activeService.name" class="form-control">
+                                <label>Type:</label>
+                                <select class="form-control">
+                                    <option>Car Parking</option>
+                                    <option>Motorcycle Parking</option>
+                                </select>
                             </div>
                             <div class="form-group col-md-3"></div>
                         </div>
@@ -209,6 +268,15 @@
                             <div class="form-group col-md-4">
                                 <label>Status:</label>
                                 <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activeService.proc_status">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12" style="margin-top:15px">
+                            <div class="form-group col-md-2">
+                                <button class="form-control">Cancel</button>
+                            </div>
+                            <div class="form-group col-md-8"></div>
+                            <div class="form-group col-md-2">
+                                <button class="form-control">Accept</button>
                             </div>
                         </div>
                     </div>
