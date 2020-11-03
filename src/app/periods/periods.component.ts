@@ -346,7 +346,7 @@ export class PeriodsComponent implements OnInit {
 
 
                                   services.forEach(service => {
-                                    if (service.status === '1') {
+                                    if (service.status == '1') {
                                       let partial_service: debits = new debits;
                                       if (service.max == '0') {
                                         partial_service.amount = service.amount;
@@ -697,7 +697,8 @@ export class PeriodsComponent implements OnInit {
                               })
 
                               services.forEach(service => {
-                                if (service.status === '1') {
+                                console.log(service);
+                                if (service.status == '1') {
                                   console.log(service);
                                   let partial_service: debits = new debits;
                                   if (service.max == '0') {
