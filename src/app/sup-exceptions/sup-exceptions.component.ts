@@ -44,7 +44,7 @@ export class SupExceptionsComponent implements OnInit {
             adjustment.id_user = this.authService.getAuthusr().iduser;
             adjustment.id_type = '2';
             adjustment.id_department = '28';
-            adjustment.date = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString());
+            adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
             adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
             adjustment.status = 'PENDING';
             adjustment.reason = sup.reason;

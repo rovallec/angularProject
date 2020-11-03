@@ -534,5 +534,9 @@ getPaymentMethods(employee:employees){
 getServices(any:any){
   return this.httpClient.post<services[]>(`${this.PHP_API_SERVER}/phpscripts/getServices.php`,any);
 }
+
+insertService(service:services){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertService.php`, service);
+}
   constructor(private httpClient:HttpClient) { }
 }

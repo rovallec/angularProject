@@ -24,7 +24,7 @@ export class FprofilesComponent implements OnInit {
   todayDate:string = null;
 
   ngOnInit() {
-    this.todayDate = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString())
+    this.todayDate = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString())
     this.start();
   }
 
@@ -32,9 +32,9 @@ export class FprofilesComponent implements OnInit {
     this.bus = true;
     this.activeService = new services;
     this.activeService.id_user = this.authUser.getAuthusr().user_name;
-    this.activeService.date = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString());
-    this.activeService.status = "PENDING";
-    
+    this.activeService.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
+    this.activeService.proc_status = "PENDING";
+    this.activeService.status = '1';
   }
 
   activeParking(){
@@ -42,11 +42,34 @@ export class FprofilesComponent implements OnInit {
     this.activeService = new services;
     this.activeService = new services;
     this.activeService.id_user = this.authUser.getAuthusr().user_name;
-    this.activeService.date = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString());
-    this.activeService.status = "PENDING";
+    this.activeService.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
+    this.activeService.proc_status = "PENDING";
+    this.activeService.status = "1";
+  }
+
+  insertService(str:string){
+    if(str == 'bus'){
+      this.activeService.proc_name = "Active Bus";
+      if(this.activeService.name != "Monthly Bus"){
+        this.activeService.max = this.activeService.amount;
+      }else{
+        this.activeService.max = "0";
+      }
+    }else{
+      if(str == 'parking'){
+        this.activeService.proc_name = "Active Parking";
+        this.activeService.max = "0";
+      }
+    }
+    this.activeService.id_user = this.authUser.getAuthusr().iduser;
+    this.apiService.insertService(this.activeService).subscribe((str:string)=>{
+      this.start();
+    })
   }
 
   start(){
+    this.bus = false;
+    this.parking = false;
     this.apiService.getSearchEmployees({dp:this.authUser.getAuthusr().department, filter:'idemployees', value:this.route.snapshot.paramMap.get('id')}).subscribe((emp:employees[])=>{
       this.employee = emp[0]
       let prof:profiles = new profiles;
@@ -57,7 +80,7 @@ export class FprofilesComponent implements OnInit {
       this.apiService.getServices({id:this.employee.idemployees}).subscribe((srv:services[])=>{
         this.services = srv;
         this.services.forEach(service=>{
-          if((service.name == "Monthly Bus" || service.name == "Daily Bus " + (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString())) && service.status == '1'){
+          if((service.name == "Monthly Bus" || service.name == "Daily Bus " + (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString())) && service.status == '1'){
             this.bus = true;
           }
           if((service.name == "Car Parking" || service.name == "Motorcycle Parking") && service.status == "1"){
