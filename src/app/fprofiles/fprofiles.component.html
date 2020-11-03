@@ -178,8 +178,8 @@
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
                                 <label>Frecuency:</label>
-                                <input type="text" class="fomr-control" *ngIf="activeService.name != Monthly Bus" [disabled]="true" [(ngModel)]="activeService.frecuency">
-                                <select class="form-control" *ngIf="activeService.name == Monthly Bus" [(ngModel)]="activeService.frecuency">
+                                <input type="text" class="fomr-control" *ngIf="activeService.name != 'Monthly Bus'" [disabled]="true" [(ngModel)]="activeService.frecuency">
+                                <select class="form-control" *ngIf="activeService.name == 'Monthly Bus'" [(ngModel)]="activeService.frecuency">
                                     <option>BIWEEKLY</option>
                                     <option>MONTHLY</option>
                                 </select>
