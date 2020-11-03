@@ -36,6 +36,7 @@ export class FprofilesComponent implements OnInit {
     this.activeService.proc_status = "PENDING";
     this.activeService.status = '1';
     this.activeService.current = '0';
+    this.activeService.id_employee = this.employee.idemployees;
   }
 
   activeParking(){
@@ -47,6 +48,7 @@ export class FprofilesComponent implements OnInit {
     this.activeService.proc_status = "PENDING";
     this.activeService.status = "1";
     this.activeService.current = '0';
+    this.activeService.id_employee = this.employee.idemployees;
   }
 
   insertService(str:string){
