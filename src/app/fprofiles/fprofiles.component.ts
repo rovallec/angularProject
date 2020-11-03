@@ -26,6 +26,7 @@ export class FprofilesComponent implements OnInit {
   activeStoredparking:services = new services;
   storedBus:boolean = false;
   storedParking:boolean = false;
+  newProc:boolean = false;
   processes_template:process_templates[] = [];
   activeProc:process_templates = new process_templates;
   activeCardAssignation:card_assignation = new card_assignation;
@@ -130,6 +131,11 @@ export class FprofilesComponent implements OnInit {
     this.activeCardAssignation = new card_assignation;
     this.activeCardAssignation.date = this.todayDate;
     this.activeCardAssignation.id_user = this.authUser.getAuthusr().user_name;
+    this.newProc = true;
   }
 
+  cancelView(){
+    this.newProc = false;
+    this.activeProc = new process_templates;
+  }
 }
