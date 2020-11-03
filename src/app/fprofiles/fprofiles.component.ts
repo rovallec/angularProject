@@ -82,6 +82,14 @@ export class FprofilesComponent implements OnInit {
     })
   }
 
+  setService(str:string){
+    if(str === 'bus'){
+      this.activeService = this.activeStoredbus;
+    }else{
+      this.activeService = this.activeStoredparking;
+    }
+  }
+
   start(){
     this.bus = false;
     this.parking = false;
