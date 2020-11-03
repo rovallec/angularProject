@@ -696,7 +696,7 @@ export class PeriodsComponent implements OnInit {
                               services.forEach(service => {
                                 if (service.max != service.current) {
                                   let partial_service: debits = new debits;
-                                  if (service.max == '0') {
+                                  if (parseFloat(service.max) === 0) {
                                     partial_service.amount = service.amount;
                                   } else {
                                     if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) > 0) {
