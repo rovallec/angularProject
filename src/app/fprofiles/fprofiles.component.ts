@@ -22,6 +22,10 @@ export class FprofilesComponent implements OnInit {
   bus:boolean;
   parking:boolean;
   todayDate:string = null;
+  activeStoredbus:services = new services;
+  activeStoredparking:services = new services;
+  storedBus:boolean = false;
+  storedParking:boolean = false;
 
   ngOnInit() {
     this.todayDate = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString())
@@ -92,10 +96,14 @@ export class FprofilesComponent implements OnInit {
         this.services = srv;
         this.services.forEach(service=>{
           if((service.name == "Monthly Bus" || service.name == "Daily Bus " + (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString())) && service.status == '1'){
+            this.activeStoredbus = service;
             this.bus = true;
+            this.storedBus = true;
           }
           if((service.name == "Car Parking" || service.name == "Motorcycle Parking") && service.status == "1"){
+            this.activeStoredparking = service;
             this.parking = true;
+            this.storedParking = true;
           }
         })
       })
