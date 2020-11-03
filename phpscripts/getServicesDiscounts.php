@@ -10,8 +10,8 @@ $user = [];
 $i = 0;
 $date = ($request->date);
 
-if(parse_str(explode("-",$date)[2]) > 1){
-    $sql = "SELECT services.idservices, services.id_process, services.name, services.amount, services.max, services.frecuency, services.status, services.current, internal_processes.idinternal_processes, internal_processes.id_employee, internal_processes.id_user, internal_processes.name, internal_processes.date FROM `services` LEFT JOIN `internal_processes` ON `internal_processes`.`idinternal_processes` = `services`.`id_process` WHERE (`frecuency` = 'UNIQUE' OR `frecuency` = 'MONTHLY') AND `id_employee` = $id AND services.`status` = 1;";
+if(parse_str(explode("-",$date)[2]) > 15){
+    $sql = "SELECT services.idservices, services.id_process, services.name, services.amount, services.max, services.frecuency, services.status, services.current, internal_processes.idinternal_processes, internal_processes.id_employee, internal_processes.id_user, internal_processes.name, internal_processes.date FROM `services` LEFT JOIN `internal_processes` ON `internal_processes`.`idinternal_processes` = `services`.`id_process` WHERE (`frecuency` = 'UNIQUE' OR `frecuency` = 'MONTHLY' OR  `frecuency` = 'BIWEEKLY') AND `id_employee` = $id AND services.`status` = 1;";
 }else{
     $sql = "SELECT services.idservices, services.id_process, services.name, services.amount, services.max, services.frecuency, services.status, services.current, internal_processes.idinternal_processes, internal_processes.id_employee, internal_processes.id_user, internal_processes.name, internal_processes.date FROM `services` LEFT JOIN `internal_processes` ON `internal_processes`.`idinternal_processes` = `services`.`id_process` WHERE (`frecuency` = 'UNIQUE' OR `frecuency` = 'BIWEEKLY') AND `id_employee` = $id AND services.`status` = 1;";
 }
@@ -27,6 +27,7 @@ if($result = mysqli_query($con, $sql)){
         $user[$i]['frecuency'] = $row['frecuency'];
         $user[$i]['status'] = $row['status'];
         $user[$i]['current'] = $row['current'];
+        $i = $i + 1;
     };
     echo json_encode($user);
 }else{

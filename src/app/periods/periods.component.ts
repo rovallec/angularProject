@@ -697,9 +697,7 @@ export class PeriodsComponent implements OnInit {
                               })
 
                               services.forEach(service => {
-                                console.log(service);
                                 if (service.status == '1') {
-                                  console.log(service);
                                   let partial_service: debits = new debits;
                                   if (service.max == '0') {
                                     partial_service.amount = service.amount;
