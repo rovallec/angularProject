@@ -163,7 +163,7 @@
                             <div class="form-group col-md-3"></div>
                             <div class="form-group col-md-6">
                                 <label>Type:</label>
-                                <select class="form-control" [(ngModel)]="activeService.name">
+                                <select class="form-control" [(ngModel)]="activeService.name" (changue)="setBus()">
                                     <option>Daily Bus {{todayDate}}</option>
                                     <option>Monthly Bus</option>
                                 </select>
@@ -230,7 +230,7 @@
                             <div class="form-group col-md-3"></div>
                             <div class="form-group col-md-6">
                                 <label>Type:</label>
-                                <select class="form-control">
+                                <select class="form-control" [(ngModel)]="activeService.name">
                                     <option>Car Parking</option>
                                     <option>Motorcycle Parking</option>
                                 </select>
@@ -245,7 +245,7 @@
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
                                 <label>Frecuency:</label>
-                                <select class="form-control">
+                                <select class="form-control" [(ngModel)]="activeService.frecuency">
                                     <option>BIWEEKLY</option>
                                     <option>MONTHLY</option>
                                 </select>

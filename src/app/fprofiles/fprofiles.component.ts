@@ -39,6 +39,12 @@ export class FprofilesComponent implements OnInit {
     this.activeService.id_employee = this.route.snapshot.paramMap.get('id');
   }
 
+  setBus(){
+    if(this.activeService.name != 'Monthly Bus'){
+      this.activeService.frecuency = "UNIQUE";
+    }
+  }
+
   activeParking(){
     this.parking = true;
     this.activeService = new services;
