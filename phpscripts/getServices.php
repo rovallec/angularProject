@@ -10,7 +10,7 @@
     $r = [];
     $i = 0;
 
-    $sql = "SELECT users.user_name, services.*, internal_processes.idinternal_processes, internal_processes.id_user, internal_processes.id_employee, internal_processes.name AS `proc_name`, internal_processes.date, internal_processes.status AS `proc_status` FROM `services` LEFT JOIN `internal_processes` ON `internal_processes`.`idinternal_processes` = `services`.`id_process` LEFT JOIN `users` ON `users`.`idUser` = `internal_processes`.`id_user` WHERE `id_employee` = $id;";
+    $sql = "SELECT users.user_name, services.*, internal_processes.notes, internal_processes.idinternal_processes, internal_processes.id_user, internal_processes.id_employee, internal_processes.name AS `proc_name`, internal_processes.date, internal_processes.status AS `proc_status` FROM `services` LEFT JOIN `internal_processes` ON `internal_processes`.`idinternal_processes` = `services`.`id_process` LEFT JOIN `users` ON `users`.`idUser` = `internal_processes`.`id_user` WHERE `id_employee` = $id";
     if($res = mysqli_query($con, $sql)){
         while($result = mysqli_fetch_assoc($res)){
             $r[$i]['idservices'] = $result['idservices'];

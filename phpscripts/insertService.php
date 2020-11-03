@@ -22,7 +22,7 @@ $date = ($request->date);
 $proc_status = ($request->proc_status);
 $notes = ($request->notes);
 
-$sql = "INSERT INTO `internal_processes` (`idinternal_processes`, `id_user`, `id_employee`, `name`, `date`, `status`) VALUES (NULL, $id_user, $id_employee, '$proc_name', '$date', '$proc_status');";
+$sql = "INSERT INTO `internal_processes` (`idinternal_processes`, `id_user`, `id_employee`, `name`, `date`, `notes`, `status`) VALUES (NULL, $id_user, $id_employee, '$proc_name', '$date', '$notes', '$proc_status');";
 if(mysqli_query($con,$sql)){
     $id_process = mysqli_insert_id($con);
     $sql2 = "INSERT INTO `services` (`idservices`, `id_process`, `name`, `amount`, `max`, `frecuency`, `status`, `current`) VALUES (NULL, $id_process, '$name', $amount, $max, '$frecuency', 1, 0);";
