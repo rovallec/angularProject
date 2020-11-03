@@ -743,6 +743,12 @@ export class services {
     frecuency: string;
     status: string;
     current: string;
+    //Process
+    idinternal_process:string;
+    id_user:string;
+    proc_name:string;
+    date:string;
+    proc_status:string;
     constructor() {
         this.idservices = null;
         this.id_process = null;
@@ -752,6 +758,11 @@ export class services {
         this.max = null;
         this.frecuency = null;
         this.status = null;
+        this.idinternal_process = null;
+        this.id_user = null;
+        this.proc_name = null;
+        this.date = null;
+        this.proc_status = null;
     }
 }
 

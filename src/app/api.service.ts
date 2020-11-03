@@ -531,5 +531,8 @@ getPaymentMethods(employee:employees){
   return this.httpClient.post<payment_methods[]>(`${this.PHP_API_SERVER}/phpscripts/getPaymentMethods.php`, employee);
 }
 
+getServices(any:any){
+  return this.httpClient.post<services[]>(`${this.PHP_API_SERVER}/phpscripts/getServices.php`,any);
+}
   constructor(private httpClient:HttpClient) { }
 }
