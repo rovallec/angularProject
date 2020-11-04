@@ -255,9 +255,9 @@ export class HrhomeComponent implements OnInit {
         })
       }
     if(this.contract_type == 'Default'){
-      window.open("http://200.94.251.67/phpscripts/contract.php?id=" + this.hiresToShow[0].idemployees,"_blank");
+      window.open("http://200.94.251.67/phpscripts/contract.php?id=" + emp.idemployees,"_blank");
     }else{
-      window.open("http://200.94.251.67/phpscripts/staffContract.php?id=" + this.hiresToShow[0].idemployees + "&other=" + this.bonusHire, "_blank");
+      window.open("http://200.94.251.67/phpscripts/staffContract.php?id=" + emp.idemployees + "&other=" + this.bonusHire, "_blank");
     }
   }
 

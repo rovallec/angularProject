@@ -54,8 +54,8 @@
             $dpi_n = $row['dpi'];
             $hiring_date = explode("-", $row['ops_start'])[2] . "/" . explode("-", $row['ops_start'])[1] . "/" . explode("-", $row['ops_start'])[0];
             $job = $row['job'];
-            $base_n = $row['base'];
-            $incentivo_n = $row['prod'];
+            $base_n = $row['base_payment'];
+            $incentivo_n = $row['productivity_payment'];
             $total_n = $base_n + $incentivo_n;
             $base_n = number_format(((float)$base_n),2,".",",");
             $incentivo_n = (float)$incentivo_n - 250;
