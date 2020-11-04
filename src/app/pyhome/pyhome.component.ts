@@ -21,6 +21,7 @@ export class PyhomeComponent implements OnInit {
   employees: employees[] = [];
   filter: string = null;
   value: string = null;
+  searching:boolean = false;
 
   constructor(public apiService:ApiService, public route:Router, public authSrv:AuthServiceService) { }
 
@@ -55,7 +56,7 @@ export class PyhomeComponent implements OnInit {
 
   }
 
-  getSchedules(){
+  getSchedules(wave:waves_template){
 
   }
 
