@@ -38,7 +38,7 @@ export class SupExceptionsComponent implements OnInit {
       i = i + 1;
       if(sup.status == 'TRUE'){
         this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:sup.avaya}).subscribe((emp:employees[])=>{
-          this.apiService.getAttendences({date:" = '" + sup.date + "'", id:emp[0].idemployees}).subscribe((attendance:attendences[])=>{
+          this.apiService.getAttendences({date:"= '" + sup.date + "'", id:emp[0].idemployees}).subscribe((attendance:attendences[])=>{
             let adjustment:attendences_adjustment = new attendences_adjustment;
             adjustment.id_employee = emp[0].idemployees;
             adjustment.id_user = this.authService.getAuthusr().iduser;

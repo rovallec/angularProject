@@ -138,4 +138,15 @@ export class FprofilesComponent implements OnInit {
     this.newProc = false;
     this.activeProc = new process_templates;
   }
+  
+  insertNewProc(){
+    switch (this.activeProc.name) {
+      case 'Access Card Assignation':
+          
+        break;
+    
+      default:
+        break;
+    }
+  }
 }
