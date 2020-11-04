@@ -51,7 +51,7 @@ export class PyhomeComponent implements OnInit {
 
   }
 
-  setWave(){
+  setWave(wave:waves_template){
 
   }
 
