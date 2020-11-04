@@ -23,6 +23,7 @@ import { PyhomeComponent } from './pyhome/pyhome.component';
 import { AccprofilesComponent } from './accprofiles/accprofiles.component';
 import { FhomeComponent } from './fhome/fhome.component';
 import { FprofilesComponent } from './fprofiles/fprofiles.component';
+import { WfmhomeComponent } from './wfmhome/wfmhome.component';
 
 const routes:Routes = [
   {

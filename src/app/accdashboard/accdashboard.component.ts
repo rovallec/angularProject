@@ -20,10 +20,6 @@ export class AccdashboardComponent implements OnInit {
   schedule_to_edit: schedules = new schedules;
   hires: hires_template[] = [];
   employees: employees[] = [];
-  sch_hrs_st: string;
-  sch_min_st: string;
-  sch_hrs_e: string;
-  sch_min_e: string;
   includeAll: boolean = false;
   periods: periods[] = [];
   filter: string = null;

@@ -28,7 +28,8 @@ import { PeriodsComponent } from './periods/periods.component';
 import { PyhomeComponent } from './pyhome/pyhome.component';
 import { AccprofilesComponent } from './accprofiles/accprofiles.component';
 import { FhomeComponent } from './fhome/fhome.component';
-import { FprofilesComponent } from './fprofiles/fprofiles.component'
+import { FprofilesComponent } from './fprofiles/fprofiles.component';
+import { WfmhomeComponent } from './wfmhome/wfmhome.component'
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { FprofilesComponent } from './fprofiles/fprofiles.component'
     PyhomeComponent,
     AccprofilesComponent,
     FhomeComponent,
-    FprofilesComponent
+    FprofilesComponent,
+    WfmhomeComponent
   ],
   imports: [
     BrowserModule,
