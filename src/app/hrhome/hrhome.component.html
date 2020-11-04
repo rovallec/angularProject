@@ -118,9 +118,6 @@
                                             <i class="fas fa-save"
                                                 *ngIf="showEmployeeDetails[this.wavesToShow.indexOf(wv)] && makeEmployee"
                                                 style="margin-left:5px" (click)="setEmployees(wv)"></i>
-                                            <i class="fas fa-file-contract"
-                                                *ngIf="showEmployeeDetails[this.wavesToShow.indexOf(wv)] && makeEmployee"
-                                                style="margin-left:5px" (click)="makeContracts()"></i>
                                             <i class="fas fa-window-close"
                                                 *ngIf="showEmployeeDetails[this.wavesToShow.indexOf(wv)] && makeEmployee"
                                                 style="margin-left:5px" (click)="cancelEmployeeEdit(wv)"></i>
@@ -136,18 +133,15 @@
                                     <thead>
                                         <th>ID</th>
                                         <th>NEARSOL ID</th>
-                                        <th>CLIENT ID</th>
                                         <th>NAME</th>
                                         <th>STATUS</th>
                                         <th *ngIf="makeEmployee">PLATFORM</th>
+                                        <th *ngIf="makeEmployee">GENERATE</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let emp of hiresToShow">
                                             <td style="padding:0px; vertical-align: middle;">{{emp.id_profile}}</td>
                                             <td style="padding:0px; vertical-align: middle;">{{emp.nearsol_id}}</td>
-                                            <td style="padding: 0px; vertical-align: middle;"><input type="text"
-                                                    [disabled]="!makeEmployee || emp.status === 'EMPLOYEE'" [(ngModel)]="emp.client_id"
-                                                    style="border-radius:5px;"></td>
                                             <td style="padding:0px; vertical-align: middle;">{{emp.first_name}} {{emp.second_name}} {{emp.first_lastname}}
                                                 {{emp.second_lastname}}</td>
                                             <td style="padding:0px; vertical-align: middle;"><select [disabled]="!makeEmployee || emp.status === 'EMPLOYEE'"
@@ -169,6 +163,7 @@
                                                         <option>WAH</option>
                                                     </select>
                                                 </td>
+                                                <td *ngIf="makeEmployee"><i class="fas fa-file-contract" (click)="makeContracts(emp)"></i></td>
                                         </tr>
                                     </tbody>
                                 </table>

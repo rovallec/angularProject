@@ -174,8 +174,8 @@ export class HrhomeComponent implements OnInit {
         actual_emp.id_hire = hire.idhires;
         actual_emp.id_account = wv.id_account;
         actual_emp.reporter = hire.reporter;
-        actual_emp.client_id = hire.client_id;
         actual_emp.hiring_date = wv.ops_start;
+        actual_emp.platform = this.platforms[this.hiresToShow.indexOf(hire)];
         actual_emp.job = wv.job;
         actual_emp.id_user = this.authService.getAuthusr().iduser;
         actual_emp.id_department = this.authService.getAuthusr().department
@@ -243,24 +243,21 @@ export class HrhomeComponent implements OnInit {
     this.start();
   }
 
-  makeContracts(){
-    let employee:employees;
-    this.hiresToShow.forEach(element => {
-      if(element.status == 'EMPLOYEE' || element.status == 'HIRED'){
+  makeContracts(emp:hires_template){
+    let employee:employees = new employees;
+      if(emp.status == 'EMPLOYEE'){
         employee = new employees;
-        employee.id_profile = element.id_profile;
-        employee.idemployees = element.idemployees;
-        employee.name = element.first_name + " " + element.second_name + " " + element.first_lastname + " " + element.second_lastname;
-        employee.platform = this.platforms[this.hiresToShow.indexOf(element)];
+        employee.id_profile = emp.id_profile;
+        employee.idemployees = emp.idemployees;
+        employee.name = emp.first_name + " " + emp.second_name + " " + emp.first_lastname + " " + emp.second_lastname;
+        employee.platform = this.platforms[this.hiresToShow.indexOf(emp)];
         this.apiService.updateEmployee(employee).subscribe((str:string)=>{
-
         })
       }
-    });
     if(this.contract_type == 'Default'){
-      window.open("http://200.94.251.67/phpscripts/contract.php?id=" + this.hiresToShow[0].id_wave, "_blank");
+      window.open("http://200.94.251.67/phpscripts/contract.php?id=" + this.hiresToShow[0].idemployees,"_blank");
     }else{
-      window.open("http://200.94.251.67/phpscripts/staffContract.php?id=" + this.hiresToShow[0].id_wave + "&other=" + this.bonusHire, "_blank");
+      window.open("http://200.94.251.67/phpscripts/staffContract.php?id=" + this.hiresToShow[0].idemployees + "&other=" + this.bonusHire, "_blank");
     }
   }
 

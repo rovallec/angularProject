@@ -18,10 +18,10 @@
         'diciembre'
     ];
 
-    $idwave = $_GET['id'];
+    $id_employee = $_GET['id'];
     $others = $_GET['other'];
 
-    $sql = "SELECT `hires`.*, `employees`.*, `waves`.`ops_start`, `waves`.`base_payment` AS `base`, `waves`.`productivity_payment` AS `prod`, `profiles`.*, `education_details`.*, `contact_details`.* FROM `hires` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN `waves` ON `waves`.`idwaves` = `hires`.`id_wave` LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `contact_details` ON `contact_details`.`id_profile` = `profiles`.`idprofiles` WHERE `id_wave` = '$idwave';";
+    $sql = "SELECT `hires`.*, `employees`.*, `waves`.`ops_start`, `waves`.`base_payment` AS `base`, `waves`.`productivity_payment` AS `prod`, `profiles`.*, `education_details`.*, `contact_details`.* FROM `hires` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN `waves` ON `waves`.`idwaves` = `hires`.`id_wave` LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `contact_details` ON `contact_details`.`id_profile` = `profiles`.`idprofiles` WHERE `id_wave` = '$id_employee';";
 
     if($result = mysqli_query($con, $sql)){
         while($row = mysqli_fetch_assoc($result)){
