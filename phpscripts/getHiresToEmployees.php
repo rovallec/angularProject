@@ -15,6 +15,7 @@ if($result = mysqli_query($con, $sql))
 	while($row = mysqli_fetch_assoc($result))
 	{
 		$hires[$i]['idhires'] = $row['idhires'];
+		$hires[$i]['idemployees'] = $row['idemployees'];
 		$hires[$i]['id_profile'] = $row['id_profile'];
 		$hires[$i]['id_wave'] = $row['id_wave'];
 		$hires[$i]['nearsol_id'] = $row['nearsol_id'];
