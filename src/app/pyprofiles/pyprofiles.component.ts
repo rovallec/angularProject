@@ -23,6 +23,7 @@ export class PyprofilesComponent implements OnInit {
   constructor(public apiService:ApiService, public route:ActivatedRoute, public authUser:AuthServiceService) { }
 
   ngOnInit() {
+    this.start();
   }
 
   start(){
