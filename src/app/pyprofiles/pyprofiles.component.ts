@@ -45,4 +45,9 @@ export class PyprofilesComponent implements OnInit {
     this.newProc = true;
   }
 
+  cancelView(){
+    this.newProc = false;
+    this.activeProc = new process_templates;
+  }
+
 }
