@@ -24,7 +24,7 @@ export class PyhomeComponent implements OnInit {
   searching: boolean = false;
   editWave: boolean = false;
 
-  constructor(public apiService: ApiService, public route: Router, public authSrv: AuthServiceService) { }
+  constructor(public apiService: ApiService, public route: Router, public authService: AuthServiceService) { }
 
   ngOnInit() {
     this.getWavesAll();
@@ -35,6 +35,10 @@ export class PyhomeComponent implements OnInit {
     this.apiService.getallEmployees({ department: 'all' }).subscribe((emp: employees[]) => {
       this.employees = emp;
     })
+  }
+
+  gotoProfile(emp:employees){
+    this.route.navigate(['./hrprofiles', emp.idemployees]);
   }
 
   getWavesAll() {
@@ -52,7 +56,10 @@ export class PyhomeComponent implements OnInit {
   }
 
   searchEmployee() {
-
+    this.apiService.getSearchEmployees({filter:this.filter, value:this.value, dp:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
+      this.employees = emp;
+    });
+    this.searching = true;
   }
 
   cancelSearch() {

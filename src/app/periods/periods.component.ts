@@ -265,10 +265,9 @@ export class PeriodsComponent implements OnInit {
                                   productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
                                 } else {
-                                  productivity_credit.amount = (120 * productivity_hour).toFixed(2);
-                                  base_credit.amount = (120 * base_hour).toFixed(2);
-                                  productivity_credit.amount = (120 * productivity_hour).toFixed(2);
-                                  ot_credit.type = "Horas Extra Laboradas: " + discounted;
+                                  productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
+                                  base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
+                                  ot_credit.type = "Horas Extra Laboradas: " + discounted.toFixed(2);
                                   if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12') {
                                     ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
                                   } else {
@@ -636,9 +635,8 @@ export class PeriodsComponent implements OnInit {
                               productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                               ot_credit.amount = '0';
                             } else {
-                              productivity_credit.amount = (120 * productivity_hour).toFixed(2);
-                              base_credit.amount = (120 * base_hour).toFixed(2);
-                              productivity_credit.amount = (120 * productivity_hour).toFixed(2);
+                              productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
+                              base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
                               ot_credit.type = "Horas Extra Laboradas: " + discounted;
                               if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12') {
                                 ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
