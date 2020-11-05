@@ -8,7 +8,7 @@ $request = json_decode($postdata);
 $id = ($request->idwaves);
 
 $hires = [];
-$sql = "SELECT * FROM (SELECT `schedules`.`days_off`, `employees`.`client_id`, `employees`.`idemployees`, `hires`.*, `users`.`user_name` AS `username`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `profiles`.`status` FROM `hires` LEFT JOIN `profiles` ON `hires`.`id_profile` = `profiles`.`idprofiles`LEFT JOIN `users` ON `hires`.`reports_to` = `users`.`idUser` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule`) AS `hires_full` WHERE `hires_full`.`id_wave` = '$id'";
+$sql = "SELECT * FROM (SELECT `platform`, `schedules`.`days_off`, `employees`.`client_id`, `employees`.`idemployees`, `hires`.*, `users`.`user_name` AS `username`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `profiles`.`status` FROM `hires` LEFT JOIN `profiles` ON `hires`.`id_profile` = `profiles`.`idprofiles`LEFT JOIN `users` ON `hires`.`reports_to` = `users`.`idUser` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule`) AS `hires_full` WHERE `hires_full`.`id_wave` = '$id'";
 if($result = mysqli_query($con, $sql))
 {
 	$i = 0;
@@ -28,6 +28,7 @@ if($result = mysqli_query($con, $sql))
 		$hires[$i]['id_schedule'] = $row['id_schedule'];
 		$hires[$i]['reporter'] = $row['reports_to'];
 		$hires[$i]['client_id'] = $row['client_id'];
+		$hires[$i]['platform'] = $row['platform'];
 		$hires[$i]['day_off1'] = explode(",", $row['days_off'])[0];
 		$hires[$i]['day_off2'] = explode(",", $row['days_off'])[1];
 		$i++;

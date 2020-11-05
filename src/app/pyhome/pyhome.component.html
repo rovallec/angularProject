@@ -53,7 +53,7 @@
                                         </div>
                                         <div class="form-group col-md-2" *ngIf="wave.show === '1'">
                                             <label>Status</label>
-                                            <select class="form-control" [(ngModel)]="wave.state" (changue)="setWave(wave)">
+                                            <select class="form-control" [(ngModel)]="wave.state" (change)="setWave(wave)">
                                                 <option value="0">PENDING</option>
                                                 <option value="1">COMPLETED</option>
                                             </select>
@@ -65,6 +65,8 @@
                                                 <i class="fas fa-angle-double-up" (click)="hideSchedules()"
                                                 style="padding-left:33%; margin-top:32%; cursor: pointer;"
                                                 *ngIf="wave.show === '1'"></i>
+                                                <i class="fas fa-save"
+                                                style="margin-left:5px" (click)="saveEmployees()"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -82,10 +84,12 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let hire of hires">
-                                            <td>{{hire.nearsol_id}}</td>
-                                            <td>{{hire.first_name}} {{hire.second_name}} {{hire.first_lastname}} {{hire.second_lastname}}</td>
-                                            <td>{{hire.status}}</td>
-                                            <td><input type="text" *ngIf="editWave" [disabled]="hire.status == 'EMPLOYEE'" [(ngModel)]="hire.client_id"></td>
+                                            <td style="text-align: center;">{{hire.nearsol_id}}</td>
+                                            <td style="text-align: center;">{{hire.first_name}} {{hire.second_name}} {{hire.first_lastname}} {{hire.second_lastname}}</td>
+                                            <td style="text-align: center;">{{hire.status}}</td>
+                                            <td style="padding:0;text-align: center;"><input type="text" style="height:20px; width:100px;     border: 1px solid #3e3e3e;
+                                                border-radius: 5px 5px 5px 5px;
+                                                box-shadow: 0 0 10px #E8E8E8 inset;  padding: 2px;   background: none repeat scroll 0 0 #FFFFFF;" [disabled]="hire.status != 'EMPLOYEE'" [(ngModel)]="hire.client_id"></td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -48,6 +48,7 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['client_id'] = $row['client_id'];
         $res[$i]['nearsol_id'] = $row['nearsol_id'];
         $res[$i]['hiring_date'] = $row['hiring_date'];
+        $res[$i]['platform'] = $row['platform'];
         $res[$i]['state'] = $row['state'];
         $i++;
     }

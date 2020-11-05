@@ -158,7 +158,7 @@
                                                 <td *ngIf="makeEmployee" style="padding:0px; vertical-align: middle;">
                                                     <select [disabled]="emp.status != 'EMPLOYEE'" style="height:20px; width:100px;     border: 1px solid #3e3e3e;
                                                     border-radius: 5px 5px 5px 5px;
-                                                    box-shadow: 0 0 10px #E8E8E8 inset;  padding: 2px;   background: none repeat scroll 0 0 #FFFFFF;" [(ngModel)]="platforms[this.hiresToShow.indexOf(emp)]">
+                                                    box-shadow: 0 0 10px #E8E8E8 inset;  padding: 2px;   background: none repeat scroll 0 0 #FFFFFF;" [(ngModel)]="emp.platform">
                                                         <option>ON SITE</option>
                                                         <option>WAH</option>
                                                     </select>

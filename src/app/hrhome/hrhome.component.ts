@@ -56,6 +56,7 @@ export class HrhomeComponent implements OnInit {
   }
 
   start(){
+    this.wavesToShow = [];
     const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
     this.apiService.getfilteredWaves({str: date}).subscribe((wv:waves_template[])=>{
       wv.forEach(wa=>{
@@ -115,7 +116,8 @@ export class HrhomeComponent implements OnInit {
       const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
       this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
         readWaves.forEach(ww=>{
-          if(ww.idwaves === wv.idwaves){
+          console.log(ww);
+          if(ww.idwaves == wv.idwaves){
             wv.state = ww.state.split(",")[0] + "," + wv.state + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
           }
         })
@@ -183,13 +185,13 @@ export class HrhomeComponent implements OnInit {
 
     actual_emp = new employees();
     this.hiresToShow.forEach(hire => {
-      if(!isUndefined(hire.client_id) && hire.status == "EMPLOYEE"){
+      if(hire.status == "EMPLOYEE"){
         actual_emp = new employees();
         actual_emp.id_hire = hire.idhires;
         actual_emp.id_account = wv.id_account;
         actual_emp.reporter = hire.reporter;
         actual_emp.hiring_date = wv.ops_start;
-        actual_emp.platform = this.platforms[this.hiresToShow.indexOf(hire)];
+        actual_emp.platform = hire.platform;
         actual_emp.job = wv.job;
         actual_emp.id_user = this.authService.getAuthusr().iduser;
         actual_emp.id_department = this.authService.getAuthusr().department

@@ -17,7 +17,7 @@ for ($i=0; $i < count($request); $i++) {
 	$state = ($request[$i]->state);
 	$user = ($request[$i]->id_user);
 	$department = ($request[$i]->id_department);
-	$platform = ($request->platform);
+	$platform = ($request[$i]->platform);
 
 	$sql0="SELECT * FROM `hires` LEFT JOIN `waves` ON `waves`.`idwaves` = `hires`.`id_wave` WHERE `idhires` = $id_hire;";
 	if($result = mysqli_query($con, $sql0)){

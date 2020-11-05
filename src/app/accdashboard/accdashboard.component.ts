@@ -112,6 +112,7 @@ export class AccdashboardComponent implements OnInit {
   }
 
   getWavesAll() {
+    this.waves = [];
     const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
     this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
       this.wave_ToEdit = readWaves[0];
