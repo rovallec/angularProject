@@ -63,12 +63,12 @@ echo("
                         </td>
                         <td>
                             <table style='width:100%'>
-                                <tr style='height:30px'>
+                                <tr style='height:60px'>
                                     <td style='text-align:center;border:solid 2px black'><b style='color:#e30712; font-size:16px'>AFI-02</b></td>
                                 </tr>
                                 <tr style='height:40px'></tr>
                                 <tr>
-                                    <td>NO LLENAR A MANO</td>
+                                    <td><p style='color:#e50712'>LLENAR EN COMPUTADORA – NO LLENAR A MANO<p></td>
                                 </tr>
                             </table>
                         </td>
