@@ -56,9 +56,12 @@ export class HrhomeComponent implements OnInit {
   }
 
   start(){
-    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate() + " AND (`state` = 0 OR `state` = '3')";
+    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
     this.apiService.getfilteredWaves({str: date}).subscribe((wv:waves_template[])=>{
       this.wavesToShow = wv;
+      this.wavesToShow.forEach(wa=>{
+        wa.state = wa.state.split(",")[1];
+      })
     })
     for (let i = 0; i < this.wavesToShow.length; i++) {
       this.showEmployeeDetails.push(false);
@@ -106,6 +109,14 @@ export class HrhomeComponent implements OnInit {
   }
 
   editW(wv:waves_template){
+    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+    this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
+      readWaves.forEach(ww=>{
+        if(ww.idwaves == wv.idwaves){
+          wv.state = ww.state.split(",")[1] + "," + ww.state + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
+        }
+      })
+    })
     if(this.editWave[this.wavesToShow.indexOf(wv)]){
       this.apiService.updateWaveState(wv).subscribe((st:string)=>{
       });

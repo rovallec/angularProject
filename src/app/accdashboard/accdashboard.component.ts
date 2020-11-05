@@ -112,14 +112,25 @@ export class AccdashboardComponent implements OnInit {
   }
 
   getWavesAll() {
-    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate() + " AND (`state` = 0 OR `state` = '2')";
+    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
     this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
       this.waves = readWaves;
       this.wave_ToEdit = readWaves[0];
-    })
+      this.waves.forEach(wv=>{
+        wv.state = wv.state.split(",")[0];
+        })
+      })
   }
 
   editW(wv: waves_template) {
+    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+    this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
+      readWaves.forEach(ww=>{
+        if(ww.idwaves == wv.idwaves){
+          wv.state = wv.state + "," + ww.state.split(",")[1] + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
+        }
+      })
+    })
     this.apiService.updateWaveState(wv).subscribe((st: string) => {
       this.getWavesAll();
       this.getPeriods();

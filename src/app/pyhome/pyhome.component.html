@@ -55,7 +55,7 @@
                                             <label>Status</label>
                                             <select class="form-control" [(ngModel)]="wave.state" (changue)="setWave(wave)">
                                                 <option value="0">PENDING</option>
-                                                <option value="4">COMPLETED</option>
+                                                <option value="1">COMPLETED</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-1">
@@ -75,7 +75,20 @@
                             style="background:#eff6ff; border-color:#bbd0ff; border-style:solid; border-width:1px;">
                             <td>
                                 <table class="table table-striped table-hover">
-
+                                    <thead>
+                                        <th>NEARSOL ID</th>
+                                        <th>NAME</th>
+                                        <th>STATUS</th>
+                                        <th>CLIENT ID</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let hire of hires">
+                                            <td>{{hire.nearsol_id}}</td>
+                                            <td>{{hire.first_name}} {{hrie.second_name}} {{hire.first_lastname}} {{hire.second_lastname}}</td>
+                                            <td>{{hire.status}}</td>
+                                            <td><input type="text" *ngIf="editWave" [disabled]="hire.status == 'EMPLOYEE'" [(ngModel)]="hire.client_id"></td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </td>
                         </tr>

@@ -22,6 +22,7 @@ export class PyhomeComponent implements OnInit {
   filter: string = null;
   value: string = null;
   searching:boolean = false;
+  editWave:boolean = false;
 
   constructor(public apiService:ApiService, public route:Router, public authSrv:AuthServiceService) { }
 
@@ -37,10 +38,13 @@ export class PyhomeComponent implements OnInit {
   }
 
   getWavesAll() {
-    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate() + " AND (`state` = 0 OR `state` = '2')";
+    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
     this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
       this.waves = readWaves;
       this.wave_ToEdit = readWaves[0];
+      this.waves.forEach(ww=>{
+        ww.state = ww.state.split(",")[2];
+      })
     })
   }
 
@@ -53,15 +57,32 @@ export class PyhomeComponent implements OnInit {
   }
 
   setWave(wave:waves_template){
-
+    this.waves.forEach(ww=>{
+      if(ww.idwaves == wave.idwaves){
+        wave.state = ww.state.split(",")[0] + "," + ww.state.split(",")[1] + "," + wave.state + ww.state.split(",")[3]
+      }
+      this.apiService.updateWaveState(wave).subscribe((str:string)=>{
+        this.getWavesAll();
+        this.getAllEmployees();
+      })
+    })
   }
 
-  getSchedules(wave:waves_template){
-
+  getSchedules(wv:waves_template){
+    this.hires = [];
+    this.waves.forEach(wa => {
+      wa.show = '0';
+    });
+    this.apiService.getHiresAsEmployees({id:wv.idwaves}).subscribe((hires:hires_template[])=>{
+      this.hires = hires;
+    })
+    this.waves[this.waves.indexOf(wv)].show = "1";
   }
 
   hideSchedules(){
-
+    this.waves.forEach(wv=>{
+      wv.show = '0';
+    })
   }
 
 
