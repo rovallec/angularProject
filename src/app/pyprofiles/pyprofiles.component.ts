@@ -27,7 +27,7 @@ export class PyprofilesComponent implements OnInit {
   }
 
   start(){
-    this.apiService.getSearchEmployees({dp:this.authUser.getAuthusr().department, filter:'idemployees', value:this.route.snapshot.paramMap.get('id')}).subscribe((emp:employees[])=>{
+    this.apiService.getSearchEmployees({dp:'all', filter:'idemployees', value:this.route.snapshot.paramMap.get('id')}).subscribe((emp:employees[])=>{
       this.employee = emp[0]
       let prof:profiles = new profiles;
       prof.idprofiles = emp[0].id_profile;
