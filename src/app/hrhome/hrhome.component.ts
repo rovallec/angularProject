@@ -109,7 +109,7 @@ export class HrhomeComponent implements OnInit {
   }
 
   editW(wv:waves_template){
-    if(this.editWave){
+    if(this.editWave[this.wavesToShow.indexOf(wv)]){
       const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
       this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
         readWaves.forEach(ww=>{
