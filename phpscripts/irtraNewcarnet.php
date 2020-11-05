@@ -63,12 +63,12 @@ echo("
                         </td>
                         <td>
                             <table style='width:100%'>
-                                <tr style='height:60px'>
+                                <tr style='height:50px'>
                                     <td style='text-align:center;border:solid 2px black'><b style='color:#e30712; font-size:16px'>AFI-02</b></td>
                                 </tr>
                                 <tr style='height:40px'></tr>
                                 <tr>
-                                    <td><p style='color:#e50712'>LLENAR EN COMPUTADORA – NO LLENAR A MANO<p></td>
+                                    <td><p style='color:#e50712; font-size:10px'>LLENAR EN COMPUTADORA – NO LLENAR A MANO<p></td>
                                 </tr>
                             </table>
                         </td>
@@ -222,12 +222,13 @@ echo("
                 </table>
             </td>
         </tr>
+        <tr style='height:2.5px'></tr>
         <tr>
             <td colspan='3'>
-                <table style='widht:100%'>
+                <table style='width:100%'>
                     <tr>
-                        <td>Proporcione su correo electronico:<td>
-                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$email</td>
+                        <td>Proporcione su correo electronico:</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:600px;text-align:center'>$email</td>
                     </tr>
                 </table>
             </td>
@@ -243,6 +244,21 @@ echo("
                                 <tr style='height:96px'>
                                     <td style='border:solid 2px black;width:210px'></td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td style='font-size:10px; text-align:center'><u>(FIRMA)</u></td>
+                                            </tr>
+                                            <tr>
+                                                <td style='font-size:9px; text-align:center'><u>FAVOR FIRMAR CON <b>TINTA NEGRA</b> SIN</u></td>
+                                            </tr>
+                                            <tr>
+                                                <td style='font-size:9px; text-align:center'><u>SALIRSE DEL MARCO DE REFERENCIA</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                <tr>
                             </table>
                         </td>
                         <td style='width:320'></td>

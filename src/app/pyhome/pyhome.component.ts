@@ -38,7 +38,7 @@ export class PyhomeComponent implements OnInit {
   }
 
   gotoProfile(emp:employees){
-    this.route.navigate(['./hrprofiles', emp.idemployees]);
+    this.route.navigate(['./pyprofiles', emp.idemployees]);
   }
 
   getWavesAll() {

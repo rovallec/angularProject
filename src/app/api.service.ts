@@ -542,5 +542,9 @@ insertService(service:services){
 getFacilitesTemplate(){
   return this.httpClient.get<process_templates[]>(`${this.PHP_API_SERVER}/phpscripts/getFacilitiesTemplates.php`);
 }
+
+getPayrollTemplates(){
+  return this.httpClient.get<process_templates[]>(`${this.PHP_API_SERVER}/phpscripts/getPayrollTemplates.php`);
+}
   constructor(private httpClient:HttpClient) { }
 }

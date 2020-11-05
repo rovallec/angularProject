@@ -24,6 +24,7 @@ import { AccprofilesComponent } from './accprofiles/accprofiles.component';
 import { FhomeComponent } from './fhome/fhome.component';
 import { FprofilesComponent } from './fprofiles/fprofiles.component';
 import { WfmhomeComponent } from './wfmhome/wfmhome.component';
+import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
 
 const routes:Routes = [
   {
@@ -117,6 +118,11 @@ const routes:Routes = [
   {
     path:'fhome',
     component: FhomeComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'pyprofiles/:id',
+    component: PyprofilesComponent,
     canActivate:[AuthGuard]
   },
   {

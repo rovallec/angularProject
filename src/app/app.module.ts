@@ -29,7 +29,8 @@ import { PyhomeComponent } from './pyhome/pyhome.component';
 import { AccprofilesComponent } from './accprofiles/accprofiles.component';
 import { FhomeComponent } from './fhome/fhome.component';
 import { FprofilesComponent } from './fprofiles/fprofiles.component';
-import { WfmhomeComponent } from './wfmhome/wfmhome.component'
+import { WfmhomeComponent } from './wfmhome/wfmhome.component';
+import { PyprofilesComponent } from './pyprofiles/pyprofiles.component'
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { WfmhomeComponent } from './wfmhome/wfmhome.component'
     AccprofilesComponent,
     FhomeComponent,
     FprofilesComponent,
-    WfmhomeComponent
+    WfmhomeComponent,
+    PyprofilesComponent
   ],
   imports: [
     BrowserModule,
