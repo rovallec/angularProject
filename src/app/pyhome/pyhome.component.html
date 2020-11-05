@@ -83,7 +83,7 @@
                                     <tbody>
                                         <tr *ngFor="let hire of hires">
                                             <td>{{hire.nearsol_id}}</td>
-                                            <td>{{hire.first_name}} {{hrie.second_name}} {{hire.first_lastname}} {{hire.second_lastname}}</td>
+                                            <td>{{hire.first_name}} {{hire.second_name}} {{hire.first_lastname}} {{hire.second_lastname}}</td>
                                             <td>{{hire.status}}</td>
                                             <td><input type="text" *ngIf="editWave" [disabled]="hire.status == 'EMPLOYEE'" [(ngModel)]="hire.client_id"></td>
                                         </tr>
