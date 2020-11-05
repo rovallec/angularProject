@@ -109,18 +109,21 @@ export class HrhomeComponent implements OnInit {
   }
 
   editW(wv:waves_template){
-    const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
-    this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
-      readWaves.forEach(ww=>{
-        if(ww.idwaves == wv.idwaves){
-          wv.state = ww.state.split(",")[1] + "," + ww.state + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
-        }
+    if(this.editWave){
+      const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+      this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
+        readWaves.forEach(ww=>{
+          if(ww.idwaves == wv.idwaves){
+            wv.state = ww.state.split(",")[1] + "," + ww.state + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
+          }
+        })
+        this.apiService.updateWaveState(wv).subscribe((st:string)=>{
+          this.editWave[this.wavesToShow.indexOf(wv)] = !this.editWave[this.wavesToShow.indexOf(wv)];
+          this.start();
+        });
       })
-      this.apiService.updateWaveState(wv).subscribe((st:string)=>{
-        this.editWave[this.wavesToShow.indexOf(wv)] = !this.editWave[this.wavesToShow.indexOf(wv)];
-        this.start();
-      });
-    })
+    }
+    this.editWave[this.wavesToShow.indexOf(wv)] = !this.editWave[this.wavesToShow.indexOf(wv)];
   }
 
   getWvView(wv:waves_template){
