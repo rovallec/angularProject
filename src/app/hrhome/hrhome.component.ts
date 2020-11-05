@@ -116,13 +116,11 @@ export class HrhomeComponent implements OnInit {
           wv.state = ww.state.split(",")[1] + "," + ww.state + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
         }
       })
-    })
-    if(this.editWave[this.wavesToShow.indexOf(wv)]){
       this.apiService.updateWaveState(wv).subscribe((st:string)=>{
+        this.editWave[this.wavesToShow.indexOf(wv)] = !this.editWave[this.wavesToShow.indexOf(wv)];
+        this.start();
       });
-      this.start();
-    }
-    this.editWave[this.wavesToShow.indexOf(wv)] = !this.editWave[this.wavesToShow.indexOf(wv)];
+    })
   }
 
   getWvView(wv:waves_template){

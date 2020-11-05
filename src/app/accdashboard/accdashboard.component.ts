@@ -130,13 +130,13 @@ export class AccdashboardComponent implements OnInit {
           wv.state = wv.state + "," + ww.state.split(",")[1] + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
         }
       })
+      this.apiService.updateWaveState(wv).subscribe((st: string) => {
+        this.getWavesAll();
+        this.getPeriods();
+        this.getAllEmployees();
+        this.hideSchedules();
+      });
     })
-    this.apiService.updateWaveState(wv).subscribe((st: string) => {
-      this.getWavesAll();
-      this.getPeriods();
-      this.getAllEmployees();
-      this.hideSchedules();
-    });
   }
 
 
