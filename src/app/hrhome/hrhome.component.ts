@@ -266,7 +266,7 @@ export class HrhomeComponent implements OnInit {
         employee.id_profile = emp.id_profile;
         employee.idemployees = emp.idemployees;
         employee.name = emp.first_name + " " + emp.second_name + " " + emp.first_lastname + " " + emp.second_lastname;
-        employee.platform = this.platforms[this.hiresToShow.indexOf(emp)];
+        employee.platform = emp.platform;
         this.apiService.updateEmployee(employee).subscribe((str:string)=>{
         })
       }
