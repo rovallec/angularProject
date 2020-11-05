@@ -118,7 +118,7 @@ export class AccdashboardComponent implements OnInit {
       this.waves.forEach(wv=>{
         wv.state = wv.state.split(",")[0];
         readWaves.forEach(wv=>{
-          if(wv.state == '1'){
+          if(wv.state == '0'){
             this.waves.push(wv);
           }
         })
