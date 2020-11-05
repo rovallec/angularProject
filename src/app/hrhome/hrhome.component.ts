@@ -58,9 +58,11 @@ export class HrhomeComponent implements OnInit {
   start(){
     const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
     this.apiService.getfilteredWaves({str: date}).subscribe((wv:waves_template[])=>{
-      this.wavesToShow = wv;
-      this.wavesToShow.forEach(wa=>{
+      wv.forEach(wa=>{
         wa.state = wa.state.split(",")[1];
+        if(wa.state == '0'){
+          this.wavesToShow.push(wa);
+        }
       })
     })
     for (let i = 0; i < this.wavesToShow.length; i++) {
@@ -114,7 +116,7 @@ export class HrhomeComponent implements OnInit {
       this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
         readWaves.forEach(ww=>{
           if(ww.idwaves === wv.idwaves){
-            wv.state = ww.state.split(",")[1] + "," + ww.state + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
+            wv.state = ww.state.split(",")[0] + "," + wv.state + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
           }
         })
         this.apiService.updateWaveState(wv).subscribe((st:string)=>{
