@@ -127,10 +127,17 @@ export class FprofilesComponent implements OnInit {
   }
 
   setTemplate(process:process_templates){
-    this.activeProc = process;
-    this.activeCardAssignation = new card_assignation;
-    this.activeCardAssignation.date = this.todayDate;
-    this.activeCardAssignation.id_user = this.authUser.getAuthusr().user_name;
+    switch (process.name) {
+      case "Access Card Assignation":
+        this.activeProc = process;
+        this.activeCardAssignation = new card_assignation;
+        this.activeCardAssignation.date = this.todayDate;
+        this.activeCardAssignation.id_user = this.authUser.getAuthusr().user_name;   
+        break;
+    
+      default:
+        break;
+    }
     this.newProc = true;
   }
 

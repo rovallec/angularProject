@@ -42,7 +42,13 @@ export class PyprofilesComponent implements OnInit {
   }
 
   setTemplate(process:process_templates){
-    this.activeProc = process;
+    switch (process.name) {
+      case "Access Card Assignation":
+        this.activeProc = process;
+    
+      default:
+        break;
+    }
     this.newProc = true;
   }
 

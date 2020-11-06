@@ -70,7 +70,7 @@ export class PyhomeComponent implements OnInit {
     this.hires.forEach(hire => {
       if (hire.client_id.length > 0) {
         this.apiService.getSearchEmployees({dp:'all', filter:'nearsol_id', value:hire.nearsol_id}).subscribe((emp:employees[])=>{
-          emp[0].client_id = hire.client_id;
+          emp[0].platform = hire.client_id;
           this.apiService.updateEmployee(emp[0]).subscribe((str: string) => { });
         })
       }

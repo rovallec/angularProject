@@ -818,3 +818,15 @@ export class sup_exception{
         this.status = null;
     }
 }
+
+export class change_id{
+    
+    //process
+    idinternal_process:string;
+    id_user:string;
+    proc_name:string;
+    date:string;
+    proc_status:string;
+    notes:string;
+    constructor(){
+}

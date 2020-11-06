@@ -158,6 +158,9 @@
                                             <tr>
                                                 <td style='border-top:2px solid black;font-size:12px;text-align:center'>NANCY LUCRECIA SALAZAR ESCOBAR</td>
                                             </tr>
+                                            <tr>
+                                                <td>Patrono</td>
+                                            </tr>
                                         </table>
                                     <td>
                                     <td style='width:10%'><td>
@@ -167,6 +170,9 @@
                                             </tr>
                                             <tr>
                                                 <td style='border-top:2px solid black;font-size:12px;text-align:center'>$name</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Trabajador</td>
                                             </tr>
                                         </table>
                                     <td>

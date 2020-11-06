@@ -46,9 +46,9 @@
     <tr style="border-bottom: solid 4px #e3f2fd;">
         <td colspan="2" style="padding-top:30px" *ngIf="!newProc">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
-                <div class="nav nav-tabs active" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
-                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
-                        aria-controls="nav-contact" aria-selected="false">Contact</a>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
+                    <a class="nav-item nav-link active" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+                        aria-controls="nav-contact" aria-selected="true">Contact</a>
                     <a class="nav-item nav-link" id="nav-emergency-tab" data-toggle="tab" href="#nav-emergency"
                         role="tab" aria-controls="nav-emergency" aria-selected="false">Emergency</a>
                     <a class="nav-item nav-link" id="nav-medical-tab" data-toggle="tab" href="#nav-medical" role="tab"
@@ -149,7 +149,29 @@
                     aria-labelledby="nav-newproc-tab">
                     <div class="form-row col-md-12" *ngIf="activeProc.name == 'Changue Client ID'">
                         <div class="form-row col-md-12">
+                            <div class="form-group col-md-5"></div>
+                            <div class="form-group col-md-2">
+                                <label>New ID:</label>
+                                <input type="text" class="form-control" [(ngModel)]="activeChangeID.new_id">
+                            </div>
+                            <div class="form-group col-md-5"></div>
                         </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-4">
+                                <label>Date:</label>
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeChangeID.date">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>User:</label>
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeChangeID.id_user">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Status:</label>
+                                <input type="text" class="form-control" [disabled]="true"
+                                    [(ngModel)]="activeChangeID.proc_status">
+                            </div>
                     </div>
                 </div>
             </div>
