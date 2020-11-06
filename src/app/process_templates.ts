@@ -820,7 +820,7 @@ export class sup_exception{
 }
 
 export class change_id{
-    
+    new_id:string;
     //process
     idinternal_process:string;
     id_user:string;
