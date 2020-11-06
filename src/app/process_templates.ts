@@ -829,4 +829,5 @@ export class change_id{
     proc_status:string;
     notes:string;
     constructor(){
+    }
 }
