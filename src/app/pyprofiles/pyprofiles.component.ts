@@ -4,7 +4,7 @@ import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { process } from '../process';
-import { process_templates } from '../process_templates';
+import { change_id, process_templates } from '../process_templates';
 import { profiles } from '../profiles';
 
 @Component({
@@ -19,6 +19,7 @@ export class PyprofilesComponent implements OnInit {
   processes_template:process_templates[] = [];
   activeProc:process_templates = new process_templates;
   newProc:boolean = false;
+  activeChangeID:change_id = new change_id;
 
   constructor(public apiService:ApiService, public route:ActivatedRoute, public authUser:AuthServiceService) { }
 
