@@ -42,7 +42,6 @@ export class PyprofilesComponent implements OnInit {
       default:
         break;
     }
-    console.log(this.activeChangeID);
     this.activeProc = proc;
     this.newProc = true;
   }
@@ -56,6 +55,7 @@ export class PyprofilesComponent implements OnInit {
       case 'Client ID Change':
           this.activeChangeID.id_user = this.authUser.getAuthusr().iduser;
           this.activeChangeID.proc_status = 'COMPLETED';
+          this.apiService.insertChangeClientID(this.activeChangeID).subscribe((str:string)=>{})
         break;
     
       default:
