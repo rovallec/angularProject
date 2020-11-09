@@ -32,8 +32,6 @@ export class PyprofilesComponent implements OnInit {
   }
 
   setProcess(proc:process_templates){
-    this.activeProc = proc;
-    this.newProc = true;
     switch (process.name) {
       case 'Client ID Change':
         this.activeChangeID.proc_name = proc.name;
@@ -44,6 +42,9 @@ export class PyprofilesComponent implements OnInit {
       default:
         break;
     }
+    console.log(this.activeChangeID);
+    this.activeProc = proc;
+    this.newProc = true;
   }
 
   addProcess(){

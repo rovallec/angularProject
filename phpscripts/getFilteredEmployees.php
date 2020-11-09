@@ -11,7 +11,7 @@ $filter = ($request->filter);
 $value = ($request->value);
 $dp = ($request->dp);
 
-if($dp != '4'){
+if($dp != '4' && $dp != '28'){
     if($dp == '27'){
         $add_sql = "`employees`.`id_account` = '13' OR `employees`.`id_account` = '25' OR `employees`.`id_account` = '23' OR `employees`.`id_account` = '26' OR `employees`.`id_account` = '12'";
     }else{
