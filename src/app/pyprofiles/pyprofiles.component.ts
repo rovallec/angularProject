@@ -56,7 +56,10 @@ export class PyprofilesComponent implements OnInit {
       case 'Client ID Change':
           this.activeChangeID.id_user = this.authUser.getAuthusr().iduser;
           this.activeChangeID.proc_status = 'COMPLETED';
-          this.apiService.insertChangeClientID(this.activeChangeID).subscribe((str:string)=>{})
+          this.apiService.insertChangeClientID(this.activeChangeID).subscribe((str:string)=>{
+            this.newProcess = false;
+            this.activeChangeID = new change_id;
+          })
         break;
     
       default:

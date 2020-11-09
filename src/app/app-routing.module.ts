@@ -25,6 +25,7 @@ import { FhomeComponent } from './fhome/fhome.component';
 import { FprofilesComponent } from './fprofiles/fprofiles.component';
 import { WfmhomeComponent } from './wfmhome/wfmhome.component';
 import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
+import { ImportOtComponent } from './import-ot/import-ot.component';
 
 const routes:Routes = [
   {
@@ -128,6 +129,11 @@ const routes:Routes = [
   {
     path:'fProfile/:id',
     component: FprofilesComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'impOt',
+    component: ImportOtComponent,
     canActivate:[AuthGuard]
   },
   {

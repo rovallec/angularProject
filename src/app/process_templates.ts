@@ -842,3 +842,14 @@ export class change_id{
         this.notes = null;
     }
 }
+
+export class ot_manage{
+    id_employee:string;
+    amount:string;
+    id_period:string;
+    constructor(){
+        this.id_employee = null;
+        this.amount = null;
+        this.id_period = null;
+    }
+}

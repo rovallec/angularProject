@@ -1,0 +1,25 @@
+<div class="width:90%;margin-left:5%; margin-top:50px">
+    <div class="form-row col-md-12">
+        <div class="form-group col-md-5"></div>
+        <div class="form-group col-md-2">
+            <input  type="file" class="form-control" (change)="addFile($event)"
+        </div>
+        <div class="form-group col-md-5"></div>
+    </div>
+    <div class="form-row col-md-12">
+        <table class="table table-striped table-hover selectable" style="text-align:center;margin-left:5%;width:90%">
+            <thead>
+                <th>NAME</th>
+                <th>NEARSOL ID</th>
+                <th>OT</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ot of ots">
+                    <td>{{ot.name}}</td>
+                    <td>{{ot.nearsol_id}}</td>
+                    <td>{{ot.amount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

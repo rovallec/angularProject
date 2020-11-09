@@ -30,7 +30,8 @@ import { AccprofilesComponent } from './accprofiles/accprofiles.component';
 import { FhomeComponent } from './fhome/fhome.component';
 import { FprofilesComponent } from './fprofiles/fprofiles.component';
 import { WfmhomeComponent } from './wfmhome/wfmhome.component';
-import { PyprofilesComponent } from './pyprofiles/pyprofiles.component'
+import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
+import { ImportOtComponent } from './import-ot/import-ot.component'
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { PyprofilesComponent } from './pyprofiles/pyprofiles.component'
     FhomeComponent,
     FprofilesComponent,
     WfmhomeComponent,
-    PyprofilesComponent
+    PyprofilesComponent,
+    ImportOtComponent
   ],
   imports: [
     BrowserModule,
