@@ -39,6 +39,7 @@ export class PyprofilesComponent implements OnInit {
         this.activeChangeID.date = this.todayDate;
         this.activeChangeID.id_user = this.authUser.getAuthusr().user_name;
         this.activeChangeID.old_id = this.employee.client_id;
+        this.activeChangeID.id_employee = this.employee.idemployees;
       default:
         break;
     }

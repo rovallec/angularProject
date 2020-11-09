@@ -17,9 +17,9 @@
     $notes = ($request->notes);
     $old = ($request->old_id);
 
-    $notes_proc = $old . "|" . $new_id . " -> " . $notes;
+    $notes_proc = $old . "|" . $new_id;
     
-    $sql = "INSERT INTO `internal_processes` (`idinternal_processes`, `id_user`, `id_employee`, `name`, `date`, `status`, `notes`) VALUES (null, '$id_user', '$id_employee', '$proc_name', '$date', '$status', '$notes_proc';);";
+    $sql = "INSERT INTO `internal_processes` (`idinternal_processes`, `id_user`, `id_employee`, `name`, `date`, `status`, `notes`) VALUES (null, '$id_user', '$id_employee', '$proc_name', '$date', '$proc_status', '$notes_proc');";
     $sql2 = "UPDATE `employes` SET `client_id`  = '$new_id' WHERE `idemployees` = $id_employee;";
 
     if(mysqli_query($con, $sql)){
