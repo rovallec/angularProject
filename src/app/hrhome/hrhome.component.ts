@@ -182,6 +182,7 @@ export class HrhomeComponent implements OnInit {
   setEmployees(wv:waves_template){
     let employees_col:employees[] = [];
     let actual_emp:employees;
+    let updateEmp:employees[] = [];
 
     actual_emp = new employees();
     this.hiresToShow.forEach(hire => {
@@ -197,16 +198,22 @@ export class HrhomeComponent implements OnInit {
         actual_emp.id_department = this.authService.getAuthusr().department
         actual_emp.state = "EMPLOYEE";
         actual_emp.productivity_payment = wv.productivity_payment;
-        employees_col.push(actual_emp);
+        if(hire.idemployees != null){
+          updateEmp.push(actual_emp);
+        }else{
+          employees_col.push(actual_emp);
+        }
       }
     });
-    console.log(employees_col);
     this.apiService.insertEmployees(employees_col).subscribe((str:string)=>{
+      updateEmp.forEach(emp => {
+        this.apiService.updateEmployee(emp).subscribe((str:string)=>{});
+        this.cancelEmployeeEdit(wv);
+        this.getShow(wv);
+        this.hideWave();
+        this.start();
+      });
     });
-    this.cancelEmployeeEdit(wv);
-    this.getShow(wv);
-    this.hideWave();
-    this.start();
   }
 
   changeDate(a:string, wv:waves_template){

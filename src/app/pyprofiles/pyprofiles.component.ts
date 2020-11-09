@@ -17,14 +17,49 @@ export class PyprofilesComponent implements OnInit {
   employee:employees = new employees;
   profile:profiles = new profiles;
   processes_template:process_templates[] = [];
+  processRecord:process[] = [];
   activeProc:process_templates = new process_templates;
   newProc:boolean = false;
+  newProcess:boolean = false;
+  viewRecProd:boolean = false;
   activeChangeID:change_id = new change_id;
+  todayDate:string = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + new Date().getDate().toString();
 
   constructor(public apiService:ApiService, public route:ActivatedRoute, public authUser:AuthServiceService) { }
 
   ngOnInit() {
     this.start();
+  }
+
+  setProcess(proc:process_templates){
+    this.activeProc = proc;
+    this.newProc = true;
+    switch (process.name) {
+      case 'Client ID Change':
+        this.activeChangeID.proc_name = proc.name;
+        this.activeChangeID.proc_status = 'PENDING';
+        this.activeChangeID.date = this.todayDate;
+        this.activeChangeID.id_user = this.authUser.getAuthusr().user_name;
+        this.activeChangeID.old_id = this.employee.client_id;
+      default:
+        break;
+    }
+  }
+
+  addProcess(){
+    this.newProcess = true
+  }
+
+  insertProc(){
+    switch (this.activeProc.name) {
+      case 'Client ID Change':
+          this.activeChangeID.id_user = this.authUser.getAuthusr().iduser;
+          this.activeChangeID.proc_status = 'COMPLETED';
+        break;
+    
+      default:
+        break;
+    }
   }
 
   start(){
@@ -42,16 +77,6 @@ export class PyprofilesComponent implements OnInit {
     })
   }
 
-  setTemplate(process:process_templates){
-    switch (process.name) {
-      case "Access Card Assignation":
-        this.activeProc = process;
-    
-      default:
-        break;
-    }
-    this.newProc = true;
-  }
 
   cancelView(){
     this.newProc = false;

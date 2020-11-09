@@ -821,6 +821,8 @@ export class sup_exception{
 
 export class change_id{
     new_id:string;
+    old_id:string;
+    id_employee:string;
     //process
     idinternal_process:string;
     id_user:string;
@@ -829,5 +831,14 @@ export class change_id{
     proc_status:string;
     notes:string;
     constructor(){
+        this.new_id = null;
+        this.id_employee = null;
+        //process
+        this.idinternal_process = null;
+        this.id_user = null;
+        this.proc_name = null;
+        this.date = null;
+        this.proc_status = null;
+        this.notes = null;
     }
 }
