@@ -23,7 +23,7 @@ export class PyprofilesComponent implements OnInit {
   newProcess:boolean = false;
   viewRecProd:boolean = false;
   activeChangeID:change_id = new change_id;
-  todayDate:string = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString() + new Date().getDate().toString();
+  todayDate:string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
 
   constructor(public apiService:ApiService, public route:ActivatedRoute, public authUser:AuthServiceService) { }
 
