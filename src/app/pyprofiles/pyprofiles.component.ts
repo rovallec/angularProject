@@ -32,7 +32,7 @@ export class PyprofilesComponent implements OnInit {
   }
 
   setProcess(proc:process_templates){
-    switch (process.name) {
+    switch (proc.name) {
       case 'Client ID Change':
         this.activeChangeID.proc_name = proc.name;
         this.activeChangeID.proc_status = 'PENDING';
