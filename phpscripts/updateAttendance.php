@@ -24,7 +24,8 @@ $id_wave = ($request->id_wave);
 $balance = ($request->balance);
 
 
-$sql = "UPDATE `attendences` SET `scheduled` = '$scheduled' WHERE `worked_time` = '$worked_time';";
+$sql = "UPDATE `attendences` SET `scheduled` = '$scheduled', `worked_time` = '$worked_time' WHERE `idattendences` = $idattendences;";
+echo($sql);
 
 
 

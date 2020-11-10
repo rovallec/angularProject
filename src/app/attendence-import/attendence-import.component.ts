@@ -113,15 +113,15 @@ export class AttendenceImportComponent implements OnInit {
   uploadAttendences() {
     this.attendences.forEach(element => {
       if (element.day_off1 == 'OMMIT') {
-        this.uploaded.push(element);
         this.fail.push(element);
       } else {
         if(element.day_off1 == 'APPLY'){
           this.apply.push(element);
           this.uploaded.push(element);
         }else{
-          if(element.day_off1 != "NOT MATCH"){
+          if(element.day_off1 == "CORRECT"){
             this.correct.push(element);
+            this.uploaded.push(element);
           }
         }
       }
@@ -131,7 +131,7 @@ export class AttendenceImportComponent implements OnInit {
       let adj:attendences_adjustment = new attendences_adjustment;
       adj.date = app.date;
       adj.id_attendence = app.idattendences;
-      adj.id_department = '4';
+      adj.id_department = '4'; 
       adj.id_employee = app.id_employee;
       adj.id_type = '2';
       adj.id_user = this.authService.getAuthusr().iduser;
@@ -139,8 +139,8 @@ export class AttendenceImportComponent implements OnInit {
       adj.reason = 'WFM Correction';
       adj.state = 'PENDING';
       adj.status = "PENDING";
-      adj.time_after = app.day_off2;
-      adj.time_before = app.worked_time;
+      adj.time_after = app.worked_time;
+      adj.time_before = app.day_off2;
       adj.amount = (parseFloat(app.day_off2) - parseFloat(app.worked_time)).toFixed(2);
       this.apiService.insertAttJustification(adj).subscribe((str:string)=>{
         this.apiService.updateAttendances(app).subscribe((str:string)=>{});

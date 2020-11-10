@@ -69,7 +69,7 @@
                     
                     echo json_encode($att);
                 }else{
-                    http_response_code(404);
+                    http_response_code(200);
                 }
     }
 ?>
