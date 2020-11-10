@@ -157,6 +157,8 @@ export class MiprofilesComponent implements OnInit {
   };
 
   prof_to_get: profiles = {
+    gender: null,
+    etnia: null,
     idprofiles: 'N/A',
     tittle: 'N/A',
     first_name: 'N/A',
