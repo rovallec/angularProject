@@ -32,7 +32,7 @@ for ($i=0; $i < count($request); $i++) {
 	if(mysqli_query($con, $sql)){
 		$id_employee = mysqli_insert_id($con);
 		if(mysqli_query($con,$sql1)){
-			$sql2 = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (NULL, '$user', '$id_employee', '1', '$department', '$date', 'Inherent Process', 'CLOSED');";
+			$sql2 = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (NULL, '$user', '$id_employee', '1', '$department', '$date', 'Inherent Process New Employee $id_employee', 'CLOSED');";
 			if(mysqli_query($con,$sql2)){
 			}else{
 				http_response_code(404);

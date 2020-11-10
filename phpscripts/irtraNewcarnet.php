@@ -217,7 +217,7 @@ echo("
                 <table style='width:100%'>
                     <tr>
                         <td>Nombre del Cónyuge:</td>
-                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$spuse_name</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$spouse_name</td>
                         <td>Apellidos del Cónyuge:</td>
                         <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$spouse_lastname</td>
                     </tr>

@@ -12,7 +12,7 @@ $type = ($request->type);
 $spuse_name = ($request->spouse_name);
 $spouse_lastname = ($request->spouse_lastname);
 
-$sql = "INSERT INTO `irtra_requests` (`idirtra_requests`, `id_process`, `type`, `spuse_name`, `spouse_lastname`) VALUES (NULL, '$idprocess', '$type', '$spuse_name', '$spouse_lastname');";
+$sql = "INSERT INTO `irtra_requests` (`idirtra_requests`, `id_process`, `type`, `spouse_name`, `spouse_lastname`) VALUES (NULL, '$idprocess', '$type', '$spuse_name', '$spouse_lastname');";
 if(mysqli_query($con,$sql)){
     http_response_code(200);
 }else{
