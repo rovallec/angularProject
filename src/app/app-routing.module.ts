@@ -132,7 +132,7 @@ const routes:Routes = [
     canActivate:[AuthGuard]
   },
   {
-    path:'impOt',
+    path:'impoOt',
     component: ImportOtComponent,
     canActivate:[AuthGuard]
   },
