@@ -20,7 +20,6 @@ export class ImportOtComponent implements OnInit {
   file: any;
   arrayBuffer: any;
   filelist: any;
-  failCount: number = 0;
   imported:boolean = false;
   ots:ot_manage[] = [];
 
@@ -44,6 +43,7 @@ export class ImportOtComponent implements OnInit {
   addfile(event) {
     this.file = event.target.files[0];
     let fileReader = new FileReader();
+    let num:number = 0;
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
@@ -64,6 +64,10 @@ export class ImportOtComponent implements OnInit {
           ot.name = emp[0].name;
           ot.nearsol_id = element['NEARSOL ID'];
           this.ots.push(ot);
+          num = num + 1;
+          if(num == sheetToJson.length){
+            this.imported = true;
+          }
         })
       })
     }
