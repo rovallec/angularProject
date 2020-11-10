@@ -280,6 +280,8 @@ export class PeriodsComponent implements OnInit {
                                   let ot_hours:number = 0;
                                   ot.id_period = this.period.idperiods;
                                   ot.id_employee = emp[0].idemployees;
+                                  ot.name = emp[0].name;
+                                  ot.nearsol_id = emp[0].nearsol_id;
                                   this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
                                     if(parseFloat(ots.amount) >= discounted){
                                       ot_hours = discounted;
