@@ -261,9 +261,9 @@ export class PeriodsComponent implements OnInit {
                                 productivity_credit.type = "Bonificacion Productividad";
                                 decreto_credit.type = "Bonificacion Decreto";
 
-                                if (discounted <= 0) {
-                                  base_credit.amount = (((att.length * 8) - (discounted)) * base_hour).toFixed(2);
-                                  productivity_credit.amount = (((att.length * 8) - (discounted)) * productivity_hour).toFixed(2);
+                                if (this.absence <= 0) {
+                                  base_credit.amount = (((att.length * 8) - (this.absence)) * base_hour).toFixed(2);
+                                  productivity_credit.amount = (((att.length * 8) - (this.absence)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
                                 } else {
                                   productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
@@ -273,8 +273,8 @@ export class PeriodsComponent implements OnInit {
                                   ot.id_period = this.period.idperiods;
                                   ot.id_employee = emp[0].idemployees;
                                   this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
-                                    if(parseFloat(ots.amount) >= discounted){
-                                      ot_hours = discounted;
+                                    if(parseFloat(ots.amount) >= this.absence){
+                                      ot_hours = this.absence;
                                     }else{
                                       ot_hours = parseFloat(ots.amount);
                                     }
@@ -642,9 +642,9 @@ export class PeriodsComponent implements OnInit {
                             decreto_credit.type = "Bonificacion Decreto";
                             igss_debit.type = "IGSS";
 
-                            if (discounted >= 0) {
-                              base_credit.amount = (((att.length * 8) - (discounted)) * base_hour).toFixed(2);
-                              productivity_credit.amount = (((att.length * 8) - (discounted)) * productivity_hour).toFixed(2);
+                            if (this.absence >= 0) {
+                              base_credit.amount = (((att.length * 8) - (this.absence)) * base_hour).toFixed(2);
+                              productivity_credit.amount = (((att.length * 8) - (this.absence)) * productivity_hour).toFixed(2);
                               ot_credit.amount = '0';
                             } else {
                               productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
@@ -654,8 +654,8 @@ export class PeriodsComponent implements OnInit {
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
                               this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
-                                if(parseFloat(ots.amount) >= discounted){
-                                  ot_hours = discounted;
+                                if(parseFloat(ots.amount) >= this.absence){
+                                  ot_hours = this.absence;
                                 }else{
                                   ot_hours = parseFloat(ots.amount);
                                 }
