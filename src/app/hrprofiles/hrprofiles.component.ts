@@ -776,8 +776,8 @@ export class HrprofilesComponent implements OnInit {
       case 'Pay Vacations':
         if (this.availableVacations < 1) {
           this.addVac = false;
-          this.actuallProc.idprocesses = '1';
         } else {
+          this.actuallProc.idprocesses = '1';
           this.addVac = true;
         }
         this.actuallProc.descritpion = null;
@@ -817,7 +817,6 @@ export class HrprofilesComponent implements OnInit {
       switch (this.actuallProc.name) {
         case 'Termination':
           this.actualTerm.id_process = str;
-          this.actualTerm.period_to_pay = this.checkDate1 + " - " + this.checkDate2 + " Days:" + this.checkDay;
           this.apiService.insertTerm(this.actualTerm).subscribe((str: string) => {
             this.cancelView();
           })
@@ -872,10 +871,11 @@ export class HrprofilesComponent implements OnInit {
                 this.activeVacation.took_date = this.todayDate;
                 this.insertVacation();
                 let cred: credits = new credits;
-                cred.amount = ((parseFloat(this.workingEmployee.base_payment) / 30) + (parseFloat(this.workingEmployee.productivity_payment) / 30)).toFixed(2);
+                cred.amount = ((parseFloat(this.workingEmployee.base_payment) / 30) + ((parseFloat(this.workingEmployee.productivity_payment) - 250) / 30)).toFixed(2);
                 cred.id_employee = this.workingEmployee.idemployees;
                 cred.id_user = this.authUser.getAuthusr().iduser;
                 cred.date = this.todayDate;
+                console.log(this.workingEmployee.idemployees);
                 payment.forEach(py => {
                   if(py.id_employee == this.workingEmployee.idemployees){
                     cred.idpayments = py.idpayments;
