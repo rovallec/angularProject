@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { profiles } from './profiles';
 import { process } from './process';
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage } from './process_templates';
 
 import { Observable } from 'rxjs'; 
 import { users } from './users';
@@ -549,6 +549,14 @@ getPayrollTemplates(){
 
 insertChangeClientID(change:change_id){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertChangeClientID.php`, change)
+}
+
+insertApprovedOt(ot:ot_manage){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertApprovedOt.php`, ot);
+}
+
+getApprovedOt(ot:ot_manage){
+  return this.httpClient.post<ot_manage>(`${this.PHP_API_SERVER}/phpscripts/getApprovedOt.php`, ot);
 }
 
   constructor(private httpClient:HttpClient) { }

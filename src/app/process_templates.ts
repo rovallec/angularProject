@@ -845,6 +845,8 @@ export class change_id{
 
 export class ot_manage{
     id_employee:string;
+    name:string;
+    nearsol_id:string;
     amount:string;
     id_period:string;
     constructor(){

@@ -5,6 +5,7 @@ import { ot_manage, periods } from '../process_templates';
 import { timeStamp } from 'console';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
+import { isNull } from 'util';
 
 @Component({
   selector: 'app-import-ot',
@@ -20,6 +21,7 @@ export class ImportOtComponent implements OnInit {
   arrayBuffer: any;
   filelist: any;
   failCount: number = 0;
+  imported:boolean = false;
   ots:ot_manage[] = [];
 
   ngOnInit() {
@@ -27,6 +29,16 @@ export class ImportOtComponent implements OnInit {
       this.period = pr[pr.length-1];
 
     })
+  }
+
+  saveOt(){
+    this.ots.forEach(ot => {
+      this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
+        if(parseFloat(ots.id_employee) > 0){
+          this.apiService.insertApprovedOt(ot).subscribe((str:string)=>{});
+        }
+      })
+    });
   }
 
   addfile(event) {
@@ -37,7 +49,6 @@ export class ImportOtComponent implements OnInit {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
-      let nm: string = null;
       for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
       var bstr = arr.join("");
       var workbook = XLSX.read(bstr, { type: "binary" });
@@ -50,6 +61,8 @@ export class ImportOtComponent implements OnInit {
           ot.id_employee = emp[0].idemployees;
           ot.amount = element['AMOUNT'];
           ot.id_period = this.period.idperiods;
+          ot.name = emp[0].name;
+          ot.nearsol_id = element['NEARSOL ID'];
           this.ots.push(ot);
         })
       })

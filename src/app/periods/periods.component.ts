@@ -10,11 +10,12 @@ import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { schedule_visit } from '../addTemplate';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, payments, periods, services, vacations } from '../process_templates';
+import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
 import { resolve } from 'url';
+import { DH_NOT_SUITABLE_GENERATOR } from 'constants';
 
 @Component({
   selector: 'app-periods',
@@ -267,15 +268,27 @@ export class PeriodsComponent implements OnInit {
                                 } else {
                                   productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
                                   base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
-                                  ot_credit.type = "Horas Extra Laboradas: " + discounted.toFixed(2);
-                                  if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12') {
-                                    ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
-                                  } else {
-                                    ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
-                                  }
-                                  ot_credit.idpayments = pay.idpayments;
-                                  pushCredits.push(ot_credit);
-                                  this.global_credits.push(ot_credit);
+                                  let ot:ot_manage = new ot_manage;
+                                  let ot_hours:number = 0;
+                                  ot.id_period = this.period.idperiods;
+                                  ot.id_employee = emp[0].idemployees;
+                                  this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
+                                    if(parseFloat(ots.amount) >= discounted){
+                                      ot_hours = discounted;
+                                    }else{
+                                      ot_hours = parseFloat(ots.amount);
+                                    }
+    
+                                    ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
+                                    if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
+                                      ot_credit.amount = ((base_hour + productivity_hour) * 2 * ot_hours).toFixed(2);
+                                    } else {
+                                      ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
+                                    }
+                                    if (base_credit.amount != 'NaN') {
+                                      this.credits.push(ot_credit);
+                                    }
+                                  })
                                 }
                                 decreto_credit.amount = '125.00';
                                 igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
@@ -637,15 +650,27 @@ export class PeriodsComponent implements OnInit {
                             } else {
                               productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
                               base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
-                              ot_credit.type = "Horas Extra Laboradas: " + discounted;
-                              if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
-                              } else {
-                                ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
-                              }
-                              if (base_credit.amount != 'NaN') {
-                                this.credits.push(ot_credit);
-                              }
+                              let ot:ot_manage = new ot_manage;
+                              let ot_hours:number = 0;
+                              ot.id_period = this.period.idperiods;
+                              ot.id_employee = emp[0].idemployees;
+                              this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
+                                if(parseFloat(ots.amount) >= discounted){
+                                  ot_hours = discounted;
+                                }else{
+                                  ot_hours = parseFloat(ots.amount);
+                                }
+
+                                ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
+                                if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
+                                  ot_credit.amount = ((base_hour + productivity_hour) * 2 * ot_hours).toFixed(2);
+                                } else {
+                                  ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
+                                }
+                                if (base_credit.amount != 'NaN') {
+                                  this.credits.push(ot_credit);
+                                }
+                              })
                             }
                             decreto_credit.amount = '125.00';
                             igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
