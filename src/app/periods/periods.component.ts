@@ -285,9 +285,8 @@ export class PeriodsComponent implements OnInit {
                                     } else {
                                       ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
                                     }
-                                    if (base_credit.amount != 'NaN') {
-                                      this.credits.push(ot_credit);
-                                    }
+                                    pushCredits.push(ot_credit);
+                                    this.global_credits.push(ot_credit);
                                   })
                                 }
                                 decreto_credit.amount = '125.00';
@@ -667,9 +666,7 @@ export class PeriodsComponent implements OnInit {
                                 } else {
                                   ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
                                 }
-                                if (base_credit.amount != 'NaN') {
                                   this.credits.push(ot_credit);
-                                }
                               })
                             }
                             decreto_credit.amount = '125.00';
