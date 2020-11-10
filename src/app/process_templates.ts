@@ -849,6 +849,7 @@ export class ot_manage{
     nearsol_id:string;
     amount:string;
     id_period:string;
+    status:string;
     constructor(){
         this.id_employee = null;
         this.amount = null;

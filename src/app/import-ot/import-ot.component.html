@@ -13,12 +13,14 @@
                 <th>NAME</th>
                 <th>NEARSOL ID</th>
                 <th>OT</th>
+                <th *ngIf="saved">STATUS</th>
             </thead>
             <tbody>
                 <tr *ngFor="let ot of ots">
                     <td>{{ot.name}}</td>
                     <td>{{ot.nearsol_id}}</td>
                     <td>{{ot.amount}}</td>
+                    <td *ngIf="saved">{{ot.status}}</td>
                 </tr>
             </tbody>
         </table>

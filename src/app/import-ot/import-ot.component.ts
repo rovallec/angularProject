@@ -21,6 +21,7 @@ export class ImportOtComponent implements OnInit {
   arrayBuffer: any;
   filelist: any;
   imported:boolean = false;
+  saved:boolean = false;
   ots:ot_manage[] = [];
 
   ngOnInit() {
@@ -31,10 +32,15 @@ export class ImportOtComponent implements OnInit {
   }
 
   saveOt(){
+    this.saved = true;
     this.ots.forEach(ot => {
       this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
         if(parseFloat(ots.id_employee) > 0){
-          this.apiService.insertApprovedOt(ot).subscribe((str:string)=>{});
+         ot.status = 'FAIL';
+        }else{
+          this.apiService.insertApprovedOt(ot).subscribe((str:string)=>{
+            ot.status = 'SAVED';
+          });
         }
       })
     });

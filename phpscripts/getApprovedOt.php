@@ -16,11 +16,12 @@ $result = [];
 
 $sql = "SELECT * FROM `approved_ot` WHERE `id_employee` = $id_employee AND `id_period` = $id_period;";
 if($result = mysqli_query($con,$sql)){
-    $row = mysql_fetch_assoc($result);
-    $result['idapproved_ot'] = $row[0]['idapproved_ot'];
-    $result['id_employee'] = $row[0]['id_emloyee'];
-    $result['id_period'] = $row[0]['id_period'];
-    $result['amount'] = $row[0]['amount'];
+    while($row = mysqli_fetch_assoc($result)){
+        $result['idapproved_ot'] = $row['idapproved_ot'];
+        $result['id_employee'] = $row['id_emloyee'];
+        $result['id_period'] = $row['id_period'];
+        $result['amount'] = $row['amount'];
+    };
     echo(json_encode($result));
 }else{
     http_response_code(400);
