@@ -642,6 +642,7 @@ export class PeriodsComponent implements OnInit {
                             decreto_credit.type = "Bonificacion Decreto";
                             igss_debit.type = "IGSS";
 
+                            console.log(discounted);
                             if (discounted <= 0) {
                               base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
                               productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
