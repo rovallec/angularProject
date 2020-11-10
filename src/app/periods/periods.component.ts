@@ -199,8 +199,16 @@ export class PeriodsComponent implements OnInit {
                                   leave.forEach(leav => {
                                     if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
                                       activeLeav = true;
-                                      if (leav.motive == 'UNPAID' || leav.motive == 'Leave of Absence Unpaid') {
+                                      if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                         discounted = discounted - 8;
+                                        this.absence = this.absence - 8;
+                                        attendance.balance = 'JANP';
+                                      } else {
+                                        if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
+                                          this.roster = this.roster + parseFloat(attendance.scheduled);
+                                          this.attended = this.attended + parseFloat(attendance.scheduled);
+                                          attendance.balance = 'JAP';
+                                        }
                                       }
                                     }
                                   })
@@ -261,9 +269,9 @@ export class PeriodsComponent implements OnInit {
                                 productivity_credit.type = "Bonificacion Productividad";
                                 decreto_credit.type = "Bonificacion Decreto";
 
-                                if (this.absence <= 0) {
-                                  base_credit.amount = (((att.length * 8) - (this.absence)) * base_hour).toFixed(2);
-                                  productivity_credit.amount = (((att.length * 8) - (this.absence)) * productivity_hour).toFixed(2);
+                                if (discounted <= 0) {
+                                  base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
+                                  productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
                                 } else {
                                   productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
@@ -273,8 +281,8 @@ export class PeriodsComponent implements OnInit {
                                   ot.id_period = this.period.idperiods;
                                   ot.id_employee = emp[0].idemployees;
                                   this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
-                                    if(parseFloat(ots.amount) >= this.absence){
-                                      ot_hours = this.absence;
+                                    if(parseFloat(ots.amount) >= discounted){
+                                      ot_hours = discounted;
                                     }else{
                                       ot_hours = parseFloat(ots.amount);
                                     }
@@ -642,9 +650,9 @@ export class PeriodsComponent implements OnInit {
                             decreto_credit.type = "Bonificacion Decreto";
                             igss_debit.type = "IGSS";
 
-                            if (this.absence >= 0) {
-                              base_credit.amount = (((att.length * 8) - (this.absence)) * base_hour).toFixed(2);
-                              productivity_credit.amount = (((att.length * 8) - (this.absence)) * productivity_hour).toFixed(2);
+                            if (this.absence <= 0) {
+                              base_credit.amount = (((att.length * 8) + (this.absence)) * base_hour).toFixed(2);
+                              productivity_credit.amount = (((att.length * 8) + (this.absence)) * productivity_hour).toFixed(2);
                               ot_credit.amount = '0';
                             } else {
                               productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
