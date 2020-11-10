@@ -277,7 +277,9 @@ export class MiprofilesComponent implements OnInit {
     degree: 'N/A',
     iddocuments: 'N/A',
     doc_type: 'N/A',
-    doc_path: 'N/A'
+    doc_path: 'N/A',
+    gender: null,
+    etnia: null
   }];
 
   documents_view: string[][];
