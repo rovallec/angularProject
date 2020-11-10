@@ -1161,6 +1161,17 @@
                             </div>
                         </div>
 
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-6">
+                                <label>Spouse Name:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualIrtrarequests.spouse_name" [disabled]="!viewRecProd">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Spouse Lastname:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualIrtrarequests.spouse_lastname" [disabled]="!viewRecProd">
+                            </div>
+                        </div>
+
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cance</button>
@@ -1353,6 +1364,14 @@
                                 <textarea class="form-control" width="100%" [(ngModel)]="actuallProc.descritpion"
                                     [disabled]="viewRecProd"></textarea>
                             </div>
+                        </div>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-5"></div>
+                            <div class="form-group col-md-2">
+                                <label>Amount:</label>
+                                <input type="number" class="form-control" [(ngModel)]="actuallProc."
+                            </div>
+                            <div class="form-group col-md-5"></div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">

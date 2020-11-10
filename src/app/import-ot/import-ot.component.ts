@@ -23,6 +23,7 @@ export class ImportOtComponent implements OnInit {
   imported:boolean = false;
   saved:boolean = false;
   ots:ot_manage[] = [];
+  completed:boolean = false;
 
   ngOnInit() {
     this.apiService.getPeriods().subscribe((pr:periods[])=>{
@@ -33,13 +34,22 @@ export class ImportOtComponent implements OnInit {
 
   saveOt(){
     this.saved = true;
+    let cnt:number = 0;
     this.ots.forEach(ot => {
       this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
         if(parseFloat(ots.id_employee) > 0){
+          cnt = cnt + 1;
          ot.status = 'FAIL';
+         if(cnt == this.ots.length){
+          this.completed = true;
+        }
         }else{
           this.apiService.insertApprovedOt(ot).subscribe((str:string)=>{
             ot.status = 'SAVED';
+            cnt = cnt + 1;
+            if(cnt == this.ots.length){
+              this.completed = true;
+            }
           });
         }
       })

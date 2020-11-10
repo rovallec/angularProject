@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { users } from '../users';
@@ -36,11 +36,11 @@ export class HrprofilesComponent implements OnInit {
   vacationsEarned: number = 0;
   accId: string = '';
   addVac: boolean = true;
-  useCompany:string = null;
-  igss_patronal:string = null;
-  dpTerm:boolean = false;
-  workingEmployee:employees = new employees;
-  riseIncrease:string = null;
+  useCompany: string = null;
+  igss_patronal: string = null;
+  dpTerm: boolean = false;
+  workingEmployee: employees = new employees;
+  riseIncrease: string = null;
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -55,9 +55,9 @@ export class HrprofilesComponent implements OnInit {
   process_templates: process[] = [];
   processRecord: process[] = [];
   allAccounts: accounts[] = [];
-  actualMessagings:messagings = new messagings;
-  actualIrtrarequests:irtra_requests = new irtra_requests;
-  actualJudicial:judicials = new judicials;
+  actualMessagings: messagings = new messagings;
+  actualIrtrarequests: irtra_requests = new irtra_requests;
+  actualJudicial: judicials = new judicials;
   actualReport: reports = new reports;
   actualAdvance: advances = new advances;
   actualRise: rises = new rises;
@@ -89,8 +89,8 @@ export class HrprofilesComponent implements OnInit {
   editRequest: boolean = true;
   newSuspension: string = "NO";
   accChange: string = null;
-  editableIrtra:boolean = false;
-  editableIgss:boolean = false;
+  editableIrtra: boolean = false;
+  editableIgss: boolean = false;
 
   earnVacations: number = 0;
   tookVacations: number = 0;
@@ -634,10 +634,10 @@ export class HrprofilesComponent implements OnInit {
     if (this.newSuspension === "NO" && this.newAudience === "NO") {
       this.apiService.insertDP(this.activeRequest).subscribe((str: string) => {
         this.getDisciplinaryProcesses();
-        if(this.activeRequest.dp_grade == 'Terminacion Laboral'){
+        if (this.activeRequest.dp_grade == 'Terminacion Laboral') {
           this.newRequest = false;
           this.storedRequest = false;
-          let act:process = new process;
+          let act: process = new process;
           act.idprocesses = "8";
           act.name = 'Termination';
           act.descritpion = 'Employee Termination';
@@ -660,15 +660,15 @@ export class HrprofilesComponent implements OnInit {
   }
 
   pushDay2(str: any) {
-    this.activeRequest.day_2 =  "'" + str + "'";
+    this.activeRequest.day_2 = "'" + str + "'";
   }
 
   pushDay3(str: any) {
-    this.activeRequest.day_3 =  "'" + str + "'";
+    this.activeRequest.day_3 = "'" + str + "'";
   }
 
   pushDay4(str: any) {
-    this.activeRequest.day_4 =  "'" + str + "'";
+    this.activeRequest.day_4 = "'" + str + "'";
   }
 
   getBeneficiaries() {
@@ -776,7 +776,8 @@ export class HrprofilesComponent implements OnInit {
       case 'Pay Vacations':
         if (this.availableVacations < 1) {
           this.addVac = false;
-        }else{
+          this.actuallProc.idprocesses = '1';
+        } else {
           this.addVac = true;
         }
         this.actuallProc.descritpion = null;
@@ -836,7 +837,7 @@ export class HrprofilesComponent implements OnInit {
         case 'Rise':
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
-          this.workingEmployee.productivity_payment =  (parseFloat(this.workingEmployee.productivity_payment) + parseFloat(this.riseIncrease)).toString();
+          this.workingEmployee.productivity_payment = (parseFloat(this.workingEmployee.productivity_payment) + parseFloat(this.riseIncrease)).toString();
           this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
             this.cancelView();
           })
@@ -858,18 +859,44 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Pay Vacations':
-          this.addVacation("Take", "4");
-          this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
-          this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
-          this.activeVacation.id_department = this.workingEmployee.account;
-          this.activeVacation.date = this.todayDate;
-          this.activeVacation.notes = this.actuallProc.descritpion;
-          this.activeVacation.took_date = this.todayDate;
-          this.insertVacation();
-          this.cancelView();
+          let cnt:number = 0;
+          for (let i = 0; i < (parseFloat(this.actuallProc.idprocesses) - 1); i++) {
+            this.apiService.getPeriods().subscribe((periods: periods[]) => {
+              this.apiService.getPayments(periods[periods.length - 1]).subscribe((payment: payments[]) => {
+                this.addVacation("Take", "4");
+                this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
+                this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
+                this.activeVacation.id_department = this.workingEmployee.account;
+                this.activeVacation.date = this.todayDate;
+                this.activeVacation.notes = this.actuallProc.descritpion;
+                this.activeVacation.took_date = this.todayDate;
+                this.insertVacation();
+                let cred: credits = new credits;
+                cred.amount = ((parseFloat(this.workingEmployee.base_payment) / 30) + (parseFloat(this.workingEmployee.productivity_payment) / 30)).toFixed(2);
+                cred.id_employee = this.workingEmployee.idemployees;
+                cred.id_user = this.authUser.getAuthusr().iduser;
+                cred.date = this.todayDate;
+                payment.forEach(py => {
+                  if(py.id_employee == this.workingEmployee.idemployees){
+                    cred.idpayments = py.idpayments;
+                  }
+                });
+                cred.notes = 'Vacations Payed';
+                cred.type = 'HR Vacations Payed';
+                this.apiService.insertPushedCredit(cred).subscribe((str:string)=>{
+                  this.apiService.insertCredits(cred).subscribe((str:string)=>{
+                    cnt = cnt + 1;
+                    if(cnt == (parseFloat(this.actuallProc.idprocesses) - 1)){
+                      this.cancelView();
+                    }
+                  })
+                })
+              })
+            })
+          }
           break;
         case 'Supervisor Survey':
-          this.actualSurvey.id_process = str;
+          this.actualSurvey.id_process = str; 2
           this.apiService.insertSurvey(this.actualSurvey).subscribe((str: string) => {
             this.cancelView();
           })
@@ -881,22 +908,22 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Legal Discount':
           this.actualJudicial.id_process = str;
-          this.apiService.insertJudicials(this.actualJudicial).subscribe((str:string)=>{
+          this.apiService.insertJudicials(this.actualJudicial).subscribe((str: string) => {
             this.cancelView();
           })
           break;
         case 'Irtra Request':
           this.actualIrtrarequests.idprocess = str;
-          this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str:string)=>{
+          this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str: string) => {
             this.getIrtra();
             this.cancelView();
           })
-        break;
+          break;
         case 'Messaging':
-            this.actualMessagings.idprocess = str;
-            this.apiService.insertMessagings(this.actualMessagings).subscribe((str:string)=>{
-              this.cancelView();
-            })
+          this.actualMessagings.idprocess = str;
+          this.apiService.insertMessagings(this.actualMessagings).subscribe((str: string) => {
+            this.cancelView();
+          })
           break;
         default:
           break;
@@ -917,10 +944,10 @@ export class HrprofilesComponent implements OnInit {
     this.actuallProc = pr;
     switch (this.actuallProc.name) {
       case 'Messaging':
-        this.apiService.getMessagings(this.actuallProc).subscribe((msg:messagings)=>{
+        this.apiService.getMessagings(this.actuallProc).subscribe((msg: messagings) => {
           this.actualMessagings = msg;
         })
-      break;
+        break;
       case 'Termination':
         this.apiService.getTerm(this.actuallProc).subscribe((trm: terminations) => {
           this.actualTerm = trm;
@@ -957,15 +984,15 @@ export class HrprofilesComponent implements OnInit {
         })
         break;
       case 'Legal Discount':
-        this.apiService.getJudicials(this.actuallProc).subscribe((jdc:judicials)=>{
+        this.apiService.getJudicials(this.actuallProc).subscribe((jdc: judicials) => {
           this.actualJudicial = jdc;
         })
         break;
       case 'Irtra Request':
-        this.apiService.getIrtra_request(this.actuallProc).subscribe((irt:irtra_requests)=>{
+        this.apiService.getIrtra_request(this.actuallProc).subscribe((irt: irtra_requests) => {
           this.actualIrtrarequests = irt;
         })
-      break;
+        break;
       default:
         break;
     }
@@ -1168,43 +1195,43 @@ export class HrprofilesComponent implements OnInit {
     this.actuallProc.descritpion = this.accId;
   }
 
-  getIrtra(){
-    let m:string;
-    let f:string;
-    let married:string;
+  getIrtra() {
+    let m: string;
+    let f: string;
+    let married: string;
 
-    if(this.profile[0].tittle == 'MR'){
-      f = null;
+    if (this.profile[0].gender == 'M') {
+      f = ' ';
       m = "x";
-    }else{
-      m = null;
+    } else {
+      m = ' ';
       f = "x";
     }
 
-    if(this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico"){
-      window.open('http://200.94.251.67/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0]+'&afiliacion=' + this.profile[0].irtra+'&birthday_day=' + this.profile[0].day_of_birth.split('-')[2]+'&birthday_month=' + this.profile[0].day_of_birth.split('-')[1]+'&birthday_year=' + this.profile[0].day_of_birth.split('-')[0]+'&book= ' +  '&cedula= ' +  '&company=' + this.useCompany+'&conyuge_firstname= ' +  '&conyuge_lastname= ' +  '&department=' + this.profile[0].city +'&dpi=' + this.profile[0].dpi+'&extended= ' +  '&f=' + f+'&first_lastname=' + this.profile[0].first_lastname+'&first_name=' + this.profile[0].first_name+'&fold= ' +  '&m=' + m+'&married= ' +  '&municipio=' + this.profile[0].address.split(',')[2]+'&partida= ' +  '&pasaport= ' +  '&patronal=' + this.igss_patronal+'&phone=' + this.profile[0].phone+'&reg= ' + '&second_lastname=' + this.profile[0].second_lastname+'&second_name=' + this.profile[0].second_name+'&zone=' + this.profile[0].address.split(",")[1].split(" ")[1] + "&email=" + this.profile[0].email, "_blank");
-    }else{
-      window.open('http://200.94.251.67/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type,"_blank");
+    if (this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico") {
+      window.open('http://200.94.251.67/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' + this.profile[0].irtra + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] + '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' + '&conyuge_lastname= ' + '&department=' + this.profile[0].city + '&dpi=' + this.profile[0].dpi + '&extended= ' + '&f=' + f + '&first_lastname=' + this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' + this.profile[0].address.split(',')[2] + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' + '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[1] + "&email=" + this.profile[0].email, "_blank");
+    } else {
+      window.open('http://200.94.251.67/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type, "_blank");
     }
   }
 
-  editIrtra(){
-    if(this.editableIrtra){
-      this.apiService.updateIrtra(this.profile[0]).subscribe((str:string)=>{})
+  editIrtra() {
+    if (this.editableIrtra) {
+      this.apiService.updateIrtra(this.profile[0]).subscribe((str: string) => { })
     }
     this.editableIrtra = !this.editableIrtra;
   }
 
-  editIgss(){
-    if(this.editableIgss){
-      this.apiService.updateIgss(this.profile[0]).subscribe((str:string)=>{})
+  editIgss() {
+    if (this.editableIgss) {
+      this.apiService.updateIgss(this.profile[0]).subscribe((str: string) => { })
     }
     this.editableIgss = !this.editableIgss;
   }
 
-  printDP(){
-    let nm:string = this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname;
-    let months:string[] = [
+  printDP() {
+    let nm: string = this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname;
+    let months: string[] = [
       "enero",
       "febrero",
       "marzo",
@@ -1220,7 +1247,7 @@ export class HrprofilesComponent implements OnInit {
     ];
 
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
-      window.open("http://200.94.251.67/phpscripts/disciplinariProcess.php?avaya=" + emp.client_id + "&employee=" + nm + "&sup=" + emp.reporter + "&date=" + this.todayDate.split("-")[2] + " de " + months[parseInt(this.todayDate.split('-')[1]) - 1] + " de " + this.todayDate.split('-')[0] + "&pos=" + emp.job + "&acc=Operaciones&grade=" + this.activeRequest.dp_grade + "&type=" + this.activeRequest.type + "&description=" + this.activeRequest.description + "&legal=" + this.activeRequest.legal_foundament + "&mot=" + this.activeRequest.motive + "&consequences=" + this.activeRequest.consequences + "&observations=" + this.activeRequest.observations , "_blank");
+      window.open("http://200.94.251.67/phpscripts/disciplinariProcess.php?avaya=" + emp.client_id + "&employee=" + nm + "&sup=" + emp.reporter + "&date=" + this.todayDate.split("-")[2] + " de " + months[parseInt(this.todayDate.split('-')[1]) - 1] + " de " + this.todayDate.split('-')[0] + "&pos=" + emp.job + "&acc=Operaciones&grade=" + this.activeRequest.dp_grade + "&type=" + this.activeRequest.type + "&description=" + this.activeRequest.description + "&legal=" + this.activeRequest.legal_foundament + "&mot=" + this.activeRequest.motive + "&consequences=" + this.activeRequest.consequences + "&observations=" + this.activeRequest.observations, "_blank");
     })
   }
 }

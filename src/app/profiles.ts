@@ -57,5 +57,7 @@ export class profiles {
     degree:string;
     iddocuments:string;
     doc_type:string;
-    doc_path:string; 
+    doc_path:string;
+    gender:string;
+    etnia:string;
 }

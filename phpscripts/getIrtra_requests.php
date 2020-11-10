@@ -16,6 +16,8 @@ if($result = mysqli_query($con, $sql)){
         $user['idprocess'] = $row['id_process'];
         $user['idirtra_requests'] = $row['id_process'];
         $user['type'] = $row['type'];
+        $user['spouse_name'] = $row['spouse_name'];
+        $user['spouse_lastname'] = $row['Spouse_lastname'];
     };
     echo json_encode($user);
 }else{
