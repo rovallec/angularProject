@@ -28,6 +28,8 @@ $second_lastname = $_GET['second_lastname'];
 $second_name = $_GET['second_name'];
 $zone = $_GET['zone'];
 $email = $_GET['email'];
+$spouse_name = $_GET['spouse_name'];
+$spouse_lastname = $_GET['spouse_lastname'];
 
 echo("
 <div style='margin-left:50px; width:900px'>
@@ -215,9 +217,9 @@ echo("
                 <table style='width:100%'>
                     <tr>
                         <td>Nombre del Cónyuge:</td>
-                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$conyuge_firstname</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$spuse_name</td>
                         <td>Apellidos del Cónyuge:</td>
-                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$conyuge_lastname</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$spouse_lastname</td>
                     </tr>
                 </table>
             </td>
