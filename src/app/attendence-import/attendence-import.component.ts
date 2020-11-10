@@ -120,7 +120,9 @@ export class AttendenceImportComponent implements OnInit {
           this.apply.push(element);
           this.uploaded.push(element);
         }else{
-          this.correct.push(element);
+          if(element.day_off1 != "NOT MATCH"){
+            this.correct.push(element);
+          }
         }
       }
     });
@@ -139,6 +141,7 @@ export class AttendenceImportComponent implements OnInit {
       adj.status = "PENDING";
       adj.time_after = app.day_off2;
       adj.time_before = app.worked_time;
+      adj.amount = (parseFloat(app.day_off2) - parseFloat(app.worked_time)).toFixed(2);
       this.apiService.insertAttJustification(adj).subscribe((str:string)=>{
         this.apiService.updateAttendances(app).subscribe((str:string)=>{});
       })
