@@ -140,6 +140,8 @@
                                         <option>Marriage Certificate</option>
                                         <option>Death Certificate</option>
                                         <option>Birth Certificate</option>
+                                        <option *ngIf="attAdjudjment.reason === 'WFM Correction'">WFM Correction</option>
+                                        <option *ngIf="attAdjudjment.reason === 'Supervisor Exception'">Supervisor Exception</option>
                                     </select>
                                 </div>
                             </div>

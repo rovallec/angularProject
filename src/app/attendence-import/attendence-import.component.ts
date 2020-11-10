@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { attendences } from '../process_templates';
+import { attendences, attendences_adjustment } from '../process_templates';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
 import { isNullOrUndefined, isNull } from 'util';
+import { AuthServiceService } from '../auth-service.service';
 
 @Component({
   selector: 'app-attendence-import',
@@ -21,9 +22,11 @@ export class AttendenceImportComponent implements OnInit {
 
   correct: attendences[] = [];
   fail: attendences[] = [];
+  apply:attendences[] = [];
+  uploaded:attendences[] = [];
 
   attendences: attendences[] = [];
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, public authService:AuthServiceService) { }
 
   ngOnInit() {
   }
@@ -75,18 +78,21 @@ export class AttendenceImportComponent implements OnInit {
         let att: attendences[] = [];
 
         this.attendences.forEach(elem => {
-          elem.day_off1 = "FAIL";
+          elem.day_off1 = "NO MATCH";
           this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp:'4'}).subscribe((emp: employees[]) => {
             if (!isNullOrUndefined(emp[0])) {
               this.apiService.getAttendences({ date:elem.date + ";" + emp[0].idemployees , id:'NULL' }).subscribe((att: attendences[]) => {
                 if (att.length > 0) {
-                  elem.day_off1 = "FAIL";
+                  elem.idattendences = att[0].idattendences;
+                  elem.id_employee = att[0].id_employee;
+                  elem.day_off2 = att[0].worked_time;
+                  elem.day_off1 = "OMMIT";
                 } else {
                   elem.day_off1 = "CORRECT";
                 }
               })
               elem.id_employee = emp[0].idemployees;
-              this.checkedCount++;
+              this.checkedCount = this.checkedCount + 1;
             }
           })
           att.push(elem);
@@ -99,13 +105,43 @@ export class AttendenceImportComponent implements OnInit {
     }
   }
 
+  setAction(att:attendences){
+    this.checkedCount = this.checkedCount + 1;
+    this.failCount = this.failCount - 1;
+  }
+
   uploadAttendences() {
     this.attendences.forEach(element => {
-      if (element.day_off1 == 'FAIL') {
+      if (element.day_off1 == 'OMMIT') {
+        this.uploaded.push(element);
         this.fail.push(element);
       } else {
-        this.correct.push(element);
+        if(element.day_off1 == 'APPLY'){
+          this.apply.push(element);
+          this.uploaded.push(element);
+        }else{
+          this.correct.push(element);
+        }
       }
+    });
+
+    this.apply.forEach(app => {
+      let adj:attendences_adjustment = new attendences_adjustment;
+      adj.date = app.date;
+      adj.id_attendence = app.idattendences;
+      adj.id_department = '4';
+      adj.id_employee = app.id_employee;
+      adj.id_type = '2';
+      adj.id_user = this.authService.getAuthusr().iduser;
+      adj.notes = 'WFM Attendance correction';
+      adj.reason = 'WFM Correction';
+      adj.state = 'PENDING';
+      adj.status = "PENDING";
+      adj.time_after = app.day_off2;
+      adj.time_before = app.worked_time;
+      this.apiService.insertAttJustification(adj).subscribe((str:string)=>{
+        this.apiService.updateAttendances(app).subscribe((str:string)=>{});
+      })
     });
 
     this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {

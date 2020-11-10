@@ -559,5 +559,9 @@ getApprovedOt(ot:ot_manage){
   return this.httpClient.post<ot_manage>(`${this.PHP_API_SERVER}/phpscripts/getApprovedOt.php`, ot);
 }
 
+updateAttendances(att:attendences){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateAttendance.php`, att);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

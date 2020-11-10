@@ -30,7 +30,7 @@
             <label style="text-align:center">Completed</label>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center"
-                    *ngFor="let att of correct">
+                    *ngFor="let att of uploaded">
                     {{att.first_name}} {{att.second_name}} {{att.first_lastname}} {{att.second_lastname}}
                 </li>
             </ul>
@@ -67,9 +67,11 @@
                     <td>{{att.worked_time}}</td>
                     <td>{{att.balance}}</td>
                     <td>
-                        <select [(ngModel)]="att.day_off1" [disabled]="true" class="form-control">
-                            <option>CORRECT</option>
-                            <option>FAIL</option>
+                        <select [(ngModel)]="att.day_off1" [disabled]="att.day_off1 != 'OMMIT'" class="form-control" (change)="setAction(att)">
+                            <option *ngIf='att.day_off1 === "CORRECT"'>CORRECT</option>
+                            <option *ngIf='att.day_off1 === "NO MATCH"'>NO MATCH</option>
+                            <option>OMMIT</option>
+                            <option>APPLY</option>
                         </select>
                     </td>
                 </tr>

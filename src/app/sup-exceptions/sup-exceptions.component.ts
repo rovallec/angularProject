@@ -47,7 +47,7 @@ export class SupExceptionsComponent implements OnInit {
             adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
             adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
             adjustment.status = 'PENDING';
-            adjustment.reason = sup.reason;
+            adjustment.reason = 'Supervisor Exception';
             adjustment.id_attendence = attendance[0].idattendences;
             adjustment.time_before = attendance[0].worked_time;
             adjustment.time_after = (parseFloat(sup.time) + parseFloat(attendance[0].worked_time)).toFixed(2);
