@@ -797,6 +797,7 @@ export class HrprofilesComponent implements OnInit {
             if (process.name == 'First Interview') {
               let prP: fullPreapproval = new fullPreapproval;
               prP.idprocesses = process.idprocesses;
+              prP.id_profile = '1';
               this.apiService.getFullTestResults(prP).subscribe((qry: queryDoc_Proc[]) => {
                 this.first_interview.username = qry[0].username;
               })
@@ -804,6 +805,7 @@ export class HrprofilesComponent implements OnInit {
               if (process.name == 'Second Interview') {
                 let prP2: fullPreapproval = new fullPreapproval;
                 prP2.idprocesses = process.idprocesses;
+                prP2.id_profile = '1';
                 this.apiService.getFullTestResults(prP2).subscribe((qry: queryDoc_Proc[]) => {
                   this.second_interview.english_test = qry[0].english_test;
                 })
@@ -981,6 +983,7 @@ export class HrprofilesComponent implements OnInit {
               if (process.name == 'First Interview') {
                 let prP: fullPreapproval = new fullPreapproval;
                 prP.idprocesses = process.idprocesses;
+                prP.id_profile = '1';
                 this.apiService.getFullTestResults(prP).subscribe((qry: queryDoc_Proc[]) => {
                   this.first_interview.username = qry[0].username;
                 })
@@ -988,6 +991,7 @@ export class HrprofilesComponent implements OnInit {
                 if (process.name == 'Second Interview') {
                   let prP2: fullPreapproval = new fullPreapproval;
                   prP2.idprocesses = process.idprocesses;
+                  prP2.id_profile = '1';
                   this.apiService.getFullTestResults(prP2).subscribe((qry: queryDoc_Proc[]) => {
                     this.second_interview.english_test = qry[0].english_test;
                   })
