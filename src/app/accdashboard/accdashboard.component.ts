@@ -79,11 +79,11 @@ export class AccdashboardComponent implements OnInit {
       if (hire.status == 'EMPLOYEE') {
         this.apiService.updateBank(hire).subscribe((str: string) => {
         });
-        this.hideSchedules();
-        this.getWavesAll();
-        this.getPeriods();
-        this.getAllEmployees();
       }
+      this.hideSchedules();
+      this.getWavesAll();
+      this.getPeriods();
+      this.getAllEmployees();
     })
   }
 
