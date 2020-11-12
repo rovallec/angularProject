@@ -95,10 +95,10 @@ if($res1 = mysqli_query($con, $sql)){
         }
 
         while($row2 = mysqli_fetch_assoc($res2)){
-            $rw1 = $row['first_name'] . ' ' . $row['second_name'] . ' ' . $row['first_lastname'] . ' ' . $row['second_lastname'];
-            $rw2 = $row['kind'];
-            $rw3 = $row['valid_from'];
-            $rw4 = $rw['reason'];
+            $rw1 = $row2['first_name'] . ' ' . $row2['second_name'] . ' ' . $row2['first_lastname'] . ' ' . $row2['second_lastname'];
+            $rw2 = $row2['kind'];
+            $rw3 = $row2['valid_from'];
+            $rw4 = $row2['reason'];
             echo("
                 <tr>
                     <td style='border:solid 1px black; text-align:center'>$rw1</td>

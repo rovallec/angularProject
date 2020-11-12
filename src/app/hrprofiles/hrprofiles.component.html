@@ -1929,6 +1929,16 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-row col-md-12">
+                                    <div class="form-group col-md-6">
+                                        <label>Recriuter:</label>
+                                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="first_interview.username">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label>OPS Interview:</label>
+                                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="second_interview.english_test">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">

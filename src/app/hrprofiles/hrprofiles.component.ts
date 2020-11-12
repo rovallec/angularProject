@@ -4,7 +4,7 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
-import { employees } from '../fullProcess';
+import { employees, fullPreapproval, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
@@ -64,6 +64,9 @@ export class HrprofilesComponent implements OnInit {
   actualCallTracker: call_tracker = new call_tracker;
   actualLetters: letters = new letters;
   actualSurvey: supervisor_survey = new supervisor_survey;
+  first_interview: queryDoc_Proc = new queryDoc_Proc;
+  second_enterview: queryDoc_Proc = new queryDoc_Proc;
+
 
   editInview: boolean = false;
   viewRecProd: boolean = false;
@@ -787,6 +790,27 @@ export class HrprofilesComponent implements OnInit {
         this.actualTerm.headsets = "YES";
         this.actualTerm.nearsol_experience = '0';
         this.actualTerm.supervisor_experience = '0';
+        let proc: process = new process;
+        proc.id_profile = this.profile[0].id_profile;
+        this.apiService.getProcesses(proc).subscribe((processes: process[]) => {
+          processes.forEach(process => {
+            if (process.name == 'First Interview') {
+              let prP: fullPreapproval = new fullPreapproval;
+              prP.idprocesses = process.idprocesses;
+              this.apiService.getFullTestResults(prP).subscribe((qry: queryDoc_Proc[]) => {
+                this.first_interview.username = qry[0].username;
+              })
+            } else {
+              if (process.name == 'Second Interview') {
+                let prP2: fullPreapproval = new fullPreapproval;
+                prP2.idprocesses = process.idprocesses;
+                this.apiService.getFullTestResults(prP2).subscribe((qry: queryDoc_Proc[]) => {
+                  this.second_enterview.english_test = qry[0].english_test;
+                })
+              }
+            }
+          });
+        })
         break;
       case 'Transfer':
         this.accChange = this.accId;
@@ -858,8 +882,8 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Pay Vacations':
-          let cnt:number = 0;
-          for (let i = 0; i < (parseFloat(this.actuallProc.idprocesses) - 1); i++) {
+          let cnt: number = 0;
+          for (let i = 0; i < (parseFloat(this.actuallProc.idprocesses)); i++) {
             this.apiService.getPeriods().subscribe((periods: periods[]) => {
               this.apiService.getPayments(periods[periods.length - 1]).subscribe((payment: payments[]) => {
                 this.addVacation("Take", "4");
@@ -877,16 +901,16 @@ export class HrprofilesComponent implements OnInit {
                 cred.date = this.todayDate;
                 console.log(this.workingEmployee.idemployees);
                 payment.forEach(py => {
-                  if(py.id_employee == this.workingEmployee.idemployees){
+                  if (py.id_employee == this.workingEmployee.idemployees) {
                     cred.idpayments = py.idpayments;
                   }
                 });
                 cred.notes = 'Vacations Payed';
                 cred.type = 'HR Vacations Payed';
-                this.apiService.insertPushedCredit(cred).subscribe((str:string)=>{
-                  this.apiService.insertCredits(cred).subscribe((str:string)=>{
+                this.apiService.insertPushedCredit(cred).subscribe((str: string) => {
+                  this.apiService.insertCredits(cred).subscribe((str: string) => {
                     cnt = cnt + 1;
-                    if(cnt == (parseFloat(this.actuallProc.idprocesses) - 1)){
+                    if (cnt == (parseFloat(this.actuallProc.idprocesses) - 1)) {
                       this.cancelView();
                     }
                   })
@@ -950,6 +974,27 @@ export class HrprofilesComponent implements OnInit {
         break;
       case 'Termination':
         this.apiService.getTerm(this.actuallProc).subscribe((trm: terminations) => {
+          let proc: process = new process;
+          proc.id_profile = this.profile[0].id_profile;
+          this.apiService.getProcesses(proc).subscribe((processes: process[]) => {
+            processes.forEach(process => {
+              if (process.name == 'First Interview') {
+                let prP: fullPreapproval = new fullPreapproval;
+                prP.idprocesses = process.idprocesses;
+                this.apiService.getFullTestResults(prP).subscribe((qry: queryDoc_Proc[]) => {
+                  this.first_interview.username = qry[0].username;
+                })
+              } else {
+                if (process.name == 'Second Interview') {
+                  let prP2: fullPreapproval = new fullPreapproval;
+                  prP2.idprocesses = process.idprocesses;
+                  this.apiService.getFullTestResults(prP2).subscribe((qry: queryDoc_Proc[]) => {
+                    this.second_enterview.english_test = qry[0].english_test;
+                  })
+                }
+              }
+            });
+          })
           this.actualTerm = trm;
         })
         break;

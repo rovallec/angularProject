@@ -32,4 +32,4 @@ if($result = mysqli_query($con,$sql)){
 }else{
 	http_response_code(404);
 };
-?>
+?> 
