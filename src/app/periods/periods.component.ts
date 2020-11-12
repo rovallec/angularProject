@@ -273,6 +273,7 @@ export class PeriodsComponent implements OnInit {
                                   base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
                                   productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
+                                  decreto_credit.amount = (((att.length * 8) + (discounted)) * (125/120)).toFixed(2);
                                 } else {
                                   productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
                                   base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
@@ -298,8 +299,8 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
                                   })
+                                  decreto_credit.amount = '125.00';
                                 }
-                                decreto_credit.amount = '125.00';
                                 igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
                                 igss_debit.type = "Descuento IGSS";
 
