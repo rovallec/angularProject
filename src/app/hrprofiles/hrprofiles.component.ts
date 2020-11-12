@@ -792,12 +792,12 @@ export class HrprofilesComponent implements OnInit {
         this.actualTerm.supervisor_experience = '0';
         let proc: process = new process;
         proc.id_profile = this.profile[0].id_profile;
+        proc.id_role = '1';
         this.apiService.getProcesses(proc).subscribe((processes: process[]) => {
           processes.forEach(process => {
             if (process.name == 'First Interview') {
               let prP: fullPreapproval = new fullPreapproval;
               prP.idprocesses = process.idprocesses;
-              prP.id_profile = '1';
               this.apiService.getFullTestResults(prP).subscribe((qry: queryDoc_Proc[]) => {
                 this.first_interview.username = qry[0].username;
               })
@@ -805,7 +805,6 @@ export class HrprofilesComponent implements OnInit {
               if (process.name == 'Second Interview') {
                 let prP2: fullPreapproval = new fullPreapproval;
                 prP2.idprocesses = process.idprocesses;
-                prP2.id_profile = '1';
                 this.apiService.getFullTestResults(prP2).subscribe((qry: queryDoc_Proc[]) => {
                   this.second_interview.english_test = qry[0].english_test;
                 })
