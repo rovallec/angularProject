@@ -546,7 +546,7 @@
                                         <option>PENDING</option>
                                         <option>ACCEPTED</option>
                                         <option>REJECTED</option>
-                                        <option>DISPATCHED</option>
+                                        <option *ngIf="activeRequest.status === 'DISPATCHED'">DISPATCHED</option>
                                     </select>
                                 </div>
                             </div>

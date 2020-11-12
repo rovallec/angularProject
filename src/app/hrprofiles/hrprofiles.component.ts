@@ -65,7 +65,7 @@ export class HrprofilesComponent implements OnInit {
   actualLetters: letters = new letters;
   actualSurvey: supervisor_survey = new supervisor_survey;
   first_interview: queryDoc_Proc = new queryDoc_Proc;
-  second_enterview: queryDoc_Proc = new queryDoc_Proc;
+  second_interview: queryDoc_Proc = new queryDoc_Proc;
 
 
   editInview: boolean = false;
@@ -805,7 +805,7 @@ export class HrprofilesComponent implements OnInit {
                 let prP2: fullPreapproval = new fullPreapproval;
                 prP2.idprocesses = process.idprocesses;
                 this.apiService.getFullTestResults(prP2).subscribe((qry: queryDoc_Proc[]) => {
-                  this.second_enterview.english_test = qry[0].english_test;
+                  this.second_interview.english_test = qry[0].english_test;
                 })
               }
             }
@@ -989,7 +989,7 @@ export class HrprofilesComponent implements OnInit {
                   let prP2: fullPreapproval = new fullPreapproval;
                   prP2.idprocesses = process.idprocesses;
                   this.apiService.getFullTestResults(prP2).subscribe((qry: queryDoc_Proc[]) => {
-                    this.second_enterview.english_test = qry[0].english_test;
+                    this.second_interview.english_test = qry[0].english_test;
                   })
                 }
               }
