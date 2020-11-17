@@ -64,6 +64,8 @@
                         role="tab" aria-controls="nav-emergency" aria-selected="false">Emergency</a>
                     <a class="nav-item nav-link" id="nav-medical-tab" data-toggle="tab" href="#nav-medical" role="tab"
                         aria-controls="nav-medical" aria-selected="false">Medical</a>
+                    <a class="nav-item nav-link" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab"
+                        aria-controls="nav-data" aria-selected="false">Data Validation</a>
                 </div>
             </nav>
 
@@ -79,7 +81,7 @@
                                     <label>Date:</label>
                                     <input type="date" class="form-control"
                                         (change)="getAttendences($event.target.value)" [value]="todayDate">
-                                </div>`
+                                </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <table style="width:98%; padding: 1%;" class="table table-striped table-hover">
@@ -140,15 +142,18 @@
                                         <option>Marriage Certificate</option>
                                         <option>Death Certificate</option>
                                         <option>Birth Certificate</option>
-                                        <option *ngIf="attAdjudjment.reason === 'WFM Correction'">WFM Correction</option>
-                                        <option *ngIf="attAdjudjment.reason === 'Supervisor Exception'">Supervisor Exception</option>
+                                        <option *ngIf="attAdjudjment.reason === 'WFM Correction'">WFM Correction
+                                        </option>
+                                        <option *ngIf="attAdjudjment.reason === 'Supervisor Exception'">Supervisor
+                                            Exception</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-3">
                                     <label>Date:</label>
-                                    <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.attendance_date" class="form-control">
+                                    <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.attendance_date"
+                                        class="form-control">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Time Before:</label>
@@ -208,7 +213,8 @@
                 <div class="tab-pane fade" id="nav-leavs" role="tabpanel" aria-labelledby="nav-leavs-tab">
                     <div class="form-row col-md-12">
                         <div class="form-group col-sm-6">
-                            <label style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Vacations</label>
+                            <label
+                                style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Vacations</label>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-4">
                                     <label>Earned:</label>
@@ -592,7 +598,8 @@
                                         <option *ngFor="let moti of motive_select">{{moti}}</option>
                                     </select>
                                     <input type="text" [disabled]="true" class="form-control"
-                                        [(ngModel)]="activeRequest.motive" *ngIf="activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'"
+                                        [(ngModel)]="activeRequest.motive"
+                                        *ngIf="activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'"
                                         style="font: 8px">
                                 </div>
                                 <div class="form-group col-md-4"
@@ -675,7 +682,8 @@
                                 <div class="form-group col-md-1"></div>
                                 <div class="form-group col-md-8">
                                     <label
-                                        style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Disciplinary Hearing</label>
+                                        style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Disciplinary
+                                        Hearing</label>
                                 </div>
                                 <div class="form-group col-md-1"></div>
                             </div>
@@ -696,7 +704,8 @@
                                         (change)="pushAudienceTime($event.target.value)"
                                         *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
-                                        [(ngModel)]="activeRequest.time" *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
+                                        [(ngModel)]="activeRequest.time"
+                                        *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Status:</label>
@@ -747,8 +756,8 @@
                                 *ngIf="storedRequest && activeRequest.status === 'ACCEPTED' && newSuspension === 'YES' || !editRequest">
                                 <div class="form-group col-md-6">
                                     <label>Day 1:</label>
-                                    <input type="date" (change)="pushDay1($event.target.value)"
-                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
+                                    <input type="date" (change)="pushDay1($event.target.value)" class="form-control"
+                                        *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_1"
                                         *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
@@ -756,18 +765,19 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Day 2:</label>
-                                    <input type="date" (change)="pushDay2($event.target.value)"
-                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
+                                    <input type="date" (change)="pushDay2($event.target.value)" class="form-control"
+                                        *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
-                                        [(ngModel)]="activeRequest.day_2" *ngIf=" activeRequest.status === 'DISPATCHED'">
+                                        [(ngModel)]="activeRequest.day_2"
+                                        *ngIf=" activeRequest.status === 'DISPATCHED'">
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
                                 *ngIf="storedRequest && activeRequest.status === 'ACCEPTED' && newSuspension === 'YES' || !editRequest">
                                 <div class="form-group col-md-6">
                                     <label>Day 3:</label>
-                                    <input type="date" (change)="pushDay3($event.target.value)"
-                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
+                                    <input type="date" (change)="pushDay3($event.target.value)" class="form-control"
+                                        *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_3"
                                         *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
@@ -775,10 +785,11 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Day 4:</label>
-                                    <input type="date" (change)="pushDay4($event.target.value)"
-                                        class="form-control" *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
+                                    <input type="date" (change)="pushDay4($event.target.value)" class="form-control"
+                                        *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE'">
                                     <input class="form-control" type="text" [disabled]="true"
-                                        [(ngModel)]="activeRequest.day_4" *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
+                                        [(ngModel)]="activeRequest.day_4"
+                                        *ngIf=" activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE'">
                                 </div>
                             </div>
                             <div class="form-row col-md-12"
@@ -1046,6 +1057,95 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="tab-pane fade" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
+                    <div class="form-row col-md-12">
+                        <div class="form-group col-sm-6">
+                            <label style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Data
+                                Validation</label>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-sm-12">
+                                    <label style="font-size: 12px; margin-left:40%;margin-top: 10px;">Data</label>
+                                    <table class="table table-striped table-hover selectable"
+                                        style="text-align: center; margin-top:20px" width=100%>
+                                        <thead>
+                                            <th>ID</th>
+                                            <th>NAME</th>
+                                            <th>DPI</th>
+                                            <th>INCLUDE</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>RAUL ALEJANDRO OVALLE CASTILLO</td>
+                                                <td>214896484654</td>
+                                                <td style="margin: 0px; padding: 0px;"><input type="radio" class="form-control" style="margin: 0px; padding: 0px; height: 17px;"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Data</label>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-sm-12">
+                                    <label style="font-size: 12px; margin-left:40%;margin-top: 10px;">Data</label>
+                                    <table class="table table-striped table-hover selectable"
+                                        style="text-align: center; margin-top:20px" width=100%>
+                                        <thead>
+                                            <th>FIELD</th>
+                                            <th>VALUE</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>FIRST NAME</td>
+                                                <td>RAUL</td>
+                                            </tr>
+                                            <tr>
+                                                <td>MIDDLE NAME</td>
+                                                <td>ALEJANDRO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>FIRST LASTNAME</td>
+                                                <td>OVALLE</td>
+                                            </tr>
+                                            <tr>
+                                                <td>SECOND LASTNAME</td>
+                                                <td>CASTILLO</td>
+                                            </tr>
+                                            <tr>
+                                                <td>PRIMARY PHONE NUMBER</td>
+                                                <td>50199234</td>
+                                            </tr>
+                                            <tr>
+                                                <td>EMAIL ADDRESS</td>
+                                                <td>raul.ovalle@nearsol.gt</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-12">
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-md-8" style="border-bottom: solid 4px #e3f2fd;">
+                            </div>
+                            <div class="form-group col-md-2"></div>
+                        </div>
+                    </div>
+                    <div class="form-row col-md-12">
+                        <div class="form-group col-md-2">
+                            <button class="form-control">Cancel</button>
+                        </div>
+                        <div class="form-group col-md-8"></div>
+                        <div class="form-group col-md-2">
+                            <button class="form-control">Merge</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </td>
         <!---------------------------------------------------------------------------------NEW PROCESS----------------------------------------------------------------------->
@@ -1086,7 +1186,8 @@
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
                                 <label>Action</label>
-                                <select class="form-control" [(ngModel)]="actualMessagings.type" [disabled]="viewRecProd">
+                                <select class="form-control" [(ngModel)]="actualMessagings.type"
+                                    [disabled]="viewRecProd">
                                     <option>Recepcion</option>
                                     <option>Envio</option>
                                 </select>
@@ -1163,11 +1264,13 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-6">
                                 <label>Spouse Name:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualIrtrarequests.spouse_name" [disabled]="viewRecProd">
+                                <input type="text" class="form-control" [(ngModel)]="actualIrtrarequests.spouse_name"
+                                    [disabled]="viewRecProd">
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Spouse Lastname:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualIrtrarequests.spouse_lastname" [disabled]="viewRecProd">
+                                <input type="text" class="form-control"
+                                    [(ngModel)]="actualIrtrarequests.spouse_lastname" [disabled]="viewRecProd">
                             </div>
                         </div>
 
@@ -1368,7 +1471,8 @@
                             <div class="form-group col-md-5"></div>
                             <div class="form-group col-md-2">
                                 <label>Amount:</label>
-                                <input type="number" class="form-control" [(ngModel)]="actuallProc.idprocesses" [disabled]="viewRecProd">
+                                <input type="number" class="form-control" [(ngModel)]="actuallProc.idprocesses"
+                                    [disabled]="viewRecProd">
                             </div>
                             <div class="form-group col-md-5"></div>
                         </div>
@@ -1931,11 +2035,13 @@
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-6">
                                         <label>Recriuter:</label>
-                                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="first_interview.username">
+                                        <input type="text" class="form-control" [disabled]="true"
+                                            [(ngModel)]="first_interview.username">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>OPS Interview:</label>
-                                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="second_interview.english_test">
+                                        <input type="text" class="form-control" [disabled]="true"
+                                            [(ngModel)]="second_interview.english_test">
                                     </div>
                                 </div>
                             </div>

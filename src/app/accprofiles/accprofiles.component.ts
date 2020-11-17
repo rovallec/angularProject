@@ -147,4 +147,4 @@ export class AccprofilesComponent implements OnInit {
         this.record = true;
       })
   }
-}
+} 
