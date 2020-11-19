@@ -1304,7 +1304,7 @@ export class HrprofilesComponent implements OnInit {
     })
   }
 
-  change_time(){
+  change_time(any:any){
     let str_split:Date = new Date(2020,1,1,parseFloat(this.temp_start.split(":")[0]),parseFloat(this.temp_start.split(":")[1].split(" ")[0]));
     let end_split:Date = new Date(2020,1,1,parseFloat(this.temp_end.split(":")[0]),parseFloat(this.temp_end.split(":")[1].split(" ")[0]));
 
