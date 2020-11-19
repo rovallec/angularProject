@@ -8,9 +8,12 @@ import { employees, fullPreapproval, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
-import { TranslationWidth } from '@angular/common';
+import { Time, TranslationWidth } from '@angular/common';
 import { ThrowStmt } from '@angular/compiler';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
+import { time } from 'console';
+import { parse } from 'querystring';
+import { Z_STREAM_END } from 'zlib';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -34,6 +37,8 @@ export class HrprofilesComponent implements OnInit {
   checkDate2: string;
   checkDay: string;
   vacationsEarned: number = 0;
+  temp_start:string = "12:00";
+  temp_end:string = "12:00";
   accId: string = '';
   addVac: boolean = true;
   useCompany: string = null;
@@ -47,7 +52,7 @@ export class HrprofilesComponent implements OnInit {
 
   showAttAdjustments: attendences_adjustment[] = [];
   showVacations: vacations[] = [];
-  showAttendences: attendences[] = [];
+  showAttendences: attendences[] = [new attendences];
   leaves: leaves[] = [];
   discilplinary_processes: disciplinary_processes[] = [];
   insurances: insurances = new insurances;
@@ -1297,5 +1302,16 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       window.open("http://200.94.251.67/phpscripts/disciplinariProcess.php?avaya=" + emp.client_id + "&employee=" + nm + "&sup=" + emp.reporter + "&date=" + this.todayDate.split("-")[2] + " de " + months[parseInt(this.todayDate.split('-')[1]) - 1] + " de " + this.todayDate.split('-')[0] + "&pos=" + emp.job + "&acc=Operaciones&grade=" + this.activeRequest.dp_grade + "&type=" + this.activeRequest.type + "&description=" + this.activeRequest.description + "&legal=" + this.activeRequest.legal_foundament + "&mot=" + this.activeRequest.motive + "&consequences=" + this.activeRequest.consequences + "&observations=" + this.activeRequest.observations, "_blank");
     })
+  }
+
+  change_time(){
+    let str_split:Date = new Date(2020,1,1,parseFloat(this.temp_start.split(":")[0]),parseFloat(this.temp_start.split(":")[1].split(" ")[0]));
+    let end_split:Date = new Date(2020,1,1,parseFloat(this.temp_end.split(":")[0]),parseFloat(this.temp_end.split(":")[1].split(" ")[0]));
+
+    console.log(end_split.getTime() + " " + str_split.getTime());
+
+    this.attAdjudjment.amount = ((end_split.getTime() - str_split.getTime())/3600000).toFixed(2);
+
+    this.attAdjudjment.time_after = (parseFloat(this.attAdjudjment.time_before) + parseFloat(this.attAdjudjment.amount)).toFixed(2);
   }
 }

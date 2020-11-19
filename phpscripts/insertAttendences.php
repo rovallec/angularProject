@@ -22,7 +22,9 @@
             $worked = ($de->worked_time);
             $id = ($de->id_wave);
             $d_off = ($de->day_off1);
-            $sql = "INSERT INTO `attendences`(`idattendences`, `id_employee`, `date`, `scheduled`, `worked_time`) VALUES  (NULL, '$id_employee', '$date', '$scheduled', '$worked');";
+            $sql = "INSERT INTO attendences (idattendences, id_employee, date, scheduled, worked_time)  
+                        SELECT * FROM (SELECT null,$id_employee AS `1`,'$date' AS `2`,'$scheduled' AS `3`,'$worked' AS `4`) 
+                        AS tmp WHERE NOT EXISTS (SELECT date FROM attendences WHERE id_employee = $id_employee AND date = '$date') LIMIT 1;";
             if(mysqli_query($con, $sql)){
             }else{
             break;
