@@ -8,9 +8,27 @@
             <div class="form-group col-md-12">
                 <div class="form-row">
                     <div class="form-group col-md-8">
-                        <label for="txt_name">Name:</label>
+                        <label for="txt_name">Name:</label><i class="fas fa-edit" style="margin-left:2px" (click)=editNames() *ngIf="!editingNames"></i><i class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()" *ngIf="editingNames"></i>
                         <input type="text" class="form-control" [disabled]="true"
-                            [(ngModel)]="profile[0].first_name + ' ' + profile[0].second_name + ' ' + profile[0].first_lastname + ' ' + profile[0].second_lastname">
+                            [(ngModel)]="profile[0].first_name + ' ' + profile[0].second_name + ' ' + profile[0].first_lastname + ' ' + profile[0].second_lastname" *ngIf="!editingNames">
+                            <div class="form-row col-md-12" *ngIf="editingNames">
+                                <div class="form-group col-md-3">
+                                    <label>First Name:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].first_name">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Middle Name:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].second_name">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>First Lastname:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].first_lastname">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Second Lastname:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].second_lastname">
+                                </div>
+                            </div>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Account:</label>
@@ -25,7 +43,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-3">
-                        <label for="txt_name">DPI:</label>
+                        <label for="txt_name">DPI:</label><i class="fas fa-edit" style="margin-left:2px" (click)=editNames() *ngIf="!editingNames"></i><i class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()" *ngIf="editingNames"></i>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].dpi">
                     </div>
                     <div class="form-group col-md-3">
@@ -962,8 +980,7 @@
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                     <div class="form-row" style="margin-top:30px">
                         <label
-                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">CONTACT</label><i class="far fa-edit" (click)="editContact()"
-                            style="margin-left:5px;"></i>
+                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">CONTACT</label>
                         <div class="form-group col-sm-6">
                             <div class="form-group col-md-12">
                                 <div class="form-row">
@@ -1164,6 +1181,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </td>
         <!---------------------------------------------------------------------------------NEW PROCESS----------------------------------------------------------------------->
         <td colspan="2" style="padding-top:30px" *ngIf="addProc || viewRecProd">

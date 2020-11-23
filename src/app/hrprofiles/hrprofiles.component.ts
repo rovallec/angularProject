@@ -93,6 +93,7 @@ export class HrprofilesComponent implements OnInit {
   reasonRequiered: boolean = false;
   setNewRequest: boolean = false;
   storedRequest: boolean = false;
+  editingNames:boolean = false;
   newAudience: string = "NO";
   editRequest: boolean = true;
   newSuspension: string = "NO";
@@ -1315,7 +1316,13 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.time_after = (parseFloat(this.attAdjudjment.time_before) + parseFloat(this.attAdjudjment.amount)).toFixed(2);
   }
 
-  editContact(){
-    this.apiService.getcontact
+  editNames(){
+    this.editingNames = true;
+  }
+
+  closeEditNames(){
+    this.apiService.updateProfile(this.profile[0]).subscribe((prof:profiles)=>{
+      this.editingNames = false;
+    })
   }
 }
