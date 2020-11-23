@@ -796,7 +796,7 @@ export class HrprofilesComponent implements OnInit {
         this.actualTerm.nearsol_experience = '0';
         this.actualTerm.supervisor_experience = '0';
         let proc: process = new process;
-        proc.id_profile = this.profile[0].id_profile;
+        proc.id_profile = this.workingEmployee.id_profile;
         proc.id_role = '1';
         this.apiService.getProcesses(proc).subscribe((processes: process[]) => {
           processes.forEach(process => {
@@ -1313,5 +1313,9 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.amount = ((end_split.getTime() - str_split.getTime())/3600000).toFixed(2);
 
     this.attAdjudjment.time_after = (parseFloat(this.attAdjudjment.time_before) + parseFloat(this.attAdjudjment.amount)).toFixed(2);
+  }
+
+  editContact(){
+    this.apiService.getcontact
   }
 }

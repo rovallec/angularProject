@@ -33,12 +33,13 @@
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].day_of_birth">
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="txt_nationality">Nationality:</label>
-                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].nationality">
-                    </div>
-                    <div class="form-group col-md-3">
                         <label>Joining Date:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].date_joining">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txt_nationality">Avaya ID:</label>
+                        <input type="text" class="form-control" [disabled]="true"
+                            [(ngModel)]="workingEmployee.client_id">
                     </div>
                 </div>
             </div>
@@ -960,204 +961,209 @@
 
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                     <div class="form-row" style="margin-top:30px">
+                        <label
+                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">CONTACT</label><i class="far fa-edit" (click)="editContact()"
+                            style="margin-left:5px;"></i>
+                        <div class="form-group col-sm-6">
+                            <div class="form-group col-md-12">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="txt_primary_phone">Primary Phone Number:</label>
+                                        <input type="text" class="form-control" [(ngModel)]="profile[0].primary_phone"
+                                            [disabled]="true">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="txt_secondary_phone">Secondary Phone Number:</label>
+                                        <input type="text" class="form-control" [(ngModel)]="profile[0].secondary_phone"
+                                            [disabled]="true">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="txt_address">Address:</label>
+                                        <input type="text" class="form-control" [(ngModel)]="profile[0].address"
+                                            [disabled]="true">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="txt_city">City:</label>
+                                        <input type="text" class="form-control" [(ngModel)]="profile[0].city"
+                                            [disabled]="true">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="txt_email">Email Address:</label>
+                                        <input type="text" class="form-control" [(ngModel)]="profile[0].email"
+                                            [disabled]="true">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>IRTRA:<i class="far fa-edit" (click)="editIrtra()"
+                                                style="margin-left:5px;"></i></label>
+                                        <input type="text" class="form-control" [(ngModel)]="profile[0].irtra"
+                                            [disabled]="!editableIrtra">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>IGSS:<i class="far fa-edit" (click)="editIgss()"
+                                                style="margin-left:5px;"></i></label>
+                                        <input type="text" class="form-control" [(ngModel)]="profile[0].iggs"
+                                            [disabled]="!editableIgss">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-emergency" role="tabpanel" aria-labelledby="nav-emergency-tab">
                         <div class="form-group col-md-12">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="txt_primary_phone">Primary Phone Number:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].primary_phone"
-                                        [disabled]="true">
+                                    <label for="txt_emergency_fristName">Contact's First Name:</label>
+                                    <input type="text" class="form-control"
+                                        [(ngModel)]="profile[0].emergency_first_name" [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="txt_secondary_phone">Secondary Phone Number:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].secondary_phone"
-                                        [disabled]="true">
+                                    <label for="txt_emergency_secondName">Contact's Middle Name:</label>
+                                    <input class="text" class="form-control"
+                                        [(ngModel)]="profile[0].emergency_second_name" [disabled]="true">
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="txt_address">Address:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].address"
+                                    <label for="txt_emergency_lastname">Contact's First Lastname:</label>
+                                    <input type="text" class="form-control"
+                                        [(ngModel)]="profile[0].emergency_first_lastname" [disabled]="true">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="txt_emergency_secondLastname">Contact's Second Lastname:</label>
+                                    <input type="text" class="form-control"
+                                        [(ngModel)]="profile[0].emergency_second_lastname" [disabled]="true">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="txt_emergency_phone">Phone Number:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].phone"
                                         [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="txt_city">City:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].city"
+                                    <label for="txt_emergency_relationship">Relationship</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].relationship"
+                                        [disabled]="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-medical" role="tabpanel" aria-labelledby="nav-medical-tab">
+                        <div class="form-group col-md-12">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="txt_medical_treatment">Medical Treatment:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile[0].medical_treatment"
                                         [disabled]="true">
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="txt_email">Email Address:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].email"
-                                        [disabled]="true">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>IRTRA:<i class="far fa-edit" (click)="editIrtra()"
-                                            style="margin-left:5px;"></i></label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].irtra"
-                                        [disabled]="!editableIrtra">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>IGSS:<i class="far fa-edit" (click)="editIgss()"
-                                            style="margin-left:5px;"></i></label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile[0].iggs"
-                                        [disabled]="!editableIgss">
+                                <div class="form-group col-md-12">
+                                    <label for="txt_medical_condition">Medical Prescription</label>
+                                    <input type="text" class="form-control"
+                                        [(ngModel)]="profile[0].medical_prescription" [disabled]="true">
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="tab-pane fade" id="nav-emergency" role="tabpanel" aria-labelledby="nav-emergency-tab">
-                    <div class="form-group col-md-12">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_fristName">Contact's First Name:</label>
-                                <input type="text" class="form-control" [(ngModel)]="profile[0].emergency_first_name"
-                                    [disabled]="true">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_secondName">Contact's Middle Name:</label>
-                                <input class="text" class="form-control" [(ngModel)]="profile[0].emergency_second_name"
-                                    [disabled]="true">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_lastname">Contact's First Lastname:</label>
-                                <input type="text" class="form-control"
-                                    [(ngModel)]="profile[0].emergency_first_lastname" [disabled]="true">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_secondLastname">Contact's Second Lastname:</label>
-                                <input type="text" class="form-control"
-                                    [(ngModel)]="profile[0].emergency_second_lastname" [disabled]="true">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_phone">Phone Number:</label>
-                                <input type="text" class="form-control" [(ngModel)]="profile[0].phone"
-                                    [disabled]="true">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_relationship">Relationship</label>
-                                <input type="text" class="form-control" [(ngModel)]="profile[0].relationship"
-                                    [disabled]="true">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-medical" role="tabpanel" aria-labelledby="nav-medical-tab">
-                    <div class="form-group col-md-12">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="txt_medical_treatment">Medical Treatment:</label>
-                                <input type="text" class="form-control" [(ngModel)]="profile[0].medical_treatment"
-                                    [disabled]="true">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="txt_medical_condition">Medical Prescription</label>
-                                <input type="text" class="form-control" [(ngModel)]="profile[0].medical_prescription"
-                                    [disabled]="true">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
-                    <div class="form-row col-md-12">
-                        <div class="form-group col-sm-6">
-                            <label style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Data
-                                Validation</label>
-                            <div class="form-row col-md-12">
-                                <div class="form-group col-sm-12">
-                                    <table class="table table-striped table-hover selectable"
-                                        style="text-align: center; margin-top:20px" width=100%>
-                                        <thead>
-                                            <th>ID</th>
-                                            <th>NAME</th>
-                                            <th>DPI</th>
-                                            <th>INCLUDE</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>RAUL ALEJANDRO OVALLE CASTILLO</td>
-                                                <td>214896484654</td>
-                                                <td style="margin: 0px; padding: 0px;"><input type="radio"
-                                                        class="form-control"
-                                                        style="margin: 0px; padding: 0px; height: 17px;"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label
-                                style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Data</label>
-                            <div class="form-row col-md-12">
-                                <div class="form-group col-sm-12">
-                                    <table class="table table-striped table-hover selectable"
-                                        style="text-align: center; margin-top:20px" width=100%>
-                                        <thead>
-                                            <th>FIELD</th>
-                                            <th>VALUE</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>FIRST NAME</td>
-                                                <td>RAUL</td>
-                                            </tr>
-                                            <tr>
-                                                <td>MIDDLE NAME</td>
-                                                <td>ALEJANDRO</td>
-                                            </tr>
-                                            <tr>
-                                                <td>FIRST LASTNAME</td>
-                                                <td>OVALLE</td>
-                                            </tr>
-                                            <tr>
-                                                <td>SECOND LASTNAME</td>
-                                                <td>CASTILLO</td>
-                                            </tr>
-                                            <tr>
-                                                <td>PRIMARY PHONE NUMBER</td>
-                                                <td>50199234</td>
-                                            </tr>
-                                            <tr>
-                                                <td>EMAIL ADDRESS</td>
-                                                <td>raul.ovalle@nearsol.gt</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row col-md-12">
+                    <div class="tab-pane fade" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
                         <div class="form-row col-md-12">
-                            <div class="form-group col-md-2"></div>
-                            <div class="form-group col-md-8" style="border-bottom: solid 4px #e3f2fd;">
+                            <div class="form-group col-sm-6">
+                                <label
+                                    style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Data
+                                    Validation</label>
+                                <div class="form-row col-md-12">
+                                    <div class="form-group col-sm-12">
+                                        <table class="table table-striped table-hover selectable"
+                                            style="text-align: center; margin-top:20px" width=100%>
+                                            <thead>
+                                                <th>ID</th>
+                                                <th>NAME</th>
+                                                <th>DPI</th>
+                                                <th>INCLUDE</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>RAUL ALEJANDRO OVALLE CASTILLO</td>
+                                                    <td>214896484654</td>
+                                                    <td style="margin: 0px; padding: 0px;"><input type="radio"
+                                                            class="form-control"
+                                                            style="margin: 0px; padding: 0px; height: 17px;"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-sm-6">
+                                <label
+                                    style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Data</label>
+                                <div class="form-row col-md-12">
+                                    <div class="form-group col-sm-12">
+                                        <table class="table table-striped table-hover selectable"
+                                            style="text-align: center; margin-top:20px" width=100%>
+                                            <thead>
+                                                <th>FIELD</th>
+                                                <th>VALUE</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>FIRST NAME</td>
+                                                    <td>RAUL</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>MIDDLE NAME</td>
+                                                    <td>ALEJANDRO</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>FIRST LASTNAME</td>
+                                                    <td>OVALLE</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>SECOND LASTNAME</td>
+                                                    <td>CASTILLO</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>PRIMARY PHONE NUMBER</td>
+                                                    <td>50199234</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>EMAIL ADDRESS</td>
+                                                    <td>raul.ovalle@nearsol.gt</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row col-md-12">
-                        <div class="form-group col-md-2">
-                            <button class="form-control">Cancel</button>
+                        <div class="form-row col-md-12">
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-2"></div>
+                                <div class="form-group col-md-8" style="border-bottom: solid 4px #e3f2fd;">
+                                </div>
+                                <div class="form-group col-md-2"></div>
+                            </div>
                         </div>
-                        <div class="form-group col-md-8"></div>
-                        <div class="form-group col-md-2">
-                            <button class="form-control">Merge</button>
+                        <div class="form-row col-md-12">
+                            <div class="form-group col-md-2">
+                                <button class="form-control">Cancel</button>
+                            </div>
+                            <div class="form-group col-md-8"></div>
+                            <div class="form-group col-md-2">
+                                <button class="form-control">Merge</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </td>
         <!---------------------------------------------------------------------------------NEW PROCESS----------------------------------------------------------------------->
         <td colspan="2" style="padding-top:30px" *ngIf="addProc || viewRecProd">
