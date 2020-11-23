@@ -100,6 +100,7 @@ export class HrprofilesComponent implements OnInit {
   accChange: string = null;
   editableIrtra: boolean = false;
   editableIgss: boolean = false;
+  editingDPI:boolean = false;
 
   earnVacations: number = 0;
   tookVacations: number = 0;
@@ -1316,6 +1317,10 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.time_after = (parseFloat(this.attAdjudjment.time_before) + parseFloat(this.attAdjudjment.amount)).toFixed(2);
   }
 
+  editDPI(){
+    this.editingDPI = true;
+  }
+
   editNames(){
     this.editingNames = true;
   }
@@ -1323,6 +1328,7 @@ export class HrprofilesComponent implements OnInit {
   closeEditNames(){
     this.apiService.updateProfile(this.profile[0]).subscribe((prof:profiles)=>{
       this.editingNames = false;
+      this.editingDPI = false;
     })
   }
 }

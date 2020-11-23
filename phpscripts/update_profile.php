@@ -18,11 +18,11 @@ header('Access-Control-Allow-Headers: *');
 		$marital_status = ($request->marital_status);
 		$dpi = ($request->dpi);
 		$nit = ($request->nit);
-		$igss = ($request->igss);
+		$iggs = ($request->iggs);
 		$irtra = ($request->irtra);
 		$status = ($request->status);
 
-		$sql = "UPDATE `profiles` set `tittle` = '{$tittle}', `first_name` = '{$first_name}', `second_name` = '{$second_name}', `first_lastname` = '{$first_lastname}', `second_lastname` = '{$second_lastname}', `day_of_birth` = '{$day_of_birthday}', `nationality` = '{$nationality}', `marital_status` = '{$marital_status}', `dpi` = '{$dpi}', `nit` = '{$nit}', `iggs` = '{$igss}', `irtra` = '{$irtra}', `status` = '{$status}' WHERE `idprofiles` = '$idprofiles';";
+		$sql = "UPDATE `profiles` set `tittle` = '{$tittle}', `first_name` = '{$first_name}', `second_name` = '{$second_name}', `first_lastname` = '{$first_lastname}', `second_lastname` = '{$second_lastname}', `day_of_birth` = '{$day_of_birthday}', `nationality` = '{$nationality}', `marital_status` = '{$marital_status}', `dpi` = '{$dpi}', `nit` = '{$nit}', `iggs` = '{$iggs}', `irtra` = '{$irtra}', `status` = '{$status}' WHERE `idprofiles` = '$idprofiles';";
 
 		if(mysqli_query($con,$sql)){
 			$id_profile = mysqli_insert_id($con);
@@ -41,7 +41,7 @@ header('Access-Control-Allow-Headers: *');
 				$english_level = ($request->english_level);
 				$transport = ($request->transport);
 				$start_date = ($request->start_date);
-				$unavialable_days = ($request->unavailable_days);
+				$unavialable_days = ($request->unavialable_days);
 				$marketing_campaing = ($request->marketing_campaing);
 				$first_lenguage = ($request->first_lenguage);
 				$second_lenguage = ($request->second_lenguage);
@@ -55,7 +55,7 @@ header('Access-Control-Allow-Headers: *');
 					$second_name = ($request->emergency_second_name);
 					$first_lastname = ($request->emergency_first_lastname);
 					$second_lastname = ($request->emergency_second_lastname);
-					$phone = ($request->emergency_phone);
+					$phone = ($request->phone);
 					$relationship = ($request->relationship);
 
 					$sql4 = "UPDATE `emergency_details` SET `e_first_name` = '{$first_name}', `e_second_name` = '{$second_name}', `e_first_lastname` = '{$first_lastname}', `e_second_lastname` = '{$second_lastname}', `phone` = '{$phone}', `relationship` = '{$relationship}' WHERE `id_profile` = '{$idprofiles}';";
