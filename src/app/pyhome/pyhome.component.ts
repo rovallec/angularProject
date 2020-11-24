@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
-import { hires_template, schedules, waves_template } from '../process_templates';
+import { attendance_accounts, hires_template, schedules, waves_template } from '../process_templates';
 
 @Component({
   selector: 'app-pyhome',
@@ -16,6 +16,7 @@ export class PyhomeComponent implements OnInit {
   waves: waves_template[] = [new waves_template];
   wave_ToEdit: waves_template = new waves_template;
   schedules: schedules[] = [new schedules];
+  accounts:attendance_accounts[] = [];
   schedule_to_edit: schedules = new schedules;
   hires: hires_template[] = [];
   employees: employees[] = [];

@@ -990,19 +990,26 @@
                             <div class="form-group col-md-12">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="txt_primary_phone">Primary Phone Number:</label>
+                                        <label for="txt_primary_phone">Primary Phone Number:</label><i
+                                            class="fas fa-edit" style="margin-left:2px" (click)=editPhone()
+                                            *ngIf="!editingPhones"></i><i class="fas fa-edit" style="margin-left:2px"
+                                            (click)="closeEditNames()" *ngIf="editingPhones"></i>
                                         <input type="text" class="form-control" [(ngModel)]="profile[0].primary_phone"
-                                            [disabled]="true">
+                                            [disabled]="!editingPhones">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="txt_secondary_phone">Secondary Phone Number:</label>
+                                        <label for="txt_secondary_phone">Secondary Phone Number:</label><i
+                                            class="fas fa-edit" style="margin-left:2px" (click)=editPhone()
+                                            *ngIf="!editingPhones"></i><i class="fas fa-edit" style="margin-left:2px"
+                                            (click)="closeEditNames()" *ngIf="editingPhones"></i>
                                         <input type="text" class="form-control" [(ngModel)]="profile[0].secondary_phone"
-                                            [disabled]="true">
+                                            [disabled]="!editingPhones">
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="form-row" *ngIf="!editingAddress">
                                     <div class="form-group col-md-6">
-                                        <label for="txt_address">Address:</label>
+                                        <label for="txt_address">Address:</label><i class="fas fa-edit"
+                                            style="margin-left:2px" (click)="editAddress()"></i>
                                         <input type="text" class="form-control" [(ngModel)]="profile[0].address"
                                             [disabled]="true">
                                     </div>
@@ -1010,6 +1017,53 @@
                                         <label for="txt_city">City:</label>
                                         <input type="text" class="form-control" [(ngModel)]="profile[0].city"
                                             [disabled]="true">
+                                    </div>
+                                </div>
+                                <div class="form-row" *ngIf="editingAddress">
+                                    <label for="txt_address">Address:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="closeEditNames"></i>
+                                    <div class="form-row col-md-12">
+                                        <div class="form-group col-md-5">
+                                            <label>First Line:</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <div class="from-group col-md-2">
+                                            <label>Distrit:</label>
+                                            <select class="form-control" [(ngModel)]="departamento" (change)="changeDistrit()">
+                                                <option>Alta Verapaz</option>
+                                                <option>Chimaltenango</option>
+                                                <option>Chiquimula</option>
+                                                <option>Peten</option>
+                                                <option>El Progreso</option>
+                                                <option>Quiche</option>
+                                                <option>Escuintla</option>
+                                                <option>Guatemala</option>
+                                                <option>Huehuetenango</option>
+                                                <option>Izabal</option>
+                                                <option>Quetzaltenango</option>
+                                                <option>Retalhuleu</option>
+                                                <option>Sacatepequez</option>
+                                                <option>San Marcos</option>
+                                                <option>Santa Rosa</option>
+                                                <option>Solola</option>
+                                                <option>Suchitepequez</option>
+                                                <option>Tecpan</option>
+                                                <option>Zacapa</option>
+                                                <option>Baja Verapaz</option>
+                                                <option>Jalapa</option>
+                                                <option>Jutiapa</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label>City:</label>
+                                            <select class="form-control" [(ngModel)]="municipio" [disabled]="departamento === null">
+                                                <option *ngFor="let mun of municipios">{{mun}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-1">
+                                            <label>Zone:</label>
+                                            <input type="number" class="form-control" [(ngModel)]="zone">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -1112,14 +1166,6 @@
                                             <th>INCLUDE</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>RAUL ALEJANDRO OVALLE CASTILLO</td>
-                                                <td>214896484654</td>
-                                                <td style="margin: 0px; padding: 0px;"><input type="radio"
-                                                        class="form-control"
-                                                        style="margin: 0px; padding: 0px; height: 17px;"></td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1137,30 +1183,6 @@
                                             <th>VALUE</th>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>FIRST NAME</td>
-                                                <td>RAUL</td>
-                                            </tr>
-                                            <tr>
-                                                <td>MIDDLE NAME</td>
-                                                <td>ALEJANDRO</td>
-                                            </tr>
-                                            <tr>
-                                                <td>FIRST LASTNAME</td>
-                                                <td>OVALLE</td>
-                                            </tr>
-                                            <tr>
-                                                <td>SECOND LASTNAME</td>
-                                                <td>CASTILLO</td>
-                                            </tr>
-                                            <tr>
-                                                <td>PRIMARY PHONE NUMBER</td>
-                                                <td>50199234</td>
-                                            </tr>
-                                            <tr>
-                                                <td>EMAIL ADDRESS</td>
-                                                <td>raul.ovalle@nearsol.gt</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

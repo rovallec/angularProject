@@ -37,8 +37,8 @@ export class HrprofilesComponent implements OnInit {
   checkDate2: string;
   checkDay: string;
   vacationsEarned: number = 0;
-  temp_start:string = "12:00";
-  temp_end:string = "12:00";
+  temp_start: string = "12:00";
+  temp_end: string = "12:00";
   accId: string = '';
   addVac: boolean = true;
   useCompany: string = null;
@@ -60,6 +60,7 @@ export class HrprofilesComponent implements OnInit {
   process_templates: process[] = [];
   processRecord: process[] = [];
   allAccounts: accounts[] = [];
+  municipios: string[] = [];
   actualMessagings: messagings = new messagings;
   actualIrtrarequests: irtra_requests = new irtra_requests;
   actualJudicial: judicials = new judicials;
@@ -93,15 +94,18 @@ export class HrprofilesComponent implements OnInit {
   reasonRequiered: boolean = false;
   setNewRequest: boolean = false;
   storedRequest: boolean = false;
-  editingNames:boolean = false;
+  editingNames: boolean = false;
   newAudience: string = "NO";
   editRequest: boolean = true;
   newSuspension: string = "NO";
   accChange: string = null;
   editableIrtra: boolean = false;
   editableIgss: boolean = false;
-  editingDPI:boolean = false;
+  editingDPI: boolean = false;
+  editingPhones: boolean = false;
+  editingAddress:boolean = false;
 
+  departamento: string = null;
   earnVacations: number = 0;
   tookVacations: number = 0;
   availableVacations: number = 0;
@@ -984,6 +988,7 @@ export class HrprofilesComponent implements OnInit {
         this.apiService.getTerm(this.actuallProc).subscribe((trm: terminations) => {
           let proc: process = new process;
           proc.id_profile = this.profile[0].id_profile;
+          proc.id_role = '1';
           this.apiService.getProcesses(proc).subscribe((processes: process[]) => {
             processes.forEach(process => {
               if (process.name == 'First Interview') {
@@ -1306,29 +1311,422 @@ export class HrprofilesComponent implements OnInit {
     })
   }
 
-  change_time(any:any){
-    let str_split:Date = new Date(2020,1,1,parseFloat(this.temp_start.split(":")[0]),parseFloat(this.temp_start.split(":")[1].split(" ")[0]));
-    let end_split:Date = new Date(2020,1,1,parseFloat(this.temp_end.split(":")[0]),parseFloat(this.temp_end.split(":")[1].split(" ")[0]));
+  change_time(any: any) {
+    let str_split: Date = new Date(2020, 1, 1, parseFloat(this.temp_start.split(":")[0]), parseFloat(this.temp_start.split(":")[1].split(" ")[0]));
+    let end_split: Date = new Date(2020, 1, 1, parseFloat(this.temp_end.split(":")[0]), parseFloat(this.temp_end.split(":")[1].split(" ")[0]));
 
     console.log(end_split.getTime() + " " + str_split.getTime());
 
-    this.attAdjudjment.amount = ((end_split.getTime() - str_split.getTime())/3600000).toFixed(2);
+    this.attAdjudjment.amount = ((end_split.getTime() - str_split.getTime()) / 3600000).toFixed(2);
 
     this.attAdjudjment.time_after = (parseFloat(this.attAdjudjment.time_before) + parseFloat(this.attAdjudjment.amount)).toFixed(2);
   }
 
-  editDPI(){
+  editDPI() {
     this.editingDPI = true;
   }
 
-  editNames(){
+  editNames() {
     this.editingNames = true;
   }
 
-  closeEditNames(){
-    this.apiService.updateProfile(this.profile[0]).subscribe((prof:profiles)=>{
+  editPhone() {
+    this.editingPhones = true;
+  }
+  
+  editAddress(){
+    this.editingAddress = true;
+  }
+
+  closeEditNames() {
+    this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
       this.editingNames = false;
       this.editingDPI = false;
+      this.editingPhones = false;
+      this.editingAddress = false;
     })
+  }
+
+  changeDistrit() {
+    this.municipios = [];
+    switch (this.departamento) {
+      case 'Alta Verapaz':
+        this.municipios.push('Cobán ');
+        this.municipios.push('Santa Cruz Verapaz');
+        this.municipios.push('San Cristóbal Verapaz');
+        this.municipios.push('Tactic');
+        this.municipios.push('Tamahú');
+        this.municipios.push('San Miguel Tucurú');
+        this.municipios.push('Panzóz');
+        this.municipios.push('Senahú.');
+        this.municipios.push('San Pedro Carchá');
+        this.municipios.push('San Juan Chamelco');
+        this.municipios.push('San Agustín Lanquín');
+        this.municipios.push('Santa María Cahabón');
+        this.municipios.push('Chisec');
+        this.municipios.push('Chahal');
+        this.municipios.push('Fray Bartolomé de las Casas');
+        this.municipios.push('Santa Catalina La Tinta');
+        this.municipios.push('Raxruhá');
+        break;
+      case 'Chimaltenango':
+        this.municipios.push('Chimaltenango');
+        this.municipios.push('San José Poaquil');
+        this.municipios.push('San Martín Jilotepeque');
+        this.municipios.push('San Juan Comalapa');
+        this.municipios.push('Santa Apolonia');
+        this.municipios.push('Tecpán');
+        this.municipios.push('Patzún');
+        this.municipios.push('San Miguel Pochuta');
+        this.municipios.push('Patzicía');
+        this.municipios.push('Santa Cruz Balanyá');
+        this.municipios.push('Acatenango');
+        this.municipios.push('San Pedro Yepocapa');
+        this.municipios.push('San Andrés Itzapa');
+        this.municipios.push('Parramos');
+        this.municipios.push('Zaragoza');
+        this.municipios.push('El Tejar');
+        break;
+      case 'Chiquimula':
+        this.municipios.push('Chiquimula');
+        this.municipios.push('Jocotán');
+        this.municipios.push('Esquipulas');
+        this.municipios.push('Camotán');
+        this.municipios.push('Quezaltepeque');
+        this.municipios.push('Olopa');
+        this.municipios.push('Ipala');
+        this.municipios.push('San Juan Hermita');
+        this.municipios.push('Concepción Las Minas');
+        this.municipios.push('San Jacinto');
+        this.municipios.push('San José la Arada');
+        break;
+      case 'Peten':
+        this.municipios.push('Flores');
+        this.municipios.push('San José');
+        this.municipios.push('San Benito');
+        this.municipios.push('San Andrés');
+        this.municipios.push('La Libertad');
+        this.municipios.push('San Francisco');
+        this.municipios.push('Santa Ana');
+        this.municipios.push('Dolores');
+        this.municipios.push('San Luis');
+        this.municipios.push('Sayaxché');
+        this.municipios.push('Melchor de Mencos');
+        this.municipios.push('Poptún');
+        break;
+      case 'El Progreso':
+        this.municipios.push('El Jícaro');
+        this.municipios.push('Morazán');
+        this.municipios.push('San Agustín Acasaguastlán');
+        this.municipios.push('San Antonio La Paz');
+        this.municipios.push('San Cristóbal Acasaguastlán');
+        this.municipios.push('Sanarate');
+        this.municipios.push('Guastatoya');
+        this.municipios.push('Sansare');
+        break;
+      case 'Quiche':
+        this.municipios.push('Santa Cruz del Quiché');
+        this.municipios.push('Chiché');
+        this.municipios.push('Chinique');
+        this.municipios.push('Zacualpa');
+        this.municipios.push('Chajul');
+        this.municipios.push('Santo Tomás Chichicastenango');
+        this.municipios.push('Patzité');
+        this.municipios.push('San Antonio Ilotenango');
+        this.municipios.push('San Pedro Jocopilas');
+        this.municipios.push('Cunén');
+        this.municipios.push('San Juan Cotzal');
+        this.municipios.push('Santa María Joyabaj');
+        this.municipios.push('Santa María Nebaj');
+        this.municipios.push('San Andrés Sajcabajá');
+        this.municipios.push('Uspantán');
+        this.municipios.push('Sacapulas');
+        this.municipios.push('San Bartolomé Jocotenango');
+        this.municipios.push('Canillá');
+        this.municipios.push('Chicamán');
+        this.municipios.push('Ixcán');
+        this.municipios.push('Pachalum');
+        break;
+      case 'Escuintla':
+        this.municipios.push('Escuintla ');
+        this.municipios.push('Santa Lucía Cotzumalguapa');
+        this.municipios.push('La Democracia');
+        this.municipios.push('Siquinalá');
+        this.municipios.push('Masagua');
+        this.municipios.push('Tiquisate');
+        this.municipios.push('La Gomera');
+        this.municipios.push('Guaganazapa');
+        this.municipios.push('San José');
+        this.municipios.push('Iztapa');
+        this.municipios.push('Palín');
+        this.municipios.push('San Vicente Pacaya');
+        this.municipios.push('Nueva Concepción');
+        break;
+      case 'Guatemala':
+        this.municipios.push('Santa Catarina Pinula');
+        this.municipios.push('San José Pinula');
+        this.municipios.push('Guatemala');
+        this.municipios.push('San José del Golfo');
+        this.municipios.push('Palencia');
+        this.municipios.push('Chinautla');
+        this.municipios.push('San Pedro Ayampuc');
+        this.municipios.push('Mixco');
+        this.municipios.push('San Pedro Sacatapéquez');
+        this.municipios.push('San Juan Sacatepéquez');
+        this.municipios.push('Chuarrancho');
+        this.municipios.push('San Raymundo');
+        this.municipios.push('Fraijanes');
+        this.municipios.push('Amatitlán');
+        this.municipios.push('Villa Nueva');
+        this.municipios.push('Villa Canales');
+        this.municipios.push('San Miguel Petapa');
+        break;
+      case 'Huehuetenango':
+        this.municipios.push('Huehuetenango');
+        this.municipios.push('Chiantla');
+        this.municipios.push('Malacatancito');
+        this.municipios.push('Cuilco');
+        this.municipios.push('Nentón');
+        this.municipios.push('San Pedro Necta');
+        this.municipios.push('Jacaltenango');
+        this.municipios.push('Soloma');
+        this.municipios.push('Ixtahuacán');
+        this.municipios.push('Santa Bárbara');
+        this.municipios.push('La Libertad');
+        this.municipios.push('La Democracia');
+        this.municipios.push('San Miguel Acatán');
+        this.municipios.push('San Rafael La Independencia');
+        this.municipios.push('Todos Santos Cuchumatán');
+        this.municipios.push('San Juan Atitlán');
+        this.municipios.push('Santa Eulalia');
+        this.municipios.push('San Mateo Ixtatán');
+        this.municipios.push('Colotenango');
+        this.municipios.push('San Sebastián Huehuetenango');
+        this.municipios.push('Tectitán');
+        this.municipios.push('Concepción Huista');
+        this.municipios.push('San Juan Ixcoy');
+        this.municipios.push('San Antonio Huista');
+        this.municipios.push('Santa Cruz Barillas');
+        this.municipios.push('San Sebastián Coatán');
+        this.municipios.push('Aguacatán');
+        this.municipios.push('San Rafael Petzal');
+        this.municipios.push('San Gaspar Ixchil');
+        this.municipios.push('Santiago Chimaltenango');
+        this.municipios.push('Santa Ana Huista');
+        break;
+      case 'Izabal':
+        this.municipios.push('Morales');
+        this.municipios.push('Los Amates');
+        this.municipios.push('Livingston');
+        this.municipios.push('El Estor');
+        this.municipios.push('Puerto Barrios');
+        break;
+      case 'Quetzaltenango':
+        this.municipios.push('Quetzaltenango');
+        this.municipios.push('Salcajá');
+        this.municipios.push('San Juan Olintepeque');
+        this.municipios.push('San Carlos Sija');
+        this.municipios.push('Sibilia');
+        this.municipios.push('Cabricán');
+        this.municipios.push('Cajolá');
+        this.municipios.push('San Miguel Siguilá');
+        this.municipios.push('San Juan Ostuncalco');
+        this.municipios.push('San Mateo');
+        this.municipios.push('Concepción Chiquirichapa');
+        this.municipios.push('San Martín Sacatepéquez');
+        this.municipios.push('Almolonga');
+        this.municipios.push('Cantel');
+        this.municipios.push('Huitán');
+        this.municipios.push('Zunil');
+        this.municipios.push('Colomba Costa Cuca');
+        this.municipios.push('San Francisco La Unión');
+        this.municipios.push('El Palmar');
+        this.municipios.push('Coatepeque');
+        this.municipios.push('Génova');
+        this.municipios.push('Flores Costa Cuca');
+        this.municipios.push('La Esperanza');
+        this.municipios.push('Palestina de Los Altos');
+        break;
+      case 'Retalhuleu':
+        this.municipios.push('Retalhuleu ');
+        this.municipios.push('San Sebastián');
+        this.municipios.push('Santa Cruz Muluá');
+        this.municipios.push('San Martín Zapotitlán');
+        this.municipios.push('San Felipe');
+        this.municipios.push('San Andrés Villa Seca');
+        this.municipios.push('Champerico');
+        this.municipios.push('Nuevo San Carlos');
+        this.municipios.push('El Asintal');
+        break;
+      case 'Sacatepequez':
+        this.municipios.push('Antigua Guatemala ');
+        this.municipios.push('Jocotenango');
+        this.municipios.push('Pastores');
+        this.municipios.push('Sumpango');
+        this.municipios.push('Santo Domingo Xenacoj');
+        this.municipios.push('Santiago Sacatepéquez');
+        this.municipios.push('San Bartolomé Milpas Altas');
+        this.municipios.push('San Lucas Sacatepéquez');
+        this.municipios.push('Santa Lucía Milpas Altas');
+        this.municipios.push('Magdalena Milpas Altas');
+        this.municipios.push('Santa María de Jesús');
+        this.municipios.push('Ciudad Vieja');
+        this.municipios.push('San Miguel Dueñas');
+        this.municipios.push('San Juan Alotenango');
+        this.municipios.push('San Antonio Aguas Calientes');
+        this.municipios.push('Santa Catarina Barahona');
+        break;
+      case 'San Marcos':
+        this.municipios.push('San Marcos ');
+        this.municipios.push('Ayutla');
+        this.municipios.push('Catarina');
+        this.municipios.push('Comitancillo');
+        this.municipios.push('Concepción Tutuapa');
+        this.municipios.push('El Quetzal');
+        this.municipios.push('El Rodeo');
+        this.municipios.push('El Tumblador');
+        this.municipios.push('Ixchiguán');
+        this.municipios.push('La Reforma');
+        this.municipios.push('Malacatán');
+        this.municipios.push('Nuevo Progreso');
+        this.municipios.push('Ocós');
+        this.municipios.push('Pajapita');
+        this.municipios.push('Esquipulas Palo Gordo');
+        this.municipios.push('San Antonio Sacatepéquez');
+        this.municipios.push('San Cristóbal Cucho');
+        this.municipios.push('San José Ojetenam');
+        this.municipios.push('San Lorenzo');
+        this.municipios.push('San Miguel Ixtahuacán');
+        this.municipios.push('San Pablo');
+        this.municipios.push('San Pedro Sacatepéquez');
+        this.municipios.push('San Rafael Pie de la Cuesta');
+        this.municipios.push('Sibinal');
+        this.municipios.push('Sipacapa');
+        this.municipios.push('Tacaná');
+        this.municipios.push('Tajumulco');
+        this.municipios.push('Tejutla');
+        this.municipios.push('Río Blanco');
+        this.municipios.push('La Blanca');
+        break;
+      case 'Santa Rosa':
+        this.municipios.push('Cuilapa');
+        this.municipios.push('Casillas Santa Rosa');
+        this.municipios.push('Chiquimulilla');
+        this.municipios.push('Guazacapán');
+        this.municipios.push('Nueva Santa Rosa');
+        this.municipios.push('Oratorio');
+        this.municipios.push('Pueblo Nuevo Viñas');
+        this.municipios.push('San Juan Tecuaco');
+        this.municipios.push('San Rafael Las Flores');
+        this.municipios.push('Santa Cruz Naranjo');
+        this.municipios.push('Santa María Ixhuatán');
+        this.municipios.push('Santa Rosa de Lima');
+        this.municipios.push('Taxisco');
+        this.municipios.push('Barberena');
+        break;
+      case 'Solola':
+        this.municipios.push('Sololá');
+        this.municipios.push('Concepción');
+        this.municipios.push('Nahualá');
+        this.municipios.push('Panajachel');
+        this.municipios.push('San Andrés Semetabaj');
+        this.municipios.push('San Antonio Palopó');
+        this.municipios.push('San José Chacayá');
+        this.municipios.push('San Juan La Laguna');
+        this.municipios.push('San Lucas Tolimán');
+        this.municipios.push('San Marcos La Laguna');
+        this.municipios.push('San Pablo La Laguna');
+        this.municipios.push('San Pedro La Laguna');
+        this.municipios.push('Santa Catarina Ixtahuacán');
+        this.municipios.push('Santa Catarina Palopó');
+        this.municipios.push('Santa Clara La Laguna');
+        this.municipios.push('Santa Cruz La Laguna');
+        this.municipios.push('Santa Lucía Utatlán');
+        this.municipios.push('Santa María Visitación');
+        this.municipios.push('Santiago Atitlán');
+        break;
+      case 'Suchitepequez':
+        this.municipios.push('Mazatenango');
+        this.municipios.push('Cuyotenango');
+        this.municipios.push('San Francisco Zapotitlán');
+        this.municipios.push('San Bernardino');
+        this.municipios.push('San José El Ídolo');
+        this.municipios.push('Santo Domingo Suchitépequez');
+        this.municipios.push('San Lorenzo');
+        this.municipios.push('Samayac');
+        this.municipios.push('San Pablo Jocopilas');
+        this.municipios.push('San Antonio Suchitépequez');
+        this.municipios.push('San Miguel Panán');
+        this.municipios.push('San Gabriel');
+        this.municipios.push('Chicacao');
+        this.municipios.push('Patulul');
+        this.municipios.push('Santa Bárbara');
+        this.municipios.push('San Juan Bautista');
+        this.municipios.push('Santo Tomás La Unión');
+        this.municipios.push('Zunilito');
+        this.municipios.push('Pueblo Nuevo');
+        this.municipios.push('Río Bravo');
+        break;
+      case 'Tecpan':
+        this.municipios.push('Totonicapán');
+        this.municipios.push('San Cristóbal Totonicapán');
+        this.municipios.push('San Francisco El Alto');
+        this.municipios.push('San Andrés Xecul');
+        this.municipios.push('Momostenango');
+        this.municipios.push('Santa María Chiquimula');
+        this.municipios.push('Santa Lucía La Reforma');
+        this.municipios.push('San Bartolo');
+        break;
+      case 'Zacapa':
+        this.municipios.push('Cabañas');
+        this.municipios.push('Estanzuela');
+        this.municipios.push('Gualán');
+        this.municipios.push('Huité');
+        this.municipios.push('La Unión');
+        this.municipios.push('Río Hondo');
+        this.municipios.push('San Jorge');
+        this.municipios.push('San Diego');
+        this.municipios.push('Teculután');
+        this.municipios.push('Usumatlán');
+        this.municipios.push('Zacapa');
+        break;
+      case 'Baja Verapaz':
+        this.municipios.push('Salamá ');
+        this.municipios.push('San Miguel Chicaj');
+        this.municipios.push('Rabinal');
+        this.municipios.push('Cubulco');
+        this.municipios.push('Granados');
+        this.municipios.push('Santa Cruz el Chol');
+        this.municipios.push('San Jerónimo');
+        this.municipios.push('Purulhá');
+        break;
+      case 'Jalapa':
+        this.municipios.push('Jalapa');
+        this.municipios.push('San Pedro Pinula');
+        this.municipios.push('San Luis Jilotepeque');
+        this.municipios.push('San Manuel Chaparrón');
+        this.municipios.push('San Carlos Alzatate');
+        this.municipios.push('Monjas');
+        this.municipios.push('Mataquescuintla');
+        break;
+      case 'Jutiapa':
+        this.municipios.push('Jutiapa');
+        this.municipios.push('El Progreso');
+        this.municipios.push('Santa Catarina Mita');
+        this.municipios.push('Agua Blanca');
+        this.municipios.push('Asunción Mita');
+        this.municipios.push('Yupiltepeque');
+        this.municipios.push('Atescatempa');
+        this.municipios.push('Jerez');
+        this.municipios.push('El Adelanto');
+        this.municipios.push('Zapotitlán');
+        this.municipios.push('Comapa');
+        this.municipios.push('Jalpatagua');
+        this.municipios.push('Conguaco');
+        this.municipios.push('Moyuta');
+        this.municipios.push('Pasaco');
+        this.municipios.push('Quesada');
+        break;
+    }
   }
 }

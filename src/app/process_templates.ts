@@ -858,3 +858,18 @@ export class ot_manage{
         this.id_period = null;
     }
 }
+
+export class attendance_accounts{
+    idaccount:string;
+    name:string;
+    max:string;
+    value:string;
+    show:string;
+    constructor(){
+        this.idaccount = null;
+        this.name = null;
+        this.max = null;
+        this.value = null;
+        this.show = null;
+    }
+}

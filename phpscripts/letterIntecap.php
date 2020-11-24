@@ -129,7 +129,7 @@ echo "
 <td colspan='4' style='text-alignt:center'>
 <table styel='width:100%'>
 <tr>
-<td><img style='width:100px;height:50px;margin-left:250px' src='http://200.94.251.67/uploads/" . $iduser . "_Signatures_.jpeg'></td>
+<td><img style='width:150px;height:75px;margin-left:225px' src='http://200.94.251.67/uploads/" . $iduser . "_Signatures_.jpeg'></td>
 </tr>
 </table>
 </td>
