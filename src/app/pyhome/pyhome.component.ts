@@ -135,7 +135,7 @@ export class PyhomeComponent implements OnInit {
   }
 
   showAccount(acc:attendance_accounts){
-    this.apiService.getAttMissing({date:new Date().getFullYear().toString() + "-" + (new Date().getMonth()+1).toString() + "-" + new Date().getDate().toString(), account:acc.idaccounts}).subscribe((att:employees[])=>{
+    this.apiService.getAttMissing({date:acc.date, account:acc.idaccounts}).subscribe((att:employees[])=>{
       this.pointedAtt = att;
     })
     this.accounts[this.accounts.indexOf(acc)].show = '1';
