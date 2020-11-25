@@ -11,6 +11,8 @@ $account = ($request->account);
 $res = [];
 $i = 0;
 
+$sql = "select * FROM (select employees.*, coalesce(`tmp`.idattendences, 0) as `exist` from employees left join (SELECT * from attendences where date = '$date') as `tmp` on `tmp`.id_employee = employees.idemployees WHERE id_account = $account) as `tmp2` left join hires on hires.idhires = `tmp2`.id_hire left join profiles on profiles.idprofiles = hires.id_profile where `exist` = 0 AND hiring_date <= '$date';";
+
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
         $res[$i]['id_profile'] = $row['id_profile'];
