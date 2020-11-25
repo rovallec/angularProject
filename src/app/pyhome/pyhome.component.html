@@ -133,8 +133,8 @@
                                         <input type="text" class="form-control" [(ngModel)]="acc.value + '/' + acc.max" [disabled]="true">
                                     </div>
                                     <div class="form-group col-md-1">
-                                        <i class="fas fa-angle-double-down" (click)="showAccount(acc)" style="margin-top:50%"></i>
-                                        <i class="fas fa-angle-double-up" (click)="hideAccounts()" style="margin-top:50%"></i>
+                                        <i class="fas fa-angle-double-down" (click)="showAccount(acc)" style="margin-top:30%" *ngIf="acc.show === '0'"></i>
+                                        <i class="fas fa-angle-double-up" (click)="hideAccounts()" style="margin-top:30%" *ngIf="acc.show === '1'"></i>
                                     </div>
                                 </div>
                             </div>
