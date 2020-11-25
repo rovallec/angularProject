@@ -72,6 +72,9 @@ export class HrprofilesComponent implements OnInit {
   actualSurvey: supervisor_survey = new supervisor_survey;
   first_interview: queryDoc_Proc = new queryDoc_Proc;
   second_interview: queryDoc_Proc = new queryDoc_Proc;
+  municipio:string = null;
+  zone:string = null;
+  first_line:string = null;
 
 
   editInview: boolean = false;
@@ -1339,6 +1342,9 @@ export class HrprofilesComponent implements OnInit {
   }
 
   closeEditNames() {
+    if(this.editingAddress){
+      this.profile[0].address = this.first_line + ", Zona " + this.zone + ", de" + this.municipio + ", " + this.departamento;
+    }
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
       this.editingNames = false;
       this.editingDPI = false;
