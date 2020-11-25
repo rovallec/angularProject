@@ -30,6 +30,7 @@ export class PyhomeComponent implements OnInit {
   ngOnInit() {
     this.getWavesAll();
     this.getAllEmployees();
+    this.getAttAccounts();
   }
 
   getAttAccounts(){
