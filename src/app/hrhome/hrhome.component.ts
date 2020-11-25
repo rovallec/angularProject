@@ -116,7 +116,6 @@ export class HrhomeComponent implements OnInit {
       const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
       this.apiService.getfilteredWaves({ str: date }).subscribe((readWaves: waves_template[]) => {
         readWaves.forEach(ww => {
-          console.log(ww);
           if (ww.idwaves == wv.idwaves) {
             wv.state = ww.state.split(",")[0] + "," + wv.state + "," + ww.state.split(",")[2] + "," + ww.state.split(",")[3];
           }

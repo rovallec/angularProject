@@ -32,6 +32,20 @@ export class PyhomeComponent implements OnInit {
     this.getAllEmployees();
   }
 
+  getAttAccounts(){
+    let date:Date = new Date();
+    let start:string = null;
+    let end:string = null;
+    if(date.getDate() > 15){
+      start = date.getFullYear().toString() + "-" + (date.getMonth()+1).toString() + "-" + '16';
+      end = date.getFullYear().toString() + "-" + (date.getMonth()+1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth()+1, 0).getDate().toString());
+    }
+
+    this.apiService.getAttAccounts({start:start, end:end}).subscribe((acc:attendance_accounts[])=>{
+      this.accounts = acc;
+    })
+  }
+
   getAllEmployees() {
     this.apiService.getallEmployees({ department: 'all' }).subscribe((emp: employees[]) => {
       this.employees = emp;
