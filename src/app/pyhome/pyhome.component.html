@@ -115,13 +115,13 @@
                             style="padding:15px; background-color:rgb(239, 246, 255);border-color:rgb(187, 208, 255);border-style: solid; border-width: 1px">
                             <div class="form-row col-md-12">
                                 <div class="form-row col-md-12">
-                                    <div class="fomr-group col-md-4">
+                                    <div class="fomr-group col-md-3">
                                         <label>Name:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="acc.name">
+                                        <input type="text" class="form-control" [(ngModel)]="acc.name" [disabled]="true">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label>Date:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="acc.date">
+                                        <input type="text" class="form-control" [(ngModel)]="acc.date" [disabled]="true">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Progress:</label>
@@ -129,8 +129,12 @@
                                             style="border-radius: 10%;"></progress>
                                     </div>
                                     <div class="form-group col-md-1">
-                                        <i class="fas fa-angle-double-down" (click)="showAccount(acc)"></i>
-                                        <i class="fas fa-angle-double-up" (click)="hideAccounts()"></i>
+                                        <label>Count:</label>
+                                        <input type="text" class="fomr-contro" [(ngModel)]="acc.value + '/' + acc.max" [disabled]="true">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <i class="fas fa-angle-double-down" (click)="showAccount(acc)" style="margin-top:50%"></i>
+                                        <i class="fas fa-angle-double-up" (click)="hideAccounts()" style="margin-top:50%"></i>
                                     </div>
                                 </div>
                             </div>
