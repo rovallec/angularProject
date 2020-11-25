@@ -860,13 +860,13 @@ export class ot_manage{
 }
 
 export class attendance_accounts{
-    idaccount:string;
+    idaccounts:string;
     name:string;
     max:string;
     value:string;
     show:string;
     constructor(){
-        this.idaccount = null;
+        this.idaccounts = null;
         this.name = null;
         this.max = null;
         this.value = null;
