@@ -128,5 +128,7 @@ export class PyhomeComponent implements OnInit {
     })
   }
 
-
+  showAccount(acc:attendance_accounts){
+    this.accounts[this.accounts.indexOf(acc)].show = '1';
+  }
 }
