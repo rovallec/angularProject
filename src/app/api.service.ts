@@ -19,7 +19,7 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-PHP_API_SERVER = "http://200.94.251.67";
+PHP_API_SERVER = "http://200.94.251.67/test";
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
@@ -567,5 +567,8 @@ getAttAccounts(any:any){
   return this.httpClient.post<attendance_accounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAttAccounts.php`,any);
 }
 
+getAttMissing(any:any){
+  return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getAttMissing.php`, any);
+}
   constructor(private httpClient:HttpClient) { }
 }

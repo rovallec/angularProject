@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
-import { attendance_accounts, hires_template, schedules, waves_template } from '../process_templates';
+import { attendance_accounts, attendences, hires_template, schedules, waves_template } from '../process_templates';
 
 @Component({
   selector: 'app-pyhome',
@@ -20,6 +20,7 @@ export class PyhomeComponent implements OnInit {
   schedule_to_edit: schedules = new schedules;
   hires: hires_template[] = [];
   employees: employees[] = [];
+  pointedAtt:employees[] = [];
   filter: string = null;
   value: string = null;
   searching: boolean = false;
@@ -43,7 +44,11 @@ export class PyhomeComponent implements OnInit {
     }
 
     this.apiService.getAttAccounts({start:start, end:end}).subscribe((acc:attendance_accounts[])=>{
-      this.accounts = acc;
+      acc.forEach(accoun => {
+        if(accoun.max != accoun.value){
+          this.accounts.push(accoun);
+        }
+      })
     })
   }
 
@@ -130,6 +135,15 @@ export class PyhomeComponent implements OnInit {
   }
 
   showAccount(acc:attendance_accounts){
+    this.apiService.getAttMissing({date:new Date().getFullYear().toString() + "-" + (new Date().getMonth()+1).toString() + "-" + new Date().getDate().toString()}).subscribe((att:employees[])=>{
+      this.pointedAtt = att;
+    })
     this.accounts[this.accounts.indexOf(acc)].show = '1';
+  }
+
+  hideAccounts(){
+    this.accounts.forEach(element => {
+      element.show = '0';
+    });
   }
 }
