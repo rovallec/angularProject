@@ -145,14 +145,12 @@
                                         <th>NEARSOL ID</th>
                                         <th>CLIENT ID</th>
                                         <th>NAME</th>
-                                        <th>ACCOUNT</th>
-                                        <th>DATE</th>
-                                        <th>ROSTER</th>
-                                        <th>ATTENDED</th>
-                                        <th>BALANCE</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let att of pointedAtt">
+                                            <td>{{att.nearsol_id}}</td>
+                                            <td>{{att.client_id}}</td>
+                                            <td>{{att.name}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
