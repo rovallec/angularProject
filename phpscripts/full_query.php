@@ -50,6 +50,7 @@ $profiles[$i]['email'] = $row['email'];
 $profiles[$i]['idjob_histories'] = $row['idjob_histories'];
 $profiles[$i]['company'] = $row['company'];
 $profiles[$i]['date_joining'] = $row['date_joining'];
+$profiles[$i]['date_end'] = $row['date_end'];
 $profiles[$i]['position'] = $row['position'];
 $profiles[$i]['reference_name'] = $row['reference_name'];
 $profiles[$i]['reference_lastname'] = $row['reference_lastname'];

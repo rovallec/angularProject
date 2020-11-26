@@ -23,6 +23,7 @@ export class profiles {
     idjob_histories:string;
     company:string;
     date_joining:string;
+    date_end:string;
     position:string;
     reference_name:string;
     reference_lastname:string;
