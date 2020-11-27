@@ -88,4 +88,8 @@ export class PyprofilesComponent implements OnInit {
     this.activeProc = new process_templates;
   }
 
+  return(){
+    this.newProc = false;
+  }
+
 }

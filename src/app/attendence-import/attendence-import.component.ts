@@ -20,7 +20,7 @@ export class AttendenceImportComponent implements OnInit {
   importCompleted: boolean = false;
   completed: boolean = false;
   getNewRoster:boolean = false;
-  selectedAccount:accounts = new accounts;
+  selectedAccount:string = null;
 
 
   correct: attendences[] = [];
@@ -164,7 +164,7 @@ export class AttendenceImportComponent implements OnInit {
   }
 
   selectAccount(event){
-    console.log(this.selectedAccount.idaccounts);
+    console.log(this.selectedAccount);
   }
 
   getRoster(){
