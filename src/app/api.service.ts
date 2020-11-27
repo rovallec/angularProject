@@ -19,7 +19,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-PHP_API_SERVER = "http://localhost/angularproject";
+//PHP_API_SERVER = "http://localhost/angularproject";
+PHP_API_SERVER = "http://200.94.251.67";
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
