@@ -163,6 +163,10 @@ export class AttendenceImportComponent implements OnInit {
     })
   }
 
+  selectAccount(event){
+    console.log(this.selectedAccount.idaccounts);
+  }
+
   getRoster(){
     console.log(this.selectedAccount);
     window.open("http://200.94.251.67/phpscripts/exportRoster.php?acc=" + this.selectedAccount.idaccounts, "_blank")

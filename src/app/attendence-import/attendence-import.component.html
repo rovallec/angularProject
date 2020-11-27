@@ -11,8 +11,8 @@
         </div>
         <div class="form-group col-md-3" *ngIf="getNewRoster">
             <label>Account:</label>
-            <select class="form-control" [(ngModel)]="selectedAccount" style="height: 38px;">
-                <option *ngFor="let acc of accounts" [value]="acc">{{acc.name}}</option>
+            <select class="form-control" [(ngModel)]="selectedAccount" (change)="selectAccount($event)" style="height: 38px;">
+                <option *ngFor="let acc of accounts" value="{{acc}}">{{acc.name}}</option>
             </select>
         </div>
         <div class="form-group col-md-3" *ngIf="!getNewRoster"></div>
