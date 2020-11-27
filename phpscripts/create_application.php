@@ -3,10 +3,8 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 	require 'database.php';
 	$postdata = file_get_contents("php://input");
-	if(isset($postdata) && !empty($postdata))
-	{
-		$request = json_decode($postdata);
-
+	if(isset($postdata) && !empty($postdata)){	
+		$request = json_decode($postdata);		
 		$tittle = ($request->tittle);
 		$first_name = ($request->first_name);
 		$second_name = ($request->second_name);
@@ -20,16 +18,15 @@ header('Access-Control-Allow-Headers: *');
 		$igss = ($request->igss);
 		$irtra = ($request->irtra);
 		$status = ($request->status);
+
 		$gender = ($request->gender);
 		$etnia = ($request->etnia);
 		$bank = ($request->bank);
-		$account = ($request->account);
+		$account = ($request->account);		
 
 		$sql = "INSERT INTO `profiles`(`tittle`, `first_name`, `second_name`, `first_lastname`, `second_lastname`, `day_of_birth`, `nationality`, `marital_status`, `dpi`, `nit`, `iggs`, `irtra`, `status`, `gender`, `etnia`, `bank`, `account`) VALUE ('{$tittle}','{$first_name}','{$second_name}','{$first_lastname}','{$second_lastname}','{$day_of_birthday}' ,'{$nationality}','{$marital_status}','{$dpi}','{$nit}','{$igss}','{$irtra}','{$status}', '{$gender}', '{$etnia}', '{$bank}', '{$account}');";
-
 		if(mysqli_query($con,$sql)){
 			$id_profile = mysqli_insert_id($con);
-
 			$idcontact_details = ($request->idcontact_details);
 			$primary_phone = ($request->primary_phone);
 			$secondary_phone = ($request->secondary_phone);
@@ -75,11 +72,21 @@ header('Access-Control-Allow-Headers: *');
 							$currently_studing = ($request->currently_studing);
 							$institution_name = ($request->institution_name);
 							$degree = ($request->degree);
-
 							$sql6 = "INSERT INTO `education_details`(`id_profile`, `current_level`, `further_education`, `currently_studing`, `institution_name`, `degree`) VALUES ('{$id_profile}', '{$current_level}', '{$futher_education}','{$currently_studing}', '{$institution_name}','{$degree}');";
 							if(mysqli_query($con,$sql6)){
-								http_response_code(200);
-								echo $id_profile;
+									$affinity_first_name = ($request->affinity_first_name);
+									$affinity_second_name = ($request->affinity_second_name);
+									$affinity_phone = ($request->affinity_phone);
+									$affinity_first_lastname = ($request->affinity_first_lastname);
+									$affinity_second_lastname = ($request->affinity_second_lastname);
+									$affinity_relationship = ($request->affinity_relationship);
+
+									$sql7 = "INSERT INTO `families`(`id_profile`, `first_name`, `second_name`, `first_last_name`, `second_last_name`, `phone`, `relationship`) VALUES ('{$id_profile}', '{$affinity_first_name}', '{$affinity_second_name}','{$affinity_first_lastname}', '{$affinity_second_lastname}','{$affinity_phone}','{$affinity_relationship}');";
+									if(mysqli_query($con,$sql7)){
+									http_response_code(200);									
+									} else {
+										http_response_code(427);
+								}
 							}else{
 								http_response_code(400);
 							}
@@ -88,17 +95,17 @@ header('Access-Control-Allow-Headers: *');
 						}
 
 					}else{
-						http_response_code(422);
+						http_response_code(424);
 					}
 				}else{
-					http_response_code(422);
+					http_response_code(423);
 				}
 			}else{
 				http_response_code(422);
 			}
 			
 		}else{
-			http_response_code(422);
+			http_response_code(421);
 		}
 	}
 ?>
