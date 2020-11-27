@@ -83,10 +83,9 @@ header('Access-Control-Allow-Headers: *');
 
 									$sql7 = "INSERT INTO `families`(`id_profile`, `first_name`, `second_name`, `first_last_name`, `second_last_name`, `phone`, `relationship`) VALUES ('{$id_profile}', '{$affinity_first_name}', '{$affinity_second_name}','{$affinity_first_lastname}', '{$affinity_second_lastname}','{$affinity_phone}','{$affinity_relationship}');";
 									if(mysqli_query($con,$sql7)){
-									http_response_code(200);
-									echo $id_profile;
+									http_response_code(200);									
 									} else {
-									
+										http_response_code(427);
 								}
 							}else{
 								http_response_code(400);
@@ -96,17 +95,17 @@ header('Access-Control-Allow-Headers: *');
 						}
 
 					}else{
-						http_response_code(422);
+						http_response_code(424);
 					}
 				}else{
 					http_response_code(423);
 				}
 			}else{
-				http_response_code(424);
+				http_response_code(422);
 			}
 			
 		}else{
-			http_response_code(425);
+			http_response_code(421);
 		}
 	}
 ?>
