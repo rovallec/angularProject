@@ -26,6 +26,7 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['max'] = $row['max'];
         $res[$i]['value'] = $row['completed'];
         $res[$i]['date'] = $row['date'];
+        $res[$i]['status'] = $row['status'];
         $res[$i]['show'] = '0';
         $i++;
     }

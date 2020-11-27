@@ -865,12 +865,14 @@ export class attendance_accounts{
     max:string;
     value:string;
     date:string;
+    status:string;
     show:string;
     constructor(){
         this.idaccounts = null;
         this.name = null;
         this.max = null;
         this.value = null;
+        this.status = null;
         this.show = null;
     }
 }

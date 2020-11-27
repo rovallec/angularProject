@@ -49,7 +49,7 @@
             $total_n_n = $base_n_n + $incentivo_n_n;
             $base_n_n = number_format(((float)$base_n_n),2);
             $incentivo_n_n = (float)$incentivo_n_n - 250;
-            $incentivo_exp = explode(".", $incentivo_n);
+            $incentivo_exp = explode(".", $incentivo_n_n);
             $incentivo_n = number_format(((float)$incentivo_n),2);
             $total_n = number_format(((float)$total_n),2);
 
@@ -67,7 +67,7 @@
             $t = $t . " espacio " . $f->format($dpi_1[9]);
             $t = $t . " " . $f->format($dpi_4);
 
-            $base_n_init = explode(".", $base_n);
+            $base_n_init = explode(".", $base_n_n);
             $base_n_int_l = $f->format($base_n_init[0]);
             $base_n_cent_l = $f->format($base_n_init[1]);
 
