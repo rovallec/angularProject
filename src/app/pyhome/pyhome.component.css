@@ -41,3 +41,9 @@ i{
 input{
     text-align:center;
 }
+
+table .table-striped{
+    background:white; 
+    margin:1%; 
+    width:98%;
+}

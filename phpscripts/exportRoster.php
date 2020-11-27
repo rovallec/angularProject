@@ -18,7 +18,7 @@ fputcsv($output, array("Client ID", "Date", "Name"));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $roster[0] = $row['client_id'];
-        $roster[1] = $date;
+        $roster[1] = '"' . $date . '"';
         $roster[2] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         fputcsv($output, $roster, ",");
     };
