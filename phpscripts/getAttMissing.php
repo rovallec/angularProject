@@ -23,6 +23,7 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['reporter'] = $row['reporter'];
         $res[$i]['client_id'] = $row['client_id'];
         $res[$i]['nearsol_id'] = $row['nearsol_id'];
+        $res[$i]['status'] = $row['status'];
         $i++;
     }
     echo(json_encode($res));

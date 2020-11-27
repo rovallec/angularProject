@@ -6,7 +6,18 @@
             <input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file"
                 accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
         </div>
-        <div class="form-group col-md-4"></div>
+        <div class="form-group col-md-1" *ngIf="!getNewRoster">
+            <i class="fas fa-address-card" (click)="activeRoster()"></i>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Account:</label>
+            <select class="form-control" [(ngModel)]="selected_account">
+                <option *ngFor="let acc of accounts">{{acc.name}}</option>
+            </select>
+        </div>
+        <div class="form-group col-md-1" *ngIf="getNewRoster">
+            <i class="fas fa-download" (click)="getRoster()"></i>
+        </div>
     </div>
     <div class="form-row col-md-12">
         <div class="form-group col-md-3"></div>
@@ -21,7 +32,8 @@
         </div>
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-1">
-            <button class="form-control" (click)="uploadAttendences()" *ngIf="!importCompleted">Import</button>
+            <button class="form-control" (click)="uploadAttendences()" *ngIf="!importCompleted"
+                style="margin-top: 21%">Import</button>
         </div>
         <div class="form-group col-md-1"></div>
     </div>
@@ -38,8 +50,7 @@
         <div class="form-group col-md-6">
             <label style="text-align:center">Fail</label>
             <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center"
-                    *ngFor="let fl of fail">
+                <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let fl of fail">
                     {{fl.first_name}} {{fl.second_name}} {{fl.first_lastname}} {{fl.second_lastname}}
                 </li>
             </ul>
@@ -67,7 +78,8 @@
                     <td>{{att.worked_time}}</td>
                     <td>{{att.balance}}</td>
                     <td>
-                        <select [(ngModel)]="att.day_off1" [disabled]="att.day_off1 != 'OMMIT'" class="form-control" (change)="setAction(att)">
+                        <select [(ngModel)]="att.day_off1" [disabled]="att.day_off1 != 'OMMIT'" class="form-control"
+                            (change)="setAction(att)">
                             <option *ngIf='att.day_off1 === "CORRECT"'>CORRECT</option>
                             <option *ngIf='att.day_off1 === "NO MATCH"'>NO MATCH</option>
                             <option>OMMIT</option>

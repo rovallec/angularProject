@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { attendences, attendences_adjustment } from '../process_templates';
+import { accounts, attendences, attendences_adjustment } from '../process_templates';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
 import { isNullOrUndefined, isNull } from 'util';
@@ -19,11 +19,15 @@ export class AttendenceImportComponent implements OnInit {
   checkedCount: number = 0;
   importCompleted: boolean = false;
   completed: boolean = false;
+  getNewRoster:boolean = false;
+  selectedAccount:accounts = new accounts;
+
 
   correct: attendences[] = [];
   fail: attendences[] = [];
   apply:attendences[] = [];
   uploaded:attendences[] = [];
+  accounts:accounts[] = [];
 
   attendences: attendences[] = [];
   constructor(private apiService: ApiService, public authService:AuthServiceService) { }
@@ -150,5 +154,16 @@ export class AttendenceImportComponent implements OnInit {
     this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {
       this.importCompleted = true;
     });
+  }
+
+  activeRoster(){
+    this.getNewRoster = true;
+    this.apiService.getAcconts().subscribe((acc:accounts[])=>{
+      this.accounts = acc;
+    })
+  }
+
+  getRoster(){
+    window.open("http://200.94.251.67/phpscripts/exportRoster.php?acc=" + this.selectedAccount.idaccounts, "_blank") 
   }
 }
