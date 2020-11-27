@@ -7,16 +7,17 @@
                 accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
         </div>
         <div class="form-group col-md-1" *ngIf="!getNewRoster">
-            <i class="fas fa-address-card" (click)="activeRoster()"></i>
+            <i class="fas fa-address-card" (click)="activeRoster()" stype="margin-top:25%"></i>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-3" *ngIf="getNewRoster">
             <label>Account:</label>
-            <select class="form-control" [(ngModel)]="selectedAccount">
-                <option *ngFor="let acc of accounts">{{acc.name}}</option>
+            <select class="form-control" [(ngModel)]="selectedAccount" style="height: 38px;">
+                <option *ngFor="let acc of accounts" [value]="acc">{{acc.name}}</option>
             </select>
         </div>
+        <div class="form-group col-md-3" *ngIf="getNewRoster"></div>
         <div class="form-group col-md-1" *ngIf="getNewRoster">
-            <i class="fas fa-download" (click)="getRoster()"></i>
+            <i class="fas fa-download" (click)="getRoster()" stype="margin-top:25%"></i>
         </div>
     </div>
     <div class="form-row col-md-12">

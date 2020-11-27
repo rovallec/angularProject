@@ -164,6 +164,6 @@ export class AttendenceImportComponent implements OnInit {
   }
 
   getRoster(){
-    window.open("http://200.94.251.67/phpscripts/exportRoster.php?acc=" + this.selectedAccount.idaccounts, "_blank") 
+    window.open("http://200.94.251.67/phpscripts/exportRoster.php?acc=" + this.selectedAccount.idaccounts, "_blank")
   }
 }

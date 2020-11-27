@@ -11,7 +11,7 @@ $roster = [];
 $i = 0;
 $date = date("Y-m-d");
 
-$sql = "SELECT * FROM employees LEFT JOIN hires ON hires.idhires = employees.id_hire LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile LEFT JOIN (SELECT * FROM hr_processes WHERE id_type = 8) AS `term` ON `term`.id_employee  = employees.idemployees  WHERE (active = 1 AND id_account = 6 AND employees.hiring_date <= '$date') OR (`term`.date >= '$date' AND id_account = $account);";
+$sql = "SELECT * FROM employees LEFT JOIN hires ON hires.idhires = employees.id_hire LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile LEFT JOIN (SELECT * FROM hr_processes WHERE id_type = 8) AS `term` ON `term`.id_employee  = employees.idemployees  WHERE (active = 1 AND id_account = $account AND employees.hiring_date <= '$date') OR (`term`.date >= '$date' AND id_account = $account);";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("Client ID", "Date", "Name"));
