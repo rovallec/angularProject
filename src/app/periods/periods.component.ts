@@ -234,7 +234,7 @@ export class PeriodsComponent implements OnInit {
                                       this.roster = this.roster + parseFloat(attendance.scheduled);
                                       if (parseFloat(attendance.worked_time) == 0) {
                                         ad.forEach(adjustment => {
-                                          if (adjustment.id_attendence === attendance.idattendences) {
+                                          if (adjustment.id_attendence === attendance.idattendences && adjustment.id_user != '22' && adjustment.id_user != '23' && adjustment.id_user != '42') {
                                             this.non_show_2 = false;
                                           }
                                         })
