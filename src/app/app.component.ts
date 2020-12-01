@@ -54,6 +54,6 @@ export class AppComponent {
   }
 
   getEmployeeData(){
-    window.open("http://200.94.251.67/phpscripts/exportEmployeeData.php", "_blank");
+    window.open("http://200.94.251.67/phpscripts/exportEmployeesData.php", "_blank");
   }
 }
