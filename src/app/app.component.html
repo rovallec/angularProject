@@ -77,7 +77,7 @@
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
-          style="color: white" (click)="getEmployeeData()" [ngClass]="{'act':selectedOption=='EMPD'}">EMPLOYEE DATA</a>
+          style="color: white; cursor:pointer;" (click)="getEmployeeData()" [ngClass]="{'act':selectedOption=='EMPD'}">EMPLOYEE DATA</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
