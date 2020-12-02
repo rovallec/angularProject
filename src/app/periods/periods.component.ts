@@ -673,7 +673,6 @@ export class PeriodsComponent implements OnInit {
                               ot.id_employee = emp[0].idemployees;
                               this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
                                 if(!isNullOrUndefined(ot.amount)){
-                                  console.log('1');
                                   if(parseFloat(ots.amount) >= this.absence){
                                     ot_hours = this.absence;
                                   }else{
@@ -689,7 +688,6 @@ export class PeriodsComponent implements OnInit {
                                     this.credits.push(ot_credit);
                                 }else{
                                   ot_credit.amount = '0';
-                                  console.log(ot_credit);
                                 }
                               })
                             }
@@ -711,7 +709,10 @@ export class PeriodsComponent implements OnInit {
                               this.credits.push(credit);
                             });
 
-
+                            if(isNull(ot_credit.amount)){
+                              ot_credit.amount = '0';
+                            }
+                            
                             totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                             console.log(totalCred + " " + base_credit.amount + " " + productivity_credit.amount + " " + decreto_credit.amount + " " + ot_credit.amount);
                             totalDeb = totalDeb + parseFloat(igss_debit.amount);
