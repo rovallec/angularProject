@@ -1763,7 +1763,16 @@ export class HrprofilesComponent implements OnInit {
 
   mergeProfile(){
     this.apiService.insertMergeProfile({id_old:this.workingEmployee.id_profile, id_new:this.selectedToMerge}).subscribe((str:string)=>{
-      this.ngOnInit();
+      let proc:process = new process;
+      proc.id_profile = this.workingEmployee.idemployees;
+      proc.id_user = this.authUser.getAuthusr().iduser;
+      proc.idprocesses = '20';
+      proc.descritpion = "Data Merge from " + this.selectedToMerge;
+      proc.prc_date = this.todayDate;
+      proc.status = "CLOSED";
+      this.apiService.insertProc(proc).subscribe((str:string)=>{
+        this.ngOnInit();
+      })
     })
   }
 
