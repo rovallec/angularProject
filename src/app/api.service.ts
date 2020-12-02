@@ -579,5 +579,10 @@ getToValidate(){
 getJobHistories(any:any){
   return this.httpClient.post<profiles_histories[]>(`${this.PHP_API_SERVER}/phpscripts/getJobHistories.php`, any);
 }
+
+insertMergeProfile(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertMergeProfile.php`, any);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
