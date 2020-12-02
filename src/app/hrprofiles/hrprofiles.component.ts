@@ -1747,7 +1747,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   setSelectedProf(val:profiles){
-    let i:number = 0;
+    let i:number = 1;
     Object.getOwnPropertyNames(val).forEach(obj=>{
       let str:string[] = [];
       str[0] = obj;
