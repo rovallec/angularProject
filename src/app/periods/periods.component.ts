@@ -705,6 +705,7 @@ export class PeriodsComponent implements OnInit {
                               this.debits.push(debit);
                             })
                             cd.forEach(credit => {
+                              console.log(totalCred);
                               totalCred = totalCred + parseFloat(credit.amount)
                               this.credits.push(credit);
                             });
