@@ -1753,6 +1753,7 @@ export class HrprofilesComponent implements OnInit {
       str[0] = obj;
       str[1] = (Object.values(val)[i]);
       this.profiletoMarge.push(str);
+      i++;
     })
   }
 }
