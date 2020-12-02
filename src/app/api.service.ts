@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
-import { profiles } from './profiles';
+import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
 import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts } from './process_templates';
@@ -574,6 +574,10 @@ getAttMissing(any:any){
 
 getToValidate(){
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/getValidate.php`);
+}
+
+getJobHistories(any:any){
+  return this.httpClient.post<profiles_histories[]>(`${this.PHP_API_SERVER}/phpscripts/getJobHistories.php`, any);
 }
   constructor(private httpClient:HttpClient) { }
 }

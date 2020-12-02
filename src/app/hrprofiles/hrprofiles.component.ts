@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { profiles } from '../profiles';
+import { profiles, profiles_histories } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
@@ -46,6 +46,8 @@ export class HrprofilesComponent implements OnInit {
   dpTerm: boolean = false;
   workingEmployee: employees = new employees;
   riseIncrease: string = null;
+  profiletoMarge:string[][] = [[]];
+  profiletoMargeHeaders:string[] = [];
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -1745,6 +1747,10 @@ export class HrprofilesComponent implements OnInit {
   }
 
   setSelectedProf(val:profiles){
-    
+    let i:number = 0;
+    Object.getOwnPropertyNames(val).forEach(obj=>{
+      this.profiletoMarge[i][0] = obj;
+      this.profiletoMarge[i][1] = (Object.values(val)[i]);
+    })
   }
 }

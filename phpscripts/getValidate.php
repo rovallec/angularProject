@@ -4,79 +4,64 @@ header('Access-Control-Allow-Headers: *');
 
 	require 'database.php';
 
-	$postdata = file_get_contents("php://input");
-	if(isset($postdata) && !empty($postdata)){
-
-		$request = json_decode($postdata);
-		$idprofile = ($request->idprofiles);
-	}
-
 		$profiles = [];
-		$sql = "SELECT `profiles`.*, `contact_details`.*, `job_histories`.*, `profile_details`.*, `emergency_details`.*, `medical_details`.*, `education_details`.*
-			FROM `profiles` 
-			LEFT JOIN `contact_details` ON `contact_details`.`id_profile` = `profiles`.`idprofiles` 
-			LEFT JOIN `profile_details` ON `profile_details`.`id_profile` = `profiles`.`idprofiles` 
-			LEFT JOIN `emergency_details` ON `emergency_details`.`id_profile` = `profiles`.`idprofiles` 
-			LEFT JOIN `medical_details` ON `medical_details`.`id_profile` = `profiles`.`idprofiles` 
-			LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` 
-			WHERE
-			`profiles`.`idprofiles` = {$idprofile};";
+		$sql = "SELECT `profiles`.*, `contact_details`.*, `profile_details`.*, `emergency_details`.*, `medical_details`.*, `education_details`.* FROM `profiles` LEFT JOIN `contact_details` ON `contact_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `profile_details` ON `profile_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `emergency_details` ON `emergency_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `medical_details` ON `medical_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` WHERE `profiles`.`status` = 'VALIDATION';";
 
 
 		if($result = mysqli_query($con, $sql)){
 			$i = 0;
 			while($row = mysqli_fetch_assoc($result)){
-				$profiles['idprofiles'] = $row['idprofiles'];
-				$profiles['tittle'] = $row['tittle'];
-				$profiles['first_name'] = $row['first_name'];
-				$profiles['second_name'] = $row['second_name'];
-				$profiles['first_lastname'] = $row['first_lastname'];
-				$profiles['second_lastname'] = $row['second_lastname'];
-				$profiles['day_of_birth'] = $row['day_of_birth'];
-				$profiles['nationality'] = $row['nationality'];
-				$profiles['gender'] = $row[gender''];
-				$profiles['etnia'] = $row['etnia'];
-				$profiles['bank'] = $row['bank'];
-				$profiles['account'] = $row['account']; 
-				$profiles['account_type'] = $row['type_account'];
-				$profiles['marital_status'] = $row['marital_status'];
-				$profiles['dpi'] = $row['dpi'];
-				$profiles['nit'] = $row['nit'];
-				$profiles['iggs'] = $row['iggs'];
-				$profiles['irtra'] = $row['irtra'];
-				$profiles['status'] = $row['status'];
-				$profiles['idcontact_details'] = $row['idcontact_details'];
-				$profiles['id_profile'] = $row['id_profile'];
-				$profiles['primary_phone'] = $row['primary_phone'];
-				$profiles['secondary_phone'] = $row['secondary_phone'];
-				$profiles['address'] = $row['address'];
-				$profiles['city'] = $row['city'];
-				$profiles['email'] = $row['email'];
-				$profiles['idprofile_details'] = $row['idprofile_details'];
-				$profiles['english_level'] = $row['english_level'];
-				$profiles['transport'] = $row['transport'];
-				$profiles['start_date'] = $row['start_date'];
-				$profiles['unavialable_days'] = $row['unavialable_days'];
-				$profiles['marketing_campaing'] = $row['marketing_campaing'];
-				$profiles['first_lenguage'] = $row['first_lenguage'];
-				$profiles['second_lenguage'] = $row['second_lenguage'];
-				$profiles['third_lenguage'] = $row['third_lenguage'];
-				$profiles['idemergency_details'] = $row['idemergency_details'];
-				$profiles['emergency_first_name'] = $row['emergency_first_name'];
-				$profiles['emergency_second_name'] = $row['emergency_second_name'];
-				$profiles['emergency_first_lastname'] = $row['emergency_first_lastname'];
-				$profiles['emergency_second_lastname'] = $row['emergency_second_lastname'];
-				$profiles['phone'] = $row['phone'];
-				$profiles['relationship'] = $row['relationship'];
-				$profiles['idmedical_details'] = $row['idmedical_details'];
-				$profiles['medical_treatment'] = $row['medical_treatment'];
-				$profiles['medical_prescription'] = $row['medical_prescription'];
-				$profiles['ideducation_details'] = $row['ideducation_details'];
-				$profiles['current_level'] = $row['current_level'];
-				$profiles['further_education'] = $row['further_education'];
-				$profiles['currently_studing'] = $row['currently_studing'];
-				$profiles['institution_name'] = $row['institution_name'];
-				$profiles['degree'] = $row['degree'];
+				$profiles[$i]['idprofiles'] = $row['idprofiles'];
+				$profiles[$i]['tittle'] = $row['tittle'];
+				$profiles[$i]['first_name'] = $row['first_name'];
+				$profiles[$i]['second_name'] = $row['second_name'];
+				$profiles[$i]['first_lastname'] = $row['first_lastname'];
+				$profiles[$i]['second_lastname'] = $row['second_lastname'];
+				$profiles[$i]['day_of_birth'] = $row['day_of_birth'];
+				$profiles[$i]['nationality'] = $row['nationality'];
+				$profiles[$i]['gender'] = $row['gender'];
+				$profiles[$i]['etnia'] = $row['etnia'];
+				$profiles[$i]['bank'] = $row['bank'];
+				$profiles[$i]['account'] = $row['account']; 
+				$profiles[$i]['account_type'] = $row['account_type'];
+				$profiles[$i]['marital_status'] = $row['marital_status'];
+				$profiles[$i]['dpi'] = $row['dpi'];
+				$profiles[$i]['nit'] = $row['nit'];
+				$profiles[$i]['iggs'] = $row['iggs'];
+				$profiles[$i]['irtra'] = $row['irtra'];
+				$profiles[$i]['status'] = $row['status'];
+				$profiles[$i]['idcontact_details'] = $row['idcontact_details'];
+				$profiles[$i]['id_profile'] = $row['id_profile'];
+				$profiles[$i]['primary_phone'] = $row['primary_phone'];
+				$profiles[$i]['secondary_phone'] = $row['secondary_phone'];
+				$profiles[$i]['address'] = $row['address'];
+				$profiles[$i]['city'] = $row['city'];
+				$profiles[$i]['email'] = $row['email'];
+				$profiles[$i]['idprofile_details'] = $row['idprofile_details'];
+				$profiles[$i]['english_level'] = $row['english_level'];
+				$profiles[$i]['transport'] = $row['transport'];
+				$profiles[$i]['start_date'] = $row['start_date'];
+				$profiles[$i]['unavialable_days'] = $row['unavialable_days'];
+				$profiles[$i]['marketing_campaing'] = $row['marketing_campaing'];
+				$profiles[$i]['first_lenguage'] = $row['first_lenguage'];
+				$profiles[$i]['second_lenguage'] = $row['second_lenguage'];
+				$profiles[$i]['third_lenguage'] = $row['third_lenguage'];
+				$profiles[$i]['idemergency_details'] = $row['idemergency_details'];
+				$profiles[$i]['emergency_first_name'] = $row['e_first_name'];
+				$profiles[$i]['emergency_second_name'] = $row['e_second_name'];
+				$profiles[$i]['emergency_first_lastname'] = $row['e_first_lastname'];
+				$profiles[$i]['emergency_second_lastname'] = $row['e_second_lastname'];
+				$profiles[$i]['phone'] = $row['phone'];
+				$profiles[$i]['relationship'] = $row['relationship'];
+				$profiles[$i]['idmedical_details'] = $row['idmedical_details'];
+				$profiles[$i]['medical_treatment'] = $row['medical_treatment'];
+				$profiles[$i]['medical_prescription'] = $row['medical_prescription'];
+				$profiles[$i]['ideducation_details'] = $row['ideducation_details'];
+				$profiles[$i]['current_level'] = $row['current_level'];
+				$profiles[$i]['further_education'] = $row['further_education'];
+				$profiles[$i]['currently_studing'] = $row['currently_studing'];
+				$profiles[$i]['institution_name'] = $row['institution_name'];
+				$profiles[$i]['degree'] = $row['degree'];
 				$i++;
 				}
 
