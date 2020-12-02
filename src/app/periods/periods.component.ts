@@ -671,7 +671,8 @@ export class PeriodsComponent implements OnInit {
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
                               this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
-                                if(!isNull(ot)){
+                                if(!isNullOrUndefined(ot)){
+                                  console.log(ot);
                                   if(parseFloat(ots.amount) >= this.absence){
                                     ot_hours = this.absence;
                                   }else{
