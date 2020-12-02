@@ -674,7 +674,9 @@ export class PeriodsComponent implements OnInit {
                                   if(parseFloat(ots.amount) >= this.absence){
                                     ot_hours = this.absence;
                                   }else{
-                                    ot_hours = parseFloat(ots.amount);
+                                    if(parseFloat(ots.amount) <= this.absence){
+                                      ot_hours = parseFloat(ots.amount);
+                                    }
                                   }
                                   ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
                                   if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
@@ -702,11 +704,6 @@ export class PeriodsComponent implements OnInit {
                               totalCred = totalCred + parseFloat(credit.amount)
                               this.credits.push(credit);
                             });
-
-                            if(isNull(ot_credit.amount)){
-                              console.log('here');
-                              ot_credit.amount = '0';
-                            }
 
                             totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
                             console.log(totalCred + " " + base_credit.amount + " " + productivity_credit.amount + " " + decreto_credit.amount + " " + ot_credit.amount);
