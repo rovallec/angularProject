@@ -1166,6 +1166,12 @@
                                             <th>INCLUDE</th>
                                         </thead>
                                         <tbody>
+                                            <tr *ngFor="let val of tovalidate" (click)="setSelectedProf(val)">
+                                                <td style="text-align: center;">{{val.idprofiles}}</td>
+                                                <td style="text-align: center;">{{val.first_name}} {{val.second_name}} {{val.first_lastname}} {{val.second_lastname}}</td>
+                                                <td style="text-align: center;">{{val.dpi}}</td>
+                                                <td style="text-align: center;"><input type="radio"></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

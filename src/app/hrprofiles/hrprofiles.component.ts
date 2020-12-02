@@ -61,6 +61,7 @@ export class HrprofilesComponent implements OnInit {
   processRecord: process[] = [];
   allAccounts: accounts[] = [];
   municipios: string[] = [];
+  tovalidate:profiles[] = [];
   actualMessagings: messagings = new messagings;
   actualIrtrarequests: irtra_requests = new irtra_requests;
   actualJudicial: judicials = new judicials;
@@ -251,6 +252,7 @@ export class HrprofilesComponent implements OnInit {
   ngOnInit() {
     this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
     this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
+    this.getValidatingData();
     this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
       this.profile = prof;
     });
@@ -1734,5 +1736,15 @@ export class HrprofilesComponent implements OnInit {
         this.municipios.push('Quesada');
         break;
     }
+  }
+
+  getValidatingData(){
+    this.apiService.getToValidate().subscribe((prof:profiles[])=>{
+      this.tovalidate = prof;
+    })
+  }
+
+  setSelectedProf(val:profiles){
+    
   }
 }

@@ -571,5 +571,9 @@ getAttAccounts(any:any){
 getAttMissing(any:any){
   return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getAttMissing.php`, any);
 }
+
+getToValidate(){
+  return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/getValidate.php`);
+}
   constructor(private httpClient:HttpClient) { }
 }
