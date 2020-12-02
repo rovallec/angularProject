@@ -686,6 +686,8 @@ export class PeriodsComponent implements OnInit {
                                     ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
                                   }
                                     this.credits.push(ot_credit);
+                                }else{
+                                  ot_credit.amount = '0';
                                 }
                               })
                             }
