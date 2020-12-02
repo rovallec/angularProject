@@ -704,6 +704,7 @@ export class PeriodsComponent implements OnInit {
                             });
 
                             if(isNull(ot_credit.amount)){
+                              console.log('here');
                               ot_credit.amount = '0';
                             }
 
