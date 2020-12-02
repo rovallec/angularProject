@@ -658,6 +658,7 @@ export class PeriodsComponent implements OnInit {
                             igss_debit.type = "IGSS";
 
                             if (this.absence <= 0) {
+                              console.log('aah!');
                               base_credit.amount = (((att.length * 8) + (this.absence)) * base_hour).toFixed(2);
                               productivity_credit.amount = (((att.length * 8) + (this.absence)) * productivity_hour).toFixed(2);
                               ot_credit.amount = '0';
