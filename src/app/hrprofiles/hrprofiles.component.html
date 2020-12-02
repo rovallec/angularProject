@@ -1170,6 +1170,13 @@
                                             <th>INCLUDE</th>
                                         </thead>
                                         <tbody>
+                                            <tr *ngFor="let att of showAttendences" style="cursor:pointer"
+                                                (click)="addJustification(att)" class="selectable">
+                                                <td>{{att.date}}</td>
+                                                <td>{{att.date}}</td>
+                                                <td>{{att.date}}</td>
+                                                <td>{{att.date}}</td>                                                
+                                            </tr>                                                                                        
                                         </tbody>
                                     </table>
                                 </div>
