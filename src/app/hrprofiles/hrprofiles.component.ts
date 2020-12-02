@@ -1749,9 +1749,10 @@ export class HrprofilesComponent implements OnInit {
   setSelectedProf(val:profiles){
     let i:number = 0;
     Object.getOwnPropertyNames(val).forEach(obj=>{
-      this.profiletoMarge[i][0] = obj;
-      this.profiletoMarge[i][1] = (Object.values(val)[i]);
-      i = i + 1;
+      let str:string[] = [];
+      str[0] = obj;
+      str[1] = (Object.values(val)[i]);
+      this.profiletoMarge.push(str);
     })
   }
 }
