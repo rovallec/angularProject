@@ -1752,7 +1752,7 @@ export class HrprofilesComponent implements OnInit {
     Object.getOwnPropertyNames(val).forEach(obj=>{
       let str:string[] = [];
       str[0] = obj;
-      str[1] = (Object.values(val)[i]);
+      str[1] = (Object.values(val)[i-1]);
       this.profiletoMarge.push(str);
       i++;
     })
