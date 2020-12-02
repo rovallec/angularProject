@@ -1750,7 +1750,7 @@ export class HrprofilesComponent implements OnInit {
     let i:number = 0;
     Object.getOwnPropertyNames(val).forEach(obj=>{
       this.profiletoMarge[i][0] = obj;
-      this.profiletoMarge[i][1] = (Object.values(val)[obj]);
+      this.profiletoMarge[i][1] = (Object.values(val)[i]);
       i = i + 1;
     })
   }
