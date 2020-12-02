@@ -672,6 +672,7 @@ export class PeriodsComponent implements OnInit {
                               ot.id_employee = emp[0].idemployees;
                               this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
                                 if(!isNullOrUndefined(ot.amount)){
+                                  console.log('1');
                                   if(parseFloat(ots.amount) >= this.absence){
                                     ot_hours = this.absence;
                                   }else{
@@ -705,7 +706,6 @@ export class PeriodsComponent implements OnInit {
                               this.debits.push(debit);
                             })
                             cd.forEach(credit => {
-                              console.log(totalCred);
                               totalCred = totalCred + parseFloat(credit.amount)
                               this.credits.push(credit);
                             });
