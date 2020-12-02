@@ -671,19 +671,21 @@ export class PeriodsComponent implements OnInit {
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
                               this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
-                                if(parseFloat(ots.amount) >= this.absence){
-                                  ot_hours = this.absence;
-                                }else{
-                                  ot_hours = parseFloat(ots.amount);
+                                if(!isNull(ot)){
+                                  if(parseFloat(ots.amount) >= this.absence){
+                                    ot_hours = this.absence;
+                                  }else{
+                                    ot_hours = parseFloat(ots.amount);
+                                  }
+  
+                                  ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
+                                  if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
+                                    ot_credit.amount = ((base_hour + productivity_hour) * 2 * ot_hours).toFixed(2);
+                                  } else {
+                                    ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
+                                  }
+                                    this.credits.push(ot_credit);
                                 }
-
-                                ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
-                                if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                  ot_credit.amount = ((base_hour + productivity_hour) * 2 * ot_hours).toFixed(2);
-                                } else {
-                                  ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
-                                }
-                                  this.credits.push(ot_credit);
                               })
                             }
                             igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
