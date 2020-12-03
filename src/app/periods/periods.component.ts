@@ -29,6 +29,7 @@ export class PeriodsComponent implements OnInit {
   file: any;
   arrayBuffer: any;
   filelist: any;
+  importStart:boolean = false;
   selectedEmployee: boolean = false;
   attendances: attendences[] = [];
   deductions: deductions[] = [];
@@ -823,6 +824,8 @@ export class PeriodsComponent implements OnInit {
     this.credits = [];
     this.file = event.target.files[0];
     let fileReader = new FileReader();
+    let found:boolean = false;
+
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
       if (!this.completed) {
@@ -835,34 +838,29 @@ export class PeriodsComponent implements OnInit {
         var first_sheet_name = workbook.SheetNames[0];
         var worksheet = workbook.Sheets[first_sheet_name];
         let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-        sheetToJson.forEach(element => {
-          let cred: credits = new credits;
-          try {
-            this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
-              payments.forEach(pay => {
-                this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
-                  if (emp[0].nearsol_id == element['Nearsol ID']) {
-                    if (this.importType == 'Bono') {
-                      cred.iddebits = emp[0].name;
-                      cred.amount = (parseFloat(element['Amount'])).toFixed(2);
-                      cred.type = this.importType + " " + this.importString;
-                      cred.idpayments = pay.idpayments;
-                      this.credits.push(cred);
-                    } else {
-                      cred.iddebits = emp[0].name;
-                      cred.amount = (parseFloat(element['Amount'])).toFixed(2);
-                      cred.type = this.importType + " " + this.importString;
-                      cred.idpayments = pay.idpayments;
-                      this.credits.push(cred);
-                    }
-                  }
-                })
-              })
-              this.completed = true;
+        this.apiService.getPayments(this.period).subscribe((paymnts:payments[])=>{
+          sheetToJson.forEach(element => {
+            this.apiService.getSearchEmployees({dp:'all', filter:"nearsol_id", value:element['Nearsol ID']}).subscribe((emp:employees[])=>{
+              paymnts.forEach(pay => {
+                let cred:credits = new credits;
+                if(pay.id_employee = emp[0].idemployees){
+                  cred.iddebits = emp[0].idemployees;
+                  cred.idpayments = pay.idpayments;
+                  cred.amount = element['Amount'];
+                  cred.type = this.importType;
+                  cred.iddebits = "TRUE";
+                  cred.date = emp[0].name;
+                  cred.id_user = element['Nearsol ID'];
+                  this.credits.push(cred);
+                  found = true;
+                }
+                if(!found){
+                  cred.iddebits = "FALSE"
+                  cred.id_user = element['Nearsol ID'];
+                }
+              });
             })
-          } catch (error) {
-
-          }
+          })
         })
       }
     }
