@@ -280,27 +280,18 @@ export class PeriodsComponent implements OnInit {
                                   productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
                                   base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
                                   let ot: ot_manage = new ot_manage;
-                                  let ot_hours: number = 0;
                                   ot.id_period = this.period.idperiods;
                                   ot.id_employee = emp[0].idemployees;
                                   ot.name = emp[0].name;
                                   ot.nearsol_id = emp[0].nearsol_id;
-                                  this.apiService.getApprovedOt(ot).subscribe((ots: ot_manage) => {
-                                    if (parseFloat(ots.amount) >= discounted) {
-                                      ot_hours = discounted;
-                                    } else {
-                                      ot_hours = parseFloat(ots.amount);
-                                    }
-
-                                    ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
+                                    ot_credit.type = "Horas Extra Laboradas: " + this.absence;
                                     if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                      ot_credit.amount = ((base_hour + productivity_hour) * 2 * ot_hours).toFixed(2);
+                                      ot_credit.amount = ((base_hour + productivity_hour) * 2 * this.absence).toFixed(2);
                                     } else {
-                                      ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
+                                      ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * this.absence).toFixed(2);
                                     }
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
-                                  })
                                   decreto_credit.amount = '125.00';
                                 }
                                 igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
