@@ -844,19 +844,22 @@ export class PeriodsComponent implements OnInit {
               paymnts.forEach(pay => {
                 let cred:credits = new credits;
                 if(pay.id_employee = emp[0].idemployees){
-                  cred.iddebits = emp[0].idemployees;
-                  cred.idpayments = pay.idpayments;
+                  cred.id_employee = emp[0].idemployees;
                   cred.amount = element['Amount'];
                   cred.type = this.importType;
-                  cred.iddebits = "TRUE";
-                  cred.date = emp[0].name;
-                  cred.id_user = element['Nearsol ID'];
+                  cred.iddebits = emp[0].name;
+                  cred.iddebits = element['Nearsol ID'];
+                  cred.notes = "TRUE"
                   this.credits.push(cred);
                   found = true;
                 }
                 if(!found){
-                  cred.iddebits = "FALSE"
-                  cred.id_user = element['Nearsol ID'];
+                  cred.id_employee = "FALSE";
+                  cred.amount = element['Amount'];
+                  cred.type = this.importType;
+                  cred.iddebits = emp[0].name;
+                  cred.iddebits = element['Nearsol ID'];
+                  cred.notes = "FALSE"
                 }
               });
             })
