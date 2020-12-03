@@ -616,6 +616,7 @@ export class PeriodsComponent implements OnInit {
                                 }else{
                                   this.attended = this.attended + parseFloat(attendance.worked_time);
                                   this.absence  = this.absence + parseFloat(attendance.worked_time);
+                                  discounted = discounted + parseFloat(attendance.worked_time);
                                 }
                               } else {
                                 this.roster = this.roster + parseFloat(attendance.scheduled);
