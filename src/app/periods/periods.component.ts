@@ -667,14 +667,13 @@ export class PeriodsComponent implements OnInit {
                               base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
                               decreto_credit.amount = '125.00';
                               let ot: ot_manage = new ot_manage;
-                              let ot_hours: number = 0;
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
-                              ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
+                              ot_credit.type = "Horas Extra Laboradas: " + this.absence;
                               if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                ot_credit.amount = ((base_hour + productivity_hour) * 2 * ot_hours).toFixed(2);
+                                ot_credit.amount = ((base_hour + productivity_hour) * 2 * this.absence).toFixed(2);
                               } else {
-                                ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
+                                ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * this.absence).toFixed(2);
                               }
                               this.credits.push(ot_credit);
                             }
