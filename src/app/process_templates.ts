@@ -723,6 +723,8 @@ export class payments {
     employee_name: string;
     total: string;
     status: string;
+    nearsol_id:string;
+    client_id:string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;

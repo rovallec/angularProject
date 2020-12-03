@@ -413,6 +413,8 @@ export class PeriodsComponent implements OnInit {
                                   pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
                                   pay.employee_name = emp[0].name;
                                   pay.total = (totalCred - totalDeb).toFixed(2);
+                                  pay.nearsol_id = emp[0].nearsol_id;
+                                  pay.client_id = emp[0].client_id;
                                 })
                               } else {
                                 pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();;
