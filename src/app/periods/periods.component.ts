@@ -609,11 +609,13 @@ export class PeriodsComponent implements OnInit {
                             });
 
                             if (!activeLeav && !activeVac && !activeDp) {
-                              if (attendance.scheduled == 'OFF') {
+                              if (attendance.scheduled == 'OFF' && parseFloat(attendance.worked_time) == 0) {
                                 this.daysOff = this.daysOff + 1;
                                 attendance.balance = "OFF";
                               } else {
-                                this.roster = this.roster + parseFloat(attendance.scheduled);
+                                if(attendance.scheduled != 'OFF'){
+                                  this.roster = this.roster + parseFloat(attendance.scheduled);
+                                }
                                 if (parseFloat(attendance.worked_time) == 0) {
                                   ad.forEach(adjustment => {
                                     if (adjustment.id_attendence === attendance.idattendences) {
