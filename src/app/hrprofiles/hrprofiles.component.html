@@ -60,10 +60,6 @@
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].date_joining">
                     </div>
                     <div class="form-group col-md-3">
-                        <label>End Date:</label>
-                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].date_end">
-                    </div>
-                    <div class="form-group col-md-3">
                         <label for="txt_nationality">Avaya ID:</label>
                         <input type="text" class="form-control" [disabled]="true"
                             [(ngModel)]="workingEmployee.client_id">
@@ -1170,13 +1166,12 @@
                                             <th>INCLUDE</th>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let att of showAttendences" style="cursor:pointer"
-                                                (click)="addJustification(att)" class="selectable">
-                                                <td>{{att.date}}</td>
-                                                <td>{{att.date}}</td>
-                                                <td>{{att.date}}</td>
-                                                <td>{{att.date}}</td>                                                
-                                            </tr>                                                                                        
+                                            <tr *ngFor="let val of tovalidate" (click)="setSelectedProf(val)">
+                                                <td style="text-align: center;">{{val.idprofiles}}</td>
+                                                <td style="text-align: center;">{{val.first_name}} {{val.second_name}} {{val.first_lastname}} {{val.second_lastname}}</td>
+                                                <td style="text-align: center;">{{val.dpi}}</td>
+                                                <td style="text-align: center;"><input type="radio"></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1194,6 +1189,10 @@
                                             <th>VALUE</th>
                                         </thead>
                                         <tbody>
+                                            <tr *ngFor="let value of profiletoMarge">
+                                                <td>{{value[0]}}</td>
+                                                <td>{{value[1]}}</td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

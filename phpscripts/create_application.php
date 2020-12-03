@@ -75,20 +75,8 @@ header('Access-Control-Allow-Headers: *');
 							$degree = ($request->degree);
 							$sql6 = "INSERT INTO `education_details`(`id_profile`, `current_level`, `further_education`, `currently_studing`, `institution_name`, `degree`) VALUES ('{$id_profile}', '{$current_level}', '{$futher_education}','{$currently_studing}', '{$institution_name}','{$degree}');";
 							if(mysqli_query($con,$sql6)){
-									$affinity_first_name = ($request->affinity_first_name);
-									$affinity_second_name = ($request->affinity_second_name);
-									$affinity_phone = ($request->affinity_phone);
-									$affinity_first_last_name = ($request->affinity_first_last_name);
-									$affinity_second_last_name = ($request->affinity_second_last_name);
-									$affinity_relationship = ($request->affinity_relationship);
-
-									$sql7 = "INSERT INTO `families`(`id_profile`, `first_name`, `second_name`, `first_last_name`, `second_last_name`, `phone`, `relationship`) VALUES ('{$id_profile}', '{$affinity_first_name}', '{$affinity_second_name}','{$affinity_first_last_name}', '{$affinity_second_last_name}','{$affinity_phone}','{$affinity_relationship}');";
-									if(mysqli_query($con,$sql7)){
-										http_response_code(200);
-										echo($id_profile);
-									} else {
-										http_response_code(427);
-								}
+								http_response_code(200);
+								echo($id_profile);								
 							}else{
 								http_response_code(400);
 							}

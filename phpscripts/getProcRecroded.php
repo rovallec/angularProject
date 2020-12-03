@@ -10,9 +10,14 @@ $id = ($request->id);
 
 $i = 0;
 $process = [];
+$date = date("Y-m-d");
+$date_2 = date("Y-m-d",strtotime($date."- 1 month"));
 
-
-$sql = "SELECT * FROM `hr_processes` LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `id_employee` = '$id' && `idprocess_types` > 7;";
+if($id =='all'){
+    $sql = "SELECT * FROM `hr_processes` LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `date` BETWEEN '$date_2' AND '$date';";
+}else{
+    $sql = "SELECT * FROM `hr_processes` LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` WHERE `id_employee` = '$id' && `idprocess_types` > 7;";
+}
 
 if($result = mysqli_query($con,$sql)){
 	while($row = mysqli_fetch_assoc($result)){
@@ -26,10 +31,11 @@ if($result = mysqli_query($con,$sql)){
         $process[$i]['id_user'] = $row['id_user'];
         $process[$i]['user_name'] = $row['user_name'];
         $process[$i]['notes'] = $row['notes'];
-		$i++;
+		$i++; 
 	};
 	echo json_encode($process);
 }else{
 	http_response_code(404);
-};
+}
+
 ?> 

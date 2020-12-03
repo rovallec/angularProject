@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
-import { employees } from '../fullProcess';
+import { employees, hrProcess } from '../fullProcess';
+import { process } from '../process';
 import { attendance_accounts, attendences, hires_template, schedules, waves_template } from '../process_templates';
+import { profiles } from '../profiles';
 
 @Component({
   selector: 'app-pyhome',
@@ -16,11 +18,14 @@ export class PyhomeComponent implements OnInit {
   waves: waves_template[] = [new waves_template];
   wave_ToEdit: waves_template = new waves_template;
   schedules: schedules[] = [new schedules];
-  accounts:attendance_accounts[] = [];
+  accounts: attendance_accounts[] = [];
   schedule_to_edit: schedules = new schedules;
   hires: hires_template[] = [];
   employees: employees[] = [];
-  pointedAtt:employees[] = [];
+  pointedAtt: employees[] = [];
+  transfers: process[] = [];
+  profilesTransfer: employees[] = [];
+  profilesTerm: employees[] = [];
   filter: string = null;
   value: string = null;
   searching: boolean = false;
@@ -32,20 +37,22 @@ export class PyhomeComponent implements OnInit {
     this.getWavesAll();
     this.getAllEmployees();
     this.getAttAccounts();
+    this.getTransfers();
+    this.getTerminations();
   }
 
-  getAttAccounts(){
-    let date:Date = new Date();
-    let start:string = null;
-    let end:string = null;
-    if(date.getDate() > 15){
-      start = date.getFullYear().toString() + "-" + (date.getMonth()+1).toString() + "-" + '16';
-      end = date.getFullYear().toString() + "-" + (date.getMonth()+1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth()+1, 0).getDate().toString());
+  getAttAccounts() {
+    let date: Date = new Date();
+    let start: string = null;
+    let end: string = null;
+    if (date.getDate() > 15) {
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '16';
+      end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
     }
 
-    this.apiService.getAttAccounts({start:start, end:end}).subscribe((acc:attendance_accounts[])=>{
+    this.apiService.getAttAccounts({ start: start, end: end }).subscribe((acc: attendance_accounts[]) => {
       acc.forEach(accoun => {
-        if(accoun.max != accoun.value){
+        if (accoun.max != accoun.value) {
           this.accounts.push(accoun);
         }
       })
@@ -58,7 +65,7 @@ export class PyhomeComponent implements OnInit {
     })
   }
 
-  gotoProfile(emp:employees){
+  gotoProfile(emp: employees) {
     this.route.navigate(['./pyprofiles', emp.idemployees]);
   }
 
@@ -77,7 +84,7 @@ export class PyhomeComponent implements OnInit {
   }
 
   searchEmployee() {
-    this.apiService.getSearchEmployees({filter:this.filter, value:this.value, dp:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
+    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: this.authService.getAuthusr().department }).subscribe((emp: employees[]) => {
       this.employees = emp;
     });
     this.searching = true;
@@ -90,10 +97,10 @@ export class PyhomeComponent implements OnInit {
   saveEmployees() {
     this.hires.forEach(hire => {
       if (hire.client_id.length > 0) {
-        this.apiService.getSearchEmployees({dp:'all', filter:'nearsol_id', value:hire.nearsol_id}).subscribe((emp:employees[])=>{
-          if(emp[0].client_id != hire.client_id){
+        this.apiService.getSearchEmployees({ dp: 'all', filter: 'nearsol_id', value: hire.nearsol_id }).subscribe((emp: employees[]) => {
+          if (emp[0].client_id != hire.client_id) {
             emp[0].platform = hire.client_id;
-            this.apiService.updateEmployee(emp[0]).subscribe((str: string) => { 
+            this.apiService.updateEmployee(emp[0]).subscribe((str: string) => {
               this.hideSchedules();
             });
           }
@@ -134,16 +141,52 @@ export class PyhomeComponent implements OnInit {
     })
   }
 
-  showAccount(acc:attendance_accounts){
-    this.apiService.getAttMissing({date:acc.date, account:acc.idaccounts}).subscribe((att:employees[])=>{
+  showAccount(acc: attendance_accounts) {
+    this.apiService.getAttMissing({ date: acc.date, account: acc.idaccounts }).subscribe((att: employees[]) => {
       this.pointedAtt = att;
     })
     this.accounts[this.accounts.indexOf(acc)].show = '1';
   }
 
-  hideAccounts(){
+  hideAccounts() {
     this.accounts.forEach(element => {
       element.show = '0';
     });
+  }
+
+  getTransfers() {
+    this.transfers = [];
+    this.apiService.getProcRecorded({ id: 'all' }).subscribe((proc: process[]) => {
+      proc.forEach(proc => {
+        if (proc.name == "Transfer") {
+          this.transfers.push(proc)
+        }
+      })
+
+      this.transfers.forEach(trans => {
+        this.apiService.getSearchEmployees({ filter: 'idemployees', value: trans.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
+          emp[0].platform = trans.prc_date;
+          this.profilesTransfer.push(emp[0]);
+        })
+      })
+    })
+  }
+
+  getTerminations() {
+    let term: process[] = [];
+    this.apiService.getProcRecorded({ id: 'all' }).subscribe((proc: process[]) => {
+      proc.forEach(proc => {
+        if (proc.name == "Termination") {
+          term.push(proc);
+        }
+      })
+
+      term.forEach(termed => {
+        this.apiService.getSearchEmployees({ filter: 'idemployees', value: termed.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
+          emp[0].platform = termed.prc_date;
+          this.profilesTerm.push(emp[0]);
+        })
+      })
+    })
   }
 }

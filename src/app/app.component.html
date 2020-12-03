@@ -56,7 +56,7 @@
           <a class="dropdown-item" routerLink="/impoOt" (click)="SetSel('IMP')">OT Manage</a>
         </div>
       </li>
-      <li *ngIf="getAuth()" class="nav-item active">
+      <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/dilyconvergent" style="color: white"
           [ngClass]="{'act':selectedOption=='DAILY'}" (click)="SetSel('DAILY')">DAILY CONVERGENT</a>
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
@@ -70,10 +70,14 @@
           routerLink="/activeReport" style="color: white" [ngClass]="{'act':selectedOption=='ACTVR'}"
           (click)="SetSel('ACTVR')">ACTIVE AGENTS REPORT</a>
       </li>
-      <li *ngIf="getAuth()" class="nav-item active">
+      <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
           routerLink="/dpMaintenance" style="color: white" [ngClass]="{'act':selectedOption=='DPM'}"
           (click)="SetSel('DPM')">DP MAINTENANCE</a>
+      </li>
+      <li *ngIf="getAuth()" class="nav-item">
+        <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
+          style="color: white; cursor:pointer;" (click)="getEmployeeData()" [ngClass]="{'act':selectedOption=='EMPD'}">EMPLOYEE DATA</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">

@@ -234,7 +234,7 @@ export class PeriodsComponent implements OnInit {
                                       this.roster = this.roster + parseFloat(attendance.scheduled);
                                       if (parseFloat(attendance.worked_time) == 0) {
                                         ad.forEach(adjustment => {
-                                          if (adjustment.id_attendence === attendance.idattendences) {
+                                          if (adjustment.id_attendence === attendance.idattendences && adjustment.id_user != '22' && adjustment.id_user != '23' && adjustment.id_user != '42') {
                                             this.non_show_2 = false;
                                           }
                                         })
@@ -661,9 +661,11 @@ export class PeriodsComponent implements OnInit {
                               base_credit.amount = (((att.length * 8) + (this.absence)) * base_hour).toFixed(2);
                               productivity_credit.amount = (((att.length * 8) + (this.absence)) * productivity_hour).toFixed(2);
                               ot_credit.amount = '0';
+                              decreto_credit.amount = ((125/120)*((att.length*8)+(this.absence))).toFixed(2);
                             } else {
                               productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
                               base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
+                              decreto_credit.amount = '125.00';
                               let ot:ot_manage = new ot_manage;
                               let ot_hours:number = 0;
                               ot.id_period = this.period.idperiods;
@@ -684,7 +686,6 @@ export class PeriodsComponent implements OnInit {
                                   this.credits.push(ot_credit);
                               })
                             }
-                            decreto_credit.amount = '125.00';
                             igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
 
                             if (base_credit.amount != 'NaN') {

@@ -157,6 +157,9 @@ export class MiprofilesComponent implements OnInit {
   };
 
   prof_to_get: profiles = {
+    bank:null,
+    account:null,
+    account_type:null,
     gender: null,
     etnia: null,
     idprofiles: 'N/A',
@@ -222,6 +225,9 @@ export class MiprofilesComponent implements OnInit {
   };
 
   prof_getted: profiles[] = [{
+    bank:null,
+    account:null,
+    account_type:null,
     idprofiles: 'N/A',
     tittle: 'N/A',
     first_name: 'N/A',
