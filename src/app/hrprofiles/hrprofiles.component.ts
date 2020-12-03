@@ -14,6 +14,7 @@ import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { time } from 'console';
 import { parse } from 'querystring';
 import { Z_STREAM_END } from 'zlib';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -64,6 +65,7 @@ export class HrprofilesComponent implements OnInit {
   allAccounts: accounts[] = [];
   municipios: string[] = [];
   tovalidate:profiles[] = [];
+  selectedToMerge:string = null;
   actualMessagings: messagings = new messagings;
   actualIrtrarequests: irtra_requests = new irtra_requests;
   actualJudicial: judicials = new judicials;
@@ -1748,6 +1750,7 @@ export class HrprofilesComponent implements OnInit {
 
   setSelectedProf(val:profiles){
     this.profiletoMarge = [];
+    this.selectedToMerge = val.idprofiles;
     let i:number = 1;
     Object.getOwnPropertyNames(val).forEach(obj=>{
       let str:string[] = [];
@@ -1756,5 +1759,27 @@ export class HrprofilesComponent implements OnInit {
       this.profiletoMarge.push(str);
       i++;
     })
+  }
+
+  mergeProfile(){
+    this.apiService.insertMergeProfile({id_old:this.workingEmployee.id_profile, id_new:this.selectedToMerge}).subscribe((str:string)=>{
+      let proc:process = new process;
+      proc.id_profile = this.workingEmployee.idemployees;
+      proc.id_user = this.authUser.getAuthusr().iduser;
+      proc.idprocesses = '20';
+      proc.descritpion = "Data Merge from " + this.selectedToMerge;
+      proc.prc_date = this.todayDate;
+      proc.status = "CLOSED";
+      this.apiService.insertProc(proc).subscribe((str:string)=>{
+        this.ngOnInit();
+      })
+    })
+  }
+
+  changeRadio(val:profiles){
+    this.tovalidate.forEach(element => {
+      element.doc_type = '';
+    });
+   this.selectedToMerge = val.idprofiles;
   }
 }

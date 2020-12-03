@@ -90,7 +90,12 @@
             <table class="table table-striped table-hover" style="width: 100%;text-align:center">
                 <thead>
                     <th>ID</th>
+                    <th>NEARSOL ID</th>
+                    <th>CLIENT ID</th>
+                    <th>ACCOUNT</th>
                     <th>NAME</th>
+                    <th>DAYS</th>
+                    <th>OT</th>
                     <th>CREDITS</th>
                     <th>DEBITS</th>
                     <th>DATE</th>
@@ -99,7 +104,12 @@
                 <tbody>
                     <tr *ngFor="let pay of payments">
                         <td>{{pay.idpayments}}</td>
+                        <td>{{pay.nearsol_id}}</td>
+                        <td>{{pay.client_id}}</td>
+                        <td>{{pay.account}}</td>
                         <td>{{pay.employee_name}}</td>
+                        <td>{{pay.days}}</td>
+                        <td>{{pay.ot}}</td>
                         <td>{{pay.credits}}</td>
                         <td>{{pay.debits}}</td>
                         <td>{{pay.date}}</td>

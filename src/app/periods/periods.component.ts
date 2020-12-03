@@ -197,7 +197,7 @@ export class PeriodsComponent implements OnInit {
                                   })
 
                                   leave.forEach(leav => {
-                                    if(attendance.scheduled != 'OFF'){
+                                    if (attendance.scheduled != 'OFF') {
                                       if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
                                         activeLeav = true;
                                         if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
@@ -219,7 +219,7 @@ export class PeriodsComponent implements OnInit {
                                     if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
                                       discounted = discounted - 8;
                                       activeDp = true;
-                                      if(this.non_show_2){
+                                      if (this.non_show_2) {
                                         discounted = discounted - 8;
                                         this.non_show_2 = false;
                                       }
@@ -275,32 +275,27 @@ export class PeriodsComponent implements OnInit {
                                   base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
                                   productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
-                                  decreto_credit.amount = (((att.length * 8) + (discounted)) * (125/120)).toFixed(2);
+                                  decreto_credit.amount = (((att.length * 8) + (discounted)) * (125 / 120)).toFixed(2);
+                                  pay.days = (((att.length*8) + (discounted))/8).toFixed(2);
+                                  pay.ot = '0';
                                 } else {
                                   productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
                                   base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
-                                  let ot:ot_manage = new ot_manage;
-                                  let ot_hours:number = 0;
+                                  pay.days = '15';
+                                  pay.ot = discounted.toFixed(2);
+                                  let ot: ot_manage = new ot_manage;
                                   ot.id_period = this.period.idperiods;
                                   ot.id_employee = emp[0].idemployees;
                                   ot.name = emp[0].name;
                                   ot.nearsol_id = emp[0].nearsol_id;
-                                  this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
-                                    if(parseFloat(ots.amount) >= discounted){
-                                      ot_hours = discounted;
-                                    }else{
-                                      ot_hours = parseFloat(ots.amount);
-                                    }
-    
-                                    ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
+                                    ot_credit.type = "Horas Extra Laboradas: " + discounted;
                                     if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                      ot_credit.amount = ((base_hour + productivity_hour) * 2 * ot_hours).toFixed(2);
+                                      ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
                                     } else {
-                                      ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
+                                      ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
                                     }
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
-                                  })
                                   decreto_credit.amount = '125.00';
                                 }
                                 igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
@@ -422,6 +417,10 @@ export class PeriodsComponent implements OnInit {
                                   pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
                                   pay.employee_name = emp[0].name;
                                   pay.total = (totalCred - totalDeb).toFixed(2);
+                                  pay.nearsol_id = emp[0].nearsol_id;
+                                  pay.client_id = emp[0].client_id;
+                                  pay.state = emp[0].state;
+                                  pay.account = emp[0].account;
                                 })
                               } else {
                                 pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();;
@@ -490,10 +489,10 @@ export class PeriodsComponent implements OnInit {
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
     this.global_services.forEach(service => {
-      if(parseFloat(service.max) === parseFloat(service.current)){
+      if (parseFloat(service.max) === parseFloat(service.current)) {
         service.status = '0';
       }
-      this.apiService.updateServices(service).subscribe((str:string)=>{});
+      this.apiService.updateServices(service).subscribe((str: string) => { });
     });
     this.apiService.closePeriod(this.period).subscribe((str: string) => {
       this.payments.forEach(pay => {
@@ -576,7 +575,7 @@ export class PeriodsComponent implements OnInit {
                             })
 
                             leave.forEach(leav => {
-                              if(attendance.scheduled != 'OFF'){
+                              if (attendance.scheduled != 'OFF') {
                                 if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
                                   this.roster = this.roster + parseFloat(attendance.scheduled);
                                   activeLeav = true;
@@ -600,7 +599,7 @@ export class PeriodsComponent implements OnInit {
                                 this.roster = this.roster + parseFloat(attendance.scheduled);
                                 this.absence = this.absence - parseFloat(attendance.scheduled);
                                 discounted = discounted - 8;
-                                if(this.non_show_2){
+                                if (this.non_show_2) {
                                   discounted = discounted - 8;
                                   this.non_show_2 = false;
                                 }
@@ -661,32 +660,23 @@ export class PeriodsComponent implements OnInit {
                               base_credit.amount = (((att.length * 8) + (this.absence)) * base_hour).toFixed(2);
                               productivity_credit.amount = (((att.length * 8) + (this.absence)) * productivity_hour).toFixed(2);
                               ot_credit.amount = '0';
-                              decreto_credit.amount = ((125/120)*((att.length*8)+(this.absence))).toFixed(2);
+                              decreto_credit.amount = ((125 / 120) * ((att.length * 8) + (this.absence))).toFixed(2);
                             } else {
                               productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
                               base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
                               decreto_credit.amount = '125.00';
-                              let ot:ot_manage = new ot_manage;
-                              let ot_hours:number = 0;
+                              let ot: ot_manage = new ot_manage;
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
-                              this.apiService.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
-                                if(parseFloat(ots.amount) >= this.absence){
-                                  ot_hours = this.absence;
-                                }else{
-                                  ot_hours = parseFloat(ots.amount);
-                                }
-
-                                ot_credit.type = "Horas Extra Laboradas: " + ot_hours;
-                                if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                  ot_credit.amount = ((base_hour + productivity_hour) * 2 * ot_hours).toFixed(2);
-                                } else {
-                                  ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * ot_hours).toFixed(2);
-                                }
-                                  this.credits.push(ot_credit);
-                              })
+                              ot_credit.type = "Horas Extra Laboradas: " + this.absence;
+                              if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
+                                ot_credit.amount = ((base_hour + productivity_hour) * 2 * this.absence).toFixed(2);
+                              } else {
+                                ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * this.absence).toFixed(2);
+                              }
+                              this.credits.push(ot_credit);
                             }
-                            igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
+                            igss_debit.amount = ((parseFloat(base_credit.amount) + parseFloat(ot_credit.amount)) * 0.0483).toFixed(2);
 
                             if (base_credit.amount != 'NaN') {
                               this.credits.push(base_credit);
@@ -704,8 +694,8 @@ export class PeriodsComponent implements OnInit {
                               this.credits.push(credit);
                             });
 
-
                             totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
+                            console.log(totalCred + " " + base_credit.amount + " " + productivity_credit.amount + " " + decreto_credit.amount + " " + ot_credit.amount);
                             totalDeb = totalDeb + parseFloat(igss_debit.amount);
 
                             this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
