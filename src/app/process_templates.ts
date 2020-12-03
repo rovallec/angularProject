@@ -725,6 +725,8 @@ export class payments {
     status: string;
     nearsol_id:string;
     client_id:string;
+    state:string;
+    account:string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;
