@@ -677,7 +677,7 @@ export class PeriodsComponent implements OnInit {
                               }
                               this.credits.push(ot_credit);
                             }
-                            igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
+                            igss_debit.amount = ((parseFloat(base_credit.amount) + parseFloat(ot_credit.amount)) * 0.0483).toFixed(2);
 
                             if (base_credit.amount != 'NaN') {
                               this.credits.push(base_credit);
