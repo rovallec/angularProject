@@ -727,6 +727,8 @@ export class payments {
     client_id:string;
     state:string;
     account:string;
+    days:string;
+    ot:string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;

@@ -276,9 +276,13 @@ export class PeriodsComponent implements OnInit {
                                   productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
                                   decreto_credit.amount = (((att.length * 8) + (discounted)) * (125 / 120)).toFixed(2);
+                                  pay.days = (((att.length*8) + (discounted))/8).toFixed(2);
+                                  pay.ot = '0';
                                 } else {
                                   productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
                                   base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
+                                  pay.days = '15';
+                                  pay.ot = discounted.toFixed(2);
                                   let ot: ot_manage = new ot_manage;
                                   ot.id_period = this.period.idperiods;
                                   ot.id_employee = emp[0].idemployees;
