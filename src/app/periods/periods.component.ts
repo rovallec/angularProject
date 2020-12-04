@@ -865,6 +865,7 @@ export class PeriodsComponent implements OnInit {
               this.credits.push(ele);
               if(count == (partial_credits.length - 1)){
                 this.importEnd = true;
+                this.completed = true;
               }
             })
           })
