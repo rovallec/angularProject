@@ -22,6 +22,7 @@ if(mysqli_query($con,$sql1)){
                 echo("1");
             } else {
                 http_response_code(404);
+                echo($con->error);
             }
         } else {
             http_response_code(403);
