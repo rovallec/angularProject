@@ -16,6 +16,7 @@ import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
 import { resolve } from 'url';
 import { DH_NOT_SUITABLE_GENERATOR } from 'constants';
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-periods',
@@ -29,7 +30,7 @@ export class PeriodsComponent implements OnInit {
   file: any;
   arrayBuffer: any;
   filelist: any;
-  importStart:boolean = false;
+  importEnd: boolean = false;
   selectedEmployee: boolean = false;
   attendances: attendences[] = [];
   deductions: deductions[] = [];
@@ -277,7 +278,7 @@ export class PeriodsComponent implements OnInit {
                                   productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
                                   decreto_credit.amount = (((att.length * 8) + (discounted)) * (125 / 120)).toFixed(2);
-                                  pay.days = (((att.length*8) + (discounted))/8).toFixed(2);
+                                  pay.days = (((att.length * 8) + (discounted)) / 8).toFixed(2);
                                   pay.ot = '0';
                                 } else {
                                   productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
@@ -289,14 +290,14 @@ export class PeriodsComponent implements OnInit {
                                   ot.id_employee = emp[0].idemployees;
                                   ot.name = emp[0].name;
                                   ot.nearsol_id = emp[0].nearsol_id;
-                                    ot_credit.type = "Horas Extra Laboradas: " + discounted;
-                                    if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                      ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
-                                    } else {
-                                      ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
-                                    }
-                                    pushCredits.push(ot_credit);
-                                    this.global_credits.push(ot_credit);
+                                  ot_credit.type = "Horas Extra Laboradas: " + discounted;
+                                  if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
+                                    ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
+                                  } else {
+                                    ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
+                                  }
+                                  pushCredits.push(ot_credit);
+                                  this.global_credits.push(ot_credit);
                                   decreto_credit.amount = '125.00';
                                 }
                                 igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
@@ -611,12 +612,12 @@ export class PeriodsComponent implements OnInit {
 
                             if (!activeLeav && !activeVac && !activeDp) {
                               if (attendance.scheduled == 'OFF') {
-                                if(parseFloat(attendance.worked_time) == 0){
+                                if (parseFloat(attendance.worked_time) == 0) {
                                   this.daysOff = this.daysOff + 1;
                                   attendance.balance = "OFF";
-                                }else{
+                                } else {
                                   this.attended = this.attended + parseFloat(attendance.worked_time);
-                                  this.absence  = this.absence + parseFloat(attendance.worked_time);
+                                  this.absence = this.absence + parseFloat(attendance.worked_time);
                                   discounted = discounted + parseFloat(attendance.worked_time);
                                 }
                               } else {
@@ -823,8 +824,9 @@ export class PeriodsComponent implements OnInit {
   addfile(event) {
     this.credits = [];
     this.file = event.target.files[0];
+    let partial_credits: credits[] = [];
     let fileReader = new FileReader();
-    let found:boolean = false;
+    let found: boolean = false;
 
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
@@ -838,36 +840,30 @@ export class PeriodsComponent implements OnInit {
         var first_sheet_name = workbook.SheetNames[0];
         var worksheet = workbook.Sheets[first_sheet_name];
         let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-        this.apiService.getPayments(this.period).subscribe((paymnts:payments[])=>{
-          sheetToJson.forEach(element => {
-            this.apiService.getSearchEmployees({dp:'all', filter:"nearsol_id", value:element['Nearsol ID']}).subscribe((emp:employees[])=>{
-              paymnts.forEach(pay => {
-                let cred:credits = new credits;
-                if(pay.id_employee = emp[0].idemployees){
-                  cred.id_employee = emp[0].idemployees;
-                  cred.amount = element['Amount'];
-                  cred.type = this.importType;
-                  cred.iddebits = emp[0].name;
-                  cred.iddebits = element['Nearsol ID'];
-                  cred.notes = "TRUE"
-                  this.credits.push(cred);
-                  found = true;
-                }
-                if(!found){
-                  cred.id_employee = "FALSE";
-                  cred.amount = element['Amount'];
-                  cred.type = this.importType;
-                  cred.iddebits = emp[0].name;
-                  cred.iddebits = element['Nearsol ID'];
-                  cred.notes = "FALSE"
-                }
-              });
-            })
+        sheetToJson.forEach(element => {
+          let cred: credits = new credits;
+          cred.iddebits = element['Nearsol ID'];
+          cred.amount = element['Amount'];
+          partial_credits.push(cred);
+        })
+        let count:number = 0;
+        partial_credits.forEach(ele=>{
+          this.apiService.getSearchEmployees({dp:'all', filter:'nearsol_id', value:ele.iddebits}).subscribe((emp:employees[])=>{
+            ele.type = this.importType;
+            if(!isNullOrUndefined(emp[0])){
+              ele.notes =  emp[0].name;
+            }else{
+              ele.notes = "ERROR";
+            }
+            count = count + 1;
+            this.credits.push(ele);
+            if(count == (partial_credits.length - 1)){
+              this.importEnd = true;
+            }
           })
         })
       }
     }
-
   }
 
   pushDeductions(str: string, credits?: credits[], debits?: debits[]) {

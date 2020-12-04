@@ -65,22 +65,20 @@
             <div class="form-group col-md-3"></div>
         </div>
 
-        <div class="form-row col-md-12" *ngIf="!importStart">
+        <div class="form-row col-md-12" *ngIf="importEnd">
             <table class="table table-striped table-hover" style="width: 100%;text-align:center">
                 <thead>
                     <th>NEARSOL ID</th>
                     <th>NAME</th>
                     <th>AMOUNT</th>
                     <th>TYPE</th>
-                    <th>STATUS</th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let credit of credits">
-                        <td>{{credit.idpayments}}</td>
                         <td>{{credit.iddebits}}</td>
+                        <td>{{credit.notes}}</td>
                         <td>{{credit.amount}}</td>
                         <td>{{credit.type}}</td>
-                        <td>{{cred.</td>
                     </tr>
                 </tbody>
             </table>
