@@ -22,9 +22,10 @@ header('Access-Control-Allow-Headers: *');
 		$gender = ($request->gender);
 		$etnia = ($request->etnia);
 		$bank = ($request->bank);
-		$account = ($request->account);		
+		$account = ($request->account);
+		$account_type = ($request->account_type);
 
-		$sql = "INSERT INTO `profiles`(`tittle`, `first_name`, `second_name`, `first_lastname`, `second_lastname`, `day_of_birth`, `nationality`, `marital_status`, `dpi`, `nit`, `iggs`, `irtra`, `status`, `gender`, `etnia`, `bank`, `account`) VALUE ('{$tittle}','{$first_name}','{$second_name}','{$first_lastname}','{$second_lastname}','{$day_of_birthday}' ,'{$nationality}','{$marital_status}','{$dpi}','{$nit}','{$igss}','{$irtra}','{$status}', '{$gender}', '{$etnia}', '{$bank}', '{$account}');";
+		$sql = "INSERT INTO `profiles`(`tittle`, `first_name`, `second_name`, `first_lastname`, `second_lastname`, `day_of_birth`, `nationality`, `marital_status`, `dpi`, `nit`, `iggs`, `irtra`, `status`, `gender`, `etnia`, `bank`, `account`,`account_type`) VALUE ('{$tittle}','{$first_name}','{$second_name}','{$first_lastname}','{$second_lastname}','{$day_of_birthday}' ,'{$nationality}','{$marital_status}','{$dpi}','{$nit}','{$igss}','{$irtra}','{$status}', '{$gender}', '{$etnia}', '{$bank}', '{$account}', '{$account_type}');";
 		if(mysqli_query($con,$sql)){
 			$id_profile = mysqli_insert_id($con);
 			$idcontact_details = ($request->idcontact_details);
@@ -74,19 +75,8 @@ header('Access-Control-Allow-Headers: *');
 							$degree = ($request->degree);
 							$sql6 = "INSERT INTO `education_details`(`id_profile`, `current_level`, `further_education`, `currently_studing`, `institution_name`, `degree`) VALUES ('{$id_profile}', '{$current_level}', '{$futher_education}','{$currently_studing}', '{$institution_name}','{$degree}');";
 							if(mysqli_query($con,$sql6)){
-									$affinity_first_name = ($request->affinity_first_name);
-									$affinity_second_name = ($request->affinity_second_name);
-									$affinity_phone = ($request->affinity_phone);
-									$affinity_first_lastname = ($request->affinity_first_lastname);
-									$affinity_second_lastname = ($request->affinity_second_lastname);
-									$affinity_relationship = ($request->affinity_relationship);
-
-									$sql7 = "INSERT INTO `families`(`id_profile`, `first_name`, `second_name`, `first_last_name`, `second_last_name`, `phone`, `relationship`) VALUES ('{$id_profile}', '{$affinity_first_name}', '{$affinity_second_name}','{$affinity_first_lastname}', '{$affinity_second_lastname}','{$affinity_phone}','{$affinity_relationship}');";
-									if(mysqli_query($con,$sql7)){
-									http_response_code(200);									
-									} else {
-										http_response_code(427);
-								}
+								http_response_code(200);
+								echo($id_profile);								
 							}else{
 								http_response_code(400);
 							}

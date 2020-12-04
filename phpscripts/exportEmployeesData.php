@@ -8,7 +8,17 @@ require 'database.php';
 $exportRow = [];
 $i = 0;
 
-$sql = "SELECT users.*, employees.*, `term`.*, hires.*, profiles.*, accounts.name as `acc_name` FROM employees LEFT JOIN (SELECT * FROM terminations LEFT JOIN hr_processes ON hr_processes.idhr_processes = terminations.id_process) AS `term` ON `term`.id_employee = employees.idemployees LEFT JOIN hires ON hires.idhires = employees.id_hire LEFT JOIN payment_methods ON payment_methods.id_employee = employees.idemployees LEFT JOIN profiles on profiles.idprofiles = hires.id_profile LEFT JOIN users ON users.idUser = employees.reporter LEFT JOIN accounts ON accounts.idaccounts = employees.id_account WHERE employees.id_account in(SELECT idaccounts FROM accounts WHERE id_client != 2) AND `employees`.`job` = 'Representante de Servicio al Cliente';";
+$sql = "SELECT users.*, employees.*, `term`.*, hires.*, profiles.*, accounts.name as `acc_name` FROM employees 
+        LEFT JOIN (
+                SELECT * FROM terminations 
+                LEFT JOIN hr_processes ON hr_processes.idhr_processes = terminations.id_process
+                ) AS `term` ON `term`.id_employee = employees.idemployees 
+        LEFT JOIN hires ON hires.idhires = employees.id_hire 
+        LEFT JOIN payment_methods ON payment_methods.id_employee = employees.idemployees 
+        LEFT JOIN profiles on profiles.idprofiles = hires.id_profile 
+        LEFT JOIN users ON users.idUser = employees.reporter 
+        LEFT JOIN accounts ON accounts.idaccounts = employees.id_account 
+        WHERE employees.id_account in(SELECT idaccounts FROM accounts WHERE id_client != 2) AND `employees`.`job` = 'Representante de Servicio al Cliente';";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("Site", "Onsite Employee/Remote Employee", "Company Name", "Business Class", "Industry", "Department", "Work Category", "Employee Number", "Employee First Name", "Employee Last Name", "Employee Status", "Employment Status Reason", "Gender Code (M/F)", "Gross Pay (Annual)", "Org Hire Date", "Hire Date", "Termination Date", "Job Title", "Pay Group", "Pay Class", "Pay Type", "Supervisor Name"));

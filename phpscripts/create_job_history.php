@@ -6,7 +6,6 @@ header('Access-Control-Allow-Headers: *');
 
     if(isset($postdata) && !empty($postdata)){
         $request = json_decode($postdata);
-
         foreach ($request as $val) {
             $r_val_id_profile = ($val->id_profile);
             $r_val_company = ($val->company);
@@ -21,10 +20,11 @@ header('Access-Control-Allow-Headers: *');
             $r_val_working = ($val->working);
 
             $sql = "INSERT INTO `job_histories`(`id_profile`, `company`, `date_joining`,`date_end`, `position`, `reference_name`, `reference_lastname`, `reference_position`, `reference_email`, `reference_phone`, `working`) VALUES ('{$r_val_id_profile}','{$r_val_company}','{$r_val_date_joining}','{$r_val_date_end}','{$r_val_position}','{$r_val_reference_name}','{$r_val_reference_lastname}', '{$r_val_reference_position}', '{$r_val_reference_mail}', '{$r_val_reference_phone}', '{$r_val_working}');";
+            
             if(mysqli_query($con,$sql)){					
                 http_response_code(200);
             }else{
-                http_response_code(422);
+                http_response_code(422);                
             }
         }
     }
