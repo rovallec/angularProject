@@ -1779,7 +1779,6 @@ export class HrprofilesComponent implements OnInit {
       proc.prc_date = this.todayDate;
       proc.status = "CLOSED";
       this.apiService.insertProc(proc).subscribe((str:string)=>{
-        this.tovalidate = [];
         this.getProfile();
       })
     })
