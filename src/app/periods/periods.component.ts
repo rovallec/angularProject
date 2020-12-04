@@ -180,6 +180,9 @@ export class PeriodsComponent implements OnInit {
                             if (this.period.status == '1') {
                               if (att.length != 0) {
                                 att.forEach(attendance => {
+                                  if(pay.idpayments == '7601'){
+                                    console.log("Absence:" + this.absence + "Discounted: " + discounted + "Total: " + (att.length*8))
+                                  }
                                   activeDp = false;
                                   activeVac = false;
                                   activeLeav = false;

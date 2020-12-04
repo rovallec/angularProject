@@ -34,7 +34,7 @@ if(parse_str(explode("-", $next_start)[2]) == 15){
         }
     }
 }else{
-    $next_end = date("Y-m-d", strtotime($next_start . " +15 days"));
+    $next_end = date("Y-m-d", strtotime($next_start . " +14 days"));
 }
 
 
