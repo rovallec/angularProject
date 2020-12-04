@@ -72,6 +72,7 @@
                     <th>NAME</th>
                     <th>AMOUNT</th>
                     <th>TYPE</th>
+                    <th>PAYMENT</th>
                 </thead>
                 <tbody>
                     <tr *ngFor="let credit of credits">
@@ -79,6 +80,7 @@
                         <td>{{credit.notes}}</td>
                         <td>{{credit.amount}}</td>
                         <td>{{credit.type}}</td>
+                        <td>{{credit.idpayments}}</td>
                     </tr>
                 </tbody>
             </table>
