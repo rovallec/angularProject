@@ -91,6 +91,7 @@ export class HrprofilesComponent implements OnInit {
   modifyInsurance: boolean = false;
   newInsurance: boolean = false;
   insuranceNull: boolean = true;
+  validating:boolean = false;
   activeEmp: string = null;
   editAdj: boolean = false;
   vacationAdd: boolean = false;
@@ -1768,6 +1769,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   mergeProfile(){
+    this.validating = true;
     this.apiService.insertMergeProfile({id_old:this.workingEmployee.id_profile, id_new:this.selectedToMerge}).subscribe((str:string)=>{
       let proc:process = new process;
       proc.id_profile = this.workingEmployee.idemployees;
@@ -1777,6 +1779,7 @@ export class HrprofilesComponent implements OnInit {
       proc.prc_date = this.todayDate;
       proc.status = "CLOSED";
       this.apiService.insertProc(proc).subscribe((str:string)=>{
+        this.tovalidate = [];
         this.getProfile();
       })
     })

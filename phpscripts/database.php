@@ -3,7 +3,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 define('db_host', 'localhost');
 define('db_user','neadmin');
-define('db_password','Nearsol123');
+define('db_password','N$4rsol.@dmin');
 define('db_name','minearsol');
 
 function connect()
