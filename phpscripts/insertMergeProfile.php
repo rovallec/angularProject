@@ -26,11 +26,14 @@ if(mysqli_query($con,$sql1)){
             }
         } else {
             http_response_code(403);
+            echo($con->error);
         }
     } else {
         http_response_code(402);
+        echo($con->error);
     }
 } else {
     http_response_code(401);
+    echo($con->error);
 }
 ?>
