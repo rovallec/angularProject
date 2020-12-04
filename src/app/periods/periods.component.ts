@@ -847,19 +847,26 @@ export class PeriodsComponent implements OnInit {
           partial_credits.push(cred);
         })
         let count:number = 0;
-        partial_credits.forEach(ele=>{
-          this.apiService.getSearchEmployees({dp:'all', filter:'nearsol_id', value:ele.iddebits}).subscribe((emp:employees[])=>{
-            ele.type = this.importType;
-            if(!isNullOrUndefined(emp[0])){
-              ele.notes =  emp[0].name;
-            }else{
-              ele.notes = "ERROR";
-            }
-            count = count + 1;
-            this.credits.push(ele);
-            if(count == (partial_credits.length - 1)){
-              this.importEnd = true;
-            }
+        this.apiService.getPayments(this.period).subscribe((paymnts:payments[])=>{
+          partial_credits.forEach(ele=>{
+            this.apiService.getSearchEmployees({dp:'all', filter:'nearsol_id', value:ele.iddebits}).subscribe((emp:employees[])=>{
+              ele.type = this.importType;
+              if(!isNullOrUndefined(emp[0])){
+                paymnts.forEach(py => {
+                  if(py.id_employee == emp[0].idemployees){
+                    ele.idpayments = py.idpayments;
+                  }
+                });
+                ele.notes =  emp[0].name;
+              }else{
+                ele.notes = "ERROR";
+              }
+              count = count + 1;
+              this.credits.push(ele);
+              if(count == (partial_credits.length - 1)){
+                this.importEnd = true;
+              }
+            })
           })
         })
       }
