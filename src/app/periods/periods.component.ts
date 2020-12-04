@@ -180,9 +180,13 @@ export class PeriodsComponent implements OnInit {
                             if (this.period.status == '1') {
                               if (att.length != 0) {
                                 att.forEach(attendance => {
-                                  if(pay.idpayments == '7601'){
-                                    console.log("Absence:" + this.absence + "Discounted: " + discounted + "Total: " + (att.length*8))
+
+                                  let dt: Date = new Date(attendance.date);
+
+                                  if (dt.getDay() === 0) {
+                                    this.non_show_2 = true;
                                   }
+
                                   activeDp = false;
                                   activeVac = false;
                                   activeLeav = false;
@@ -706,7 +710,6 @@ export class PeriodsComponent implements OnInit {
                             });
 
                             totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
-                            console.log(totalCred + " " + base_credit.amount + " " + productivity_credit.amount + " " + decreto_credit.amount + " " + ot_credit.amount);
                             totalDeb = totalDeb + parseFloat(igss_debit.amount);
 
                             this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
