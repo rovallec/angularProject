@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { profiles, profiles_histories } from '../profiles';
+import { profiles } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
@@ -259,7 +259,7 @@ export class HrprofilesComponent implements OnInit {
     this.getValidatingData();
     this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
       this.profile = prof;
-    });
+    });    
 
     this.apiService.getApprovers().subscribe((usrs: users[]) => {
       this.approvals = usrs;
@@ -274,8 +274,6 @@ export class HrprofilesComponent implements OnInit {
       this.getVacations();
       this.getAllaccounts();
     })
-
-
 
     this.getAttendences(this.todayDate);
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
@@ -304,8 +302,16 @@ export class HrprofilesComponent implements OnInit {
     this.getInsurances();
     this.getTemplates();
     this.getProcessesrecorded();
-
   }
+  
+  getProfile() {    
+    this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
+    this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
+    this.getValidatingData();
+    this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
+      this.profile = prof;  
+    });    
+  };
 
   getStaffes() {
     this.apiService.getStaffPeople().subscribe((usr: users[]) => {
@@ -1771,7 +1777,7 @@ export class HrprofilesComponent implements OnInit {
       proc.prc_date = this.todayDate;
       proc.status = "CLOSED";
       this.apiService.insertProc(proc).subscribe((str:string)=>{
-        this.ngOnInit();
+        this.getProfile();
       })
     })
   }
