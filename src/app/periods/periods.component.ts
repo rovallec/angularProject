@@ -239,6 +239,9 @@ export class PeriodsComponent implements OnInit {
                                     if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
                                       discounted = discounted - 8;
                                       activeDp = true;
+                                      if(attendance.id_employee == '5393'){
+                                        console.log(attendance.date + discounted);
+                                      }
                                     }
                                   });
 
@@ -269,9 +272,6 @@ export class PeriodsComponent implements OnInit {
                                         discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                       }
                                     }
-                                  }
-                                  if(attendance.id_employee == '5393'){
-                                    console.log(attendance.date + discounted);
                                   }
                                 });
 
