@@ -181,6 +181,7 @@ export class PeriodsComponent implements OnInit {
                                   if (dt.getDay() === 0) {
                                     if(nonShowCount < 5){
                                       this.non_show_2 = true;
+                                      console.log(nonShowCount + "  " + attendance.date);
                                     }
 
                                     if(janp_sequence >= 5){
