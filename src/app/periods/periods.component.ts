@@ -150,6 +150,7 @@ export class PeriodsComponent implements OnInit {
         this.working = false;
       }
       payments.forEach(pay => {
+        this.seventh = 0;
         let totalCred: number = 0;
         let totalDeb: number = 0;
         let discounted: number = 0;
@@ -453,6 +454,7 @@ export class PeriodsComponent implements OnInit {
                                   pay.client_id = emp[0].client_id;
                                   pay.state = emp[0].state;
                                   pay.account = emp[0].account;
+                                  pay.seventh = this.seventh.toString();
                                 })
                               } else {
                                 pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();;
@@ -670,7 +672,7 @@ export class PeriodsComponent implements OnInit {
                                 this.roster = this.roster + parseFloat(attendance.scheduled);
                                 if (parseFloat(attendance.worked_time) == 0) {
                                   ad.forEach(adjustment => {
-                                    if (adjustment.id_attendence === attendance.idattendences && adjustment.id_user != '22' && adjustment.id_user != '23' && adjustment.id_user != '42') {
+                                    if (adjustment.id_attendence === attendance.idattendences ) {
                                       this.non_show_2 = false;
                                     }
                                   })

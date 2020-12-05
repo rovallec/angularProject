@@ -729,6 +729,7 @@ export class payments {
     account:string;
     days:string;
     ot:string;
+    seventh:string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;
