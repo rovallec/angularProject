@@ -574,7 +574,7 @@ export class PeriodsComponent implements OnInit {
 
                             if (dt.getDay() === 0) {
                               this.non_show_2 = true;
-                              if(nonShowCount >= 3){
+                              if(nonShowCount >= 2){
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
                                 this.seventh = this.seventh + 1;
