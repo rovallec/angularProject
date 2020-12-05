@@ -125,6 +125,7 @@ export class PeriodsComponent implements OnInit {
 
 
   closePeriod() {
+    this.attended = 0;
     this.working = true;
     let pushCredits: credits[] = [];
     let pusDebits: debits[] = [];
@@ -149,7 +150,6 @@ export class PeriodsComponent implements OnInit {
         this.working = false;
       }
       payments.forEach(pay => {
-        this.attended = 0;
         let totalCred: number = 0;
         let totalDeb: number = 0;
         let discounted: number = 0;
@@ -280,7 +280,6 @@ export class PeriodsComponent implements OnInit {
                                     }
                                   }
                                 });
-
                                 if(pay.idpayments == '7701'){
                                   console.log(this.attended + " " + discounted + " " + att.length);
                                 }
@@ -288,8 +287,9 @@ export class PeriodsComponent implements OnInit {
                                 if (this.attended == 0) {
                                   this.absence = (att.length * 8) * (-1);
                                   discounted = (att.length * 8) * (-1);
-
                                 }
+
+                                this.attended = 0;
                                 
                                 let base_hour: number = parseFloat(emp[0].base_payment) / 240;
                                 let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
