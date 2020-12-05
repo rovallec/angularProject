@@ -156,6 +156,7 @@ export class PeriodsComponent implements OnInit {
         let activeVac: boolean = false;
         let activeLeav: boolean = false;
         let activeDp: boolean = false;
+        let janp_sequence:number = 0;
 
         let non_show1: boolean = false;
         let non_show2: boolean = false;
@@ -185,6 +186,11 @@ export class PeriodsComponent implements OnInit {
 
                                   if (dt.getDay() === 0) {
                                     this.non_show_2 = true;
+                                    janp_sequence = 0;
+                                    if(janp_sequence == 5){
+                                      discounted = discounted - 16;
+                                      this.absence = this.absence - 16;
+                                    }
                                   }
 
                                   activeDp = false;
@@ -213,6 +219,7 @@ export class PeriodsComponent implements OnInit {
                                           discounted = discounted - 8;
                                           this.absence = this.absence - 8;
                                           attendance.balance = 'JANP';
+                                          janp_sequence = janp_sequence + 1;
                                         } else {
                                           if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
                                             this.roster = this.roster + parseFloat(attendance.scheduled);
@@ -521,6 +528,7 @@ export class PeriodsComponent implements OnInit {
     let activeVac: boolean = false;
     let activeLeav: boolean = false;
     let activeDp: boolean = false;
+    let janp_sequence:number = 0;
 
     let non_show1: boolean = false;
     let non_show2: boolean = false;
@@ -563,6 +571,11 @@ export class PeriodsComponent implements OnInit {
 
                             if (dt.getDay() === 0) {
                               this.non_show_2 = true;
+                              janp_sequence = 0;
+                              if(janp_sequence == 5){
+                                discounted = discounted - 16;
+                                this.absence = this.absence - 16;
+                              }
                             }
 
                             activeDp = false;
@@ -592,6 +605,7 @@ export class PeriodsComponent implements OnInit {
                                     discounted = discounted - 8;
                                     this.absence = this.absence - 8;
                                     attendance.balance = 'JANP';
+                                    janp_sequence = janp_sequence + 1;
                                   } else {
                                     if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
                                       this.roster = this.roster + parseFloat(attendance.scheduled);
