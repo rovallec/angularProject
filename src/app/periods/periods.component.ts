@@ -204,6 +204,9 @@ export class PeriodsComponent implements OnInit {
 
                                   vac.forEach(vacation => {
                                     if (vacation.took_date == attendance.date) {
+                                      if(attendance.id_employee == '5393'){
+                                        console.log(attendance.date + " " + discounted);
+                                      }
                                       if (attendance.scheduled != "OFF") {
                                         this.roster = this.roster + Number(attendance.scheduled);
                                         this.attended = this.attended + Number(attendance.scheduled);
@@ -217,7 +220,6 @@ export class PeriodsComponent implements OnInit {
                                   })
 
                                   leave.forEach(leav => {
-                                    if (attendance.scheduled != 'OFF') {
                                       if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
                                         activeLeav = true;
                                         if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
@@ -232,11 +234,13 @@ export class PeriodsComponent implements OnInit {
                                           }
                                         }
                                       }
-                                    }
                                   })
 
                                   dp.forEach(disciplinary => {
                                     if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
+                                      if(attendance.id_employee == '5393'){
+                                        console.log(attendance.date + " " + discounted);
+                                      }
                                       discounted = discounted - 8;
                                       attendance.balance = "SUSPENSION"
                                       activeDp = true;
@@ -244,6 +248,9 @@ export class PeriodsComponent implements OnInit {
                                   });
 
                                   if (!activeLeav && !activeVac && !activeDp) {
+                                    if(attendance.id_employee == '5393'){
+                                      console.log(attendance.date + " " + discounted);
+                                    }
                                     if (attendance.scheduled == 'OFF') {
                                       this.daysOff = this.daysOff + 1;
                                       attendance.balance = "OFF";
@@ -612,7 +619,6 @@ export class PeriodsComponent implements OnInit {
                             })
 
                             leave.forEach(leav => {
-                              if (attendance.scheduled != 'OFF') {
                                 if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
                                   this.roster = this.roster + Number(attendance.scheduled);
                                   activeLeav = true;
@@ -628,7 +634,6 @@ export class PeriodsComponent implements OnInit {
                                     }
                                   }
                                 }
-                              }
                             })
 
                             dp.forEach(disciplinary => {
