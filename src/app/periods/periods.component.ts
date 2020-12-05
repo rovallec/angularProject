@@ -573,15 +573,18 @@ export class PeriodsComponent implements OnInit {
                             let dt: Date = new Date(attendance.date);
 
                             if (dt.getDay() === 0) {
-                              if(nonShowCount < 5){
-                                this.non_show_2 = true;
+                              this.non_show_2 = true;
+                              if(nonShowCount >= 3){
+                                discounted = discounted - 8;
+                                this.absence = this.absence - 8;
+                                this.seventh = this.seventh + 1;
                                 console.log(nonShowCount + "  " + attendance.date);
                               }
 
                               if(janp_sequence >= 5){
                                 discounted = discounted - 16;
                                 this.absence = this.absence - 16;
-                                this.seventh = this.seventh + 1;
+                                this.seventh = this.seventh + 2;
                                 console.log(nonShowCount + "  " + attendance.date);
                               }
 
