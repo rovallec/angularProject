@@ -633,8 +633,6 @@ export class PeriodsComponent implements OnInit {
 
                             dp.forEach(disciplinary => {
                               if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
-                                this.roster = this.roster + Number(attendance.scheduled);
-                                this.absence = this.absence - Number(attendance.scheduled);
                                 discounted = discounted - 8;
                                 attendance.balance = "SUSPENSION"
                                 activeDp = true;
