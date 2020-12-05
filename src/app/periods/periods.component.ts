@@ -240,10 +240,6 @@ export class PeriodsComponent implements OnInit {
                                     if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
                                       discounted = discounted - 8;
                                       activeDp = true;
-                                      if (this.non_show_2) {
-                                        discounted = discounted - 8;
-                                        this.non_show_2 = false;
-                                      }
                                     }
                                   });
 
@@ -641,10 +637,6 @@ export class PeriodsComponent implements OnInit {
                                 this.roster = this.roster + Number(attendance.scheduled);
                                 this.absence = this.absence - Number(attendance.scheduled);
                                 discounted = discounted - 8;
-                                if (this.non_show_2) {
-                                  discounted = discounted - 8;
-                                  this.non_show_2 = false;
-                                }
                                 attendance.balance = "SUSPENSION"
                                 activeDp = true;
                               }
