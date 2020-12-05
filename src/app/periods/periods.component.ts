@@ -184,14 +184,12 @@ export class PeriodsComponent implements OnInit {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
                                       this.seventh = this.seventh + 1;
-                                      console.log(nonShowCount + "  " + attendance.date);
                                     }
       
                                     if (janp_sequence >= 5) {
                                       discounted = discounted - 16;
                                       this.absence = this.absence - 16;
                                       this.seventh = this.seventh + 2;
-                                      console.log(nonShowCount + "  " + attendance.date);
                                     }
       
                                     janp_sequence = 0;
@@ -282,11 +280,16 @@ export class PeriodsComponent implements OnInit {
                                   }
                                 });
 
+                                if(pay.idpayments == '7701'){
+                                  console.log(this.absence + " " + discounted + " " + att.length);
+                                }
+
                                 if (this.attended == 0) {
                                   this.absence = (att.length * 8) * (-1);
                                   discounted = (att.length * 8) * (-1);
-                                }
 
+                                }
+                                
                                 let base_hour: number = parseFloat(emp[0].base_payment) / 240;
                                 let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
                                 let base_credit: credits = new credits;
@@ -587,14 +590,12 @@ export class PeriodsComponent implements OnInit {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
                                 this.seventh = this.seventh + 1;
-                                console.log(nonShowCount + "  " + attendance.date);
                               }
 
                               if (janp_sequence >= 5) {
                                 discounted = discounted - 16;
                                 this.absence = this.absence - 16;
                                 this.seventh = this.seventh + 2;
-                                console.log(nonShowCount + "  " + attendance.date);
                               }
 
                               janp_sequence = 0;
