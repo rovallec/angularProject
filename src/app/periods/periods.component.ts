@@ -676,6 +676,9 @@ export class PeriodsComponent implements OnInit {
                                 }
                               }
                             }
+                            if(attendance.id_employee == '5393'){
+                              console.log(attendance.date + " " + this.absence + " " + this.roster + " " + this.attended + " " + janp_sequence + " " + nonShowCount);
+                            }
                           });
 
                           if (this.attended == 0) {
