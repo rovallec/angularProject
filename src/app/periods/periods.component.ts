@@ -179,17 +179,21 @@ export class PeriodsComponent implements OnInit {
                                   let dt: Date = new Date(attendance.date);
 
                                   if (dt.getDay() === 0) {
-                                    if (nonShowCount < 5) {
-                                      this.non_show_2 = true;
+                                    this.non_show_2 = true;
+                                    if (nonShowCount > 3) {
+                                      discounted = discounted - 8;
+                                      this.absence = this.absence - 8;
+                                      this.seventh = this.seventh + 1;
                                       console.log(nonShowCount + "  " + attendance.date);
                                     }
-
+      
                                     if (janp_sequence >= 5) {
                                       discounted = discounted - 16;
                                       this.absence = this.absence - 16;
-                                      this.seventh = this.seventh + 1;
+                                      this.seventh = this.seventh + 2;
+                                      console.log(nonShowCount + "  " + attendance.date);
                                     }
-
+      
                                     janp_sequence = 0;
                                     nonShowCount = 0;
                                   }
@@ -277,6 +281,11 @@ export class PeriodsComponent implements OnInit {
                                     }
                                   }
                                 });
+
+                                if (this.attended == 0) {
+                                  this.absence = (this.attendances.length * 8) * (-1);
+                                  discounted = (this.attendances.length * 8) * (-1);
+                                }
 
                                 let base_hour: number = parseFloat(emp[0].base_payment) / 240;
                                 let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
