@@ -149,6 +149,7 @@ export class PeriodsComponent implements OnInit {
         this.working = false;
       }
       payments.forEach(pay => {
+        this.attended = 0;
         let totalCred: number = 0;
         let totalDeb: number = 0;
         let discounted: number = 0;
