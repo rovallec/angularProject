@@ -270,6 +270,9 @@ export class PeriodsComponent implements OnInit {
                                       }
                                     }
                                   }
+                                  if(attendance.id_employee == '5393'){
+                                    console.log(attendance.date + " " + this.absence + " " + this.roster + " " + this.attended + " " + janp_sequence + " " + nonShowCount);
+                                  }
                                 });
 
                                 if (this.attended == 0) {
@@ -671,9 +674,6 @@ export class PeriodsComponent implements OnInit {
                                   discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                 }
                               }
-                            }
-                            if(attendance.id_employee == '5393'){
-                              console.log(attendance.date + " " + this.absence + " " + this.roster + " " + this.attended + " " + janp_sequence + " " + nonShowCount);
                             }
                           });
 
