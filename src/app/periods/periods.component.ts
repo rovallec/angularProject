@@ -283,8 +283,8 @@ export class PeriodsComponent implements OnInit {
                                 });
 
                                 if (this.attended == 0) {
-                                  this.absence = (this.attendances.length * 8) * (-1);
-                                  discounted = (this.attendances.length * 8) * (-1);
+                                  this.absence = (att.length * 8) * (-1);
+                                  discounted = (att.length * 8) * (-1);
                                 }
 
                                 let base_hour: number = parseFloat(emp[0].base_payment) / 240;
