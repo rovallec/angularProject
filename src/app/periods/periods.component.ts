@@ -155,8 +155,8 @@ export class PeriodsComponent implements OnInit {
         let activeVac: boolean = false;
         let activeLeav: boolean = false;
         let activeDp: boolean = false;
-        let janp_sequence:number = 0;
-        let nonShowCount:number = 0;
+        let janp_sequence: number = 0;
+        let nonShowCount: number = 0;
 
 
         pushCredits = [];
@@ -179,12 +179,12 @@ export class PeriodsComponent implements OnInit {
                                   let dt: Date = new Date(attendance.date);
 
                                   if (dt.getDay() === 0) {
-                                    if(nonShowCount < 5){
+                                    if (nonShowCount < 5) {
                                       this.non_show_2 = true;
                                       console.log(nonShowCount + "  " + attendance.date);
                                     }
 
-                                    if(janp_sequence >= 5){
+                                    if (janp_sequence >= 5) {
                                       discounted = discounted - 16;
                                       this.absence = this.absence - 16;
                                       this.seventh = this.seventh + 1;
@@ -531,7 +531,7 @@ export class PeriodsComponent implements OnInit {
     let activeVac: boolean = false;
     let activeLeav: boolean = false;
     let activeDp: boolean = false;
-    let janp_sequence:number = 0;
+    let janp_sequence: number = 0;
 
     let non_show1: boolean = false;
     let non_show2: boolean = false;
@@ -570,25 +570,18 @@ export class PeriodsComponent implements OnInit {
                         if (att.length != 0) {
                           att.forEach(attendance => {
 
-                            if(att.indexOf(attendance) == (att.length - 1)){
-                              if(this.attended == 0){
-                                this.absence = (120)*(-1);
-                                discounted = (-120);
-                              }
-                            }
-
                             let dt: Date = new Date(attendance.date);
 
                             if (dt.getDay() === 0) {
                               this.non_show_2 = true;
-                              if(nonShowCount > 3){
+                              if (nonShowCount > 3) {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
                                 this.seventh = this.seventh + 1;
                                 console.log(nonShowCount + "  " + attendance.date);
                               }
 
-                              if(janp_sequence >= 5){
+                              if (janp_sequence >= 5) {
                                 discounted = discounted - 16;
                                 this.absence = this.absence - 16;
                                 this.seventh = this.seventh + 2;
@@ -692,6 +685,11 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
                           });
+
+                          if (this.attended == 0) {
+                            this.absence = (this.attendances.length * 8) * (-1);
+                            discounted = (this.attendances.length * 8) * (-1);
+                          }
 
                           this.attendances = att;
                           if (this.period.status == '1') {
@@ -889,24 +887,24 @@ export class PeriodsComponent implements OnInit {
           cred.amount = element['Amount'];
           partial_credits.push(cred);
         })
-        let count:number = 0;
-        this.apiService.getPayments(this.period).subscribe((paymnts:payments[])=>{
-          partial_credits.forEach(ele=>{
-            this.apiService.getSearchEmployees({dp:'all', filter:'nearsol_id', value:ele.iddebits}).subscribe((emp:employees[])=>{
+        let count: number = 0;
+        this.apiService.getPayments(this.period).subscribe((paymnts: payments[]) => {
+          partial_credits.forEach(ele => {
+            this.apiService.getSearchEmployees({ dp: 'all', filter: 'nearsol_id', value: ele.iddebits }).subscribe((emp: employees[]) => {
               ele.type = this.importType;
-              if(!isNullOrUndefined(emp[0])){
+              if (!isNullOrUndefined(emp[0])) {
                 paymnts.forEach(py => {
-                  if(py.id_employee == emp[0].idemployees){
+                  if (py.id_employee == emp[0].idemployees) {
                     ele.idpayments = py.idpayments;
                   }
                 });
-                ele.notes =  emp[0].name;
-              }else{
+                ele.notes = emp[0].name;
+              } else {
                 ele.notes = "ERROR";
               }
               count = count + 1;
               this.credits.push(ele);
-              if(count == (partial_credits.length - 1)){
+              if (count == (partial_credits.length - 1)) {
                 this.importEnd = true;
                 this.completed = true;
               }
