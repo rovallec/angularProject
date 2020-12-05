@@ -205,8 +205,8 @@ export class PeriodsComponent implements OnInit {
                                   vac.forEach(vacation => {
                                     if (vacation.took_date == attendance.date) {
                                       if (attendance.scheduled != "OFF") {
-                                        this.roster = this.roster + parseFloat(attendance.scheduled);
-                                        this.attended = this.attended + parseFloat(attendance.scheduled);
+                                        this.roster = this.roster + Number(attendance.scheduled);
+                                        this.attended = this.attended + Number(attendance.scheduled);
                                         attendance.balance = 'VAC';
                                       } else {
                                         this.daysOff = this.daysOff + 1;
@@ -227,8 +227,8 @@ export class PeriodsComponent implements OnInit {
                                           janp_sequence = janp_sequence + 1;
                                         } else {
                                           if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
-                                            this.roster = this.roster + parseFloat(attendance.scheduled);
-                                            this.attended = this.attended + parseFloat(attendance.scheduled);
+                                            this.roster = this.roster + Number(attendance.scheduled);
+                                            this.attended = this.attended + Number(attendance.scheduled);
                                             attendance.balance = 'JAP';
                                           }
                                         }
@@ -252,8 +252,8 @@ export class PeriodsComponent implements OnInit {
                                       this.daysOff = this.daysOff + 1;
                                       attendance.balance = "OFF";
                                     } else {
-                                      this.roster = this.roster + parseFloat(attendance.scheduled);
-                                      if (parseFloat(attendance.worked_time) == 0) {
+                                      this.roster = this.roster + Number(attendance.scheduled);
+                                      if (Number(attendance.worked_time) == 0) {
                                         if (this.non_show_2) {
                                           this.absence = this.absence - 16;
                                           discounted = discounted - 16;
@@ -268,10 +268,10 @@ export class PeriodsComponent implements OnInit {
                                           discounted = discounted - 8;
                                         }
                                       } else {
-                                        this.attended = this.attended + parseFloat(attendance.worked_time);
-                                        this.absence = this.absence + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
-                                        attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
-                                        discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
+                                        this.attended = this.attended + Number(attendance.worked_time);
+                                        this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                        attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                                        discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                       }
                                     }
                                   }
@@ -284,8 +284,8 @@ export class PeriodsComponent implements OnInit {
 
                                 this.attended = 0;
                                 
-                                let base_hour: number = parseFloat(emp[0].base_payment) / 240;
-                                let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
+                                let base_hour: number = Number(emp[0].base_payment) / 240;
+                                let productivity_hour: number = (Number(emp[0].productivity_payment) - 250) / 240;
                                 let base_credit: credits = new credits;
                                 let productivity_credit: credits = new credits;
                                 let decreto_credit: credits = new credits;
@@ -323,7 +323,7 @@ export class PeriodsComponent implements OnInit {
                                   this.global_credits.push(ot_credit);
                                   decreto_credit.amount = '125.00';
                                 }
-                                igss_debit.amount = (parseFloat(base_credit.amount) * 0.0483).toFixed(2);
+                                igss_debit.amount = (Number(base_credit.amount) * 0.0483).toFixed(2);
                                 igss_debit.type = "Descuento IGSS";
 
                                 base_credit.idpayments = pay.idpayments;
@@ -344,31 +344,31 @@ export class PeriodsComponent implements OnInit {
                                   this.global_debits.push(igss_debit);
 
                                   db.forEach(debit => {
-                                    totalDeb = totalDeb + parseFloat(debit.amount);
+                                    totalDeb = totalDeb + Number(debit.amount);
                                   })
                                   cd.forEach(credit => {
-                                    totalCred = totalCred + parseFloat(credit.amount)
+                                    totalCred = totalCred + Number(credit.amount)
                                   });
 
 
-                                  totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
-                                  totalDeb = totalDeb + parseFloat(igss_debit.amount);
+                                  totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount);
+                                  totalDeb = totalDeb + Number(igss_debit.amount);
 
                                   adjustments.forEach(adjustment => {
                                     let new_credit: credits = new credits;
                                     let new_debit: debits = new debits;
-                                    new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * productivity_hour)).toFixed(2);
+                                    new_credit.amount = (((Number(adjustment.time_after) - Number(adjustment.time_before)) * base_hour) + ((Number(adjustment.time_after) - Number(adjustment.time_before)) * productivity_hour)).toFixed(2);
                                     new_credit.idpayments = pay.idpayments;
                                     new_credit.type = "Auto Ajuste " + adjustment.date;
 
-                                    new_debit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) * 0.0483).toFixed(2);
+                                    new_debit.amount = (((Number(adjustment.time_after) - Number(adjustment.time_before)) * base_hour) * 0.0483).toFixed(2);
                                     new_debit.idpayments = pay.idpayments;
                                     new_debit.type = "Auto Ajuste IGSS";
 
                                     this.global_debits.push(new_debit);
                                     this.global_credits.push(new_credit);
-                                    totalCred = totalCred + parseFloat(new_credit.amount);
-                                    totalDeb = totalDeb + parseFloat(new_debit.amount);
+                                    totalCred = totalCred + Number(new_credit.amount);
+                                    totalDeb = totalDeb + Number(new_debit.amount);
                                   });
 
                                   vac.forEach(vacat => {
@@ -387,8 +387,8 @@ export class PeriodsComponent implements OnInit {
                                       this.debits.push(new_debit2);
                                       this.global_credits.push(new_credit2);
                                       this.global_debits.push(new_debit2);
-                                      totalCred = totalCred + parseFloat(new_credit2.amount);
-                                      totalDeb = totalDeb + parseFloat(new_debit2.amount);
+                                      totalCred = totalCred + Number(new_credit2.amount);
+                                      totalDeb = totalDeb + Number(new_debit2.amount);
                                     }
                                   })
 
@@ -399,11 +399,11 @@ export class PeriodsComponent implements OnInit {
                                       if (service.max == '0') {
                                         partial_service.amount = service.amount;
                                       } else {
-                                        if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) < 0) {
+                                        if ((Number(service.max) - (Number(service.current) + Number(service.amount))) < 0) {
                                           partial_service.amount = service.amount;
-                                          service.current = (parseFloat(service.current) + parseFloat(service.amount)).toFixed(2);
+                                          service.current = (Number(service.current) + Number(service.amount)).toFixed(2);
                                         } else {
-                                          partial_service.amount = (parseFloat(service.max) - parseFloat(service.current)).toFixed(2);
+                                          partial_service.amount = (Number(service.max) - Number(service.current)).toFixed(2);
                                           service.current = service.max;
                                           service.status = '0';
                                         }
@@ -413,18 +413,18 @@ export class PeriodsComponent implements OnInit {
                                       this.debits.push(partial_service);
                                       this.global_debits.push(partial_service);
                                       this.global_services.push(service);
-                                      totalDeb = totalDeb + parseFloat(partial_service.amount);
+                                      totalDeb = totalDeb + Number(partial_service.amount);
                                     }
                                   })
 
                                   judicials.forEach(judicial => {
                                     if (judicial.max != judicial.current) {
                                       let partial_debit: debits = new debits;
-                                      if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
-                                        partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
-                                        judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
+                                      if (Number(judicial.max) - (((Number(judicial.amount) / 100) * (totalCred - totalDeb)) + Number(judicial.current)) > 0) {
+                                        partial_debit.amount = ((Number(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
+                                        judicial.current = (Number(judicial.max) + ((Number(judicial.amount) / 100) * totalCred)).toFixed(2);
                                       } else {
-                                        partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
+                                        partial_debit.amount = (Number(judicial.max) - Number(judicial.current)).toFixed(2);
                                         judicial.current = judicial.max;
                                       }
                                       partial_debit.idpayments = pay.idpayments;
@@ -432,7 +432,7 @@ export class PeriodsComponent implements OnInit {
                                       this.global_debits.push(partial_debit);
                                       this.debits.push(partial_debit);
                                       this.global_judicials.push(judicial);
-                                      totalDeb = totalDeb + parseFloat(partial_debit.amount);
+                                      totalDeb = totalDeb + Number(partial_debit.amount);
                                     }
                                   })
 
@@ -456,7 +456,7 @@ export class PeriodsComponent implements OnInit {
                               }
                             } else {
                               payments.forEach((py) => {
-                                py.total = (parseFloat(py.credits) - parseFloat(py.debits)).toFixed(2);
+                                py.total = (Number(py.credits) - Number(py.debits)).toFixed(2);
                               })
                             }
                             this.progress = this.progress + 1;
@@ -515,7 +515,7 @@ export class PeriodsComponent implements OnInit {
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
     this.global_services.forEach(service => {
-      if (parseFloat(service.max) === parseFloat(service.current)) {
+      if (Number(service.max) === Number(service.current)) {
         service.status = '0';
       }
       this.apiService.updateServices(service).subscribe((str: string) => { });
@@ -604,8 +604,8 @@ export class PeriodsComponent implements OnInit {
                             vac.forEach(vacation => {
                               if (vacation.took_date == attendance.date) {
                                 if (attendance.scheduled != "OFF") {
-                                  this.roster = this.roster + parseFloat(attendance.scheduled);
-                                  this.attended = this.attended + parseFloat(attendance.scheduled);
+                                  this.roster = this.roster + Number(attendance.scheduled);
+                                  this.attended = this.attended + Number(attendance.scheduled);
                                   attendance.balance = 'VAC';
                                 } else {
                                   this.daysOff = this.daysOff + 1;
@@ -618,7 +618,7 @@ export class PeriodsComponent implements OnInit {
                             leave.forEach(leav => {
                               if (attendance.scheduled != 'OFF') {
                                 if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
-                                  this.roster = this.roster + parseFloat(attendance.scheduled);
+                                  this.roster = this.roster + Number(attendance.scheduled);
                                   activeLeav = true;
                                   if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                     discounted = discounted - 8;
@@ -627,8 +627,8 @@ export class PeriodsComponent implements OnInit {
                                     janp_sequence = janp_sequence + 1;
                                   } else {
                                     if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
-                                      this.roster = this.roster + parseFloat(attendance.scheduled);
-                                      this.attended = this.attended + parseFloat(attendance.scheduled);
+                                      this.roster = this.roster + Number(attendance.scheduled);
+                                      this.attended = this.attended + Number(attendance.scheduled);
                                       attendance.balance = 'JAP';
                                     }
                                   }
@@ -638,8 +638,8 @@ export class PeriodsComponent implements OnInit {
 
                             dp.forEach(disciplinary => {
                               if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
-                                this.roster = this.roster + parseFloat(attendance.scheduled);
-                                this.absence = this.absence - parseFloat(attendance.scheduled);
+                                this.roster = this.roster + Number(attendance.scheduled);
+                                this.absence = this.absence - Number(attendance.scheduled);
                                 discounted = discounted - 8;
                                 if (this.non_show_2) {
                                   discounted = discounted - 8;
@@ -652,17 +652,17 @@ export class PeriodsComponent implements OnInit {
 
                             if (!activeLeav && !activeVac && !activeDp) {
                               if (attendance.scheduled == 'OFF') {
-                                if (parseFloat(attendance.worked_time) == 0) {
+                                if (Number(attendance.worked_time) == 0) {
                                   this.daysOff = this.daysOff + 1;
                                   attendance.balance = "OFF";
                                 } else {
-                                  this.attended = this.attended + parseFloat(attendance.worked_time);
-                                  this.absence = this.absence + parseFloat(attendance.worked_time);
-                                  discounted = discounted + parseFloat(attendance.worked_time);
+                                  this.attended = this.attended + Number(attendance.worked_time);
+                                  this.absence = this.absence + Number(attendance.worked_time);
+                                  discounted = discounted + Number(attendance.worked_time);
                                 }
                               } else {
-                                this.roster = this.roster + parseFloat(attendance.scheduled);
-                                if (parseFloat(attendance.worked_time) == 0) {
+                                this.roster = this.roster + Number(attendance.scheduled);
+                                if (Number(attendance.worked_time) == 0) {
                                   if (this.non_show_2) {
                                     this.absence = this.absence - 16;
                                     discounted = discounted - 16;
@@ -677,10 +677,10 @@ export class PeriodsComponent implements OnInit {
                                     nonShowCount = nonShowCount + 1;
                                   }
                                 } else {
-                                  this.attended = this.attended + parseFloat(attendance.worked_time);
-                                  this.absence = this.absence + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
-                                  attendance.balance = (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled)).toFixed(2);
-                                  discounted = discounted + (parseFloat(attendance.worked_time) - parseFloat(attendance.scheduled));
+                                  this.attended = this.attended + Number(attendance.worked_time);
+                                  this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                  attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                                  discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                 }
                               }
                             }
@@ -693,8 +693,8 @@ export class PeriodsComponent implements OnInit {
 
                           this.attendances = att;
                           if (this.period.status == '1') {
-                            let base_hour: number = parseFloat(emp[0].base_payment) / 240;
-                            let productivity_hour: number = (parseFloat(emp[0].productivity_payment) - 250) / 240;
+                            let base_hour: number = Number(emp[0].base_payment) / 240;
+                            let productivity_hour: number = (Number(emp[0].productivity_payment) - 250) / 240;
                             let base_credit: credits = new credits;
                             let productivity_credit: credits = new credits;
                             let decreto_credit: credits = new credits;
@@ -726,7 +726,7 @@ export class PeriodsComponent implements OnInit {
                               }
                               this.credits.push(ot_credit);
                             }
-                            igss_debit.amount = ((parseFloat(base_credit.amount) + parseFloat(ot_credit.amount)) * 0.0483).toFixed(2);
+                            igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount)) * 0.0483).toFixed(2);
 
                             if (base_credit.amount != 'NaN') {
                               this.credits.push(base_credit);
@@ -736,25 +736,25 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             db.forEach(debit => {
-                              totalDeb = totalDeb + parseFloat(debit.amount);
+                              totalDeb = totalDeb + Number(debit.amount);
                               this.debits.push(debit);
                             })
                             cd.forEach(credit => {
-                              totalCred = totalCred + parseFloat(credit.amount)
+                              totalCred = totalCred + Number(credit.amount)
                               this.credits.push(credit);
                             });
 
-                            totalCred = totalCred + parseFloat(base_credit.amount) + parseFloat(productivity_credit.amount) + parseFloat(decreto_credit.amount) + parseFloat(ot_credit.amount);
-                            totalDeb = totalDeb + parseFloat(igss_debit.amount);
+                            totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount);
+                            totalDeb = totalDeb + Number(igss_debit.amount);
 
                             this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
                               adjustments.forEach(adjustment => {
                                 let new_credit: credits = new credits;
-                                new_credit.amount = (((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * base_hour) + ((parseFloat(adjustment.time_after) - parseFloat(adjustment.time_before)) * productivity_hour)).toFixed(2);
+                                new_credit.amount = (((Number(adjustment.time_after) - Number(adjustment.time_before)) * base_hour) + ((Number(adjustment.time_after) - Number(adjustment.time_before)) * productivity_hour)).toFixed(2);
                                 new_credit.type = "Auto Ajuste " + adjustment.date;
 
                                 this.credits.push(new_credit);
-                                totalCred = totalCred + parseFloat(new_credit.amount);
+                                totalCred = totalCred + Number(new_credit.amount);
                               });
 
                               vac.forEach(vacat => {
@@ -764,7 +764,7 @@ export class PeriodsComponent implements OnInit {
                                   new_credit2.type = "Auto Ajuste Vacaciones " + vacat.took_date;
 
                                   this.credits.push(new_credit2);
-                                  totalCred = totalCred + parseFloat(new_credit2.amount);
+                                  totalCred = totalCred + Number(new_credit2.amount);
                                 }
                               })
 
@@ -774,64 +774,64 @@ export class PeriodsComponent implements OnInit {
                                   if (service.max == '0') {
                                     partial_service.amount = service.amount;
                                   } else {
-                                    if ((parseFloat(service.max) - (parseFloat(service.current) + parseFloat(service.amount))) > 0) {
+                                    if ((Number(service.max) - (Number(service.current) + Number(service.amount))) > 0) {
                                       partial_service.amount = service.amount;
-                                      service.current = (parseFloat(service.current) + parseFloat(service.amount)).toFixed(2);
+                                      service.current = (Number(service.current) + Number(service.amount)).toFixed(2);
                                     } else {
-                                      partial_service.amount = (parseFloat(service.max) - parseFloat(service.current)).toFixed(2);
+                                      partial_service.amount = (Number(service.max) - Number(service.current)).toFixed(2);
                                       service.current = service.max;
                                     }
                                   }
 
                                   partial_service.type = "Descuento Por Servicio " + service.name;
                                   this.debits.push(partial_service);
-                                  totalDeb = totalDeb + parseFloat(partial_service.amount);
+                                  totalDeb = totalDeb + Number(partial_service.amount);
                                 }
                               })
 
                               judicials.forEach(judicial => {
                                 if (judicial.max != judicial.current) {
                                   let partial_debit: debits = new debits;
-                                  if (parseFloat(judicial.max) - (((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)) + parseFloat(judicial.current)) > 0) {
-                                    partial_debit.amount = ((parseFloat(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
-                                    judicial.current = (parseFloat(judicial.max) + ((parseFloat(judicial.amount) / 100) * totalCred)).toFixed(2);
+                                  if (Number(judicial.max) - (((Number(judicial.amount) / 100) * (totalCred - totalDeb)) + Number(judicial.current)) > 0) {
+                                    partial_debit.amount = ((Number(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
+                                    judicial.current = (Number(judicial.max) + ((Number(judicial.amount) / 100) * totalCred)).toFixed(2);
                                   } else {
-                                    partial_debit.amount = (parseFloat(judicial.max) - parseFloat(judicial.current)).toFixed(2);
+                                    partial_debit.amount = (Number(judicial.max) - Number(judicial.current)).toFixed(2);
                                     judicial.current = judicial.max;
                                   }
 
                                   partial_debit.type = "Acuerdo Judicial";
                                   this.debits.push(partial_debit);
-                                  totalDeb = totalDeb + parseFloat(partial_debit.amount);
+                                  totalDeb = totalDeb + Number(partial_debit.amount);
                                 }
                               });
 
 
 
-                              this.totalCredits = parseFloat((totalCred).toFixed(2));
-                              this.totalDebits = parseFloat((totalDeb).toFixed(2));
+                              this.totalCredits = Number((totalCred).toFixed(2));
+                              this.totalDebits = Number((totalDeb).toFixed(2));
                               this.absence_fixed = (this.absence).toFixed(2);
-                              this.roster = parseFloat((this.roster).toFixed(2));
-                              this.attended = parseFloat((this.attended).toFixed(2));
-                              this.diff = parseFloat((this.roster - this.attended).toFixed(2));
+                              this.roster = Number((this.roster).toFixed(2));
+                              this.attended = Number((this.attended).toFixed(2));
+                              this.diff = Number((this.roster - this.attended).toFixed(2));
                             })
                           }
                         } else {
                           db.forEach(debit => {
-                            totalDeb = totalDeb + parseFloat(debit.amount);
+                            totalDeb = totalDeb + Number(debit.amount);
                             this.debits.push(debit);
                           })
                           cd.forEach(credit => {
-                            totalCred = totalCred + parseFloat(credit.amount)
+                            totalCred = totalCred + Number(credit.amount)
                             this.credits.push(credit);
                           });
 
-                          this.totalCredits = parseFloat((totalCred).toFixed(2));
-                          this.totalDebits = parseFloat((totalDeb).toFixed(2));
+                          this.totalCredits = Number((totalCred).toFixed(2));
+                          this.totalDebits = Number((totalDeb).toFixed(2));
                           this.absence_fixed = (this.absence).toFixed(2);
-                          this.roster = parseFloat((this.roster).toFixed(2));
-                          this.attended = parseFloat((this.attended).toFixed(2));
-                          this.diff = parseFloat((this.roster - this.attended).toFixed(2));
+                          this.roster = Number((this.roster).toFixed(2));
+                          this.attended = Number((this.attended).toFixed(2));
+                          this.diff = Number((this.roster - this.attended).toFixed(2));
                         }
                         this.selectedEmployee = true;
                       })
