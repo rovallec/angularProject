@@ -226,7 +226,9 @@ export class PeriodsComponent implements OnInit {
                                           discounted = discounted - 8;
                                           this.absence = this.absence - 8;
                                           attendance.balance = 'JANP';
-                                          janp_sequence = janp_sequence + 1;
+                                          if(attendance.scheduled != 'OFF'){
+                                            janp_sequence = janp_sequence + 1;
+                                          }
                                         } else {
                                           if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
                                             this.attended = this.attended + 8
@@ -626,7 +628,9 @@ export class PeriodsComponent implements OnInit {
                                     discounted = discounted - 8;
                                     this.absence = this.absence - 8;
                                     attendance.balance = 'JANP';
-                                    janp_sequence = janp_sequence + 1;
+                                    if(attendance.scheduled != 'OFF'){
+                                      janp_sequence = janp_sequence + 1;
+                                    }
                                   } else {
                                     if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
                                       this.attended = this.attended + 8;
