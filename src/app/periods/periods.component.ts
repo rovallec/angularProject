@@ -152,17 +152,11 @@ export class PeriodsComponent implements OnInit {
         let totalCred: number = 0;
         let totalDeb: number = 0;
         let discounted: number = 0;
-        let offCount: number = 0;
         let activeVac: boolean = false;
         let activeLeav: boolean = false;
         let activeDp: boolean = false;
         let janp_sequence:number = 0;
-
-        let non_show1: boolean = false;
-        let non_show2: boolean = false;
-
-        let cnt: number = 0;
-        let err: boolean = false;
+        let nonShowCount:number = 0;
 
 
         pushCredits = [];
@@ -185,12 +179,18 @@ export class PeriodsComponent implements OnInit {
                                   let dt: Date = new Date(attendance.date);
 
                                   if (dt.getDay() === 0) {
-                                    this.non_show_2 = true;
-                                    janp_sequence = 0;
-                                    if(janp_sequence == 5){
+                                    if(nonShowCount < 5){
+                                      this.non_show_2 = true;
+                                    }
+
+                                    if(janp_sequence >= 5){
                                       discounted = discounted - 16;
                                       this.absence = this.absence - 16;
+                                      this.seventh = this.seventh + 1;
                                     }
+
+                                    janp_sequence = 0;
+                                    nonShowCount = 0;
                                   }
 
                                   activeDp = false;
@@ -260,8 +260,10 @@ export class PeriodsComponent implements OnInit {
                                           this.seventh = this.seventh + 1;
                                           this.non_show_2 = false;
                                           attendance.balance = "NS";
+                                          nonShowCount = nonShowCount + 1;
                                         } else {
                                           attendance.balance = "NS"
+                                          nonShowCount = nonShowCount + 1;
                                           this.absence = this.absence - 8;
                                           discounted = discounted - 8;
                                         }
@@ -524,7 +526,7 @@ export class PeriodsComponent implements OnInit {
     let totalCred: number = 0;
     let totalDeb: number = 0;
     let discounted: number = 0;
-    let offCount: number = 0;
+    let nonShowCount: number = 0;
     let activeVac: boolean = false;
     let activeLeav: boolean = false;
     let activeDp: boolean = false;
@@ -570,12 +572,18 @@ export class PeriodsComponent implements OnInit {
                             let dt: Date = new Date(attendance.date);
 
                             if (dt.getDay() === 0) {
-                              this.non_show_2 = true;
-                              janp_sequence = 0;
-                              if(janp_sequence == 5){
+                              if(nonShowCount < 5){
+                                this.non_show_2 = true;
+                              }
+
+                              if(janp_sequence >= 5){
                                 discounted = discounted - 16;
                                 this.absence = this.absence - 16;
+                                this.seventh = this.seventh + 1;
                               }
+
+                              janp_sequence = 0;
+                              nonShowCount = 0;
                             }
 
                             activeDp = false;
@@ -655,10 +663,12 @@ export class PeriodsComponent implements OnInit {
                                     this.seventh = this.seventh + 1;
                                     this.non_show_2 = false;
                                     attendance.balance = "NS";
+                                    nonShowCount = nonShowCount + 1;
                                   } else {
                                     attendance.balance = "NS"
                                     this.absence = this.absence - 8;
                                     discounted = discounted - 8;
+                                    nonShowCount = nonShowCount + 1;
                                   }
                                 } else {
                                   this.attended = this.attended + parseFloat(attendance.worked_time);
