@@ -570,6 +570,13 @@ export class PeriodsComponent implements OnInit {
                         if (att.length != 0) {
                           att.forEach(attendance => {
 
+                            if(att.indexOf(attendance) == (att.length - 1)){
+                              if(this.attended == 0){
+                                this.absence = (120)*(-1);
+                                discounted = (-120);
+                              }
+                            }
+
                             let dt: Date = new Date(attendance.date);
 
                             if (dt.getDay() === 0) {
