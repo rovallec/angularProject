@@ -227,8 +227,7 @@ export class PeriodsComponent implements OnInit {
                                           janp_sequence = janp_sequence + 1;
                                         } else {
                                           if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
-                                            this.roster = this.roster + Number(attendance.scheduled);
-                                            this.attended = this.attended + Number(attendance.scheduled);
+                                            this.attended = this.attended + 8
                                             attendance.balance = 'JAP';
                                           }
                                         }
