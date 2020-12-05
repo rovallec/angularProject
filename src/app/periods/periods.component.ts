@@ -281,7 +281,7 @@ export class PeriodsComponent implements OnInit {
                                 });
 
                                 if(pay.idpayments == '7701'){
-                                  console.log(this.absence + " " + discounted + " " + att.length);
+                                  console.log(this.attended + " " + discounted + " " + att.length);
                                 }
 
                                 if (this.attended == 0) {
