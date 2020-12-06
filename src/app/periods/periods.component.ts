@@ -188,13 +188,13 @@ export class PeriodsComponent implements OnInit {
                                       this.absence = this.absence - 8;
                                       this.seventh = this.seventh + 1;
                                     }
-      
+
                                     if (janp_sequence >= 5) {
                                       discounted = discounted - 16;
                                       this.absence = this.absence - 16;
                                       this.seventh = this.seventh + 2;
                                     }
-      
+
                                     janp_sequence = 0;
                                     nonShowCount = 0;
                                   }
@@ -203,51 +203,9 @@ export class PeriodsComponent implements OnInit {
                                   activeVac = false;
                                   activeLeav = false;
 
-                                  vac.forEach(vacation => {
-                                    if (vacation.took_date == attendance.date) {
-                                      if(attendance.id_employee == '5393'){
-                                        console.log(attendance.date + " " + discounted);
-                                      }
-                                      if (attendance.scheduled != "OFF") {
-                                        this.roster = this.roster + Number(attendance.scheduled);
-                                        this.attended = this.attended + Number(attendance.scheduled);
-                                        attendance.balance = 'VAC';
-                                      } else {
-                                        this.daysOff = this.daysOff + 1;
-                                        attendance.balance = "OFF";
-                                      }
-                                      activeVac = true;
-                                    }
-                                  })
-
-                                  leave.forEach(leav => {
-                                      if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
-                                        activeLeav = true;
-                                        if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
-                                          if(attendance.id_employee == '5393'){
-                                            console.log(attendance.date + " JANP: " + discounted);
-                                          }
-                                          discounted = discounted - 8;
-                                          this.absence = this.absence - 8;
-                                          attendance.balance = 'JANP';
-                                          if(attendance.scheduled != 'OFF'){
-                                            janp_sequence = janp_sequence + 1;
-                                          }
-                                        } else {
-                                          if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
-                                            if(attendance.id_employee == '5393'){
-                                              console.log(attendance.date + " JAP: " + discounted);
-                                            }
-                                            this.attended = this.attended + 8
-                                            attendance.balance = 'JAP';
-                                          }
-                                        }
-                                      }
-                                  })
-
                                   dp.forEach(disciplinary => {
                                     if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
-                                      if(attendance.id_employee == '5393'){
+                                      if (attendance.id_employee == '5393') {
                                         console.log(attendance.date + " SUSPENSION: " + discounted);
                                       }
                                       discounted = discounted - 8;
@@ -256,8 +214,54 @@ export class PeriodsComponent implements OnInit {
                                     }
                                   });
 
+                                  if (!activeDp) {
+                                    leave.forEach(leav => {
+                                      if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
+                                        activeLeav = true;
+                                        if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
+                                          if (attendance.id_employee == '5393') {
+                                            console.log(attendance.date + " JANP: " + discounted);
+                                          }
+                                          discounted = discounted - 8;
+                                          this.absence = this.absence - 8;
+                                          attendance.balance = 'JANP';
+                                          if (attendance.scheduled != 'OFF') {
+                                            janp_sequence = janp_sequence + 1;
+                                          }
+                                        } else {
+                                          if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
+                                            if (attendance.id_employee == '5393') {
+                                              console.log(attendance.date + " JAP: " + discounted);
+                                            }
+                                            this.attended = this.attended + 8
+                                            attendance.balance = 'JAP';
+                                          }
+                                        }
+                                      }
+                                    })
+                                  }
+
+                                  if (!activeDp && !activeLeav) {
+                                    vac.forEach(vacation => {
+                                      if (vacation.took_date == attendance.date) {
+                                        if (attendance.id_employee == '5393') {
+                                          console.log(attendance.date + " " + discounted);
+                                        }
+                                        if (attendance.scheduled != "OFF") {
+                                          this.roster = this.roster + Number(attendance.scheduled);
+                                          this.attended = this.attended + Number(attendance.scheduled);
+                                          attendance.balance = 'VAC';
+                                        } else {
+                                          this.daysOff = this.daysOff + 1;
+                                          attendance.balance = "OFF";
+                                        }
+                                        activeVac = true;
+                                      }
+                                    })
+                                  }
+
                                   if (!activeLeav && !activeVac && !activeDp) {
-                                    if(attendance.id_employee == '5393'){
+                                    if (attendance.id_employee == '5393') {
                                       console.log(attendance.date + " " + discounted);
                                     }
                                     if (attendance.scheduled == 'OFF') {
@@ -295,7 +299,7 @@ export class PeriodsComponent implements OnInit {
                                 }
 
                                 this.attended = 0;
-                                
+
                                 let base_hour: number = Number(emp[0].base_payment) / 240;
                                 let productivity_hour: number = (Number(emp[0].productivity_payment) - 250) / 240;
                                 let base_credit: credits = new credits;
@@ -613,23 +617,19 @@ export class PeriodsComponent implements OnInit {
                             activeVac = false;
                             activeLeav = false;
 
-                            vac.forEach(vacation => {
-                              if (vacation.took_date == attendance.date) {
-                                if (attendance.scheduled != "OFF") {
-                                  this.roster = this.roster + Number(attendance.scheduled);
-                                  this.attended = this.attended + Number(attendance.scheduled);
-                                  attendance.balance = 'VAC';
-                                } else {
-                                  this.daysOff = this.daysOff + 1;
-                                  attendance.balance = "OFF";
-                                }
-                                activeVac = true;
+                            dp.forEach(disciplinary => {
+                              if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
+                                this.absence = this.absence - 8;
+                                discounted = discounted - 8;
+                                attendance.balance = "SUSPENSION"
+                                activeDp = true;
                               }
-                            })
+                            });
 
-                            leave.forEach(leav => {
+                            if (!activeDp) {
+                              leave.forEach(leav => {
                                 if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
-                                  if(attendance.scheduled != 'OFF'){
+                                  if (attendance.scheduled != 'OFF') {
                                     this.roster = this.roster + Number(attendance.scheduled);
                                   }
                                   activeLeav = true;
@@ -637,7 +637,7 @@ export class PeriodsComponent implements OnInit {
                                     discounted = discounted - 8;
                                     this.absence = this.absence - 8;
                                     attendance.balance = 'JANP';
-                                    if(attendance.scheduled != 'OFF'){
+                                    if (attendance.scheduled != 'OFF') {
                                       janp_sequence = janp_sequence + 1;
                                     }
                                   } else {
@@ -647,15 +647,24 @@ export class PeriodsComponent implements OnInit {
                                     }
                                   }
                                 }
-                            })
+                              })
+                            }
 
-                            dp.forEach(disciplinary => {
-                              if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
-                                discounted = discounted - 8;
-                                attendance.balance = "SUSPENSION"
-                                activeDp = true;
-                              }
-                            });
+                            if (!activeDp && !activeLeav) {
+                              vac.forEach(vacation => {
+                                if (vacation.took_date == attendance.date) {
+                                  if (attendance.scheduled != "OFF") {
+                                    this.roster = this.roster + Number(attendance.scheduled);
+                                    this.attended = this.attended + Number(attendance.scheduled);
+                                    attendance.balance = 'VAC';
+                                  } else {
+                                    this.daysOff = this.daysOff + 1;
+                                    attendance.balance = "OFF";
+                                  }
+                                  activeVac = true;
+                                }
+                              })
+                            }
 
                             if (!activeLeav && !activeVac && !activeDp) {
                               if (attendance.scheduled == 'OFF') {
