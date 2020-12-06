@@ -134,7 +134,6 @@ export class PeriodsComponent implements OnInit {
     this.global_credits = [];
     this.global_judicials = [];
     this.global_services = [];
-    this.seventh = 0;
 
     this.credits = [];
     this.debits = [];
@@ -151,7 +150,7 @@ export class PeriodsComponent implements OnInit {
         this.working = false;
       }
       payments.forEach(pay => {
-        this.seventh = 0;
+        let svnth:number = 0;
         let totalCred: number = 0;
         let totalDeb: number = 0;
         let discounted: number = 0;
@@ -186,13 +185,13 @@ export class PeriodsComponent implements OnInit {
                                     if (nonShowCount > 3) {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
-                                      this.seventh = this.seventh + 1;
+                                      svnth = svnth + 1;
                                     }
 
                                     if (janp_sequence >= 5) {
                                       discounted = discounted - 16;
                                       this.absence = this.absence - 16;
-                                      this.seventh = this.seventh + 2;
+                                      svnth = svnth + 2;
                                     }
 
                                     janp_sequence = 0;
@@ -205,9 +204,6 @@ export class PeriodsComponent implements OnInit {
 
                                   dp.forEach(disciplinary => {
                                     if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
-                                      if (attendance.id_employee == '5393') {
-                                        console.log(attendance.date + " SUSPENSION: " + discounted);
-                                      }
                                       discounted = discounted - 8;
                                       attendance.balance = "SUSPENSION"
                                       activeDp = true;
@@ -219,9 +215,6 @@ export class PeriodsComponent implements OnInit {
                                       if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
                                         activeLeav = true;
                                         if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
-                                          if (attendance.id_employee == '5393') {
-                                            console.log(attendance.date + " JANP: " + discounted);
-                                          }
                                           discounted = discounted - 8;
                                           this.absence = this.absence - 8;
                                           attendance.balance = 'JANP';
@@ -230,9 +223,6 @@ export class PeriodsComponent implements OnInit {
                                           }
                                         } else {
                                           if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
-                                            if (attendance.id_employee == '5393') {
-                                              console.log(attendance.date + " JAP: " + discounted);
-                                            }
                                             this.attended = this.attended + 8
                                             attendance.balance = 'JAP';
                                           }
@@ -244,9 +234,6 @@ export class PeriodsComponent implements OnInit {
                                   if (!activeDp && !activeLeav) {
                                     vac.forEach(vacation => {
                                       if (vacation.took_date == attendance.date) {
-                                        if (attendance.id_employee == '5393') {
-                                          console.log(attendance.date + " " + discounted);
-                                        }
                                         if (attendance.scheduled != "OFF") {
                                           this.roster = this.roster + Number(attendance.scheduled);
                                           this.attended = this.attended + Number(attendance.scheduled);
@@ -261,9 +248,6 @@ export class PeriodsComponent implements OnInit {
                                   }
 
                                   if (!activeLeav && !activeVac && !activeDp) {
-                                    if (attendance.id_employee == '5393') {
-                                      console.log(attendance.date + " " + discounted);
-                                    }
                                     if (attendance.scheduled == 'OFF') {
                                       this.daysOff = this.daysOff + 1;
                                       attendance.balance = "OFF";
@@ -273,7 +257,7 @@ export class PeriodsComponent implements OnInit {
                                         if (this.non_show_2) {
                                           this.absence = this.absence - 16;
                                           discounted = discounted - 16;
-                                          this.seventh = this.seventh + 1;
+                                          svnth = svnth + 1;
                                           this.non_show_2 = false;
                                           attendance.balance = "NS";
                                           nonShowCount = nonShowCount + 1;
@@ -462,7 +446,7 @@ export class PeriodsComponent implements OnInit {
                                   pay.client_id = emp[0].client_id;
                                   pay.state = emp[0].state;
                                   pay.account = emp[0].account;
-                                  pay.seventh = this.seventh.toString();
+                                  pay.seventh = svnth.toFixed(0);
                                 })
                               } else {
                                 pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();;
@@ -707,7 +691,14 @@ export class PeriodsComponent implements OnInit {
                             discounted = (this.attendances.length * 8) * (-1);
                           }
 
+                          if(this.daysOff < this.seventh){
+                            discounted = discounted + (8*(this.seventh - this.daysOff));
+                            this.absence = this.absence + (8*(this.seventh - this.daysOff));
+                            this.seventh = this.daysOff;
+                          }
+
                           this.attendances = att;
+
                           if (this.period.status == '1') {
                             let base_hour: number = Number(emp[0].base_payment) / 240;
                             let productivity_hour: number = (Number(emp[0].productivity_payment) - 250) / 240;
