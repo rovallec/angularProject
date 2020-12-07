@@ -446,7 +446,7 @@ export class PeriodsComponent implements OnInit {
                                   pay.client_id = emp[0].client_id;
                                   pay.state = emp[0].state;
                                   pay.account = emp[0].account;
-                                  pay.seventh = svnth.toFixed(0);
+                                  pay.seventh = svnth.toString();
                                 })
                               } else {
                                 pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();;
@@ -584,11 +584,13 @@ export class PeriodsComponent implements OnInit {
                               if (nonShowCount == 5) {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
+                                this.seventh = this.seventh + 1;
                               }
 
                               if (janp_sequence == 5) {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
+                                this.seventh = this.seventh + 1;
                               }
 
                               janp_sequence = 0;
