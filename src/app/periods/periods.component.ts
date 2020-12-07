@@ -1,7 +1,7 @@
 import { NumberFormatStyle } from '@angular/common';
 import { formattedError, ThrowStmt } from '@angular/compiler';
 import { Route } from '@angular/compiler/src/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { timeStamp } from 'console';
 import { AttachSession } from 'protractor/built/driverProviders';
@@ -683,8 +683,10 @@ export class PeriodsComponent implements OnInit {
                           });
 
                           if (this.attended == 0) {
+                            console.log(this.absence);
                             this.absence = (this.attendances.length * 8) * (-1);
                             discounted = (this.attendances.length * 8) * (-1);
+                            console.log(this.absence);
                           }
 
                           this.attendances = att;
