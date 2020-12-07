@@ -185,13 +185,11 @@ export class PeriodsComponent implements OnInit {
                                     if (nonShowCount == 5) {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
-                                      svnth = svnth + 1;
                                     }
 
                                     if (janp_sequence == 5) {
                                       discounted = discounted - 16;
                                       this.absence = this.absence - 16;
-                                      svnth = svnth + 2;
                                     }
 
                                     janp_sequence = 0;
@@ -584,13 +582,11 @@ export class PeriodsComponent implements OnInit {
                               if (nonShowCount == 5) {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
-                                this.seventh = this.seventh + 1;
                               }
 
                               if (janp_sequence == 5) {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
-                                this.seventh = this.seventh + 1;
                               }
 
                               janp_sequence = 0;
