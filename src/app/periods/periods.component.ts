@@ -182,13 +182,13 @@ export class PeriodsComponent implements OnInit {
 
                                   if (dt.getDay() === 0) {
                                     this.non_show_2 = true;
-                                    if (nonShowCount > 3) {
+                                    if (nonShowCount = 5) {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
                                       svnth = svnth + 1;
                                     }
 
-                                    if (janp_sequence >= 5) {
+                                    if (janp_sequence = 5) {
                                       discounted = discounted - 16;
                                       this.absence = this.absence - 16;
                                       svnth = svnth + 2;
@@ -581,16 +581,14 @@ export class PeriodsComponent implements OnInit {
 
                             if (dt.getDay() === 0) {
                               this.non_show_2 = true;
-                              if (nonShowCount > 3) {
+                              if (nonShowCount = 5) {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
-                                this.seventh = this.seventh + 1;
                               }
 
-                              if (janp_sequence >= 5) {
-                                discounted = discounted - 16;
-                                this.absence = this.absence - 16;
-                                this.seventh = this.seventh + 2;
+                              if (janp_sequence = 5) {
+                                discounted = discounted - 8;
+                                this.absence = this.absence - 8;
                               }
 
                               janp_sequence = 0;
@@ -689,12 +687,6 @@ export class PeriodsComponent implements OnInit {
                           if (this.attended == 0) {
                             this.absence = (this.attendances.length * 8) * (-1);
                             discounted = (this.attendances.length * 8) * (-1);
-                          }
-
-                          if(this.daysOff < this.seventh){
-                            discounted = discounted + (8*(this.seventh - this.daysOff));
-                            this.absence = this.absence + (8*(this.seventh - this.daysOff));
-                            this.seventh = this.daysOff;
                           }
 
                           this.attendances = att;
