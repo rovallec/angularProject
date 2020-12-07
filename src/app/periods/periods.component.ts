@@ -581,12 +581,12 @@ export class PeriodsComponent implements OnInit {
 
                             if (dt.getDay() === 0) {
                               this.non_show_2 = true;
-                              if (nonShowCount = 5) {
+                              if (nonShowCount == 5) {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
                               }
 
-                              if (janp_sequence = 5) {
+                              if (janp_sequence == 5) {
                                 discounted = discounted - 8;
                                 this.absence = this.absence - 8;
                               }
