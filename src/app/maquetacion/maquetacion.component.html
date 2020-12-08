@@ -1,0 +1,198 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:#003b71">
+    <a class="navbar-brand" *ngIf="!getAuth()">
+        <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+            alt="" style="margin-left: 30px">
+    </a>
+</nav>
+
+<div class="col-12 flex-column" style="margin-top: 15px;">
+    <div class="row  ">
+        <div class="col-2" style="margin-top: 10px;">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-post-tab" data-toggle="pill" href="#v-pills-post" role="tab"
+                    aria-controls="v-pills-post" aria-selected="true">New Post</a>
+                <a class="nav-link" id="v-pills-image-tab" data-toggle="pill" href="#v-pills-image" role="tab"
+                    aria-controls="v-pills-image" aria-selected="false">Image</a>
+                <a class="nav-link" id="v-pills-enlace-tab" data-toggle="pill" href="#v-pills-enlace" role="tab"
+                    aria-controls="v-pills-enlace" aria-selected="false">Enlaces</a>
+                <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
+                    aria-controls="v-pills-settings" aria-selected="false">Settings</a>
+            </div>
+        </div>
+        <div class="col-dm-1">
+            <div class="row-sm-10" style="border: #e3f2fd solid 4px; height: 98%; margin-bottom: 25px;"></div>
+        </div>
+        <div class="col-8" style="margin-top: 10px;">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-post" role="tabpanel"
+                    aria-labelledby="v-pills-post-tab">
+                    <h3>Posts</h3>
+                    <p>
+                        Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum. Donec
+                        sed odio operae,
+                        eu vulputate felis rhoncus. Praeterea iter est quasdam res quas ex communi. At nos hinc posthac,
+                        sitientis piros Afros.
+                        Petierunt uti sibi concilium totius Galliae in diem certam indicere. Cras mattis iudicium purus
+                        sit amet fermentum.
+                    </p>                    
+                    <p>TextArea</p>
+                    <textarea class="ckeditor" name = "mensajes" id="mensajes" config.extraPlugins='colorbutton' style="height: '300px' "></textarea>
+                </div>
+                <div class="tab-pane fade" id="v-pills-image" role="tabpanel" aria-labelledby="v-pills-image-tab">
+                    <div class="container">
+                        <button type="submit" class="btn btn-primary dropright" data-toggle="modal"
+                            data-target="#Agregar" style="right: auto;">
+                            Agregar imágen ...
+                        </button>
+                    </div>
+                    <div class="modal" id="Agregar">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header text-info">
+                                    <h4 class="modal-title">
+                                        Agregar Imágen
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <label class="control-label text-info" for="descripcion1">
+                                        Descripción
+                                    </label>
+                                    <div class="controls">
+                                        <input type="text" id="descripcion" style="display: flexbox;"
+                                            name="descripcion">
+                                    </div>
+                                    <br>
+                                    <div class="controls">
+
+                                        <div class="input-append">
+                                            <input id="falso1" class="form-control-file border text-info" type="file">
+                                            <a class="btn btn-file">
+                                                <i class="fa fa-folder-open-o">
+
+                                                </i>
+                                                Seleccionar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_Callcenter.jpg">
+                            <img src="http://localhost/public/Nearsol_Callcenter.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <form>
+                                <div class="custom-control custom-switch">
+                                    <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                                </div>
+                            </form>
+                            <br>
+                            Nearsol CallCenter
+                        </div>
+                    </div>
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_customer_service.jpg">
+                            <img src="http://localhost/public/Nearsol_customer_service.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                            Nearsol Service
+                        </div>
+                    </div>
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_Guatemala.jpg">
+                            <img src="http://localhost/public/Nearsol_Guatemala.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                            Nearsol Guatemala
+                        </div>
+                    </div>
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_Guatemala2.jpg">
+                            <img src="http://localhost/public/Nearsol_Guatemala2.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                            Nearsol
+                        </div>
+                    </div>
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_reforma.jpg">
+                            <img src="http://localhost/public/Nearsol_reforma.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                            Nearsol Reforma
+                        </div>
+                    </div>
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_Tower.jpg">
+                            <img src="http://localhost/public/Nearsol_Tower.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                            Nearsol Tower
+                        </div>
+                    </div>
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_Family.jpg">
+                            <img src="http://localhost/public/Nearsol_Family.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                            Nearsol Tower
+                        </div>
+                    </div>
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_group.jpg">
+                            <img src="http://localhost/public/Nearsol_group.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                            Nearsol Tower
+                        </div>
+                    </div>
+                    <div class="gallery">
+                        <a target="_blank" href="http://localhost/public/Nearsol_International.jpg">
+                            <img src="http://localhost/public/Nearsol_International.jpg" alt="Call Center">
+                        </a>
+                        <div class="desc">
+                            <input class="form-check-input" type="checkbox" style="text-align-last: right;">
+                            Nearsol Tower
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-enlace" role="tabpanel" aria-labelledby="v-pills-enlace-tab">
+                    <h3>Enlaces</h3>
+                    <p>
+                        Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum. Donec
+                        sed odio operae,
+                        eu vulputate felis rhoncus. Praeterea iter est quasdam res quas ex communi. At nos hinc posthac,
+                        sitientis piros Afros.
+                        Petierunt uti sibi concilium totius Galliae in diem certam indicere. Cras mattis iudicium purus
+                        sit amet fermentum.
+                    </p>
+                </div>
+                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    <h3>Settings</h3>
+                    <p>
+                        Ambitioni dedisse scripsisse iudicaretur. Cras mattis iudicium purus sit amet fermentum. Donec
+                        sed odio operae,
+                        eu vulputate felis rhoncus. Praeterea iter est quasdam res quas ex communi. At nos hinc posthac,
+                        sitientis piros Afros.
+                        Petierunt uti sibi concilium totius Galliae in diem certam indicere. Cras mattis iudicium purus
+                        sit amet fermentum.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

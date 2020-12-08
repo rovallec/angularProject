@@ -26,6 +26,8 @@ import { FprofilesComponent } from './fprofiles/fprofiles.component';
 import { WfmhomeComponent } from './wfmhome/wfmhome.component';
 import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
 import { ImportOtComponent } from './import-ot/import-ot.component';
+import { MaquetacionComponent } from './maquetacion/maquetacion.component';
+
 
 const routes:Routes = [
   {
@@ -136,15 +138,24 @@ const routes:Routes = [
     component: ImportOtComponent,
     canActivate:[AuthGuard]
   },
+  { 
+    path:'maquetacion',
+    component: MaquetacionComponent
+  },
   {
     path:'',
     redirectTo:'/login',
+    pathMatch:'full'
+  },
+  {
+    path:'public',
+    redirectTo:'/public',
     pathMatch:'full'
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes) ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
