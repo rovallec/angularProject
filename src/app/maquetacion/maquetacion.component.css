@@ -22,3 +22,8 @@ div.gallery {
     padding: 15px;
     text-align: center;
   }
+
+  textarea-both {
+    resize: both;    
+    overflow: scroll;
+  }

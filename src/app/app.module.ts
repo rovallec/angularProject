@@ -32,6 +32,7 @@ import { WfmhomeComponent } from './wfmhome/wfmhome.component';
 import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
 import { ImportOtComponent } from './import-ot/import-ot.component';
 import { MaquetacionComponent } from './maquetacion/maquetacion.component';
+import { CKEditorModule  } from 'ng2-ckeditor';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { MaquetacionComponent } from './maquetacion/maquetacion.component';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    CKEditorModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
