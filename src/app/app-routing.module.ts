@@ -151,6 +151,11 @@ const routes:Routes = [
     path:'public',
     redirectTo:'/public',
     pathMatch:'full'
+  },
+  {
+    path:'ckeditor',
+    redirectTo:'/public/ckeditor',
+    pathMatch:'full'
   }
 ];
 
