@@ -32,6 +32,7 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['date'] = $res['date'];
         $return[$i]['start'] = $res['start'];
         $return[$i]['end'] = $res['end'];
+        $return[$i]['last_seventh'] = $res['last_seventh'];
         $i++;
     }
     echo(json_encode($return));

@@ -730,6 +730,7 @@ export class payments {
     days:string;
     ot:string;
     seventh:string;
+    last_seventh:string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;
@@ -740,6 +741,7 @@ export class payments {
         this.date = null;
         this.employee_name = null;
         this.total = null;
+        this.last_seventh = null;
     }
 }
 

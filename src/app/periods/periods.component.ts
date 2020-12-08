@@ -159,6 +159,7 @@ export class PeriodsComponent implements OnInit {
         let activeDp: boolean = false;
         let janp_sequence: number = 0;
         let nonShowCount: number = 0;
+        let last_seventh:boolean = true;
 
 
         pushCredits = [];
@@ -174,6 +175,11 @@ export class PeriodsComponent implements OnInit {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                         this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                           this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
+                            this.apiService.getLastSeventh(pay).subscribe((paym:payments)=>{
+                              if(paym.last_seventh == '1'){
+                                last_seventh = false;
+                              }
+                            })
                             if (this.period.status == '1') {
                               if (att.length != 0) {
                                 att.forEach(attendance => {
@@ -252,13 +258,16 @@ export class PeriodsComponent implements OnInit {
                                     } else {
                                       this.roster = this.roster + Number(attendance.scheduled);
                                       if (Number(attendance.worked_time) == 0) {
-                                        if (this.non_show_2) {
+                                        if (this.non_show_2 && last_seventh) {
                                           this.absence = this.absence - 16;
                                           discounted = discounted - 16;
                                           svnth = svnth + 1;
                                           this.non_show_2 = false;
                                           attendance.balance = "NS";
                                           nonShowCount = nonShowCount + 1;
+                                          if((att.length - att.indexOf(attendance)) <= 6 ){
+                                            last_seventh = false;
+                                          }
                                         } else {
                                           attendance.balance = "NS"
                                           nonShowCount = nonShowCount + 1;
@@ -278,6 +287,7 @@ export class PeriodsComponent implements OnInit {
                                 if (this.attended == 0) {
                                   this.absence = (att.length * 8) * (-1);
                                   discounted = (att.length * 8) * (-1);
+                                  svnth = 0;
                                 }
 
                                 this.attended = 0;
@@ -445,6 +455,11 @@ export class PeriodsComponent implements OnInit {
                                   pay.state = emp[0].state;
                                   pay.account = emp[0].account;
                                   pay.seventh = svnth.toString();
+                                  if(last_seventh){
+                                    pay.last_seventh = '0';
+                                  }else{
+                                    pay.last_seventh = '1';
+                                  }
                                 })
                               } else {
                                 pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();;
@@ -537,6 +552,7 @@ export class PeriodsComponent implements OnInit {
     let activeLeav: boolean = false;
     let activeDp: boolean = false;
     let janp_sequence: number = 0;
+    let last_seventh:boolean = true;
 
     let non_show1: boolean = false;
     let non_show2: boolean = false;
@@ -562,6 +578,14 @@ export class PeriodsComponent implements OnInit {
                   this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                     this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                       this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
+                        let py:payments = new payments;
+                        py.id_employee = emp[0].idemployees;
+                        py.id_period = this.period.idperiods;
+                        this.apiService.getLastSeventh(py).subscribe((pyment:payments)=>{
+                          if(pyment.last_seventh == '1'){
+                            last_seventh = false;
+                          }
+                        })
                         vac.forEach(vacc => {
                           if (vacc.status === 'PENDING') {
                             this.vacations.push(vacc);
@@ -659,7 +683,7 @@ export class PeriodsComponent implements OnInit {
                               } else {
                                 this.roster = this.roster + Number(attendance.scheduled);
                                 if (Number(attendance.worked_time) == 0) {
-                                  if (this.non_show_2) {
+                                  if (this.non_show_2 && last_seventh) {
                                     this.absence = this.absence - 16;
                                     discounted = discounted - 16;
                                     this.seventh = this.seventh + 1;
@@ -683,10 +707,9 @@ export class PeriodsComponent implements OnInit {
                           });
 
                           if (this.attended == 0) {
-                            console.log(this.absence);
                             this.absence = (this.attendances.length * 8) * (-1);
                             discounted = (this.attendances.length * 8) * (-1);
-                            console.log(this.absence);
+                            this.seventh = 0;
                           }
 
                           this.attendances = att;
@@ -850,7 +873,7 @@ export class PeriodsComponent implements OnInit {
   }
 
   completeImport() {
-    if (this.importType == 'Bono') {
+    if (this.importType == 'Bonus') {
       this.pushDeductions('credits', this.credits);
     } else {
       this.pushDeductions('debits', this.credits);
@@ -902,7 +925,19 @@ export class PeriodsComponent implements OnInit {
                 ele.notes = "ERROR";
               }
               count = count + 1;
-              this.credits.push(ele);
+              if(this.importType == "Bonus"){
+                this.credits.push(ele);
+              }else if(this.importType == "Discount"){
+                let deb:debits = new debits;
+                deb.amount = ele.amount;
+                deb.date = ele.date;
+                deb.id_employee = ele.id_employee;
+                deb.idpayments = ele.idpayments;
+                deb.notes = ele.notes;
+                deb.type = ele.type;
+                this.debits.push(deb);
+              }
+              
               if (count == (partial_credits.length - 1)) {
                 this.importEnd = true;
                 this.completed = true;

@@ -584,5 +584,8 @@ insertMergeProfile(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertMergeProfile.php`, any);
 }
 
+getLastSeventh(payment:payments){
+  return this.httpClient.post<payments>(`${this.PHP_API_SERVER}/phpscripts/getLastSeventh.php`, payment);
+}
   constructor(private httpClient:HttpClient) { }
 }
