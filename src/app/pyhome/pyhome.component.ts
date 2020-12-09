@@ -58,6 +58,9 @@ export class PyhomeComponent implements OnInit {
     if (date.getDate() > 15) {
       start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '16';
       end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
+    }else{
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
+      end = end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + "15";
     }
 
     this.apiService.getAttAccounts({ start: start, end: end }).subscribe((acc: attendance_accounts[]) => {

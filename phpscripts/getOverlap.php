@@ -29,7 +29,6 @@ if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
         $res[$i]['id_profile'] = $row['idprofiles'];
         $res[$i]['idemployees'] = $row['idemployees'];
-        $res[$i]['id_account'] = $row['id_account'];
         $res[$i]['account'] = $row['acc'];
         $res[$i]['name'] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         $res[$i]['client_id'] = $row['client_id'];
