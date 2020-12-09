@@ -121,7 +121,8 @@
                             <th style="text-align: center;">TRANSFER DATE</th>
                         </thead>
                         <tbody>
-                            <tr class="selectable" *ngFor="let transfer of profilesTransfer" (click)="gotoProfile(transfer)">
+                            <tr class="selectable" *ngFor="let transfer of profilesTransfer"
+                                (click)="gotoProfile(transfer)">
                                 <td style="text-align: center;">{{transfer.nearsol_id}}</td>
                                 <td style="text-align: center;">{{transfer.client_id}}</td>
                                 <td style="text-align: center;">{{transfer.name}}</td>
@@ -156,6 +157,37 @@
                                 <td style="text-align: center;">{{term.name}}</td>
                                 <td style="text-align: center;">{{term.account}}</td>
                                 <td style="text-align: center;">{{term.platform}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr style="height: 25px;"></tr>
+            <tr *ngIf="!searching">
+                <td
+                    style="padding:6px; background-color:rgb(227, 239, 255); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255)">
+                    OVERLAPS</td>
+            </tr>
+            <tr *ngIf="!searching">
+                <td
+                    style="padding:15px; background-color:rgb(239, 246, 255);border-color:rgb(187, 208, 255);border-style: solid; border-width: 1px">
+                    <table style="width:98%;padding: 1%;" class="table-striped table-hover">
+                        <thead>
+                            <th>NAME</th>
+                            <th>ACCOUNT</th>
+                            <th>NEARSOL ID</th>
+                            <th>CLIENT ID</th>
+                            <th>DATES</th>
+                            <th>COUNT</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let over of overlaps">
+                                <td>{{over.name}}</td>
+                                <td>{{over.account}}</td>
+                                <td>{{over.nearsol_id}}</td>
+                                <td>{{over.client_id}}</td>
+                                <td>{{over.paltform}}</td>
+                                <td>{{over.state}}</td>
                             </tr>
                         </tbody>
                     </table>

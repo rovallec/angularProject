@@ -587,5 +587,9 @@ insertMergeProfile(any:any){
 getLastSeventh(payment:payments){
   return this.httpClient.post<payments>(`${this.PHP_API_SERVER}/phpscripts/getLastSeventh.php`, payment);
 }
+
+getOverlaps(any:any){
+  return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getOverlap.php`, any);
+}
   constructor(private httpClient:HttpClient) { }
 }

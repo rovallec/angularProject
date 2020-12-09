@@ -26,6 +26,7 @@ export class PyhomeComponent implements OnInit {
   transfers: process[] = [];
   profilesTransfer: employees[] = [];
   profilesTerm: employees[] = [];
+  overlaps:employees[] = [];
   filter: string = null;
   value: string = null;
   searching: boolean = false;
@@ -39,6 +40,14 @@ export class PyhomeComponent implements OnInit {
     this.getAttAccounts();
     this.getTransfers();
     this.getTerminations();
+    this.getOverlaps();
+  }
+
+  getOverlaps(){
+    let st:Date = new Date();
+    this.apiService.getOverlaps({st:st.getDate()}).subscribe((emp:employees[])=>{
+      this.overlaps = emp;
+    })
   }
 
   getAttAccounts() {
