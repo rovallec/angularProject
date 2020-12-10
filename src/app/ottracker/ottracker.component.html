@@ -1,12 +1,12 @@
 <div class="row col-12" style="margin-top:25px; margin-left:1%; width:98%;">
     <div class="row col-3">
         <div class="row col-12">
-            <div class="row col-12">
+            <div class="row col-12 position-absolute top-0 start-0" style="max-height: 38px;">
                 <select class="form-control" (change)="setClient(selectedClient)" [(ngModel)]="selectedClient">
                     <option *ngFor="let cl of clients" [value]="cl.idclients">{{cl.name}}</option>
                 </select>
             </div>
-            <div class="row col-12" style="margin-top:15px">
+            <div class="row col-12 position-absolute top-0 start-0" style="margin-top:45px">
                 <div class="list-group w-100" id="list-tab" role="tablist">
                     <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
                         [tabindex]="acc.idaccounts" (click)="setSelection(acc)"
