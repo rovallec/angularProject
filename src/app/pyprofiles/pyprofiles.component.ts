@@ -34,6 +34,7 @@ export class PyprofilesComponent implements OnInit {
   attended: number = 0;
   roster: number = 0;
   daysOff: number = 0;
+  absence_fixed:string = null;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -276,6 +277,10 @@ export class PyprofilesComponent implements OnInit {
                           this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
                           attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
                           discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                          this.absence_fixed = (this.absence).toFixed(2);
+                          this.roster = Number((this.roster).toFixed(2));
+                          this.attended = Number((this.attended).toFixed(2));
+                          this.diff = Number((this.roster - this.attended).toFixed(2));
                         }
                       }
                     }
