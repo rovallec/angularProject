@@ -27,6 +27,7 @@ export class OttrackerComponent implements OnInit {
   }
 
   setSelection(acc:accounts){
+    this.ots = [];
     let date: Date = new Date();
     let start: string = null;
     let end: string = null;
@@ -56,8 +57,9 @@ export class OttrackerComponent implements OnInit {
                 ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
               }
             })
-            
-            this.ots.push(ot);
+            if(Number(ot.amount) > 0){
+              this.ots.push(ot);
+            }
           }
         })
       })
