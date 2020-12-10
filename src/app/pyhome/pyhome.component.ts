@@ -44,9 +44,18 @@ export class PyhomeComponent implements OnInit {
   }
 
   getOverlaps(){
-    let st:Date = new Date();
-    let dt:Date = new Date(st.getFullYear(),(st.getMonth() + 2),0);
-    this.apiService.getOverlaps({start:st.getFullYear() + "-" + (st.getMonth()) + "-01", end:dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate()}).subscribe((emp:employees[])=>{
+    let date: Date = new Date();
+    let start: string = null;
+    let end: string = null;
+    if (date.getDate() > 15) {
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '16';
+      end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
+    }else{
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
+      end = end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + "15";
+    }
+    
+    this.apiService.getOverlaps({start:start, end:end}).subscribe((emp:employees[])=>{
       this.overlaps = emp;
     })
   }
