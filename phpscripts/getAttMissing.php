@@ -11,7 +11,11 @@ $account = ($request->account);
 $res = [];
 $i = 0;
 
-$sql = "select * FROM (select employees.*, coalesce(`tmp`.idattendences, 0) as `exist` from employees left join (SELECT * from attendences where date = '$date') as `tmp` on `tmp`.id_employee = employees.idemployees WHERE id_account = $account) as `tmp2` left join hires on hires.idhires = `tmp2`.id_hire left join profiles on profiles.idprofiles = hires.id_profile where `exist` = 0 AND hiring_date <= '$date';";
+$sql = "SELECT distinct *  FROM (select `tmp2`.*, `tmp2`.state as `status`, hr_processes.date, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.id_profile, hires.nearsol_id FROM (select employees.*, coalesce(`tmp`.idattendences, 0) as `exist` from employees 
+left join (SELECT * from attendences where date = '$date') as `tmp` on `tmp`.id_employee = employees.idemployees WHERE id_account = $account) as `tmp2`
+left join hires on hires.idhires = `tmp2`.id_hire left join profiles on profiles.idprofiles = hires.id_profile
+left join hr_processes on hr_processes.id_employee = `tmp2`.idemployees  AND id_type = 8) AS `fin`
+where (`fin`.`exist` = 0 AND `fin`.hiring_date <= '$date') AND (`fin`.active = 1 OR `fin`.date >= '$date');";
 
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){

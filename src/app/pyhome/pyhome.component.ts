@@ -65,7 +65,7 @@ export class PyhomeComponent implements OnInit {
 
     this.apiService.getAttAccounts({ start: start, end: end }).subscribe((acc: attendance_accounts[]) => {
       acc.forEach(accoun => {
-        if (accoun.max != accoun.value) {
+        if (accoun.max > accoun.value) {
           this.accounts.push(accoun);
         }
       })

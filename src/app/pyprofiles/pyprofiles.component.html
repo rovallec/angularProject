@@ -14,11 +14,11 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label>Account:</label>
-                        <input type="text" class="form-control" [disabled]='true' [(ngModel)]='employee.id_account'>
+                        <input type="text" class="form-control" [disabled]='true' [(ngModel)]='employee.account'>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Supervisor:</label>
-                        <input type="text" class="form-control" [disabled]='true' [(ngModel)]="employee.reporter">
+                        <input type="text" class="form-control" [disabled]='true' [(ngModel)]="employee.user_name">
                     </div>
                 </div>
                 <div class="form-row">
@@ -47,14 +47,14 @@
         <td colspan="2" style="padding-top:30px" *ngIf="!newProc">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
-                    <a class="nav-item nav-link active" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
+                    <a class="nav-item nav-link active" id="nav-attendance-tab" data-toggle="tab" href="#nav-attendance" role="tab"
+                        aria-controls="nav-attendance" aria-selected="false">Attendance</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
                         role="tab" aria-controls="nav-contact" aria-selected="true">Contact</a>
                     <a class="nav-item nav-link" id="nav-emergency-tab" data-toggle="tab" href="#nav-emergency"
                         role="tab" aria-controls="nav-emergency" aria-selected="false">Emergency</a>
                     <a class="nav-item nav-link" id="nav-medical-tab" data-toggle="tab" href="#nav-medical" role="tab"
                         aria-controls="nav-medical" aria-selected="false">Medical</a>
-                    <a class="nav-item nav-link" id="nav-attendance-tab" data-toggle="tab" href="#nav-attendance" role="tab"
-                        aria-controls="nav-attendance" aria-selected="false">Attendance</a>
                 </div>
             </nav>
 
@@ -136,7 +136,52 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-attendance" role="tabpanel" aria-labelledby="nav-attendance-tab">
+                    <div class="from-row col-md-12">
+                        <table style="width: 100;" class="table table-striped table-hover"
+                            style="width: 100%;text-align:center">
+                            <thead style="text-align:center;">
+                                <th>DATE</th>
+                                <th>ROSTER</th>
+                                <th>ATTENDED</th>
+                                <th>BALANCE</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let att of attendances" class="selectable">
+                                    <td>{{att.date}}</td>
+                                    <td>{{att.scheduled}}</td>
+                                    <td>{{att.worked_time}}</td>
+                                    <td>{{att.balance}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
+                    <div class="form-row col-md-12" style="text-align:center;">
+                        <div class="form-group col-md-2">
+                            <label>DAYS OFF</label>
+                            <input type="text" class="form-control" [disabled]="true" [(ngModel)]="daysOff">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>ROSTER</label>
+                            <input type="text" class="form-control" [disabled]="true" [(ngModel)]="roster">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>ATTENDED</label>
+                            <input type="text" class="form-control" [disabled]="true" [(ngModel)]="attended">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>DIFF</label>
+                            <input type="text" class="form-control" [disabled]="true" [(ngModel)]="diff">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>DISCOUNTED</label>
+                            <input type="text" class="form-control" [disabled]="true" [(ngModel)]="absence_fixed">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>SEVENTH</label>
+                            <input type="text" class="form-control" [disabled]="true" [(ngModel)]="seventh">
+                        </div>
+                    </div>
                 </div>
             </div>
         </td>

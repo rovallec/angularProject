@@ -33,7 +33,7 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['name'] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         $res[$i]['client_id'] = $row['client_id'];
         $res[$i]['nearsol_id'] = $row['nearsol_id'];
-        $res[$i]['platform'] = $row['dates'];
+        $res[$i]['job'] = $row['dates'];
         $res[$i]['state'] = $row['cnt'];
         $i++;
     }

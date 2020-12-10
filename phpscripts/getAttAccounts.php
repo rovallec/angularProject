@@ -13,7 +13,7 @@ $i = 0;
 $sql = "SELECT name, date, id_account, `completed`, coalesce(`add`,0) + coalesce(`parcial`,0) AS `max` FROM (SELECT name, `tmp2`.date, `tmp2`.id_account, `tmp2`.`completed`, `tmp2`.`add`, SUM(`tmp2`.`active_today`) as `parcial` FROM (SELECT `tmp`.date, `tmp`.id_account, `tmp`.`completed`, `tmp`.`add`, `active_today` FROM (
 	SELECT date, id_account, `completed`, SUM(`plus`) AS `add` FROM (
 		SELECT `uploaded`.date, `uploaded`.id_account, `completed`, `plus` FROM (SELECT COUNT(idemployees) AS `completed`, date, id_account FROM attendences LEFT JOIN employees ON employees.idemployees = attendences.id_employee GROUP BY id_account, date) AS `uploaded`
-		LEFT JOIN (SELECT COUNT(idemployees) AS `plus`, date, id_account FROM hr_processes LEFT JOIN employees ON employees.idemployees = hr_processes.id_employee WHERE id_type = 8 GROUP BY date, id_account) AS `terminated` ON `uploaded`.id_account = `terminated`.id_account AND `uploaded`.date < `terminated`.date) AS `temp` GROUP BY date, id_account
+		LEFT JOIN (SELECT COUNT(distinct idemployees) AS `plus`, date, id_account FROM hr_processes LEFT JOIN employees ON employees.idemployees = hr_processes.id_employee WHERE id_type = 8 GROUP BY date, id_account) AS `terminated` ON `uploaded`.id_account = `terminated`.id_account AND `uploaded`.date <= `terminated`.date) AS `temp` GROUP BY date, id_account
 	) AS `tmp`
 	LEFT JOIN (
 		SELECT COUNT(idemployees) AS `active_today`, id_account, hiring_date FROM employees WHERE active = 1 GROUP BY id_account, hiring_date
