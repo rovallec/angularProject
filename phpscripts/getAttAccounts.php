@@ -17,7 +17,7 @@ $sql = "SELECT name, date, id_account, `completed`, coalesce(`add`,0) + coalesce
 	) AS `tmp`
 	LEFT JOIN (
 		SELECT COUNT(idemployees) AS `active_today`, id_account, hiring_date FROM employees WHERE active = 1 GROUP BY id_account, hiring_date
-	) AS `today` ON `today`.id_account = `tmp`.id_account AND `today`.hiring_date <= `tmp`.date) AS `tmp2` LEFT JOIN accounts ON accounts.idaccounts = `tmp2`.id_account GROUP BY id_account, date) AS `final` WHERE date between '$start' AND '$end' ORDER BY id_account DESC;";
+	) AS `today` ON `today`.id_account = `tmp`.id_account AND `today`.hiring_date <= `tmp`.date) AS `tmp2` LEFT JOIN accounts ON accounts.idaccounts = `tmp2`.id_account GROUP BY id_account, date) AS `final` WHERE date between '$start' AND '$end' ORDER BY id_account, date DESC;";
 
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){

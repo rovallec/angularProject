@@ -56,6 +56,7 @@ export class OttrackerComponent implements OnInit {
                 ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
               }
             })
+            
             this.ots.push(ot);
           }
         })

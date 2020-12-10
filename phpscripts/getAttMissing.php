@@ -11,7 +11,7 @@ $account = ($request->account);
 $res = [];
 $i = 0;
 
-$sql = "SELECT distinct *  FROM (select `tmp2`.*, `tmp2`.state as `status`, hr_processes.date, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.id_profile, hires.nearsol_id FROM (select employees.*, coalesce(`tmp`.idattendences, 0) as `exist` from employees 
+$sql = "SELECT distinct *  FROM (select `tmp2`.*, `tmp2`.state as `status`, hr_processes.date, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.id_profile, hires.nearsol_id, profiles.status AS `st` FROM (select employees.*, coalesce(`tmp`.idattendences, 0) as `exist` from employees 
 left join (SELECT * from attendences where date = '$date') as `tmp` on `tmp`.id_employee = employees.idemployees WHERE id_account = $account) as `tmp2`
 left join hires on hires.idhires = `tmp2`.id_hire left join profiles on profiles.idprofiles = hires.id_profile
 left join hr_processes on hr_processes.id_employee = `tmp2`.idemployees  AND id_type = 8) AS `fin`
@@ -27,7 +27,7 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['reporter'] = $row['reporter'];
         $res[$i]['client_id'] = $row['client_id'];
         $res[$i]['nearsol_id'] = $row['nearsol_id'];
-        $res[$i]['status'] = $row['status'];
+        $res[$i]['status'] = $row['st'];
         $i++;
     }
     echo(json_encode($res));
