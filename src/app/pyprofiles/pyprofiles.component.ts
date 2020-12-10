@@ -82,6 +82,7 @@ export class PyprofilesComponent implements OnInit {
   start() {
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees[]) => {
       this.employee = emp[0]
+      this.setPayTime(this.employee.idemployees, this.employee.id_profile);
       let prof: profiles = new profiles;
       prof.idprofiles = emp[0].id_profile;
       this.apiService.getProfile(prof).subscribe((profile: profiles[]) => {
