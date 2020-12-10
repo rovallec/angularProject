@@ -5,13 +5,17 @@
   </a>
   <a class="navbar-brand" *ngIf="getAuth()">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
-      alt="" style="margin-left: 30px" routerLink="/rehome" *ngIf="getSaved().department == '2'" (click)="SetSel('HOME')">
+      alt="" style="margin-left: 30px" routerLink="/rehome" *ngIf="getSaved().department == '2'"
+      (click)="SetSel('HOME')">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
-      alt="" style="margin-left: 30px" routerLink="/achome" *ngIf="getSaved().department == '4'" (click)="SetSel('HOME')">
+      alt="" style="margin-left: 30px" routerLink="/achome" *ngIf="getSaved().department == '4'"
+      (click)="SetSel('HOME')">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
-      alt="" style="margin-left: 30px" routerLink="/pyhome" *ngIf="getSaved().department == '28'" (click)="SetSel('HOME')">
+      alt="" style="margin-left: 30px" routerLink="/pyhome" *ngIf="getSaved().department == '28'"
+      (click)="SetSel('HOME')">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
-      alt="" style="margin-left: 30px" routerLink="/fhome" *ngIf="getSaved().department == '29'" (click)="SetSel('HOME')">
+      alt="" style="margin-left: 30px" routerLink="/fhome" *ngIf="getSaved().department == '29'"
+      (click)="SetSel('HOME')">
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/hrhome"
       *ngIf="getSaved().department == '5' || getSaved().department == '27'">
@@ -62,6 +66,8 @@
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
           routerLink="/attritionReport" style="color: white" [ngClass]="{'act':selectedOption=='ATTREP'}"
           (click)="SetSel('ATTREP')">ATTRITION REPORT</a>
+        <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/ottracker" style="color: white"
+          [ngClass]="{'act':selectedOption=='OTTRACK'}" (click)="SetSel('OTTRACK')">OT TRACKER</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/classlist" style="color: white"
@@ -77,7 +83,8 @@
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
-          style="color: white; cursor:pointer;" (click)="getEmployeeData()" [ngClass]="{'act':selectedOption=='EMPD'}">EMPLOYEE DATA</a>
+          style="color: white; cursor:pointer;" (click)="getEmployeeData()"
+          [ngClass]="{'act':selectedOption=='EMPD'}">EMPLOYEE DATA</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
@@ -89,8 +96,8 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <a class="dropdown-item" href="#">Log Out</a>
           <a class="dropdown-item" href="#">My Profile</a>
-          <a class="dropdown-item" *ngIf="getSaved().department == '5' || getSaved().department == '27'">Signature<input type="file" class="form-control"
-              placeholder="Update Signature" (change)="onChange($event)"></a>
+          <a class="dropdown-item" *ngIf="getSaved().department == '5' || getSaved().department == '27'">Signature<input
+              type="file" class="form-control" placeholder="Update Signature" (change)="onChange($event)"></a>
         </div>
       </div>
     </form>

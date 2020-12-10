@@ -31,7 +31,8 @@ import { FhomeComponent } from './fhome/fhome.component';
 import { FprofilesComponent } from './fprofiles/fprofiles.component';
 import { WfmhomeComponent } from './wfmhome/wfmhome.component';
 import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
-import { ImportOtComponent } from './import-ot/import-ot.component'
+import { ImportOtComponent } from './import-ot/import-ot.component';
+import { OttrackerComponent } from './ottracker/ottracker.component'
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { ImportOtComponent } from './import-ot/import-ot.component'
     FprofilesComponent,
     WfmhomeComponent,
     PyprofilesComponent,
-    ImportOtComponent
+    ImportOtComponent,
+    OttrackerComponent
   ],
   imports: [
     BrowserModule,

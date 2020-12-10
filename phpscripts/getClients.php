@@ -4,12 +4,11 @@ header('Access-Control-Allow-Headers: *');
 require  'database.php';
 $res = [];
 $i = 0;
-$sql = "Select * from `accounts`;";
+$sql = "Select * from `clients`;";
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
-        $res[$i]['idaccounts'] = $row['idaccounts'];
+        $res[$i]['idclients'] = $row['idclients'];
         $res[$i]['name'] = $row['name'];
-        $res[$i]['id_client'] = $row['id_client'];
         $i++;
     }
     echo(json_encode($res));

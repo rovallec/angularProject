@@ -69,10 +69,11 @@ export class hires_template {
 export class accounts {
     idaccounts: string;
     name: string;
-
+    id_client:string;
     constructor() {
         this.idaccounts = null;
         this.name = null;
+        this.id_client = null;
     }
 }
 
@@ -883,5 +884,14 @@ export class attendance_accounts{
         this.value = null;
         this.status = null;
         this.show = null;
+    }
+}
+
+export class clients{
+    idclients:string;
+    name:string;
+    constructor(){
+        this.idclients = null;
+        this.name = null;
     }
 }

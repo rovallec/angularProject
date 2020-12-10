@@ -26,6 +26,7 @@ import { FprofilesComponent } from './fprofiles/fprofiles.component';
 import { WfmhomeComponent } from './wfmhome/wfmhome.component';
 import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
 import { ImportOtComponent } from './import-ot/import-ot.component';
+import { OttrackerComponent } from './ottracker/ottracker.component';
 
 const routes:Routes = [
   {
@@ -134,6 +135,11 @@ const routes:Routes = [
   {
     path:'impoOt',
     component: ImportOtComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'ottracker',
+    component: OttrackerComponent,
     canActivate:[AuthGuard]
   },
   {
