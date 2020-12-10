@@ -196,9 +196,21 @@ export class PyhomeComponent implements OnInit {
 
   getTerminations() {
     let term: process[] = [];
+    let date: Date = new Date();
+    let start: string = null;
+    let end: string = null;
+
+    if (date.getDate() > 15) {
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '16';
+      end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
+    }else{
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
+      end = end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + "15";
+    }
+
     this.apiService.getProcRecorded({ id: 'all' }).subscribe((proc: process[]) => {
       proc.forEach(proc => {
-        if (proc.name == "Termination") {
+        if (proc.name == "Termination" && new Date(proc.prc_date) < new Date(end) && new Date(proc.prc_date) > new Date(start)) {
           term.push(proc);
         }
       })
