@@ -41,7 +41,7 @@ export class OttrackerComponent implements OnInit {
     }
 
     this.selectedAccount = acc;
-    this.apiServices.getSearchEmployees({filter:"id_account", value: this.selectedAccount.idaccounts, dp:'all'}).subscribe((emp:employees[])=>{
+    this.apiServices.getSearchEmployees({filter:"id_account", value: this.selectedAccount.idaccounts, dp:'exact'}).subscribe((emp:employees[])=>{
       emp.forEach(employee =>{
         this.apiServices.getAttPeriod({id: employee.idemployees, date_1: start, date_2: end}).subscribe((att:attendences[])=>{
           if(att.length > 0){

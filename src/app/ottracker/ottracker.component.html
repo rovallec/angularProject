@@ -1,47 +1,53 @@
-<div class="row col-12" style="margin-top:25px; margin-left:1%; width:98%;">
-    <div class="row col-3">
-        <div class="row col-12">
-            <div class="row col-12 position-absolute top-0 start-0" style="max-height: 38px;">
-                <select class="form-control" (change)="setClient(selectedClient)" [(ngModel)]="selectedClient">
-                    <option *ngFor="let cl of clients" [value]="cl.idclients">{{cl.name}}</option>
-                </select>
-            </div>
-            <div class="row col-12 position-absolute top-0 start-0" style="margin-top:45px">
-                <div class="list-group w-100" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
-                        [tabindex]="acc.idaccounts" (click)="setSelection(acc)"
-                        [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}"
-                        style="cursor: pointer;">{{acc.name}}</a>
+<div class="row" style="margin-top:25px; margin-left:1%; width:98%;">
+    <div class="col-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="row position-absolute top-0 start-0" style="max-height: 38px;">
+                    <div class="col-12">
+                        <select class="form-control" (change)="setClient(selectedClient)" [(ngModel)]="selectedClient">
+                            <option *ngFor="let cl of clients" [value]="cl.idclients">{{cl.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row position-absolute top-0 start-0" style="margin-top:45px">
+                    <div class=" col-12">
+                        <div class="list-group w-100" id="list-tab" role="tablist">
+                            <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
+                                [tabindex]="acc.idaccounts" (click)="setSelection(acc)"
+                                [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}"
+                                style="cursor: pointer;">{{acc.name}}</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-0" style="width: 10px;">
-        <div class="row" style="height:1%;width: 5px;max-height: 100px;"></div>
-        <div class="row" style="height:98%; border-right:4px solid #e3f2fd; width: 5px;"></div>
-        <div class="row" style="height:1%; width: 5px; max-height: 100px;"></div>
-    </div>
-    <div class="col-9">
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show" [ngClass]="{'active': showAccount}">
-                <table class="table table-hover">
-                    <thead>
-                        <th>ID</th>
-                        <th>NEARSOL ID</th>
-                        <th>CLIENT ID</th>
-                        <th>NAME</th>
-                        <th>VALUE</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let ot of ots">
-                            <td class="text-center">{{ot.id_employee}}</td>
-                            <td class="text-center">{{ot.nearsol_id}}</td>
-                            <td class="text-center">{{ot.id_period}}</td>
-                            <td class="text-center">{{ot.name}}</td>
-                            <td class="text-center">{{ot.amount}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="col-0" style="width: 10px;">
+            <div class="row" style="height:1%;width: 5px;max-height: 100px;"></div>
+            <div class="row" style="height:98%; border-right:4px solid #e3f2fd; width: 5px; max-height: 100%;"></div>
+            <div class="row" style="height:1%; width: 5px; max-height: 100px;"></div>
+        </div>
+        <div class="col-9">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show" [ngClass]="{'active': showAccount}">
+                    <table class="table table-hover">
+                        <thead>
+                            <th>ID</th>
+                            <th>NEARSOL ID</th>
+                            <th>CLIENT ID</th>
+                            <th>NAME</th>
+                            <th>VALUE</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ot of ots">
+                                <td class="text-center">{{ot.id_employee}}</td>
+                                <td class="text-center">{{ot.nearsol_id}}</td>
+                                <td class="text-center">{{ot.id_period}}</td>
+                                <td class="text-center">{{ot.name}}</td>
+                                <td class="text-center">{{ot.amount}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
