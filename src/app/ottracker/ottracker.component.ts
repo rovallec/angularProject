@@ -45,6 +45,10 @@ export class OttrackerComponent implements OnInit {
         this.apiServices.getAttPeriod({id: employee.idemployees, date_1: start, date_2: end}).subscribe((att:attendences[])=>{
           if(att.length > 0){
             let ot:ot_manage = new ot_manage;
+            ot.id_employee = employee.idemployees;
+            ot.name = employee.name;
+            ot.nearsol_id = employee.nearsol_id;
+            ot.status = employee.client_id;
             att.forEach(attendance=>{
               if(attendance.scheduled != 'OFF'){
                 ot.amount = (Number(ot.amount) + (Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
