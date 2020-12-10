@@ -27,6 +27,7 @@ export class PyprofilesComponent implements OnInit {
 
   vacations: vacations[] = [];
   leaves: leaves[] = [];
+  attendances:attendences[] = [];
   non_show_2: boolean = false;
   seventh: number = 0;
   absence: number = 0;
@@ -173,6 +174,7 @@ export class PyprofilesComponent implements OnInit {
                 non_show2 = false;
 
                 if (att.length != 0) {
+                  this.attendances = att;
                   att.forEach(attendance => {
 
                     let dt: Date = new Date(attendance.date);
