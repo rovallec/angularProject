@@ -13,7 +13,7 @@ $num_piriod = parse_str($id_period);
 
 $return = [];
 
-$sql = "SELECT * FROM payments WHERE id_employee = $id_employee AND idpayments = $num_piriod ORDER BY id_period DESC LIMIT 1;"
+$sql = "SELECT * FROM payments WHERE id_employee = $id_employee AND idpayments = $num_piriod ORDER BY id_period DESC LIMIT 1;";
 
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){
