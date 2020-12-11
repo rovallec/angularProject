@@ -181,8 +181,7 @@ export class OttrackerComponent implements OnInit {
   
         att.idattendences = mar.id_attendance;
         att.worked_time = mar.after;
-        att.scheduled = mar.id_marginalization;
-
+        att.scheduled = mar.after;
         mar.id_marginalization = str;
 
         this.apiServices.updateAttendances(att).subscribe((str:string)=>{

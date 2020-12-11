@@ -25,8 +25,6 @@ $balance = ($request->balance);
 
 
 $sql = "UPDATE `attendences` SET `scheduled` = '$scheduled', `worked_time` = '$worked_time' WHERE `idattendences` = $idattendences;";
-echo($sql);
-
 
 
 if($result = mysqli_query($con, $sql))
