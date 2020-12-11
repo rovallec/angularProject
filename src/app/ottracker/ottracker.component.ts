@@ -148,4 +148,9 @@ export class OttrackerComponent implements OnInit {
       })
     })
   }
+
+  saveOTMerge(){
+    this.marginalazing = false;
+    this.setSelection(this.accounts[0]);
+  }
 }

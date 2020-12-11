@@ -39,7 +39,8 @@
                         </div>
                         <div class="flex-fill"></div>
                         <div class="float-right p-2">
-                            <button type="button" class="btn btn-outline-success" style="padding-right:10px"
+                            <button type="button" class="btn btn-outline-primary" *ngIf="marginalazing" style="padding-right:10px" (click)="saveOTMerge()"><i class="far fa-save"></i></button>
+                            <button *ngIf="!marginalazing" type="button" class="btn btn-outline-success" style="padding-right:10px"
                                 data-toggle="modal" data-target="#exampleModal"><i
                                     class="fas fa-wave-square"></i></button>
                         </div>
@@ -117,7 +118,7 @@
                                 <tr *ngFor="let margins of marginalizations">
                                     <td class="text-center">{{margins.idemployees}}</td>
                                     <td class="text-center">{{margins.nearsol_id}}</td>
-                                    <td class="text-center">{{margins.id_period}}</td>
+                                    <td class="text-center">{{margins.idmarginalization_details}}</td>
                                     <td class="text-center">{{margins.name}}</td>
                                     <td class="text-center">{{margins.before}}</td>
                                     <td class="text-center">{{margins.after}}</td>
