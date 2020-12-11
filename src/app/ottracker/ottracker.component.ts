@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 import { ApiService } from '../api.service';
+import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
-import { accounts, attendences, clients, ot_manage } from '../process_templates';
+import { accounts, attendences, attendences_adjustment, clients, marginalization, ot_manage } from '../process_templates';
 
 @Component({
   selector: 'app-ottracker',
@@ -12,11 +14,14 @@ export class OttrackerComponent implements OnInit {
   accounts:accounts[] = [];
   ots:ot_manage[] = [];
   clients:clients[] = [];
+  marginalizations:marginalization[] = [];
   selectedAccount:accounts = new accounts;
   selectedClient:string = null;
+  marginalazing:boolean = false;
   showAccount:boolean = false;
+  iduser:string = null;
 
-  constructor(public apiServices:ApiService) { }
+  constructor(public apiServices:ApiService, public authService:AuthServiceService) { }
 
   ngOnInit() {
     this.apiServices.getClients().subscribe((cls:clients[])=>{
@@ -75,7 +80,49 @@ export class OttrackerComponent implements OnInit {
           this.accounts.push(account);
         }
       });
+      this.setSelection(this.accounts[0]);
     })
   }
 
+  marginalize(){
+    let date: Date = new Date();
+    let start: string = null;
+    let end: string = null;
+    let cnt:number = 0;
+
+    if (date.getDate() > 15) {
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '16';
+      end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
+    }else{
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
+      end = end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + "15";
+    }
+
+    this.ots.forEach(ot=>{
+      this.apiServices.getAttPeriod({id: ot.id_employee, date_1: start, date_2: end}).subscribe((att:attendences[])=>{
+        cnt = cnt + 1;
+        att.forEach(attendance=>{
+          let marg:marginalization = new marginalization;
+          if(attendance.scheduled != 'OFF' && Number(attendance.worked_time) > Number(attendance.scheduled)){
+            marg.before = attendance.worked_time;
+            attendance.worked_time = attendance.scheduled;
+            marg.id_attendance = attendance.idattendences;
+            marg.after = attendance.scheduled;
+            marg.approve_by = this.iduser;
+            marg.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+            marg.id_user = this.authService.getAuthusr().iduser;
+            marg.type = 'OT Reduction';
+            marg.value = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+            marg.idemployees = attendance.id_employee;
+            marg.name = ot.name;
+            marg.nearsol_id = ot.nearsol_id;
+            this.marginalizations.push(marg);
+          }
+        })
+        if((this.ots.length - 1) == cnt){
+          this.marginalazing = true;
+        }
+      })
+    })
+  }
 }

@@ -29,7 +29,7 @@
                 <div class="col-12">
                     <div class="d-flex mb-3">
                         <div class="float-left p-2">
-                            <i class="fas fa-history" style="padding-left: 10px; color:red"></i>
+                            <button type="button" style="padding-left: 10px;" class="btn btn-outline-danger"><i class="fas fa-history"></i></button>
                         </div>
                         <div class="flex-fill"></div>
                         <div class="float-center">
@@ -37,12 +37,35 @@
                         </div>
                         <div class="flex-fill"></div>
                         <div class="float-right p-2">
-                            <i class="fas fa-wave-square" style="padding-right:10px; color:green"></i>
+                            <button type="button" class="btn btn-outline-success" style="padding-right:10px"><i class="fas fa-wave-square"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="!marginalazing">
+                <div class="col-md-12" id="nav-tabContent">
+                    <div class="tab-pane fade show" [ngClass]="{'active': showAccount}">
+                        <table class="table table-hover mw-100">
+                            <thead>
+                                <th>ID</th>
+                                <th>NEARSOL ID</th>
+                                <th>NAME</th>
+                                <th>VALUE</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let ot of ots">
+                                    <td class="text-center">{{ot.id_employee}}</td>
+                                    <td class="text-center">{{ot.nearsol_id}}</td>
+                                    <td class="text-center">{{ot.name}}</td>
+                                    <td class="text-center">{{ot.amount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="marginalazing">
                 <div class="col-md-12" id="nav-tabContent">
                     <div class="tab-pane fade show" [ngClass]="{'active': showAccount}">
                         <table class="table table-hover mw-100">
@@ -51,15 +74,19 @@
                                 <th>NEARSOL ID</th>
                                 <th>CLIENT ID</th>
                                 <th>NAME</th>
+                                <th>BEFORE</th>
+                                <th>AFTER</th>
                                 <th>VALUE</th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let ot of ots">
-                                    <td class="text-center">{{ot.id_employee}}</td>
-                                    <td class="text-center">{{ot.nearsol_id}}</td>
-                                    <td class="text-center">{{ot.id_period}}</td>
-                                    <td class="text-center">{{ot.name}}</td>
-                                    <td class="text-center">{{ot.amount}}</td>
+                                <tr *ngFor="let margins of marginalizations">
+                                    <td class="text-center">{{margins.id_employee}}</td>
+                                    <td class="text-center">{{margins.nearsol_id}}</td>
+                                    <td class="text-center">{{margins.id_period}}</td>
+                                    <td class="text-center">{{margins.name}}</td>
+                                    <td class="text-center">{{margins.before}}</td>
+                                    <td class="text-center">{{margins.after}}</td>
+                                    <td class="text-center">{{margins.value}}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -59,17 +59,17 @@ export class hires_template {
     reporter: string;
     day_off1: string;
     day_off2: string;
-    bank:string;
-    account:string;
-    payType:string;
-    platform:string;
-    bool:boolean;
+    bank: string;
+    account: string;
+    payType: string;
+    platform: string;
+    bool: boolean;
 }
 
 export class accounts {
     idaccounts: string;
     name: string;
-    id_client:string;
+    id_client: string;
     constructor() {
         this.idaccounts = null;
         this.name = null;
@@ -186,7 +186,7 @@ export class attendences_adjustment {
     idattendence_adjustemnt: string;
     id_attendence: string;
     id_justification: string;
-    attendance_date:string;
+    attendance_date: string;
     time_before: string;
     time_after: string;
     amount: string;
@@ -616,8 +616,8 @@ export class irtra_requests {
     idprocess: string;
     idirtra_requests: string;
     type: string;
-    spouse_name:string;
-    spouse_lastname:string;
+    spouse_name: string;
+    spouse_lastname: string;
     constructor() {
         this.idirtra_requests = null;
         this.idprocess = null;
@@ -724,14 +724,14 @@ export class payments {
     employee_name: string;
     total: string;
     status: string;
-    nearsol_id:string;
-    client_id:string;
-    state:string;
-    account:string;
-    days:string;
-    ot:string;
-    seventh:string;
-    last_seventh:string;
+    nearsol_id: string;
+    client_id: string;
+    state: string;
+    account: string;
+    days: string;
+    ot: string;
+    seventh: string;
+    last_seventh: string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;
@@ -757,12 +757,12 @@ export class services {
     status: string;
     current: string;
     //Process
-    idinternal_process:string;
-    id_user:string;
-    proc_name:string;
-    date:string;
-    proc_status:string;
-    notes:string;
+    idinternal_process: string;
+    id_user: string;
+    proc_name: string;
+    date: string;
+    proc_status: string;
+    notes: string;
     constructor() {
         this.idservices = null;
         this.id_process = null;
@@ -781,20 +781,20 @@ export class services {
     }
 }
 
-export class card_assignation{
-    idcard_assignations:string;
-    id_employee:string;
-    id_process:string;
-    code:string;
-    status:string;
+export class card_assignation {
+    idcard_assignations: string;
+    id_employee: string;
+    id_process: string;
+    code: string;
+    status: string;
     //processes
-    idinternal_process:string;
-    id_user:string;
-    proc_name:string;
-    date:string;
-    proc_status:string;
-    notes:string;
-    constructor(){
+    idinternal_process: string;
+    id_user: string;
+    proc_name: string;
+    date: string;
+    proc_status: string;
+    notes: string;
+    constructor() {
         this.idcard_assignations = null;
         this.id_employee = null;
         this.id_process = null;
@@ -810,16 +810,16 @@ export class card_assignation{
     }
 }
 
-export class sup_exception{
-    avaya:string;
-    name:string;
-    date:string;
-    reason:string;
-    time:string;
-    notes:string;
-    supervisor:string;
-    status:string;
-    constructor(){
+export class sup_exception {
+    avaya: string;
+    name: string;
+    date: string;
+    reason: string;
+    time: string;
+    notes: string;
+    supervisor: string;
+    status: string;
+    constructor() {
         this.avaya = null;
         this.name = null;
         this.date = null;
@@ -831,18 +831,18 @@ export class sup_exception{
     }
 }
 
-export class change_id{
-    new_id:string;
-    old_id:string;
-    id_employee:string;
+export class change_id {
+    new_id: string;
+    old_id: string;
+    id_employee: string;
     //process
-    idinternal_process:string;
-    id_user:string;
-    proc_name:string;
-    date:string;
-    proc_status:string;
-    notes:string;
-    constructor(){
+    idinternal_process: string;
+    id_user: string;
+    proc_name: string;
+    date: string;
+    proc_status: string;
+    notes: string;
+    constructor() {
         this.new_id = null;
         this.id_employee = null;
         //process
@@ -855,29 +855,29 @@ export class change_id{
     }
 }
 
-export class ot_manage{
-    id_employee:string;
-    name:string;
-    nearsol_id:string;
-    amount:string;
-    id_period:string;
-    status:string;
-    constructor(){
+export class ot_manage {
+    id_employee: string;
+    name: string;
+    nearsol_id: string;
+    amount: string;
+    id_period: string;
+    status: string;
+    constructor() {
         this.id_employee = null;
         this.amount = null;
         this.id_period = null;
     }
 }
 
-export class attendance_accounts{
-    idaccounts:string;
-    name:string;
-    max:string;
-    value:string;
-    date:string;
-    status:string;
-    show:string;
-    constructor(){
+export class attendance_accounts {
+    idaccounts: string;
+    name: string;
+    max: string;
+    value: string;
+    date: string;
+    status: string;
+    show: string;
+    constructor() {
         this.idaccounts = null;
         this.name = null;
         this.max = null;
@@ -887,11 +887,47 @@ export class attendance_accounts{
     }
 }
 
-export class clients{
-    idclients:string;
-    name:string;
-    constructor(){
+export class clients {
+    idclients: string;
+    name: string;
+    constructor() {
         this.idclients = null;
         this.name = null;
+    }
+}
+
+export class marginalization {
+    //Employees
+    idemployees:string;
+    id_profile:string;
+    nearsol_id:string;
+    name:string;
+    //Master
+    idmarginalizations: string;
+    id_user: string;
+    approve_by: string;
+    date: string;
+    type: string;
+    //Details
+    idmarginalization_details: string;
+    id_attendance: string;
+    id_marginalization: string;
+    before: string;
+    after: string;
+    value: string;
+    constructor() {
+        //Master
+        this.idmarginalizations = null;
+        this.id_attendance = null;
+        this.id_user = null;
+        this.approve_by = null;
+        this.date = null;
+        this.type = null;
+        //Details
+        this.idmarginalization_details = null;
+        this.id_marginalization = null;
+        this.before = null;
+        this.after = null;
+        this.value = null;
     }
 }
