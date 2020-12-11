@@ -4,6 +4,7 @@ import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { accounts, attendences, attendences_adjustment, clients, marginalization, ot_manage } from '../process_templates';
+import { users } from '../users';
 
 @Component({
   selector: 'app-ottracker',
@@ -15,6 +16,7 @@ export class OttrackerComponent implements OnInit {
   ots:ot_manage[] = [];
   clients:clients[] = [];
   marginalizations:marginalization[] = [];
+  approvals:users[] = []
   selectedAccount:accounts = new accounts;
   selectedClient:string = null;
   marginalazing:boolean = false;
@@ -28,6 +30,9 @@ export class OttrackerComponent implements OnInit {
       this.clients = cls;
       this.selectedClient = this.clients[0].idclients;
       this.setClient(this.clients[0].idclients);
+    })
+    this.apiServices.getApprovers().subscribe((usrs:users[])=>{
+      this.approvals = usrs;
     })
   }
 

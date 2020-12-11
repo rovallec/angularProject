@@ -1,43 +1,78 @@
 <div class="col-md-12" style="margin-top:25px">
     <div class="row">
         <div class="col-md-3">
-                <div class="row h-100" style="padding-left:5px">
-                    <div class="col-md-12 h-100" style="border-right: solid 4px #e3f2fd">
-                        <div class="row">
-                            <div class="col-md-12" style="max-height: 38px;">
-                                <select class="form-control" (change)="setClient(selectedClient)"
-                                    [(ngModel)]="selectedClient">
-                                    <option *ngFor="let cl of clients" [value]="cl.idclients">{{cl.name}}</option>
-                                </select>
-                            </div>
+            <div class="row h-100" style="padding-left:5px">
+                <div class="col-md-12 h-100" style="border-right: solid 4px #e3f2fd">
+                    <div class="row">
+                        <div class="col-md-12" style="max-height: 38px;">
+                            <select class="form-control" (change)="setClient(selectedClient)"
+                                [(ngModel)]="selectedClient">
+                                <option *ngFor="let cl of clients" [value]="cl.idclients">{{cl.name}}</option>
+                            </select>
                         </div>
-                        <div class="row" style="margin-top:10px">
-                            <div class="col-md-12">
-                                <div class="list-group w-100" id="list-tab" role="tablist">
-                                    <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
-                                        [tabindex]="acc.idaccounts" (click)="setSelection(acc)"
-                                        [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}"
-                                        style="cursor: pointer;">{{acc.name}}</a>
-                                </div>
+                    </div>
+                    <div class="row" style="margin-top:10px">
+                        <div class="col-md-12">
+                            <div class="list-group w-100" id="list-tab" role="tablist">
+                                <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
+                                    [tabindex]="acc.idaccounts" (click)="setSelection(acc)"
+                                    [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}"
+                                    style="cursor: pointer;">{{acc.name}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
         <div class="col-md-9">
             <div class="row">
                 <div class="col-12">
                     <div class="d-flex mb-3">
                         <div class="float-left p-2">
-                            <button type="button" style="padding-left: 10px;" class="btn btn-outline-danger"><i class="fas fa-history"></i></button>
+                            <button type="button" style="padding-left: 10px;" class="btn btn-outline-danger"><i
+                                    class="fas fa-history"></i></button>
                         </div>
                         <div class="flex-fill"></div>
                         <div class="float-center">
-                            <input type="text" class="form-control" disabled="true" [(ngModel)]="selectedAccount.name" style="text-align: center;">
+                            <input type="text" class="form-control" disabled="true" [(ngModel)]="selectedAccount.name"
+                                style="text-align: center;">
                         </div>
                         <div class="flex-fill"></div>
                         <div class="float-right p-2">
-                            <button type="button" class="btn btn-outline-success" style="padding-right:10px"><i class="fas fa-wave-square"></i></button>
+                            <button type="button" class="btn btn-outline-success" style="padding-right:10px"
+                                data-toggle="modal" data-target="#exampleModal"><i
+                                    class="fas fa-wave-square"></i></button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">APPROVED BY</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body align-self-center">
+                                            <div style="width:200px">
+                                                <select class="form-control" [(ngModel)]="iduser">
+                                                    <option *ngFor="let app of approvals" [value]="app.iduser">
+                                                        {{app.user_name}}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer d-flex">
+                                            <div class="mr-auto p-2">
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="marginalize()">ACCEPT</button>
+                                            </div>
+                                            <div class="p-2">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">CLOSE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
