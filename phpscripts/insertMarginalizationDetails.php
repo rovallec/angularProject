@@ -20,12 +20,11 @@ $request = json_decode($postdata);
     $after = ($request->after);
     $value = ($request->value);
 
-$sql = "INSERT INTO `minearsol`.`marginalizations` (`idmarginalizations`, `id_user`, `approved_by`, `date`, `type`) VALUES (NULL,  '$id_user', '$approve_by', '$date', '$type');";
+$sql = "INSERT INTO `minearsol`.`marginalization_details` (`idmarginalization_details`, `id_marginalization`, `id_attendance`, `before`, `after`, `value`) VALUES (NULL, '$id_marginalization', '$id_attendance', '$before', '$after', '$value');";
 
 
 if($result = mysqli_query($con, $sql))
 {
-	$id_marginalization = mysqli_insert_id($con);
 		http_response_code(200);
 }else{
 	http_response_code(404);

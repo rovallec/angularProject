@@ -160,13 +160,16 @@ export class OttrackerComponent implements OnInit {
       att.worked_time = mar.after;
       att.scheduled = mar.id_marginalization;
       this.apiServices.insertMarginalizations(mar).subscribe((str: string) => {
-        count = count + 1;
-        //this.apiServices.updateAttendances(att).subscribe((str:string)=>{})
-        console.log(att);
-        if (count == (this.marginalizations.length - 1)) {
-          this.marginalazing = false;
-          this.setSelection(this.accounts[0]);
-        }
+        mar.id_marginalization = str;
+        this.apiServices.insertMarginalizationsDetails(mar).subscribe((str: string) => {
+          count = count + 1;
+          //this.apiServices.updateAttendances(att).subscribe((str:string)=>{})
+          console.log(att);
+          if (count == (this.marginalizations.length - 1)) {
+            this.marginalazing = false;
+            this.setSelection(this.accounts[0]);
+          }
+        })
       })
     })
   }

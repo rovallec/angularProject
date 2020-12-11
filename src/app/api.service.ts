@@ -599,5 +599,9 @@ getClients(){
 insertMarginalizations(margin:marginalization){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertMarginazations.php`, margin);
 }
+
+insertMarginalizationsDetails(margin:marginalization){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertMarginalizationDetails.php`, margin);
+}
   constructor(private httpClient:HttpClient) { }
 }
