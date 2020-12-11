@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+import { MarginInfo } from 'xlsx/types';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
@@ -153,38 +154,23 @@ export class OttrackerComponent implements OnInit {
   }
 
   saveOTMerge() {
-    let count: number = 0;
-    let lastId: string = 'N/A';
-    this.marginalizations.forEach(mar => {
-      let att: attendences = new attendences;
-      att.idattendences = mar.id_attendance;
-      att.worked_time = mar.after;
-      att.scheduled = mar.id_marginalization;
-      if (mar.idemployees != lastId) {
-        lastId = mar.idemployees;
-        this.apiServices.insertMarginalizations(mar).subscribe((str: string) => {
-          mar.id_marginalization = str;
-          this.apiServices.insertMarginalizationsDetails(mar).subscribe((str: string) => {
-            count = count + 1;
-            //this.apiServices.updateAttendances(att).subscribe((str:string)=>{})
-            console.log(att);
-            if (count == (this.marginalizations.length - 1)) {
-              this.marginalazing = false;
-              this.setSelection(this.accounts[0]);
-            }
-          })
-        })
-      } else {
-        this.apiServices.insertMarginalizationsDetails(mar).subscribe((str: string) => {
-          count = count + 1;
-          //this.apiServices.updateAttendances(att).subscribe((str:string)=>{})
-          console.log(att);
-          if (count == (this.marginalizations.length - 1)) {
+    this.apiServices.insertMarginalizations(this.marginalizations[0]).subscribe((str:string)=>{
+      this.marginalizations.forEach(mar => {
+        let att: attendences = new attendences;
+  
+        att.idattendences = mar.id_attendance;
+        att.worked_time = mar.after;
+        att.scheduled = mar.id_marginalization;
+
+        mar.idmarginalizations = str;
+
+        this.apiServices.insertMarginalizationsDetails(mar).subscribe((str:string)=>{
+          if(this.marginalizations.indexOf(mar) == (this.marginalizations.length - 1)){
             this.marginalazing = false;
-            this.setSelection(this.accounts[0]);
+            this.setSelection(this.selectedAccount);
           }
         })
-      }
+      })
     })
   }
 }
