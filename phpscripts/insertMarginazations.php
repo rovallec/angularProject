@@ -25,8 +25,9 @@ $sql = "INSERT INTO `minearsol`.`marginalizations` (`idmarginalizations`, `id_us
 
 if($result = mysqli_query($con, $sql))
 {
-	$id_marginalization = mysqli_insert_id($con);
-		http_response_code(200);
+    $id_marginalization = mysqli_insert_id($con);
+    echo($id_marginalization);
+	http_response_code(200);
 }else{
 	http_response_code(404);
 }

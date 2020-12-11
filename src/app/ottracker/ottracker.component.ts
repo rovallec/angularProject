@@ -154,13 +154,27 @@ export class OttrackerComponent implements OnInit {
 
   saveOTMerge() {
     let count: number = 0;
+    let lastId: string = 'N/A';
     this.marginalizations.forEach(mar => {
       let att: attendences = new attendences;
       att.idattendences = mar.id_attendance;
       att.worked_time = mar.after;
       att.scheduled = mar.id_marginalization;
-      this.apiServices.insertMarginalizations(mar).subscribe((str: string) => {
-        mar.id_marginalization = str;
+      if (mar.idemployees != lastId) {
+        lastId = mar.idemployees;
+        this.apiServices.insertMarginalizations(mar).subscribe((str: string) => {
+          mar.id_marginalization = str;
+          this.apiServices.insertMarginalizationsDetails(mar).subscribe((str: string) => {
+            count = count + 1;
+            //this.apiServices.updateAttendances(att).subscribe((str:string)=>{})
+            console.log(att);
+            if (count == (this.marginalizations.length - 1)) {
+              this.marginalazing = false;
+              this.setSelection(this.accounts[0]);
+            }
+          })
+        })
+      } else {
         this.apiServices.insertMarginalizationsDetails(mar).subscribe((str: string) => {
           count = count + 1;
           //this.apiServices.updateAttendances(att).subscribe((str:string)=>{})
@@ -170,7 +184,7 @@ export class OttrackerComponent implements OnInit {
             this.setSelection(this.accounts[0]);
           }
         })
-      })
+      }
     })
   }
 }
