@@ -22,6 +22,7 @@ export class OttrackerComponent implements OnInit {
   selectedClient: string = null;
   marginalazing: boolean = false;
   showAccount: boolean = false;
+  history:boolean = false;
   iduser: string = null;
 
   constructor(public apiServices: ApiService, public authService: AuthServiceService) { }
@@ -153,6 +154,26 @@ export class OttrackerComponent implements OnInit {
     })
   }
 
+  viewHistory(){
+    let date: Date = new Date();
+    let start: string = null;
+    let end: string = null;
+    let cnt: number = 0;
+    this.marginalazing = false;
+    if (date.getDate() > 15) {
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '16';
+      end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
+    } else {
+      start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
+      end = end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + "15";
+    }
+
+    this.apiServices.getMarginalizations({start:start, end:end, account:this.selectedAccount.idaccounts}).subscribe((margins:marginalization[])=>{
+      this.marginalizations = margins;
+      this.history = true
+    })
+  }
+
   saveOTMerge() {
     this.apiServices.insertMarginalizations(this.marginalizations[0]).subscribe((str:string)=>{
       this.marginalizations.forEach(mar => {
@@ -164,12 +185,14 @@ export class OttrackerComponent implements OnInit {
 
         mar.id_marginalization = str;
 
-        this.apiServices.insertMarginalizationsDetails(mar).subscribe((str:string)=>{
-          if(this.marginalizations.indexOf(mar) == (this.marginalizations.length - 1)){
-            this.marginalazing = false;
-            this.setSelection(this.selectedAccount);
-          }
-        })
+        this.apiServices.updateAttendances(att).subscribe((str:string)=>{
+          this.apiServices.insertMarginalizationsDetails(mar).subscribe((str:string)=>{
+            if(this.marginalizations.indexOf(mar) == (this.marginalizations.length - 1)){
+              this.marginalazing = false;
+              this.setSelection(this.selectedAccount);
+            }
+          })
+        });
       })
     })
   }

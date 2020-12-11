@@ -603,5 +603,10 @@ insertMarginalizations(margin:marginalization){
 insertMarginalizationsDetails(margin:marginalization){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertMarginalizationDetails.php`, margin);
 }
+
+getMarginalizations(any:any){
+  return this.httpClient.post<marginalization[]>(`${this.PHP_API_SERVER}/phpscripts/getMarginalizations.php`, any);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
