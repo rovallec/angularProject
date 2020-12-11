@@ -162,7 +162,7 @@ export class OttrackerComponent implements OnInit {
         att.worked_time = mar.after;
         att.scheduled = mar.id_marginalization;
 
-        mar.idmarginalizations = str;
+        mar.id_marginalization = str;
 
         this.apiServices.insertMarginalizationsDetails(mar).subscribe((str:string)=>{
           if(this.marginalizations.indexOf(mar) == (this.marginalizations.length - 1)){
