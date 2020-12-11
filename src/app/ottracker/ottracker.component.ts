@@ -139,6 +139,7 @@ export class OttrackerComponent implements OnInit {
               marg.value = (Number(marg.before) - Number(marg.after)).toFixed(2);
               marg.idemployees = attendance.id_employee;
               marg.name = ot.name;
+              marg.id_marginalization = attendance.scheduled;
               marg.nearsol_id = ot.nearsol_id;
               this.marginalizations.push(marg);
             }
@@ -151,8 +152,22 @@ export class OttrackerComponent implements OnInit {
     })
   }
 
-  saveOTMerge(){
-    this.marginalazing = false;
-    this.setSelection(this.accounts[0]);
+  saveOTMerge() {
+    let count: number = 0;
+    this.marginalizations.forEach(mar => {
+      let att: attendences = new attendences;
+      att.idattendences = mar.id_attendance;
+      att.worked_time = mar.after;
+      att.scheduled = mar.id_marginalization;
+      this.apiServices.insertMarginalizations(mar).subscribe((str: string) => {
+        count = count + 1;
+        //this.apiServices.updateAttendances(att).subscribe((str:string)=>{})
+        console.log(att);
+        if (count == (this.marginalizations.length - 1)) {
+          this.marginalazing = false;
+          this.setSelection(this.accounts[0]);
+        }
+      })
+    })
   }
 }
