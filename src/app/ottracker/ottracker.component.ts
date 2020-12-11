@@ -37,6 +37,8 @@ export class OttrackerComponent implements OnInit {
   }
 
   setSelection(acc: accounts) {
+    this.marginalazing = false;
+    this.marginalizations = [];
     this.ots = [];
     let date: Date = new Date();
     let start: string = null;
@@ -90,6 +92,7 @@ export class OttrackerComponent implements OnInit {
   }
 
   marginalize() {
+    this.marginalizations = [];
     let date: Date = new Date();
     let start: string = null;
     let end: string = null;
@@ -137,7 +140,6 @@ export class OttrackerComponent implements OnInit {
               marg.idemployees = attendance.id_employee;
               marg.name = ot.name;
               marg.nearsol_id = ot.nearsol_id;
-              marg.idmarginalization_details = attendance.client_id;
               this.marginalizations.push(marg);
             }
           }

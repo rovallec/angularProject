@@ -1,9 +1,9 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
-define('db_host', 'localhost');
-define('db_user','neadmin');
-define('db_password','N$4rsol.@dmin');
+define('db_host', '172.18.2.226');
+define('db_user','hvielman');
+define('db_password','toor');
 define('db_name','minearsol');
 
 function connect()

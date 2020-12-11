@@ -39,9 +39,10 @@
                         </div>
                         <div class="flex-fill"></div>
                         <div class="float-right p-2">
-                            <button type="button" class="btn btn-outline-primary" *ngIf="marginalazing" style="padding-right:10px" (click)="saveOTMerge()"><i class="far fa-save"></i></button>
-                            <button *ngIf="!marginalazing" type="button" class="btn btn-outline-success" style="padding-right:10px"
-                                data-toggle="modal" data-target="#exampleModal"><i
+                            <button type="button" class="btn btn-outline-primary" *ngIf="marginalazing"
+                                style="padding-right:10px" (click)="saveOTMerge()"><i class="far fa-save"></i></button>
+                            <button *ngIf="!marginalazing" type="button" class="btn btn-outline-success"
+                                style="padding-right:10px" data-toggle="modal" data-target="#exampleModal"><i
                                     class="fas fa-wave-square"></i></button>
                         </div>
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
@@ -64,8 +65,8 @@
                                     </div>
                                     <div class="modal-footer d-flex">
                                         <div class="mr-auto p-2">
-                                            <button type="button" class="btn btn-primary"
-                                                (click)="marginalize()" data-dismiss="modal">ACCEPT</button>
+                                            <button type="button" class="btn btn-primary" (click)="marginalize()"
+                                                data-dismiss="modal">ACCEPT</button>
                                         </div>
                                         <div class="p-2">
                                             <button type="button" class="btn btn-secondary"
@@ -118,7 +119,6 @@
                                 <tr *ngFor="let margins of marginalizations">
                                     <td class="text-center">{{margins.idemployees}}</td>
                                     <td class="text-center">{{margins.nearsol_id}}</td>
-                                    <td class="text-center">{{margins.idmarginalization_details}}</td>
                                     <td class="text-center">{{margins.name}}</td>
                                     <td class="text-center">{{margins.before}}</td>
                                     <td class="text-center">{{margins.after}}</td>
