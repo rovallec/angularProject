@@ -147,7 +147,7 @@ export class OttrackerComponent implements OnInit {
             }
           }
         })
-        if ((this.ots.length - 1) == cnt) {
+        if (this.ots.length == cnt) {
           this.marginalazing = true;
         }
       })
