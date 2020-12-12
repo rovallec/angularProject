@@ -67,7 +67,7 @@
           routerLink="/attritionReport" style="color: white" [ngClass]="{'act':selectedOption=='ATTREP'}"
           (click)="SetSel('ATTREP')">ATTRITION REPORT</a>
         <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/ottracker" style="color: white"
-          [ngClass]="{'act':selectedOption=='OTTRACK'}" (click)="SetSel('OTTRACK')">OT TRACKER</a>
+          [ngClass]="{'act':selectedOption=='OTTRACK'}" (click)="SetSel('OTTRACK')">MAKEUP TRACKER</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item active">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/classlist" style="color: white"

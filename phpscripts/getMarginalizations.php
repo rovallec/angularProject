@@ -10,6 +10,7 @@ $end = ($request->end);
 $account = ($request->account);
 
 $user = [];
+$i = 0;
 
 $sql = "SELECT marginalizations.*, marginalization_details.*, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id FROM marginalization_details LEFT JOIN attendences ON attendences.idattendences = marginalization_details.id_attendance LEFT JOIN employees ON employees.idemployees = attendences.id_employee LEFT JOIN hires ON hires.idhires = employees.id_hire LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile LEFT JOIN marginalizations ON marginalizations.idmarginalizations = marginalization_details.idmarginalization_details WHERE marginalizations.date BETWEEN '$start' AND '$end' AND employees.id_account = $account;";
 
