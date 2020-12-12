@@ -118,7 +118,7 @@ export class OttrackerComponent implements OnInit {
             attendance.worked_time = attendance.scheduled;
             marg.id_attendance = attendance.idattendences;
             marg.after = attendance.scheduled;
-            marg.approve_by = this.iduser;
+            marg.approved_by = this.iduser;
             marg.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
             marg.id_user = this.authService.getAuthusr().iduser;
             marg.type = 'OT Reduction';
@@ -134,7 +134,7 @@ export class OttrackerComponent implements OnInit {
               attendance.worked_time = '0.00';
               marg.id_attendance = attendance.idattendences;
               marg.after = '0.00';
-              marg.approve_by = this.iduser;
+              marg.approved_by = this.iduser;
               marg.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
               marg.id_user = this.authService.getAuthusr().iduser;
               marg.type = 'OT Reduction';

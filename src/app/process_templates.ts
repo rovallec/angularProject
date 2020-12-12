@@ -905,7 +905,7 @@ export class marginalization {
     //Master
     idmarginalizations: string;
     id_user: string;
-    approve_by: string;
+    approved_by: string;
     date: string;
     type: string;
     //Details
@@ -920,7 +920,7 @@ export class marginalization {
         this.idmarginalizations = null;
         this.id_attendance = null;
         this.id_user = null;
-        this.approve_by = null;
+        this.approved_by = null;
         this.date = null;
         this.type = null;
         //Details
