@@ -61,7 +61,7 @@ export class OttrackerComponent implements OnInit {
           if (att.length > 0) {
             let ot: ot_manage = new ot_manage;
             ot.amount = '0.00';
-            ot.amount = '0.00';
+            ot.status = '0.00';
             ot.id_employee = employee.idemployees;
             ot.name = employee.name;
             ot.nearsol_id = employee.nearsol_id;
