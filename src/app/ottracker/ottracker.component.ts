@@ -115,48 +115,50 @@ export class OttrackerComponent implements OnInit {
     }
 
     this.ots.forEach(ot => {
-      this.apiServices.getAttPeriod({ id: ot.id_employee, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
-        cnt = cnt + 1;
-        att.forEach(attendance => {
-          let marg: marginalization = new marginalization;
-          if (attendance.scheduled != 'OFF' && Number(attendance.worked_time) > Number(attendance.scheduled)) {
-            marg.before = attendance.worked_time;
-            attendance.worked_time = attendance.scheduled;
-            marg.id_attendance = attendance.idattendences;
-            marg.after = attendance.scheduled;
-            marg.approved_by = this.iduser;
-            marg.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
-            marg.id_user = this.authService.getAuthusr().iduser;
-            marg.type = 'Makeup Reduction';
-            marg.value = (Number(marg.before) - Number(marg.after)).toFixed(2);
-            marg.idemployees = attendance.id_employee;
-            marg.name = ot.name;
-            marg.nearsol_id = ot.nearsol_id;
-            marg.idmarginalization_details = attendance.client_id;
-            this.marginalizations.push(marg);
-          } else {
-            if (attendance.scheduled == 'OFF' && Number(attendance.worked_time) > 0) {
+      if(Number(ot.status) < 0){
+        this.apiServices.getAttPeriod({ id: ot.id_employee, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
+          cnt = cnt + 1;
+          att.forEach(attendance => {
+            let marg: marginalization = new marginalization;
+            if (attendance.scheduled != 'OFF' && Number(attendance.worked_time) > Number(attendance.scheduled)) {
               marg.before = attendance.worked_time;
-              attendance.worked_time = '0.00';
+              attendance.worked_time = attendance.scheduled;
               marg.id_attendance = attendance.idattendences;
-              marg.after = '0.00';
+              marg.after = attendance.scheduled;
               marg.approved_by = this.iduser;
               marg.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
               marg.id_user = this.authService.getAuthusr().iduser;
-              marg.type = 'OT Reduction';
+              marg.type = 'Makeup Reduction';
               marg.value = (Number(marg.before) - Number(marg.after)).toFixed(2);
               marg.idemployees = attendance.id_employee;
               marg.name = ot.name;
-              marg.id_marginalization = attendance.scheduled;
               marg.nearsol_id = ot.nearsol_id;
+              marg.idmarginalization_details = attendance.client_id;
               this.marginalizations.push(marg);
+            } else {
+              if (attendance.scheduled == 'OFF' && Number(attendance.worked_time) > 0) {
+                marg.before = attendance.worked_time;
+                attendance.worked_time = '0.00';
+                marg.id_attendance = attendance.idattendences;
+                marg.after = '0.00';
+                marg.approved_by = this.iduser;
+                marg.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                marg.id_user = this.authService.getAuthusr().iduser;
+                marg.type = 'OT Reduction';
+                marg.value = (Number(marg.before) - Number(marg.after)).toFixed(2);
+                marg.idemployees = attendance.id_employee;
+                marg.name = ot.name;
+                marg.id_marginalization = attendance.scheduled;
+                marg.nearsol_id = ot.nearsol_id;
+                this.marginalizations.push(marg);
+              }
             }
+          })
+          if (this.ots.length == cnt) {
+            this.marginalazing = true;
           }
         })
-        if (this.ots.length == cnt) {
-          this.marginalazing = true;
-        }
-      })
+      }
     })
   }
 
