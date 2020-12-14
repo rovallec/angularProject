@@ -200,6 +200,7 @@ export class OttrackerComponent implements OnInit {
         this.marginalizations.push(mar);
       }
       this.marginalazing = true;
+      this.history = false;
       this.otView = true;
     })
   }

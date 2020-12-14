@@ -122,6 +122,7 @@
                                 <th>BEFORE</th>
                                 <th>AFTER</th>
                                 <th>VALUE</th>
+                                <th *ngIf="otView">ACTION</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let margins of marginalizations">
@@ -131,6 +132,11 @@
                                     <td class="text-center">{{margins.before}}</td>
                                     <td class="text-center">{{margins.after}}</td>
                                     <td class="text-center">{{margins.value}}</td>
+                                    <td class="text-center" *ngIf="otView" [(ngModel)]="margins.action"><select>
+                                        <option>APPLY</option>
+                                        <option>DENY</option>
+                                        <option>OMMIT</option>
+                                    </select></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -151,7 +157,6 @@
                                 <th>BEFORE</th>
                                 <th>AFTER</th>
                                 <th>VALUE</th>
-                                <th *ngIf="otView">ACTION</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let margins of marginalizations">
@@ -163,11 +168,6 @@
                                     <td class="text-center">{{margins.before}}</td>
                                     <td class="text-center">{{margins.after}}</td>
                                     <td class="text-center">{{margins.value}}</td>
-                                    <td class="text-center" *ngIf="otView" [(ngModel)]="margins.action"><select>
-                                        <option>APPLY</option>
-                                        <option>DENY</option>
-                                        <option>OMMIT</option>
-                                    </select></td>
                                 </tr>
                             </tbody>
                         </table>
