@@ -7,8 +7,6 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id_employee = ($request->id_employee);
-$name = ($request->name);
-$nearsol_id = ($request->nearsol_id);
 $amount = ($request->amount);
 $id_period = ($request->id_period);
 

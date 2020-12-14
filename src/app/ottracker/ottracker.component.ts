@@ -171,12 +171,12 @@ export class OttrackerComponent implements OnInit {
               }
             }
           })
-          if (this.ots.length == cnt) {
-            this.marginalazing = true;
-          }
         })
       }else{
         cnt = cnt + 1;
+      }
+      if (this.ots.length == cnt) {
+        this.marginalazing = true;
       }
     })
   }
