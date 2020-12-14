@@ -1,11 +1,12 @@
 import { applySourceSpanToStatementIfNeeded } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
+import { isNullOrUndefined } from 'util';
 import { MarginInfo } from 'xlsx/types';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
-import { accounts, attendences, attendences_adjustment, clients, marginalization, ot_manage, vacations } from '../process_templates';
+import { accounts, attendences, attendences_adjustment, clients, marginalization, ot_manage, periods, vacations } from '../process_templates';
 import { users } from '../users';
 
 @Component({
@@ -24,6 +25,7 @@ export class OttrackerComponent implements OnInit {
   marginalazing: boolean = false;
   showAccount: boolean = false;
   history:boolean = false;
+  otView:boolean = false;
   iduser: string = null;
 
   constructor(public apiServices: ApiService, public authService: AuthServiceService) { }
@@ -75,9 +77,6 @@ export class OttrackerComponent implements OnInit {
                 vac.forEach(vacation=>{
                   if(vacation.took_date == attendance.date && vacation.status == "PENDING"){
                     activeVacation = true;
-                    if(attendance.id_employee == "4743"){
-                      console.log(attendance);
-                    }
                   }
                 })
 
@@ -184,6 +183,7 @@ export class OttrackerComponent implements OnInit {
 
   getOT(){
     this.marginalizations = [];
+
     this.ots.forEach(ot=>{
       if((Number(ot.amount) + Number(ot.status)) > 0){
         let mar:marginalization = new marginalization;
@@ -196,9 +196,11 @@ export class OttrackerComponent implements OnInit {
         mar.approved_by = this.iduser;
         mar.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
         mar.type = "OT Remover";
+        mar.action = "OMMIT";
         this.marginalizations.push(mar);
       }
       this.marginalazing = true;
+      this.otView = true;
     })
   }
 
@@ -223,24 +225,45 @@ export class OttrackerComponent implements OnInit {
   }
 
   saveOTMerge() {
-    this.apiServices.insertMarginalizations(this.marginalizations[0]).subscribe((str:string)=>{
-      this.marginalizations.forEach(mar => {
-        let att: attendences = new attendences;
+    if(!this.otView){
+      this.apiServices.insertMarginalizations(this.marginalizations[0]).subscribe((str:string)=>{
+        this.marginalizations.forEach(mar => {
+          let att: attendences = new attendences;
+    
+          att.idattendences = mar.id_attendance;
+          att.worked_time = mar.after;
+          att.scheduled = mar.after;
+          mar.id_marginalization = str;
   
-        att.idattendences = mar.id_attendance;
-        att.worked_time = mar.after;
-        att.scheduled = mar.after;
-        mar.id_marginalization = str;
-
-        this.apiServices.updateAttendances(att).subscribe((str:string)=>{
-          this.apiServices.insertMarginalizationsDetails(mar).subscribe((str:string)=>{
-            if(this.marginalizations.indexOf(mar) == (this.marginalizations.length - 1)){
-              this.marginalazing = false;
-              this.setSelection(this.selectedAccount);
+          this.apiServices.updateAttendances(att).subscribe((str:string)=>{
+            this.apiServices.insertMarginalizationsDetails(mar).subscribe((str:string)=>{
+              if(this.marginalizations.indexOf(mar) == (this.marginalizations.length - 1)){
+                this.marginalazing = false;
+                this.setSelection(this.selectedAccount);
+              }
+            })
+          });
+        })
+      })
+    }else{
+        this.apiServices.getPeriods().subscribe((period:periods[])=>{
+        this.marginalizations.forEach(margin=>{
+          let ot:ot_manage = new ot_manage;
+          ot.id_employee = margin.idemployees;
+          ot.id_period = period[period.length-1].idperiods;
+          if(margin.action == 'APPLY'){
+            ot.amount = margin.before;
+          }else if(margin.action == 'DENY'){
+            ot.amount = '0.00';
+          }
+          this.apiServices.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
+            if(!isNullOrUndefined(ots)){
+              this.apiServices.insertApprovedOt(ot).subscribe((str:string)=>{
+              })
             }
           })
-        });
+        })
       })
-    })
+    }
   }
 }

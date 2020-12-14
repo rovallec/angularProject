@@ -917,6 +917,8 @@ export class marginalization {
     before: string;
     after: string;
     value: string;
+    //Visual Data
+    action:string;
     constructor() {
         //Master
         this.idmarginalizations = null;

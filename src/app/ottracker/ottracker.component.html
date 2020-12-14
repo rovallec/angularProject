@@ -42,7 +42,7 @@
                             <button type="button" class="btn btn-outline-primary" *ngIf="marginalazing"
                                 style="padding-right:10px" (click)="saveOTMerge()"><i class="far fa-save"></i></button>
                             <button type="button" class="btn btn-outline-warning" *ngIf="!marginalazing"
-                                style="padding-right:10px"><i class="fas fa-business-time"
+                                style="margin-right:10px"><i class="fas fa-business-time"
                                     (click)="getOT()"></i></button>
                             <button *ngIf="!marginalazing" type="button" class="btn btn-outline-success"
                                 style="padding-right:10px" data-toggle="modal" data-target="#exampleModal"><i
@@ -151,6 +151,7 @@
                                 <th>BEFORE</th>
                                 <th>AFTER</th>
                                 <th>VALUE</th>
+                                <th *ngIf="otView">ACTION</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let margins of marginalizations">
@@ -162,6 +163,11 @@
                                     <td class="text-center">{{margins.before}}</td>
                                     <td class="text-center">{{margins.after}}</td>
                                     <td class="text-center">{{margins.value}}</td>
+                                    <td class="text-center" *ngIf="otView" [(ngModel)]="margins.action"><select>
+                                        <option>APPLY</option>
+                                        <option>DENY</option>
+                                        <option>OMMIT</option>
+                                    </select></td>
                                 </tr>
                             </tbody>
                         </table>
