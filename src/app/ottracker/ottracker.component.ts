@@ -183,6 +183,7 @@ export class OttrackerComponent implements OnInit {
 
   getOT(){
     this.marginalizations = [];
+    console.log('GetOT');
 
     this.ots.forEach(ot=>{
       if((Number(ot.amount) + Number(ot.status)) > 0){
