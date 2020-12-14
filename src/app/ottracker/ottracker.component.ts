@@ -4,7 +4,7 @@ import { MarginInfo } from 'xlsx/types';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
-import { accounts, attendences, attendences_adjustment, clients, marginalization, ot_manage } from '../process_templates';
+import { accounts, attendences, attendences_adjustment, clients, marginalization, ot_manage, vacations } from '../process_templates';
 import { users } from '../users';
 
 @Component({
@@ -39,6 +39,7 @@ export class OttrackerComponent implements OnInit {
   }
 
   setSelection(acc: accounts) {
+    let activeVacation:boolean = false;
     this.marginalazing = false;
     this.marginalizations = [];
     this.ots = [];
@@ -58,29 +59,39 @@ export class OttrackerComponent implements OnInit {
     this.apiServices.getSearchEmployees({ filter: "id_account", value: this.selectedAccount.idaccounts, dp: 'exact' }).subscribe((emp: employees[]) => {
       emp.forEach(employee => {
         this.apiServices.getAttPeriod({ id: employee.idemployees, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
-          if (att.length > 0) {
-            let ot: ot_manage = new ot_manage;
-            ot.amount = '0.00';
-            ot.status = '0.00';
-            ot.id_employee = employee.idemployees;
-            ot.name = employee.name;
-            ot.nearsol_id = employee.nearsol_id;
-            ot.client_id = employee.client_id;
-            att.forEach(attendance => {
-              if (attendance.scheduled != 'OFF') {
-                if((Number(attendance.worked_time) - Number(attendance.scheduled)) > 0){
-                  ot.amount = (Number(ot.amount) + Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
-                }else if((Number(attendance.worked_time) - Number(attendance.scheduled)) < 0){
-                  ot.status = (Number(ot.status) + Number(Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
+          this.apiServices.getVacations({id:employee.id_profile}).subscribe((vac:vacations[])=>{
+            if (att.length > 0) {
+              activeVacation = false;
+              let ot: ot_manage = new ot_manage;
+              ot.amount = '0.00';
+              ot.status = '0.00';
+              ot.id_employee = employee.idemployees;
+              ot.name = employee.name;
+              ot.nearsol_id = employee.nearsol_id;
+              ot.client_id = employee.client_id;
+              att.forEach(attendance => {
+
+                vac.forEach(vacation=>{
+                  if(vacation.date == attendance.date && vacation.status == "PENDING"){
+                    activeVacation = true;
+                  }
+                })
+
+                if (attendance.scheduled != 'OFF' && !activeVacation) {
+                  if((Number(attendance.worked_time) - Number(attendance.scheduled)) > 0){
+                    ot.amount = (Number(ot.amount) + Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                  }else if((Number(attendance.worked_time) - Number(attendance.scheduled)) < 0){
+                    ot.status = (Number(ot.status) + Number(Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
+                  }
+                } else if(attendance.scheduled == 'OFF'){
+                  ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
                 }
-              } else {
-                ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
+              })
+              if (Number(ot.amount) != 0 || Number(ot.status) != 0) {
+                this.ots.push(ot);
               }
-            })
-            if (Number(ot.amount) != 0 || Number(ot.status) != 0) {
-              this.ots.push(ot);
             }
-          }
+          })
         })
       })
       this.showAccount = true;
