@@ -608,5 +608,9 @@ getMarginalizations(any:any){
   return this.httpClient.post<marginalization[]>(`${this.PHP_API_SERVER}/phpscripts/getMarginalizations.php`, any);
 }
 
+updateApproveOt(ot:ot_manage){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateApprovedOt.php`, ot);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
