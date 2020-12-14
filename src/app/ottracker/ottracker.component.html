@@ -86,15 +86,19 @@
                             <thead>
                                 <th>ID</th>
                                 <th>NEARSOL ID</th>
+                                <th>CLIENT ID</th>
                                 <th>NAME</th>
-                                <th>VALUE</th>
+                                <th>MAKEUP</th>
+                                <th>OT</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let ot of ots">
                                     <td class="text-center">{{ot.id_employee}}</td>
                                     <td class="text-center">{{ot.nearsol_id}}</td>
+                                    <td class="text-center">{{ot.client_id}}</td>
                                     <td class="text-center">{{ot.name}}</td>
-                                    <td class="text-center">{{ot.amount}}</td>
+                                    <td class="text-center">{{ot.status}}</td>
+                                    <Td class="text-cetner">{{ot.amount}}</Td>
                                 </tr>
                             </tbody>
                         </table>

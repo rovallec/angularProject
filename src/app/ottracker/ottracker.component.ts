@@ -60,18 +60,24 @@ export class OttrackerComponent implements OnInit {
         this.apiServices.getAttPeriod({ id: employee.idemployees, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
           if (att.length > 0) {
             let ot: ot_manage = new ot_manage;
+            ot.amount = '0.00';
+            ot.amount = '0.00';
             ot.id_employee = employee.idemployees;
             ot.name = employee.name;
             ot.nearsol_id = employee.nearsol_id;
-            ot.status = employee.client_id;
+            ot.client_id = employee.client_id;
             att.forEach(attendance => {
               if (attendance.scheduled != 'OFF') {
-                ot.amount = (Number(ot.amount) + (Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
+                if((Number(attendance.worked_time) - Number(attendance.scheduled)) > 0){
+                  ot.amount = (Number(ot.amount) + Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                }else if((Number(attendance.worked_time) - Number(attendance.scheduled)) < 0){
+                  ot.status = (Number(ot.status) + Number(Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
+                }
               } else {
                 ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
               }
             })
-            if (Number(ot.amount) > 0) {
+            if (Number(ot.amount) != 0 || Number(ot.status) != 0) {
               this.ots.push(ot);
             }
           }
@@ -121,7 +127,7 @@ export class OttrackerComponent implements OnInit {
             marg.approved_by = this.iduser;
             marg.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
             marg.id_user = this.authService.getAuthusr().iduser;
-            marg.type = 'OT Reduction';
+            marg.type = 'Makeup Reduction';
             marg.value = (Number(marg.before) - Number(marg.after)).toFixed(2);
             marg.idemployees = attendance.id_employee;
             marg.name = ot.name;

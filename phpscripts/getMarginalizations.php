@@ -29,7 +29,7 @@ if($result = mysqli_query($con, $sql)){
     $user[$i]['name'] = $row['first_name'] .  ' ' . $row['second_name'] . ' ' . $row['first_lastname'] . ' ' . $row['second_lastname'];
     //Master
     $user[$i]['id_user'] = $row['user_name'];
-    $user[$i]['approve_by'] = $row['approved'];
+    $user[$i]['approved_by'] = $row['approved'];
     $user[$i]['date'] = $row['date'];
     $user[$i]['type'] = $row['type'];
     //Details

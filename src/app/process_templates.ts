@@ -862,6 +862,7 @@ export class ot_manage {
     amount: string;
     id_period: string;
     status: string;
+    client_id:string;
     constructor() {
         this.id_employee = null;
         this.amount = null;

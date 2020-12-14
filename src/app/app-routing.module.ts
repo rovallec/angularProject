@@ -138,7 +138,7 @@ const routes:Routes = [
     canActivate:[AuthGuard]
   },
   {
-    path:'ottracker',
+    path:'timetracker',
     component: OttrackerComponent,
     canActivate:[AuthGuard]
   },
