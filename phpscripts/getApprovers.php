@@ -7,7 +7,7 @@
     $r = [];
     $i = 0;
 
-    $sql = "SELECT * FROM `users` WHERE `id_role` = '7';";
+    $sql = "SELECT * FROM `users` WHERE `id_role` = '6';";
 
     if($res = mysqli_query($con, $sql)){
         while($result = mysqli_fetch_assoc($res)){
