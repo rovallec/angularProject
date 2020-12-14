@@ -1,3 +1,4 @@
+import { applySourceSpanToStatementIfNeeded } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 import { MarginInfo } from 'xlsx/types';
@@ -88,6 +89,7 @@ export class OttrackerComponent implements OnInit {
                 }
               })
               if (Number(ot.amount) != 0 || Number(ot.status) != 0) {
+                ot.balance = (Number(ot.status) + Number(ot.amount)).toFixed(2);
                 this.ots.push(ot);
               }
             }

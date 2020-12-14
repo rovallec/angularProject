@@ -90,6 +90,7 @@
                                 <th>NAME</th>
                                 <th>MAKEUP</th>
                                 <th>OT</th>
+                                <th>BALANCE</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let ot of ots">
@@ -98,7 +99,8 @@
                                     <td class="text-center">{{ot.client_id}}</td>
                                     <td class="text-center">{{ot.name}}</td>
                                     <td class="text-center">{{ot.status}}</td>
-                                    <Td class="text-cetner">{{ot.amount}}</Td>
+                                    <td class="text-cetner">{{ot.amount}}</Td>
+                                    <td class="text-cetner">{{ot.balance}}</td>
                                 </tr>
                             </tbody>
                         </table>
