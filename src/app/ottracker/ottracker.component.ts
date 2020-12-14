@@ -73,7 +73,7 @@ export class OttrackerComponent implements OnInit {
                 activeVacation = false;
 
                 vac.forEach(vacation=>{
-                  if(vacation.date == attendance.date && vacation.status == "PENDING"){
+                  if(vacation.took_date == attendance.date && vacation.status == "PENDING"){
                     activeVacation = true;
                     if(attendance.id_employee == "4743"){
                       console.log(attendance);
