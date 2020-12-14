@@ -131,7 +131,7 @@ export class OttrackerComponent implements OnInit {
           cnt = cnt + 1;
           att.forEach(attendance => {
             let marg: marginalization = new marginalization;
-            if (attendance.scheduled != 'OFF' && Number(attendance.worked_time) > Number(attendance.scheduled)) {
+            if (attendance.scheduled != 'OFF' && Number(attendance.worked_time) > Number(attendance.scheduled) && Number(ot.status) < 0) {
               marg.before = attendance.worked_time;
               attendance.worked_time = attendance.scheduled;
               marg.id_attendance = attendance.idattendences;
