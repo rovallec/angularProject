@@ -182,6 +182,26 @@ export class OttrackerComponent implements OnInit {
     })
   }
 
+  getOT(){
+    this.marginalizations = [];
+    this.ots.forEach(ot=>{
+      if((Number(ot.amount) + Number(ot.status)) > 0){
+        let mar:marginalization = new marginalization;
+        mar.idemployees = ot.id_employee;
+        mar.nearsol_id = ot.nearsol_id;
+        mar.name = ot.name;
+        mar.before = (Number(ot.status) + Number(ot.amount)).toFixed(2);
+        mar.after = "0.00";
+        mar.value = (Number(ot.status) + Number(ot.amount)).toFixed(2);
+        mar.approved_by = this.iduser;
+        mar.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+        mar.type = "OT Remover";
+        this.marginalizations.push(mar);
+      }
+      this.marginalazing = true;
+    })
+  }
+
   viewHistory(){
     let date: Date = new Date();
     let start: string = null;

@@ -29,8 +29,8 @@
                 <div class="col-12">
                     <div class="d-flex mb-3">
                         <div class="float-left p-2">
-                            <button type="button" style="padding-left: 10px;" class="btn btn-outline-danger" (click)="viewHistory()"><i
-                                    class="fas fa-history"></i></button>
+                            <button type="button" style="padding-left: 10px;" class="btn btn-outline-danger"
+                                (click)="viewHistory()"><i class="fas fa-history"></i></button>
                         </div>
                         <div class="flex-fill"></div>
                         <div class="float-center">
@@ -41,6 +41,8 @@
                         <div class="float-right p-2">
                             <button type="button" class="btn btn-outline-primary" *ngIf="marginalazing"
                                 style="padding-right:10px" (click)="saveOTMerge()"><i class="far fa-save"></i></button>
+                            <button type="button" class="btn btn-outline-warning" *ngIf="!marginalazing"><i
+                                    style="padding-right:10px" class="fas fa-business-time" (click)="getOT()"></i></button>
                             <button *ngIf="!marginalazing" type="button" class="btn btn-outline-success"
                                 style="padding-right:10px" data-toggle="modal" data-target="#exampleModal"><i
                                     class="fas fa-wave-square"></i></button>
