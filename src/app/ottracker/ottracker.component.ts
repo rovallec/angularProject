@@ -87,7 +87,7 @@ export class OttrackerComponent implements OnInit {
                   }else if((Number(attendance.worked_time) - Number(attendance.scheduled)) < 0 && attendance.scheduled != "OFF"){
                     ot.status = (Number(ot.status) + Number(Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
                   }
-                } else if(attendance.scheduled == 'OFF'){
+                } else if(attendance.scheduled == 'OFF' && !activeVacation){
                   ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
                 }
               })
