@@ -62,7 +62,6 @@ export class OttrackerComponent implements OnInit {
         this.apiServices.getAttPeriod({ id: employee.idemployees, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
           this.apiServices.getVacations({id:employee.id_profile}).subscribe((vac:vacations[])=>{
             if (att.length > 0) {
-              activeVacation = false;
               let ot: ot_manage = new ot_manage;
               ot.amount = '0.00';
               ot.status = '0.00';
@@ -71,7 +70,7 @@ export class OttrackerComponent implements OnInit {
               ot.nearsol_id = employee.nearsol_id;
               ot.client_id = employee.client_id;
               att.forEach(attendance => {
-
+                activeVacation = false;
                 vac.forEach(vacation=>{
                   if(vacation.date == attendance.date && vacation.status == "PENDING"){
                     activeVacation = true;
