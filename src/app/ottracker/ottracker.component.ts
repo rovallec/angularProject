@@ -128,9 +128,9 @@ export class OttrackerComponent implements OnInit {
     }
 
     this.ots.forEach(ot => {
+      cnt = cnt + 1;
       if(Number(ot.status) < 0){
         this.apiServices.getAttPeriod({ id: ot.id_employee, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
-          cnt = cnt + 1;
           att.forEach(attendance => {
             let marg: marginalization = new marginalization;
             if (attendance.scheduled != 'OFF' && Number(attendance.worked_time) > Number(attendance.scheduled) && Number(ot.status) < 0) {
