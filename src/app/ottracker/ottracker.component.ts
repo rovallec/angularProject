@@ -71,6 +71,7 @@ export class OttrackerComponent implements OnInit {
               ot.client_id = employee.client_id;
               att.forEach(attendance => {
                 activeVacation = false;
+
                 vac.forEach(vacation=>{
                   if(vacation.date == attendance.date && vacation.status == "PENDING"){
                     activeVacation = true;
@@ -81,14 +82,16 @@ export class OttrackerComponent implements OnInit {
                   console.log(attendance);
                 }
 
-                if (attendance.scheduled != 'OFF' && !activeVacation) {
-                  if((Number(attendance.worked_time) - Number(attendance.scheduled)) > 0){
-                    ot.amount = (Number(ot.amount) + Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
-                  }else if((Number(attendance.worked_time) - Number(attendance.scheduled)) < 0 && attendance.scheduled != "OFF"){
-                    ot.status = (Number(ot.status) + Number(Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
-                  }
-                } else if(attendance.scheduled == 'OFF' && !activeVacation){
-                  ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
+                if(!activeVacation){
+                  if (attendance.scheduled != 'OFF') {
+                    if((Number(attendance.worked_time) - Number(attendance.scheduled)) > 0){
+                      ot.amount = (Number(ot.amount) + Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                    }else if((Number(attendance.worked_time) - Number(attendance.scheduled)) < 0 && attendance.scheduled != "OFF"){
+                      ot.status = (Number(ot.status) + Number(Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
+                    }
+                  } else if(attendance.scheduled == 'OFF'){
+                    ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
+                  } 
                 }
               })
               if (Number(ot.amount) != 0 || Number(ot.status) != 0) {
