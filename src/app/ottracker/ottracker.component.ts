@@ -261,10 +261,8 @@ export class OttrackerComponent implements OnInit {
               this.apiServices.insertApprovedOt(ot).subscribe((str:string)=>{
               })
             }else{
-              ot.id_employee = ots.id_employee;
-              ot.id_period = ots.id_period;
               this.apiServices.updateApproveOt(ot).subscribe((str:string)=>{
-                if(this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)){
+                if(this.marginalizations.indexOf(margin) == (this.marginalizations.length)){
                   this.marginalazing = false;
                   this.setSelection(this.selectedAccount);
                 }
