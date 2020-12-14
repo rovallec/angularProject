@@ -77,9 +77,11 @@ export class OttrackerComponent implements OnInit {
                     activeVacation = true;
                   }
                 })
-                if(attendance.client_id == "7133329"){
+
+                if(attendance.id_employee == "4743"){
                   console.log(attendance);
                 }
+
                 if (attendance.scheduled != 'OFF' && !activeVacation) {
                   if((Number(attendance.worked_time) - Number(attendance.scheduled)) > 0){
                     ot.amount = (Number(ot.amount) + Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
