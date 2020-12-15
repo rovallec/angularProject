@@ -186,8 +186,7 @@ export class OttrackerComponent implements OnInit {
     this.ots.forEach(ot=>{
       if((Number(ot.amount) + Number(ot.status)) > 0){
         let mar:marginalization = new marginalization;
-        mar.idemployees = ot.id_employee;
-        this.marginalizations.push(mar);
+         console.log(ot);
       }
       this.marginalazing = true;
       this.history = false;
