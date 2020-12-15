@@ -258,23 +258,30 @@ export class OttrackerComponent implements OnInit {
           } else if (margin.action == 'DENY') {
             ot.amount = '0.00';
           }
-          this.apiServices.getApprovedOt(ot).subscribe((ots: ot_manage) => {
-            if (isNullOrUndefined(ots.amount)) {
-              this.apiServices.insertApprovedOt(ot).subscribe((str: string) => {
-                if (this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)) {
-                  this.marginalazing = false;
-                  this.setSelection(this.selectedAccount);
-                }
-              })
-            } else {
-              this.apiServices.updateApproveOt(ot).subscribe((str: string) => {
-                if (this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)) {
-                  this.marginalazing = false;
-                  this.setSelection(this.selectedAccount);
-                }
-              })
+          if(margin.action != "OMMIT"){
+            this.apiServices.getApprovedOt(ot).subscribe((ots: ot_manage) => {
+              if (isNullOrUndefined(ots.amount)) {
+                this.apiServices.insertApprovedOt(ot).subscribe((str: string) => {
+                  if (this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)) {
+                    this.marginalazing = false;
+                    this.setSelection(this.selectedAccount);
+                  }
+                })
+              } else {
+                this.apiServices.updateApproveOt(ot).subscribe((str: string) => {
+                  if (this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)) {
+                    this.marginalazing = false;
+                    this.setSelection(this.selectedAccount);
+                  }
+                })
+              }
+            })
+          }else{
+            if (this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)) {
+              this.marginalazing = false;
+              this.setSelection(this.selectedAccount);
             }
-          })
+          }
         })
       })
     }
