@@ -343,7 +343,9 @@ export class HrprofilesComponent implements OnInit {
   getAttAdjustemt() {
     this.editAdj = false;
     this.apiService.getAttAdjustments({ id: this.activeEmp }).subscribe((adj: attendences_adjustment[]) => {
-      this.showAttAdjustments = adj;
+      for (let i = (adj.length - 1); i > (adj.length - 16); i=i-1) {
+        this.showAttAdjustments.push(adj[i]);
+      }
     })
   }
 

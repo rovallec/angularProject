@@ -192,12 +192,12 @@
                                 <div class="form-group col-md-3">
                                     <label>Start:</label>
                                     <input type="time" class="form-control" [(ngModel)]="temp_start"
-                                        (change)="change_time($event)">
+                                        (change)="change_time($event)" *ngIf="editAdj">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>End:</label>
                                     <input type="time" class="form-control" [(ngModel)]="temp_end"
-                                        (change)="change_time($event)">
+                                        (change)="change_time($event)" *ngIf="editAdj">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Value:</label>
