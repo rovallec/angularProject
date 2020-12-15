@@ -259,7 +259,7 @@ export class OttrackerComponent implements OnInit {
             ot.amount = '0.00';
           }
           this.apiServices.getApprovedOt(ot).subscribe((ots: ot_manage) => {
-            if (isNullOrUndefined(ots)) {
+            if (isNullOrUndefined(ots.amount)) {
               this.apiServices.insertApprovedOt(ot).subscribe((str: string) => {
                 if (this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)) {
                   this.marginalazing = false;
