@@ -189,11 +189,6 @@ export class OttrackerComponent implements OnInit {
         console.log(ot);
         mar.idemployees = ot.id_employee;
         mar.date = (new Date().getFullYear()).toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + (new Date().getDate()).toString();
-        mar.name = ot.name;
-        mar.before = ot.amount;
-        mar.after = ( Number(ot.amount) + Number(ot.status)).toFixed(2);
-        mar.nearsol_id = ot.nearsol_id;
-        mar.value = ( Number(ot.amount) + Number(ot.status)).toFixed(2);
         this.marginalizations.push(mar);
       }
       this.marginalazing = true;
