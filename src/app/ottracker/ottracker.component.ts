@@ -24,8 +24,8 @@ export class OttrackerComponent implements OnInit {
   selectedClient: string = null;
   marginalazing: boolean = false;
   showAccount: boolean = false;
-  history:boolean = false;
-  otView:boolean = false;
+  history: boolean = false;
+  otView: boolean = false;
   iduser: string = null;
 
   constructor(public apiServices: ApiService, public authService: AuthServiceService) { }
@@ -42,7 +42,7 @@ export class OttrackerComponent implements OnInit {
   }
 
   setSelection(acc: accounts) {
-    let activeVacation:boolean = false;
+    let activeVacation: boolean = false;
     this.marginalazing = false;
     this.marginalizations = [];
     this.ots = [];
@@ -62,7 +62,7 @@ export class OttrackerComponent implements OnInit {
     this.apiServices.getSearchEmployees({ filter: "id_account", value: this.selectedAccount.idaccounts, dp: 'exact' }).subscribe((emp: employees[]) => {
       emp.forEach(employee => {
         this.apiServices.getAttPeriod({ id: employee.idemployees, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
-          this.apiServices.getVacations({id:employee.id_profile}).subscribe((vac:vacations[])=>{
+          this.apiServices.getVacations({ id: employee.id_profile }).subscribe((vac: vacations[]) => {
             if (att.length > 0) {
               let ot: ot_manage = new ot_manage;
               ot.amount = '0.00';
@@ -74,22 +74,22 @@ export class OttrackerComponent implements OnInit {
               att.forEach(attendance => {
                 activeVacation = false;
 
-                vac.forEach(vacation=>{
-                  if(vacation.took_date == attendance.date && vacation.status == "PENDING"){
+                vac.forEach(vacation => {
+                  if (vacation.took_date == attendance.date && vacation.status == "PENDING") {
                     activeVacation = true;
                   }
                 })
 
-                if(!activeVacation){
+                if (!activeVacation) {
                   if (attendance.scheduled != 'OFF') {
-                    if((Number(attendance.worked_time) - Number(attendance.scheduled)) > 0){
+                    if ((Number(attendance.worked_time) - Number(attendance.scheduled)) > 0) {
                       ot.amount = (Number(ot.amount) + Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
-                    }else if((Number(attendance.worked_time) - Number(attendance.scheduled)) < 0 && attendance.scheduled != "OFF"){
+                    } else if ((Number(attendance.worked_time) - Number(attendance.scheduled)) < 0 && attendance.scheduled != "OFF") {
                       ot.status = (Number(ot.status) + Number(Number(attendance.worked_time) - Number(attendance.scheduled))).toFixed(2);
                     }
-                  } else if(attendance.scheduled == 'OFF'){
+                  } else if (attendance.scheduled == 'OFF') {
                     ot.amount = (Number(ot.amount) + Number(attendance.worked_time)).toFixed(2);
-                  } 
+                  }
                 }
               })
               if (Number(ot.amount) != 0 || Number(ot.status) != 0) {
@@ -132,7 +132,7 @@ export class OttrackerComponent implements OnInit {
     }
 
     this.ots.forEach(ot => {
-      if(Number(ot.status) < 0){
+      if (Number(ot.status) < 0) {
         this.apiServices.getAttPeriod({ id: ot.id_employee, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
           cnt = cnt + 1;
           att.forEach(attendance => {
@@ -172,7 +172,7 @@ export class OttrackerComponent implements OnInit {
             }
           })
         })
-      }else{
+      } else {
         cnt = cnt + 1;
       }
       if (this.ots.length == cnt) {
@@ -181,11 +181,11 @@ export class OttrackerComponent implements OnInit {
     })
   }
 
-  getOT(){
+  getOT() {
     this.marginalizations = [];
-    this.ots.forEach(ot=>{
+    this.ots.forEach(ot => {
       let marginisation: marginalization = new marginalization;
-      if((Number(ot.amount) + Number(ot.status)) > 0){
+      if ((Number(ot.amount) + Number(ot.status)) > 0) {
         console.log(ot);
         marginisation.idemployees = ot.id_employee;
         marginisation.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
@@ -206,7 +206,7 @@ export class OttrackerComponent implements OnInit {
     })
   }
 
-  viewHistory(){
+  viewHistory() {
     let date: Date = new Date();
     let start: string = null;
     let end: string = null;
@@ -220,26 +220,26 @@ export class OttrackerComponent implements OnInit {
       end = end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + "15";
     }
 
-    this.apiServices.getMarginalizations({start:start, end:end, account:this.selectedAccount.idaccounts}).subscribe((margins:marginalization[])=>{
+    this.apiServices.getMarginalizations({ start: start, end: end, account: this.selectedAccount.idaccounts }).subscribe((margins: marginalization[]) => {
       this.marginalizations = margins;
       this.history = true
     })
   }
 
   saveOTMerge() {
-    if(!this.otView){
-      this.apiServices.insertMarginalizations(this.marginalizations[0]).subscribe((str:string)=>{
+    if (!this.otView) {
+      this.apiServices.insertMarginalizations(this.marginalizations[0]).subscribe((str: string) => {
         this.marginalizations.forEach(mar => {
           let att: attendences = new attendences;
-    
+
           att.idattendences = mar.id_attendance;
           att.worked_time = mar.after;
           att.scheduled = mar.after;
           mar.id_marginalization = str;
-  
-          this.apiServices.updateAttendances(att).subscribe((str:string)=>{
-            this.apiServices.insertMarginalizationsDetails(mar).subscribe((str:string)=>{
-              if(this.marginalizations.indexOf(mar) == (this.marginalizations.length - 1)){
+
+          this.apiServices.updateAttendances(att).subscribe((str: string) => {
+            this.apiServices.insertMarginalizationsDetails(mar).subscribe((str: string) => {
+              if (this.marginalizations.indexOf(mar) == (this.marginalizations.length - 1)) {
                 this.marginalazing = false;
                 this.setSelection(this.selectedAccount);
               }
@@ -247,24 +247,28 @@ export class OttrackerComponent implements OnInit {
           });
         })
       })
-    }else{
-        this.apiServices.getPeriods().subscribe((period:periods[])=>{
-        this.marginalizations.forEach(margin=>{
-          let ot:ot_manage = new ot_manage;
+    } else {
+      this.apiServices.getPeriods().subscribe((period: periods[]) => {
+        this.marginalizations.forEach(margin => {
+          let ot: ot_manage = new ot_manage;
           ot.id_employee = margin.idemployees;
-          ot.id_period = period[period.length-1].idperiods;
-          if(margin.action == 'APPLY'){
+          ot.id_period = period[period.length - 1].idperiods;
+          if (margin.action == 'APPLY') {
             ot.amount = margin.before;
-          }else if(margin.action == 'DENY'){
+          } else if (margin.action == 'DENY') {
             ot.amount = '0.00';
           }
-          this.apiServices.getApprovedOt(ot).subscribe((ots:ot_manage)=>{
-            if(isNullOrUndefined(ots)){
-              this.apiServices.insertApprovedOt(ot).subscribe((str:string)=>{
+          this.apiServices.getApprovedOt(ot).subscribe((ots: ot_manage) => {
+            if (isNullOrUndefined(ots)) {
+              this.apiServices.insertApprovedOt(ot).subscribe((str: string) => {
+                if (this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)) {
+                  this.marginalazing = false;
+                  this.setSelection(this.selectedAccount);
+                }
               })
-            }else{
-              this.apiServices.updateApproveOt(ot).subscribe((str:string)=>{
-                if(this.marginalizations.indexOf(margin) == (this.marginalizations.length)){
+            } else {
+              this.apiServices.updateApproveOt(ot).subscribe((str: string) => {
+                if (this.marginalizations.indexOf(margin) == (this.marginalizations.length - 1)) {
                   this.marginalazing = false;
                   this.setSelection(this.selectedAccount);
                 }

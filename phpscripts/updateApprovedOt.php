@@ -12,6 +12,7 @@ $id_period = ($request->id_period);
 
 $sql = "UPDATE `approved_ot` SET `amount` = '$amount' WHERE `id_employee` = $id_employee AND `id_period` = $id_period;";
 if(mysqli_query($con,$sql)){
+    echo("1");
     http_response_code(200);
 }else{
     http_response_code(400);

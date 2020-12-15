@@ -47,8 +47,8 @@ export class HrprofilesComponent implements OnInit {
   dpTerm: boolean = false;
   workingEmployee: employees = new employees;
   riseIncrease: string = null;
-  profiletoMarge:string[][] = [[]];
-  profiletoMargeHeaders:string[] = [];
+  profiletoMarge: string[][] = [[]];
+  profiletoMargeHeaders: string[] = [];
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -64,8 +64,8 @@ export class HrprofilesComponent implements OnInit {
   processRecord: process[] = [];
   allAccounts: accounts[] = [];
   municipios: string[] = [];
-  tovalidate:profiles[] = [];
-  selectedToMerge:string = null;
+  tovalidate: profiles[] = [];
+  selectedToMerge: string = null;
   actualMessagings: messagings = new messagings;
   actualIrtrarequests: irtra_requests = new irtra_requests;
   actualJudicial: judicials = new judicials;
@@ -77,9 +77,9 @@ export class HrprofilesComponent implements OnInit {
   actualSurvey: supervisor_survey = new supervisor_survey;
   first_interview: queryDoc_Proc = new queryDoc_Proc;
   second_interview: queryDoc_Proc = new queryDoc_Proc;
-  municipio:string = null;
-  zone:string = null;
-  first_line:string = null;
+  municipio: string = null;
+  zone: string = null;
+  first_line: string = null;
 
 
   editInview: boolean = false;
@@ -91,7 +91,7 @@ export class HrprofilesComponent implements OnInit {
   modifyInsurance: boolean = false;
   newInsurance: boolean = false;
   insuranceNull: boolean = true;
-  validating:boolean = false;
+  validating: boolean = false;
   activeEmp: string = null;
   editAdj: boolean = false;
   vacationAdd: boolean = false;
@@ -112,7 +112,7 @@ export class HrprofilesComponent implements OnInit {
   editableIgss: boolean = false;
   editingDPI: boolean = false;
   editingPhones: boolean = false;
-  editingAddress:boolean = false;
+  editingAddress: boolean = false;
 
   departamento: string = null;
   earnVacations: number = 0;
@@ -260,7 +260,7 @@ export class HrprofilesComponent implements OnInit {
     this.getValidatingData();
     this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
       this.profile = prof;
-    });    
+    });
 
     this.apiService.getApprovers().subscribe((usrs: users[]) => {
       this.approvals = usrs;
@@ -304,14 +304,14 @@ export class HrprofilesComponent implements OnInit {
     this.getTemplates();
     this.getProcessesrecorded();
   }
-  
-  getProfile() {    
+
+  getProfile() {
     this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
     this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
     this.getValidatingData();
     this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
-      this.profile = prof;  
-    });    
+      this.profile = prof;
+    });
   };
 
   getStaffes() {
@@ -343,8 +343,12 @@ export class HrprofilesComponent implements OnInit {
   getAttAdjustemt() {
     this.editAdj = false;
     this.apiService.getAttAdjustments({ id: this.activeEmp }).subscribe((adj: attendences_adjustment[]) => {
-      for (let i = (adj.length - 1); i > (adj.length - 16); i=i-1) {
-        this.showAttAdjustments.push(adj[i]);
+      if (adj.length >= 16) {
+        for (let i = (adj.length - 1); i > (adj.length - 16); i = i - 1) {
+          this.showAttAdjustments.push(adj[i]);
+        }
+      } else {
+        this.showAttAdjustments = adj;
       }
     })
   }
@@ -1351,13 +1355,13 @@ export class HrprofilesComponent implements OnInit {
   editPhone() {
     this.editingPhones = true;
   }
-  
-  editAddress(){
+
+  editAddress() {
     this.editingAddress = true;
   }
 
   closeEditNames() {
-    if(this.editingAddress){
+    if (this.editingAddress) {
       this.profile[0].address = this.first_line + ", Zona " + this.zone + ", de" + this.municipio + ", " + this.departamento;
     }
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
@@ -1751,45 +1755,45 @@ export class HrprofilesComponent implements OnInit {
     }
   }
 
-  getValidatingData(){
-    this.apiService.getToValidate().subscribe((prof:profiles[])=>{
+  getValidatingData() {
+    this.apiService.getToValidate().subscribe((prof: profiles[]) => {
       this.tovalidate = prof;
     })
   }
 
-  setSelectedProf(val:profiles){
+  setSelectedProf(val: profiles) {
     this.profiletoMarge = [];
     this.selectedToMerge = val.idprofiles;
-    let i:number = 1;
-    Object.getOwnPropertyNames(val).forEach(obj=>{
-      let str:string[] = [];
+    let i: number = 1;
+    Object.getOwnPropertyNames(val).forEach(obj => {
+      let str: string[] = [];
       str[0] = obj;
-      str[1] = (Object.values(val)[i-1]);
+      str[1] = (Object.values(val)[i - 1]);
       this.profiletoMarge.push(str);
       i++;
     })
   }
 
-  mergeProfile(){
+  mergeProfile() {
     this.validating = true;
-    this.apiService.insertMergeProfile({id_old:this.workingEmployee.id_profile, id_new:this.selectedToMerge}).subscribe((str:string)=>{
-      let proc:process = new process;
+    this.apiService.insertMergeProfile({ id_old: this.workingEmployee.id_profile, id_new: this.selectedToMerge }).subscribe((str: string) => {
+      let proc: process = new process;
       proc.id_profile = this.workingEmployee.idemployees;
       proc.id_user = this.authUser.getAuthusr().iduser;
       proc.idprocesses = '20';
       proc.descritpion = "Data Merge from " + this.selectedToMerge;
       proc.prc_date = this.todayDate;
       proc.status = "CLOSED";
-      this.apiService.insertProc(proc).subscribe((str:string)=>{
+      this.apiService.insertProc(proc).subscribe((str: string) => {
         this.getProfile();
       })
     })
   }
 
-  changeRadio(val:profiles){
+  changeRadio(val: profiles) {
     this.tovalidate.forEach(element => {
       element.doc_type = '';
     });
-   this.selectedToMerge = val.idprofiles;
+    this.selectedToMerge = val.idprofiles;
   }
 }
