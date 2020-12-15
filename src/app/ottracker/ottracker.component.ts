@@ -194,6 +194,9 @@ export class OttrackerComponent implements OnInit {
         marginisation.after = "0.00";
         marginisation.value = marginisation.before;
         marginisation.action = "OMMIT";
+        marginisation.nearsol_id = ot.nearsol_id;
+        marginisation.approved_by = this.iduser;
+        marginisation.type = "OT Remover";
         console.log(marginisation);
         this.marginalizations.push(marginisation);
       }
