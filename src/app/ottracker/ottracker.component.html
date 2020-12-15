@@ -132,7 +132,7 @@
                                     <td class="text-center">{{margins.before}}</td>
                                     <td class="text-center">{{margins.after}}</td>
                                     <td class="text-center">{{margins.value}}</td>
-                                    <td class="text-center" *ngIf="otView"><select>
+                                    <td class="text-center" *ngIf="otView"><select [(ngModel)]="margin.action">
                                         <option>APPLY</option>
                                         <option>DENY</option>
                                         <option>OMMIT</option>
