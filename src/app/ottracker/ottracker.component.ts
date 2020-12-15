@@ -188,7 +188,6 @@ export class OttrackerComponent implements OnInit {
         let mar:marginalization = new marginalization();
         console.log(ot);
         mar.idemployees = ot.id_employee;
-        mar.date = (new Date().getFullYear()).toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + (new Date().getDate()).toString();
         this.marginalizations.push(mar);
       }
       this.marginalazing = true;
