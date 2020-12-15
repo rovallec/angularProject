@@ -920,18 +920,25 @@ export class marginalization {
     //Visual Data
     action:string;
     constructor() {
-        //Master
-        this.idmarginalizations = null;
-        this.id_attendance = null;
-        this.id_user = null;
-        this.approved_by = null;
-        this.date = null;
-        this.type = null;
-        //Details
-        this.idmarginalization_details = null;
-        this.id_marginalization = null;
-        this.before = null;
-        this.after = null;
-        this.value = null;
+            //Employees
+    this.idemployees = null;
+    this.id_profile = null;
+    this.nearsol_id = null;
+    this.name = null;
+    //Master
+    this.idmarginalizations = null;
+    this.id_user = null;
+    this.approved_by = null;
+    this.date = null;
+    this.type = null;
+    //Details
+    this.idmarginalization_details = null;
+    this.id_attendance = null;
+    this.id_marginalization = null;
+    this.before = null;
+    this.after = null;
+    this.value = null;
+    //Visual Data
+    this.action = null;
     }
 }
