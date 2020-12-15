@@ -6,7 +6,7 @@ import { MarginInfo } from 'xlsx/types';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
-import { accounts, attendences, attendences_adjustment, clients, marginalization, ot_manage, periods, vacations } from '../process_templates';
+import { accounts, activities, attendences, attendences_adjustment, clients, marginalization, ot_manage, periods, vacations } from '../process_templates';
 import { users } from '../users';
 
 @Component({
@@ -193,6 +193,8 @@ export class OttrackerComponent implements OnInit {
         marginisation.before = (Number(ot.status) + Number(ot.amount)).toFixed(2);
         marginisation.after = "0.00";
         marginisation.value = marginisation.before;
+        marginisation.action = "OMMIT";
+        console.log(marginisation);
         this.marginalizations.push(marginisation);
       }
       this.marginalazing = true;
