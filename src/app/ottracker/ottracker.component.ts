@@ -183,23 +183,9 @@ export class OttrackerComponent implements OnInit {
 
   getOT(){
     this.marginalizations = [];
-    console.log('GetOT');
-
     this.ots.forEach(ot=>{
-      if((Number(ot.amount) + Number(ot.status)) > 0){
-        let mar:marginalization = new marginalization;
-        mar.idemployees = ot.id_employee;
-        mar.nearsol_id = ot.nearsol_id;
-        mar.name = ot.name;
-        mar.before = (Number(ot.status) + Number(ot.amount)).toFixed(2);
-        mar.after = "0.00";
-        mar.value = (Number(ot.status) + Number(ot.amount)).toFixed(2);
-        mar.approved_by = this.iduser;
-        mar.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
-        mar.type = "OT Remover";
-        mar.action = "OMMIT";
-        this.marginalizations.push(mar);
-      }
+      console.log(ot);
+      
       this.marginalazing = true;
       this.history = false;
       this.otView = true;
