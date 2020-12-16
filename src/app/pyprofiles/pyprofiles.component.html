@@ -149,11 +149,13 @@
                                     <tr *ngFor="let vac of vacations">
                                         <td>{{vac.date}}</td>
                                         <td>{{vac.id_user}}</td>
-                                        <td><select [(ngModel)]="vac.status">
+                                        <td>
+                                            <select>
                                                 <option>COMPLETED</option>
                                                 <option>PENDING</option>
                                                 <option>DISMISSED</option>
-                                            </select></td>
+                                            </select>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -173,7 +175,7 @@
                                         <td>{{leave.end}}</td>
                                         <td>{{leave.id_user}}</td>
                                         <td>
-                                            <select [(ngModel)]="vac.status">
+                                            <select>
                                                 <option>COMPLETED</option>
                                                 <option>PENDING</option>
                                                 <option>DISMISSED</option>
