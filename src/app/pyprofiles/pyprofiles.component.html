@@ -146,7 +146,7 @@
                                     <th>ACTOIN</th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let vac of vacations">
+                                    <tr *ngFor="let vac of vacations" [ngClass]="{'table-danger': leave.action === 'overlap'}">
                                         <td>{{vac.took_date}}</td>
                                         <td>{{vac.id_user}}</td>
                                         <td>
@@ -170,7 +170,7 @@
                                     <th>ACTOIN</th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let leave of leaves">
+                                    <tr *ngFor="let leave of leaves" [ngClass]="{'table-danger': leave.approved_by === 'overlap'}">
                                         <td>{{leave.start}}</td>
                                         <td>{{leave.end}}</td>
                                         <td>{{leave.id_user}}</td>
@@ -198,7 +198,7 @@
                                     <th>BALANCE</th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let att of attendances" class="selectable" (click)="showReg()"
+                                    <tr *ngFor="let att of attendances" class="selectable" (click)="showReg(att)"
                                         [ngClass]="{'table-danger': att.status === 'overlap'}">
                                         <td>{{att.date}}</td>
                                         <td>{{att.scheduled}}</td>

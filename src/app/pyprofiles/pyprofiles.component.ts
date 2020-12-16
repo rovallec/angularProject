@@ -305,7 +305,17 @@ export class PyprofilesComponent implements OnInit {
     })
   }
 
-  showReg(){
+  showReg(att:attendences){
+    this.vacations.forEach(vac=>{
+      if(vac.took_date == att.date){
+        vac.action == 'overlap';
+      }
+    })
+    this.leaves.forEach(leave=>{
+      if((new Date(leave.start)) <= (new Date(att.date)) && (new Date(leave.end)) >= (new Date(att.date))){
+        leave.approved_by = 'overlap';
+      }
+    })
     this.showRegs = true;
   }
 }
