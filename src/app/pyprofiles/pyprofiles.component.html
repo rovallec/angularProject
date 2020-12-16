@@ -137,8 +137,13 @@
                 <div class="tab-pane fade show active" id="nav-attendance" role="tabpanel"
                     aria-labelledby="nav-attendance-tab">
                     <div class="row col-md-12" style="margin-top:15px" *ngIf="showRegs">
-                        <div class="col-md-6">
-                            <table style="width: 100;" class="table table-striped table-hover"
+                        <div class="col-md-4">
+                            <div class="row col-md-12">
+                                <label
+                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">Vacations</label>
+                            </div>
+                            <div class="row col-md-12">
+                                <table style="width: 100;" class="table table-striped table-hover"
                                 style="width: 100%;text-align:center">
                                 <thead>
                                     <th>DATE</th>
@@ -150,7 +155,7 @@
                                         [ngClass]="{'table-danger': vac.action === 'overlap'}">
                                         <td>{{vac.took_date}}</td>
                                         <td>{{vac.id_user}}</td>
-                                        <td>
+                                        <td style="padding: 0px;">
                                             <select [(ngModel)]="vac.status"
                                                 style="height:20px; width:100px;     border: 1px solid #3e3e3e;
                                             border-radius: 5px 5px 5px 5px;
@@ -163,9 +168,15 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <table style="width: 100;" class="table table-striped table-hover"
+                        <div class="col-md-4">
+                            <div class="row col-md-12">
+                                <label
+                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">LEAVES</label>
+                            </div>
+                            <div class="row col-md-12">
+                                <table style="width: 100;" class="table table-striped table-hover"
                                 style="width: 100%;text-align:center">
                                 <thead>
                                     <th>START</th>
@@ -179,7 +190,7 @@
                                         <td>{{leave.start}}</td>
                                         <td>{{leave.end}}</td>
                                         <td>{{leave.id_user}}</td>
-                                        <td>
+                                        <td style="padding: 0px;">
                                             <select [(ngModel)]="leave.status"
                                                 style="height:20px; width:100px;     border: 1px solid #3e3e3e;
                                             border-radius: 5px 5px 5px 5px;
@@ -192,6 +203,34 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row col-md-12">
+                                <label
+                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">SUSPENSIONS</label>
+                            </div>
+                            <div class="row col-md-12">
+                                <table style="width: 100;" class="table table-striped table-hover"
+                                style="width: 100%;text-align:center">
+                                <thead>
+                                    <th>DATE 1</th>
+                                    <th>DATE 2</th>
+                                    <th>DATE 3</th>
+                                    <th>DATE 4</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let dp of dps"
+                                        [ngClass]="{'table-danger': dp.requested_by === 'overlap'}">
+                                        <td><input type="date" class="form-control" [(ngModel)]="dp.day_1" style="padding:0px"></td>
+                                        <td><input type="date" class="form-control" [(ngModel)]="dp.day_1" style="padding:0px"></td>
+                                        <td><input type="date" class="form-control" [(ngModel)]="dp.day_1" style="padding:0px"></td>
+                                        <td><input type="date" class="form-control" [(ngModel)]="dp.day_1" style="padding:0px"></td>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
                         </div>
                     </div>
                     <div class="row col-md-12" style="margin-top:15px" *ngIf="!showRegs">

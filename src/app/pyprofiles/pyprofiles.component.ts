@@ -27,6 +27,7 @@ export class PyprofilesComponent implements OnInit {
 
   vacations: vacations[] = [];
   leaves: leaves[] = [];
+  dps:disciplinary_processes[] = [];
   attendances:attendences[] = [];
   non_show_2: boolean = false;
   seventh: number = 0;
@@ -124,6 +125,8 @@ export class PyprofilesComponent implements OnInit {
     }
 
     this.vacations = [];
+    this.leaves = [];
+    this.dps = [];
     let totalCred: number = 0;
     let totalDeb: number = 0;
     let discounted: number = 0;
@@ -157,6 +160,7 @@ export class PyprofilesComponent implements OnInit {
           this.apiService.getDPAtt({ id: emp[0].idemployees, date_1: strt, date_2: nd }).subscribe((dp: disciplinary_processes[]) => {
             this.apiService.getAttPeriod({ id: emp[0].idemployees, date_1: strt, date_2: nd }).subscribe((att: attendences[]) => {
               this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
+                this.dps = dp;
                 let py: payments = new payments;
                 py.id_employee = emp[0].idemployees;
                 py.id_period = periods[periods.length - 1].idperiods;
@@ -292,8 +296,7 @@ export class PyprofilesComponent implements OnInit {
                 }
 
                 this.attendances.forEach(attend => {
-                  if((Number(attend.worked_time) > 0) && attend.balance == 'VAC'){
-                    console.log(attend);
+                  if(((Number(attend.worked_time) > 0) && attend.balance == 'VAC') || ((Number(attend.worked_time) > 0) && attend.balance == 'SUSPENSION') || ((Number(attend.worked_time) > 0) && attend.balance == 'JANP') || ((Number(attend.worked_time) > 0) && attend.balance == 'JAP')){
                     attend.status = 'overlap';
                   }
                 });
@@ -316,18 +319,38 @@ export class PyprofilesComponent implements OnInit {
         leave.approved_by = 'overlap';
       }
     })
+    this.dps.forEach(dp=>{
+      if(dp.day_1 == att.date || dp.day_2 == att.date || dp.day_3 == att.date || dp.day_4 == att.date){
+        dp.requested_by = 'overlap';
+      }
+    })
     this.showRegs = true;
   }
   
   setState_vac(vac:vacations){
     if(vac.status == 'DISMISSED'){
-      this.apiService.updateVacations(vac);
+      console.log(vac);
+      this.apiService.updateVacations(vac).subscribe((str:string)=>{
+
+      });
+    }
+  }
+
+  setState_suspension(suspension:disciplinary_processes){
+    if(suspension.status == 'DISMISSED'){
+      console.log(suspension);
+      this.apiService.updateVacations(suspension).subscribe((str:string)=>{
+
+      });
     }
   }
 
   setState_leave(leave:leaves){
     if(leave.status == 'DISMISSED'){
-      this.apiService.updateVacations(leave);
+      console.log(leave);
+      this.apiService.updateVacations(leave).subscribe((str:string)=>{
+
+      });
     }
   }
 }
