@@ -290,18 +290,19 @@ export class PyprofilesComponent implements OnInit {
                     }
                   })
                 }
+
+                this.attendances.forEach(attend => {
+                  if((Number(attend.worked_time) > 0) && attend.balance == 'VAC'){
+                    console.log(attend);
+                    attend.status = 'overlap';
+                  }
+                });
               })
             })
           })
         })
       })
     })
-
-    this.attendances.forEach(attend => {
-      if((Number(attend.worked_time) > 0) && attend.balance == 'VAC'){
-        attend.status = 'overlap';
-      }
-    });
   }
 
   showReg(){
