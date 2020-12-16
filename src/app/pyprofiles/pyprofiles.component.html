@@ -47,10 +47,10 @@
         <td colspan="2" style="padding-top:30px" *ngIf="!newProc">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
-                    <a class="nav-item nav-link active" id="nav-attendance-tab" data-toggle="tab" href="#nav-attendance" role="tab"
-                        aria-controls="nav-attendance" aria-selected="true">Attendance</a>
-                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
-                        role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a>
+                    <a class="nav-item nav-link active" id="nav-attendance-tab" data-toggle="tab" href="#nav-attendance"
+                        role="tab" aria-controls="nav-attendance" aria-selected="true">Attendance</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+                        aria-controls="nav-contact" aria-selected="false">Contact</a>
                     <a class="nav-item nav-link" id="nav-emergency-tab" data-toggle="tab" href="#nav-emergency"
                         role="tab" aria-controls="nav-emergency" aria-selected="false">Emergency</a>
                     <a class="nav-item nav-link" id="nav-medical-tab" data-toggle="tab" href="#nav-medical" role="tab"
@@ -59,8 +59,7 @@
             </nav>
 
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade" id="nav-contact" role="tabpanel"
-                    aria-labelledby="nav-contact-tab">
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                     <div class="form-row" style="margin-top:30px">
                         <div class="form-group col-md-12">
                             <div class="form-row">
@@ -135,25 +134,79 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade show active" id="nav-attendance" role="tabpanel" aria-labelledby="nav-attendance-tab">
-                    <div class="from-row col-md-12">
-                        <table style="width: 100;" class="table table-striped table-hover"
-                            style="width: 100%;text-align:center">
-                            <thead style="text-align:center;">
-                                <th>DATE</th>
-                                <th>ROSTER</th>
-                                <th>ATTENDED</th>
-                                <th>BALANCE</th>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let att of attendances" class="selectable">
-                                    <td>{{att.date}}</td>
-                                    <td>{{att.scheduled}}</td>
-                                    <td>{{att.worked_time}}</td>
-                                    <td>{{att.balance}}</td>
-                                </tr>   
-                            </tbody>
-                        </table>
+                <div class="tab-pane fade show active" id="nav-attendance" role="tabpanel"
+                    aria-labelledby="nav-attendance-tab">
+                    <div class="from-row" *ngIf="showRegs">
+                        <div class="form-group col-md-6">
+                            <table style="width: 100;" class="table table-striped table-hover"
+                                style="width: 100%;text-align:center">
+                                <thead>
+                                    <th>DATE</th>
+                                    <th>USER</th>
+                                    <th>ACTOIN</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let vac of vacations">
+                                        <td>{{vac.date}}</td>
+                                        <td>{{vac.id_user}}</td>
+                                        <td><select [(ngModel)]="vac.status">
+                                                <option>COMPLETED</option>
+                                                <option>PENDING</option>
+                                                <option>DISMISSED</option>
+                                            </select></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <table style="width: 100;" class="table table-striped table-hover"
+                                style="width: 100%;text-align:center">
+                                <thead>
+                                    <th>START</th>
+                                    <th>END</th>
+                                    <th>USER</th>
+                                    <th>ACTOIN</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let leave of leaves">
+                                        <td>{{leave.start}}</td>
+                                        <td>{{leave.end}}</td>
+                                        <td>{{leave.id_user}}</td>
+                                        <td>
+                                            <select [(ngModel)]="vac.status">
+                                                <option>COMPLETED</option>
+                                                <option>PENDING</option>
+                                                <option>DISMISSED</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="from-row col-md-12" style="margin-top:15px" *ngIf="!showRegs">
+                        <div class="form-group col-md-2"></div>
+                        <div class="form-group col-md-8">
+                            <table style="width: 100;" class="table table-striped table-hover"
+                                style="width: 100%;text-align:center">
+                                <thead style="text-align:center;">
+                                    <th>DATE</th>
+                                    <th>ROSTER</th>
+                                    <th>ATTENDED</th>
+                                    <th>BALANCE</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let att of attendances" class="selectable" (click)="showReg()"
+                                        [(ngClass)]="{'table-dange': att.status === 'overlap'}">
+                                        <td>{{att.date}}</td>
+                                        <td>{{att.scheduled}}</td>
+                                        <td>{{att.worked_time}}</td>
+                                        <td>{{att.balance}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group col-md-2"></div>
                     </div>
 
                     <div class="form-row col-md-12" style="text-align:center;">

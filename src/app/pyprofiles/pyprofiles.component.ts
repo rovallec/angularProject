@@ -36,6 +36,7 @@ export class PyprofilesComponent implements OnInit {
   roster: number = 0;
   daysOff: number = 0;
   absence_fixed:string = null;
+  showRegs:boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -295,5 +296,15 @@ export class PyprofilesComponent implements OnInit {
         })
       })
     })
+
+    this.attendances.forEach(attend => {
+      if((Number(attend.worked_time) > 0) && attend.balance == 'VAC'){
+        attend.status = 'overlap';
+      }
+    });
+  }
+
+  showReg(){
+    this.showRegs = true;
   }
 }
