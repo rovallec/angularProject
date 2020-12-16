@@ -147,7 +147,7 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let vac of vacations"
-                                        [ngClass]="{'table-danger': leave.action === 'overlap'}">
+                                        [ngClass]="{'table-danger': vac.action === 'overlap'}">
                                         <td>{{vac.took_date}}</td>
                                         <td>{{vac.id_user}}</td>
                                         <td>
