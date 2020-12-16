@@ -150,7 +150,7 @@
                                         <td>{{vac.date}}</td>
                                         <td>{{vac.id_user}}</td>
                                         <td>
-                                            <select>
+                                            <select [(ngModel)]="vac.status">
                                                 <option>COMPLETED</option>
                                                 <option>PENDING</option>
                                                 <option>DISMISSED</option>
@@ -175,7 +175,7 @@
                                         <td>{{leave.end}}</td>
                                         <td>{{leave.id_user}}</td>
                                         <td>
-                                            <select>
+                                            <select [(ngModel)]="leave.status">
                                                 <option>COMPLETED</option>
                                                 <option>PENDING</option>
                                                 <option>DISMISSED</option>
