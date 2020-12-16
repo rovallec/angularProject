@@ -228,6 +228,7 @@ export class attendences_adjustment {
 
 export class vacations {
     //process
+    id_process;
     id_user: string;
     id_employee: string;
     id_type: string;
@@ -254,6 +255,7 @@ export class vacations {
 }
 
 export class leaves {
+    id_process;
     //process
     id_user: string;
     id_employee: string;

@@ -612,5 +612,9 @@ updateApproveOt(ot:ot_manage){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateApprovedOt.php`, ot);
 }
 
+updateVacations(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateVacations.php`, any);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

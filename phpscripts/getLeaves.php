@@ -14,6 +14,7 @@
 
     if($result = mysqli_query($con, $sql)){
         while($res = mysqli_fetch_assoc($result)){
+            $return[$i]['id_process'] = $res['idhr_processes'];
             $return[$i]['id_user'] = $res['id_user'];
             $return[$i]['id_employee'] = $id;
             $return[$i]['id_type'] = $res['type'];

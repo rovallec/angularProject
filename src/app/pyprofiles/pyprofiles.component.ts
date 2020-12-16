@@ -318,4 +318,16 @@ export class PyprofilesComponent implements OnInit {
     })
     this.showRegs = true;
   }
+  
+  setState_vac(vac:vacations){
+    if(vac.status == 'DISMISSED'){
+      this.apiService.updateVacations(vac);
+    }
+  }
+
+  setState_leave(leave:leaves){
+    if(leave.status == 'DISMISSED'){
+      this.apiService.updateVacations(leave);
+    }
+  }
 }
