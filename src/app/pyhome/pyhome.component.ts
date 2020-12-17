@@ -91,6 +91,7 @@ export class PyhomeComponent implements OnInit {
     this.route.navigate(['./pyprofiles', emp.idemployees]);
   }
 
+
   getWavesAll() {
     this.waves = [];
     const date = ">=" + new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();

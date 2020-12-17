@@ -181,7 +181,7 @@
                             <th style="text-align: center;">COUNT</th>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let over of overlaps">
+                            <tr *ngFor="let over of overlaps" (click)="gotoProfile(over)">
                                 <td  style="text-align: center;">{{over.name}}</td>
                                 <td  style="text-align: center;">{{over.account}}</td>
                                 <td  style="text-align: center;">{{over.nearsol_id}}</td>

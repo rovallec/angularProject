@@ -100,6 +100,7 @@ export class PyprofilesComponent implements OnInit {
 
   cancelView() {
     this.newProc = false;
+    this.showRegs = false;
     this.activeProc = new process_templates;
   }
 
@@ -309,16 +310,19 @@ export class PyprofilesComponent implements OnInit {
   }
 
   showReg(att:attendences){
+
     this.vacations.forEach(vac=>{
       if(vac.took_date == att.date){
-        vac.action == 'overlap';
+        vac.action = 'overlap';
       }
     })
+
     this.leaves.forEach(leave=>{
       if((new Date(leave.start)) <= (new Date(att.date)) && (new Date(leave.end)) >= (new Date(att.date))){
         leave.approved_by = 'overlap';
       }
     })
+
     this.dps.forEach(dp=>{
       if(dp.day_1 == att.date || dp.day_2 == att.date || dp.day_3 == att.date || dp.day_4 == att.date){
         dp.requested_by = 'overlap';
@@ -353,4 +357,5 @@ export class PyprofilesComponent implements OnInit {
       });
     }
   }
+
 }
