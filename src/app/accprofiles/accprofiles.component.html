@@ -51,7 +51,7 @@
                     <a class="nav-item nav-link" id="nav-leavs-tab" data-toggle="tab" href="#nav-leavs" role="tab"
                         aria-controls="nav-leavs" aria-selected="false">Payment Methods</a>
                     <a class="nav-item nav-link" id="nav-term-tab" data-toggle="tab" href="#nav-term" role="tab"
-                        aria-controls="nav-term" aria-selected="false">Termination</a>
+                        aria-controls="nav-term" aria-selected="false" *ngIf="employee.active === '0'">Termination</a>
                 </div>
             </nav>
 
