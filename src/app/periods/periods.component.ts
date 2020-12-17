@@ -175,11 +175,6 @@ export class PeriodsComponent implements OnInit {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                         this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                           this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
-                            this.apiService.getLastSeventh(pay).subscribe((paym:payments)=>{
-                              if(paym.last_seventh == '1'){
-                                last_seventh = false;
-                              }
-                            })
                             if (this.period.status == '1') {
                               if (att.length != 0) {
                                 att.forEach(attendance => {
@@ -192,16 +187,16 @@ export class PeriodsComponent implements OnInit {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
                                     }
-
+      
                                     if (janp_sequence == 5) {
-                                      discounted = discounted - 16;
-                                      this.absence = this.absence - 16;
+                                      discounted = discounted - 8;
+                                      this.absence = this.absence - 8;
                                     }
-
+      
                                     janp_sequence = 0;
                                     nonShowCount = 0;
                                   }
-
+                                  
                                   activeDp = false;
                                   activeVac = false;
                                   activeLeav = false;
@@ -258,16 +253,13 @@ export class PeriodsComponent implements OnInit {
                                     } else {
                                       this.roster = this.roster + Number(attendance.scheduled);
                                       if (Number(attendance.worked_time) == 0) {
-                                        if (this.non_show_2 && last_seventh) {
+                                        if (this.non_show_2) {
                                           this.absence = this.absence - 16;
                                           discounted = discounted - 16;
                                           svnth = svnth + 1;
                                           this.non_show_2 = false;
                                           attendance.balance = "NS";
                                           nonShowCount = nonShowCount + 1;
-                                          if((att.length - att.indexOf(attendance)) <= 6 ){
-                                            last_seventh = false;
-                                          }
                                         } else {
                                           attendance.balance = "NS"
                                           nonShowCount = nonShowCount + 1;
