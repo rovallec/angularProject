@@ -196,7 +196,7 @@ export class PeriodsComponent implements OnInit {
                                     janp_sequence = 0;
                                     nonShowCount = 0;
                                   }
-                                  
+
                                   activeDp = false;
                                   activeVac = false;
                                   activeLeav = false;
@@ -250,6 +250,10 @@ export class PeriodsComponent implements OnInit {
                                     if (attendance.scheduled == 'OFF') {
                                       this.daysOff = this.daysOff + 1;
                                       attendance.balance = "OFF";
+                                      if(Number(attendance.worked_time) > 0){
+                                        attendance.balance = attendance.worked_time;
+                                        discounted = discounted + Number(attendance.worked_time);
+                                      }
                                     } else {
                                       this.roster = this.roster + Number(attendance.scheduled);
                                       if (Number(attendance.worked_time) == 0) {
@@ -668,6 +672,7 @@ export class PeriodsComponent implements OnInit {
                                   this.daysOff = this.daysOff + 1;
                                   attendance.balance = "OFF";
                                 } else {
+                                  attendance.balance = attendance.worked_time;
                                   this.attended = this.attended + Number(attendance.worked_time);
                                   this.absence = this.absence + Number(attendance.worked_time);
                                   discounted = discounted + Number(attendance.worked_time);
