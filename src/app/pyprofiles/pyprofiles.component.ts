@@ -323,9 +323,7 @@ export class PyprofilesComponent implements OnInit {
     this.leaves.forEach(leave=>{
       let startDate:Date = new Date(leave.start);
       let endDate:Date = new Date(leave.end);
-      if(startDate.getTime <= actualDate.getTime && endDate.getTime >= actualDate.getTime){
-        leave.approved_by = 'overlap';
-      }
+      console.log(actualDate.getTime + " " + startDate.getTime + " " + endDate.getDate);
     })
 
     this.dps.forEach(dp=>{
