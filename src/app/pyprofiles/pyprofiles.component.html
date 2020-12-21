@@ -159,7 +159,7 @@
                                             <select [(ngModel)]="vac.status"
                                                 style="height:20px; width:100px;     border: 1px solid #3e3e3e;
                                             border-radius: 5px 5px 5px 5px;
-                                            box-shadow: 0 0 10px #E8E8E8 inset;  padding: 2px;   background: none repeat scroll 0 0 #FFFFFF;" (change)="setState_vac(vac)">
+                                            box-shadow: 0 0 10px #E8E8E8 inset;  padding: 2px;   background: none repeat scroll 0 0 #FFFFFF;" (change)="setState_vac(vac)" [disabled]="vac.status == 'COMPLETED'">
                                                 <option>COMPLETED</option>
                                                 <option>PENDING</option>
                                                 <option>DISMISSED</option>
@@ -182,13 +182,24 @@
                                     <th>START</th>
                                     <th>END</th>
                                     <th>USER</th>
+                                    <th>ACTION</th>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let leave of leaves"
                                         [ngClass]="{'table-danger': leave.approved_by === 'overlap'}">
-                                        <td><input type="date" class="form-control" [(ngModel)]="leave.start"></td>
-                                        <td><input type="date" class="form-control" [(ngModel)]="leave.end"></td>
-                                        <td>{{leave.id_user}}</td>
+                                        <td>{{leave.start}}/td>
+                                        <td>{{leave.end}}</td>
+                                        <td>{{leave.motive}}</td>
+                                        <td style="padding: 0px;">
+                                            <select [(ngModel)]="leave.status"
+                                                style="height:20px; width:100px;     border: 1px solid #3e3e3e;
+                                            border-radius: 5px 5px 5px 5px;
+                                            box-shadow: 0 0 10px #E8E8E8 inset;  padding: 2px;   background: none repeat scroll 0 0 #FFFFFF;" (change)="setState_leave(leave)" [disabled]="leave.status == 'COMPLETED'">
+                                                <option>COMPLETED</option>
+                                                <option>PENDING</option>
+                                                <option>DISMISSED</option>
+                                            </select>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -150,7 +150,7 @@ export class PeriodsComponent implements OnInit {
         this.working = false;
       }
       payments.forEach(pay => {
-        let svnth:number = 0;
+        let svnth: number = 0;
         let totalCred: number = 0;
         let totalDeb: number = 0;
         let discounted: number = 0;
@@ -159,7 +159,7 @@ export class PeriodsComponent implements OnInit {
         let activeDp: boolean = false;
         let janp_sequence: number = 0;
         let nonShowCount: number = 0;
-        let last_seventh:boolean = true;
+        let last_seventh: boolean = true;
 
 
         pushCredits = [];
@@ -187,12 +187,12 @@ export class PeriodsComponent implements OnInit {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
                                     }
-      
+
                                     if (janp_sequence == 5) {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
                                     }
-      
+
                                     janp_sequence = 0;
                                     nonShowCount = 0;
                                   }
@@ -202,7 +202,7 @@ export class PeriodsComponent implements OnInit {
                                   activeLeav = false;
 
                                   dp.forEach(disciplinary => {
-                                    if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
+                                    if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != "COMPLETED" && disciplinary.status != "DISMISSED")) {
                                       discounted = discounted - 8;
                                       attendance.balance = "SUSPENSION"
                                       activeDp = true;
@@ -211,7 +211,7 @@ export class PeriodsComponent implements OnInit {
 
                                   if (!activeDp) {
                                     leave.forEach(leav => {
-                                      if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
+                                      if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "COMPLETED" && leav.status != "DISMISSED")) {
                                         activeLeav = true;
                                         if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                           discounted = discounted - 8;
@@ -232,7 +232,7 @@ export class PeriodsComponent implements OnInit {
 
                                   if (!activeDp && !activeLeav) {
                                     vac.forEach(vacation => {
-                                      if (vacation.took_date == attendance.date) {
+                                      if ((vacation.took_date == attendance.date) && (vacation.status != "COMPLETED" && vacation.status != "DISMISSED")) {
                                         if (attendance.scheduled != "OFF") {
                                           this.roster = this.roster + Number(attendance.scheduled);
                                           this.attended = this.attended + Number(attendance.scheduled);
@@ -250,7 +250,7 @@ export class PeriodsComponent implements OnInit {
                                     if (attendance.scheduled == 'OFF') {
                                       this.daysOff = this.daysOff + 1;
                                       attendance.balance = "OFF";
-                                      if(Number(attendance.worked_time) > 0){
+                                      if (Number(attendance.worked_time) > 0) {
                                         attendance.balance = attendance.worked_time;
                                         discounted = discounted + Number(attendance.worked_time);
                                       }
@@ -359,40 +359,27 @@ export class PeriodsComponent implements OnInit {
                                   totalDeb = totalDeb + Number(igss_debit.amount);
 
                                   adjustments.forEach(adjustment => {
-                                    let new_credit: credits = new credits;
-                                    let new_debit: debits = new debits;
-                                    new_credit.amount = (((Number(adjustment.time_after) - Number(adjustment.time_before)) * base_hour) + ((Number(adjustment.time_after) - Number(adjustment.time_before)) * productivity_hour)).toFixed(2);
-                                    new_credit.idpayments = pay.idpayments;
-                                    new_credit.type = "Auto Ajuste " + adjustment.date;
+                                    if (adjustment.status == "PENDING") {
+                                      let new_credit: credits = new credits;
+                                      new_credit.amount = (((Number(adjustment.time_after) - Number(adjustment.time_before)) * base_hour) + ((Number(adjustment.time_after) - Number(adjustment.time_before)) * productivity_hour)).toFixed(2);
+                                      new_credit.idpayments = pay.idpayments;
+                                      new_credit.type = "Auto Ajuste " + adjustment.date;
 
-                                    new_debit.amount = (((Number(adjustment.time_after) - Number(adjustment.time_before)) * base_hour) * 0.0483).toFixed(2);
-                                    new_debit.idpayments = pay.idpayments;
-                                    new_debit.type = "Auto Ajuste IGSS";
-
-                                    this.global_debits.push(new_debit);
-                                    this.global_credits.push(new_credit);
-                                    totalCred = totalCred + Number(new_credit.amount);
-                                    totalDeb = totalDeb + Number(new_debit.amount);
+                                      this.global_credits.push(new_credit);
+                                      totalCred = totalCred + Number(new_credit.amount);
+                                    }
                                   });
 
                                   vac.forEach(vacat => {
                                     if (new Date(vacat.took_date) < new Date(this.period.start) && vacat.status == 'PENDING') {
                                       let new_credit2: credits = new credits;
-                                      let new_debit2: debits = new debits;
                                       new_credit2.amount = ((8 * base_hour) + (8 * productivity_hour)).toFixed(2);
                                       new_credit2.idpayments = pay.idpayments;
                                       new_credit2.type = "Auto Ajuste Vacaciones " + vacat.took_date;
 
-                                      new_debit2.amount = ((8 * base_hour) * 0.0483).toFixed(2);
-                                      new_debit2.idpayments = pay.idpayments;
-                                      new_debit2.type = "Auto Ajuste IGSS";
-
                                       this.credits.push(new_credit2);
-                                      this.debits.push(new_debit2);
                                       this.global_credits.push(new_credit2);
-                                      this.global_debits.push(new_debit2);
                                       totalCred = totalCred + Number(new_credit2.amount);
-                                      totalDeb = totalDeb + Number(new_debit2.amount);
                                     }
                                   })
 
@@ -451,9 +438,9 @@ export class PeriodsComponent implements OnInit {
                                   pay.state = emp[0].state;
                                   pay.account = emp[0].account;
                                   pay.seventh = svnth.toString();
-                                  if(last_seventh){
+                                  if (last_seventh) {
                                     pay.last_seventh = '0';
-                                  }else{
+                                  } else {
                                     pay.last_seventh = '1';
                                   }
                                 })
@@ -548,7 +535,7 @@ export class PeriodsComponent implements OnInit {
     let activeLeav: boolean = false;
     let activeDp: boolean = false;
     let janp_sequence: number = 0;
-    let last_seventh:boolean = true;
+    let last_seventh: boolean = true;
 
     let non_show1: boolean = false;
     let non_show2: boolean = false;
@@ -574,11 +561,11 @@ export class PeriodsComponent implements OnInit {
                   this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                     this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                       this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
-                        let py:payments = new payments;
+                        let py: payments = new payments;
                         py.id_employee = emp[0].idemployees;
                         py.id_period = this.period.idperiods;
-                        this.apiService.getLastSeventh(py).subscribe((pyment:payments)=>{
-                          if(pyment.last_seventh == '1'){
+                        this.apiService.getLastSeventh(py).subscribe((pyment: payments) => {
+                          if (pyment.last_seventh == '1') {
                             last_seventh = false;
                           }
                         })
@@ -618,7 +605,7 @@ export class PeriodsComponent implements OnInit {
                             activeLeav = false;
 
                             dp.forEach(disciplinary => {
-                              if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
+                              if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != "COMPLETED" && disciplinary.status != "DISMISSED")) {
                                 this.absence = this.absence - 8;
                                 discounted = discounted - 8;
                                 attendance.balance = "SUSPENSION"
@@ -628,7 +615,7 @@ export class PeriodsComponent implements OnInit {
 
                             if (!activeDp) {
                               leave.forEach(leav => {
-                                if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
+                                if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "COMPLETED" && leav.status != "DISMISSED")) {
                                   if (attendance.scheduled != 'OFF') {
                                     this.roster = this.roster + Number(attendance.scheduled);
                                   }
@@ -652,7 +639,7 @@ export class PeriodsComponent implements OnInit {
 
                             if (!activeDp && !activeLeav) {
                               vac.forEach(vacation => {
-                                if (vacation.took_date == attendance.date) {
+                                if (vacation.took_date == attendance.date && (vacation.status != "COMPLETED" && vacation.status != "DISMISSED")) {
                                   if (attendance.scheduled != "OFF") {
                                     this.roster = this.roster + Number(attendance.scheduled);
                                     this.attended = this.attended + Number(attendance.scheduled);
@@ -922,10 +909,10 @@ export class PeriodsComponent implements OnInit {
                 ele.notes = "ERROR";
               }
               count = count + 1;
-              if(this.importType == "Bonus"){
+              if (this.importType == "Bonus") {
                 this.credits.push(ele);
-              }else if(this.importType == "Discount"){
-                let deb:debits = new debits;
+              } else if (this.importType == "Discount") {
+                let deb: debits = new debits;
                 deb.amount = ele.amount;
                 deb.date = ele.date;
                 deb.id_employee = ele.id_employee;
@@ -934,7 +921,7 @@ export class PeriodsComponent implements OnInit {
                 deb.type = ele.type;
                 this.debits.push(deb);
               }
-              
+
               if (count == (partial_credits.length - 1)) {
                 this.importEnd = true;
                 this.completed = true;

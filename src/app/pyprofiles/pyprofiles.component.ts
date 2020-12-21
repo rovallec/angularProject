@@ -168,6 +168,7 @@ export class PyprofilesComponent implements OnInit {
                 let py: payments = new payments;
                 py.id_employee = emp[0].idemployees;
                 py.id_period = periods[periods.length - 1].idperiods;
+
                 this.apiService.getLastSeventh(py).subscribe((pyment: payments) => {
                   if (pyment.last_seventh == '1') {
                     last_seventh = false;
@@ -311,7 +312,6 @@ export class PyprofilesComponent implements OnInit {
   }
 
   showReg(att:attendences){
-    console.log(att);
     let actualDate:Date = new Date(att.date);
 
     this.vacations.forEach(vac=>{
@@ -323,7 +323,6 @@ export class PyprofilesComponent implements OnInit {
     this.leaves.forEach(leave=>{
       let startDate:Date = new Date(leave.start);
       let endDate:Date = new Date(leave.end);
-
       if(startDate.getTime() <= actualDate.getTime() && endDate.getTime() >= actualDate.getTime()){
         leave.approved_by = 'overlap';
       }
@@ -347,7 +346,7 @@ export class PyprofilesComponent implements OnInit {
 
   setState_suspension(suspension:disciplinary_processes){
     if(suspension.status == 'DISMISSED'){
-      this.apiService.updateVacations(suspension).subscribe((str:string)=>{
+      this.apiService.updateSuspensions(suspension).subscribe((str:string)=>{
 
       });
     }
@@ -355,7 +354,7 @@ export class PyprofilesComponent implements OnInit {
 
   setState_leave(leave:leaves){
     if(leave.status == 'DISMISSED'){
-      this.apiService.updateVacations(leave).subscribe((str:string)=>{
+      this.apiService.updateLeaves(leave).subscribe((str:string)=>{
 
       });
     }

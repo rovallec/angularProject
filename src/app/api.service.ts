@@ -616,5 +616,12 @@ updateVacations(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateVacations.php`, any);
 }
 
+updateLeaves(leave:leaves){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateLeaves.php`, leave);
+}
+
+updateSuspensions(susp:disciplinary_processes){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateSuspensions.php`, susp);
+}
   constructor(private httpClient:HttpClient) { }
 }
