@@ -189,15 +189,15 @@
                                     <input type="text" [(ngModel)]="attAdjudjment.time_after" class="form-control"
                                         [disabled]="true">
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-3"*ngIf="!editAdj">
                                     <label>Start:</label>
                                     <input type="time" class="form-control" [(ngModel)]="temp_start"
-                                        (change)="change_time($event)" *ngIf="editAdj">
+                                        (change)="change_time($event)">
                                 </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-3" *ngIf="!editAdj">
                                     <label>End:</label>
                                     <input type="time" class="form-control" [(ngModel)]="temp_end"
-                                        (change)="change_time($event)" *ngIf="editAdj">
+                                        (change)="change_time($event)" >
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label>Value:</label>
