@@ -10,5 +10,11 @@ $id_process = ($request->id_process);
 
 $sql = "UPDATE `hr_processes` SET `status` = 'DISMISSED', `notes` = 'DISMISSED By attendance overlap' WHERE `idhr_processes` = $id_process;";
 
-echo($sql);
+if(mysqli_query($con, $sql)){
+    http_response_code(200);
+    echo("1");
+}else{
+    http_response_code(404);
+    echo($sql);
+}
 ?>

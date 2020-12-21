@@ -209,7 +209,7 @@ export class PyprofilesComponent implements OnInit {
                     activeLeav = false;
 
                     dp.forEach(disciplinary => {
-                      if (disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) {
+                      if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != 'DISMISSED' && disciplinary.status != "COMPLETED")) {
                         this.absence = this.absence - 8;
                         discounted = discounted - 8;
                         attendance.balance = "SUSPENSION"
@@ -219,7 +219,7 @@ export class PyprofilesComponent implements OnInit {
 
                     if (!activeDp) {
                       leave.forEach(leav => {
-                        if ((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) {
+                        if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != 'DISMISSED' && leav.status != "COMPLETED")) {
                           if (attendance.scheduled != 'OFF') {
                             this.roster = this.roster + Number(attendance.scheduled);
                           }
@@ -243,7 +243,7 @@ export class PyprofilesComponent implements OnInit {
 
                     if (!activeDp && !activeLeav) {
                       vac.forEach(vacation => {
-                        if (vacation.took_date == attendance.date) {
+                        if (vacation.took_date == attendance.date && (vacation.status != 'DISMISSED' && vacation.status != "COMPLETED")) {
                           if (attendance.scheduled != "OFF") {
                             this.roster = this.roster + Number(attendance.scheduled);
                             this.attended = this.attended + Number(attendance.scheduled);
@@ -315,7 +315,7 @@ export class PyprofilesComponent implements OnInit {
     let actualDate:Date = new Date(att.date);
 
     this.vacations.forEach(vac=>{
-      if(vac.took_date == att.date){
+      if(vac.took_date == att.date && (vac.status != "DISMISSED" && vac.status != "COMPLETED")){
         vac.action = 'overlap';
       }
     })
@@ -323,13 +323,13 @@ export class PyprofilesComponent implements OnInit {
     this.leaves.forEach(leave=>{
       let startDate:Date = new Date(leave.start);
       let endDate:Date = new Date(leave.end);
-      if(startDate.getTime() <= actualDate.getTime() && endDate.getTime() >= actualDate.getTime()){
+      if((startDate.getTime() <= actualDate.getTime() && endDate.getTime() >= actualDate.getTime()) && (leave.status != "DISMISSED" && leave.status != "COMPLETED")){
         leave.approved_by = 'overlap';
       }
     })
 
     this.dps.forEach(dp=>{
-      if(dp.day_1 == att.date || dp.day_2 == att.date || dp.day_3 == att.date || dp.day_4 == att.date){
+      if((dp.day_1 == att.date || dp.day_2 == att.date || dp.day_3 == att.date || dp.day_4 == att.date) && (dp.status != "DISMISSED" && dp.status != "COMPLETED")){
         dp.requested_by = 'overlap';
       }
     })
