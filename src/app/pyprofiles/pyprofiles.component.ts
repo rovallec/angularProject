@@ -311,15 +311,12 @@ export class PyprofilesComponent implements OnInit {
   }
 
   showReg(att:attendences){
-    let vacShow:vacations[];
-    let leaveShow:leaves[];
-    let suspensionShow:disciplinary_processes[];
+    console.log(att);
     let actualDate:Date = new Date(att.date);
 
     this.vacations.forEach(vac=>{
       if(vac.took_date == att.date){
         vac.action = 'overlap';
-        vacShow.push(vac);
       }
     })
 
@@ -328,21 +325,14 @@ export class PyprofilesComponent implements OnInit {
       let endDate:Date = new Date(leave.end);
       if(startDate.getTime <= actualDate.getTime && endDate.getTime >= actualDate.getTime){
         leave.approved_by = 'overlap';
-        leaveShow.push(leave);
       }
     })
 
     this.dps.forEach(dp=>{
       if(dp.day_1 == att.date || dp.day_2 == att.date || dp.day_3 == att.date || dp.day_4 == att.date){
         dp.requested_by = 'overlap';
-        suspensionShow.push(dp);
       }
     })
-
-    this.vacations = vacShow;
-    this.leaves = leaveShow;
-    this.dps = suspensionShow;
-    
     this.showRegs = true;
   }
   
