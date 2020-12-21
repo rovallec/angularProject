@@ -266,6 +266,7 @@ export class PyprofilesComponent implements OnInit {
                           this.attended = this.attended + Number(attendance.worked_time);
                           this.absence = this.absence + Number(attendance.worked_time);
                           discounted = discounted + Number(attendance.worked_time);
+                          attendance.balance = attendance.worked_time;
                         }
                       } else {
                         this.roster = this.roster + Number(attendance.scheduled);
