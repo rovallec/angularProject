@@ -311,30 +311,43 @@ export class PyprofilesComponent implements OnInit {
   }
 
   showReg(att:attendences){
+    let vacShow:vacations[];
+    let leaveShow:leaves[];
+    let suspensionShow:disciplinary_processes[];
+    let actualDate:Date = new Date(att.date);
 
     this.vacations.forEach(vac=>{
       if(vac.took_date == att.date){
         vac.action = 'overlap';
+        vacShow.push(vac);
       }
     })
 
     this.leaves.forEach(leave=>{
-      if((new Date(leave.start)) <= (new Date(att.date)) && (new Date(leave.end)) >= (new Date(att.date))){
+      let startDate:Date = new Date(leave.start);
+      let endDate:Date = new Date(leave.end);
+      if(startDate <= actualDate && endDate >= actualDate){
         leave.approved_by = 'overlap';
+        leaveShow.push(leave);
       }
     })
 
     this.dps.forEach(dp=>{
       if(dp.day_1 == att.date || dp.day_2 == att.date || dp.day_3 == att.date || dp.day_4 == att.date){
         dp.requested_by = 'overlap';
+        suspensionShow.push(dp);
       }
     })
+
+    this.vacations = vacShow;
+    this.leaves = leaveShow;
+    this.dps = suspensionShow;
+    
     this.showRegs = true;
   }
   
   setState_vac(vac:vacations){
     if(vac.status == 'DISMISSED'){
-      console.log(vac);
       this.apiService.updateVacations(vac).subscribe((str:string)=>{
 
       });
@@ -343,7 +356,6 @@ export class PyprofilesComponent implements OnInit {
 
   setState_suspension(suspension:disciplinary_processes){
     if(suspension.status == 'DISMISSED'){
-      console.log(suspension);
       this.apiService.updateVacations(suspension).subscribe((str:string)=>{
 
       });
@@ -352,7 +364,6 @@ export class PyprofilesComponent implements OnInit {
 
   setState_leave(leave:leaves){
     if(leave.status == 'DISMISSED'){
-      console.log(leave);
       this.apiService.updateVacations(leave).subscribe((str:string)=>{
 
       });
