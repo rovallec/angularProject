@@ -161,6 +161,9 @@ export class PyprofilesComponent implements OnInit {
           this.apiService.getDPAtt({ id: emp[0].idemployees, date_1: strt, date_2: nd }).subscribe((dp: disciplinary_processes[]) => {
             this.apiService.getAttPeriod({ id: emp[0].idemployees, date_1: strt, date_2: nd }).subscribe((att: attendences[]) => {
               this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
+                this.leaves = leave;
+                console.log(leave);
+                console.log(this.leaves);
                 this.dps = dp;
                 let py: payments = new payments;
                 py.id_employee = emp[0].idemployees;
@@ -175,8 +178,6 @@ export class PyprofilesComponent implements OnInit {
                     this.vacations.push(vacc);
                   }
                 })
-
-                this.leaves = leave;
                 non_show1 = false;
                 non_show2 = false;
 
