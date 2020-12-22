@@ -27,6 +27,7 @@ import { WfmhomeComponent } from './wfmhome/wfmhome.component';
 import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
 import { ImportOtComponent } from './import-ot/import-ot.component';
 import { OttrackerComponent } from './ottracker/ottracker.component';
+import { AttendanceReportComponent } from './attendance-report/attendance-report.component';
 
 const routes:Routes = [
   {
@@ -140,6 +141,11 @@ const routes:Routes = [
   {
     path:'timetracker',
     component: OttrackerComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path: 'exportatt',
+    component:AttendanceReportComponent,
     canActivate:[AuthGuard]
   },
   {
