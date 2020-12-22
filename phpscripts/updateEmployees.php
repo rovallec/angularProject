@@ -8,7 +8,7 @@ $request = json_decode($postdata);
 
 $platform = ($request->platform);
 $id = ($request->id_profile);
-$status = ($request->status);
+$status = ($request->state);
 
 if($platform != 'WAH' && $platform != 'ON SITE'){
 	$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `client_id` = '$platform' WHERE `id_profile` = '$id';";
