@@ -183,7 +183,7 @@ export class AccprofilesComponent implements OnInit {
 
     this.apiService.getProcRecorded({id:this.employee.idemployees}).subscribe((pr:process[])=>{
       pr.forEach(proc=>{
-        if(proc.name === "Termination"){
+        if(proc.name === "Termination" && this.employee.client_id != "NONE"){
           end_date = proc.prc_date;
           difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
         }
