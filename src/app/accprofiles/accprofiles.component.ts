@@ -8,6 +8,7 @@ import { AuthGuard } from '../guard/auth-guard.service';
 import { PeriodsComponent } from '../periods/periods.component';
 import { process } from '../process';
 import { attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
+import { profiles } from '../profiles';
 
 @Component({
   selector: 'app-accprofiles',
@@ -224,6 +225,11 @@ export class AccprofilesComponent implements OnInit {
       cred_pendings.amount = this.total.toFixed(2);
       this.cred_benefits.push(cred_pendings);
     })
+  }
+
+  completePayment(){
+    this.employee.state = "PAID";
+    this.apiService.updateEmployee(this.employee).subscribe((str:string)=>{});
   }
 
   setPayTime(id_employee: string, id_profile: string) {
