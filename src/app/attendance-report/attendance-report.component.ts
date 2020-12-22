@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { stringify } from 'querystring';
 import { ApiService } from '../api.service';
 import { accounts } from '../process_templates';
 
@@ -11,6 +12,9 @@ export class AttendanceReportComponent implements OnInit {
 
   selectedAccounts:string[] = [];
   accounts:accounts[] = [];
+  get:boolean = false;
+  fromDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate() - 1);
+  toDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
 
   constructor(public apiServices:ApiService) { }
 
@@ -47,5 +51,36 @@ export class AttendanceReportComponent implements OnInit {
     newAccount.name = acc.split(".")[1];
 
     this.accounts.push(newAccount);
+    if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
+      this.get = true;
+    }else{
+      this.get = false;
+    }
+  }
+
+  changeFrom(str:string){
+    this.fromDate = str;
+    if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
+      this.get = true;
+    }else{
+      this.get = false;
+    }
+  }
+
+  changeTo(str:string){
+    this.toDate = str;
+    if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
+      this.get = true;
+    }else{
+      this.get = false;
+    }
+  }
+
+  getReport(){
+    let acc:string = null;
+    this.selectedAccounts.forEach(str=> {
+      acc = str.split(".")[0] + "|" + acc;
+    })
+    window.open("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank")
   }
 }
