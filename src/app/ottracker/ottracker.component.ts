@@ -135,7 +135,6 @@ export class OttrackerComponent implements OnInit {
       if (Number(ot.status) < 0) {
         this.apiServices.getAttPeriod({ id: ot.id_employee, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
           cnt = cnt + 1;
-          console.log(cnt + " " + this.ots.length);
           att.forEach(attendance => {
             let marg: marginalization = new marginalization;
             if (attendance.scheduled != 'OFF' && Number(attendance.worked_time) > Number(attendance.scheduled) && Number(ot.status) < 0) {
@@ -172,13 +171,17 @@ export class OttrackerComponent implements OnInit {
               }
             }
           })
+          if (this.ots.length == cnt) {
+            this.marginalazing = true;
+            this.history = false;
+          }
         })
       } else {
         cnt = cnt + 1;
-        console.log(cnt + " " + this.ots.length);
       }
       if (this.ots.length == cnt) {
         this.marginalazing = true;
+        this.history = false;
       }
     })
   }
