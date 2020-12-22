@@ -100,13 +100,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="row col-md-12">
-                                    <div class="col-md-5"></div>
-                                    <div class="col-md-2">
-                                        <button class="form-control" (click)="completePayment()"></button>
-                                    </div>
-                                    <div class="col-md-5"></div>
-                                </div>
                                 <div class="form-row col-md-12" *ngIf="!insertNew">
                                     <div class="form-group col-md-2"></div>
                                     <div class="form-group col-md-8" style="border-bottom:solid 4px #e3f2fd"></div>
@@ -338,6 +331,13 @@
                             </table>
                         </div>
                         <div class="col-md-1"></div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-5"></div>
+                        <div class="col-md-2">
+                            <button class="form-control" (click)="completePayment()"></button>
+                        </div>
+                        <div class="col-md-5"></div>
                     </div>
                 </div>
             </div>
