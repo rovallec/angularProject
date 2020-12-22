@@ -205,7 +205,7 @@ export class AccprofilesComponent implements OnInit {
       }else{
         b_date = (new Date(end_date).getFullYear()) + "-07-01";
       }
-      cred_bono14.type = "Aguinaldo Periodo del " + b_date + " al " + end_date;
+      cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
       cred_bono14.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/365)*((new Date(end_date).getTime() - new Date(b_date).getTime())/(1000*3600*24))).toFixed(2);
       this.cred_benefits.push(cred_bono14);
 
