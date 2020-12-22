@@ -229,6 +229,7 @@ export class AccprofilesComponent implements OnInit {
 
   completePayment(){
     this.employee.state = "PAID";
+    this.employee.platform = "NONE";
     this.apiService.updateEmployee(this.employee).subscribe((str:string)=>{});
   }
 
