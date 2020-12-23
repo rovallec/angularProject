@@ -1,6 +1,7 @@
 import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { stringify } from 'querystring';
+import { isNull } from 'util';
 import { ApiService } from '../api.service';
 import { accounts } from '../process_templates';
 
@@ -87,7 +88,11 @@ export class AttendanceReportComponent implements OnInit {
   getReport(){
     let acc:string = null;
     this.selectedAccounts.forEach(str=> {
-      acc = str.split(".")[0] + ";" + acc;
+      if(!isNull(acc)){
+        acc = str.split(".")[0] + "," + acc;
+      }else{
+        acc = str.split(".")[0];
+      }
     })
     console.log("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc);
     window.open("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank");
