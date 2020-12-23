@@ -17,9 +17,10 @@ header('Access-Control-Allow-Headers: *');
             $r_val_second_last_name = ($val->affinity_second_last_name);
             $r_val_phone = ($val->affinity_phone);
             $r_val_relationship = ($val->affinity_relationship);
+            $r_val_birthdate = ($val->affinity_birthdate);
 
-            $sql = "INSERT INTO `families`(`id_profile`, `first_name`, `second_name`,`first_last_name`, `second_last_name`, `phone`, `relationship`) 
-                    VALUES ('{$r_val_id_profile}','{$r_val_first_name}','{$r_val_second_name}','{$r_val_first_last_name}','{$r_val_second_last_name}','{$r_val_phone}','{$r_val_relationship}');";
+            $sql = "INSERT INTO `families`(`id_profile`, `first_name`, `second_name`,`first_last_name`, `second_last_name`, `phone`, `relationship`, `birthdate`)
+                    VALUES ('{$r_val_id_profile}','{$r_val_first_name}','{$r_val_second_name}','{$r_val_first_last_name}','{$r_val_second_last_name}','{$r_val_phone}','{$r_val_relationship}','{$r_val_birthdate}');";
             if(mysqli_query($con,$sql)){					
                 http_response_code(200);
             }else{
