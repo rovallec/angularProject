@@ -14,7 +14,7 @@ export class AttendanceReportComponent implements OnInit {
   selectedAccounts:string[] = [];
   accounts:accounts[] = [];
   get:boolean = false;
-  lastSelection:string = "";
+  lastSelection:string = null;
   fromDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate() - 1);
   toDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
 
