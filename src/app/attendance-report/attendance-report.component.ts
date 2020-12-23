@@ -87,8 +87,9 @@ export class AttendanceReportComponent implements OnInit {
   getReport(){
     let acc:string = null;
     this.selectedAccounts.forEach(str=> {
-      acc = str.split(".")[0] + "|" + acc;
+      acc = str.split(".")[0] + ";" + acc;
     })
-    window.open("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank")
+    console.log("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc);
+    window.open("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank");
   }
 }
