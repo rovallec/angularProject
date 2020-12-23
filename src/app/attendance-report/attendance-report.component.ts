@@ -38,7 +38,6 @@ export class AttendanceReportComponent implements OnInit {
     })
 
     this.accounts = newPool;
-    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -60,7 +59,6 @@ export class AttendanceReportComponent implements OnInit {
     newAccount.name = acc.split(".")[1];
 
     this.accounts.push(newAccount);
-    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -70,7 +68,6 @@ export class AttendanceReportComponent implements OnInit {
 
   changeFrom(str:string){
     this.fromDate = str;
-    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -80,7 +77,6 @@ export class AttendanceReportComponent implements OnInit {
 
   changeTo(str:string){
     this.toDate = str;
-    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
