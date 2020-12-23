@@ -51,7 +51,7 @@ getWaves(){
 }
 
 getAcconts(){
-  return this.httpClient.get<accounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAccounts2.php`);
+  return this.httpClient.get<accounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAccounts.php`);
 }
 
 updateWave(wv:waves_template){

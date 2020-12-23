@@ -76,7 +76,7 @@
           routerLink="/activeReport" style="color: white" [ngClass]="{'act':selectedOption=='ACTVR'}"
           (click)="SetSel('ACTVR')">ACTIVE AGENTS REPORT</a>
           <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/exportatt" style="color: white"
-          [ngClass]="{'act':selectedOption=='EXPATT'}" (click)="SetSel('EXPATT')">ATTENDANCE EXPORT</a>
+          [ngClass]="{'act':selectedOption=='EXPATT'}" (click)="SetSel('EXPATT')">ATTENDANCE REPORT</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
