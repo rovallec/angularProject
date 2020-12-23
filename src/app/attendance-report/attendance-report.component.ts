@@ -14,7 +14,7 @@ export class AttendanceReportComponent implements OnInit {
   selectedAccounts:string[] = [];
   accounts:accounts[] = [];
   get:boolean = false;
-  lastSelection:string = null;
+  lastSelection:string = "";
   fromDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate() - 1);
   toDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
 
@@ -38,6 +38,12 @@ export class AttendanceReportComponent implements OnInit {
     })
 
     this.accounts = newPool;
+    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
+    if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
+      this.get = true;
+    }else{
+      this.get = false;
+    }
   }
 
   ommit(acc:string){
