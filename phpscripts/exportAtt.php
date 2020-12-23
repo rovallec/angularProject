@@ -7,7 +7,7 @@ require 'database.php';
 
 $account = $_GET['acc'];
 $from = $_GET['from'];
-$to = $_TO['to'];
+$to = $_GET['to'];
 
 $attendances = [];
 
@@ -30,14 +30,14 @@ WHERE attendences.date BETWEEN '$from' AND '$to' AND id_account in($account)
 GROUP BY idattendences;";
 
 $output = fopen("php://output", "w");
-fputcsv($output, array("Nearsol ID", "Client ID", "Name", "Date", "Roster", "Worked", "IGSS", "AUX"));
+fputcsv($output, array("Nearsol ID", "Client ID", "Name", "Account", "Date", "Roster", "Worked", "IGSS", "AUX"));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $attendances[0] = $row['nearsol_id'];
         $attendances[1] = $row['client_id'];
         $attendances[2] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         $attendances[3] = $row['name'];
-        $attendances[4] = $row['date'];
+        $attendances[4] = str_replace("-",".",$row['date']);
         $attendances[5] = $row['scheduled'];
         $attendances[6] = $row['worked_time'];
         $attendances[7] = $row['igss'];
