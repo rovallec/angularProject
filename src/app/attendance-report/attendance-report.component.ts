@@ -1,7 +1,6 @@
 import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { stringify } from 'querystring';
-import { isNull } from 'util';
 import { ApiService } from '../api.service';
 import { accounts } from '../process_templates';
 
@@ -15,7 +14,7 @@ export class AttendanceReportComponent implements OnInit {
   selectedAccounts:string[] = [];
   accounts:accounts[] = [];
   get:boolean = false;
-  lastSelection:string = null;
+  lastSelection:string = "";
   fromDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate() - 1);
   toDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
 
@@ -39,6 +38,7 @@ export class AttendanceReportComponent implements OnInit {
     })
 
     this.accounts = newPool;
+    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -60,6 +60,7 @@ export class AttendanceReportComponent implements OnInit {
     newAccount.name = acc.split(".")[1];
 
     this.accounts.push(newAccount);
+    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -69,6 +70,7 @@ export class AttendanceReportComponent implements OnInit {
 
   changeFrom(str:string){
     this.fromDate = str;
+    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -78,6 +80,7 @@ export class AttendanceReportComponent implements OnInit {
 
   changeTo(str:string){
     this.toDate = str;
+    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -88,12 +91,8 @@ export class AttendanceReportComponent implements OnInit {
   getReport(){
     let acc:string = null;
     this.selectedAccounts.forEach(str=> {
-      if(!isNull(acc)){
-        acc = str.split(".")[0] + "," + acc;
-      }else{
-        acc = str.split(".")[0];
-      }
+      acc = str.split(".")[0] + "|" + acc;
     })
-    window.open("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank");
+    window.open("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank")
   }
 }

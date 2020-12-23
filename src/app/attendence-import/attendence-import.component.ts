@@ -145,7 +145,7 @@ export class AttendenceImportComponent implements OnInit {
       adj.status = "PENDING";
       adj.time_after = app.worked_time;
       adj.time_before = app.day_off2;
-      adj.amount = (parseFloat(app.worked_time) - parseFloat(app.day_off2)).toFixed(2);
+      adj.amount = (parseFloat(app.day_off2) - parseFloat(app.worked_time)).toFixed(2);
       this.apiService.insertAttJustification(adj).subscribe((str:string)=>{
         this.apiService.updateAttendances(app).subscribe((str:string)=>{});
       })
