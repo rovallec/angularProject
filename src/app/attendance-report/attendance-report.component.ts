@@ -1,3 +1,4 @@
+import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { stringify } from 'querystring';
 import { ApiService } from '../api.service';
@@ -13,6 +14,7 @@ export class AttendanceReportComponent implements OnInit {
   selectedAccounts:string[] = [];
   accounts:accounts[] = [];
   get:boolean = false;
+  lastSelection:string = null;
   fromDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate() - 1);
   toDate:string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
 
@@ -27,6 +29,7 @@ export class AttendanceReportComponent implements OnInit {
   addSelected(acc:string){
     let newPool:accounts[] = [];
     this.selectedAccounts.push(acc);
+    this.lastSelection = acc;
     
     this.accounts.forEach(account=>{
       if(account.idaccounts != acc.split(".")[0]){
@@ -51,6 +54,7 @@ export class AttendanceReportComponent implements OnInit {
     newAccount.name = acc.split(".")[1];
 
     this.accounts.push(newAccount);
+    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -60,6 +64,7 @@ export class AttendanceReportComponent implements OnInit {
 
   changeFrom(str:string){
     this.fromDate = str;
+    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{
@@ -69,6 +74,7 @@ export class AttendanceReportComponent implements OnInit {
 
   changeTo(str:string){
     this.toDate = str;
+    console.log(new Date(this.toDate).getTime()  + " " + new Date(this.fromDate).getTime() + " " + this.selectedAccounts.length);
     if((new Date(this.toDate).getTime()) >= (new Date(this.fromDate).getTime()) && this.selectedAccounts.length > 0){
       this.get = true;
     }else{

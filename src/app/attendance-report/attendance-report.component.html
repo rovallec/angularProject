@@ -13,7 +13,7 @@
     </div>
     <div class="row col-md-12" style="margin-top:10px;">
         <div class="col-md-2">
-            <select class="form-control" (change)="addSelected($event.target.value)">
+            <select class="form-control" (change)="addSelected($event.target.value)" [(ngModel)]="lastSelection">
                 <option *ngFor="let account of accounts">{{account.idaccounts}}.{{account.name}}</option>
             </select>
         </div>
