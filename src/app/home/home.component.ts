@@ -138,7 +138,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     
-    this.apiService.getAcconts().subscribe((acc:accounts[])=>{
+    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
       this.accounts = acc;
     })
 

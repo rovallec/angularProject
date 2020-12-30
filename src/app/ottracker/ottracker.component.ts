@@ -106,7 +106,7 @@ export class OttrackerComponent implements OnInit {
 
   setClient(cl: string) {
     this.accounts = [];
-    this.apiServices.getAcconts().subscribe((acc: accounts[]) => {
+    this.apiServices.getAccounts().subscribe((acc: accounts[]) => {
       acc.forEach(account => {
         if (account.id_client == cl) {
           this.accounts.push(account);

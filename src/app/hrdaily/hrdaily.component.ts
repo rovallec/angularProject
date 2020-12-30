@@ -24,7 +24,7 @@ export class HrdailyComponent implements OnInit {
   constructor(private apiService: ApiService){}
 
   ngOnInit(){
-    this.apiService.getAcconts().subscribe((acc:accounts[])=>{
+    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
       this.accounts = acc;
     })
   }

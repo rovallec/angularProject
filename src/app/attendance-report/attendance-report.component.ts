@@ -21,7 +21,7 @@ export class AttendanceReportComponent implements OnInit {
   constructor(public apiServices:ApiService) { }
 
   ngOnInit() {
-    this.apiServices.getAcconts().subscribe((acc:accounts[])=>{
+    this.apiServices.getAccounts().subscribe((acc:accounts[])=>{
       this.accounts = acc;
     })
   }

@@ -12,8 +12,6 @@ if(isset($postdata)&&!empty($postdata)){
 	$authUser = [];
 }
 
-
-
 define('db_host', 'localhost');
 define('db_user', $usr);
 define('db_password', $pss);
@@ -57,7 +55,7 @@ if(!$mysqlc){
 			$authUser[$i]['id_role'] = $row['id_role'];
 			$authUser[$i]['signature'] = $row['signature'];
 			$i++;
-		};
+		};		
 		echo json_encode($authUser);
 	};
 }
