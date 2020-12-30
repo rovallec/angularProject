@@ -1,5 +1,5 @@
 <div class="row col-md-12" style="margin-top:25px;">
-    <div class="row col-md-12">
+    <div class="row col-md-12" style="border-bottom: solid #e3f2fd 3px">
         <div class="col-md-3"></div>
         <div class="col-md-3 form-group">
             <label>FROM:</label>
@@ -12,13 +12,14 @@
         <div class="col-md-3"></div>
     </div>
     <div class="row col-md-12" style="margin-top:10px;">
-        <div class="col-md-2">
+        <div class="col-md-2" style="padding-right:0px">
             <select class="form-control" (change)="addSelected($event.target.value)" [(ngModel)]="lastSelection">
+                <option></option>
                 <option *ngFor="let account of accounts">{{account.idaccounts}}.{{account.name}}</option>
             </select>
         </div>
-        <div class="col-md-1">
-            <i *ngIf="get" class="fas fa-download" (click)="getReport()" style="margin-top:30%"></i>
+        <div class="col-md-1" style="padding-left:0px">
+            <i *ngIf="get" class="fas fa-download" (click)="getReport()" style="margin-top:9%; margin-left:5px; cursor:pointer"></i>
         </div>
         <div class="col-md-9">
             <ul class="list-group">
