@@ -16,6 +16,7 @@ if(parse_str(explode("-",$date)[2]) > 15){
     $sql = "SELECT services.idservices, services.id_process, services.name, services.amount, services.max, services.frecuency, services.status, services.current, internal_processes.idinternal_processes, internal_processes.id_employee, internal_processes.id_user, internal_processes.name, internal_processes.date FROM `services` LEFT JOIN `internal_processes` ON `internal_processes`.`idinternal_processes` = `services`.`id_process` WHERE (`frecuency` = 'UNIQUE' OR `frecuency` = 'BIWEEKLY') AND `id_employee` = $id AND services.`status` = 1;";
 }
 
+
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
         $user[$i]['idservices'] = $row['idservices'];

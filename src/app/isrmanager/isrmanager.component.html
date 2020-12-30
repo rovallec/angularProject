@@ -1,0 +1,12 @@
+<div class="row col-md-12">
+    <div class="row col-md-12">
+        <div class="col-md-2">
+            <div class="list-group w-100" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action w-100" *ngFor="let period of periods"
+                [tabindex]="period.idperiods" (click)="setSelection(period)"
+                [ngClass]="{'active': selectedPeriod.idperiods == period.idperiods}"
+                style="cursor: pointer;">{{period.start}} - {{period.end}}</a>
+            </div>
+        </div>
+    </div>
+</div>

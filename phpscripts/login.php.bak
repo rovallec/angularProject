@@ -57,7 +57,7 @@ if(!$mysqlc){
 			$authUser[$i]['id_role'] = $row['id_role'];
 			$authUser[$i]['signature'] = $row['signature'];
 			$i++;
-		};
+		};		
 		echo json_encode($authUser);
 	};
 }

@@ -49,8 +49,6 @@
           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           IMPORT
         </a>
-        <a *ngIf="getSaved().department == 4'" class="nav-link" routerLink="/isrManager"
-          style="color: white" [ngClass]="{'act':selectedOption=='ISR'}" (click)="SetSel('ISR')">ISR MANAGER</a>
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link" routerLink="/hrdaily"
           style="color: white" [ngClass]="{'act':selectedOption=='HRDAILY'}" (click)="SetSel('HRDAILY')">EXCEPTIONS</a>
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/realtime"
@@ -78,7 +76,7 @@
           routerLink="/activeReport" style="color: white" [ngClass]="{'act':selectedOption=='ACTVR'}"
           (click)="SetSel('ACTVR')">ACTIVE AGENTS REPORT</a>
           <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/exportatt" style="color: white"
-          [ngClass]="{'act':selectedOption=='EXPATT'}" (click)="SetSel('EXPATT')">ATTENDANCE REPORT</a>
+          [ngClass]="{'act':selectedOption=='EXPATT'}" (click)="SetSel('EXPATT')">ATTENDANCE EXPORT</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
