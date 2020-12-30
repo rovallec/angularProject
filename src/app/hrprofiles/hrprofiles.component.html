@@ -90,6 +90,8 @@
                         aria-controls="nav-medical" aria-selected="false">Medical</a>
                     <a class="nav-item nav-link" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab"
                         aria-controls="nav-data" aria-selected="false">Data Validation</a>
+                    <a class="nav-item nav-link" id="nav-family-tab" data-toggle="tab" href="#nav-family" role="tab"
+                        aria-controls="nav-family" aria-selected="false">Family</a>                        
                 </div>
             </nav>
 
@@ -1156,8 +1158,9 @@
                     </div> 
                     <div class="form-row col-md-12" *ngIf="!validating">
                         <div class="form-group col-sm-6">
-                            <label style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Data
-                                Validation</label>
+                            <label style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">
+                                Data Validation
+                            </label>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-sm-12">
                                     <table class="table table-striped table-hover selectable"
@@ -1219,6 +1222,91 @@
                             <button class="form-control" (click)="mergeProfile()">Merge</button>
                         </div>
                     </div>
+                </div>
+                <div class="tab-pane fade" id="nav-family" role="tabpanel" aria-labelledby="nav-family-tab" style="margin-top: 15px;">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="families">Families</label>
+                            <div class="list-group w-100" id="list-tab" role="tablist" >
+                                <a (click)="getFamily(fam)" 
+                                    class="list-group-item list-group-item-action w-100 fam" 
+                                    *ngFor="let fam of family" 
+                                    [tabindex]="fam.affinity_idfamilies">
+                                    {{ fam.affinity_first_name }} {{ fam.affinity_second_name }} {{ fam.affinity_first_last_name }} {{ fam.affinity_second_last_name }}
+                                </a>
+                            </div>
+                            <div class="form-group col-sm-7"></div>
+                                <div class="form-group col-sm-1">                                
+                                    <button class="form-control fam-button-add" type="button" style="border: #007bff 1px solid;"
+                                        data-toggle="tooltip" data-placement="top" title="Add">
+                                        <i class="fa fa-plus-square">
+                                        </i>
+                                    </button>
+                                </div>                  
+                            </div>
+                            
+                        <div class="form-group col-md-8 fam-group form-group" style="margin-top: 15px;">
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-6">
+                                    <label for="families">First name:</label>
+                                    <input type="text" class="form-control" [disabled]="true" value="{{ selected_family.affinity_first_name }}">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="families">Middle name:</label>
+                                    <input type="text" class="form-control" [disabled]="true" value="{{ selected_family.affinity_second_name }}">
+                                </div>
+                            </div>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-6">
+                                    <label for="families">First lastname:</label>
+                                    <input type="text" class="form-control" [disabled]="true" value="{{ selected_family.affinity_first_last_name }}">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="families">Second lastname:</label>
+                                    <input type="text" class="form-control" [disabled]="true" value="{{ selected_family.affinity_second_last_name }}">
+                                </div>
+                            </div>
+                            <div class="form-row col-md-12">
+                                <div class="form-group col-md-4">
+                                    <label for="families">Phone:</label>
+                                    <input type="text" class="form-control" [disabled]="true" value="{{ selected_family.affinity_phone }}">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="families">Relationship:</label>
+                                    <input type="text" class="form-control" [disabled]="true" value="{{ selected_family.affinity_relationship }}">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="families">Birthdate:</label>
+                                    <input type="text" class="form-control" [disabled]="true" value="{{ selected_family.affinity_birthdate }}">
+                                </div>
+                            </div>
+                            <!--   Botones de family -->
+                            <div class="form-row col-sm-12">                                
+                                <div class="form-group col-sm-9"></div>
+                                <div class="form-group col-sm-1">
+                                    <button class="form-control fam-button-add" type="button" style="border: #007bff 1px solid;"
+                                        data-toggle="tooltip" data-placement="top" title="Add" ng-disabled="!edition_status" (click)="this.isButtonVisible = !edition_status">
+                                        <i class="fa fa-floppy-o">
+                                        </i>
+                                    </button>
+                                </div>
+                                <div class=" form-group col-sm-1">
+                                    <button class="form-control fam-button-edit" type="button" style="border: #28a745 1px solid;" 
+                                        data-toggle="tooltip" data-placement="top" title="Edit" ng-disabled="edition_status" (click)="this.isButtonVisible = edition_status">
+                                        <i class="fa fa-edit">
+                                        </i>
+                                    </button>
+                                </div>                                
+                                <div class="form-group col-sm-1">
+                                    <button class="form-control fam-button-del" type="button" style="border: #dc3545 1px solid;" 
+                                        data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <i class="fa fa-trash">
+                                        </i>
+                                    </button>
+                                </div>
+                            </div> <!--   Botones de family -->
+                        </div>
+                    </div>                    
                 </div>
             </div>
         </td>
