@@ -789,7 +789,6 @@ export class PeriodsComponent implements OnInit {
                                       service.current = service.max;
                                     }
                                   }
-<<<<<<< HEAD
 
                                   partial_service.type = "Descuento Por Servicio " + service.name;
                                   this.debits.push(partial_service);
@@ -807,32 +806,6 @@ export class PeriodsComponent implements OnInit {
                                     partial_debit.amount = (Number(judicial.max) - Number(judicial.current)).toFixed(2);
                                     judicial.current = judicial.max;
                                   }
-=======
-
-                                  partial_service.type = "Descuento Por Servicio " + service.name;
-                                  this.debits.push(partial_service);
-                                  totalDeb = totalDeb + Number(partial_service.amount);
-                                }
-                              })
-
-                              judicials.forEach(judicial => {
-                                if (judicial.max != judicial.current) {
-                                  let partial_debit: debits = new debits;
-                                  if (Number(judicial.max) - (((Number(judicial.amount) / 100) * (totalCred - totalDeb)) + Number(judicial.current)) > 0) {
-                                    partial_debit.amount = ((Number(judicial.amount) / 100) * (totalCred - totalDeb)).toFixed(2);
-                                    judicial.current = (Number(judicial.max) + ((Number(judicial.amount) / 100) * totalCred)).toFixed(2);
-                                  } else {
-                                    partial_debit.amount = (Number(judicial.max) - Number(judicial.current)).toFixed(2);
-                                    judicial.current = judicial.max;
-                                  }
-
-                                  partial_debit.type = "Acuerdo Judicial";
-                                  this.debits.push(partial_debit);
-                                  totalDeb = totalDeb + Number(partial_debit.amount);
-                                }
-                              });
-
->>>>>>> remotes/origin/merge_master
 
                                   partial_debit.type = "Acuerdo Judicial";
                                   this.debits.push(partial_debit);
