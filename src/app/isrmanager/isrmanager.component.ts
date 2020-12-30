@@ -20,8 +20,8 @@ export class IsrmanagerComponent implements OnInit {
     })
   }
 
-  setSelection(){
-    
+  setSelection(period:periods){
+
   }
 
 }
