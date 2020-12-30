@@ -19,7 +19,7 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = "http://localhost/trunk/angularProject"; // Desarrollo
+//PHP_API_SERVER = "http://localhost"; // Desarrollo
 PHP_API_SERVER = "http://200.94.251.67";  // produccion
 
 readProfiles():Observable<profiles[]>{
@@ -100,6 +100,10 @@ getCoincidences(prof:profiles){
 
 getProfile(prof:profiles):Observable<profiles[]>{
   return this.httpClient.post<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/full_query.php`, prof);
+}
+
+getFamilies(profile:profiles):Observable<profiles_family[]>{
+  return this.httpClient.post<profiles_family[]>(`${this.PHP_API_SERVER}/phpscripts/getfamilies.php`, profile);
 }
 
 authUsr(users:users):Observable<users[]>{

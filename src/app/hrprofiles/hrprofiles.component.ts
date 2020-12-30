@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { profiles } from '../profiles';
+import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
@@ -28,6 +28,8 @@ export class HrprofilesComponent implements OnInit {
 
   profile: profiles[] = [new profiles()];
   staffes: users[] = [];
+  family : profiles_family[] = [];
+  selected_family : profiles_family = new profiles_family;
 
   attAdjudjment: attendences_adjustment = new attendences_adjustment;
   activeVacation: vacations = new vacations;
@@ -81,7 +83,7 @@ export class HrprofilesComponent implements OnInit {
   zone: string = null;
   first_line: string = null;
 
-
+  edition_status: boolean = false;
   editInview: boolean = false;
   viewRecProd: boolean = false;
   addProc: boolean = false;
@@ -258,8 +260,12 @@ export class HrprofilesComponent implements OnInit {
     this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
     this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
     this.getValidatingData();
-    this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
+    this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {      
       this.profile = prof;
+      this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
+        this.family = fam;
+        console.log(fam);
+      });
     });
 
     this.apiService.getApprovers().subscribe((usrs: users[]) => {
@@ -312,6 +318,10 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
       this.profile = prof;
     });
+  };
+
+  getFamily(fam: profiles_family) {
+    this.selected_family = fam;
   };
 
   getStaffes() {

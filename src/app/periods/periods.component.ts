@@ -762,6 +762,7 @@ export class PeriodsComponent implements OnInit {
                                 this.credits.push(new_credit);
                                 totalCred = totalCred + Number(new_credit.amount);
                               });
+                            })
 
                               vac.forEach(vacat => {
                                 if (new Date(vacat.took_date) < new Date(this.period.start) && vacat.status == 'PENDING') {
