@@ -813,15 +813,12 @@ export class PeriodsComponent implements OnInit {
                                 }
                               });
 
-
-
                               this.totalCredits = Number((totalCred).toFixed(2));
                               this.totalDebits = Number((totalDeb).toFixed(2));
                               this.absence_fixed = (this.absence).toFixed(2);
                               this.roster = Number((this.roster).toFixed(2));
                               this.attended = Number((this.attended).toFixed(2));
                               this.diff = Number((this.roster - this.attended).toFixed(2));
-                            })
                           }
                         } else {
                           db.forEach(debit => {
