@@ -503,13 +503,8 @@ export class AccprofilesComponent implements OnInit {
                                   if (service.max == '0') {
                                     partial_service.amount = service.amount;
                                   } else {
-                                    if ((Number(service.max) - (Number(service.current) + Number(service.amount))) > 0) {
-                                      partial_service.amount = service.amount;
-                                      service.current = (Number(service.current) + Number(service.amount)).toFixed(2);
-                                    } else {
-                                      partial_service.amount = (Number(service.max) - Number(service.current)).toFixed(2);
-                                      service.current = service.max;
-                                    }
+                                      partial_service.amount = ((Number(service.max)) - (Number(service.current))).toFixed(2);
+                                      service.current = (Number(service.max)).toFixed(2);
                                   }
 
                                   partial_service.type = "Descuento Por Servicio " + service.name;

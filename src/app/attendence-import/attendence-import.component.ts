@@ -158,7 +158,7 @@ export class AttendenceImportComponent implements OnInit {
 
   activeRoster(){
     this.getNewRoster = true;
-    this.apiService.getAcconts().subscribe((acc:accounts[])=>{
+    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
       this.accounts = acc;
     })
   }

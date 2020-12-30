@@ -28,6 +28,7 @@ import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
 import { ImportOtComponent } from './import-ot/import-ot.component';
 import { OttrackerComponent } from './ottracker/ottracker.component';
 import { AttendanceReportComponent } from './attendance-report/attendance-report.component';
+import { IsrmanagerComponent } from './isrmanager/isrmanager.component';
 
 const routes:Routes = [
   {
@@ -146,6 +147,11 @@ const routes:Routes = [
   {
     path: 'exportatt',
     component:AttendanceReportComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'isrManager',
+    component: IsrmanagerComponent,
     canActivate:[AuthGuard]
   },
   {

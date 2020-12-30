@@ -50,7 +50,7 @@ getWaves(){
   return this.httpClient.get<waves_template[]>(`${this.PHP_API_SERVER}/phpscripts/getwaves.php`);
 }
 
-getAcconts(){
+getAccounts(){
   return this.httpClient.get<accounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAccounts.php`);
 }
 
