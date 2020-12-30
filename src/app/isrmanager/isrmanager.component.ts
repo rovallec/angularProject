@@ -10,6 +10,7 @@ import { periods } from '../process_templates';
 export class IsrmanagerComponent implements OnInit {
 
   periods:periods[] = [];
+  selectedPeriod:periods = new periods;
 
   constructor(public apiServices:ApiService) { }
 
@@ -17,6 +18,10 @@ export class IsrmanagerComponent implements OnInit {
     this.apiServices.getPeriods().subscribe((per:periods[])=>{
       this.periods = per;
     })
+  }
+
+  setSelection(){
+    
   }
 
 }
