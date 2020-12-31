@@ -44,10 +44,6 @@ export class IsrmanagerComponent implements OnInit {
     })
   }
 
-  setYear(year: string) {
-    this.selectedYear = year;
-  }
-
   setSelection(period: periods) {
     this.getIsr();
     this.selectedPeriod = period;
