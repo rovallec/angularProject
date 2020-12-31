@@ -944,3 +944,22 @@ export class marginalization {
     this.action = null;
     }
 }
+
+export class isr{
+   idemployees:string;
+   idisr:string;
+   nearsol_id:string;
+   name:string;
+   accumulated:string;
+   expected:string;
+   amount:string;
+   constructor(){
+    this.idemployees = null
+    this.idisr = null
+    this.nearsol_id = null
+    this.name = null
+    this.accumulated = null
+    this.expected = null
+    this.amount = null
+   }
+}

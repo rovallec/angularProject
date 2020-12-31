@@ -1,12 +1,40 @@
-<div class="row col-md-12">
+<div class="row col-md-12" style="margin-top: 25px;">
     <div class="row col-md-12">
+        <div class="col-md-2">
+            <select class="form-control" (change)="setYear(year)" [(ngModel)]="selectedYear" style="text-align: center;">
+                <option *ngFor="let year of years">{{year}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="row col-md-12" style="margin-top: 10px;">
         <div class="col-md-2">
             <div class="list-group w-100" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action w-100" *ngFor="let period of periods"
                 [tabindex]="period.idperiods" (click)="setSelection(period)"
                 [ngClass]="{'active': selectedPeriod.idperiods == period.idperiods}"
-                style="cursor: pointer;">{{period.start}} - {{period.end}}</a>
+                style="cursor: pointer; font-weight: bold;text-align: center;" >{{period.start}} - {{period.end}}</a>
             </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-9">
+            <table class="table table-stripped table-hover">
+                <thead>
+                    <th>NEARSOL ID</th>
+                    <th>NAME</th>
+                    <th>ACCUMULATED</th>
+                    <th>EXPECTED</th>
+                    <th>CONTRIBUTION</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let isr of isrs">
+                    <td>{{isr.nearsol_id}}</td>
+                    <td>{{irs.name}}</td>
+                    <td>{{isr.accumulated}}</td>
+                    <td>{{isr.expected}}</td>
+                    <td>{{isr.amount}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
