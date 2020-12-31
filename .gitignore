@@ -9,6 +9,7 @@
 
 # dependencies
 /node_modules
+/angularProject/phpscripts/
 
 # profiling files
 chrome-profiler-events*.json
@@ -45,3 +46,13 @@ testem.log
 .DS_Store
 Thumbs.db
 phpscripts/database.php
+phpscripts/database.php
+src/app/api.service.ts
+phpscripts/database.php
+src/app/api.service.ts
+phpscripts/database.php
+src/app/api.service.ts
+src/app/api.service.ts
+angular.json
+phpscripts/database.php
+phpscripts/login.php
