@@ -217,6 +217,7 @@ export class PyhomeComponent implements OnInit {
       })
 
       console.log(term);
+      console.log(proc);
 
       term.forEach(termed => {
         this.apiService.getSearchEmployees({ filter: 'idemployees', value: termed.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
@@ -224,7 +225,6 @@ export class PyhomeComponent implements OnInit {
           this.profilesTerm.push(emp[0]);
         })
       })
-
     })
   }
 }
