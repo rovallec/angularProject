@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Z_DATA_ERROR } from 'zlib';
+import { isNullOrUndefined } from 'util';
+import * as XLSX from 'xlsx';
 import { ApiService } from '../api.service';
+import { employees } from '../fullProcess';
 import { isr, periods } from '../process_templates';
 
 @Component({
@@ -14,7 +16,10 @@ export class IsrmanagerComponent implements OnInit {
   selectedPeriod: periods = new periods;
   years: string[] = [new Date().getFullYear().toString()];
   selectedYear: string = new Date().getFullYear().toString();
-  isrs:isr[] = [];
+  isrs: isr[] = [];
+  file: any;
+  arrayBuffer: any;
+  filelist: any;
 
   constructor(public apiServices: ApiService) { }
 
@@ -42,8 +47,8 @@ export class IsrmanagerComponent implements OnInit {
     });
   }
 
-  getIsr(){
-    this.apiServices.getIsr(this.selectedPeriod).subscribe((isrs:isr[])=>{
+  getIsr() {
+    this.apiServices.getIsr(this.selectedPeriod).subscribe((isrs: isr[]) => {
       this.isrs = isrs;
     })
   }
@@ -53,11 +58,50 @@ export class IsrmanagerComponent implements OnInit {
     this.selectedPeriod = period;
   }
 
-  getIsrReport(){
+  getIsrReport() {
     window.open("http://200.94.251.67/phpscripts/exportIsrReport.php", "_blank");
   }
 
-  setIsrReport(){
+  setIsrReport() {
 
+  }
+
+  addfile(event) {
+    this.file = event.target.files[0];
+    let fileReader = new FileReader();
+    let new_isr:isr = new isr;
+
+    fileReader.readAsArrayBuffer(this.file);
+    fileReader.onload = (e) => {
+      this.arrayBuffer = fileReader.result;
+      var data = new Uint8Array(this.arrayBuffer);
+      var arr = new Array();
+      let nm: string = null;
+      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+      var bstr = arr.join("");
+      var workbook = XLSX.read(bstr, { type: "binary" });
+      var first_sheet_name = workbook.SheetNames[0];
+      var worksheet = workbook.Sheets[first_sheet_name];
+      let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+      sheetToJson.forEach(element => {
+        let temp_nit:string = null;
+        temp_nit = element['NIT Empleado'];
+        temp_nit = temp_nit.substr(1,temp_nit.length - 1) + "%" + temp_nit.charAt(temp_nit.length - 1) + "%";
+        this.apiServices.getSearchEmployees({filter:'nit', value:temp_nit, dp:'exact'}).subscribe((employees:employees[])=>{
+          if(!isNullOrUndefined(employees)){
+            new_isr.nearsol_id = employees[0].nearsol_id;
+            new_isr.name = employees[0].name;
+            new_isr.nit = element['NIT Empleado'];
+            new_isr.gross_income = element['Renta Bruta'];
+            new_isr.taxable_income = element['Renta Imponible'];
+            new_isr.anual_tax = element['Impuesto Anual'];
+            new_isr.other_retentions = element['Otras Retenciones'];
+            new_isr.accumulated = element['Retenciones Practicadas'];
+            new_isr.expected = element['Impuesto a Retener'];
+            new_isr.amount = element['Retención Mensual'];
+          }
+        });
+      })
+    }
   }
 }

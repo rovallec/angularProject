@@ -947,19 +947,29 @@ export class marginalization {
 
 export class isr{
    idemployees:string;
+   nit:string;
    idisr:string;
    nearsol_id:string;
    name:string;
+   gross_income:string;
+   taxable_income:string;
+   anual_tax:string;
+   other_retentions:string;
    accumulated:string;
    expected:string;
    amount:string;
    constructor(){
-    this.idemployees = null
-    this.idisr = null
-    this.nearsol_id = null
-    this.name = null
-    this.accumulated = null
-    this.expected = null
-    this.amount = null
+    this.idemployees = null;
+    this.nit = null;
+    this.idisr = null;
+    this.nearsol_id = null;
+    this.name = null;
+    this.gross_income = null;
+    this.taxable_income = null;
+    this.anual_tax = null;
+    this.other_retentions = null;
+    this.accumulated = null;
+    this.expected = null;
+    this.amount = null;
    }
 }

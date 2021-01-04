@@ -22,11 +22,11 @@ coalesce(`real_base`,0) AS `print_base`, coalesce(`real_productivity`,0) AS `pri
 WHERE active = 1 GROUP BY idemployees;";
 
 $output = fopen("php://output", "w");
-fputcsv($output, array("NIT empleado", "Sueldos", "Horas Extras", "Bono Decreto 37-2001", "Otras Bonificaciones", "Comisiones", "Propinas", "Aguinaldo", "Bono Anual de trabajadores (14)", "Viáticos", "Gasto de representación", "Dietas", "Gratificaciones", "Remuneraciones", "Prestaciones IGSS", "Otros", "Indemnizaciones o pensiones por causa de muerte", "Indemnizaciónes por tiempo servido", "Remuneraciones de los diplomáticos", "Gastos de representación y viáticos comprobables", "Aguinaldo", "Bono Anual de trabajadores (14)", "Cuotas IGSS  y Otros planes de seguridad social"));
+fputcsv($output, array("NIT empleado", "Sueldos", "Horas Extras", "Bono Decreto 37-2001", "Otras Bonificaciones", "Comisiones", "Propinas", "Aguinaldo", "Bono Anual de trabajadores (14)", 'Viáticos', "Gasto de representación", "Dietas", "Gratificaciones", "Remuneraciones", "Prestaciones IGSS", "Otros", "Indemnizaciones o pensiones por causa de muerte", "Indemnizaciónes por tiempo servido", "Remuneraciones de los diplomáticos", "Gastos de representación y viáticos comprobables", "Aguinaldo", "Bono Anual de trabajadores (14)", "Cuotas IGSS  y Otros planes de seguridad social"));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $isr[0] = str_replace("-", "",$row['nit']);
-        $isr[1] = ($row['base'] * (12 - date('m')) + $row['print_base']);
+        $isr[1] = ($row['base'] * (13 - date('m')) + $row['print_base']);
         $isr[2] = $row['over_time'];
         $isr[3] = 250*12;
         $isr[4] = ($row['productivity'] * (13 - date('m')) + $row['print_productivity']);
@@ -53,7 +53,7 @@ if($result = mysqli_query($con,$sql)){
             $b_diff = $today_date->diff($b_date);
             $b_days = $b_diff->format("%a");
         };
-        $isr[8] = ($row['base'] + $row['productivity']) * ($a_days/365);
+        $isr[8] = ($row['base'] + $row['productivity']) * ($b_days/365);
         $isr[9] = '0';
         $isr[10] = '0';
         $isr[11] = '0';
