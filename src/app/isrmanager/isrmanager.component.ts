@@ -86,7 +86,7 @@ export class IsrmanagerComponent implements OnInit {
       let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
       sheetToJson.forEach(element => {
         let temp_nit:string = null;
-        temp_nit = element['NIT Empleado'];
+        temp_nit = element['NIT Empleado'].toString();
         temp_nit = temp_nit.substr(1,temp_nit.length - 1) + "%" + temp_nit.charAt(temp_nit.length - 1) + "%";
         this.apiServices.getSearchEmployees({filter:'nit', value:temp_nit, dp:'exact'}).subscribe((employees:employees[])=>{
           if(!isNullOrUndefined(employees)){
