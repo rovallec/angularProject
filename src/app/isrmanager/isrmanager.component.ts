@@ -92,6 +92,7 @@ export class IsrmanagerComponent implements OnInit {
         this.apiServices.getSearchEmployees({filter:'nit', value:temp_nit, dp:'4'}).subscribe((employees:employees[])=>{
           if(!isNullOrUndefined(employees)){
             new_isr.nearsol_id = employees[0].nearsol_id;
+            new_isr.idemployees =  employees[0].idemployees;
             new_isr.name = employees[0].name;
             new_isr.nit = element['NIT Empleado'];
             new_isr.gross_income = element['Renta Bruta'];
@@ -115,7 +116,7 @@ export class IsrmanagerComponent implements OnInit {
       let p:periods = new periods;
       p = this.selectedPeriod;
       p.status = single_isr.idemployees;
-      p.start = 'explicit';
+      p.start = "explicit";
       this.apiServices.getPayments(p).subscribe((pay:payments[])=>{
         if(!isNullOrUndefined(pay)){
           deb.id_employee = single_isr.idemployees;
