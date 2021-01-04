@@ -31,6 +31,8 @@ export class IsrmanagerComponent implements OnInit {
           this.years.push(period.start.split("-")[0]);
         }
 
+        this.selectedYear = this.years[0];
+
         if (this.selectedYear == period.start.split("-")[0]) {
           this.periods.push(period);
           this.selectedPeriod = this.periods[0];
@@ -51,4 +53,11 @@ export class IsrmanagerComponent implements OnInit {
     this.selectedPeriod = period;
   }
 
+  getIsrReport(){
+    window.open("http://200.94.251.67/phpscripts/exportIsrReport.php", "_blank");
+  }
+
+  setIsrReport(){
+
+  }
 }

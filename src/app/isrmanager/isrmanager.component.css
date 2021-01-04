@@ -45,3 +45,27 @@ tbody tr{
     font-size:12px;
     text-align: center;
 }
+
+.blue_hover:hover{
+    color:white;
+    border-color: white;
+    background-color: #003b71;
+}
+
+.orange_hover:hover{
+    color:white;
+    border-color: white;
+    background-color: #fa4238;
+}
+
+.blue_hover{
+    color:#003b71;
+    border-color:#003b71;
+    background-color: white; 
+}
+
+.orange_hover{
+    color:#fa4238;
+    border-color:#fa4238;
+    background-color: white;   
+}

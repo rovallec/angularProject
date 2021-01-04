@@ -631,5 +631,6 @@ updateSuspensions(susp:disciplinary_processes){
 getIsr(period:periods){
   return this.httpClient.post<isr[]>(`${this.PHP_API_SERVER}/phpscripts/getIsr.php`, period);
 }
+
   constructor(private httpClient:HttpClient) { }
 }

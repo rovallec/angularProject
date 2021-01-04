@@ -5,6 +5,15 @@
                 <option *ngFor="let year of years">{{year}}</option>
             </select>
         </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-9 d-flex flex-row-reverse">
+            <div *ngIf="selectedPeriod.status == '1'">
+                <button class="form-control blue_hover" (click)="getIsrReport()"><i class="fas fa-download"></i></button>
+            </div>
+            <div style="margin-right:10px" *ngIf="selectedPeriod.status == '1'">
+                <button class="form-control orange_hover" (click)="setIsrReport()"><i class="fas fa-upload"></i></button>
+            </div>
+        </div>
     </div>
     <div class="row col-md-12" style="margin-top: 10px;">
         <div class="col-md-2">
