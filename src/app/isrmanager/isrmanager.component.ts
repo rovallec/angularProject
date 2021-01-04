@@ -115,7 +115,7 @@ export class IsrmanagerComponent implements OnInit {
       let p:periods = new periods;
       p = this.selectedPeriod;
       p.status = single_isr.idemployees;
-      p.start = 'equ';
+      p.start = 'explicit';
       this.apiServices.getPayments(p).subscribe((pay:payments[])=>{
         if(!isNullOrUndefined(pay)){
           deb.id_employee = single_isr.idemployees;
