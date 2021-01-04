@@ -23,6 +23,8 @@ export class IsrmanagerComponent implements OnInit {
   }
 
   setPeriods() {
+    this.periods = [];
+    this.years = [];
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       per.forEach(period => {
         if (this.years[0] != period.start.split("-")[0]) {
