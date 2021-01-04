@@ -87,8 +87,8 @@ export class IsrmanagerComponent implements OnInit {
       sheetToJson.forEach(element => {
         let temp_nit:string = null;
         temp_nit = element['NIT Empleado'].toString();
-        temp_nit = temp_nit.substr(1,temp_nit.length - 1) + "%" + temp_nit.charAt(temp_nit.length - 1) + "%";
-        this.apiServices.getSearchEmployees({filter:'nit', value:temp_nit, dp:'exact'}).subscribe((employees:employees[])=>{
+        temp_nit = temp_nit.substr(1,temp_nit.length - 2) + "%" + temp_nit.charAt(temp_nit.length - 1) + "%";
+        this.apiServices.getSearchEmployees({filter:'nit', value:temp_nit, dp:'4'}).subscribe((employees:employees[])=>{
           if(!isNullOrUndefined(employees)){
             new_isr.nearsol_id = employees[0].nearsol_id;
             new_isr.name = employees[0].name;
