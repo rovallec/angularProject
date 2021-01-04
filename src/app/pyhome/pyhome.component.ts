@@ -216,12 +216,15 @@ export class PyhomeComponent implements OnInit {
         }
       })
 
+      console.log(proc);
+
       term.forEach(termed => {
         this.apiService.getSearchEmployees({ filter: 'idemployees', value: termed.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
           emp[0].platform = termed.prc_date;
           this.profilesTerm.push(emp[0]);
         })
       })
+
     })
   }
 }
