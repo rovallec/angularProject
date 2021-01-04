@@ -16,8 +16,9 @@
                         class="fas fa-upload"></i></button>
             </div>
             <div style="margin-right:10px" *ngIf="selectedPeriod.status == '1' && completed">
-                <button class="form-control green_hover" (click)="setIsr()"><i
-                        class="fas fa-squere-check"></i></button>
+                <button class="form-control green_hover" (click)="setIsr()">
+                    <i class="fas fa-check"></i>
+                </button>
             </div>
 
             <!-------------------------------------MODAL----------------------------------------------------------------->
