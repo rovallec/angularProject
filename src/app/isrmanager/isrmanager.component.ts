@@ -17,6 +17,7 @@ export class IsrmanagerComponent implements OnInit {
   years: string[] = [new Date().getFullYear().toString()];
   selectedYear: string = new Date().getFullYear().toString();
   isrs: isr[] = [];
+  temp_isr:isr[] = [];
   file: any;
   arrayBuffer: any;
   filelist: any;
@@ -63,7 +64,7 @@ export class IsrmanagerComponent implements OnInit {
   }
 
   setIsrReport() {
-
+    this.isrs = this.temp_isr;
   }
 
   addfile(event) {
@@ -99,6 +100,7 @@ export class IsrmanagerComponent implements OnInit {
             new_isr.accumulated = element['Retenciones Practicadas'];
             new_isr.expected = element['Impuesto a Retener'];
             new_isr.amount = element['Retención Mensual'];
+            this.temp_isr.push(new_isr);
           }
         });
       })
