@@ -3,7 +3,7 @@ import { isNullOrUndefined } from 'util';
 import * as XLSX from 'xlsx';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
-import { isr, periods } from '../process_templates';
+import { debits, isr, payments, periods } from '../process_templates';
 
 @Component({
   selector: 'app-isrmanager',
@@ -21,6 +21,7 @@ export class IsrmanagerComponent implements OnInit {
   file: any;
   arrayBuffer: any;
   filelist: any;
+  completed:boolean = false;
 
   constructor(public apiServices: ApiService) { }
 
@@ -105,5 +106,25 @@ export class IsrmanagerComponent implements OnInit {
         });
       })
     }
+    this.completed = true;
+  }
+
+  setIsr(){
+    this.isrs.forEach(single_isr=>{
+      let deb:debits = new debits;
+      let p:periods = new periods;
+      p = this.selectedPeriod;
+      p.status = single_isr.idemployees;
+      p.start = 'equ';
+      this.apiServices.getPayments(p).subscribe((pay:payments[])=>{
+        if(!isNullOrUndefined(pay)){
+          deb.id_employee = single_isr.idemployees;
+          deb.idpayments = pay[0].idpayments;
+          deb.amount = single_isr.amount;
+          deb.type = "ISR";
+          console.log(deb);
+        }
+      })
+    })
   }
 }

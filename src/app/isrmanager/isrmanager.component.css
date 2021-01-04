@@ -69,3 +69,15 @@ tbody tr{
     border-color:#fa4238;
     background-color: white;   
 }
+
+.green_hover{
+    color:white;
+    border-color: white;
+    background-color: green;
+}
+
+.green_hover:hover{
+    color:green;
+    border-color:green;
+    background-color: white; 
+}

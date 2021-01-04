@@ -9,6 +9,8 @@ $isr = [];
 $current_date = date("Y-m-d");
 $today_date = new DateTime(date("Y-m-d"));
 
+echo "\xEF\xBB\xBF";
+
 $sql = "SELECT employees.idemployees, profiles.nit, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, coalesce(employees.base_payment, 0) AS `base`, coalesce((employees.productivity_payment-250),0) AS `productivity`,
 '250.00' AS `decreto`, coalesce(`ot`,0) AS `over_time`, coalesce(`rise_amount`,0) AS `rises`, employees.hiring_date, coalesce(employees.indemnizations,0) AS `indemnization`, coalesce(employees.retentions,0) AS `retention`,
 coalesce(`real_base`,0) AS `print_base`, coalesce(`real_productivity`,0) AS `print_productivity` FROM employees
@@ -22,7 +24,7 @@ coalesce(`real_base`,0) AS `print_base`, coalesce(`real_productivity`,0) AS `pri
 WHERE active = 1 GROUP BY idemployees;";
 
 $output = fopen("php://output", "w");
-fputcsv($output, array("NIT empleado", "Sueldos", "Horas Extras", "Bono Decreto 37-2001", "Otras Bonificaciones", "Comisiones", "Propinas", "Aguinaldo", "Bono Anual de trabajadores (14)", 'Viáticos', "Gasto de representación", "Dietas", "Gratificaciones", "Remuneraciones", "Prestaciones IGSS", "Otros", "Indemnizaciones o pensiones por causa de muerte", "Indemnizaciónes por tiempo servido", "Remuneraciones de los diplomáticos", "Gastos de representación y viáticos comprobables", "Aguinaldo", "Bono Anual de trabajadores (14)", "Cuotas IGSS  y Otros planes de seguridad social"));
+fputcsv($output, array("NIT empleado", "Sueldos", "Horas Extras", "Bono Decreto 37-2001", "Otras Bonificaciones", "Comisiones", "Propinas", "Aguinaldo", "Bono Anual de trabajadores (14)", "Viáticos", "Gasto de representación", "Dietas", "Gratificaciones", "Remuneraciones", "Prestaciones IGSS", "Otros", "Indemnizaciones o pensiones por causa de muerte", "Indemnizaciónes por tiempo servido", "Remuneraciones de los diplomáticos", "Gastos de representación y viáticos comprobables", "Aguinaldo", "Bono Anual de trabajadores (14)", "Cuotas IGSS  y Otros planes de seguridad social"));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $isr[0] = str_replace("-", "",$row['nit']);

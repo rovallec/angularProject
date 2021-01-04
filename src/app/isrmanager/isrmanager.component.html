@@ -7,13 +7,17 @@
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-9 d-flex flex-row-reverse">
-            <div *ngIf="selectedPeriod.status == '1'">
+            <div *ngIf="selectedPeriod.status == '1' && !completed">
                 <button class="form-control blue_hover" (click)="getIsrReport()"><i
                         class="fas fa-download"></i></button>
             </div>
-            <div style="margin-right:10px" *ngIf="selectedPeriod.status == '1'">
+            <div style="margin-right:10px" *ngIf="selectedPeriod.status == '1' && !completed">
                 <button class="form-control orange_hover" data-toggle="modal" data-target="#exampleModal"><i
                         class="fas fa-upload"></i></button>
+            </div>
+            <div style="margin-right:10px" *ngIf="selectedPeriod.status == '1' && completed">
+                <button class="form-control green_hover" (click)="setIsr()"><i
+                        class="fas fa-squere-check"></i></button>
             </div>
 
             <!-------------------------------------MODAL----------------------------------------------------------------->
@@ -55,7 +59,7 @@
                 <a class="list-group-item list-group-item-action w-100" *ngFor="let period of periods"
                     [tabindex]="period.idperiods" (click)="setSelection(period)"
                     [ngClass]="{'active': selectedPeriod.idperiods == period.idperiods}"
-                    style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} - {{period.end}}</a>
+                    style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO {{period.end}}</a>
             </div>
         </div>
         <div class="col-md-1"></div>
