@@ -216,7 +216,7 @@ export class PyhomeComponent implements OnInit {
         }
       })
 
-      console.log(proc);
+      console.log(term);
 
       term.forEach(termed => {
         this.apiService.getSearchEmployees({ filter: 'idemployees', value: termed.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
