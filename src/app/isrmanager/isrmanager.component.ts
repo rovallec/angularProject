@@ -101,7 +101,7 @@ export class IsrmanagerComponent implements OnInit {
             new_isr.other_retentions = element['Otras Retenciones'];
             new_isr.accumulated = element['Retenciones Practicadas'];
             new_isr.expected = element['Impuesto a Retener'];
-            new_isr.amount = element['Retención Mensual'];
+            new_isr.amount = Number(element['Retención Mensual']).toFixed(2);
             this.temp_isr.push(new_isr);
           }
         });
@@ -114,8 +114,11 @@ export class IsrmanagerComponent implements OnInit {
     this.isrs.forEach(single_isr=>{
       let deb:debits = new debits;
       let p:periods = new periods;
+      let cnt:string = null;
+
       p = this.selectedPeriod;
       p.status = single_isr.idemployees;
+      cnt = p.start;
       p.start = "explicit";
       this.apiServices.getPayments(p).subscribe((pay:payments[])=>{
         if(!isNullOrUndefined(pay)){
@@ -123,9 +126,11 @@ export class IsrmanagerComponent implements OnInit {
           deb.idpayments = pay[0].idpayments;
           deb.amount = single_isr.amount;
           deb.type = "ISR";
-          console.log(deb);
+          this.apiServices.insertDebits(deb).subscribe((str:string)=>{        
+          })
         }
       })
+      p.start = cnt;
     })
   }
 }
