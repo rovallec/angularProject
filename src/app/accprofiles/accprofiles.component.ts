@@ -28,6 +28,7 @@ export class AccprofilesComponent implements OnInit {
   payment_methods: payment_methods[] = [];
   cred_benefits:credits[] = [];
   vacations:vacations[] = [];
+  deb_benefits:debits[] = [];
   active_payment: payments = new payments;
   newProc:boolean = false;
   insertN:string = null;
@@ -184,6 +185,20 @@ export class AccprofilesComponent implements OnInit {
     this.apiService.getProcRecorded({id:this.employee.idemployees}).subscribe((pr:process[])=>{
       pr.forEach(proc=>{
         if(proc.name === "Termination"){
+          this.apiService.getTerm(proc).subscribe((term:terminations)=>{
+            if(term.access_card != "YES"){
+              let deb_access:debits = new debits;
+              deb_access.type = "(-)Access Card Replacement";
+              deb_access.amount = '125.00';
+              this.deb_benefits.push(deb_access);
+            }
+            if(term.headsets != "YES"){
+              let deb_headsets:debits = new debits;
+              deb_headsets.type = "(-)Headsets Replacement";
+              deb_headsets.amount = "400.00";
+              this.deb_benefits.push(deb_headsets);
+            }
+          })
           end_date = proc.prc_date;
           difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
         }
@@ -228,9 +243,24 @@ export class AccprofilesComponent implements OnInit {
   }
 
   completePayment(){
-    this.employee.state = "PAID";
-    this.employee.platform = "NONE";
-    this.apiService.updateEmployee(this.employee).subscribe((str:string)=>{});
+    this.apiService.getPeriods().subscribe((p:periods[])=>{
+      p[p.length-1].start = 'explicit';
+      p[p.length-1].status = this.employee.idemployees;
+      this.employee.state = "PAID";
+      this.employee.platform = "NONE";
+      this.apiService.updateEmployee(this.employee).subscribe((str:string)=>{
+        this.apiService.getPayments(this.period).subscribe((pay:payments[])=>{
+          this.cred_benefits.forEach(cred=>{
+            cred.idpayments = pay[0].idpayments;
+            this.apiService.insertCredits(cred);
+          })
+          this.deb_benefits.forEach(deb=>{
+            deb.idpayments = pay[0].idpayments;
+            this.apiService.insertDebits(deb);
+          })
+        });
+      });
+    })
   }
 
   setPayTime(id_employee: string, id_profile: string) {
