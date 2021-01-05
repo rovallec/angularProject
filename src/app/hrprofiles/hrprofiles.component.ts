@@ -15,6 +15,7 @@ import { time } from 'console';
 import { parse } from 'querystring';
 import { Z_STREAM_END } from 'zlib';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { $ } from 'protractor';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -83,7 +84,7 @@ export class HrprofilesComponent implements OnInit {
   zone: string = null;
   first_line: string = null;
 
-  edition_status: boolean = false;
+  edition_status: string = 'Browse';
   editInview: boolean = false;
   viewRecProd: boolean = false;
   addProc: boolean = false;
@@ -264,7 +265,6 @@ export class HrprofilesComponent implements OnInit {
       this.profile = prof;
       this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
         this.family = fam;
-        console.log(fam);
       });
     });
 
@@ -1805,5 +1805,58 @@ export class HrprofilesComponent implements OnInit {
       element.doc_type = '';
     });
     this.selectedToMerge = val.idprofiles;
+  }
+
+  setEdit(state: string) {
+    this.edition_status = state;
+  }
+
+  addFamily() {
+    this.setEdit('Insert');
+    this.selected_family = new profiles_family;
+    this.selected_family.affinity_id_profile = Number(this.profile[0].idprofiles);    
+  }
+
+  delFamily() {
+    this.apiService.delFamily(this.selected_family).subscribe((fam: string) => {
+      this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
+        this.family = fam;
+      });
+    });
+  }
+
+  empty_family() {
+    if ((this.selected_family.affinity_first_name=='') || (this.selected_family.affinity_first_last_name=='') || (this.selected_family.affinity_id_profile==0)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  saveFamily() {
+
+    if (this.empty_family()==false) {      
+    
+      console.log(this.selected_family);
+      if(this.edition_status=='Insert') {
+        this.apiService.createFamily(this.selected_family).subscribe((fams: string) => {
+          this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
+            this.family = fam;
+          });
+        });
+      } else if (this.edition_status=='Edit') {
+        this.apiService.updateFamily(this.selected_family).subscribe((fams: string) => {
+          this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
+            this.family = fam;
+          });
+        });
+      }
+    }
+    this.setEdit('Browse');
+  }
+
+  cancelFamily() {
+    this.selected_family = new profiles_family;;
+    this.setEdit('Browse');
   }
 }

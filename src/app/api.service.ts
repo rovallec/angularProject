@@ -19,8 +19,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = "http://localhost"; // Desarrollo
-PHP_API_SERVER = "http://200.94.251.67";  // produccion
+PHP_API_SERVER = "http://localhost"; // Desarrollo
+//PHP_API_SERVER = "http://200.94.251.67";  // produccion
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
@@ -104,6 +104,18 @@ getProfile(prof:profiles):Observable<profiles[]>{
 
 getFamilies(profile:profiles):Observable<profiles_family[]>{
   return this.httpClient.post<profiles_family[]>(`${this.PHP_API_SERVER}/phpscripts/getfamilies.php`, profile);
+}
+
+delFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/delete_family.php`, family);
+}
+
+createFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insert_family.php`, family);
+}
+
+updateFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/update_family.php`, family);
 }
 
 authUsr(users:users):Observable<users[]>{

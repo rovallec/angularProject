@@ -1,4 +1,4 @@
-<?php
+<?php  
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
     require 'database.php';
@@ -8,8 +8,10 @@ header('Access-Control-Allow-Headers: *');
         $request = json_decode($postdata);
 
         foreach ($request as $val2) {
-            $test = json_encode($val2); 
-            $val = json_decode($test); 
+            $val = $val2;
+            //$test = json_encode($val2); 
+            //$val = json_decode($test); 
+            
             $r_val_id_profile = ($val->id_profile);
             $r_val_first_name = ($val->affinity_first_name);
             $r_val_second_name = ($val->affinity_second_name);
@@ -27,7 +29,7 @@ header('Access-Control-Allow-Headers: *');
                 http_response_code(422);
                 echo($sql);
             }
-        }
+        }   
     }
     
 ?>
