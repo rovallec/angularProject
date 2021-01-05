@@ -235,10 +235,6 @@ export class AccprofilesComponent implements OnInit {
       })
 
       this.setPayTime(this.employee.idemployees, this.employee.id_profile);
-
-      cred_pendings.type = "Sueldos y Salarios Pendientes de Pago";
-      cred_pendings.amount = this.total.toFixed(2);
-      this.cred_benefits.push(cred_pendings);
     })
   }
 
@@ -587,6 +583,11 @@ export class AccprofilesComponent implements OnInit {
                           this.attended = Number((this.attended).toFixed(2));
                           this.diff = Number((this.roster - this.attended).toFixed(2));
                           this.total = this.totalCredits - this.totalDebits;
+
+                          let cred_pendings:credits = new credits;
+                          cred_pendings.type = "Sueldos y Salarios Pendientes de Pago";
+                          cred_pendings.amount = this.total.toFixed(2);
+                          this.cred_benefits.push(cred_pendings);
                         }
                       })
                     })
