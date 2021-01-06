@@ -732,6 +732,11 @@ export class payments {
     account: string;
     days: string;
     ot: string;
+    base:string;
+    productivity:string;
+    ot_hours: string;
+    base_hours:string;
+    productivity_hours:string;
     seventh: string;
     last_seventh: string;
     constructor() {
