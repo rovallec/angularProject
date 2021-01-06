@@ -516,10 +516,17 @@ export class PeriodsComponent implements OnInit {
       }
       this.apiService.updateServices(service).subscribe((str: string) => { });
     });
+
+    //ELIMINAR
     this.apiService.closePeriod(this.period).subscribe((str: string) => {
       this.payments.forEach(pay => {
         this.apiService.insertPayment(pay).subscribe((str: string) => { })
       })
+
+    //ELIMINAR
+
+    
+
       this.start();
       this.closePeriod();
     });
