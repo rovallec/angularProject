@@ -526,6 +526,7 @@ export class PeriodsComponent implements OnInit {
     //ELIMINAR
 
     
+
       this.start();
       this.closePeriod();
     });
