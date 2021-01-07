@@ -16,6 +16,7 @@ $sql = "UPDATE `payments` set `credits` = '$credits', `debits` = '$debits', `dat
 if(mysqli_query($con, $sql)){
     echo("1");
 }else{
+    echo("0");
     http_response_code(404);
 }
 ?>
