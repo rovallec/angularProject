@@ -632,5 +632,29 @@ getIsr(period:periods){
   return this.httpClient.post<isr[]>(`${this.PHP_API_SERVER}/phpscripts/getIsr.php`, period);
 }
 
+getFilteredEmployees_ph(str:any){
+  return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getFilteredEmployees_ph.php`, str);
+}
+
+getallEmployees_ph(dp:any){
+  return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getallEmployees_ph.php`, dp)
+}
+
+getPeriods_ph(){
+  return this.httpClient.get<periods[]>(`${this.PHP_API_SERVER}/phpscripts/getPeriods_ph.php`);
+}
+
+getCredits_ph(any:any){
+  return this.httpClient.post<credits[]>(`${this.PHP_API_SERVER}/phpscripts/getCredits_ph.php`, any);
+}
+
+getDebits_ph(any:any){
+  return this.httpClient.post<debits[]>(`${this.PHP_API_SERVER}/phpscripts/getDebits_ph.php`, any);
+}
+
+getPayments_ph(period:periods){
+  return this.httpClient.post<payments[]>(`${this.PHP_API_SERVER}/phpscripts/getPayments_ph.php`, period);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

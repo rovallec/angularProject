@@ -34,7 +34,9 @@ import { PyprofilesComponent } from './pyprofiles/pyprofiles.component';
 import { ImportOtComponent } from './import-ot/import-ot.component';
 import { OttrackerComponent } from './ottracker/ottracker.component';
 import { AttendanceReportComponent } from './attendance-report/attendance-report.component';
-import { IsrmanagerComponent } from './isrmanager/isrmanager.component'
+import { IsrmanagerComponent } from './isrmanager/isrmanager.component';
+import { AcphhomeComponent } from './acphhome/acphhome.component';
+import { PeriodsPhComponent } from './periods-ph/periods-ph.component'
 
 @NgModule({
   declarations: [
@@ -64,7 +66,9 @@ import { IsrmanagerComponent } from './isrmanager/isrmanager.component'
     ImportOtComponent,
     OttrackerComponent,
     AttendanceReportComponent,
-    IsrmanagerComponent
+    IsrmanagerComponent,
+    AcphhomeComponent,
+    PeriodsPhComponent
   ],
   imports: [
     BrowserModule,

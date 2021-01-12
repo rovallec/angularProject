@@ -1,0 +1,73 @@
+<div class="row col-md-12" style="margin-top:10px; width:97%; margin-left: 1.5%;">
+    <div class="form-group col-md-3">
+        <label>Filter:</label>
+        <select class="form-control" [(ngModel)]="filter">
+            <option Value="name">Name:</option>
+            <option Value="dpi">SSS:</option>
+            <option Value="client_id">Client ID:</option>
+            <option Value="nearsol_id">Nearsol ID:</option>
+        </select>
+    </div>
+    <div class="form-group col-md-3">
+        <label>Search:</label>
+        <input type="text" class="form-control" [(ngModel)]="value" (keyup.enter)="searchEmployee()">
+    </div>
+    <div class="col-md-1; text-align:left">
+        <button class="btn btn-outline-success" style="margin-top: 77%;" *ngIf="!searching" (click)="searchEmployee()"><i class="fas fa-search" aria-hidden="true"></i></button>
+    </div>
+    <div class="col-md-1; text-align:left">
+        <button class="btn btn-outline-danger" style="margin-top: 69%; margin-left:5px" *ngIf="searching" (click)="cancelSearch()"><i class="fas fa-minus-circle"></i></button>
+    </div>
+</div>
+<div class="row col-md-12" style="margin-top:15px" *ngIf="!searching">
+    <table width="96%" style="border:solid 1px #adc7ff; margin-left:3%;">
+        <tr style="background-color: #e3efff;">
+            PERIODS
+        </tr>
+        <tr style="background-color: #eff6ff;">
+            <table class="table table-striped selectable" style="background-color: white; width: 90%; margin-left: 5%; margin-top:10px">
+                <thead>
+                    <th>ID</th>
+                    <th>START</th>
+                    <th>END</th>
+                    <th>STATUS</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let period of periods" (click)="gotoPeriod(period)">
+                        <td>{{period.idperiods}}</td>
+                        <td>{{period.start}}</td>
+                        <td>{{period.end}}</td>
+                        <td>{{period.status}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </tr>
+    </table>
+</div>
+<div class="row col-md-12" style="margin-top:15px">
+    <table width="96%" style="border:solid 1px #adc7ff; margin-left:3%;">
+        <tr style="background-color: #e3efff;">
+            EMPLOYEES
+        </tr>
+        <tr style="background-color: #eff6ff;">
+            <table class="table table-striped selectable" style="background-color: white; width: 90%; margin-left: 5%; margin-top:10px">
+                <thead>
+                    <th>NAME</th>
+                    <th>NEARSOL ID</th>
+                    <th>CLIENT ID</th>
+                    <th>ACCOUNT</th>
+                    <th>HIRING DATE</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let employee of employees">
+                        <td>{{employee.name}}</td>
+                        <td>{{employee.nearsol_id}}</td>
+                        <td>{{employee.client_id}}</td>
+                        <td>{{employee.account}}</td>
+                        <td>{{employee.hiring_date}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </tr>
+    </table>
+</div>

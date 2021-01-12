@@ -29,6 +29,8 @@ import { ImportOtComponent } from './import-ot/import-ot.component';
 import { OttrackerComponent } from './ottracker/ottracker.component';
 import { AttendanceReportComponent } from './attendance-report/attendance-report.component';
 import { IsrmanagerComponent } from './isrmanager/isrmanager.component';
+import { AcphhomeComponent } from './acphhome/acphhome.component';
+import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
 
 const routes:Routes = [
   {
@@ -152,6 +154,16 @@ const routes:Routes = [
   {
     path:'isrManager',
     component: IsrmanagerComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'acphhome',
+    component: AcphhomeComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'periods_ph/:id',
+    component:PeriodsPhComponent,
     canActivate:[AuthGuard]
   },
   {

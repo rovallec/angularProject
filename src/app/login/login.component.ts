@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
           if(this.resUsr[0].department == "2"){
             this._router.navigate(['/rehome']);
           }else{
-            if(this.resUsr[0].department == "4" || this.resUsr[0].department == "37"){
+            if(this.resUsr[0].department == "4"){
               this._router.navigate(['/achome']);
             }else{
               if(this.resUsr[0].department == "5" || this.resUsr[0].department == "27"){
@@ -65,6 +65,10 @@ export class LoginComponent implements OnInit {
                 }else{
                   if(this.resUsr[0].department == "29"){
                     this._router.navigate(['/fhome']);
+                  }else{
+                    if( this.resUsr[0].department == "37"){
+                      this._router.navigate(['/acphhome']);
+                    }
                   }
                 }
               }
