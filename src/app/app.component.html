@@ -19,6 +19,9 @@
     <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/hrhome"
       *ngIf="getSaved().department == '5' || getSaved().department == '27'">
+    <img src="http://200.94.251.67/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+      alt="" style="margin-left: 30px" routerLink="/acphhome" *ngIf="getSaved().department == '37'"
+      (click)="SetSel('HOME')">
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +45,8 @@
           [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link" routerLink="/hrhome"
           style="color: white" [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
+          <a *ngIf="getSaved().department == '37'" class="nav-link" routerLink="/acphhome" style="color: white"
+          [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
       </li>
       <li class="nav-item dropdown" *ngIf="getAuth()">
         <a [ngClass]="{'act':selectedOption=='IMP'}" *ngIf="getSaved().department == '28'"

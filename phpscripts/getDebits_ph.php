@@ -12,9 +12,21 @@ $id = ($request->id);
 $period = ($request->period);
 
 if($id != 'all'){
-    $sql = "select profiles.idprofiles, debits.iddebits, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, debits.type, debits.amount from debits left join payments on payments.idpayments = debits.id_payment left join employees on employees.idemployees = payments.id_employee left join periods on periods.idperiods = payments.id_period left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile where id_employee = $id AND idperiods = $period;";
+    $sql = "SELECT profiles.idprofiles, debits.iddebits, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, 
+    debits.type, debits.amount, hires.nearsol_id, employees.client_id FROM debits 
+    LEFT JOIN payments ON payments.idpayments = debits.id_payment 
+    LEFT JOIN employees ON employees.idemployees = payments.id_employee 
+    LEFT JOIN periods ON periods.idperiods = payments.id_period
+    LEFT JOIN hires ON hires.idhires = employees.id_hire 
+    LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile where id_employee = $id AND idperiods = $period;";
 }else{
-    $sql = "select profiles.idprofiles, debits.iddebits, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, debits.type, debits.amount from debits left join payments on payments.idpayments = debits.id_payment left join employees on employees.idemployees = payments.id_employee left join periods on periods.idperiods = payments.id_period left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile where idperiods = $period;";
+    $sql = "SELECT profiles.idprofiles, debits.iddebits, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, 
+    debits.type, debits.amount, hires.nearsol_id, employees.client_id FROM debits 
+    LEFT JOIN payments ON payments.idpayments = debits.id_payment 
+    LEFT JOIN employees ON employees.idemployees = payments.id_employee 
+    LEFT JOIN periods ON periods.idperiods = payments.id_period 
+    LEFT JOIN hires ON hires.idhires = employees.id_hire 
+    LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile where idperiods = $period;";
 }
 
 if($request = mysqli_query($con,$sql)){
@@ -23,6 +35,9 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['idpayments'] = $row['idprofiles'];
         $res[$i]['type'] = $row['type'];
         $res[$i]['amount'] = $row['amount'];
+        $res[$i]['id_user'] = $row['nearsol_id'];
+        $res[$i]['notes'] = $row['client_id'];
+        $res[$i]['id_process'] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         $i++;
     }
     echo(json_encode($res));

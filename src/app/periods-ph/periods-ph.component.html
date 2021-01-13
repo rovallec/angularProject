@@ -1,27 +1,76 @@
 <div class="row col-md-12" style="margin-top: 15px;">
     <div class="row col-md-12">
         <div class="col-md-3"></div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-2" *ngIf="!showAll && !importPayroll">
             <label>FROM:</label>
             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activePeriod.start">
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-2" *ngIf="showAll && !importPayroll">
+            <label>FILTER:</label>
+            <select class="form-control" [(ngModel)]="filter">
+                <option Value="name">Name:</option>
+                <option Value="dpi">SSS:</option>
+                <option Value="client_id">Client ID:</option>
+                <option Value="nearsol_id">Nearsol ID:</option>
+            </select>
+        </div>
+
+        <div class="form-group col-md-2" *ngIf="!showAll && !importPayroll">
             <label>TO:</label>
             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activePeriod.end">
         </div>
+        <div class="form-group col-md-2" *ngIf="showAll && !importPayroll">
+            <label>Search:</label>
+            <input type="text" class="form-control" [(ngModel)]="value" (keyup.enter)="searchEmployee()">
+        </div>
+        <div class="form-group col-md-2" *ngIf="!showAll && importPayroll">
+        </div>
+
+        <div class="form-group col-md-2" *ngIf="!showAll && importPayroll && !working">
+            <label>Import:</label>
+            <input type="file" class="form-control" (change)="setPayroll_values($event)">
+        </div>
+
+        <div class="col-md-2 align-self-center text-primary" *ngIf="!showAll && importPayroll && working">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden"></span>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group col-md-2">
             <button title="Upload Time Keeping Report" class="btn btn-outline-primary"
-                *ngIf="activePeriod.status == '1' && !showAll" style="margin-top: 11%;"><i
-                    class="fas fa-file-upload"></i></button>
-            <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#importDeduction"
-                *ngIf="activePeriod.status == '1' && !showAll" style="margin-top: 11%; margin-left:5px;"><i
-                    class="fas fa-upload"></i></button>
-            <button title="Close Period" class="btn btn-outline-success" *ngIf="activePeriod.status == '1' && !showAll"
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll" style="margin-top: 11%;"
+                (click)="setPayrollValues()"><i class="fas fa-file-upload"></i></button>
+
+            <button title="Upload Credit/Debit" type="button" class="btn btn-outline-warning" data-toggle="modal"
+                data-target="#importDeduction"
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll"
+                style="margin-top: 11%; margin-left:5px;" (click)="setModal()"><i class="fas fa-upload"></i></button>
+
+            <button title="Close Period" class="btn btn-outline-success"
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll"
                 style="margin-top: 11%; margin-left:5px;"><i class="far fa-calendar-check"></i></button>
-            <button title="Close Period" class="btn btn-outline-success" *ngIf="showAll && !searching"
-                style="margin-top: 11%; margin-left:5px;"><i class="fas fa-search"></i></button>
-            <button title="Close Period" class="btn btn-outline-danger" *ngIf="showAll && searching"
-                style="margin-top: 11%; margin-left:5px;"><i class="fas fa-search"></i></button>
+
+            <button title="Search Payment" class="btn btn-outline-success"
+                *ngIf="showAll && !showImport && !importPayroll" style="margin-top: 11%; margin-left:5px;"
+                (click)="searchEmployee()"><i class="fas fa-search"></i></button>
+
+            <button title="Save All Deductions" class="btn btn-outline-success"
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && importPayroll" style="margin-top: 11%;"
+                (click)="writePayrollValues()" [disabled]="loading" data-toggle="modal" data-target="#loadingModal"><i class="fas fa-check"></i></button>
+            <button title="Cancel Import" class="btn btn-outline-danger"
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && importPayroll"
+                style="margin-top: 11%; margin-left:5px" (click)="cancelImport()" [disabled]="loading"><i
+                    class="fas fa-times"></i></button>
+
+            <button title="Save All Deductions" class="btn btn-outline-success"
+                *ngIf="activePeriod.status == '1' && !showAll && showImport && !importPayroll" style="margin-top: 11%;"
+                (click)="writeImport()"><i class="fas fa-check"></i></button>
+            <button title="Cancel Import" class="btn btn-outline-danger"
+                *ngIf="activePeriod.status == '1' && !showAll && showImport" style="margin-top: 11%; margin-left:5px"
+                (click)="cancelImport()"><i class="fas fa-times"></i></button>
         </div>
         <div class="col-md-3"></div>
     </div>
@@ -29,52 +78,137 @@
     <div class="row col-md-12" style="margin-top:15px;">
         <nav style="border-top: 4px solid #e3f2fd; width: 90%; margin-left:5%">
             <div class="nav nav-tabs" id="nav-tb" role="tablist" style="padding-top:15px;">
-                <a class="nav-item nav-link active" id="nav-debits-tab" data-toggle="tab" href="#nav-debits" role="tab"
-                    aria-controls="nav-debits" aria-selected="true" (click)="resetCount()"
-                    *ngIf="!showImport">DEBITS</a>
-                <a class="nav-item nav-link" id="nav-credits-tab" data-toggle="tab" href="#nav-credits" role="tab"
-                    aria-controls="nav-credits" aria-selected="true" (click)="resetCount()"
-                    *ngIf="!showImport">CREDITS</a>
+                <a class="nav-item nav-link active" id="nav-credits-tab" data-toggle="tab" href="#nav-credits"
+                    role="tab" aria-controls="nav-credits" aria-selected="true" (click)="resetCount('CREDITS')"
+                    *ngIf="!showImport && !importPayroll">CREDITS</a>
+                <a class="nav-item nav-link" id="nav-debits-tab" data-toggle="tab" href="#nav-debits" role="tab"
+                    aria-controls="nav-debits" aria-selected="true" (click)="resetCount('DEBITS')"
+                    *ngIf="!showImport && !importPayroll">DEBITS</a>
                 <a class="nav-item nav-link" id="nav-employees-tab" data-toggle="tab" href="#nav-employees" role="tab"
                     aria-controls="nav-employees" aria-selected="true" (click)="resetCount('emp')"
-                    *ngIf="!showImport">EMPLOYEES</a>
-                <a class="nav-item nav-link" id="nav-correct-tab" data-toggle="tab" href="#nav-correct" role="tab"
-                    aria-controls="nav-correct" aria-selected="true" *ngIf="showImport">CORRECT</a>
+                    *ngIf="!showImport && !importPayroll">EMPLOYEES</a>
+
+                <a class="nav-item nav-link active" id="nav-correct-tab" data-toggle="tab" href="#nav-correct"
+                    role="tab" aria-controls="nav-correct" aria-selected="true" *ngIf="showImport && !importPayroll"
+                    (click)="showCorrect()">CORRECT</a>
                 <a class="nav-item nav-link" id="nav-failed-tab" data-toggle="tab" href="#nav-failed" role="tab"
-                    aria-controls="nav-failed" aria-selected="true" *ngIf="showImport">FAIL</a>
-                <div class="ml-auto">
-                    <button class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i></button>
-                    <button class="btn btn-outline-secondary" style="margin-left:5px"><i
+                    aria-controls="nav-failed" aria-selected="true" *ngIf="showImport && !importPayroll"
+                    (click)="showFail()">FAIL</a>
+
+
+                <a class="nav-item nav-link active" id="nav-correct-values-tab" data-toggle="tab"
+                    href="#nav-correct-values" role="tab" aria-controls="nav-correct-values" aria-selected="true"
+                    *ngIf="importPayroll">CORRECT</a>
+                <a class="nav-item nav-link" id="nav-failed-values-tab" data-toggle="tab" href="#nav-failed-values"
+                    role="tab" aria-controls="nav-failed-values" aria-selected="true" *ngIf="importPayroll">FAIL</a>
+
+
+                <div class="ml-auto" *ngIf="!show_fail && !showAll">
+                    <button class="btn btn-outline-secondary" *ngIf="importPayroll"
+                        [disabled]="(actual_show == 0) || (actual_show <= 50 && start_view)"
+                        (click)="less_showPayroll()"><i class="fas fa-arrow-left"></i></button>
+                    <button class="btn btn-outline-secondary" style="margin-left:5px" (click)="showPayroll()"
+                        *ngIf="importPayroll" [disabled]="stop_show"><i class="fas fa-arrow-right"></i></button>
+
+                    <button class="btn btn-outline-secondary" *ngIf="importType == 'CREDIT' && !importPayroll"
+                        [disabled]="(actual_show == 0) || (actual_show <= 25 && start_view)"
+                        (click)="less_showCredits()"><i class="fas fa-arrow-left"></i></button>
+                    <button class="btn btn-outline-secondary" style="margin-left:5px" (click)="showCredits()"
+                        *ngIf="importType == 'CREDIT' && !importPayroll" [disabled]="stop_show"><i
+                            class="fas fa-arrow-right"></i></button>
+
+                    <button class="btn btn-outline-secondary" *ngIf="importType == 'DEBIT' && !importPayroll"
+                        [disabled]="(actual_show == 0) || (actual_show <= 25 && start_view)"
+                        (click)="less_showDebits()"><i class="fas fa-arrow-left"></i></button>
+                    <button class="btn btn-outline-secondary" style="margin-left:5px" (click)="showDebits()"
+                        *ngIf="importType == 'DEBIT' && !importPayroll" [disabled]="stop_show"><i
                             class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent" style="width: 90%; margin-left:5%;margin-top: 10px;">
-            <div class="tab-pane fade show active" id="nav-debits" role="tabpanel" aria-labelledby="nav-debits-tab"
-                *ngIf="!showImport">
-                <table class="table table-striped selectable">
+            <div class="tab-pane fade show" id="nav-failed-values" role="tabpanel"
+                aria-labelledby="nav-failed-values-tab" *ngIf="!showImport && importPayroll">
+                <table class="table table-hover table-striped selectable">
+                    <thead>
+                        <th>CLIENT ID</th>
+                        <th>NEARSOL ID</th>
+                        <th>NAME</th>
+                        <th>SUPERVISOR</th>
+                        <th>ERROR</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let val of errorPayroll">
+                            <td>{{val.client_id}}</td>
+                            <td>{{val.nearsol_id}}</td>
+                            <td>{{val.name}}</td>
+                            <td>{{val.supervisor}}</td>
+                            <td>{{val.absences}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade show active" id="nav-correct-values" role="tabpanel"
+                aria-labelledby="nav-correct-values-tab" *ngIf="!showImport && importPayroll">
+                <table class="table table-hover">
+                    <thead>
+                        <th>NO.</th>
+                        <th>CLIENT ID</th>
+                        <th>NEARSOL ID</th>
+                        <th>NAME</th>
+                        <th>SUPERVISOR</th>
+                        <th>ABSENCES</th>
+                        <th>DISCOUNT</th>
+                        <th>NIGHT HOURS</th>
+                        <th>REGULAR OT</th>
+                        <th>RDOT</th>
+                        <th>OT In HLD</th>
+                        <th>REGULAR HOLIDAY</th>
+                        <th>SPECIAL HOLIDAY</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let payroll of show_payroll">
+                            <td>{{payroll.idpayroll_values}}</td>
+                            <td>{{payroll.client_id}}</td>
+                            <td>{{payroll.nearsol_id}}</td>
+                            <td>{{payroll.name}}</td>
+                            <td>{{payroll.supervisor}}</td>
+                            <td>{{payroll.absences}}</td>
+                            <td>{{payroll.discount}}</td>
+                            <td>{{payroll.night_hours}}</td>
+                            <td>{{payroll.ot_regular}}</td>
+                            <td>{{payroll.ot_rdot}}</td>
+                            <td>{{payroll.ot_holiday}}</td>
+                            <td>{{payroll.holiday_regular}}</td>
+                            <td>{{payroll.holiday_special}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade show active" id="nav-credits" role="tabpanel" aria-labelledby="nav-credits-tab"
+                *ngIf="!showImport && !importPayroll">
+                <table class="table table-hover table-hovertable-striped selectable">
                     <thead>
                         <th>NEARSOL ID</th>
                         <th>CLIENT ID</th>
                         <th>NAME</th>
+                        <th>DESCRIPTION</th>
                         <th>AMOUNT</th>
                     </thead>
+                    <tbody>
+                        <tr *ngFor="let cred of show_credits">
+                            <td>{{cred.id_user}}</td>
+                            <td>{{cred.notes}}</td>
+                            <td>{{cred.id_process}}</td>
+                            <td>{{cred.type}}</td>
+                            <td>{{cred.amount}}</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade show" id="nav-credits" role="tabpanel" aria-labelledby="nav-credits-tab"
-                *ngIf="!showImport">
-                <table class="table table-striped selectable">
-                    <thead>
-                        <th>NEARSOL ID</th>
-                        <th>CLIENT ID</th>
-                        <th>NAME</th>
-                        <th>AMOUNT</th>
-                    </thead>
-                </table>
-            </div>
-            <div class="tab-pane fade show active" id="nav-correct" role="tabpanel" aria-labelledby="nav-correct-tab"
-                *ngIf="showImport">
-                <table class="table table-striped selectable">
+            <div class="tab-pane fade show" id="nav-debits" role="tabpanel" aria-labelledby="nav-debits-tab"
+                *ngIf="!showImport && !importPayroll">
+                <table class="table table-hover table-striped selectable">
                     <thead>
                         <th>NEARSOL ID</th>
                         <th>CLIENT ID</th>
@@ -82,40 +216,221 @@
                         <th>AMOUNT</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let deduction of show_deductions">
-                            <td>{{deduction.id_user}}</td>
-                            <td>{{deduction.notes}}</td>
-                            <td>{{deduction.id_process}}</td>
-                            <td>{{deduction.amount}}</td>
+                        <tr *ngFor="let deb of show_debits">
+                            <td>{{deb.id_user}}</td>
+                            <td>{{deb.notes}}</td>
+                            <td>{{deb.id_process}}</td>
+                            <td>{{deb.type}}</td>
+                            <td>{{deb.amount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade show active" id="nav-correct" role="tabpanel" aria-labelledby="nav-correct-tab"
+                *ngIf="showImport && !importPayroll">
+                <table class="table table-hover table-striped selectable" *ngIf="importType == 'CREDIT'">
+                    <thead>
+                        <th>NO.</th>
+                        <th>NEARSOL ID</th>
+                        <th>CLIENT ID</th>
+                        <th>NAME</th>
+                        <th>AMOUNT</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cred of show_credits">
+                            <td>{{cred.date}}</td>
+                            <td>{{cred.id_user}}</td>
+                            <td>{{cred.notes}}</td>
+                            <td>{{cred.id_process}}</td>
+                            <td>{{cred.amount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-hover table-striped selectable" *ngIf="importType == 'DEBIT'">
+                    <thead>
+                        <th>NO.</th>
+                        <th>NEARSOL ID</th>
+                        <th>CLIENT ID</th>
+                        <th>NAME</th>
+                        <th>AMOUNT</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let deb of show_debits">
+                            <td>{{cred.date}}</td>
+                            <td>{{deb.id_user}}</td>
+                            <td>{{deb.notes}}</td>
+                            <td>{{deb.id_process}}</td>
+                            <td>{{deb.amount}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="tab-pane fade show" id="nav-failed" role="tabpanel" aria-labelledby="nav-failed-tab"
-            *ngIf="showImport">
-            <table class="table table-striped selectable">
-                <thead>
-                    <th>NAME</th>
-                    <th>AMOUNT</th>
-                    <th>ERROR</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let impF of importFail">
-                        <td>{{impF.id_process}}</td>
-                        <td>{{impF.amount}}</td>
-                        <td>{{impF.date}}</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+                *ngIf="showImport && !importPayroll">
+                <table class="table table-hover table-striped selectable">
+                    <thead>
+                        <th>NAME</th>
+                        <th>AMOUNT</th>
+                        <th>ERROR</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let impF of importFail">
+                            <td>{{impF.id_process}}</td>
+                            <td>{{impF.amount}}</td>
+                            <td>{{impF.date}}</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade show" id="nav-employees" role="tabpanel" aria-labelledby="nav-employees-tab"
+                *ngIf="!showImport && !importPayroll">
+                <table class="table table-hover table-striped selectable">
+                    <thead>
+                        <th>NEARSOL ID</th>
+                        <th>CLIENT ID</th>
+                        <th>NAME</th>
+                        <th>CREDITS</th>
+                        <th>DABITS</th>
+                        <th>TOTAL</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pay of allPayments" (click)="setPayment(pay)" data-toggle="modal"
+                            data-target="#paymentDetails">
+                            <td>{{pay.nearsol_id}}</td>
+                            <td>{{pay.client_id}}</td>
+                            <td>{{pay.employee_name}}</td>
+                            <td>{{pay.credits}}</td>
+                            <td>{{pay.debits}}</td>
+                            <td>{{pay.total}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+    </div>
+</div>
+<!----------------------------------------------------------------------- MODAL LOADING ------------------------------------------------------------------>
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog  modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="st-loadingModalLabel">PAYROLL VALUES</h5>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center">
+                    <div class="d-flex align-items-center">
+                        <strong>Loading...</strong>
+                        <div class="spinner-border ms-auto" role="status" aria-hidden="true" *ngIf="loading"></div>
+                      </div>
+                    <button class="btn btn-outline-primary" data-dismiss="modal" *ngIf="!loading">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------------------------------------------------- MODAL PAYMENT DETAILS -------------------------------------------------------------->
+<div class="modal fade" id="paymentDetails" tabindex="-1" aria-labelledby="paymentDetailsLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="st-paymentDetailsLabel">{{selectedPayment.employee_name}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12 p-0 ml-0" style="margin-top:15px;">
+                    <nav style="border-top: 4px solid #e3f2fd; width: 98%; margin-left:1%">
+                        <div class="nav nav-tabs" id="nav-tb-payment" role="tablist" style="padding-top:15px;">
+                            <a class="nav-item nav-link active" id="nav-credits-tab-payment" data-toggle="tab"
+                                href="#nav-credits-payment" role="tab" aria-controls="nav-credits" aria-selected="true"
+                                *ngIf="!showImport">CREDITS</a>
+                            <a class="nav-item nav-link" id="nav-debits-tab-payment" data-toggle="tab"
+                                href="#nav-debits-payment" role="tab" aria-controls="nav-debits" aria-selected="true"
+                                *ngIf="!showImport">DEBITS</a>
+                            <a class="nav-item nav-link" id="nav-tk-tab-payment" data-toggle="tab"
+                                href="#nav-tk-payment" role="tab" aria-controls="nav-tk" aria-selected="true"
+                                *ngIf="!showImport">TIME KEEPING</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent-payment"
+                        style="width: 98%; margin-left:1%;margin-top: 10px;">
+                        <div class="tab-pane fade show active" id="nav-credits-payment" role="tabpanel"
+                            aria-labelledby="nav-credits-payment-tab">
+                            <div class="row col-lg-12 m-0 p-0">
+                                <div class="row col-lg-12 p-0 m-0">
+                                    <table class="table table-hover table-striped" style="width:100%;">
+                                        <thead>
+                                            <th>ID</th>
+                                            <th>TYPE</th>
+                                            <th>AMOUNT</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let cred of emp_credits">
+                                                <td>{{cred.iddebits}}</td>
+                                                <td>{{cred.type}}</td>
+                                                <td>{{cred.amount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row col-lg-12 mr-0 p-0">
+                                    <div class="form-group col-lg-2 p-0"></div>
+                                    <div class="form-group col-lg-8 p-0">
+                                        <label>TOTAL:</label>
+                                        <input type="text" [disabled]="true" [(ngModel)]="total_credits"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-2 p-0"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade show" id="nav-debits-payment" role="tabpanel"
+                            aria-labelledby="nav-debits-payment-tab">
+                            <div class="row col-lg-12 m-0 p-0">
+                                <div class="row col-lg-12 p-0 m-0">
+                                    <table class="table table-hover table-striped" style="width:100%;">
+                                        <thead>
+                                            <th>ID</th>
+                                            <th>TYPE</th>
+                                            <th>AMOUNT</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let deb of emp_debits">
+                                                <td>{{deb.iddebits}}</td>
+                                                <td>{{deb.type}}</td>
+                                                <td>{{deb.amount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row col-lg-12 mr-0 p-0">
+                                    <div class="form-group col-lg-2 p-0"></div>
+                                    <div class="form-group col-lg-8 p-0">
+                                        <label>TOTAL:</label>
+                                        <input type="text" [disabled]="true" [(ngModel)]="total_debits"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-2 p-0"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade show" id="nav-tk-payment" role="tabpanel"
+                            aria-labelledby="nav-tk-payment-tab">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<!-----------------------------------------------------------------MODAL BONUSES / DISCOUNTS ------------------------------------------------------------>
+<!----------------------------------------------------------------- MODAL BONUSES / DISCOUNTS ------------------------------------------------------------>
 <div class="modal fade" id="importDeduction" tabindex="-1" aria-labelledby="importDeductionLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-centered">
+    <div class="modal-dialog  modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Import Bonus/Discount</h5>
@@ -148,12 +463,19 @@
                             <option>WAH ALLOWANCE</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-4" style="padding-left:3px;padding-right:0px">
+                    <div class="form-group"
+                        [ngClass]="{'col-md-4':importCurrency == 'Php', 'col-md-2':importCurrency == '$'}"
+                        style="padding-left:3px;padding-right:0px">
                         <label>CURRENCY:</label>
                         <select [(ngModel)]="importCurrency" class="form-control">
                             <option>$</option>
                             <option>Php</option>
                         </select>
+                    </div>
+                    <div class="form-group col-md-2" *ngIf="importCurrency == '$'"
+                        style="padding-left:3px;padding-right:0px">
+                        <label>Php->$</label>
+                        <input type="text" class="form-control" [(ngModel)]="rate" placeholder="0.00">
                     </div>
                 </div>
                 <div class="row col-md-12">
@@ -168,9 +490,14 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
                 <div class="d-flex justify-content-right">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                        (click)="saveImport()">Save</button>
+                    <button class="btn btn-secondary" type="button" disabled *ngIf="loading && working">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="saveImport()"
+                        *ngIf="!loading">Save</button>
                 </div>
             </div>
         </div>
     </div>
+</div>

@@ -978,3 +978,38 @@ export class isr{
     this.amount = null;
    }
 }
+
+export class payroll_values{
+    idpayroll_values:string;
+    id_employee:string;
+    id_period:string;
+    client_id:string;
+    nearsol_id:string;
+    name:string;
+    supervisor:string;
+    absences:string;
+    discount:string;
+    night_hours:string;
+    ot_regular:string;
+    ot_rdot:string;
+    ot_holiday:string;
+    holiday_regular:string;
+    holiday_special:string;
+    constructor(){
+        this.idpayroll_values = null;
+        this.id_employee = null;
+        this.id_period = null;
+        this.client_id = null;
+        this.nearsol_id = null;
+        this.name = null;
+        this.supervisor = null;
+        this.absences = null;
+        this.discount = null;
+        this.night_hours = null;
+        this.ot_regular = null;
+        this.ot_rdot = null;
+        this.ot_holiday = null;
+        this.holiday_regular = null;
+        this.holiday_special = null;
+    }
+}
