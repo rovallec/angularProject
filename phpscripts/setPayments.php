@@ -2,19 +2,10 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
+require 'funcionesVarias.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-
-function validarDatos($adato) {
-    if (empty($adato) || is_null($adato)) { $adato = "NULL"; 
-    } else {
-        if ($adato = 'NaN') {
-            $adato = 0;
-        }
-    }
-    return $adato;
-}
 
 $idpayment = validarDatos($request->idpayments);
 $credits = validarDatos($request->credits);

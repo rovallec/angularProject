@@ -1,5 +1,6 @@
 <?php
     require 'database.php';
+    require 'funcionesVarias.php';
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
 
@@ -10,17 +11,6 @@
     $date = "";
     $d_off = "";
     $sql = "";
-
-    function validarDatos($adato) {
-        if (empty($adato) || is_null($adato)) { $adato = "NULL"; 
-        } else {
-            if ($adato = 'NaN') {
-                $adato = 0;
-            }
-        }
-        return $adato;
-    }
-
 
     if(isset($postdata) && !empty($postdata)){
         $request = json_decode($postdata);
