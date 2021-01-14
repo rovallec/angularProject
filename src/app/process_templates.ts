@@ -751,20 +751,26 @@ export class payments {
         this.credits = null;
         this.debits = null;
         this.date = null;
+        this.last_seventh = null;
+        this.ot = null;
+        this.ot_hours = null;
+        this.base_hours = null;
+        this.productivity_hours = null;
+        this.base = null;
+        this.productivity = null;
+        this.seventh = null;
+        this.holidays = null;
+        this.holidays_hours = null;
+        this.base_complete = null;
+        this.productivity_complete = null;
         this.employee_name = null;
         this.total = null;
-        this.last_seventh = '0';
-        this.ot = '0';
-        this.ot_hours = '0';
-        this.base_hours = '0';
-        this.productivity_hours = '0';
-        this.base = '0';
-        this.productivity = '0';
-        this.seventh = '0';
-        this.holidays = '0';
-        this.holidays_hours = '0';
-        this.base_complete = '0';
-        this.productivity_complete = '0';
+        this.status = null;
+        this.nearsol_id = null;
+        this.client_id = null;
+        this.state = null;
+        this.account = null;
+        this.days = null;
     }
 }
 

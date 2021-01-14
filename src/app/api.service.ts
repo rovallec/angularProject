@@ -484,8 +484,8 @@ closePeriod(period:periods){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/closePeriod.php`, period);
 }
 
-setClosePeriods(id_period:string){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setClosePeriod.php`, id_period);
+setClosePeriods(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setClosePeriod.php`, any);
 }
 
 getDPAtt(any:any){

@@ -533,7 +533,7 @@ export class PeriodsComponent implements OnInit {
           }
           cnt = cnt + 1;
           if (cnt == this.payments.length-1) {
-            this.apiService.setClosePeriods(this.period.idperiods).subscribe((str: string) => {
+            this.apiService.setClosePeriods({id_period:this.period.idperiods}).subscribe((str: string) => {
               if (str != '1') {          
                 console.log('Error al cerrar el período. Paso 8. '  + str);
               } else {
@@ -541,7 +541,7 @@ export class PeriodsComponent implements OnInit {
               }
             }); //Fin del if.
           }
-          console.log('Cerrando período Paso 5' + cnt);
+          console.log('Cerrando período Paso 5 ' + cnt);
         })
       }      
     );
@@ -549,28 +549,17 @@ export class PeriodsComponent implements OnInit {
 
   completePeriod() {
     this.working = true;
-    this.progress = 0;
-    console.log('Cerrando período Paso 1');
+    this.progress = 0;    
     this.pushDeductions('credits', this.global_credits);
-    console.log('Cerrando período Paso 2');
     this.pushDeductions('debits', this.global_debits);
-    console.log('Cerrando período Paso 3');
     this.global_services.forEach(service => {
       if (Number(service.max) === Number(service.current)) {
         service.status = '0';
       }
       this.apiService.updateServices(service).subscribe((str: string) => { });
-      console.log('Cerrando período Paso 4 Actualizando serivicios...');      
     });
 
-    //ELIMINAR
-    
-
-     
-    //ELIMINAR
-    console.log('Cerrando período Paso 6');
-    this.start();
-    console.log('Cerrando período Paso 7');
+    this.start();    
     this.closePeriod();
     console.log('Cerrando período Paso 8');
     this.proceedClosePeriod();

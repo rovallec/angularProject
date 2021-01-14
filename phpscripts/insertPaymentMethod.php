@@ -29,7 +29,7 @@ if($res=mysqli_query($con, $sql1)){
 }
 if($t == 1){
     if(mysqli_query($con, $sql)){
-        $id_paymentMethod = echo(mysqli_insert_id($con));
+        $id_paymentMethod = mysqli_insert_id($con);
         $sql3 = "INSERT INTO `minearsol`.`modify_payment_methods` (`idmodify_payment_methods`, `id_payment_method`, `id_user`, `date`, `notes`) VALUES (NULL, $id_paymentMethod, $id_user, '$date', '$notes');";
         if(mysqli_query($con,$sql3)){}else{
             http_response_code(404);
