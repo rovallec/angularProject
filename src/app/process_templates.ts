@@ -723,6 +723,18 @@ export class payments {
     credits: string;
     debits: string;
     date: string;
+    last_seventh: string;
+    ot: string;
+    ot_hours: string;
+    base_hours: string;
+    productivity_hours: string;
+    base: string;
+    productivity: string;
+    seventh: string;
+    holidays: string;
+    holidays_hours: string;
+    base_complete: string;
+    productivity_complete: string;
     employee_name: string;
     total: string;
     status: string;
@@ -731,14 +743,6 @@ export class payments {
     state: string;
     account: string;
     days: string;
-    ot: string;
-    base:string;
-    productivity:string;
-    ot_hours: string;
-    base_hours:string;
-    productivity_hours:string;
-    seventh: string;
-    last_seventh: string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;
@@ -749,7 +753,18 @@ export class payments {
         this.date = null;
         this.employee_name = null;
         this.total = null;
-        this.last_seventh = null;
+        this.last_seventh = '0';
+        this.ot = '0';
+        this.ot_hours = '0';
+        this.base_hours = '0';
+        this.productivity_hours = '0';
+        this.base = '0';
+        this.productivity = '0';
+        this.seventh = '0';
+        this.holidays = '0';
+        this.holidays_hours = '0';
+        this.base_complete = '0';
+        this.productivity_complete = '0';
     }
 }
 

@@ -29,6 +29,7 @@ if($result = mysqli_query($con, $sql)){
     }
     echo(json_encode($return));
 }else{
-    http_response_code(404);
+    echo($sql);
+    http_response_code(400);
 }
 ?>

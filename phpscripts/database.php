@@ -10,11 +10,14 @@ define('db_name','minearsol');
 function connect()
 {
 	$connect = mysqli_connect(db_host,db_user,db_password,db_name);
-	if(mysqli_connect_errno($connect))
+  if (!$connect) {
+    die('Error de conexión: ' . mysqli_connect_error());
+  }
+	/*if(mysqli_connect_errno($connect))
 	{
 		die("Failed to connect: " . mysqli_connect_errno());
 	}
-
+*/
 	return $connect;
 }
 

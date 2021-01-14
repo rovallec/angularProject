@@ -19,8 +19,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = "http://localhost"; // Desarrollo
-PHP_API_SERVER = "http://200.94.251.67";  // produccion
+PHP_API_SERVER = "http://localhost"; // Desarrollo
+//PHP_API_SERVER = "http://200.94.251.67";  // produccion
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
@@ -484,6 +484,10 @@ closePeriod(period:periods){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/closePeriod.php`, period);
 }
 
+setClosePeriods(id_period:string){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setClosePeriod.php`, id_period);
+}
+
 getDPAtt(any:any){
   return this.httpClient.post<disciplinary_processes[]>(`${this.PHP_API_SERVER}/phpscripts/getDPAtt.php`, any);
 }
@@ -492,8 +496,8 @@ getAttPeriod(any:any){
   return this.httpClient.post<attendences[]>(`${this.PHP_API_SERVER}/phpscripts/getAttendancesPeriod.php`, any);
 }
 
-insertPayment(payments:payments){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPayments.php`, payments);
+setPayment(payments:payments){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setPayments.php`, payments);
 }
 
 getJudicialDiscounts(any:any){

@@ -3,7 +3,7 @@ import { formattedError, ThrowStmt } from '@angular/compiler';
 import { Route } from '@angular/compiler/src/core';
 import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { timeStamp } from 'console';
+import { Console, timeStamp } from 'console';
 import { AttachSession } from 'protractor/built/driverProviders';
 import { parse } from 'querystring';
 import { isNull, isNullOrUndefined, isUndefined } from 'util';
@@ -17,6 +17,8 @@ import { promise } from 'protractor';
 import { resolve } from 'url';
 import { DH_NOT_SUITABLE_GENERATOR } from 'constants';
 import { runInThisContext } from 'vm';
+import { map, delay } from "rxjs/operators";
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Component({
   selector: 'app-periods',
@@ -67,6 +69,7 @@ export class PeriodsComponent implements OnInit {
   count_payments: number = 0;
   importType: string = null;
   importString: string = null;
+  public message_period: string = '';
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
@@ -516,38 +519,63 @@ export class PeriodsComponent implements OnInit {
     this.showPaymentes = false;
   }
 
+  proceedClosePeriod()  {
+    let cnt: number = 0;
+    let failed: payments[] = [];
+
+    console.log('Cerrando período Paso 8.1 setear pagos ya calculados...');
+    this.payments.forEach(pay => {
+      console.log(pay);
+      this.apiService.setPayment(pay).subscribe((str: string) => { // Inserta los pagos ya calculados.
+          if (str != '1') {
+            failed.push(pay);
+            console.log("Paso 8.2 " + cnt + " ERROR");
+          }
+          cnt = cnt + 1;
+          if (cnt == this.payments.length-1) {
+            this.apiService.setClosePeriods(this.period.idperiods).subscribe((str: string) => {
+              if (str != '1') {          
+                console.log('Error al cerrar el período. Paso 8. '  + str);
+              } else {
+                console.log('Cerrando período Paso 8, Procesando... ' + str);
+              }
+            }); //Fin del if.
+          }
+          console.log('Cerrando período Paso 5' + cnt);
+        })
+      }      
+    );
+  };
+
   completePeriod() {
+    this.working = true;
+    this.progress = 0;
+    console.log('Cerrando período Paso 1');
     this.pushDeductions('credits', this.global_credits);
+    console.log('Cerrando período Paso 2');
     this.pushDeductions('debits', this.global_debits);
+    console.log('Cerrando período Paso 3');
     this.global_services.forEach(service => {
       if (Number(service.max) === Number(service.current)) {
         service.status = '0';
       }
       this.apiService.updateServices(service).subscribe((str: string) => { });
+      console.log('Cerrando período Paso 4 Actualizando serivicios...');      
     });
 
     //ELIMINAR
-    let cnt: number = 0;
-    let failed: payments[] = [];
-    this.apiService.closePeriod(this.period).subscribe((str: string) => {
-      this.payments.forEach(pay => {
-        this.apiService.insertPayment(pay).subscribe((str: string) => {
-          if (str != '1') {
-            failed.push(pay);
-          }
-          cnt = cnt + 1;
-          if (cnt == this.payments.length) {
-            //HACER ALGO AL TERMINAR
-          }
+    
 
-        })
-      })
-      //ELIMINAR
-
-
-      this.start();
-      this.closePeriod();
-    });
+     
+    //ELIMINAR
+    console.log('Cerrando período Paso 6');
+    this.start();
+    console.log('Cerrando período Paso 7');
+    this.closePeriod();
+    console.log('Cerrando período Paso 8');
+    this.proceedClosePeriod();
+    console.log('Cerrando período Paso 9, Finalizado.');
+    this.working = false;
   }
 
   setPayTime(id_employee: string, id_profile: string) {
@@ -947,7 +975,7 @@ export class PeriodsComponent implements OnInit {
 
               if (count == (partial_credits.length - 1)) {
                 this.importEnd = true;
-                this.completed = true;
+                this.completed = true;/*  */
               }
             })
           })
