@@ -11,17 +11,28 @@
     $d_off = "";
     $sql = "";
 
+    function validarDatos($adato) {
+        if (empty($adato) || is_null($adato)) { $adato = "NULL"; 
+        } else {
+            if ($adato = 'NaN') {
+                $adato = 0;
+            }
+        }
+        return $adato;
+    }
+
+
     if(isset($postdata) && !empty($postdata)){
         $request = json_decode($postdata);
         for ($i=0; $i < count($request); $i++) {
             $en = json_encode($request[$i]);
             $de = json_decode($en);
-            $id_employee = ($de->id_employee);
-            $date = ($de->date);
-            $scheduled = ($de->scheduled);
-            $worked = ($de->worked_time);
-            $id = ($de->id_wave);
-            $d_off = ($de->day_off1);
+            $id_employee = validarDatos($de->id_employee);
+            $date = validarDatos($de->date);
+            $scheduled = validarDatos($de->scheduled);
+            $worked = validarDatos($de->worked_time);
+            $id = validarDatos($de->id_wave);
+            $d_off = validarDatos($de->day_off1);
             $sql = "INSERT INTO attendences (idattendences, id_employee, date, scheduled, worked_time)  
                         SELECT * FROM (SELECT null,$id_employee AS `1`,'$date' AS `2`,'$scheduled' AS `3`,'$worked' AS `4`) 
                         AS tmp WHERE NOT EXISTS (SELECT date FROM attendences WHERE id_employee = $id_employee AND date = '$date') LIMIT 1;";
