@@ -8,6 +8,8 @@ require 'database.php';
 $isr = [];
 $current_date = date("Y-m-d");
 $today_date = new DateTime(date("Y-m-d"));
+$ag_date = new DateTime((date("Y")) . "-12-01");
+$bn_date = new DateTime((date("Y")) . "-07-01");
 
 echo "\xEF\xBB\xBF";
 
@@ -28,10 +30,10 @@ fputcsv($output, array("NIT empleado", "Sueldos", "Horas Extras", "Bono Decreto 
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $isr[0] = str_replace("-", "",$row['nit']);
-        $isr[1] = ($row['base'] * (13 - date('m')) + $row['print_base']);
+        $isr[1] = number_format(($row['base'] * (13 - date('m')) + $row['print_base']),2);
         $isr[2] = $row['over_time'];
         $isr[3] = 250*12;
-        $isr[4] = ($row['productivity'] * (13 - date('m')) + $row['print_productivity']);
+        $isr[4] = number_format(($row['productivity'] * (13 - date('m')) + $row['print_productivity']),2);
         $isr[5] = '0';
         $isr[6] = '0';
 //////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
@@ -41,21 +43,21 @@ if($result = mysqli_query($con,$sql)){
             $a_days = $a_diff->format("%a");
         }else{
             $a_date = new DateTime($row['hiring_date']);
-            $a_diff = $today_date->diff($a_date);
+            $a_diff = $ag_date->diff($a_date);
             $a_days = $a_diff->format("%a");
         };
-        $isr[7] = ($row['base'] + $row['productivity']) * ($a_days/365);
+        $isr[7] = number_format(($row['base'] + $row['productivity']) * ($a_days/365),2);
 //////////////////////////////////////////////////BONO 14//////////////////////////////////////////////////////////////
         if(date($row['hiring_date']) <= date((date("Y")-1) . "-07-01")){
             $b_date = new DateTime((date("Y")-1) . "-07-01");
-            $b_diff = $today_date->diff($b_date);
+            $b_diff = $bn_date->diff($b_date);
             $b_days = $b_diff->format("%a");
         }else{
             $b_date = new DateTime($row['hiring_date']);
             $b_diff = $today_date->diff($b_date);
             $b_days = $b_diff->format("%a");
         };
-        $isr[8] = ($row['base'] + $row['productivity']) * ($b_days/365);
+        $isr[8] = number_format(($row['base'] + $row['productivity']) * ($b_days/365),2);
         $isr[9] = '0';
         $isr[10] = '0';
         $isr[11] = '0';
@@ -67,9 +69,9 @@ if($result = mysqli_query($con,$sql)){
         $isr[17] = $row['indemnization'];
         $isr[18] = '0';
         $isr[19] = '0';
-        $isr[20] = ($row['base'] + $row['productivity']) * ($a_days/365);
-        $isr[21] = ($row['productivity'] * (13 - date('m')) + $row['print_productivity']);
-        $isr[22] = ($row['base'] * (12 - date('m')) + $row['print_base'] + $row['over_time'])*0.0483;
+        $isr[20] = number_format(($row['base'] + $row['productivity']) * ($a_days/365),2);
+        $isr[21] = number_format(($row['productivity'] * (13 - date('m')) + $row['print_productivity']),2);
+        $isr[22] = number_format(($row['base'] * (12 - date('m')) + $row['print_base'] + $row['over_time'])*0.0483,2);
         fputcsv($output, $isr, ",");
     };
 }else{

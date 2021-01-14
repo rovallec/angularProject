@@ -220,7 +220,7 @@ export class AccprofilesComponent implements OnInit {
       if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date.split("-")[0])).toString() + "-07-01").getTime()) >= 0)){
         b_date = this.employee.hiring_date;
       }else{
-        b_date = (new Date(end_date).getFullYear()) + "-07-01";
+        b_date = (new Date(end_date).getFullYear() - 1) + "-07-01";
       }
       cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
       cred_bono14.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/365)*((new Date(end_date).getTime() - new Date(b_date).getTime())/(1000*3600*24))).toFixed(2);

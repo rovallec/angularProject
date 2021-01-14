@@ -668,5 +668,13 @@ insertPayrollValues(payroll:payroll_values){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPayrollValues_ph.php`,payroll);
 }
 
+getPayrollValues_ph(period:periods){
+  return this.httpClient.post<payroll_values[]>(`${this.PHP_API_SERVER}/phpscripts/getPayrollValues_ph.php`, period);
+}
+
+getProfile_ph(prof:profiles):Observable<profiles[]>{
+  return this.httpClient.post<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/full_query_ph.php`, prof);
+}
+
   constructor(private httpClient:HttpClient) { }
 }

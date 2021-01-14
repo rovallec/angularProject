@@ -41,36 +41,38 @@
 
         <div class="form-group col-md-2">
             <button title="Upload Time Keeping Report" class="btn btn-outline-primary"
-                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll" style="margin-top: 11%;"
-                (click)="setPayrollValues()"><i class="fas fa-file-upload"></i></button>
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll  && !closing"
+                style="margin-top: 11%;" (click)="setPayrollValues()"><i class="fas fa-file-upload"></i></button>
 
             <button title="Upload Credit/Debit" type="button" class="btn btn-outline-warning" data-toggle="modal"
                 data-target="#importDeduction"
-                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll"
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll && !closing"
                 style="margin-top: 11%; margin-left:5px;" (click)="setModal()"><i class="fas fa-upload"></i></button>
 
             <button title="Close Period" class="btn btn-outline-success"
-                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll"
-                style="margin-top: 11%; margin-left:5px;"><i class="far fa-calendar-check"></i></button>
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && !importPayroll && !closing"
+                style="margin-top: 11%; margin-left:5px;" (click)="closePeriod()"><i
+                    class="far fa-calendar-check"></i></button>
 
             <button title="Search Payment" class="btn btn-outline-success"
-                *ngIf="showAll && !showImport && !importPayroll" style="margin-top: 11%; margin-left:5px;"
+                *ngIf="showAll && !showImport && !importPayroll && !closing" style="margin-top: 11%; margin-left:5px;"
                 (click)="searchEmployee()"><i class="fas fa-search"></i></button>
 
-            <button title="Save All Deductions" class="btn btn-outline-success"
-                *ngIf="activePeriod.status == '1' && !showAll && !showImport && importPayroll" style="margin-top: 11%;"
-                (click)="writePayrollValues()" [disabled]="loading" data-toggle="modal" data-target="#loadingModal"><i class="fas fa-check"></i></button>
+            <button title="Save All Payroll Vlues" class="btn btn-outline-success"
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && importPayroll && !closing"
+                style="margin-top: 11%;" (click)="writePayrollValues()" [disabled]="loading"><i
+                    class="fas fa-check"></i></button>
             <button title="Cancel Import" class="btn btn-outline-danger"
-                *ngIf="activePeriod.status == '1' && !showAll && !showImport && importPayroll"
+                *ngIf="activePeriod.status == '1' && !showAll && !showImport && importPayroll && !closing"
                 style="margin-top: 11%; margin-left:5px" (click)="cancelImport()" [disabled]="loading"><i
                     class="fas fa-times"></i></button>
 
             <button title="Save All Deductions" class="btn btn-outline-success"
-                *ngIf="activePeriod.status == '1' && !showAll && showImport && !importPayroll" style="margin-top: 11%;"
-                (click)="writeImport()"><i class="fas fa-check"></i></button>
+                *ngIf="activePeriod.status == '1' && !showAll && showImport && !importPayroll && !closing"
+                style="margin-top: 11%;" (click)="writeImport()"><i class="fas fa-check"></i></button>
             <button title="Cancel Import" class="btn btn-outline-danger"
-                *ngIf="activePeriod.status == '1' && !showAll && showImport" style="margin-top: 11%; margin-left:5px"
-                (click)="cancelImport()"><i class="fas fa-times"></i></button>
+                *ngIf="activePeriod.status == '1' && !showAll && showImport && !closing"
+                style="margin-top: 11%; margin-left:5px" (click)="cancelImport()"><i class="fas fa-times"></i></button>
         </div>
         <div class="col-md-3"></div>
     </div>
@@ -80,27 +82,31 @@
             <div class="nav nav-tabs" id="nav-tb" role="tablist" style="padding-top:15px;">
                 <a class="nav-item nav-link active" id="nav-credits-tab" data-toggle="tab" href="#nav-credits"
                     role="tab" aria-controls="nav-credits" aria-selected="true" (click)="resetCount('CREDITS')"
-                    *ngIf="!showImport && !importPayroll">CREDITS</a>
+                    *ngIf="!showImport && !importPayrol && !closing">CREDITS</a>
                 <a class="nav-item nav-link" id="nav-debits-tab" data-toggle="tab" href="#nav-debits" role="tab"
                     aria-controls="nav-debits" aria-selected="true" (click)="resetCount('DEBITS')"
-                    *ngIf="!showImport && !importPayroll">DEBITS</a>
+                    *ngIf="!showImport && !importPayroll && !closing">DEBITS</a>
                 <a class="nav-item nav-link" id="nav-employees-tab" data-toggle="tab" href="#nav-employees" role="tab"
                     aria-controls="nav-employees" aria-selected="true" (click)="resetCount('emp')"
-                    *ngIf="!showImport && !importPayroll">EMPLOYEES</a>
+                    *ngIf="!showImport && !importPayroll && !closing">EMPLOYEES</a>
 
                 <a class="nav-item nav-link active" id="nav-correct-tab" data-toggle="tab" href="#nav-correct"
-                    role="tab" aria-controls="nav-correct" aria-selected="true" *ngIf="showImport && !importPayroll"
-                    (click)="showCorrect()">CORRECT</a>
+                    role="tab" aria-controls="nav-correct" aria-selected="true"
+                    *ngIf="showImport && !importPayroll && !closing" (click)="showCorrect()">CORRECT</a>
                 <a class="nav-item nav-link" id="nav-failed-tab" data-toggle="tab" href="#nav-failed" role="tab"
-                    aria-controls="nav-failed" aria-selected="true" *ngIf="showImport && !importPayroll"
+                    aria-controls="nav-failed" aria-selected="true" *ngIf="showImport && !importPayroll && !closing"
                     (click)="showFail()">FAIL</a>
 
+                <a class="nav-item nav-link active" id="nav-payrollview-tab" data-toggle="tab" href="#nav-payrollview"
+                    role="tab" aria-controls="nav-payrollview" aria-selected="true"
+                    *ngIf="showImport && !importPayroll && closing">PAYROLL</a>
 
                 <a class="nav-item nav-link active" id="nav-correct-values-tab" data-toggle="tab"
                     href="#nav-correct-values" role="tab" aria-controls="nav-correct-values" aria-selected="true"
-                    *ngIf="importPayroll">CORRECT</a>
+                    *ngIf="importPayroll && !closing">CORRECT</a>
                 <a class="nav-item nav-link" id="nav-failed-values-tab" data-toggle="tab" href="#nav-failed-values"
-                    role="tab" aria-controls="nav-failed-values" aria-selected="true" *ngIf="importPayroll">FAIL</a>
+                    role="tab" aria-controls="nav-failed-values" aria-selected="true"
+                    *ngIf="importPayroll && !closing">FAIL</a>
 
 
                 <div class="ml-auto" *ngIf="!show_fail && !showAll">
@@ -127,8 +133,28 @@
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent" style="width: 90%; margin-left:5%;margin-top: 10px;">
+            <div class="tab-pane fade show active" id="nav-payrollview" role="tabpanel"
+                aria-labelledby="nav-payrollview-tab" *ngIf="!showImport && importPayroll && closing">
+                <table class="table table-hover">
+                    <thead>
+                        <th>NEARSOL ID</th>
+                        <th>CLIENT ID</th>
+                        <th>NAME</th>
+                        <th>NET TAKE HOME</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let payroll of payrolls">
+                            <td>{{payroll.nearsol_id}}</td>
+                            <td>{{payroll.client_id}}</td>
+                            <td>{{payroll.name}}</td>
+                            <td>{{payroll.net_take_home}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <div class="tab-pane fade show" id="nav-failed-values" role="tabpanel"
-                aria-labelledby="nav-failed-values-tab" *ngIf="!showImport && importPayroll">
+                aria-labelledby="nav-failed-values-tab" *ngIf="!showImport && importPayroll && !closing">
                 <table class="table table-hover table-striped selectable">
                     <thead>
                         <th>CLIENT ID</th>
@@ -149,7 +175,7 @@
                 </table>
             </div>
             <div class="tab-pane fade show active" id="nav-correct-values" role="tabpanel"
-                aria-labelledby="nav-correct-values-tab" *ngIf="!showImport && importPayroll">
+                aria-labelledby="nav-correct-values-tab" *ngIf="!showImport && importPayroll && !closing">
                 <table class="table table-hover">
                     <thead>
                         <th>NO.</th>
@@ -186,7 +212,7 @@
                 </table>
             </div>
             <div class="tab-pane fade show active" id="nav-credits" role="tabpanel" aria-labelledby="nav-credits-tab"
-                *ngIf="!showImport && !importPayroll">
+                *ngIf="!showImport && !importPayroll && !closing">
                 <table class="table table-hover table-hovertable-striped selectable">
                     <thead>
                         <th>NEARSOL ID</th>
@@ -207,12 +233,13 @@
                 </table>
             </div>
             <div class="tab-pane fade show" id="nav-debits" role="tabpanel" aria-labelledby="nav-debits-tab"
-                *ngIf="!showImport && !importPayroll">
+                *ngIf="!showImport && !importPayroll && !closing">
                 <table class="table table-hover table-striped selectable">
                     <thead>
                         <th>NEARSOL ID</th>
                         <th>CLIENT ID</th>
                         <th>NAME</th>
+                        <th>DESCRIPTION</th>
                         <th>AMOUNT</th>
                     </thead>
                     <tbody>
@@ -227,7 +254,7 @@
                 </table>
             </div>
             <div class="tab-pane fade show active" id="nav-correct" role="tabpanel" aria-labelledby="nav-correct-tab"
-                *ngIf="showImport && !importPayroll">
+                *ngIf="showImport && !importPayroll && !closing">
                 <table class="table table-hover table-striped selectable" *ngIf="importType == 'CREDIT'">
                     <thead>
                         <th>NO.</th>
@@ -266,7 +293,7 @@
                 </table>
             </div>
             <div class="tab-pane fade show" id="nav-failed" role="tabpanel" aria-labelledby="nav-failed-tab"
-                *ngIf="showImport && !importPayroll">
+                *ngIf="showImport && !importPayroll && !closing">
                 <table class="table table-hover table-striped selectable">
                     <thead>
                         <th>NAME</th>
@@ -284,7 +311,7 @@
                 </table>
             </div>
             <div class="tab-pane fade show" id="nav-employees" role="tabpanel" aria-labelledby="nav-employees-tab"
-                *ngIf="!showImport && !importPayroll">
+                *ngIf="!showImport && !importPayroll && !closing">
                 <table class="table table-hover table-striped selectable">
                     <thead>
                         <th>NEARSOL ID</th>
@@ -306,25 +333,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-</div>
-<!----------------------------------------------------------------------- MODAL LOADING ------------------------------------------------------------------>
-<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog  modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="st-loadingModalLabel">PAYROLL VALUES</h5>
-            </div>
-            <div class="modal-body">
-                <div class="d-flex justify-content-center">
-                    <div class="d-flex align-items-center">
-                        <strong>Loading...</strong>
-                        <div class="spinner-border ms-auto" role="status" aria-hidden="true" *ngIf="loading"></div>
-                      </div>
-                    <button class="btn btn-outline-primary" data-dismiss="modal" *ngIf="!loading">Close</button>
-                </div>
             </div>
         </div>
     </div>
@@ -449,8 +457,12 @@
                     </div>
                     <div class="form-group col-md-4" style="padding-left:3px;padding-right:0px">
                         <label>DESCRIPTION:</label>
-                        <input type="text" class="form-control" [(ngModel)]="importDescription"
-                            *ngIf="importType == 'DEBIT'">
+                        <select class="form-control" [(ngModel)]="importDescription" *ngIf="importType == 'DEBIT'">
+                            <option>SSS LOAN</option>
+                            <option>HDMF LOAN</option>
+                            <option>HMO</option>
+                            <option>OTHERS</option>
+                        </select>
                         <select [(ngModel)]="importDescription" class="form-control" *ngIf="importType == 'CREDIT'">
                             <option>WIDGET</option>
                             <option>NCP</option>
@@ -461,6 +473,7 @@
                             <option>RAF</option>
                             <option>LEAVE CONVERSION</option>
                             <option>WAH ALLOWANCE</option>
+                            <option>OTHERS</option>
                         </select>
                     </div>
                     <div class="form-group"

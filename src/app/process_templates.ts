@@ -1013,3 +1013,76 @@ export class payroll_values{
         this.holiday_special = null;
     }
 }
+
+export class payroll_ph{
+    nearsol_id:string;
+    client_id:string;
+    name:string;
+    position:string;
+    wave:string;
+    status:string;
+    tin:string;
+    sss:string;
+    account_number:string;
+    gross_basic_monthly:string;
+    gross_basic_semi_monthly:string;
+    overtime:string;
+    tardi_ness:string;
+    holiday:string;
+    undertime:string;
+    absent:string;
+    night_difference:string;
+    other_adjustment:string;
+    total:string;
+    sss_tax:string;
+    phic:string;
+    pag_ibig:string;
+    total_taxes:string;
+    taxable_income:string;
+    tax_due:string;
+    net_taxable_income:string;
+    other_income:string;
+    de_minimis:string;
+    other_non_taxable:string;
+    sss_loan:string;
+    hdmf_loan:string;
+    hmo:string;
+    others_deduction:string;
+    net_take_home:string;
+    constructor(){
+    this.nearsol_id = null;
+    this.client_id = null;
+    this.name = null;
+    this.position = null;
+    this.wave = null;
+    this.status = null;
+    this.tin = null;
+    this.sss = null;
+    this.account_number = null;
+    this.gross_basic_monthly = null;
+    this.gross_basic_semi_monthly = null;
+    this.overtime = null;
+    this.tardi_ness = null;
+    this.holiday = null;
+    this.undertime = null;
+    this.absent = null;
+    this.night_difference = null;
+    this.other_adjustment = null;
+    this.total = null;
+    this.sss_tax = null;
+    this.phic = null;
+    this.pag_ibig = null;
+    this.total_taxes = null;
+    this.taxable_income = null;
+    this.tax_due = null;
+    this.net_taxable_income = null;
+    this.other_income = null;
+    this.de_minimis = null;
+    this.other_non_taxable = null;
+    this.sss_loan = null;
+    this.hdmf_loan = null;
+    this.hmo = null;
+    this.others_deduction = null;
+    this.net_take_home = null;
+    }
+}
