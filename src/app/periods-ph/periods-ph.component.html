@@ -99,7 +99,7 @@
 
                 <a class="nav-item nav-link active" id="nav-payrollview-tab" data-toggle="tab" href="#nav-payrollview"
                     role="tab" aria-controls="nav-payrollview" aria-selected="true"
-                    *ngIf="showImport && !importPayroll && closing">PAYROLL</a>
+                    *ngIf="closing">PAYROLL</a>
 
                 <a class="nav-item nav-link active" id="nav-correct-values-tab" data-toggle="tab"
                     href="#nav-correct-values" role="tab" aria-controls="nav-correct-values" aria-selected="true"
@@ -134,7 +134,7 @@
         </nav>
         <div class="tab-content" id="nav-tabContent" style="width: 90%; margin-left:5%;margin-top: 10px;">
             <div class="tab-pane fade show active" id="nav-payrollview" role="tabpanel"
-                aria-labelledby="nav-payrollview-tab" *ngIf="!showImport && importPayroll && closing">
+                aria-labelledby="nav-payrollview-tab" *ngIf="closing">
                 <table class="table table-hover">
                     <thead>
                         <th>NEARSOL ID</th>
