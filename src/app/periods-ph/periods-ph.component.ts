@@ -589,7 +589,7 @@ export class PeriodsPhComponent implements OnInit {
                     }
                   });
 
-                  allTaxable = ot_payment + tardi_ness + holiday_payment + absent_payment + night_payment + other_taxable + other_adjustments + (Number(emp[0].base_payment) / 2) + other_taxable;
+                  allTaxable = ot_payment + other_income + tardi_ness + holiday_payment + absent_payment + night_payment + other_adjustments + (Number(emp[0].base_payment) / 2) + other_taxable;
 
                   if (Number(emp[0].base_payment) <= 200) {
                     sss_tax = 80 / 2;
@@ -599,6 +599,9 @@ export class PeriodsPhComponent implements OnInit {
                     let taxableAmount: number = 2749.99;
                     sss_tax = 100;
                     while ((Number(emp[0].base_payment) > taxableAmount) && (taxableAmount <= 19749.99)) {
+                      if(emp[0].nearsol_id == 'PHTT0719'){
+                        console.log(taxableAmount + " " + sss_tax + " " + emp[0].base_payment);
+                      }
                       taxableAmount = taxableAmount + 500;
                       sss_tax = (sss_tax + 20);
                     }
@@ -637,7 +640,7 @@ export class PeriodsPhComponent implements OnInit {
                   net_taxable_income = allTaxable - total_taxes;
 
                   let semi_monthly_minimis: number = Number(emp[0].productivity_payment) / 2;
-                  let diff_absence: number = semi_monthly_minimis*(((semi_monthly_minimis/8)+Number(payroll.absences))/ 10.875);
+                  let diff_absence: number = semi_monthly_minimis*(Number(payroll.absences)/ 10.875);
                   let wah_de_minimis: number = semi_monthly_minimis * (wah_allowance / 10.875);
                   de_minimis = (semi_monthly_minimis + diff_absence) + (wah_de_minimis);
 
