@@ -638,9 +638,9 @@ export class PeriodsPhComponent implements OnInit {
                   net_taxable_income = allTaxable - total_taxes;
 
                   let semi_monthly_minimis: number = Number(emp[0].productivity_payment) / 2;
-                  let diff_absence: number = semi_monthly_minimis * ((semi_monthly_minimis / 8) + ((Number(payroll.absences) * (-1)) / 10.875));
+                  let diff_absence: number = semi_monthly_minimis * ((semi_monthly_minimis / 8) + (Number(payroll.absences)/ 10.875));
                   let wah_de_minimis: number = semi_monthly_minimis * (wah_allowance / 10.875);
-                  de_minimis = (semi_monthly_minimis - diff_absence) + (wah_de_minimis);
+                  de_minimis = (semi_monthly_minimis + diff_absence) + (wah_de_minimis);
 
                   deb.forEach(debit => {
                     if (debit.type == "SSS LOAN") {
@@ -675,6 +675,7 @@ export class PeriodsPhComponent implements OnInit {
                   push_payroll.absent = absent_payment.toFixed(2);
                   push_payroll.night_difference = night_payment.toFixed(2);
                   push_payroll.other_adjustment = other_adjustments.toFixed(2);
+                  push_payroll.other_taxable = other_taxable.toFixed(2);
                   push_payroll.total = allTaxable.toFixed(2);
                   push_payroll.sss_tax = sss_tax.toString(2);
                   push_payroll.phic = phic.toFixed(2);

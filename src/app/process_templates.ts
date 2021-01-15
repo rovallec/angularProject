@@ -1033,6 +1033,7 @@ export class payroll_ph{
     absent:string;
     night_difference:string;
     other_adjustment:string;
+    other_taxable:string;
     total:string;
     sss_tax:string;
     phic:string;
