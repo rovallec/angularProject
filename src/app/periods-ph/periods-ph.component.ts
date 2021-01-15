@@ -579,6 +579,7 @@ export class PeriodsPhComponent implements OnInit {
                       other_taxable = other_taxable + Number(credit.amount);
                       if (credit.type == 'WAH ALLOWANCE') {
                         wah_allowance = Number(credit.amount);
+                        console.log(wah_allowance);
                       }
                     } else if (credit.type == "OTHER ADJUSTMENTS") {
                       other_adjustments = Number(credit.amount);
