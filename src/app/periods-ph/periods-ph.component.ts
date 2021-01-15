@@ -576,7 +576,7 @@ export class PeriodsPhComponent implements OnInit {
 
                   cred.forEach(credit => {
                     if (credit.type == "WIDGET" || credit.type == "NCP" || credit.type == "APPROVED INCENTIVE" || credit.type == "PERFORMANCE" || credit.type == "ATTENDANCE" || credit.type == "WAH ALLOWANCE" || credit.type == "MONTHLY INCENTIVE") {
-                      other_taxable = total_credits + Number(credit.amount);
+                      other_taxable = other_taxable + Number(credit.amount);
                       if (credit.type == 'WAH ALLOWANCE') {
                         wah_allowance = Number(credit.amount);
                       }
