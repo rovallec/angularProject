@@ -637,7 +637,7 @@ export class PeriodsPhComponent implements OnInit {
                   net_taxable_income = allTaxable - total_taxes;
 
                   let semi_monthly_minimis: number = Number(emp[0].productivity_payment) / 2;
-                  let diff_absence: number = semi_monthly_minimis * (((semi_monthly_minimis / 8) + (Number(payroll.absences))/ 10.875));
+                  let diff_absence: number = semi_monthly_minimis*(((semi_monthly_minimis/8)+Number(payroll.absences))/ 10.875);
                   let wah_de_minimis: number = semi_monthly_minimis * (wah_allowance / 10.875);
                   de_minimis = (semi_monthly_minimis + diff_absence) + (wah_de_minimis);
 
