@@ -134,10 +134,9 @@
         </nav>
         <div class="tab-content" id="nav-tabContent" style="width: 90%; margin-left:5%;margin-top: 10px;">
             <div class="tab-pane fade show active" id="nav-payrollview" role="tabpanel"
-                aria-labelledby="nav-payrollview-tab" *ngIf="closing">
+                aria-labelledby="nav-payrollview-tab" *ngIf="closing" style="overflow-x:auto;">
                 <table class="table table-hover">
                     <thead>
-                        <th>NEARSOL ID</th>
                         <th>CLIENT ID</th>
                         <th>NAME</th>
                         <th>GROSS MONTHLY</th>
@@ -157,6 +156,7 @@
                         <th>NET TAXABLE</th>
                         <th>OTHER INCOME</th>
                         <th>OTHER NOT TAXABLE</th>
+                        <th>DeMinimis</th>
                         <th>SSS LOAN</th>
                         <th>HDMF LOAN</th>
                         <th>HMO</th>
@@ -165,7 +165,6 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let payroll of payrolls">
-                            <td>{{payroll.nearsol_id}}</td>
                             <td>{{payroll.client_id}}</td>
                             <td>{{payroll.name}}</td>
                             <td>{{payroll.gross_basic_monthly}}</td>
@@ -185,6 +184,7 @@
                             <td>{{payroll.other_income}}</td>
                             <td>{{payroll.net_taxable_income}}</td>
                             <td>{{payroll.other_non_taxable}}</td>
+                            <td>{{payroll.de_minimis}}</td>
                             <td>{{payroll.sss_loan}}</td>
                             <td>{{payroll.hdmf_loan}}</td>
                             <td>{{payroll.hmo}}</td>

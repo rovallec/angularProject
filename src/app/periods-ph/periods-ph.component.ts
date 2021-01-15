@@ -599,9 +599,6 @@ export class PeriodsPhComponent implements OnInit {
                     let taxableAmount: number = 2749.99;
                     sss_tax = 100;
                     while ((Number(emp[0].base_payment) > taxableAmount) && (taxableAmount <= 19749.99)) {
-                      if(emp[0].nearsol_id == 'PHTT0719'){
-                        console.log(taxableAmount + " " + sss_tax + " " + emp[0].base_payment);
-                      }
                       taxableAmount = taxableAmount + 500;
                       sss_tax = (sss_tax + 20);
                     }
