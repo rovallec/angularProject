@@ -679,7 +679,7 @@ export class PeriodsPhComponent implements OnInit {
                   push_payroll.other_adjustment = other_adjustments.toFixed(2);
                   push_payroll.other_taxable = other_taxable.toFixed(2);
                   push_payroll.total = allTaxable.toFixed(2);
-                  push_payroll.sss_tax = sss_tax.toString(2);
+                  push_payroll.sss_tax = sss_tax.toFixed(2);
                   push_payroll.phic = phic.toFixed(2);
                   push_payroll.pag_ibig = pag_ibig.toFixed(2);
                   push_payroll.total_taxes = total_taxes.toFixed(2);
