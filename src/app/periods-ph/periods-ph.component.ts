@@ -524,7 +524,6 @@ export class PeriodsPhComponent implements OnInit {
     this.apiServices.getPayrollValues_ph(this.activePeriod).subscribe((pay_values: payroll_values[]) => {
       this.allPayroll = pay_values;
       this.allPayroll.forEach(payroll => {
-        console.log(payroll);
         let hour_pay: number = 0;
         let total_credits: number = 0;
         let total_debits: number = 0;
@@ -692,8 +691,12 @@ export class PeriodsPhComponent implements OnInit {
                   push_payroll.hmo = hmo.toFixed(2);
                   push_payroll.others_deduction = others_deduction.toFixed(2);
                   push_payroll.net_take_home = net_take_home.toFixed(2);
-                  console.log(push_payroll);
                   this.payrolls.push(push_payroll);
+
+                  if(emp[0].nearsol_id == 'PHTT2165'){
+                    console.log(push_payroll);
+                    console.log("SEMI : " + semi_monthly_minimis + " DIFF: " + diff_absence + " WAH Allowance: " + wah_de_minimis);
+                  }
                 })
             })
           })
