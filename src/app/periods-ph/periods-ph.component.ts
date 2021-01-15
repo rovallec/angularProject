@@ -695,7 +695,7 @@ export class PeriodsPhComponent implements OnInit {
 
                   if(emp[0].nearsol_id == 'PHTT2165'){
                     console.log(push_payroll);
-                    console.log("SEMI : " + semi_monthly_minimis + " DIFF: " + diff_absence + " WAH Allowance: " + wah_de_minimis);
+                    console.log("SEMI : " + semi_monthly_minimis + " DIFF: " + diff_absence + " WAH Allowance: " + wah_de_minimis + " ABSENCE: " + payroll.absences);
                   }
                 })
             })
