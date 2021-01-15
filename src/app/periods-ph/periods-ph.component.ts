@@ -598,11 +598,12 @@ export class PeriodsPhComponent implements OnInit {
                     sss_tax = 100 / 2;
                   } else {
                     let taxableAmount: number = 2749.99;
-                    sss_tax = 80 / 2;
+                    sss_tax = 100;
                     while ((Number(emp[0].base_payment) > taxableAmount) && (taxableAmount <= 19749.99)) {
                       taxableAmount = taxableAmount + 500;
-                      sss_tax = (sss_tax + 20) / 2;
+                      sss_tax = (sss_tax + 20);
                     }
+                    sss_tax = sss_tax/2;
                   }
 
                   if (Number(emp[0].base_payment) > 59999) {
