@@ -692,11 +692,6 @@ export class PeriodsPhComponent implements OnInit {
                   push_payroll.others_deduction = others_deduction.toFixed(2);
                   push_payroll.net_take_home = net_take_home.toFixed(2);
                   this.payrolls.push(push_payroll);
-
-                  if(emp[0].nearsol_id == 'PHTT2165'){
-                    console.log(push_payroll);
-                    console.log("SEMI : " + semi_monthly_minimis + " DIFF: " + diff_absence + " WAH Allowance: " + wah_de_minimis + " ABSENCE: " + payroll.absences);
-                  }
                 })
             })
           })
