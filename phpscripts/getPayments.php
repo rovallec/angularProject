@@ -59,5 +59,6 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['days'] = "0";
         $i++;
     }
+    echo(json_encode($return));
 }
 ?>

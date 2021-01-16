@@ -10,7 +10,7 @@ import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { schedule_visit } from '../addTemplate';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations } from '../process_templates';
+import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
@@ -69,7 +69,8 @@ export class PeriodsComponent implements OnInit {
   count_payments: number = 0;
   importType: string = null;
   importString: string = null;
-  public message_period: string = '';
+  loading: boolean = false;
+  isrs: isr[] = [];
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
@@ -130,6 +131,7 @@ export class PeriodsComponent implements OnInit {
   closePeriod() {
     this.attended = 0;
     this.working = true;
+    this.loading = (this.working && this.progress == 0);
     let pushCredits: credits[] = [];
     let pusDebits: debits[] = [];
 
@@ -152,6 +154,7 @@ export class PeriodsComponent implements OnInit {
       if (payments.length < 1) {
         this.working = false;
       }
+      this.loading = (this.working && this.progress == 0);
       payments.forEach(pay => {
         let svnth: number = 0;
         let totalCred: number = 0;
@@ -467,10 +470,11 @@ export class PeriodsComponent implements OnInit {
                                 py.total = (Number(py.credits) - Number(py.debits)).toFixed(2);
                               })
                             }
-                            this.progress = this.progress + 1;
+                            this.progress = this.progress + 1;                            
                             if (this.progress == payments.length) {
-                              this.working = false;
+                              this.working = false;              
                             }
+                            this.loading = (this.working && this.progress == 0);
                           })
                         })
                       })
@@ -524,47 +528,51 @@ export class PeriodsComponent implements OnInit {
     let failed: payments[] = [];
 
     console.log('Cerrando período Paso 8.1 setear pagos ya calculados...');
-    this.payments.forEach(pay => {
-      console.log(pay);
+     
+      return this.payments.forEach(pay => {
       this.apiService.setPayment(pay).subscribe((str: string) => { // Inserta los pagos ya calculados.
           if (str != '1') {
             failed.push(pay);
-            console.log("Paso 8.2 " + cnt + " ERROR");
-          }
+          }          
           cnt = cnt + 1;
           if (cnt == this.payments.length-1) {
-            this.apiService.setClosePeriods({id_period:this.period.idperiods}).subscribe((str: string) => {
+            this.apiService.setClosePeriods({id_period:this.period.idperiods}).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
               if (str != '1') {          
                 console.log('Error al cerrar el período. Paso 8. '  + str);
               } else {
-                console.log('Cerrando período Paso 8, Procesando... ' + str);
+                this.loading = false;
+                console.log('Cerrar período, ya procesado' + str);
               }
-            }); //Fin del if.
+            }); //Fin del if.            
           }
-          console.log('Cerrando período Paso 5 ' + cnt);
+          return str;
         })
       }      
     );
   };
 
+  getHome() {    
+    window.open("./", "_self");
+  }
+
   completePeriod() {
-    this.working = true;
-    this.progress = 0;    
+    this.loading = true;    
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
     this.global_services.forEach(service => {
       if (Number(service.max) === Number(service.current)) {
         service.status = '0';
-      }
-      this.apiService.updateServices(service).subscribe((str: string) => { });
+      }      
+      this.apiService.updateServices(service).subscribe((str: string) => { });    
     });
 
-    this.start();    
-    this.closePeriod();
-    console.log('Cerrando período Paso 8');
-    this.proceedClosePeriod();
-    console.log('Cerrando período Paso 9, Finalizado.');
-    this.working = false;
+    this.start(); 
+    let respuesta: any;
+    respuesta = this.proceedClosePeriod();
+    this.loading = false;
+    if (respuesta != '') {      
+      //this.getHome();
+    }
   }
 
   setPayTime(id_employee: string, id_profile: string) {
@@ -602,7 +610,7 @@ export class PeriodsComponent implements OnInit {
                 this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                   this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                     this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
-                      this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
+                      this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {                        
                         let py: payments = new payments;
                         py.id_employee = emp[0].idemployees;
                         py.id_period = this.period.idperiods;
@@ -880,6 +888,7 @@ export class PeriodsComponent implements OnInit {
                           this.diff = Number((this.roster - this.attended).toFixed(2));
                         }
                         this.selectedEmployee = true;
+                      
                       })
                     })
                   })
