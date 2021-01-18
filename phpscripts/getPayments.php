@@ -39,6 +39,24 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['start'] = $res['start'];
         $return[$i]['end'] = $res['end'];
         $return[$i]['last_seventh'] = $res['last_seventh'];
+        $return[$i]['ot'] = $res['ot'];
+        $return[$i]['ot_hours'] = $res['ot_hours'];
+        $return[$i]['base_hours'] = $res['base_hours'];
+        $return[$i]['productivity_hours'] = $res['productivity_hours'];
+        $return[$i]['base'] = $res['base'];
+        $return[$i]['productivity'] = $res['productivity'];
+        $return[$i]['seventh'] = $res['sevenths'];
+        $return[$i]['holidays'] = $res['holidays'];
+        $return[$i]['holidays_hours'] = $res['holidays_hours'];
+        $return[$i]['base_complete'] = $res['base_complete'];
+        $return[$i]['productivity_complete'] = $res['productivity_complete'];
+        $return[$i]['total'] = "0";
+        $return[$i]['status'] = $res['state'];
+        $return[$i]['nearsol_id'] = $res['status'];
+        $return[$i]['client_id'] = $res['client_id'];
+        $return[$i]['state'] = $res['state'];
+        $return[$i]['account'] = $res['id_account'];
+        $return[$i]['days'] = "0";
         $i++;
     }
     echo(json_encode($return));
