@@ -17,6 +17,7 @@ import { promise } from 'protractor';
 import { resolve } from 'url';
 import { DH_NOT_SUITABLE_GENERATOR } from 'constants';
 import { runInThisContext } from 'vm';
+import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 
 @Component({
   selector: 'app-periods',
@@ -282,8 +283,8 @@ export class PeriodsComponent implements OnInit {
                                 });
 
                                 if (this.attended == 0) {
-                                  this.absence = (att.length * 8) * (-1);
-                                  discounted = (att.length * 8) * (-1);
+                                  this.absence = (-120);
+                                  discounted = (-120);
                                   svnth = 0;
                                 }
 
@@ -649,6 +650,7 @@ export class PeriodsComponent implements OnInit {
                                     discounted = discounted - 8;
                                     this.absence = this.absence - 8;
                                     attendance.balance = 'JANP';
+                                    console.log(this.attended);
                                     if (attendance.scheduled != 'OFF') {
                                       janp_sequence = janp_sequence + 1;
                                     }
@@ -716,8 +718,8 @@ export class PeriodsComponent implements OnInit {
                           });
 
                           if (this.attended == 0) {
-                            this.absence = (this.attendances.length * 8) * (-1);
-                            discounted = (this.attendances.length * 8) * (-1);
+                            this.absence = (-120);
+                            discounted = (-120);
                             this.seventh = 0;
                           }
 
