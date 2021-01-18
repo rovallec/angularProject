@@ -538,8 +538,10 @@ export class PeriodsComponent implements OnInit {
           cnt = cnt + 1;
           if (cnt == this.payments.length-1) {
             this.apiService.setClosePeriods({id_period:this.period.idperiods}).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
-              if (str != '1') {          
+              if (str != '1') {
                 console.log('Error al cerrar el período. Paso 8. '  + str);
+                this.loading = false;
+                this.getHome();
               } else {
                 this.loading = false;
                 console.log('Cerrar período, ya procesado' + str);
@@ -570,10 +572,6 @@ export class PeriodsComponent implements OnInit {
     this.start(); 
     let respuesta: any;
     respuesta = this.proceedClosePeriod();
-    this.loading = false;
-    if (respuesta != '') {      
-      this.getHome();
-    }
   }
 
   setPayTime(id_employee: string, id_profile: string) {
@@ -675,7 +673,6 @@ export class PeriodsComponent implements OnInit {
                                     discounted = discounted - 8;
                                     this.absence = this.absence - 8;
                                     attendance.balance = 'JANP';
-                                    console.log(this.attended);
                                     if (attendance.scheduled != 'OFF') {
                                       janp_sequence = janp_sequence + 1;
                                     }
@@ -741,8 +738,9 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
                           });
-
+                          console.log(this.attended);
                           if (this.attended == 0) {
+                            console.log(this.attended);
                             this.absence = ((this.attendances.length * (-8)));
                             discounted = ((this.attendances.length * (-8)));
                             this.seventh = 0;
@@ -975,7 +973,7 @@ export class PeriodsComponent implements OnInit {
 
               if (count == (partial_credits.length - 1)) {
                 this.importEnd = true;
-                this.completed = true;/*  */
+                this.completed = true;
               }
             })
           })
