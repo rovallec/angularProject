@@ -571,7 +571,7 @@ export class PeriodsComponent implements OnInit {
     respuesta = this.proceedClosePeriod();
     this.loading = false;
     if (respuesta != '') {      
-      this.getHome();
+      //this.getHome();
     }
   }
 
