@@ -646,7 +646,8 @@ export class PeriodsPhComponent implements OnInit {
                     let hiring_discount:debits = new debits;
                     hiring_discount.type = "OTHER ADJUSTMENTS";
                     hiring_discount.amount = ((((new Date(emp[0].hiring_date).getTime())-(new Date(this.activePeriod.start).getTime()))/1000/3600/24)*8*hour_pay).toFixed(2);
-                    this.global_debits.push(hiring_discount)
+                    this.global_debits.push(hiring_discount);
+                    other_adjustments = Number(hiring_discount.amount) + other_adjustments;
                     wah_allowance = semi_monthly_minimis * ((((new Date(this.activePeriod.start).getTime()-new Date(this.activePeriod.end).getTime())-(new Date(emp[0].hiring_date).getTime()))/1000/3600/24)/ 10.875);
                   }
                   de_minimis = (semi_monthly_minimis + diff_absence) + wah_allowance;
