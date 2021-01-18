@@ -287,8 +287,8 @@ export class PeriodsComponent implements OnInit {
                                 });
 
                                 if (this.attended == 0) {
-                                  this.absence = (this.attendances.length * (-8));
-                                  discounted = (this.attendances.length * (-8));
+                                  this.absence = (att.length * (-8));
+                                  discounted = (att.length * (-8));
                                   svnth = 0;
                                 }
 
@@ -741,8 +741,8 @@ export class PeriodsComponent implements OnInit {
                           console.log(this.attended);
                           if (this.attended == 0) {
                             console.log(this.attended);
-                            this.absence = ((this.attendances.length * (-8)));
-                            discounted = ((this.attendances.length * (-8)));
+                            this.absence = ((att.length * (-8)));
+                            discounted = ((att.length * (-8)));
                             this.seventh = 0;
                           }
 
