@@ -452,6 +452,8 @@ export class PeriodsComponent implements OnInit {
                                   pay.seventh = svnth.toString();
                                   pay.base_hours = (Number(pay.days) * 8).toFixed(2);
                                   pay.productivity_hours = (Number(pay.days) * 8).toFixed(2);
+                                  pay.base_complete = emp[0].base_payment;
+                                  pay.productivity_complete = emp[0].productivity_payment;
                                   if (last_seventh) {
                                     pay.last_seventh = '0';
                                   } else {
