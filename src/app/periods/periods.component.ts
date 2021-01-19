@@ -164,9 +164,9 @@ export class PeriodsComponent implements OnInit {
         let activeDp: boolean = false;
         let janp_sequence: number = 0;
         let nonShowCount: number = 0;
-        let hld:number = 0;
+        let hld: number = 0;
         let last_seventh: boolean = true;
-        let off_pass:boolean = true;
+        let off_pass: boolean = true;
         pushCredits = [];
         pusDebits = [];
 
@@ -279,18 +279,18 @@ export class PeriodsComponent implements OnInit {
                                           discounted = discounted - 8;
                                         }
                                       } else {
-                                        if(attendance.date == ((new Date().getFullYear()).toString() + "-01-01")){
+                                        if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
                                           hld = this.attended + Number(attendance.worked_time);
-                                        }else{
+                                        }
                                         this.attended = this.attended + Number(attendance.worked_time);
                                         this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                         attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
                                         discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
-                                        }
                                       }
                                     }
                                   }
                                 });
+
 
                                 if (this.attended == 0 || this.absence <= (-120) || discounted <= (-120)) {
                                   this.absence = (att.length * (-8));
@@ -307,17 +307,18 @@ export class PeriodsComponent implements OnInit {
                                 let decreto_credit: credits = new credits;
                                 let ot_credit: credits = new credits;
                                 let igss_debit: debits = new debits;
-                                let hld_credit:credits = new credits;
+                                let hld_credit: credits = new credits;
 
                                 base_credit.type = "Salario Base";
                                 productivity_credit.type = "Bonificacion Productividad";
                                 decreto_credit.type = "Bonificacion Decreto";
 
-                                if(hld > 0){
+                                if (hld > 0) {
                                   hld_credit.type = "Horas De Asueto: " + hld;
-                                hld_credit.amount = ((hld * base_hour) + (hld * productivity_hour)).toFixed(2);
-                                this.global_credits.push(hld_credit);
-                                pushCredits.push(hld_credit);
+                                  hld_credit.amount = ((hld * base_hour) + (hld * productivity_hour)).toFixed(2);
+                                  hld_credit.idpayments = pay.idpayments;
+                                  this.global_credits.push(hld_credit);
+                                  pushCredits.push(hld_credit);
                                 }
 
                                 if (discounted <= 0) {
@@ -360,7 +361,6 @@ export class PeriodsComponent implements OnInit {
                                 productivity_credit.idpayments = pay.idpayments;
                                 decreto_credit.idpayments = pay.idpayments;
                                 igss_debit.idpayments = pay.idpayments;
-                                hld_credit.idpayments = pay.idpayments;
 
                                 this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
 
@@ -486,9 +486,9 @@ export class PeriodsComponent implements OnInit {
                                 py.total = (Number(py.credits) - Number(py.debits)).toFixed(2);
                               })
                             }
-                            this.progress = this.progress + 1;                            
+                            this.progress = this.progress + 1;
                             if (this.progress == payments.length) {
-                              this.working = false;              
+                              this.working = false;
                             }
                             this.loading = (this.working && this.progress == 0);
                           })
@@ -539,52 +539,52 @@ export class PeriodsComponent implements OnInit {
     this.showPaymentes = false;
   }
 
-  proceedClosePeriod()  {
+  proceedClosePeriod() {
     let cnt: number = 0;
     let failed: payments[] = [];
 
     console.log('Cerrando período Paso 8.1 setear pagos ya calculados...');
-     
-      return this.payments.forEach(pay => {
+
+    return this.payments.forEach(pay => {
       this.apiService.setPayment(pay).subscribe((str: string) => { // Inserta los pagos ya calculados.
-          if (str != '1') {
-            failed.push(pay);
-          }          
-          cnt = cnt + 1;
-          if (cnt == this.payments.length-1) {
-            this.apiService.setClosePeriods({id_period:this.period.idperiods}).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
-              if (str != '1') {
-                console.log('Error al cerrar el período. Paso 8. '  + str);
-                this.loading = false;
-                this.getHome();
-              } else {
-                this.loading = false;
-                console.log('Cerrar período, ya procesado' + str);
-              }
-            }); //Fin del if.            
-          }
-          return str;
-        })
-      }      
+        if (str != '1') {
+          failed.push(pay);
+        }
+        cnt = cnt + 1;
+        if (cnt == this.payments.length - 1) {
+          this.apiService.setClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
+            if (str != '1') {
+              console.log('Error al cerrar el período. Paso 8. ' + str);
+              this.loading = false;
+              this.getHome();
+            } else {
+              this.loading = false;
+              console.log('Cerrar período, ya procesado' + str);
+            }
+          }); //Fin del if.            
+        }
+        return str;
+      })
+    }
     );
   };
 
-  getHome() {    
+  getHome() {
     window.open("./", "_self");
   }
 
   completePeriod() {
-    this.loading = true;    
+    this.loading = true;
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
     this.global_services.forEach(service => {
       if (Number(service.max) === Number(service.current)) {
         service.status = '0';
-      }      
-      this.apiService.updateServices(service).subscribe((str: string) => { });    
+      }
+      this.apiService.updateServices(service).subscribe((str: string) => { });
     });
 
-    this.start(); 
+    this.start();
     let respuesta: any;
     respuesta = this.proceedClosePeriod();
   }
@@ -600,6 +600,7 @@ export class PeriodsComponent implements OnInit {
     let activeDp: boolean = false;
     let janp_sequence: number = 0;
     let last_seventh: boolean = true;
+    let hld: number = 0;
 
     let non_show1: boolean = false;
     let non_show2: boolean = false;
@@ -624,7 +625,7 @@ export class PeriodsComponent implements OnInit {
                 this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cd: credits[]) => {
                   this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                     this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
-                      this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {                        
+                      this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
                         let py: payments = new payments;
                         py.id_employee = emp[0].idemployees;
                         py.id_period = this.period.idperiods;
@@ -745,6 +746,9 @@ export class PeriodsComponent implements OnInit {
                                     nonShowCount = nonShowCount + 1;
                                   }
                                 } else {
+                                  if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
+                                    hld = this.attended + Number(attendance.worked_time);
+                                  }
                                   this.attended = this.attended + Number(attendance.worked_time);
                                   this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                   attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
@@ -753,11 +757,11 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
                           });
-                          console.log(this.attended);
-                          if (this.attended == 0) {
-                            console.log(this.attended);
-                            this.absence = ((att.length * (-8)));
-                            discounted = ((att.length * (-8)));
+
+
+                          if (this.attended == 0 || this.absence <= (-120) || discounted <= (-120)) {
+                            this.absence = (att.length * (-8));
+                            discounted = (att.length * (-8));
                             this.seventh = 0;
                           }
 
@@ -771,11 +775,18 @@ export class PeriodsComponent implements OnInit {
                             let decreto_credit: credits = new credits;
                             let ot_credit: credits = new credits;
                             let igss_debit: debits = new debits;
+                            let hld_credit:credits = new credits;
 
                             base_credit.type = "Salario Base";
                             productivity_credit.type = "Bonificacion Productividad";
                             decreto_credit.type = "Bonificacion Decreto";
                             igss_debit.type = "IGSS";
+
+                            if (hld > 0) {
+                              hld_credit.type = "Horas De Asueto: " + hld;
+                              hld_credit.amount = ((hld * base_hour) + (hld * productivity_hour)).toFixed(2);
+                              this.credits.push(hld_credit);
+                            }
 
                             if (this.absence <= 0) {
                               base_credit.amount = (((att.length * 8) + (this.absence)) * base_hour).toFixed(2);
@@ -815,7 +826,7 @@ export class PeriodsComponent implements OnInit {
                               this.credits.push(credit);
                             });
 
-                            totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount);
+                            totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount);
                             totalDeb = totalDeb + Number(igss_debit.amount);
 
                             this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
@@ -903,7 +914,7 @@ export class PeriodsComponent implements OnInit {
                           this.diff = Number((this.roster - this.attended).toFixed(2));
                         }
                         this.selectedEmployee = true;
-                      
+
                       })
                     })
                   })
