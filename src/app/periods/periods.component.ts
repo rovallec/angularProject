@@ -354,7 +354,7 @@ export class PeriodsComponent implements OnInit {
                                   this.global_credits.push(ot_credit);
                                   decreto_credit.amount = '125.00';
                                 }
-                                igss_debit.amount = (Number(base_credit.amount) * 0.0483).toFixed(2);
+                                igss_debit.amount = ((Number(base_credit.amount) + Number(hld_credit.amount) + Number(ot_credit.amount)) * 0.0483).toFixed(2);
                                 igss_debit.type = "Descuento IGSS";
 
                                 base_credit.idpayments = pay.idpayments;
@@ -469,6 +469,8 @@ export class PeriodsComponent implements OnInit {
                                   pay.productivity_hours = (Number(pay.days) * 8).toFixed(2);
                                   pay.base_complete = emp[0].base_payment;
                                   pay.productivity_complete = emp[0].productivity_payment;
+                                  pay.holidays = hld_credit.amount;
+                                  pay.holidays_hours = hld.toFixed(2);
                                   if (last_seventh) {
                                     pay.last_seventh = '0';
                                   } else {
@@ -808,7 +810,7 @@ export class PeriodsComponent implements OnInit {
                               }
                               this.credits.push(ot_credit);
                             }
-                            igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount)) * 0.0483).toFixed(2);
+                            igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount)) * 0.0483).toFixed(2);
 
                             if (base_credit.amount != 'NaN') {
                               this.credits.push(base_credit);
