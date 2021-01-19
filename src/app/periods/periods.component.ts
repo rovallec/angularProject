@@ -166,7 +166,7 @@ export class PeriodsComponent implements OnInit {
         let nonShowCount: number = 0;
         let hld: number = 0;
         let last_seventh: boolean = true;
-        let off_pass: boolean = true;
+
         pushCredits = [];
         pusDebits = [];
 
@@ -188,12 +188,12 @@ export class PeriodsComponent implements OnInit {
 
                                   if (dt.getDay() === 0) {
                                     this.non_show_2 = true;
-                                    if (nonShowCount == 5 && off_pass) {
+                                    if (nonShowCount == 5) {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
                                     }
 
-                                    if (janp_sequence == 5 && off_pass) {
+                                    if (janp_sequence == 5) {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
                                     }
@@ -207,7 +207,7 @@ export class PeriodsComponent implements OnInit {
                                   activeLeav = false;
 
                                   dp.forEach(disciplinary => {
-                                    if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != "COMPLETED" && disciplinary.status != "DISMISSED")) {
+                                    if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != "DISMISSED")) {
                                       discounted = discounted - 8;
                                       attendance.balance = "SUSPENSION"
                                       activeDp = true;
@@ -216,7 +216,7 @@ export class PeriodsComponent implements OnInit {
 
                                   if (!activeDp) {
                                     leave.forEach(leav => {
-                                      if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "COMPLETED" && leav.status != "DISMISSED")) {
+                                      if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "DISMISSED")) {
                                         activeLeav = true;
                                         if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                           discounted = discounted - 8;
@@ -237,7 +237,7 @@ export class PeriodsComponent implements OnInit {
 
                                   if (!activeDp && !activeLeav) {
                                     vac.forEach(vacation => {
-                                      if ((vacation.took_date == attendance.date) && (vacation.status != "COMPLETED" && vacation.status != "DISMISSED")) {
+                                      if ((vacation.took_date == attendance.date) && (vacation.status != "DISMISSED")) {
                                         if (attendance.scheduled != "OFF") {
                                           this.roster = this.roster + Number(attendance.scheduled);
                                           this.attended = this.attended + Number(attendance.scheduled);
@@ -777,7 +777,7 @@ export class PeriodsComponent implements OnInit {
                             let decreto_credit: credits = new credits;
                             let ot_credit: credits = new credits;
                             let igss_debit: debits = new debits;
-                            let hld_credit:credits = new credits;
+                            let hld_credit: credits = new credits;
 
                             base_credit.type = "Salario Base";
                             productivity_credit.type = "Bonificacion Productividad";
