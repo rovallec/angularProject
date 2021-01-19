@@ -164,6 +164,7 @@ export class PeriodsComponent implements OnInit {
         let activeDp: boolean = false;
         let janp_sequence: number = 0;
         let nonShowCount: number = 0;
+        let hld:number = 0;
         let last_seventh: boolean = true;
         let off_pass:boolean = true;
         pushCredits = [];
@@ -278,10 +279,14 @@ export class PeriodsComponent implements OnInit {
                                           discounted = discounted - 8;
                                         }
                                       } else {
+                                        if(attendance.date == ((new Date().getFullYear()).toString() + "-01-01")){
+                                          hld = this.attended + Number(attendance.worked_time);
+                                        }else{
                                         this.attended = this.attended + Number(attendance.worked_time);
                                         this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                         attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
                                         discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                        }
                                       }
                                     }
                                   }
@@ -302,10 +307,18 @@ export class PeriodsComponent implements OnInit {
                                 let decreto_credit: credits = new credits;
                                 let ot_credit: credits = new credits;
                                 let igss_debit: debits = new debits;
+                                let hld_credit:credits = new credits;
 
                                 base_credit.type = "Salario Base";
                                 productivity_credit.type = "Bonificacion Productividad";
                                 decreto_credit.type = "Bonificacion Decreto";
+
+                                if(hld > 0){
+                                  hld_credit.type = "Horas De Asueto: " + hld;
+                                hld_credit.amount = ((hld * base_hour) + (hld * productivity_hour)).toFixed(2);
+                                this.global_credits.push(hld_credit);
+                                pushCredits.push(hld_credit);
+                                }
 
                                 if (discounted <= 0) {
                                   base_credit.amount = (((att.length * 8) + (discounted)) * base_hour).toFixed(2);
@@ -347,6 +360,7 @@ export class PeriodsComponent implements OnInit {
                                 productivity_credit.idpayments = pay.idpayments;
                                 decreto_credit.idpayments = pay.idpayments;
                                 igss_debit.idpayments = pay.idpayments;
+                                hld_credit.idpayments = pay.idpayments;
 
                                 this.apiService.getAutoAdjustments({ id: emp[0].idemployees, date: this.period.start }).subscribe((adjustments: attendences_adjustment[]) => {
 
@@ -369,7 +383,7 @@ export class PeriodsComponent implements OnInit {
                                   });
 
 
-                                  totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount);
+                                  totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount);
                                   totalDeb = totalDeb + Number(igss_debit.amount);
 
                                   adjustments.forEach(adjustment => {
