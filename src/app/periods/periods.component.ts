@@ -182,9 +182,6 @@ export class PeriodsComponent implements OnInit {
                             if (this.period.status == '1') {
                               if (att.length != 0) {
                                 att.forEach(attendance => {
-                                  if(attendance.scheduled == "OFF"){
-                                    off_pass = true;
-                                  }
 
                                   let dt: Date = new Date(attendance.date);
 
@@ -193,13 +190,11 @@ export class PeriodsComponent implements OnInit {
                                     if (nonShowCount == 5 && off_pass) {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
-                                      off_pass = false;
                                     }
 
                                     if (janp_sequence == 5 && off_pass) {
                                       discounted = discounted - 8;
                                       this.absence = this.absence - 8;
-                                      off_pass = false;
                                     }
 
                                     janp_sequence = 0;
@@ -292,7 +287,7 @@ export class PeriodsComponent implements OnInit {
                                   }
                                 });
 
-                                if (this.attended == 0) {
+                                if (this.attended == 0 || this.absence <= (-120) || discounted <= (-120)) {
                                   this.absence = (att.length * (-8));
                                   discounted = (att.length * (-8));
                                   svnth = 0;
