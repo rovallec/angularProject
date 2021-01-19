@@ -1,9 +1,10 @@
 <?php
     
 function validarDatos($adato) {
-        if (empty($adato) || is_null($adato)) { $adato = "NULL"; 
+        if (empty($adato) || is_null($adato)) { 
+            $adato = "NULL";
         } else {
-            if ($adato = 'NaN') {
+            if ($adato == 'NaN') {
                 $adato = 0;
             }
         }

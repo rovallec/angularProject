@@ -1,7 +1,7 @@
 <div class="row col-md-12" style="margin-top: 25px;">
     <div class="row col-md-12">
         <div class="col-md-2">
-            <select class="form-control" (change)="setPeriods()" [(ngModel)]="selectedYear" style="text-align: center;">
+            <select class="form-control" (change)="setPSelection()" [(ngModel)]="selectedYear" style="text-align: center;">
                 <option *ngFor="let year of years">{{year}}</option>
             </select>
         </div>

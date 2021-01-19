@@ -17,11 +17,11 @@ export class IsrmanagerComponent implements OnInit {
   years: string[] = [new Date().getFullYear().toString()];
   selectedYear: string = new Date().getFullYear().toString();
   isrs: isr[] = [];
-  temp_isr:isr[] = [];
+  temp_isr: isr[] = [];
   file: any;
   arrayBuffer: any;
   filelist: any;
-  completed:boolean = false;
+  completed: boolean = false;
 
   constructor(public apiServices: ApiService) { }
 
@@ -30,12 +30,14 @@ export class IsrmanagerComponent implements OnInit {
   }
 
   setPeriods() {
+    let i: number = 0;
     this.periods = [];
     this.years = [];
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       per.forEach(period => {
-        if (this.years[0] != period.start.split("-")[0]) {
+        if (this.years[i] != period.start.split("-")[0]) {
           this.years.push(period.start.split("-")[0]);
+          i = i + 1;
         }
 
         this.selectedYear = this.years[0];
@@ -47,6 +49,18 @@ export class IsrmanagerComponent implements OnInit {
         }
       })
     });
+  }
+
+  setPSelection() {
+    this.periods = [];
+    this.apiServices.getPeriods().subscribe((per: periods[]) => {
+      per.forEach(period => {
+        if (this.selectedYear == period.start.split("-")[0]) {
+          this.periods.push(period);
+          this.getIsr();
+        }
+      })
+    })
   }
 
   getIsr() {
@@ -71,7 +85,7 @@ export class IsrmanagerComponent implements OnInit {
   addfile(event) {
     this.file = event.target.files[0];
     let fileReader = new FileReader();
-    let new_isr:isr = new isr;
+    let new_isr: isr = new isr;
 
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
@@ -86,13 +100,13 @@ export class IsrmanagerComponent implements OnInit {
       var worksheet = workbook.Sheets[first_sheet_name];
       let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
       sheetToJson.forEach(element => {
-        let temp_nit:string = null;
+        let temp_nit: string = null;
         temp_nit = element['NIT Empleado'].toString();
-        temp_nit = temp_nit.substr(1,temp_nit.length - 2) + "%" + temp_nit.charAt(temp_nit.length - 1) + "%";
-        this.apiServices.getSearchEmployees({filter:'nit', value:temp_nit, dp:'4'}).subscribe((employees:employees[])=>{
-          if(!isNullOrUndefined(employees)){
+        temp_nit = temp_nit.substr(1, temp_nit.length - 2) + "%" + temp_nit.charAt(temp_nit.length - 1) + "%";
+        this.apiServices.getSearchEmployees({ filter: 'nit', value: temp_nit, dp: '4' }).subscribe((employees: employees[]) => {
+          if (!isNullOrUndefined(employees)) {
             new_isr.nearsol_id = employees[0].nearsol_id;
-            new_isr.idemployees =  employees[0].idemployees;
+            new_isr.idemployees = employees[0].idemployees;
             new_isr.name = employees[0].name;
             new_isr.nit = element['NIT Empleado'];
             new_isr.gross_income = element['Renta Bruta'];
@@ -110,23 +124,23 @@ export class IsrmanagerComponent implements OnInit {
     this.completed = true;
   }
 
-  setIsr(){
-    this.isrs.forEach(single_isr=>{
-      let deb:debits = new debits;
-      let p:periods = new periods;
-      let cnt:string = null;
+  setIsr() {
+    this.isrs.forEach(single_isr => {
+      let deb: debits = new debits;
+      let p: periods = new periods;
+      let cnt: string = null;
 
       p = this.selectedPeriod;
       p.status = single_isr.idemployees;
       cnt = p.start;
       p.start = "explicit";
-      this.apiServices.getPayments(p).subscribe((pay:payments[])=>{
-        if(!isNullOrUndefined(pay)){
+      this.apiServices.getPayments(p).subscribe((pay: payments[]) => {
+        if (!isNullOrUndefined(pay)) {
           deb.id_employee = single_isr.idemployees;
           deb.idpayments = pay[0].idpayments;
           deb.amount = single_isr.amount;
           deb.type = "ISR";
-          this.apiServices.insertDebits(deb).subscribe((str:string)=>{        
+          this.apiServices.insertDebits(deb).subscribe((str: string) => {
           })
         }
       })
