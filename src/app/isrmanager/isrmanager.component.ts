@@ -30,16 +30,20 @@ export class IsrmanagerComponent implements OnInit {
   }
 
   setPeriods() {
-    let i: number = 0;
+    let toPush: boolean = false;
     this.periods = [];
     this.years = [];
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       per.forEach(period => {
-        if (this.years[i] != period.start.split("-")[0]) {
+        toPush = false;
+        this.years.forEach(yr=>{
+          if(yr != period.start.split("-")[0]){
+            toPush = true;
+          }
+        })
+        if (toPush) {
           this.years.push(period.start.split("-")[0]);
-          i = i + 1;
         }
-
         this.selectedYear = this.years[0];
 
         if (this.selectedYear == period.start.split("-")[0]) {
@@ -60,6 +64,7 @@ export class IsrmanagerComponent implements OnInit {
           this.getIsr();
         }
       })
+      this.selectedYear = this.years[0];
     })
   }
 
