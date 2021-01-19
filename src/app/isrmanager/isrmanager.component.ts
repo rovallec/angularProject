@@ -32,7 +32,7 @@ export class IsrmanagerComponent implements OnInit {
   setPeriods() {
     let toPush: boolean = false;
     this.periods = [];
-    this.years = [];
+    this.years = [new Date().getFullYear().toString()];
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       per.forEach(period => {
         toPush = false;
