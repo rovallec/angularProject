@@ -292,7 +292,8 @@ export class PeriodsComponent implements OnInit {
                                 });
 
 
-                                if (this.attended == 0 || this.absence <= (-120) || discounted <= (-120)) {
+                                if (this.attended == 0 || discounted <= (-120)) {
+                                  console.log(this.attended);
                                   this.absence = (att.length * (-8));
                                   discounted = (att.length * (-8));
                                   svnth = 0;
@@ -761,7 +762,7 @@ export class PeriodsComponent implements OnInit {
                           });
 
 
-                          if (this.attended == 0 || this.absence <= (-120) || discounted <= (-120)) {
+                          if (this.attended == 0 || discounted <= (-120)) {
                             this.absence = (att.length * (-8));
                             discounted = (att.length * (-8));
                             this.seventh = 0;
