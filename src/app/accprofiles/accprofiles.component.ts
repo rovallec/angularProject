@@ -237,7 +237,9 @@ export class AccprofilesComponent implements OnInit {
       
       let p:periods = new periods;
       p.start = 'explicit_employee';
-      p.status = this.employee.idemployees + " ORDER BY idpayments DESC LIMIT 1";
+      p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
+      p.idperiods = "all";
+      console.log(p);
       this.apiService.getPayments(p).subscribe((pay:payments[])=>{
         if(!isNullOrUndefined(pay)){
           this.apiService.getCredits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((cred:credits[])=>{
