@@ -344,13 +344,14 @@ export class PeriodsComponent implements OnInit {
                                   ot.id_employee = emp[0].idemployees;
                                   ot.name = emp[0].name;
                                   ot.nearsol_id = emp[0].nearsol_id;
-                                  ot_credit.type = "Horas Extra Laboradas: " + discounted;
+                                  ot_credit.type = "Horas Extra Laboradas: " + discounted.toFixed(2);
                                   if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
                                     ot_credit.amount = ((base_hour + productivity_hour) * 2 * discounted).toFixed(2);
                                   } else {
                                     ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * discounted).toFixed(2);
                                   }
                                   pay.ot = ot_credit.amount;
+                                  ot_credit.idpayments = pay.idpayments;
                                   pushCredits.push(ot_credit);
                                   this.global_credits.push(ot_credit);
                                   decreto_credit.amount = '125.00';
