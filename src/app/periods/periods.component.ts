@@ -261,7 +261,7 @@ export class PeriodsComponent implements OnInit {
                                       }
                                     } else {
                                       this.roster = this.roster + Number(attendance.scheduled);
-                                      if (Number(attendance.worked_time) == 0) {
+                                      if (Number(attendance.worked_time) == 0 && (attendance.date != ((new Date().getFullYear()).toString() + "-01-01"))) {
                                         if (this.non_show_2) {
                                           this.absence = this.absence - 16;
                                           discounted = discounted - 16;
@@ -734,7 +734,7 @@ export class PeriodsComponent implements OnInit {
                                 }
                               } else {
                                 this.roster = this.roster + Number(attendance.scheduled);
-                                if (Number(attendance.worked_time) == 0) {
+                                if (Number(attendance.worked_time) == 0 && (attendance.date != ((new Date().getFullYear()).toString() + "-01-01"))) {
                                   if (this.non_show_2 && last_seventh) {
                                     this.absence = this.absence - 16;
                                     discounted = discounted - 16;

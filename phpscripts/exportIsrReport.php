@@ -33,7 +33,7 @@ if($result = mysqli_query($con,$sql)){
         $isr[1] = number_format(($row['base'] * (13 - date('m')) + $row['print_base']),2);
         $isr[2] = $row['over_time'];
         $isr[3] = 250*12;
-        $isr[4] = number_format(($row['productivity'] * (13 - date('m')) + $row['print_productivity']),2);
+        $isr[4] = number_format(($row['productivity'] * (13 - date('m')) + $row['print_productivity']),2); // + productividad bono 14 y aguinaldo + bonificaciones;
         $isr[5] = '0';
         $isr[6] = '0';
 //////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ if($result = mysqli_query($con,$sql)){
             $a_diff = $ag_date->diff($a_date);
             $a_days = $a_diff->format("%a");
         };
-        $isr[7] = number_format(($row['base'] + $row['productivity']) * ($a_days/365),2);
+        $isr[7] = number_format(($row['base']) * ($a_days/365),2);
 //////////////////////////////////////////////////BONO 14//////////////////////////////////////////////////////////////
         if(date($row['hiring_date']) <= date((date("Y")-1) . "-07-01")){
             $b_date = new DateTime((date("Y")-1) . "-07-01");
@@ -57,7 +57,7 @@ if($result = mysqli_query($con,$sql)){
             $b_diff = $today_date->diff($b_date);
             $b_days = $b_diff->format("%a");
         };
-        $isr[8] = number_format(($row['base'] + $row['productivity']) * ($b_days/365),2);
+        $isr[8] = number_format(($row['base']) * ($b_days/365),2);
         $isr[9] = '0';
         $isr[10] = '0';
         $isr[11] = '0';
@@ -69,9 +69,9 @@ if($result = mysqli_query($con,$sql)){
         $isr[17] = $row['indemnization'];
         $isr[18] = '0';
         $isr[19] = '0';
-        $isr[20] = number_format(($row['base'] + $row['productivity']) * ($a_days/365),2);
-        $isr[21] = number_format(($row['productivity'] * (13 - date('m')) + $row['print_productivity']),2);
-        $isr[22] = number_format(($row['base'] * (12 - date('m')) + $row['print_base'] + $row['over_time'])*0.0483,2);
+        $isr[20] = number_format(($row['base']) * ($a_days/365),2);
+        $isr[21] = number_format(($row['productivity'] * (13 - date('m'))),2);
+        $isr[22] = number_format(($row['base'] * (13 - date('m')) + $row['print_base'] + $row['over_time'])*0.0483,2);
         fputcsv($output, $isr, ",");
     };
 }else{
