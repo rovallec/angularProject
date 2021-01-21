@@ -534,6 +534,7 @@ export class PeriodsComponent implements OnInit {
                                   py.total = (Number(py.credits) - Number(py.debits)).toFixed(2);
                                 })
                               }
+                              this.payments.push(pay);
                             }
                             this.progress = this.progress + 1;
                             if (this.progress == payments.length) {
@@ -551,7 +552,6 @@ export class PeriodsComponent implements OnInit {
           })
         })
       })
-      this.payments = payments;
       this.ded = false;
       this.showPaymentes = true;
     })
