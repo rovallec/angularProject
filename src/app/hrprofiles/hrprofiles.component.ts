@@ -419,7 +419,11 @@ export class HrprofilesComponent implements OnInit {
     this.activeVacation.id_department = this.authUser.getAuthusr().department;
     this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
     this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
-    this.activeVacation.status = 'PENDING';
+    if(action = "Add"){
+      this.activeVacation.status = "COMPLETED";
+    }else{
+      this.activeVacation.status = 'PENDING';
+    }
     this.activeVacation.count = '1';
     this.activeVacation.action = action;
     this.activeVacation.id_type = type;
