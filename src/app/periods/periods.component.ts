@@ -327,7 +327,9 @@ export class PeriodsComponent implements OnInit {
                                   productivity_credit.amount = (((att.length * 8) + (discounted)) * productivity_hour).toFixed(2);
                                   ot_credit.amount = '0';
                                   decreto_credit.amount = (((att.length * 8) + (discounted)) * (125 / 120)).toFixed(2);
-                                  pay.days = (((att.length * 8) + (discounted)) / 8).toFixed(2);
+                                  pay.days = (((att.length * 8) + (discounted)) / 8).toFixed(4);
+                                  pay.base_hours = ((att.length * 8) + (discounted)).toFixed(4);
+                                  pay.productivity_hours = ((att.length * 8) + (discounted)).toFixed(4);
                                   pay.ot_hours = '0';
                                   pay.ot = "0";
                                   pay.base = base_credit.amount;
@@ -338,6 +340,8 @@ export class PeriodsComponent implements OnInit {
                                   base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
                                   pay.base = base_credit.amount;
                                   pay.days = '15';
+                                  pay.base_hours = "120";
+                                  pay.productivity_hours = "120";
                                   pay.ot_hours = discounted.toFixed(2);
                                   let ot: ot_manage = new ot_manage;
                                   ot.id_period = this.period.idperiods;
@@ -467,12 +471,10 @@ export class PeriodsComponent implements OnInit {
                                   pay.state = emp[0].state;
                                   pay.account = emp[0].account;
                                   pay.seventh = svnth.toString();
-                                  pay.base_hours = (Number(pay.days) * 8).toFixed(2);
-                                  pay.productivity_hours = (Number(pay.days) * 8).toFixed(2);
                                   pay.base_complete = emp[0].base_payment;
                                   pay.productivity_complete = emp[0].productivity_payment;
                                   pay.holidays = hld_credit.amount;
-                                  pay.holidays_hours = hld.toFixed(2);
+                                  pay.holidays_hours = hld.toFixed(6);
                                   if (last_seventh) {
                                     pay.last_seventh = '0';
                                   } else {
