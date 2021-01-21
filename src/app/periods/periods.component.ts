@@ -324,19 +324,19 @@ export class PeriodsComponent implements OnInit {
                                   }
 
                                   if (new Date(att[att.length - 1].date).getTime() != new Date(this.period.end).getTime()) {
-                                    if(discounted <= 0){
-                                    base_credit.amount = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)) * base_hour).toFixed(2);
-                                    productivity_credit.amount = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)) * productivity_hour).toFixed(2);
-                                    ot_credit.amount = '0';
-                                    decreto_credit.amount = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)) * (125 / 120)).toFixed(2);
-                                    pay.days = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)) / 8).toFixed(4);
-                                    pay.base_hours = (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)).toFixed(4);
-                                    pay.productivity_hours = (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)).toFixed(4);
-                                    pay.ot_hours = '0';
-                                    pay.ot = "0";
-                                    pay.base = base_credit.amount;
-                                    pay.productivity = productivity_credit.amount;
-                                    }else{
+                                    if (discounted <= 0) {
+                                      base_credit.amount = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)) * base_hour).toFixed(2);
+                                      productivity_credit.amount = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)) * productivity_hour).toFixed(2);
+                                      ot_credit.amount = '0';
+                                      decreto_credit.amount = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)) * (125 / 120)).toFixed(2);
+                                      pay.days = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)) / 8).toFixed(4);
+                                      pay.base_hours = (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)).toFixed(4);
+                                      pay.productivity_hours = (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (discounted)).toFixed(4);
+                                      pay.ot_hours = '0';
+                                      pay.ot = "0";
+                                      pay.base = base_credit.amount;
+                                      pay.productivity = productivity_credit.amount;
+                                    } else {
                                       productivity_credit.amount = (att.length * productivity_hour).toFixed(2);
                                       pay.productivity = productivity_credit.amount;
                                       base_credit.amount = (att.length * base_hour).toFixed(2);
@@ -534,12 +534,12 @@ export class PeriodsComponent implements OnInit {
                                   py.total = (Number(py.credits) - Number(py.debits)).toFixed(2);
                                 })
                               }
-                              this.progress = this.progress + 1;
-                              if (this.progress == payments.length) {
-                                this.working = false;
-                              }
-                              this.loading = (this.working && this.progress == 0);
                             }
+                            this.progress = this.progress + 1;
+                            if (this.progress == payments.length) {
+                              this.working = false;
+                            }
+                            this.loading = (this.working && this.progress == 0);
                           })
                         })
                       })
@@ -837,25 +837,32 @@ export class PeriodsComponent implements OnInit {
                               this.credits.push(hld_credit);
                             }
 
-                            if (this.absence <= 0) {
-                              base_credit.amount = (((att.length * 8) + (this.absence)) * base_hour).toFixed(2);
-                              productivity_credit.amount = (((att.length * 8) + (this.absence)) * productivity_hour).toFixed(2);
+                            if (new Date(att[att.length - 1].date).getTime() != new Date(this.period.end).getTime()) {
+                              base_credit.amount = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence)) * base_hour).toFixed(2);
+                              productivity_credit.amount = ((120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence)) * productivity_hour).toFixed(2);
                               ot_credit.amount = '0';
-                              decreto_credit.amount = ((125 / 120) * ((att.length * 8) + (this.absence))).toFixed(2);
+                              decreto_credit.amount = ((125 / 120) * (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence))).toFixed(2);
                             } else {
-                              productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
-                              base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
-                              decreto_credit.amount = '125.00';
-                              let ot: ot_manage = new ot_manage;
-                              ot.id_period = this.period.idperiods;
-                              ot.id_employee = emp[0].idemployees;
-                              ot_credit.type = "Horas Extra Laboradas: " + this.absence;
-                              if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                ot_credit.amount = ((base_hour + productivity_hour) * 2 * this.absence).toFixed(2);
+                              if (this.absence <= 0) {
+                                base_credit.amount = (((att.length * 8) + (this.absence)) * base_hour).toFixed(2);
+                                productivity_credit.amount = (((att.length * 8) + (this.absence)) * productivity_hour).toFixed(2);
+                                ot_credit.amount = '0';
+                                decreto_credit.amount = ((125 / 120) * ((att.length * 8) + (this.absence))).toFixed(2);
                               } else {
-                                ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * this.absence).toFixed(2);
+                                productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
+                                base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
+                                decreto_credit.amount = '125.00';
+                                let ot: ot_manage = new ot_manage;
+                                ot.id_period = this.period.idperiods;
+                                ot.id_employee = emp[0].idemployees;
+                                ot_credit.type = "Horas Extra Laboradas: " + this.absence;
+                                if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
+                                  ot_credit.amount = ((base_hour + productivity_hour) * 2 * this.absence).toFixed(2);
+                                } else {
+                                  ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * this.absence).toFixed(2);
+                                }
+                                this.credits.push(ot_credit);
                               }
-                              this.credits.push(ot_credit);
                             }
                             igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount)) * 0.0483).toFixed(2);
 
