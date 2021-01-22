@@ -74,7 +74,28 @@
             <div class="form-group col-md-3"></div>
         </div>
 
-        <div class="form-row col-md-12" *ngIf="importEnd">
+        <div class="form-row col-md-12" *ngIf="importEnd  && importType == 'Bonus'">
+            <table class="table table-striped table-hover" style="width: 100%;text-align:center">
+                <thead>
+                    <th>NEARSOL ID</th>
+                    <th>NAME</th>
+                    <th>AMOUNT</th>
+                    <th>TYPE</th>
+                    <th>PAYMENT</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let credit of credits">
+                        <td>{{credit.iddebits}}</td>
+                        <td>{{credit.notes}}</td>
+                        <td>{{credit.amount}}</td>
+                        <td>{{credit.type}}</td>
+                        <td>{{credit.idpayments}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-row col-md-12" *ngIf="importEnd && importType == 'Discount'">
             <table class="table table-striped table-hover" style="width: 100%;text-align:center">
                 <thead>
                     <th>NEARSOL ID</th>
