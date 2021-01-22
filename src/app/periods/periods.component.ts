@@ -413,6 +413,13 @@ export class PeriodsComponent implements OnInit {
                                     this.global_credits.push(decreto_credit);
                                     this.global_debits.push(igss_debit);
 
+                                    totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount);
+                                    totalDeb = totalDeb + Number(igss_debit.amount);
+
+                                    if(pay.idpayments == '11143'){
+                                      console.log(totalCred);
+                                    }
+
                                     db.forEach(debit => {
                                       totalDeb = totalDeb + Number(debit.amount);
                                     })
@@ -421,10 +428,11 @@ export class PeriodsComponent implements OnInit {
                                       totalCred = totalCred + Number(credit.amount);
                                     });
 
+                                    if(pay.idpayments == '11143'){
+                                      console.log(totalDeb);
+                                    }
 
-                                    totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount);
-                                    totalDeb = totalDeb + Number(igss_debit.amount);
-
+                                    /*
                                     adjustments.forEach(adjustment => {
                                       if (adjustment.status == "PENDING") {
                                         let new_credit: credits = new credits;
@@ -449,7 +457,7 @@ export class PeriodsComponent implements OnInit {
                                         totalCred = totalCred + Number(new_credit2.amount);
                                       }
                                     })
-
+                                    */
 
                                     services.forEach(service => {
                                       if (service.status == '1') {
@@ -474,7 +482,7 @@ export class PeriodsComponent implements OnInit {
                                         totalDeb = totalDeb + Number(partial_service.amount);
                                       }
                                     })
-
+                                    /*
                                     judicials.forEach(judicial => {
                                       if (judicial.max != judicial.current) {
                                         let partial_debit: debits = new debits;
@@ -493,6 +501,7 @@ export class PeriodsComponent implements OnInit {
                                         totalDeb = totalDeb + Number(partial_debit.amount);
                                       }
                                     })
+                                    */
 
                                     pay.credits = (totalCred).toFixed(2);
                                     pay.debits = (totalDeb).toFixed(2);
