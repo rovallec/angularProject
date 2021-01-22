@@ -84,7 +84,7 @@
                     <th>PAYMENT</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let credit of credits">
+                    <tr *ngFor="let deb of credits">
                         <td>{{credit.iddebits}}</td>
                         <td>{{credit.notes}}</td>
                         <td>{{credit.amount}}</td>
@@ -105,12 +105,12 @@
                     <th>PAYMENT</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let credit of credits">
-                        <td>{{credit.iddebits}}</td>
-                        <td>{{credit.notes}}</td>
-                        <td>{{credit.amount}}</td>
-                        <td>{{credit.type}}</td>
-                        <td>{{credit.idpayments}}</td>
+                    <tr *ngFor="let deb of debits">
+                        <td>{{deb.iddebits}}</td>
+                        <td>{{deb.notes}}</td>
+                        <td>{{deb.amount}}</td>
+                        <td>{{deb.type}}</td>
+                        <td>{{deb.idpayments}}</td>
                     </tr>
                 </tbody>
             </table>
