@@ -419,7 +419,6 @@ export class PeriodsComponent implements OnInit {
 
                                     cd.forEach(credit => {
                                       totalCred = totalCred + Number(credit.amount);
-                                      console.log(credit.amount + " " + totalCred);
                                     });
 
 
