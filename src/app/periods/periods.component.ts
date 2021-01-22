@@ -166,7 +166,7 @@ export class PeriodsComponent implements OnInit {
         let nonShowCount: number = 0;
         let hld: number = 0;
         let last_seventh: boolean = true;
-        let non_show_2:boolean = false;
+        let non_show_2: boolean = false;
 
         pushCredits = [];
         pusDebits = [];
@@ -283,11 +283,12 @@ export class PeriodsComponent implements OnInit {
                                         } else {
                                           if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
                                             hld = this.attended + Number(attendance.worked_time);
+                                          } else {
+                                            this.attended = this.attended + Number(attendance.worked_time);
+                                            this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                            attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                                            discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                           }
-                                          this.attended = this.attended + Number(attendance.worked_time);
-                                          this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
-                                          attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
-                                          discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                         }
                                       }
                                     }
@@ -798,11 +799,12 @@ export class PeriodsComponent implements OnInit {
                                 } else {
                                   if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
                                     hld = this.attended + Number(attendance.worked_time);
+                                  } else {
+                                    this.attended = this.attended + Number(attendance.worked_time);
+                                    this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                    attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                                    discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                   }
-                                  this.attended = this.attended + Number(attendance.worked_time);
-                                  this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
-                                  attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
-                                  discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                 }
                               }
                             }
