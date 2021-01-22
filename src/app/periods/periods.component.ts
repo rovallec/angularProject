@@ -166,7 +166,7 @@ export class PeriodsComponent implements OnInit {
         let nonShowCount: number = 0;
         let hld: number = 0;
         let last_seventh: boolean = true;
-        let non_show_2: boolean = false;
+        let non_show_2: boolean = true;
 
         pushCredits = [];
         pusDebits = [];
