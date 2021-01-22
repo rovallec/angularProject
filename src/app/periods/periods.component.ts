@@ -1044,6 +1044,7 @@ export class PeriodsComponent implements OnInit {
                 this.credits.push(ele);
               } else if (this.importType == "Discount") {
                 let deb: debits = new debits;
+                deb.iddebits = ele.iddebits;
                 deb.amount = ele.amount;
                 deb.date = ele.date;
                 deb.id_employee = ele.id_employee;
