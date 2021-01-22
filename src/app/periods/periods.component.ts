@@ -166,6 +166,7 @@ export class PeriodsComponent implements OnInit {
         let nonShowCount: number = 0;
         let hld: number = 0;
         let last_seventh: boolean = true;
+        let non_show_2:boolean = false;
 
         pushCredits = [];
         pusDebits = [];
@@ -188,7 +189,7 @@ export class PeriodsComponent implements OnInit {
                                     let dt: Date = new Date(attendance.date);
 
                                     if (dt.getDay() === 0) {
-                                      this.non_show_2 = true;
+                                      non_show_2 = true;
                                       if (nonShowCount == 5) {
                                         discounted = discounted - 8;
                                         this.absence = this.absence - 8;
@@ -263,14 +264,14 @@ export class PeriodsComponent implements OnInit {
                                       } else {
                                         this.roster = this.roster + Number(attendance.scheduled);
                                         if (Number(attendance.worked_time) == 0 && (attendance.date != ((new Date().getFullYear()).toString() + "-01-01"))) {
-                                          if (this.non_show_2) {
+                                          if (non_show_2) {
                                             this.absence = this.absence - 16;
                                             discounted = discounted - 16;
                                             svnth = svnth + 1;
-                                            this.non_show_2 = false;
+                                            non_show_2 = false;
                                             attendance.balance = "NS";
                                             nonShowCount = nonShowCount + 1;
-                                            if (this.attendances.indexOf(attendance) >= 6) {
+                                            if (att.indexOf(attendance) >= 6) {
                                               last_seventh = true;
                                             }
                                           } else {
