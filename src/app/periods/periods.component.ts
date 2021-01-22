@@ -319,7 +319,7 @@ export class PeriodsComponent implements OnInit {
 
                                   if (hld > 0) {
                                     hld_credit.type = "Horas De Asueto: " + hld;
-                                    hld_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240)*hld).toFixed(2);
+                                    hld_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240)*1.5*hld).toFixed(2);
                                     hld_credit.idpayments = pay.idpayments;
                                     this.global_credits.push(hld_credit);
                                     pushCredits.push(hld_credit);
@@ -825,7 +825,7 @@ export class PeriodsComponent implements OnInit {
 
                             if (hld > 0) {
                               hld_credit.type = "Horas De Asueto: " + hld;
-                              hld_credit.amount = ((hld * base_hour) + (hld * productivity_hour)).toFixed(2);
+                              hld_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240)*1.5*hld).toFixed(2);
                               this.credits.push(hld_credit);
                             }
 
@@ -849,9 +849,9 @@ export class PeriodsComponent implements OnInit {
                                 ot.id_employee = emp[0].idemployees;
                                 ot_credit.type = "Horas Extra Laboradas: " + this.absence;
                                 if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                  ot_credit.amount = ((base_hour + productivity_hour) * 2 * this.absence).toFixed(2);
+                                  ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240) * 2 * this.absence).toFixed(2);
                                 } else {
-                                  ot_credit.amount = ((base_hour + productivity_hour) * 1.5 * this.absence).toFixed(2);
+                                  ot_credit.amount = ((((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240)) * 1.5 * this.absence).toFixed(2);
                                 }
                                 this.credits.push(ot_credit);
                               }
