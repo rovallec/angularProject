@@ -319,7 +319,7 @@ export class PeriodsComponent implements OnInit {
 
                                   if (hld > 0) {
                                     hld_credit.type = "Horas De Asueto: " + hld;
-                                    hld_credit.amount = ((hld * base_hour) + (hld * productivity_hour)).toFixed(2);
+                                    hld_credit.amount = ((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)/240)*hld).toFixed(2);
                                     hld_credit.idpayments = pay.idpayments;
                                     this.global_credits.push(hld_credit);
                                     pushCredits.push(hld_credit);
