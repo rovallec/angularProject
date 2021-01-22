@@ -334,8 +334,8 @@ export class PeriodsComponent implements OnInit {
                                       ot_credit.amount = '0';
                                       decreto_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * (125 / 120)).toFixed(2);
                                       pay.days = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) / 8).toFixed(2);
-                                      pay.base_hours = (120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) - att.length) * (-8)) + discounted).toFixed(2);
-                                      pay.productivity_hours = (120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) - att.length) * (-8)) + discounted).toFixed(2);
+                                      pay.base_hours = ((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted).toFixed(2);
+                                      pay.productivity_hours = ((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted).toFixed(2);
                                       pay.ot_hours = '0';
                                       pay.ot = "0";
                                       pay.base = base_credit.amount;
@@ -361,8 +361,8 @@ export class PeriodsComponent implements OnInit {
                                       productivity_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * productivity_hour).toFixed(2);
                                       decreto_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * (125 / 120)).toFixed(2);
                                       pay.days = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) / 8).toFixed(2);
-                                      pay.base_hours = (120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) - att.length) * (-8)) + discounted).toFixed(2);
-                                      pay.productivity_hours = (120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) - att.length) * (-8)) + discounted).toFixed(2);
+                                      pay.base_hours = ((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted).toFixed(2);
+                                      pay.productivity_hours = ((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted).toFixed(2);
                                       pay.base = base_credit.amount;
                                       pay.productivity = productivity_credit.amount;
                                     } else {
