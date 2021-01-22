@@ -991,11 +991,10 @@ export class PeriodsComponent implements OnInit {
     if (this.importType == 'Bonus') {
       this.pushDeductions('credits', this.credits);
     } else {
-      this.pushDeductions('debits', this.credits);
+      this.pushDeductions('debits', this.debits);
     }
     this.completed = false;
     this.importActive = false;
-    this.closePeriod();
     this.showPaymentes = true;
   }
 
