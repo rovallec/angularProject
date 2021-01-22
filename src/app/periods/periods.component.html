@@ -26,7 +26,7 @@
         </div>
         <div class="form-group col-md-2">
             <input type="text" class="form-control"
-                *ngIf="filter === 'name' || filter === 'reason' || filter === 'amount'" [(ngModel)]='value'>
+                *ngIf="filter === 'name' || filter === 'reason' || filter === 'amount'" [(ngModel)]='value' (keyup.enter)="searchEmployee()">
             <select class="form-control" *ngIf="filter === 'type'" [(ngModel)]='value'>
                 <option>DEBIT</option>
                 <option>CREDIT</option>
