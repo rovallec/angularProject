@@ -365,9 +365,9 @@ export class PeriodsComponent implements OnInit {
                                       pay.base = base_credit.amount;
                                       pay.productivity = productivity_credit.amount;
                                     } else {
-                                      productivity_credit.amount = (att.length * productivity_hour).toFixed(2);
+                                      productivity_credit.amount = (att.length * 8 * productivity_hour).toFixed(2);
                                       pay.productivity = productivity_credit.amount;
-                                      base_credit.amount = (att.length * base_hour).toFixed(2);
+                                      base_credit.amount = (att.length * 8 * base_hour).toFixed(2);
                                       pay.base = base_credit.amount;
                                       pay.days = att.length.toString();
                                       pay.base_hours = (att.length * 8).toString();
