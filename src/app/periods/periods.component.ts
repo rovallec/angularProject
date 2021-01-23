@@ -282,7 +282,13 @@ export class PeriodsComponent implements OnInit {
                                           }
                                         } else {
                                           if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
-                                            hld = this.attended + Number(attendance.worked_time);
+                                            if(Number(attendance.worked_time) > 8){
+                                              hld = this.attended + Number(attendance.worked_time) - 8;
+                                              this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                              discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                            }else{
+                                              hld = this.attended + Number(attendance.worked_time);
+                                            }
                                           } else {
                                             this.attended = this.attended + Number(attendance.worked_time);
                                             this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
@@ -809,7 +815,13 @@ export class PeriodsComponent implements OnInit {
                                   }
                                 } else {
                                   if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
-                                    hld = this.attended + Number(attendance.worked_time);
+                                    if(Number(attendance.worked_time) > 8){
+                                      hld = this.attended + Number(attendance.worked_time) - 8;
+                                      this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                      discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                    }else{
+                                      hld = this.attended + Number(attendance.worked_time);
+                                    }
                                   } else {
                                     this.attended = this.attended + Number(attendance.worked_time);
                                     this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
