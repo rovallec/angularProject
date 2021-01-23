@@ -1040,7 +1040,7 @@ export class PeriodsComponent implements OnInit {
         let count: number = 0;
         this.apiService.getPayments(this.period).subscribe((paymnts: payments[]) => {
           partial_credits.forEach(ele => {
-            this.apiService.getSearchEmployees({ dp: 'all', filter: 'nearsol_id', value: ele.iddebits }).subscribe((emp: employees[]) => {
+            this.apiService.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits }).subscribe((emp: employees[]) => {
               ele.type = this.importType;
               if (!isNullOrUndefined(emp[0])) {
                 paymnts.forEach(py => {
