@@ -296,7 +296,6 @@ export class PeriodsComponent implements OnInit {
 
 
                                   if (this.attended == 0 || discounted <= (-120)) {
-                                    console.log(this.attended);
                                     this.absence = (att.length * (-8)) + this.attended;
                                     discounted = (att.length * (-8)) + this.attended;
                                     svnth = 0;
@@ -319,7 +318,7 @@ export class PeriodsComponent implements OnInit {
 
                                   if (hld > 0) {
                                     hld_credit.type = "Horas De Asueto: " + hld;
-                                    hld_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240)*1.5*hld).toFixed(2);
+                                    hld_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * hld).toFixed(2);
                                     hld_credit.idpayments = pay.idpayments;
                                     this.global_credits.push(hld_credit);
                                     pushCredits.push(hld_credit);
@@ -383,9 +382,9 @@ export class PeriodsComponent implements OnInit {
                                     ot.nearsol_id = emp[0].nearsol_id;
                                     ot_credit.type = "Horas Extra Laboradas: " + discounted.toFixed(2);
                                     if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                      ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240) * 2 * discounted).toFixed(2);
+                                      ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * discounted).toFixed(2);
                                     } else {
-                                      ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240) * 1.5 * discounted).toFixed(2);
+                                      ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * discounted).toFixed(2);
                                     }
                                     pay.ot = ot_credit.amount;
                                     ot_credit.idpayments = pay.idpayments;
@@ -413,10 +412,15 @@ export class PeriodsComponent implements OnInit {
                                     this.global_credits.push(decreto_credit);
                                     this.global_debits.push(igss_debit);
 
+                                    if (pay.idpayments == '11143') {
+                                      console.log(totalCred);
+                                      console.log(totalCred + '+' + Number(base_credit.amount) + '+' + Number(productivity_credit.amount) + '+' + Number(decreto_credit.amount) + '+' + Number(ot_credit.amount) + '+' + Number(hld_credit.amount));
+                                    }
+
                                     totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount);
                                     totalDeb = totalDeb + Number(igss_debit.amount);
 
-                                    if(pay.idpayments == '11143'){
+                                    if (pay.idpayments == '11143') {
                                       console.log(totalCred);
                                     }
 
@@ -425,10 +429,16 @@ export class PeriodsComponent implements OnInit {
                                     })
 
                                     cd.forEach(credit => {
+                                      if (pay.idpayments == '11143') {
+                                        console.log(totalCred);
+                                      }
                                       totalCred = totalCred + Number(credit.amount);
+                                      if (pay.idpayments == '11143') {
+                                        console.log(totalCred);
+                                      }
                                     });
 
-                                    if(pay.idpayments == '11143'){
+                                    if (pay.idpayments == '11143') {
                                       console.log(totalDeb);
                                     }
 
@@ -503,6 +513,9 @@ export class PeriodsComponent implements OnInit {
                                     })
                                     */
 
+                                    if (pay.idpayments == '11143') {
+                                      console.log(totalCred);
+                                    }
                                     pay.credits = (totalCred).toFixed(2);
                                     pay.debits = (totalDeb).toFixed(2);
                                     pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
@@ -834,7 +847,7 @@ export class PeriodsComponent implements OnInit {
 
                             if (hld > 0) {
                               hld_credit.type = "Horas De Asueto: " + hld;
-                              hld_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240)*1.5*hld).toFixed(2);
+                              hld_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * hld).toFixed(2);
                               this.credits.push(hld_credit);
                             }
 
@@ -858,9 +871,9 @@ export class PeriodsComponent implements OnInit {
                                 ot.id_employee = emp[0].idemployees;
                                 ot_credit.type = "Horas Extra Laboradas: " + this.absence;
                                 if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20') {
-                                  ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240) * 2 * this.absence).toFixed(2);
+                                  ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * this.absence).toFixed(2);
                                 } else {
-                                  ot_credit.amount = ((((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))/240)) * 1.5 * this.absence).toFixed(2);
+                                  ot_credit.amount = ((((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240)) * 1.5 * this.absence).toFixed(2);
                                 }
                                 this.credits.push(ot_credit);
                               }
