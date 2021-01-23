@@ -283,7 +283,7 @@ export class PeriodsComponent implements OnInit {
                                         } else {
                                           if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
                                             if(Number(attendance.worked_time) > 8){
-                                              hld = this.attended + Number(attendance.worked_time) - 8;
+                                              hld = 8
                                               this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                               discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                             }else{
@@ -816,7 +816,7 @@ export class PeriodsComponent implements OnInit {
                                 } else {
                                   if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
                                     if(Number(attendance.worked_time) > 8){
-                                      hld = this.attended + Number(attendance.worked_time) - 8;
+                                      hld = 8;
                                       this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                       discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                     }else{
