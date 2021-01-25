@@ -418,35 +418,17 @@ export class PeriodsComponent implements OnInit {
                                     this.global_credits.push(decreto_credit);
                                     this.global_debits.push(igss_debit);
 
-                                    if (pay.idpayments == '11143') {
-                                      console.log(totalCred);
-                                      console.log(totalCred + '+' + Number(base_credit.amount) + '+' + Number(productivity_credit.amount) + '+' + Number(decreto_credit.amount) + '+' + Number(ot_credit.amount) + '+' + Number(hld_credit.amount));
-                                    }
 
                                     totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount);
                                     totalDeb = totalDeb + Number(igss_debit.amount);
-
-                                    if (pay.idpayments == '11143') {
-                                      console.log(totalCred);
-                                    }
 
                                     db.forEach(debit => {
                                       totalDeb = totalDeb + Number(debit.amount);
                                     })
 
                                     cd.forEach(credit => {
-                                      if (pay.idpayments == '11143') {
-                                        console.log(totalCred);
-                                      }
                                       totalCred = totalCred + Number(credit.amount);
-                                      if (pay.idpayments == '11143') {
-                                        console.log(totalCred);
-                                      }
                                     });
-
-                                    if (pay.idpayments == '11143') {
-                                      console.log(totalDeb);
-                                    }
 
                                     /*
                                     adjustments.forEach(adjustment => {
@@ -518,10 +500,6 @@ export class PeriodsComponent implements OnInit {
                                       }
                                     })
                                     */
-
-                                    if (pay.idpayments == '11143') {
-                                      console.log(totalCred);
-                                    }
                                     pay.credits = (totalCred).toFixed(2);
                                     pay.debits = (totalDeb).toFixed(2);
                                     pay.date = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + new Date().getDate().toString();
