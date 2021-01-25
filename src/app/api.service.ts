@@ -3,10 +3,11 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 
 import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
+// tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
 import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values } from './process_templates';
 
-import { Observable } from 'rxjs'; 
+import { Observable } from 'rxjs';
 import { users } from './users';
 import { applyent_contact, schedule_visit } from './addTemplate';
 import { Data } from '@angular/router';
@@ -59,7 +60,7 @@ updateWave(wv:waves_template){
 }
 
 updateSchedules(sch:schedules){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateSchedules.php`, sch); 
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateSchedules.php`, sch);
 }
 
 insertNewSchedule(sch:schedules){
@@ -80,7 +81,7 @@ getSearchProfile(srch:any){
 
 getFilterSchHires(sch:schedules){
   return this.httpClient.post<hires_template[]>(`${this.PHP_API_SERVER}/phpscripts/getschHires.php`, sch);
-} 
+}
 
 getUsers(wv:waves_template){
   return this.httpClient.post<users[]>(`${this.PHP_API_SERVER}/phpscripts/getUsers.php`, wv);
@@ -680,5 +681,11 @@ getProfile_ph(prof:profiles):Observable<profiles[]>{
   return this.httpClient.post<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/full_query_ph.php`, prof);
 }
 
+exportPayrollReport(period:periods){
+  return this.httpClient.get(`${this.PHP_API_SERVER}/phpscripts/exportAttritionReport.php?AID_Period=` + period.idperiods);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
+
+

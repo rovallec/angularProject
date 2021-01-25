@@ -5,7 +5,7 @@ header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="' . "reporteNomina.csv" . '"');
 require 'database.php';
 
-$date = $_GET['date'];
+$AID_Period = $_GET['AID_Period'];
 $i = 0;
 
 $sql =  "SELECT  " .
@@ -145,7 +145,7 @@ $sql =  "SELECT  " .
         "  INNER JOIN (SELECT c2.id_payment, SUM(ROUND(c2.amount, 2)) AS amount FROM credits c2 where c2.TYPE NOT IN('Bonificacion Decreto', 'Anticipo Sobre Sueldo') GROUP BY c2.id_payment) k on (g.idpayments = k.id_payment) " .
         "  INNER JOIN credits l on (g.idpayments = l.id_payment and l.type='Bonificacion Decreto') " .
         "  WHERE a.active = 1 " .
-        "  AND h.idperiods = @AID_PERIOD " .
+        "  AND h.idperiods = $AID_Period " .
         "  UNION  " .
         "  /* DEBITOS */ " .
         "SELECT DISTINCT " .
@@ -232,7 +232,7 @@ $sql =  "SELECT  " .
         "INNER JOIN periods h ON (g.id_period = h.idperiods) " .
         "INNER JOIN debits i ON (g.idpayments = i.id_payment)  " .
         "WHERE a.active = 1 " .
-        "AND h.idperiods = @AID_PERIOD " .
+        "AND h.idperiods = $AID_Period " .
         ") A1 " .
         "GROUP BY   A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JORNADA,A1.SECCION,A1.bank, " .
         "  A1.`Transferencia/Cheque`, " .
@@ -242,18 +242,18 @@ $sql =  "SELECT  " .
 
 
 
-$title = ['Empleado', 'Cliente', 'Nombre Del Trabajador', 'Jornada', 'Sección', 'banco', 'Transferencia / Cheque', 'DPI', 'No. De IGSS', 'Período', 'Salario', 'Días Trabajados', 'Horas Ordinarias', 'Horas Extraordinarias', 'Horas Asuetos', 'Salario Base', 'Salario Extraordinario', 'Salario Comisiones', 'Salario Septimos', 'Salario Asuetos', 'Salario Total', 'Ausencias', 'Salario Neto', 'IGSS', 'Otras', 'Descuentos', 'Anticipo Sobre Sueldo', 'Total Deducciones', 'Aguinaldo', 'Bono 14', 'Vacaciones', 'Idemnizacion', 'Ventajas Economicas', 'Ajuste Salarial', 'Bonificacion Incentivo', 'Otras Bonificaciones e Incentivos', 'Líquido A Recibir', 'Observaciones', 'Boleto De Ornato', 'Descuento De Seguro', 'Descuentos Judiciales', 'HeadSet', 'ISR Empleados', 'Parqueo Empleados', 'ParqueoMotos', 'Tarjeta De Parqueo', 'Transporte En Bus', 'Prestamo Personal', 'Ajustes Períodos', 'Bonos Diversos', 'Bono Por Asistencia', 'Treasure Hunt', 'Bonos Por Referidos', 'Bonos Por Reclutamiento'];
+$title = ['Empleado', 'Cliente', 'Nombre Del Trabajador', 'Jornada', 'Seccion', 'banco', 'Transferencia / Cheque', 'DPI', 'No. De IGSS', 'Período', 'Salario', 'Dias Trabajados', 'Horas Ordinarias', 'Horas Extraordinarias', 'Horas Asuetos', 'Salario Base', 'Salario Extraordinario', 'Salario Comisiones', 'Salario Septimos', 'Salario Asuetos', 'Salario Total', 'Ausencias', 'Salario Neto', 'IGSS', 'Otras', 'Descuentos', 'Anticipo Sobre Sueldo', 'Total Deducciones', 'Aguinaldo', 'Bono 14', 'Vacaciones', 'Idemnizacion', 'Ventajas Economicas', 'Ajuste Salarial', 'Bonificacion Incentivo', 'Otras Bonificaciones e Incentivos', 'Liquido A Recibir', 'Observaciones', 'Boleto De Ornato', 'Descuento De Seguro', 'Descuentos Judiciales', 'HeadSet', 'ISR Empleados', 'Parqueo Empleados', 'ParqueoMotos', 'Tarjeta De Parqueo', 'Transporte En Bus', 'Prestamo Personal', 'Ajustes Periodos', 'Bonos Diversos', 'Bono Por Asistencia', 'Treasure Hunt', 'Bonos Por Referidos', 'Bonos Por Reclutamiento'];
 $output = fopen("php://output", "w");
 fputcsv($output, $title);
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $exportRow[0] = $row['IdEmployees'];
         $exportRow[1] = $row['Client_ID'];
-        $exportRow[2] = $row['NombreDelTrabajador'];        
+        $exportRow[2] = $row['NombreDelTrabajador'];
         $exportRow[3] = $row['Jornada'];
         $exportRow[4] = $row['Seccion'];
         $exportRow[5] = $row['bank'];
-        $exportRow[6] = $row['`Transferencia/Cheque`'];
+        $exportRow[6] = $row['Transferencia/Cheque'];
         $exportRow[7] = $row['DPI'];
         $exportRow[8] = $row['No.DeIGSS'];
         $exportRow[9] = $row['Periodo'];

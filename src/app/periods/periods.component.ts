@@ -564,7 +564,7 @@ export class PeriodsComponent implements OnInit {
               this.loading = false;
               console.log('Cerrar período, ya procesado' + str);
             }
-          }); //Fin del if.            
+          }); //Fin del if.
         }
         return str;
       })
@@ -1031,7 +1031,14 @@ export class PeriodsComponent implements OnInit {
     }
   }
 
-  exportBank() {
+  exportPayrollReport() {
+    if(this.period.status == '1'){
+      alert("Missing information to generate the report");
+    }else{
+      window.open("./../phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
+      /*
+      this.apiService.exportPayrollReport(this.period); */
+    }
 
   }
 
