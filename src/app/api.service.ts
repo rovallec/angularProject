@@ -681,10 +681,6 @@ getProfile_ph(prof:profiles):Observable<profiles[]>{
   return this.httpClient.post<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/full_query_ph.php`, prof);
 }
 
-exportPayrollReport(period:periods){
-  return this.httpClient.get(`${this.PHP_API_SERVER}/phpscripts/exportAttritionReport.php?AID_Period=` + period.idperiods);
-}
-
   constructor(private httpClient:HttpClient) { }
 }
 

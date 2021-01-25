@@ -35,7 +35,6 @@ $sql =  "UPDATE `payments` set `credits` = $credits, `debits` = $debits, `date` 
 
 if(mysqli_query($con, $sql)){
     echo("1");
-    echo($sql);
 }else{
     echo("0");
     echo($sql);
