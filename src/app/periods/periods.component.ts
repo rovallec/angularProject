@@ -603,7 +603,7 @@ export class PeriodsComponent implements OnInit {
             } else {
               this.loading = false;
             }
-          }); //Fin del if.            
+          }); //Fin del if.
         }
         return str;
       })
@@ -1084,8 +1084,8 @@ export class PeriodsComponent implements OnInit {
     }
   }
 
-  exportBank() {
-
+  exportPayrollReport() {
+      window.open("./../phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
   }
 
   exportBilling() {
