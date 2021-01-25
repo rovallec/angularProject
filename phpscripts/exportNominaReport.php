@@ -75,7 +75,7 @@ $sql =  "SELECT  " .
         "    IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS JORNADA,   " .
         "    d.name AS SECCION, " .
         "    f.bank, " .
-        "    IF (f.type = 'BANK CHECK', 'CHEQUE', F.number) AS 'Transferencia/Cheque', " .
+        "    IF (f.type = 'BANK CHECK', 'CHEQUE', f.number) AS 'Transferencia/Cheque', " .
         "    c.dpi,  " .
         "    c.iggs, " .
         "    CONCAT(h.start, ' - ', h.end) AS PERIODO, " .
@@ -157,7 +157,7 @@ $sql =  "SELECT  " .
         "  IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS 'Jornada',   " .
         "  d.name AS SECCION, " .
         "  f.bank, " .
-        "  IF (f.type = 'BANK CHECK', 'CHEQUE', F.number) AS 'Transferencia/Cheque', " .
+        "  IF (f.type = 'BANK CHECK', 'CHEQUE', f.number) AS 'Transferencia/Cheque', " .
         "  c.dpi,  " .
         "  c.iggs, " .
         "  CONCAT(h.start, ' - ', h.end) AS 'Periodo', " .
