@@ -637,8 +637,7 @@ export class PeriodsPhComponent implements OnInit {
                 let semi_monthly_minimis: number = Number(emp[0].productivity_payment) / 2;
                 let diff_absence: number = semi_monthly_minimis * (Number(payroll.absences) / 10.875);
                 let wah_de_minimis: number = 0;
-                console.log("hiring: " + new Date(emp[0].hiring_date).getTime() + " |start: " + new Date(this.activePeriod.start).getTime() + " |Emp Id: " + emp[0].nearsol_id)
-                if (((new Date(emp[0].hiring_date).getTime()) - (new Date(this.activePeriod.start).getTime())) < 0) {
+                if (((new Date(emp[0].hiring_date).getTime()) - (new Date(this.activePeriod.start).getTime())) > 0) {
                   let hiring_discount: debits = new debits;
                   hiring_discount.type = "OTHER ADJUSTMENTS";
                   hiring_discount.amount = ((((new Date(emp[0].hiring_date).getTime()) - (new Date(this.activePeriod.start).getTime())) / 1000 / 3600 / 24) * (-8) * hour_pay).toFixed(2);
