@@ -68,8 +68,8 @@ export class PeriodsPhComponent implements OnInit {
 
   closing: boolean = false;
   payrolls: payroll_ph[] = [];
-  global_debits:debits[] = [];
-  global_credits:credits[] = [];
+  global_debits: debits[] = [];
+  global_credits: credits[] = [];
 
   ngOnInit() {
     this.start();
@@ -191,12 +191,8 @@ export class PeriodsPhComponent implements OnInit {
   }
 
   start() {
-    this.apiServices.getPeriods().subscribe((periods: periods[]) => {
-      periods.forEach(period => {
-        if (period.idperiods = this.route.snapshot.paramMap.get('id')) {
-          this.activePeriod = period;
-        }
-      })
+    this.apiServices.getFilteredPeriods_ph({id:this.route.snapshot.paramMap.get('id')}).subscribe((pr: periods) => {
+      this.activePeriod = pr;
     })
 
     this.apiServices.getCredits_ph({ id: 'all', period: this.route.snapshot.paramMap.get('id') }).subscribe((cred: credits[]) => {
@@ -565,147 +561,147 @@ export class PeriodsPhComponent implements OnInit {
         this.apiServices.getFilteredEmployees_ph({ filter: 'idemployees', value: payroll.id_employee, dp: this.authUser.getAuthusr().department }).subscribe((emp: employees[]) => {
           this.apiServices.getCredits_ph({ id: emp[0].idemployees, period: this.activePeriod.idperiods }).subscribe((cred: credits[]) => {
             this.apiServices.getDebits_ph({ id: emp[0].idemployees, period: this.activePeriod.idperiods }).subscribe((deb: debits[]) => {
-                let pro: profiles = new profiles;
-                pro.idprofiles = emp[0].id_profile;
-                this.apiServices.getProfile_ph(pro).subscribe((profile: profiles[]) => {
-                  hour_pay = ((Number(emp[0].base_payment) * 12) / (365 - (52 * 2))) / 8;
+              let pro: profiles = new profiles;
+              pro.idprofiles = emp[0].id_profile;
+              this.apiServices.getProfile_ph(pro).subscribe((profile: profiles[]) => {
+                hour_pay = ((Number(emp[0].base_payment) * 12) / (365 - (52 * 2))) / 8;
 
-                  ot_payment = (Number(payroll.ot_regular) * 1.25 * hour_pay) + (Number(payroll.ot_rdot) * 1.3 * hour_pay) + (Number(payroll.ot_holiday) * 2 * 1.3 * hour_pay);
-                  tardi_ness = (Number(payroll.discount) * hour_pay);
-                  holiday_payment = (Number(payroll.holiday_regular) * hour_pay) + (Number(payroll.holiday_special) * .3 * hour_pay);
-                  absent_payment = (Number(payroll.absences) * 8 * hour_pay) * (-1);
-                  night_payment = (Number(payroll.night_hours) * hour_pay * .1);
+                ot_payment = (Number(payroll.ot_regular) * 1.25 * hour_pay) + (Number(payroll.ot_rdot) * 1.3 * hour_pay) + (Number(payroll.ot_holiday) * 2 * 1.3 * hour_pay);
+                tardi_ness = (Number(payroll.discount) * hour_pay);
+                holiday_payment = (Number(payroll.holiday_regular) * hour_pay) + (Number(payroll.holiday_special) * .3 * hour_pay);
+                absent_payment = (Number(payroll.absences) * 8 * hour_pay) * (-1);
+                night_payment = (Number(payroll.night_hours) * hour_pay * .1);
 
-                  cred.forEach(credit => {
-                    if (credit.type == "WIDGET" || credit.type == "NCP" || credit.type == "APPROVED INCENTIVE" || credit.type == "PERFORMANCE" || credit.type == "ATTENDANCE" || credit.type == "WAH ALLOWANCE" || credit.type == "MONTHLY INCENTIVE") {
-                      other_taxable = other_taxable + Number(credit.amount);
-                      if (credit.type == 'WAH ALLOWANCE') {
-                        wah_allowance = Number(credit.amount);
-                      }
-                    } else if (credit.type == "OTHER ADJUSTMENTS") {
-                      other_adjustments = Number(credit.amount);
-                    } else if (credit.type == "RAF" || credit.type == "LEAVE CONVERSION") {
-                      other_income_not_taxable = other_income_not_taxable + Number(credit.amount);
-                    } else {
-                      other_income = other_income + Number(credit.amount);
+                cred.forEach(credit => {
+                  if (credit.type == "WIDGET" || credit.type == "NCP" || credit.type == "APPROVED INCENTIVE" || credit.type == "PERFORMANCE" || credit.type == "ATTENDANCE" || credit.type == "WAH ALLOWANCE" || credit.type == "MONTHLY INCENTIVE") {
+                    other_taxable = other_taxable + Number(credit.amount);
+                    if (credit.type == 'WAH ALLOWANCE') {
+                      wah_allowance = Number(credit.amount);
                     }
-                  });
-
-                  allTaxable = ot_payment + other_income + tardi_ness + holiday_payment + absent_payment + night_payment + other_adjustments + (Number(emp[0].base_payment) / 2) + other_taxable;
-
-                  if (Number(emp[0].base_payment) <= 200) {
-                    sss_tax = 80 / 2;
-                  } else if (Number(emp[0].base_payment) <= 2249.99) {
-                    sss_tax = 100 / 2;
+                  } else if (credit.type == "OTHER ADJUSTMENTS") {
+                    other_adjustments = Number(credit.amount);
+                  } else if (credit.type == "RAF" || credit.type == "LEAVE CONVERSION") {
+                    other_income_not_taxable = other_income_not_taxable + Number(credit.amount);
                   } else {
-                    let taxableAmount: number = 2749.99;
-                    sss_tax = 100;
-                    while ((Number(emp[0].base_payment) > taxableAmount) && (taxableAmount <= 19749.99)) {
-                      taxableAmount = taxableAmount + 500;
-                      sss_tax = (sss_tax + 20);
-                    }
-                    sss_tax = sss_tax/2;
+                    other_income = other_income + Number(credit.amount);
                   }
+                });
 
-                  if (Number(emp[0].base_payment) > 59999) {
-                    phic = 900 / 2;
+                allTaxable = ot_payment + other_income + tardi_ness + holiday_payment + absent_payment + night_payment + other_adjustments + (Number(emp[0].base_payment) / 2) + other_taxable;
+
+                if (Number(emp[0].base_payment) <= 200) {
+                  sss_tax = 80 / 2;
+                } else if (Number(emp[0].base_payment) <= 2249.99) {
+                  sss_tax = 100 / 2;
+                } else {
+                  let taxableAmount: number = 2749.99;
+                  sss_tax = 100;
+                  while ((Number(emp[0].base_payment) > taxableAmount) && (taxableAmount <= 19749.99)) {
+                    taxableAmount = taxableAmount + 500;
+                    sss_tax = (sss_tax + 20);
+                  }
+                  sss_tax = sss_tax / 2;
+                }
+
+                if (Number(emp[0].base_payment) > 59999) {
+                  phic = 900 / 2;
+                } else {
+                  phic = ((Number(emp[0].base_payment) / 2) * .03) / 2;
+                }
+
+                if (allTaxable <= 10417) {
+                  fixed_tax_base = 0;
+                  diff_tax_base = 0;
+                } else if (allTaxable < 16666.99) {
+                  fixed_tax_base = 0;
+                  diff_tax_base = (allTaxable - 10417) * 0.2
+                } else if (allTaxable < 33332.99) {
+                  fixed_tax_base = 1250;
+                  diff_tax_base = (allTaxable - 16667) * 0.25;
+                } else if (allTaxable < 83332.99) {
+                  fixed_tax_base = 5416.67;
+                  diff_tax_base = (allTaxable - 33333) * 0.3;
+                } else if (allTaxable > 333332.99) {
+                  fixed_tax_base = 20417.67;
+                  diff_tax_base = (allTaxable - 83333) * 0.32;
+                } else {
+                  fixed_tax_base = 100416.67;
+                  diff_tax_base = (allTaxable - 333333) * 0.35;
+                }
+
+                tax_due = fixed_tax_base + diff_tax_base;
+                total_taxes = sss_tax + phic + pag_ibig + tax_due;
+
+                net_taxable_income = allTaxable - total_taxes;
+
+                let semi_monthly_minimis: number = Number(emp[0].productivity_payment) / 2;
+                let diff_absence: number = semi_monthly_minimis * (Number(payroll.absences) / 10.875);
+                let wah_de_minimis: number = 0;
+                console.log("hiring: " + new Date(emp[0].hiring_date).getTime() + " |start: " + new Date(this.activePeriod.start).getTime() + " |Emp Id: " + emp[0].nearsol_id)
+                if (((new Date(emp[0].hiring_date).getTime()) - (new Date(this.activePeriod.start).getTime())) < 0) {
+                  let hiring_discount: debits = new debits;
+                  hiring_discount.type = "OTHER ADJUSTMENTS";
+                  hiring_discount.amount = ((((new Date(emp[0].hiring_date).getTime()) - (new Date(this.activePeriod.start).getTime())) / 1000 / 3600 / 24) * (-8) * hour_pay).toFixed(2);
+                  this.global_debits.push(hiring_discount);
+                  other_adjustments = Number(hiring_discount.amount) + other_adjustments;
+                  wah_allowance = semi_monthly_minimis * ((((new Date(this.activePeriod.start).getTime() - new Date(this.activePeriod.end).getTime()) - (new Date(emp[0].hiring_date).getTime())) / 1000 / 3600 / 24) / 10.875);
+                  console.log(emp[0].nearsol_id);
+                  console.log(hiring_discount);
+                }
+                de_minimis = (semi_monthly_minimis + diff_absence) + wah_allowance;
+
+                deb.forEach(debit => {
+                  if (debit.type == "SSS LOAN") {
+                    sss_loan = Number(debit.amount);
+                  } else if (debit.type == "HDMF LOAN") {
+                    hdmf_loan = Number(debit.amount);
+                  } else if (debit.type == "HMO") {
+                    hmo = Number(debit.amount);
                   } else {
-                    phic = ((Number(emp[0].base_payment) / 2) * .03) / 2;
+                    others_deduction = Number(debit.amount);
                   }
-
-                  if (allTaxable <= 10417) {
-                    fixed_tax_base = 0;
-                    diff_tax_base = 0;
-                  } else if (allTaxable < 16666.99) {
-                    fixed_tax_base = 0;
-                    diff_tax_base = (allTaxable - 10417) * 0.2
-                  } else if (allTaxable < 33332.99) {
-                    fixed_tax_base = 1250;
-                    diff_tax_base = (allTaxable - 16667) * 0.25;
-                  } else if (allTaxable < 83332.99) {
-                    fixed_tax_base = 5416.67;
-                    diff_tax_base = (allTaxable - 33333) * 0.3;
-                  } else if (allTaxable > 333332.99) {
-                    fixed_tax_base = 20417.67;
-                    diff_tax_base = (allTaxable - 83333) * 0.32;
-                  } else {
-                    fixed_tax_base = 100416.67;
-                    diff_tax_base = (allTaxable - 333333) * 0.35;
-                  }
-
-                  tax_due = fixed_tax_base + diff_tax_base;
-                  total_taxes = sss_tax + phic + pag_ibig + tax_due;
-
-                  net_taxable_income = allTaxable - total_taxes;
-
-                  let semi_monthly_minimis: number = Number(emp[0].productivity_payment) / 2;
-                  let diff_absence: number = semi_monthly_minimis*(Number(payroll.absences)/ 10.875);
-                  let wah_de_minimis: number = 0;
-                  console.log("hiring: " + new Date(emp[0].hiring_date).getTime() + " |start: " + new Date(this.activePeriod.start).getTime() + " |Emp Id: " + emp[0].nearsol_id)
-                  if(((new Date(emp[0].hiring_date).getTime())-(new Date(this.activePeriod.start).getTime())) > 0){
-                    let hiring_discount:debits = new debits;
-                    hiring_discount.type = "OTHER ADJUSTMENTS";
-                    hiring_discount.amount = ((((new Date(emp[0].hiring_date).getTime())-(new Date(this.activePeriod.start).getTime()))/1000/3600/24)*(-8)*hour_pay).toFixed(2);
-                    this.global_debits.push(hiring_discount);
-                    other_adjustments = Number(hiring_discount.amount) + other_adjustments;
-                    wah_allowance = semi_monthly_minimis * ((((new Date(this.activePeriod.start).getTime()-new Date(this.activePeriod.end).getTime())-(new Date(emp[0].hiring_date).getTime()))/1000/3600/24)/ 10.875);
-                    console.log(emp[0].nearsol_id);
-                    console.log(hiring_discount);
-                  }
-                  de_minimis = (semi_monthly_minimis + diff_absence) + wah_allowance;
-
-                  deb.forEach(debit => {
-                    if (debit.type == "SSS LOAN") {
-                      sss_loan = Number(debit.amount);
-                    } else if (debit.type == "HDMF LOAN") {
-                      hdmf_loan = Number(debit.amount);
-                    } else if (debit.type == "HMO") {
-                      hmo = Number(debit.amount);
-                    } else {
-                      others_deduction = Number(debit.amount);
-                    }
-                  })
-
-                  net_take_home = net_taxable_income + other_income + de_minimis + other_income_not_taxable - sss_loan - hdmf_loan - hmo - others_deduction;
-
-                  let push_payroll: payroll_ph = new payroll_ph;
-                  push_payroll.nearsol_id = emp[0].nearsol_id;
-                  push_payroll.client_id = emp[0].client_id;
-                  push_payroll.name = emp[0].name;
-                  push_payroll.position = emp[0].job;
-                  push_payroll.wave = "N/A";
-                  push_payroll.status = emp[0].state;
-                  push_payroll.tin = profile[0].nit;
-                  push_payroll.sss = profile[0].dpi;
-                  push_payroll.account_number = profile[0].account;
-                  push_payroll.gross_basic_monthly = emp[0].base_payment;
-                  push_payroll.gross_basic_semi_monthly = (Number(emp[0].base_payment) / 2).toFixed(2);
-                  push_payroll.overtime = ot_payment.toFixed(2);
-                  push_payroll.tardi_ness = tardi_ness.toFixed(2);
-                  push_payroll.holiday = holiday_payment.toFixed(2);
-                  push_payroll.undertime = "0.00";
-                  push_payroll.absent = absent_payment.toFixed(2);
-                  push_payroll.night_difference = night_payment.toFixed(2);
-                  push_payroll.other_adjustment = other_adjustments.toFixed(2);
-                  push_payroll.other_taxable = other_taxable.toFixed(2);
-                  push_payroll.total = allTaxable.toFixed(2);
-                  push_payroll.sss_tax = sss_tax.toFixed(2);
-                  push_payroll.phic = phic.toFixed(2);
-                  push_payroll.pag_ibig = pag_ibig.toFixed(2);
-                  push_payroll.total_taxes = total_taxes.toFixed(2);
-                  push_payroll.taxable_income = (allTaxable - total_taxes).toFixed(2);
-                  push_payroll.tax_due = tax_due.toFixed(2);
-                  push_payroll.net_taxable_income = net_taxable_income.toFixed(2)
-                  push_payroll.other_income = other_income.toFixed(2);
-                  push_payroll.de_minimis = de_minimis.toFixed(2);
-                  push_payroll.other_non_taxable = other_income_not_taxable.toFixed(2);
-                  push_payroll.sss_loan = sss_loan.toFixed(2);
-                  push_payroll.hdmf_loan = hdmf_loan.toFixed(2);
-                  push_payroll.hmo = hmo.toFixed(2);
-                  push_payroll.others_deduction = others_deduction.toFixed(2);
-                  push_payroll.net_take_home = net_take_home.toFixed(2);
-                  this.payrolls.push(push_payroll);
                 })
+
+                net_take_home = net_taxable_income + other_income + de_minimis + other_income_not_taxable - sss_loan - hdmf_loan - hmo - others_deduction;
+
+                let push_payroll: payroll_ph = new payroll_ph;
+                push_payroll.nearsol_id = emp[0].nearsol_id;
+                push_payroll.client_id = emp[0].client_id;
+                push_payroll.name = emp[0].name;
+                push_payroll.position = emp[0].job;
+                push_payroll.wave = "N/A";
+                push_payroll.status = emp[0].state;
+                push_payroll.tin = profile[0].nit;
+                push_payroll.sss = profile[0].dpi;
+                push_payroll.account_number = profile[0].account;
+                push_payroll.gross_basic_monthly = emp[0].base_payment;
+                push_payroll.gross_basic_semi_monthly = (Number(emp[0].base_payment) / 2).toFixed(2);
+                push_payroll.overtime = ot_payment.toFixed(2);
+                push_payroll.tardi_ness = tardi_ness.toFixed(2);
+                push_payroll.holiday = holiday_payment.toFixed(2);
+                push_payroll.undertime = "0.00";
+                push_payroll.absent = absent_payment.toFixed(2);
+                push_payroll.night_difference = night_payment.toFixed(2);
+                push_payroll.other_adjustment = other_adjustments.toFixed(2);
+                push_payroll.other_taxable = other_taxable.toFixed(2);
+                push_payroll.total = allTaxable.toFixed(2);
+                push_payroll.sss_tax = sss_tax.toFixed(2);
+                push_payroll.phic = phic.toFixed(2);
+                push_payroll.pag_ibig = pag_ibig.toFixed(2);
+                push_payroll.total_taxes = total_taxes.toFixed(2);
+                push_payroll.taxable_income = (allTaxable - total_taxes).toFixed(2);
+                push_payroll.tax_due = tax_due.toFixed(2);
+                push_payroll.net_taxable_income = net_taxable_income.toFixed(2)
+                push_payroll.other_income = other_income.toFixed(2);
+                push_payroll.de_minimis = de_minimis.toFixed(2);
+                push_payroll.other_non_taxable = other_income_not_taxable.toFixed(2);
+                push_payroll.sss_loan = sss_loan.toFixed(2);
+                push_payroll.hdmf_loan = hdmf_loan.toFixed(2);
+                push_payroll.hmo = hmo.toFixed(2);
+                push_payroll.others_deduction = others_deduction.toFixed(2);
+                push_payroll.net_take_home = net_take_home.toFixed(2);
+                this.payrolls.push(push_payroll);
+              })
             })
           })
         })

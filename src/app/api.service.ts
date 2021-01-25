@@ -680,5 +680,10 @@ getProfile_ph(prof:profiles):Observable<profiles[]>{
   return this.httpClient.post<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/full_query_ph.php`, prof);
 }
 
+getFilteredPeriods_ph(any:any){
+  return this.httpClient.post<periods>(`${this.PHP_API_SERVER}/phpscripts/getFilteredPeriods_ph.php`, any);
+}
+
+
   constructor(private httpClient:HttpClient) { }
 }
