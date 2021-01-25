@@ -589,8 +589,6 @@ export class PeriodsComponent implements OnInit {
     let cnt: number = 0;
     let failed: payments[] = [];
 
-    console.log('Cerrando período Paso 8.1 setear pagos ya calculados...');
-
     return this.payments.forEach(pay => {
       this.apiService.setPayment(pay).subscribe((str: string) => { // Inserta los pagos ya calculados.
         if (str != '1') {
@@ -600,12 +598,10 @@ export class PeriodsComponent implements OnInit {
         if (cnt == this.payments.length - 1) {
           this.apiService.setClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
             if (str != '1') {
-              console.log('Error al cerrar el período. Paso 8. ' + str);
               this.loading = false;
               this.getHome();
             } else {
               this.loading = false;
-              console.log('Cerrar período, ya procesado' + str);
             }
           }); //Fin del if.            
         }
