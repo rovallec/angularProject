@@ -69,7 +69,7 @@ $sql =  "SELECT  " .
         "  /* CREDITOS */ " .
         "  SELECT DISTINCT " .
         "    g.idpayments, " .
-        "    a.idemployees,  " .
+        "    b.NEARSOL_ID as 'idemployees',  " .
         "    a.client_id, " .
         "    UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) as NombreDelTrabajador,  " .
         "    IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS JORNADA,   " .
@@ -143,7 +143,11 @@ $sql =  "SELECT  " .
         "  INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods) " .
         "  INNER JOIN periods h ON (g.id_period = h.idperiods) " .
         "  INNER JOIN credits j on (g.idpayments = j.id_payment) " .
+<<<<<<< HEAD
         "  INNER JOIN (SELECT c2.id_payment, SUM(ROUND(c2.amount, 2)) AS amount FROM credits c2 where c2.TYPE NOT IN('Bonificacion Decreto', 'Anticipo Sobre Sueldo', 'Salario Base') OR c2.type NOT LIKE 'Horas Extra Laboradas:%' GROUP BY c2.id_payment) k on (g.idpayments = k.id_payment) " .
+=======
+        "  INNER JOIN (SELECT c2.id_payment, SUM(ROUND(c2.amount, 2)) AS amount FROM credits c2 where (c2.TYPE NOT IN('Bonificacion Decreto', 'Anticipo Sobre Sueldo', 'Salario Base') AND c2.TYPE NOT LIKE'%Horas%Extra%Laboradas%') GROUP BY c2.id_payment) k on (g.idpayments = k.id_payment) " .
+>>>>>>> newBrancheReporteNomina
         "  INNER JOIN credits l on (g.idpayments = l.id_payment and l.type='Bonificacion Decreto') " .
         "  WHERE a.active = 1 " .
         "  AND h.idperiods = $AID_Period " .
@@ -151,7 +155,7 @@ $sql =  "SELECT  " .
         "  /* DEBITOS */ " .
         "SELECT DISTINCT " .
         "  g.idpayments, " .
-        "  a.idemployees,  " .
+        "  b.NEARSOL_ID as 'idemployees',  " .
         "  a.client_id, " .
         "  UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) as 'NombreDelTrabajador',  " .
         "  IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS 'Jornada',   " .
