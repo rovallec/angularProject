@@ -368,6 +368,9 @@ export class HrprofilesComponent implements OnInit {
     this.temp_end = "12:00";
     this.temp_start = "12:00";
     this.editAdj = false;
+    this.attAdjudjment.date = this.todayDate;
+    this.attAdjudjment.state = "PENDING";
+    this.attAdjudjment.status
     this.attAdjudjment.amount = "0";
     this.attAdjudjment.time_before = att.worked_time;
     this.attAdjudjment.id_attendence = att.idattendences;
