@@ -110,8 +110,8 @@ $sql =  "SELECT  " .
         "    COALESCE(ROUND(k.amount, 2), 0.00) AS 'OtrasBonificacioneseincentivos',   " .
         "    /* SE SUMAN TODOS LOS CREDITOS Y DEBITOS */ " .
         "    ROUND( " .
-        "    ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + ((-1) * COALESCE(g.sevenths, 0.00)) + COALESCE(g.holidays, 0.00), 2) + /* Salario Base (SalarioTotal) */  " .
-        "    ROUND((COALESCE(g.base_hours, 0.00)-120) / (120 / COALESCE(g.base_complete / 2, 0.00)), 2) +  /* Ausencias */ " .
+        "    ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) + /* Salario Base (SalarioTotal) */  " .
+        "    ROUND((COALESCE(g.base_hours, 0.00)-120) / (120 / COALESCE(g.base_complete / 2, 0.00)), 2) +  /* Ausencias */ " . 
         "    0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + /* DEDUCCIONES VARIAS */  " .
         "    ROUND(COALESCE(l.amount, 0.00), 2) + /* BonificacionIncentivo */  " .
         "    COALESCE(k.amount, 0.00), 2) AS 'LiquidoARecibir', /* OtrasBonificacioneseincentivos */ " .
