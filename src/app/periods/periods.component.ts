@@ -10,7 +10,7 @@ import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { schedule_visit } from '../addTemplate';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr } from '../process_templates';
+import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
@@ -46,6 +46,7 @@ export class PeriodsComponent implements OnInit {
   global_judicials: judicials[] = [];
   global_services: services[] = [];
   backUp_payments: payments[];
+  selected_accounts:string = 'GET ALL';
   period: periods = new periods;
   daysOff: number = 0;
   roster: number = 0;
@@ -70,6 +71,7 @@ export class PeriodsComponent implements OnInit {
   importString: string = null;
   loading: boolean = false;
   isrs: isr[] = [];
+  accounts:accounts[] = [];
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
@@ -78,6 +80,9 @@ export class PeriodsComponent implements OnInit {
   }
 
   start() {
+    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
+      this.accounts = acc;
+    })
     this.getDeductions();
     this.apiService.getFilteredPeriods({ id: this.route.snapshot.paramMap.get('id') }).subscribe((p: periods) => {
       this.period = p;
@@ -1088,7 +1093,18 @@ export class PeriodsComponent implements OnInit {
       window.open("./../phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
   }
 
-  exportBilling() {
+  setAccount(str:string){
+    this.selected_accounts = str;
+  }
 
+  exportBilling() {
+    if(this.selected_accounts == "GET ALL"){
+      this.selected_accounts = this.accounts[0].idaccounts;
+      this.accounts.forEach((acc)=>{
+        this.selected_accounts = this.selected_accounts + "," + acc.idaccounts;
+      })
+    }
+    let end:Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]) + 1, 0);
+    window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])) + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + end.getMonth().toString() + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
   }
 }

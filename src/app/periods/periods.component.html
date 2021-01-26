@@ -49,7 +49,8 @@
             <i class="fas fa-arrow-circle-up" style="margin-left:5px" (click)="activeImport()"
                 *ngIf="!showPaymentes && period.status == '1'"></i>
             <i class="fas fa-download" style="margin-left:5px" (click)="exportPayrollReport()" *ngIf="period.status == '0'"></i>
-            <i class="fas fa-file-invoice-dollar" style="margin-left:5px" (click)="exportBilling()" *ngIf="period.status == '0'"></i>
+            <i class="fas fa-file-invoice-dollar" style="margin-left:5px" *ngIf="period.status == '0'" data-toggle="modal"
+            data-target="#setBilling"></i>
         </div>
     </div>
 
@@ -354,3 +355,38 @@
             </div>
         </div>
     </div>
+</div>
+<!------------------------------------------------------------------- MODAL PAYMENT DETAILS -------------------------------------------------------------->
+<div class="modal fade" id="setBilling" tabindex="-1" aria-labelledby="setBillingLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="st-setBillingLabel">BILLING EXPORT</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <label>ACCOUNT:</label>
+                        <select class="form-control" [ngModel]="selected_accounts" (click)="setAccount($event.target.value)">
+                            <option>GET ALL</option>
+                            <option *ngFor="let account of accounts" [value]="account.idaccounts">{{account.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex justify-content-left">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                <div class="d-flex justify-content-right">
+                    <button type="button" class="btn btn-primary" (click)="exportBilling()">Generate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
