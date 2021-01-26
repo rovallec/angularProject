@@ -355,7 +355,7 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getAttAdjustments({ id: this.activeEmp }).subscribe((adj: attendences_adjustment[]) => {
       if (adj.length >= 16) {
         for (let i = (adj.length - 1); i > (adj.length - 16); i = i - 1) {
-          this.showAttAdjustments.push(adj[i]);
+          this.showAttAdjustments.push(adj[adj.length - i]);
         }
       } else {
         this.showAttAdjustments = adj;
