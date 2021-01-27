@@ -11,7 +11,7 @@ $i = 0;
 
 $sql =  "SELECT  " .
         //"  A1.idpayments, " .
-        "  A1.idemployees AS IdEmployees, " .
+        "  A1.idemployees AS 'IdEmployees', " .
         "  A1.client_id As 'Client_ID', " .
         "  A1.NombreDelTrabajador, " .
         "  A1.JORNADA 'Jornada', " .
@@ -46,7 +46,7 @@ $sql =  "SELECT  " .
         "  SUM(A1.VentajasEconomicas) AS VentajasEconomicas, " .
         "  SUM(A1.AjusteSalarial) AS AjusteSalarial, " .
         "  SUM(A1.BonificacionIncentivo) AS BonificacionIncentivo, " .
-        "  SUM(A1.OtrasBonificacioneseincentivos) AS OtrasBonificacioneseincentivos, " .
+        "  SUM(A1.OtrasBonificacioneseincentivos) AS OtrasBonificacioneseIncentivos, " .
         "  SUM(A1.LiquidoARecibir) AS LiquidoARecibir, " .
         "  A1.Observaciones, " .
         "  SUM(A1.BoletoDeOrnato)  AS BoletoDeOrnato, " .
@@ -89,9 +89,9 @@ $sql =  "SELECT  " .
         "    0.00 AS 'SalarioComisiones', " .
         "    g.sevenths AS 'SalarioSeptimos', " .
         "    g.holidays AS 'SalarioAsuetos', " .
-        "    ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + (COALESCE(g.sevenths, 0.00)*(-1)) + COALESCE(g.holidays, 0.00), 2) AS 'SalarioTotal', " .
+        "    ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) AS 'SalarioTotal', " .
         "    ROUND((COALESCE (g.base_hours, 0.00)-120)/(120 / COALESCE(g.base_complete / 2, 0.00)), 2) AS 'Ausencias', " .
-        "    ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + (COALESCE(g.sevenths, 0.00)*(-1)) + COALESCE(g.holidays, 0.00), 2) + " .
+        "    ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) + " .
         "    ROUND((COALESCE(g.base_hours, 0.00)-120)/(120/COALESCE(g.base_complete/2, 0.00)), 2)AS 'SalarioNeto',    " .
         "    /* DEDUCCIONES */ " .
         "    0.00 AS 'IGSS', " .
@@ -106,14 +106,14 @@ $sql =  "SELECT  " .
         "    0.00 AS 'Idemnizacion', " .
         "    0.00 AS 'VentajasEconomicas', " .
         "    0.00 AS 'AjusteSalarial', " .
-        "    ROUND(COALESCE(l.amount, 0.00), 2) AS 'BonificacionIncentivo', " .
+        "    COALESCE(ROUND(l.amount, 2), 0.00) AS 'BonificacionIncentivo', " .
         "    COALESCE(ROUND(k.amount, 2), 0.00) AS 'OtrasBonificacioneseincentivos',   " .
         "    /* SE SUMAN TODOS LOS CREDITOS Y DEBITOS */ " .
         "    ROUND( " .
-        "    ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + ((-1) * COALESCE(g.sevenths, 0.00)) + COALESCE(g.holidays, 0.00), 2) + /* Salario Base (SalarioTotal) */  " .
+        "    ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) + /* Salario Base (SalarioTotal) */  " .
         "    ROUND((COALESCE(g.base_hours, 0.00)-120) / (120 / COALESCE(g.base_complete / 2, 0.00)), 2) +  /* Ausencias */ " .
         "    0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + /* DEDUCCIONES VARIAS */  " .
-        "    ROUND(COALESCE(l.amount, 0.00), 2) + /* BonificacionIncentivo */  " .
+        "    COALESCE(ROUND(l.amount, 2), 0.00) + /* BonificacionIncentivo */  " .
         "    COALESCE(k.amount, 0.00), 2) AS 'LiquidoARecibir', /* OtrasBonificacioneseincentivos */ " .
         "    'Planilla de Sueldo Ordinario' AS 'Observaciones', " .
         "     /*  Detalle de Descuentos */  " .
@@ -175,47 +175,47 @@ $sql =  "SELECT  " .
         "  0.00 AS 'Ausencias', " .
         "  0.00 AS 'SalarioNeto',  " .
         "  /* DEDUCCIONES */ " .
-        "  (-1*(COALESCE(IF(i.TYPE='Descuento IGSS',       ROUND(i.amount, 2), 0.00), 0.00))) AS 'IGSS', " .
-        "  (-1*(COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios','Anticipo Sobre Sueldo'),ROUND(i.amount, 2), 0.00), 0.00))) AS 'Otras',   " .
-        "  (-1*(COALESCE(IF(i.TYPE='Descuentos Varios',    ROUND(i.amount, 2), 0.00), 0.00))) AS 'Descuentos', " .
-        "  (-1*(COALESCE(IF(i.type='Anticipo Sobre Sueldo',ROUND(i.amount, 2), 0.00), 0.00))) AS 'AnticipoSobreSueldo',  " .
+        "  (-1*(COALESCE(IF(i.TYPE='Descuento IGSS',                        ROUND(i.amount, 2), 0.00), 0.00))) AS 'IGSS', " .
+        "  (-1*(COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios','Anticipo Sobre Sueldo', 'Discount'),ROUND(i.amount, 2), 0.00), 0.00))) AS 'Otras', " .
+        "  (-1*(COALESCE(IF(i.TYPE in('Descuentos Varios', 'Discount'),     ROUND(i.amount, 2), 0.00), 0.00))) AS 'Descuentos', " .
+        "  (-1*(COALESCE(IF(i.type='Anticipo Sobre Sueldo',                 ROUND(i.amount, 2), 0.00), 0.00))) AS 'AnticipoSobreSueldo',  " .
         "  /* SE SUMAN TODAS LAS DEDUCCIONES */ " .
-        "  (-1*(COALESCE(IF(i.TYPE='Descuento IGSS',       ROUND(i.amount, 2), 0.00), 0.00) + /* IGSS */  " .
-        "  COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios', 'Anticipo Sobre Sueldo'),ROUND(i.amount, 2), 0.00), 0.00) + /* Otras */ " .
-        "  COALESCE(IF(i.TYPE='Descuentos Varios',         ROUND(i.amount, 2), 0.00), 0.00) + /* Descuentos */ " .
-        "  COALESCE(IF(i.type='Anticipo Sobre Sueldo',     ROUND(i.amount, 2), 0.00), 0.00))) AS 'TotalDeducciones', /* AnticipoSobreSueldo */  " .
+        "  (-1*(COALESCE(IF(i.TYPE='Descuento IGSS',                        ROUND(i.amount, 2), 0.00), 0.00) + /* IGSS */  " .
+        "  COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios', 'Anticipo Sobre Sueldo', 'Discount'),ROUND(i.amount, 2), 0.00), 0.00) + /* Otras */ " .
+        "  COALESCE(IF(i.TYPE in('Descuentos Varios', 'Discount'),          ROUND(i.amount, 2), 0.00), 0.00) + /* Descuentos */ " .
+        "  COALESCE(IF(i.type='Anticipo Sobre Sueldo',                      ROUND(i.amount, 2), 0.00), 0.00))) AS 'TotalDeducciones', /* AnticipoSobreSueldo */  " .
         "  0.00 AS 'Aguinaldo', " .
         "  0.00 AS 'Bono14', " .
         "  0.00 AS 'Vacaciones', " .
         "  0.00 AS 'Idemnizacion', " .
         "  0.00 AS 'VentajasEconomicas', " .
-        "  IF(i.type='Ajuste Salarial',                    ROUND(COALESCE(i.amount, 0.00), 2), 0.00) AS 'AjusteSalarial', " .
+        "  IF(i.type='Ajuste Salarial',                                     ROUND(COALESCE(i.amount, 0.00), 2), 0.00) AS 'AjusteSalarial', " .
         "  0.00 AS 'BonificacionIncentivo', " .
         "  0.00 AS 'OtrasBonificacioneseincentivos', " .
         "  /* SE SUMAN TODOS LOS CREDITOS Y DEBITOS */ " .
         "  ROUND(  " .
         "  0.00 +  /* Salario Base (SalarioTotal) */  " .
         "  0.00 + /* Ausencias */  " .
-        "  (-1* (COALESCE(IF(i.TYPE='Descuento IGSS',      ROUND(i.amount, 2), 0.00), 0.00) +  /* IGSS */  " .
-        "    COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios','Descuentos Varios','Anticipo Sobre Sueldo'),ROUND(i.amount, 2), 0.00), 0.00)  +  /* Otras */ " .
-        "    COALESCE(IF(i.TYPE='Descuentos Varios',       ROUND(i.amount, 2), 0.00), 0.00) +  /* Descuentos */ " .
-        "    COALESCE(IF(i.type='Anticipo Sobre Sueldo',   ROUND(i.amount, 2), 0.00), 0.00))) +  /* TotalDeducciones En Negativo */ " .
+        "  (-1* (COALESCE(IF(i.TYPE='Descuento IGSS',                       ROUND(i.amount, 2), 0.00), 0.00) +  /* IGSS */  " .
+        "    COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios','Descuentos Varios','Anticipo Sobre Sueldo', 'Discount'),ROUND(i.amount, 2), 0.00), 0.00)  +  /* Otras */ " .
+        "    COALESCE(IF(i.TYPE in('Descuentos Varios', 'Discount'),        ROUND(i.amount, 2), 0.00), 0.00) +  /* Descuentos */ " .
+        "    COALESCE(IF(i.type='Anticipo Sobre Sueldo',                    ROUND(i.amount, 2), 0.00), 0.00))) +  /* TotalDeducciones En Negativo */ " .
         "  0.00 + 0.00 + 0.00 + 0.00 + 0.00 +                                                  /* Otros Descuentos */ " .
-        "  COALESCE(IF(i.type='Ajuste Salarial',           ROUND(i.amount, 2), 0.00), 0.00) +  /* Ajuste Salarial */  " .
+        "  COALESCE(IF(i.type='Ajuste Salarial',                            ROUND(i.amount, 2), 0.00), 0.00) +  /* Ajuste Salarial */  " .
         "  0.00 +  /* BonificacionIncentivo */  " .
         "  0.00, 2) AS 'LiquidoARecibir',  /* OtrasBonificacioneseincentivos */ " .
         "  'Planilla de Sueldo Ordinario' AS 'Observaciones', " .
         "   /*  Detalle de Descuentos */  " .
-        "  COALESCE(IF(i.type='Boleto de Ornato',          ROUND(i.amount, 2), 0.00), 0.00) AS 'BoletoDeOrnato', " .
-        "  COALESCE(IF(i.type='DESCUENTO SEGURO',          ROUND(i.amount, 2), 0.00), 0.00) AS 'DescuentoSeguro', " .
-        "  COALESCE(IF(i.type IN('Descuento Judicial', 'Acuerdo Judicial'),ROUND(i.amount, 2), 0.00), 0.00) AS 'DescuentosJudiciales', " .
-        "  COALESCE(IF(i.type='HEADSET',                   ROUND(i.amount, 2), 0.00), 0.00) AS 'HeadSet', " .
-        "  COALESCE(IF(i.type='ISR',                       ROUND(i.amount, 2), 0.00), 0.00) AS 'ISREmpleados', " .
-        "  COALESCE(IF(i.type='CAR PARKING',               ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoEmpleados', " .
-        "  COALESCE(IF(i.type='MOTORCYCLE PARKING',        ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoMotos', " .
-        "  COALESCE(IF(i.type='TARJETA DE ACCESO/PARQUEO', ROUND(i.amount, 2), 0.00), 0.00) AS 'TarjetaDeParqueo', " .
-        "  COALESCE(IF(i.type='BUS TRANSPORTATION',        ROUND(i.amount, 2), 0.00), 0.00) AS 'TransporteEnBus', " .
-        "  COALESCE(IF(i.type='PERSONAL LOAN',             ROUND(i.amount, 2), 0.00), 0.00) AS 'PrestamoPersonal',  " .
+        "  COALESCE(IF(i.type='Boleto de Ornato',                           ROUND(i.amount, 2), 0.00), 0.00) AS 'BoletoDeOrnato', " .
+        "  COALESCE(IF(i.type='DESCUENTO SEGURO',                           ROUND(i.amount, 2), 0.00), 0.00) AS 'DescuentoSeguro', " .
+        "  COALESCE(IF(i.type IN('Descuento Judicial', 'Acuerdo Judicial'), ROUND(i.amount, 2), 0.00), 0.00) AS 'DescuentosJudiciales', " .
+        "  COALESCE(IF(i.type='HEADSET',                                    ROUND(i.amount, 2), 0.00), 0.00) AS 'HeadSet', " .
+        "  COALESCE(IF(i.type='ISR',                                        ROUND(i.amount, 2), 0.00), 0.00) AS 'ISREmpleados', " .
+        "  COALESCE(IF(i.type='CAR PARKING',                                ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoEmpleados', " .
+        "  COALESCE(IF(i.type='MOTORCYCLE PARKING',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoMotos', " .
+        "  COALESCE(IF(i.type='TARJETA DE ACCESO/PARQUEO',                  ROUND(i.amount, 2), 0.00), 0.00) AS 'TarjetaDeParqueo', " .
+        "  COALESCE(IF(i.type='BUS TRANSPORTATION',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'TransporteEnBus', " .
+        "  COALESCE(IF(i.type='PERSONAL LOAN',                              ROUND(i.amount, 2), 0.00), 0.00) AS 'PrestamoPersonal',  " .
         "   /* Detalle de Bonos / Ajustes */ " .
         "  0.00 AS 'AjustesPeriodos', " .
         "  0.00 AS 'BonosDiversos', " .
