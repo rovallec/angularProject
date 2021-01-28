@@ -235,7 +235,7 @@ $sql =  "SELECT  " .
         "WHERE a.active = 1 " .
         "AND h.idperiods = $AID_Period " .
         ") A1 " .
-        "GROUP BY   A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JORNADA,A1.SECCION,A1.bank, " .
+        "GROUP BY A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JORNADA,A1.SECCION,A1.bank, " .
         "  A1.`Transferencia/Cheque`, " .
         "  A1.dpi,A1.iggs,A1.PERIODO, " .
         "  A1.Observaciones  " .
