@@ -23,7 +23,7 @@ $sql =
 "    f.number AS 'Account', " .
 "    UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) AS 'Name', " .
 "    f.bank, " .
-"    IF (f.type = 'BANK CHECK', 'CHEQUE', F.number) AS 'Transferencia/Cheque', " .
+"    f.type, " .
 "    c.dpi,          " .
 "    /* SE SUMAN TODOS LOS CREDITOS Y DEBITOS */ " .
 "    ROUND( " .
@@ -45,7 +45,6 @@ $sql =
 "  INNER JOIN credits l on (g.idpayments = l.id_payment and l.type='Bonificacion Decreto') " .
 "  WHERE a.active = 1 " .
 "  AND h.idperiods = $AID_Period " .
-"  /*AND a.idemployees = 4663*/   " .
 "  UNION  " .
 "  /* DEBITOS */ " .
 "SELECT DISTINCT " .
@@ -54,7 +53,7 @@ $sql =
 "  f.number AS 'Account', " .
 "  UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) AS 'Name',   " .
 "  f.bank, " .
-"  IF (f.type = 'BANK CHECK', 'CHEQUE', F.number) AS 'Transferencia/Cheque', " .
+"  f.type, " .
 "  c.dpi,      " .
 "  /* SE SUMAN TODOS LOS CREDITOS Y DEBITOS */ " .
 "  ROUND(  " .
@@ -79,15 +78,14 @@ $sql =
 "INNER JOIN debits i ON (g.idpayments = i.id_payment)  " .
 "WHERE a.active = 1 " .
 "AND h.idperiods = $AID_Period " .
-"/*AND a.idemployees = 4663 */ " .
-") A1   " .
+") A1 " .
+"WHERE A1.type != 'BANK CHECK' " .
+"  AND COALESCE(TRIM(A1.Account), '') != '' " .
 "GROUP BY A1.idemployees, " .
 "  A1.Account, " .
 "  A1.dpi, " .
 "  A1.Name  " .
 "LIMIT 0, 10000; ";
-
-
 
 
 $title = ['Account', 'DPI', 'Name', 'Mount'];
