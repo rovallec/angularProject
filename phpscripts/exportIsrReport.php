@@ -5,6 +5,9 @@ header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="' . "CargaProyeccionyActualizacion.csv" . '"');
 require 'database.php';
 
+$start = $_GET['start'];
+$end = $_GET['end'];
+
 $isr = [];
 $current_date = date("Y-m-d");
 $today_date = new DateTime(date("Y-m-d"));
@@ -21,7 +24,7 @@ coalesce(`real_base`,0) AS `print_base`, coalesce(`real_productivity`,0) AS `pri
     LEFT JOIN (SELECT group_concat(new_salary) AS `rise_amount`, id_employee FROM hr_processes 
 					INNER JOIN rises ON rises.id_process = hr_processes.idhr_processes WHERE hr_processes.id_type = 11 GROUP BY id_employee) AS `rise` ON `rise`.id_employee = employees.idemployees
     LEFT JOIN (SELECT SUM(payments.base) AS `real_base`, SUM(payments.productivity) AS `real_productivity`, SUM(ot) AS `ot`, id_employee FROM payments
-					INNER JOIN periods ON periods.idperiods = payments.id_period AND periods.start BETWEEN '2020-01-01' AND '2020-12-15'
+					INNER JOIN periods ON periods.idperiods = payments.id_period AND periods.start BETWEEN '$start' AND '$end'
 			   GROUP BY id_employee) AS `pay` ON `pay`.id_employee = employees.idemployees
 WHERE active = 1 GROUP BY idemployees;";
 
@@ -39,14 +42,14 @@ if($result = mysqli_query($con,$sql)){
 //////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
         if(date($row['hiring_date']) <= date((date("Y")-1) . "-12-01")){
             $a_date = new DateTime((date("Y")-1) . "-12-01");
-            $a_diff = $today_date->diff($a_date);
+            $a_diff = $a_date->diff($ag_date);
             $a_days = $a_diff->format("%a");
         }else{
             $a_date = new DateTime($row['hiring_date']);
             $a_diff = $ag_date->diff($a_date);
             $a_days = $a_diff->format("%a");
         };
-        $isr[7] = number_format(($row['base']) * ($a_days/365),2);
+        $isr[7] = number_format(($row['base'] + $row['productivity']) * ($a_days/365),2);
 //////////////////////////////////////////////////BONO 14//////////////////////////////////////////////////////////////
         if(date($row['hiring_date']) <= date((date("Y")-1) . "-07-01")){
             $b_date = new DateTime((date("Y")-1) . "-07-01");
@@ -54,10 +57,10 @@ if($result = mysqli_query($con,$sql)){
             $b_days = $b_diff->format("%a");
         }else{
             $b_date = new DateTime($row['hiring_date']);
-            $b_diff = $today_date->diff($b_date);
+            $b_diff = $bn_date->diff($b_date);
             $b_days = $b_diff->format("%a");
         };
-        $isr[8] = number_format(($row['base']) * ($b_days/365),2);
+        $isr[8] = number_format(($row['base'] + $row['productivity']) * ($b_days/365),2);
         $isr[9] = '0';
         $isr[10] = '0';
         $isr[11] = '0';
