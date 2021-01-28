@@ -19,6 +19,7 @@ import { DH_NOT_SUITABLE_GENERATOR } from 'constants';
 import { runInThisContext } from 'vm';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 
+
 @Component({
   selector: 'app-periods',
   templateUrl: './periods.component.html',
@@ -62,7 +63,7 @@ export class PeriodsComponent implements OnInit {
   value: string = null;
   ded: boolean = true;
   non_show_2: boolean = false;
-  showPaymentes: boolean = false;
+  showPayments: boolean = false;
   searchClosed: boolean = false;
   importActive: boolean = false;
   working: boolean = false;
@@ -555,13 +556,13 @@ export class PeriodsComponent implements OnInit {
         })
       })
       this.ded = false;
-      this.showPaymentes = true;
+      this.showPayments = true;
     })
   }
 
   searchCloseEmployee() {
     let partial_payments: payments[] = [];
-    this.showPaymentes = false;
+    this.showPayments = false;
     if (!this.searchClosed) {
       this.backUp_payments = this.payments;
     }
@@ -572,22 +573,22 @@ export class PeriodsComponent implements OnInit {
     })
     this.payments = partial_payments;
     this.searchClosed = false;
-    this.showPaymentes = true;
+    this.showPayments = true;
   }
 
 
   cancelCloseSearch() {
-    this.showPaymentes = false;
+    this.showPayments = false;
     this.searchClosed = true;
     this.payments = this.backUp_payments;
-    this.showPaymentes = true;
+    this.showPayments = true;
   }
 
   closeClose() {
     this.searchClosed = true;
     this.start();
     this.ded = true;
-    this.showPaymentes = false;
+    this.showPayments = false;
   }
 
   proceedClosePeriod() {
@@ -1000,7 +1001,7 @@ export class PeriodsComponent implements OnInit {
     }
     this.completed = false;
     this.importActive = false;
-    this.showPaymentes = true;
+    this.showPayments = true;
   }
 
   addfile(event) {
@@ -1090,7 +1091,11 @@ export class PeriodsComponent implements OnInit {
   }
 
   exportPayrollReport() {
-      window.open("./../phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
+      window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
+  }
+
+  exportBankReport() {
+    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportBankReport.php?AID_Period=" + this.period.idperiods, "_self")
   }
 
   setAccount(str:string){
