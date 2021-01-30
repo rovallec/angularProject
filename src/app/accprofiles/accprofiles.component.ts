@@ -1,6 +1,7 @@
 import { splitAtColon } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouteConfigLoadEnd } from '@angular/router';
+import { promise } from 'protractor';
 import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
@@ -10,6 +11,8 @@ import { PeriodsComponent } from '../periods/periods.component';
 import { process } from '../process';
 import { attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
 import { profiles } from '../profiles';
+import { Observable } from "rxjs";
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-accprofiles',
@@ -54,6 +57,8 @@ export class AccprofilesComponent implements OnInit {
   leaves:leaves[] = [];
   attendances:attendences[] = [];
   total:number;
+  termination:terminations = new terminations;
+  tvalid_Form:string = '2021-01-01';
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -182,11 +187,14 @@ export class AccprofilesComponent implements OnInit {
     let cred_bono14:credits = new credits;
     let cred_vacations:credits = new credits;
     let cred_pendings:credits = new credits;
+       
 
     this.apiService.getProcRecorded({id:this.employee.idemployees}).subscribe((pr:process[])=>{
       pr.forEach(proc=>{
-        if(proc.name === "Termination"){
-          this.apiService.getTerm(proc).subscribe((term:terminations)=>{
+        if(proc.name === "Termination"){          
+            this.apiService.getTerm(proc).subscribe((term:terminations)=>{
+            this.termination = term;
+            console.log("1) " + this.termination);
             if(term.access_card != "YES"){
               let deb_access:debits = new debits;
               deb_access.type = "(-)Access Card Replacement";
@@ -198,13 +206,20 @@ export class AccprofilesComponent implements OnInit {
               deb_headsets.type = "(-)Headsets Replacement";
               deb_headsets.amount = "400.00";
               this.deb_benefits.push(deb_headsets);
-            }
-          })
-          end_date = proc.prc_date;
+            }            
+            this.tvalid_Form = term.valid_from;            
+            
+            console.log("6) " + end_date);
+          }) // en promise          
+          //end_date = proc.prc_date;
           difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
         }
-      })
-      cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;
+      })            
+      setTimeout(() => {
+        // esperamos 1 segundo para asignar el valor.
+        end_date = this.tvalid_Form;                        
+      
+        cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;      
       cred_indemnization.amount = (((((Number(this.employee.base_payment) + Number(this.employee.productivity_payment)) /12)*14)/365)*((new Date(end_date).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1).toFixed(2);
       this.cred_benefits.push(cred_indemnization);
 
@@ -254,6 +269,9 @@ export class AccprofilesComponent implements OnInit {
           })
         }
       })
+      }, 1000);
+      
+      
     })
   }
 

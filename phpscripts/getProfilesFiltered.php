@@ -12,6 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 header('Access-Control-Allow-Origin: *');
+header('Acces-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: Application/json');
 header('Content-Type: application/json');
 
 require 'database.php';
