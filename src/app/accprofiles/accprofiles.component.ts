@@ -54,6 +54,7 @@ export class AccprofilesComponent implements OnInit {
   leaves:leaves[] = [];
   attendances:attendences[] = [];
   total:number;
+  term_valid_from:string = null;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -199,6 +200,8 @@ export class AccprofilesComponent implements OnInit {
               deb_headsets.amount = "400.00";
               this.deb_benefits.push(deb_headsets);
             }
+            this.term_valid_from = term.valid_from;
+            console.log(this.term_valid_from);
           })
           end_date = proc.prc_date;
           difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
@@ -277,4 +280,4 @@ export class AccprofilesComponent implements OnInit {
       });
     })
   }
-} 
+}

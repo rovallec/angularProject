@@ -426,7 +426,7 @@ export class HrprofilesComponent implements OnInit {
     this.activeVacation.id_department = this.authUser.getAuthusr().department;
     this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
     this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
-    if(action = "Add"){
+    if(action == "Add"){
       this.activeVacation.status = "COMPLETED";
     }else{
       this.activeVacation.status = 'PENDING';
@@ -950,7 +950,7 @@ export class HrprofilesComponent implements OnInit {
                 this.activeVacation.took_date = this.todayDate;
                 this.insertVacation();
                 let cred: credits = new credits;
-                cred.amount = ((parseFloat(this.workingEmployee.base_payment) / 30) + ((parseFloat(this.workingEmployee.productivity_payment) - 250) / 30)).toFixed(2);
+                cred.amount = ((parseFloat(this.workingEmployee.base_payment) / 30) + ((parseFloat(this.workingEmployee.productivity_payment)) / 30)).toFixed(2);
                 cred.id_employee = this.workingEmployee.idemployees;
                 cred.id_user = this.authUser.getAuthusr().iduser;
                 cred.date = this.todayDate;
