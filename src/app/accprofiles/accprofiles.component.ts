@@ -177,6 +177,7 @@ export class AccprofilesComponent implements OnInit {
 
   getTerm(){
     let end_date:string = null;
+    let end_date_plus_one:string = null;
     let difference:number = null;
     let a_date:string = null;
     let b_date:string = null;
@@ -216,62 +217,63 @@ export class AccprofilesComponent implements OnInit {
         }
       })            
       setTimeout(() => {
-        // esperamos 1 segundo para asignar el valor.
-        end_date = this.tvalid_Form;                        
+        // esperamos 1 segundo para asignar el valor.        
+        end_date = this.tvalid_Form;
+        end_date_plus_one = String(String(new Date(end_date).getFullYear())  + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate() + 2).toString());
       
+        console.log((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000*3600*24) );
+
         cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;      
-      cred_indemnization.amount = (((((Number(this.employee.base_payment) + Number(this.employee.productivity_payment)) /12)*14)/365)*((new Date(end_date).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1).toFixed(2);
-      this.cred_benefits.push(cred_indemnization);
+        cred_indemnization.amount = (((((Number(this.employee.base_payment) + Number(this.employee.productivity_payment)) /12)*14)/365)*((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1).toFixed(2);
+        this.cred_benefits.push(cred_indemnization);
 
-      if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date.split("-")[0])-1).toString() + "-12-01").getTime()) >= 0)){
-        a_date = this.employee.hiring_date;
-      }else{
-        a_date = (new Date(end_date).getFullYear() - 1) + '-12-01'
-      }
-      cred_aguinaldo .type = "Aguinaldo Periodo del " + a_date + " al " + end_date;
-      cred_aguinaldo.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/365)*(((new Date(end_date).getTime() - (new Date(a_date).getTime())))/(1000*3600*24))+1).toFixed(2);
-      this.cred_benefits.push(cred_aguinaldo);
-
-      if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)){
-        b_date = this.employee.hiring_date;
-      }else{
-        b_date = (new Date(end_date).getFullYear() - 1) + "-07-01";
-      }
-      cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
-      cred_bono14.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/365)*((new Date(end_date).getTime() - new Date(b_date).getTime())/(1000*3600*24))+1).toFixed(2);
-      this.cred_benefits.push(cred_bono14);
-
-      this.apiService.getVacations({id:this.employee.id_profile}).subscribe((vacs:vacations[])=>{
-        vacs.forEach(vacation=>{
-          v_amount = v_amount + (1 * Number(vacation.count));
-        })
-        cred_vacations.type = "Vacaciones Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
-        cred_vacations.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/30)*((((new Date(end_date).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1)/(1/(15/365)) - v_amount)).toFixed(2);
-        this.cred_benefits.push(cred_vacations);
-      })
-      
-      let p:periods = new periods;
-      p.start = 'explicit_employee';
-      p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
-      p.idperiods = "all";
-      console.log(p);
-      this.apiService.getPayments(p).subscribe((pay:payments[])=>{
-        if(!isNullOrUndefined(pay)){
-          this.apiService.getCredits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((cred:credits[])=>{
-            cred.forEach(credit=>{
-              this.cred_benefits.push(credit);
-            })
-          });
-          this.apiService.getDebits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((deb:debits[])=>{
-            deb.forEach(debit=>{
-              this.deb_benefits.push(debit);
-            })
-          })
+        if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0])-1).toString() + "-12-01").getTime()) >= 0)){
+          a_date = this.employee.hiring_date;
+        }else{
+          a_date = (new Date(end_date).getFullYear() - 1) + '-12-01'
         }
-      })
+        cred_aguinaldo .type = "Aguinaldo Periodo del " + a_date + " al " + end_date;
+        cred_aguinaldo.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/365)*(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))/(1000*3600*24))+1).toFixed(2);
+        this.cred_benefits.push(cred_aguinaldo);
+
+        if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)){
+          b_date = this.employee.hiring_date;
+        }else{
+          b_date = (new Date(end_date).getFullYear() - 1) + "-07-01";
+        }
+        cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
+        cred_bono14.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/365)*((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())/(1000*3600*24))+1).toFixed(2);
+        this.cred_benefits.push(cred_bono14);
+
+        this.apiService.getVacations({id:this.employee.id_profile}).subscribe((vacs:vacations[])=>{
+          vacs.forEach(vacation=>{
+            v_amount = v_amount + (1 * Number(vacation.count));
+          })
+          cred_vacations.type = "Vacaciones Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
+          cred_vacations.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/30)*((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1)/(1/(15/365)) - v_amount)).toFixed(2);
+          this.cred_benefits.push(cred_vacations);
+        })
+        
+        let p:periods = new periods;
+        p.start = 'explicit_employee';
+        p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
+        p.idperiods = "all";
+        console.log(p);
+        this.apiService.getPayments(p).subscribe((pay:payments[])=>{
+          if(!isNullOrUndefined(pay)){
+            this.apiService.getCredits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((cred:credits[])=>{
+              cred.forEach(credit=>{
+                this.cred_benefits.push(credit);
+              })
+            });
+            this.apiService.getDebits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((deb:debits[])=>{
+              deb.forEach(debit=>{
+                this.deb_benefits.push(debit);
+              })
+            })
+          }
+        })
       }, 1000);
-      
-      
     })
   }
 
