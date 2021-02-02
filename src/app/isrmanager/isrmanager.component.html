@@ -13,7 +13,7 @@
                         class="fas fa-download"></i></button>
             </div>
             <div *ngIf="!completed">
-                <button class="form-control yellow_hover" (click)="getTermReport()"><i
+                <button class="form-control btn btn-outline-warning" (click)="getTermReport()"><i
                         class="fas fa-users-slash"></i></button>
             </div>
             <div style="margin-right:10px" *ngIf="selectedPeriod.status == '1' && !completed">
