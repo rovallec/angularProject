@@ -5,7 +5,8 @@ header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="' . "CargaProyeccionyActualizacion.csv" . '"');
 require 'database.php';
 
-$start = date("Y") . "-01-01";
+$start = $_GET['start'];
+$start_year = (date("Y")-1) . "-12-01";
 $end = $_GET['end'];
 
 $isr = [];
@@ -29,14 +30,14 @@ $sql = "SELECT employees.idemployees, profiles.nit, profiles.first_name, profile
 coalesce(`crd`.`amnt`,0) AS `bonuses`,
 '250.00' AS `decreto`, coalesce(`ot`,0) AS `over_time`, coalesce(`rise_amount`,0) AS `rises`, employees.hiring_date, coalesce(employees.indemnizations,0) AS `indemnization`, coalesce(employees.retentions,0) AS `retention`,
 coalesce(`real_base`,0) AS `print_base`, coalesce(`real_productivity`,0) AS `print_productivity`, SUM(coalesce(`b_decreto`.`b_amt`,0)) AS `decreto_acumulado`, `trm`.`term_cat`, coalesce(`indemn`.`indemnization`,0) AS `indemn`,
-coalesce(`total_igss`.`igss_deb`,0) AS `igss_payed`
+coalesce(`total_igss`.`igss_deb`,0) AS `igss_payed`, coalesce(`ag`.`ag_amnt`,0) AS `aguinaldo`, coalesce(`b_14`.`b14_amnt`,0) AS `bono_14`
 FROM employees
 	INNER JOIN hires ON hires.idhires = employees.id_hire
 	INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     LEFT JOIN (SELECT group_concat(new_salary) AS `rise_amount`, id_employee FROM hr_processes 
 					INNER JOIN rises ON rises.id_process = hr_processes.idhr_processes WHERE hr_processes.id_type = 11 GROUP BY id_employee) AS `rise` ON `rise`.id_employee = employees.idemployees
     LEFT JOIN (SELECT avg(payments.base_complete) AS `cmp_base`, avg(payments.productivity_complete) AS `cmp_productivity`, SUM(payments.base) AS `real_base`, SUM(payments.productivity) AS `real_productivity`, SUM(ot) AS `ot`, id_employee FROM payments
-					INNER JOIN periods ON periods.idperiods = payments.id_period AND periods.start BETWEEN '$start' AND '$end'
+					INNER JOIN periods ON periods.idperiods = payments.id_period AND periods.start BETWEEN '$start_year' AND '$end'
 			   GROUP BY id_employee) AS `pay` ON `pay`.id_employee = employees.idemployees
     LEFT JOIN (SELECT SUM(credits.amount) AS `b_amt`, id_employee
                FROM credits INNER JOIN payments ON payments.idpayments = credits.id_payment
@@ -48,6 +49,12 @@ FROM employees
 					AND credits.type NOT LIKE '%Ajuste%' AND credits.type NOT LIKE '%Horas Extra Laboradas:%'  AND credits.type NOT LIKE '%Indemnizacion Periodo%'
                     AND credits.type NOT LIKE '%Aguinaldo Periodo%' AND credits.type NOT LIKE '%Bono 14 Periodo%' AND credits.type NOT LIKE '%Vacaciones Periodo%'
 					AND credits.type NOT LIKE '%Horas De Asueto:%' GROUP BY id_employee) AS `crd` ON `crd`.id_employee = employees.idemployees
+	LEFT JOIN (SELECT SUM(credits.amount) AS `b14_amnt`, id_employee
+			    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
+				WHERE credits.type LIKE '%Bono 14 Periodo%' GROUP BY id_employee) AS `b_14` ON `b_14`.id_employee = employees.idemployees
+    LEFT JOIN (SELECT SUM(credits.amount) AS `ag_amnt`, id_employee
+			    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
+				WHERE credits.type LIKE '%Aguinaldo Periodo%' GROUP BY id_employee) AS `ag` ON `ag`.id_employee = employees.idemployees
 	LEFT JOIN (SELECT SUM(credits.amount) AS `indemnization`, id_employee
 			    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
 				WHERE credits.type LIKE '%Indemnizacion Periodo%'
@@ -59,7 +66,7 @@ FROM employees
 	INNER JOIN (SELECT MIN(terminations.valid_from) AS `term_cat`, id_employee FROM hr_processes
 			   INNER JOIN terminations ON terminations.id_process = hr_processes.idhr_processes
                WHERE hr_processes.id_type = 8 GROUP BY id_employee) AS `trm` ON `trm`.id_employee = employees.idemployees
-WHERE active = 0 GROUP BY idemployees;";
+WHERE active = 0 AND  `term_cat` BETWEEN '$start' AND '$end' GROUP BY idemployees;";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("NIT empleado", "Sueldos", "Horas Extras", "Bono Decreto 37-2001", "Otras Bonificaciones", "Comisiones", "Propinas", "Aguinaldo", "Bono Anual de trabajadores (14)", "Viáticos", "Gasto de representación", "Dietas", "Gratificaciones", "Remuneraciones", "Prestaciones IGSS", "Otros", "Indemnizaciones o pensiones por causa de muerte", "Indemnizaciónes por tiempo servido", "Remuneraciones de los diplomáticos", "Gastos de representación y viáticos comprobables", "Aguinaldo", "Bono Anual de trabajadores (14)", "Cuotas IGSS  y Otros planes de seguridad social"));
@@ -73,28 +80,10 @@ if($result = mysqli_query($con,$sql)){
         $isr[4] = number_format(($row['print_productivity'] + $row['bonuses']),2);
         $isr[5] = '0';
         $isr[6] = '0';
-//////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
-        if(date($row['hiring_date']) <= date((date("Y")-1) . "-12-01")){
-            $a_date = new DateTime((date("Y")-1) . "-12-01");
-            $a_diff = $a_date->diff($term_cat);
-            $a_days = $a_diff->format("%a");
-        }else{
-            $a_date = new DateTime($row['hiring_date']);
-            $a_diff = $term_cat->diff($a_date);
-            $a_days = $a_diff->format("%a");
-        };
-        $isr[7] = number_format(($row['base'] + $row['productivity']) * ($a_days/365),2);
+//////////////////////////////////////////////////AGUINALDO////////////////////////////////////////////////////////////
+        $isr[7] = number_format($row['aguinaldo']);
 //////////////////////////////////////////////////BONO 14//////////////////////////////////////////////////////////////
-        if(date($row['hiring_date']) <= date((date("Y")-1) . "-07-01")){
-            $b_date = new DateTime((date("Y")-1) . "-07-01");
-            $b_diff = $bn_date->diff($term_cat);
-            $b_days = $b_diff->format("%a");
-        }else{
-            $b_date = new DateTime($row['hiring_date']);
-            $b_diff = $term_cat->diff($b_date);
-            $b_days = $b_diff->format("%a");
-        };
-        $isr[8] = number_format(($row['base'] + $row['productivity']) * ($b_days/365),2);
+        $isr[8] = number_format($row['bono_14']);
         $isr[9] = '0';
         $isr[10] = '0';
         $isr[11] = '0';
@@ -106,8 +95,8 @@ if($result = mysqli_query($con,$sql)){
         $isr[17] = $row['indemn'];
         $isr[18] = '0';
         $isr[19] = '0';
-        $isr[20] = number_format(($row['base'] + $row['productivity']) * ($a_days/365),2);
-        $isr[21] = number_format((($row['productivity'] + $row['base']) * ($b_days/365)),2);
+        $isr[20] = number_format($row['aguinaldo']);
+        $isr[21] = number_format($row['bono_14']);
         $isr[22] = number_format($row['igss_payed'],2);
         fputcsv($output, $isr, ",");
     };

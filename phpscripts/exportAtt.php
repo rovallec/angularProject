@@ -11,7 +11,7 @@ $to = $_GET['to'];
 
 $attendances = [];
 
-$sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*, id_account, coalesce(SUM(`igss`.amount), 0) AS `igss`, coalesce(SUM(`aux`.amount), 0) AS `aux` from attendences
+$sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*, id_account, coalesce(SUM(`igss`.amount), 0) AS `igss`, coalesce(SUM(`aux`.amount), 0) AS `aux`, coalesce(SUM(`correction`.amount),0) AS `corrections` from attendences
 INNER JOIN employees ON employees.idemployees = attendences.id_employee
 INNER JOIN hires ON hires.idhires = employees.id_hire
 INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
@@ -25,12 +25,17 @@ LEFT JOIN (SELECT * from attendence_justifications
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
-    WHERE id_department != 5) AS `aux` ON `aux`.id_attendence = attendences.idattendences
+    WHERE id_department != 5 AND attendence_justifications.reason NOT IN('IGSS', 'WFM Correction')) AS `aux` ON `aux`.id_attendence = attendences.idattendences
+    LEFT JOIN (SELECT * from attendence_justifications
+    INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
+    INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
+    INNER JOIN users ON users.idUser = hr_processes.id_user
+    WHERE id_department != 5 AND attendence_justifications.reason IN('IGSS', 'WFM Correction')) AS `correction` ON `correction`.id_attendence = attendences.idattendences
 WHERE attendences.date BETWEEN '$from' AND '$to' AND id_account in($account)
 GROUP BY idattendences;";
 
 $output = fopen("php://output", "w");
-fputcsv($output, array("Nearsol ID", "Client ID", "Name", "Account", "Date", "Roster", "Worked", "IGSS", "AUX"));
+fputcsv($output, array("Nearsol ID", "Client ID", "Name", "Account", "Date", "Roster", "Worked", "IGSS", "AUX", "CORRECTION"));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $attendances[0] = $row['nearsol_id'];
@@ -42,6 +47,7 @@ if($result = mysqli_query($con,$sql)){
         $attendances[6] = $row['worked_time'];
         $attendances[7] = $row['igss'];
         $attendances[8] = $row['aux'];
+        $attendances[9] = $row['corrections'];
         fputcsv($output, $attendances, ",");
     };
 }else{
