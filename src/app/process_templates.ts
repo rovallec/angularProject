@@ -725,6 +725,8 @@ export class payments {
     credits: string;
     debits: string;
     date: string;
+    start: string;
+    end: string;
     last_seventh: string;
     ot: string;
     ot_hours: string;
@@ -753,6 +755,8 @@ export class payments {
         this.credits = null;
         this.debits = null;
         this.date = null;
+        this.start  = null;
+        this.end = null;
         this.last_seventh = null;
         this.ot = null;
         this.ot_hours = null;

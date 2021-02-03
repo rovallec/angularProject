@@ -7,7 +7,6 @@ import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods } from '../fullProcess';
 import { AuthGuard } from '../guard/auth-guard.service';
-import { PeriodsComponent } from '../periods/periods.component';
 import { process } from '../process';
 import { attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
 import { profiles } from '../profiles';
@@ -182,7 +181,13 @@ export class AccprofilesComponent implements OnInit {
     let a_date:string = null;
     let b_date:string = null;
     let v_amount:number = 0;
-
+    let sum_payment: number = 0;
+    let average_salary: string = null;
+    let per:periods = new periods;
+    per.idperiods = 'all';
+    per.start = 'explicit';
+    per.status = this.employee.idemployees;    
+    
     let cred_indemnization:credits = new credits;
     let cred_aguinaldo:credits = new credits;
     let cred_bono14:credits = new credits;
@@ -192,11 +197,21 @@ export class AccprofilesComponent implements OnInit {
       if (Aterm.base_for_salary=='Complete') {
         return (Number(Aempl.base_payment) + Number(Aempl.productivity_payment)).toString();
       } else {
-        return (Number(Aempl.base_payment) + Number(Aempl.productivity_payment)).toString();
+        return Number(Aempl.base_payment).toString();
       };
     };
 
+    let average_payment = function salaryAverage(Aterm:terminations, Apay:payments):string {
+      if (Aterm.base_for_salary=='Complete') {
+        return (Number(Apay.base_complete) + Number(Apay.productivity_complete)).toString();
+      } else {
+        return Number(Apay.base_complete).toString();
+      };
+    }
+
+
     this.apiService.getProcRecorded({id:this.employee.idemployees}).subscribe((pr:process[])=>{
+      this.apiService.getPayments(per).subscribe((pay:payments[])=>{
       pr.forEach(proc=>{
         if(proc.name === "Termination"){          
             this.apiService.getTerm(proc).subscribe((term:terminations)=>{
@@ -215,19 +230,26 @@ export class AccprofilesComponent implements OnInit {
             }            
             this.tvalid_Form = term.valid_from;            
           }) // en promise          
-          //end_date = proc.prc_date;
+          
           difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
         }
-      })            
-      setTimeout(() => {
-        // esperamos 1 segundo para asignar el valor.        
-        end_date = this.tvalid_Form;
-        end_date_plus_one = String(String(new Date(end_date).getFullYear())  + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate() + 2).toString());
+      }) 
       
-        console.log((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000*3600*24) );
+      pay.forEach(element => {
+        sum_payment = sum_payment + Number(average_payment(this.termination, element));            
+      });     
+    
+      average_salary = (sum_payment / pay.length).toFixed(2);  
+      });     
+
+      setTimeout(() => {
+        // esperamos 1 segundo para asignar el valor.  
+              
+        end_date = this.tvalid_Form;
+        end_date_plus_one = String(String(new Date(end_date).getFullYear())  + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate() + 2).toString());        
 
         cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;      
-        cred_indemnization.amount = ((((Number(base_salary(this.termination, this.employee)) /12)*14)/365)*((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1).toFixed(2);
+        cred_indemnization.amount = ((((Number(average_salary) /12)*14)/365)*((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1).toFixed(2);
         this.cred_benefits.push(cred_indemnization);
 
         if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0])-1).toString() + "-12-01").getTime()) >= 0)){
@@ -261,7 +283,7 @@ export class AccprofilesComponent implements OnInit {
         p.start = 'explicit_employee';
         p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
         p.idperiods = "all";
-        console.log(p);
+        //console.log(p);
         this.apiService.getPayments(p).subscribe((pay:payments[])=>{
           if(!isNullOrUndefined(pay)){
             this.apiService.getCredits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((cred:credits[])=>{
@@ -281,23 +303,28 @@ export class AccprofilesComponent implements OnInit {
   }
 
   completePayment(){
-    this.apiService.getPeriods().subscribe((p:periods[])=>{
-      p[p.length-1].start = 'explicit';
-      p[p.length-1].status = this.employee.idemployees;
+    let p:periods = new periods;
+    
+      p.idperiods = 'all';
+      p.start = 'explicit';
+      p.status = this.employee.idemployees;
       this.employee.state = "PAID";
-      this.employee.platform = "NONE";
-      this.apiService.updateEmployee(this.employee).subscribe((str:string)=>{
-        this.apiService.getPayments(this.period).subscribe((pay:payments[])=>{
+      this.employee.platform = "NONE";      
+      this.apiService.updateEmployee(this.employee).subscribe((_str:string)=>{
+        this.apiService.getPayments(p).subscribe((pay:payments[])=>{
           this.cred_benefits.forEach(cred=>{
             cred.idpayments = pay[0].idpayments;
             this.apiService.insertCredits(cred);
+            console.log(pay);
           })
+          console.log(pay);
           this.deb_benefits.forEach(deb=>{
             deb.idpayments = pay[0].idpayments;
+            console.log(pay);
             this.apiService.insertDebits(deb);
           })
         });
       });
-    })
+    
   }
 } 
