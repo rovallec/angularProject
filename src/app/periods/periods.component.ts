@@ -339,7 +339,7 @@ export class PeriodsComponent implements OnInit {
                                   if (discounted <= 0) {
                                     let p_end: Date = new Date(this.period.end);
                                     let p_start: Date = new Date(this.period.start);
-                                    if (((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) > att.length) {
+                                    if ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24)+1) > att.length) {
                                       base_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * base_hour).toFixed(2);
                                       productivity_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * productivity_hour).toFixed(2);
                                       ot_credit.amount = '0';
@@ -367,7 +367,7 @@ export class PeriodsComponent implements OnInit {
                                   } else {
                                     let p_end: Date = new Date(this.period.end);
                                     let p_start: Date = new Date(this.period.start);
-                                    if (((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) > att.length) {
+                                    if ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24)+1) > att.length) {
                                       base_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * base_hour).toFixed(2);
                                       productivity_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * productivity_hour).toFixed(2);
                                       decreto_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * (125 / 120)).toFixed(2);
