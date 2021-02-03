@@ -47,7 +47,7 @@ export class PeriodsComponent implements OnInit {
   global_judicials: judicials[] = [];
   global_services: services[] = [];
   backUp_payments: payments[];
-  selected_accounts:string = 'GET ALL';
+  selected_accounts: string = 'GET ALL';
   period: periods = new periods;
   daysOff: number = 0;
   roster: number = 0;
@@ -72,7 +72,7 @@ export class PeriodsComponent implements OnInit {
   importString: string = null;
   loading: boolean = false;
   isrs: isr[] = [];
-  accounts:accounts[] = [];
+  accounts: accounts[] = [];
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
@@ -81,7 +81,7 @@ export class PeriodsComponent implements OnInit {
   }
 
   start() {
-    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
+    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
       this.accounts = acc;
     })
     this.getDeductions();
@@ -191,115 +191,120 @@ export class PeriodsComponent implements OnInit {
                               if (this.period.status == '1') {
                                 if (att.length != 0) {
                                   att.forEach(attendance => {
+                                    if (attendance.scheduled == "0" || attendance.scheduled == "NaN") {
+                                      this.absence = this.absence + 8;
+                                      discounted = discounted + 8;
+                                    } else {
 
-                                    let dt: Date = new Date(attendance.date);
+                                      let dt: Date = new Date(attendance.date);
 
-                                    if (dt.getDay() === 0) {
-                                      non_show_2 = true;
-                                      if (nonShowCount == 5) {
-                                        discounted = discounted - 8;
-                                        this.absence = this.absence - 8;
+                                      if (dt.getDay() === 0) {
+                                        non_show_2 = true;
+                                        if (nonShowCount == 5) {
+                                          discounted = discounted - 8;
+                                          this.absence = this.absence - 8;
+                                        }
+
+                                        if (janp_sequence == 5) {
+                                          discounted = discounted - 8;
+                                          this.absence = this.absence - 8;
+                                        }
+
+                                        janp_sequence = 0;
+                                        nonShowCount = 0;
                                       }
 
-                                      if (janp_sequence == 5) {
-                                        discounted = discounted - 8;
-                                        this.absence = this.absence - 8;
-                                      }
+                                      activeDp = false;
+                                      activeVac = false;
+                                      activeLeav = false;
 
-                                      janp_sequence = 0;
-                                      nonShowCount = 0;
-                                    }
+                                      dp.forEach(disciplinary => {
+                                        if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != "DISMISSED")) {
+                                          discounted = discounted - 8;
+                                          attendance.balance = "SUSPENSION"
+                                          activeDp = true;
+                                        }
+                                      });
 
-                                    activeDp = false;
-                                    activeVac = false;
-                                    activeLeav = false;
-
-                                    dp.forEach(disciplinary => {
-                                      if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != "DISMISSED")) {
-                                        discounted = discounted - 8;
-                                        attendance.balance = "SUSPENSION"
-                                        activeDp = true;
-                                      }
-                                    });
-
-                                    if (!activeDp) {
-                                      leave.forEach(leav => {
-                                        if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "DISMISSED")) {
-                                          activeLeav = true;
-                                          if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
-                                            discounted = discounted - 8;
-                                            this.absence = this.absence - 8;
-                                            attendance.balance = 'JANP';
-                                            if (attendance.scheduled != 'OFF') {
-                                              janp_sequence = janp_sequence + 1;
-                                            }
-                                          } else {
-                                            if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
-                                              this.attended = this.attended + 8
-                                              attendance.balance = 'JAP';
+                                      if (!activeDp) {
+                                        leave.forEach(leav => {
+                                          if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "DISMISSED")) {
+                                            activeLeav = true;
+                                            if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
+                                              discounted = discounted - 8;
+                                              this.absence = this.absence - 8;
+                                              attendance.balance = 'JANP';
+                                              if (attendance.scheduled != 'OFF') {
+                                                janp_sequence = janp_sequence + 1;
+                                              }
+                                            } else {
+                                              if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
+                                                this.attended = this.attended + 8
+                                                attendance.balance = 'JAP';
+                                              }
                                             }
                                           }
-                                        }
-                                      })
-                                    }
+                                        })
+                                      }
 
-                                    if (!activeDp && !activeLeav) {
-                                      vac.forEach(vacation => {
-                                        if ((vacation.took_date == attendance.date) && (vacation.status != "DISMISSED")) {
-                                          if (attendance.scheduled != "OFF") {
-                                            this.roster = this.roster + Number(attendance.scheduled);
-                                            this.attended = this.attended + Number(attendance.scheduled);
-                                            attendance.balance = 'VAC';
-                                          } else {
-                                            this.daysOff = this.daysOff + 1;
-                                            attendance.balance = "OFF";
-                                          }
-                                          activeVac = true;
-                                        }
-                                      })
-                                    }
-
-                                    if (!activeLeav && !activeVac && !activeDp) {
-                                      if (attendance.scheduled == 'OFF') {
-                                        this.daysOff = this.daysOff + 1;
-                                        attendance.balance = "OFF";
-                                        if (Number(attendance.worked_time) > 0) {
-                                          attendance.balance = attendance.worked_time;
-                                          discounted = discounted + Number(attendance.worked_time);
-                                        }
-                                      } else {
-                                        this.roster = this.roster + Number(attendance.scheduled);
-                                        if (Number(attendance.worked_time) == 0 && (attendance.date != ((new Date().getFullYear()).toString() + "-01-01"))) {
-                                          if (non_show_2) {
-                                            this.absence = this.absence - 16;
-                                            discounted = discounted - 16;
-                                            svnth = svnth + 1;
-                                            non_show_2 = false;
-                                            attendance.balance = "NS";
-                                            nonShowCount = nonShowCount + 1;
-                                            if (att.indexOf(attendance) >= 6) {
-                                              last_seventh = true;
+                                      if (!activeDp && !activeLeav) {
+                                        vac.forEach(vacation => {
+                                          if ((vacation.took_date == attendance.date) && (vacation.status != "DISMISSED")) {
+                                            if (attendance.scheduled != "OFF") {
+                                              this.roster = this.roster + Number(attendance.scheduled);
+                                              this.attended = this.attended + Number(attendance.scheduled);
+                                              attendance.balance = 'VAC';
+                                            } else {
+                                              this.daysOff = this.daysOff + 1;
+                                              attendance.balance = "OFF";
                                             }
-                                          } else {
-                                            attendance.balance = "NS"
-                                            nonShowCount = nonShowCount + 1;
-                                            this.absence = this.absence - 8;
-                                            discounted = discounted - 8;
+                                            activeVac = true;
+                                          }
+                                        })
+                                      }
+
+                                      if (!activeLeav && !activeVac && !activeDp) {
+                                        if (attendance.scheduled == 'OFF') {
+                                          this.daysOff = this.daysOff + 1;
+                                          attendance.balance = "OFF";
+                                          if (Number(attendance.worked_time) > 0) {
+                                            attendance.balance = attendance.worked_time;
+                                            discounted = discounted + Number(attendance.worked_time);
                                           }
                                         } else {
-                                          if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
-                                            if(Number(attendance.worked_time) > 8){
-                                              hld = 8
-                                              this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
-                                              discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
-                                            }else{
-                                              hld = this.attended + Number(attendance.worked_time);
+                                          this.roster = this.roster + Number(attendance.scheduled);
+                                          if (Number(attendance.worked_time) == 0 && (attendance.date != ((new Date().getFullYear()).toString() + "-01-01"))) {
+                                            if (non_show_2) {
+                                              this.absence = this.absence - 16;
+                                              discounted = discounted - 16;
+                                              svnth = svnth + 1;
+                                              non_show_2 = false;
+                                              attendance.balance = "NS";
+                                              nonShowCount = nonShowCount + 1;
+                                              if (att.indexOf(attendance) >= 6) {
+                                                last_seventh = true;
+                                              }
+                                            } else {
+                                              attendance.balance = "NS"
+                                              nonShowCount = nonShowCount + 1;
+                                              this.absence = this.absence - 8;
+                                              discounted = discounted - 8;
                                             }
                                           } else {
-                                            this.attended = this.attended + Number(attendance.worked_time);
-                                            this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
-                                            attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
-                                            discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                            if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
+                                              if (Number(attendance.worked_time) > 8) {
+                                                hld = 8
+                                                this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                                discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                              } else {
+                                                hld = this.attended + Number(attendance.worked_time);
+                                              }
+                                            } else {
+                                              this.attended = this.attended + Number(attendance.worked_time);
+                                              this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                              attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                                              discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                            }
                                           }
                                         }
                                       }
@@ -308,8 +313,8 @@ export class PeriodsComponent implements OnInit {
 
 
                                   if (this.attended == 0 || discounted <= (-120)) {
-                                    this.absence = (att.length * (-8)) + this.attended;
-                                    discounted = (att.length * (-8)) + this.attended;
+                                    this.absence = (-120) + this.attended;
+                                    discounted = (-120) + this.attended;
                                     svnth = 0;
                                   }
 
@@ -339,7 +344,7 @@ export class PeriodsComponent implements OnInit {
                                   if (discounted <= 0) {
                                     let p_end: Date = new Date(this.period.end);
                                     let p_start: Date = new Date(this.period.start);
-                                    if ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24)+1) > att.length) {
+                                    if ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) > att.length) {
                                       base_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * base_hour).toFixed(2);
                                       productivity_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * productivity_hour).toFixed(2);
                                       ot_credit.amount = '0';
@@ -367,7 +372,7 @@ export class PeriodsComponent implements OnInit {
                                   } else {
                                     let p_end: Date = new Date(this.period.end);
                                     let p_start: Date = new Date(this.period.start);
-                                    if ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24)+1) > att.length) {
+                                    if ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) > att.length) {
                                       base_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * base_hour).toFixed(2);
                                       productivity_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * productivity_hour).toFixed(2);
                                       decreto_credit.amount = (((120 + ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) - att.length) * (-8)) + discounted) * (125 / 120)).toFixed(2);
@@ -381,7 +386,7 @@ export class PeriodsComponent implements OnInit {
                                       pay.productivity = productivity_credit.amount;
                                       base_credit.amount = (120 * base_hour).toFixed(2);
                                       pay.base = base_credit.amount;
-                                      pay.days = att.length.toString();
+                                      pay.days = "15";
                                       pay.base_hours = (120).toString();
                                       pay.productivity_hours = (120).toString();
                                       decreto_credit.amount = '125.00';
@@ -795,11 +800,11 @@ export class PeriodsComponent implements OnInit {
                                   }
                                 } else {
                                   if (attendance.date == ((new Date().getFullYear()).toString() + "-01-01")) {
-                                    if(Number(attendance.worked_time) > 8){
+                                    if (Number(attendance.worked_time) > 8) {
                                       hld = 8;
                                       this.absence = this.absence + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                       discounted = discounted + (Number(attendance.worked_time) - Number(attendance.scheduled));
-                                    }else{
+                                    } else {
                                       hld = this.attended + Number(attendance.worked_time);
                                     }
                                   } else {
@@ -1091,25 +1096,25 @@ export class PeriodsComponent implements OnInit {
   }
 
   exportPayrollReport() {
-      window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
+    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
   }
 
   exportBankReport() {
     window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportBankReport.php?AID_Period=" + this.period.idperiods, "_self")
   }
 
-  setAccount(str:string){
+  setAccount(str: string) {
     this.selected_accounts = str;
   }
 
   exportBilling() {
-    if(this.selected_accounts == "GET ALL"){
+    if (this.selected_accounts == "GET ALL") {
       this.selected_accounts = this.accounts[0].idaccounts;
-      this.accounts.forEach((acc)=>{
+      this.accounts.forEach((acc) => {
         this.selected_accounts = this.selected_accounts + "," + acc.idaccounts;
       })
     }
-    let end:Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]) + 1, 0);
+    let end: Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]) + 1, 0);
     window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])) + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + end.getMonth().toString() + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
   }
 }
