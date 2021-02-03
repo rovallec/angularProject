@@ -25,12 +25,12 @@ LEFT JOIN (SELECT * from attendence_justifications
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
-    WHERE id_department != 5 AND attendence_justifications.reason NOT IN('IGSS', 'WFM Correction')) AS `aux` ON `aux`.id_attendence = attendences.idattendences
+    WHERE id_department != 5 AND attendence_justifications.reason NOT IN('IGSS', 'WFM Attendance correction')) AS `aux` ON `aux`.id_attendence = attendences.idattendences
     LEFT JOIN (SELECT * from attendence_justifications
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
-    WHERE id_department != 5 AND attendence_justifications.reason IN('IGSS', 'WFM Correction')) AS `correction` ON `correction`.id_attendence = attendences.idattendences
+    WHERE id_department != 5 AND attendence_justifications.reason IN('IGSS', 'WFM Attendance correction')) AS `correction` ON `correction`.id_attendence = attendences.idattendences
 WHERE attendences.date BETWEEN '$from' AND '$to' AND id_account in($account)
 GROUP BY idattendences;";
 

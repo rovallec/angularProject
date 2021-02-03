@@ -117,11 +117,11 @@ export class PyprofilesComponent implements OnInit {
     let strt: string = null;
 
     if (dt.getDate() > 16) {
-      strt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + "16";
+      strt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + "1";
       dt2 = new Date(dt.getFullYear(), (dt.getMonth() + 2), 0);
       nd = dt2.getFullYear() + "-" + (dt2.getMonth() + 1) + "-" + dt2.getDate();
     } else {
-      strt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + "01";
+      strt = dt.getFullYear() + "-" + (dt.getMonth()) + "-" + "16";
       nd = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + "15";
     }
 

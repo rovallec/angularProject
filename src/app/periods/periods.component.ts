@@ -187,7 +187,7 @@ export class PeriodsComponent implements OnInit {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                         this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                           this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
-                            if (emp[0].active == "1" || emp[0].active == "1") {
+                            if (emp[0].active == "1" || emp[0].active == "0") { //emp[0].active == "1" Unicamente, se agrego el "0" para asemejarce al reporte de TimeKeeping
                               if (this.period.status == '1') {
                                 if (att.length != 0) {
                                   att.forEach(attendance => {
@@ -377,13 +377,13 @@ export class PeriodsComponent implements OnInit {
                                       pay.base = base_credit.amount;
                                       pay.productivity = productivity_credit.amount;
                                     } else {
-                                      productivity_credit.amount = (att.length * 8 * productivity_hour).toFixed(2);
+                                      productivity_credit.amount = (120 * productivity_hour).toFixed(2);
                                       pay.productivity = productivity_credit.amount;
-                                      base_credit.amount = (att.length * 8 * base_hour).toFixed(2);
+                                      base_credit.amount = (120 * base_hour).toFixed(2);
                                       pay.base = base_credit.amount;
                                       pay.days = att.length.toString();
-                                      pay.base_hours = (att.length * 8).toString();
-                                      pay.productivity_hours = (att.length * 8).toString();
+                                      pay.base_hours = (120).toString();
+                                      pay.productivity_hours = (120).toString();
                                       decreto_credit.amount = '125.00';
                                     }
                                     pay.ot_hours = discounted.toFixed(2);
@@ -850,13 +850,13 @@ export class PeriodsComponent implements OnInit {
                               decreto_credit.amount = ((125 / 120) * (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence))).toFixed(2);
                             } else {
                               if (this.absence <= 0) {
-                                base_credit.amount = (((att.length * 8) + (this.absence)) * base_hour).toFixed(2);
-                                productivity_credit.amount = (((att.length * 8) + (this.absence)) * productivity_hour).toFixed(2);
+                                base_credit.amount = (((120) + (this.absence)) * base_hour).toFixed(2);
+                                productivity_credit.amount = (((120) + (this.absence)) * productivity_hour).toFixed(2);
                                 ot_credit.amount = '0';
-                                decreto_credit.amount = ((125 / 120) * ((att.length * 8) + (this.absence))).toFixed(2);
+                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence))).toFixed(2);
                               } else {
-                                productivity_credit.amount = ((att.length * 8) * productivity_hour).toFixed(2);
-                                base_credit.amount = ((att.length * 8) * base_hour).toFixed(2);
+                                productivity_credit.amount = ((120) * productivity_hour).toFixed(2);
+                                base_credit.amount = ((120) * base_hour).toFixed(2);
                                 decreto_credit.amount = '125.00';
                                 let ot: ot_manage = new ot_manage;
                                 ot.id_period = this.period.idperiods;
