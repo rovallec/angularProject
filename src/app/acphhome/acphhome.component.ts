@@ -50,6 +50,6 @@ export class AcphhomeComponent implements OnInit {
   }
 
   gotoEmployee(emp:employees){
-    this.router.navigate(['./accProfile', emp.idemployees]);
+    this.router.navigate(['./accprofiles_ph', emp.idemployees]);
   }
 }

@@ -65,7 +65,7 @@ export class AccprofilesPhComponent implements OnInit {
     let peridos: periods = new periods;
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
-    this.apiService.getallEmployees_ph({ dp: 'all', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
+    this.apiService.getFilteredEmployees_ph({ dp: 'exact', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
       this.apiService.getPaymentMethods(emp[0]).subscribe((pymM:payment_methods[])=>{
         this.paymentMethods = pymM;
         this.getTerm();
