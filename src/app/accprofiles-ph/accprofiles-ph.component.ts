@@ -1,23 +1,18 @@
-import { isNull } from '@angular/compiler/src/output/output_ast';
-import { splitAtColon } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouteConfigLoadEnd } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods } from '../fullProcess';
-import { AuthGuard } from '../guard/auth-guard.service';
-import { PeriodsComponent } from '../periods/periods.component';
 import { process } from '../process';
-import { attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
-import { profiles } from '../profiles';
+import { attendences, credits, debits, leaves, payments, periods, terminations, vacations } from '../process_templates';
 
 @Component({
-  selector: 'app-accprofiles',
-  templateUrl: './accprofiles.component.html',
-  styleUrls: ['./accprofiles.component.css']
+  selector: 'app-accprofiles-ph',
+  templateUrl: './accprofiles-ph.component.html',
+  styleUrls: ['./accprofiles-ph.component.css']
 })
-export class AccprofilesComponent implements OnInit {
+export class AccprofilesPhComponent implements OnInit {
 
   employee: employees = new employees;
   activePaymentMethod:payment_methods = new payment_methods;
