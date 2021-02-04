@@ -668,6 +668,7 @@ export class debits {
     idpayments: string;
     type: string;
     amount: string;
+    status:string;
     //process
     id_process: string;
     id_user: string;
@@ -680,6 +681,7 @@ export class debits {
         this.idpayments = null;
         this.type = null;
         this.amount = null;
+        this.status = null;
         //process
         this.id_process = null;
         this.id_user = null;
@@ -695,6 +697,7 @@ export class credits {
     idpayments: string;
     type: string;
     amount: string;
+    status:string;
     //process
     id_process: string;
     id_user: string;
@@ -706,6 +709,7 @@ export class credits {
         this.idpayments = null;
         this.type = null;
         this.amount = null;
+        this.status = null;
         //process
         this.id_process = null;
         this.id_user = null;

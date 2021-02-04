@@ -434,11 +434,15 @@ export class PeriodsComponent implements OnInit {
                                     totalDeb = totalDeb + Number(igss_debit.amount);
 
                                     db.forEach(debit => {
-                                      totalDeb = totalDeb + Number(debit.amount);
+                                      if(debit.status == "PENDING"){
+                                        totalDeb = totalDeb + Number(debit.amount);
+                                      }
                                     })
 
                                     cd.forEach(credit => {
-                                      totalCred = totalCred + Number(credit.amount);
+                                      if(credit.status == "PENDING"){
+                                        totalCred = totalCred + Number(credit.amount);
+                                      }
                                     });
 
                                     /*
@@ -965,12 +969,16 @@ export class PeriodsComponent implements OnInit {
                           }
                         } else {
                           db.forEach(debit => {
-                            totalDeb = totalDeb + Number(debit.amount);
-                            this.debits.push(debit);
+                            if(debit.status == "PENDING"){
+                              totalDeb = totalDeb + Number(debit.amount);
+                              this.debits.push(debit);
+                            }
                           })
                           cd.forEach(credit => {
-                            totalCred = totalCred + Number(credit.amount)
-                            this.credits.push(credit);
+                            if(credit.status == "PENDING"){
+                              totalCred = totalCred + Number(credit.amount)
+                              this.credits.push(credit);
+                            }
                           });
 
                           this.totalCredits = Number((totalCred).toFixed(2));

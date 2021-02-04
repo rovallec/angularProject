@@ -64,8 +64,8 @@
                         <div class="form-row col-md-12" style="padding-bottom:25px">
                             <div class="form-group col-md-4"></div>
                             <div class="form-group col-md-4">
-                                <select class="form-control" [(ngModel)]="active_payment" (Change)="setPayment()">
-                                    <option *ngFor="let payment of payments" [value]="payment">{{payment.start}} TO
+                                <select class="form-control" [(ngModel)]="active_payment" (change)="setPayment()">
+                                    <option *ngFor="let payment of payments" [ngValue]="payment">{{payment.start}} TO
                                         {{payment.end}}
                                     </option>
                                 </select>
@@ -86,26 +86,28 @@
                                     <table class="table table-striped table-hover"
                                         style="border-right:solid 4px #e3f2fd">
                                         <thead style="text-align:center">
+                                            <th></th>
                                             <th>ID</th>
                                             <th>CONCEPT</th>
                                             <th>AMOUNT</th>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let cred of credits" class="selectable"
-                                                (click)="setCredit(cred)">
-                                                <td style="text-align: center;">{{cred.iddebits}}</td>
-                                                <td style="text-align: center;">{{cred.type}}</td>
-                                                <td style="text-align: center;">{{cred.amount}}</td>
+                                            <tr *ngFor="let cred of credits" class="selectable" [ngClass]="{'table-warning': cred.status === 'PAID'}">
+                                                <td><input type="checkbox" value="{{cred.iddebits}}" (change)="selectedCredit($event)" *ngIf="cred.status != 'PAID'">
+                                                    <input type="checkbox" value="{{cred.iddebits}}" (change)="selectedCredit($event)" [disabled]="true" [checked]="true" *ngIf="cred.status == 'PAID'"></td>
+                                                <td style="text-align: center;" (click)="setCredit(cred)">{{cred.iddebits}}</td>
+                                                <td style="text-align: center;" (click)="setCredit(cred)">{{cred.type}}</td>
+                                                <td style="text-align: center;" (click)="setCredit(cred)">{{cred.amount}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew">
+                                <div class="form-row col-md-12" *ngIf="!insertNew && !acrediting">
                                     <div class="form-group col-md-2"></div>
                                     <div class="form-group col-md-8" style="border-bottom:solid 4px #e3f2fd"></div>
                                     <div class="form-group col-md-2"></div>
                                 </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew" style="margin-top:25px">
+                                <div class="form-row col-md-12" *ngIf="!insertNew && !acrediting" style="margin-top:25px">
                                     <div class="form-group col-md-5"></div>
                                     <div class="form-group col-md-2">
                                         <button class="form-control" (click)="newDeduction('Credit')">Insert</button>
@@ -120,6 +122,7 @@
                                     <table class="table table-striped table-hover"
                                         style="margin-right:solid 4px #f4f8ff">
                                         <thead style="text-align:center">
+                                            <th></th>
                                             <th>ID</th>
                                             <th>CONCEPT</th>
                                             <th>AMOUNT</th>
@@ -127,6 +130,8 @@
                                         <tbody>
                                             <tr *ngFor="let deb of debits" class="selectable"
                                                 (click)="setDeduction(deb)">
+                                                <td><input type="checkbox" value="{{deb.iddebits}}" (change)="selectedDebit($event)" *ngIf="deb.status != 'PAID'">
+                                                    <input type="checkbox" value="{{deb.iddebits}}" (change)="selectedDebit($event)" [disabled]="true" [checked]="true" *ngIf="deb.status == 'PAID'"></td>
                                                 <td style="text-align: center;">{{deb.iddebits}}</td>
                                                 <td style="text-align: center;">{{deb.type}}</td>
                                                 <td style="text-align: center;">{{deb.amount}}</td>
@@ -134,12 +139,12 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew">
+                                <div class="form-row col-md-12" *ngIf="!insertNew && !acrediting">
                                     <div class="form-group col-md-2"></div>
                                     <div class="form-group col-md-8" style="border-bottom:solid 4px #e3f2fd"></div>
                                     <div class="form-group col-md-2"></div>
                                 </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew" style="margin-top:25px">
+                                <div class="form-row col-md-12" *ngIf="!insertNew && !acrediting" style="margin-top:25px">
                                     <div class="form-group col-md-5"></div>
                                     <div class="form-group col-md-2">
                                         <button class="form-control" (click)="newDeduction('Debit')">Insert</button>
@@ -149,12 +154,19 @@
                             </div>
                             <div class="form-group col-md-1"></div>
                         </div>
-                        <div class="form-row col-md-12" *ngIf="insertNew">
+                        <div class="form-row col-md-12" *ngIf="insertNew || acrediting">
                             <div class="form-group col-md-1"></div>
                             <div class="form-group col-md-10" style="border-bottom:solid 4px #e3f2fd"></div>
                             <div class="form-group col-md-1"></div>
                         </div>
-                        <div class="form-row col-md-12" *ngIf="insertNew" style="padding-bottom:25px">
+                        <div class="form-row col-md-12" *ngIf="!insertNew && acrediting" style="padding-bottom:25px">
+                            <div class="col-md-5"></div>
+                            <div class="col-md-2">
+                                <button class="form-control" (click)="acreditSelection()">Acredit</button>
+                            </div>
+                            <div class="col-md-5"></div>
+                        </div>
+                        <div class="form-row col-md-12" *ngIf="insertNew && !acrediting" style="padding-bottom:25px">
                             <label
                                 style="font-size: 14px; font-weight: bold; margin-left:48%;margin-top: 10px;">{{insertN}}</label>
                             <div class="form-row col-md-12">

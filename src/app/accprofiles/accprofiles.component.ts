@@ -1,3 +1,4 @@
+import { isNull } from '@angular/compiler/src/output/output_ast';
 import { splitAtColon } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouteConfigLoadEnd } from '@angular/router';
@@ -55,6 +56,9 @@ export class AccprofilesComponent implements OnInit {
   attendances:attendences[] = [];
   total:number;
   term_valid_from:string = null;
+  setAcreditCredits:string = "0";
+  setAcreditDebits:string = "0";
+  acrediting:boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -201,7 +205,6 @@ export class AccprofilesComponent implements OnInit {
               this.deb_benefits.push(deb_headsets);
             }
             this.term_valid_from = term.valid_from;
-            console.log(this.term_valid_from);
           })
           end_date = proc.prc_date;
           difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
@@ -242,7 +245,6 @@ export class AccprofilesComponent implements OnInit {
       p.start = 'explicit_employee';
       p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
       p.idperiods = "all";
-      console.log(p);
       this.apiService.getPayments(p).subscribe((pay:payments[])=>{
         if(!isNullOrUndefined(pay)){
           this.apiService.getCredits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((cred:credits[])=>{
@@ -279,5 +281,36 @@ export class AccprofilesComponent implements OnInit {
         });
       });
     })
+  }
+
+  acreditSelection(){
+    this.setAcreditCredits.split(",").forEach(cred=>{
+      let cr:credits = new credits;
+      cr.status = "PAID";
+      cr.iddebits = cred;
+      this.apiService.updateCredits(cr).subscribe((str:string)=>{});
+    });
+    this.setAcreditDebits.split(",").forEach(debit=>{
+      let db:debits = new debits;
+      db.status = "PAID";
+      db.iddebits = debit;
+      this.apiService.updateCredits(db).subscribe((str:string)=>{});
+    })
+    this.setPayment();
+  }
+
+
+  selectedCredit(event){
+    if(event.target.checked){
+      this.setAcreditCredits = this.setAcreditCredits + "," + event.target.value;
+    }
+   this.acrediting = true; 
+  }
+
+  selectedDebit(event){
+    if(event.target.checked){
+      this.setAcreditDebits = this.setAcreditDebits + "," + event.target.value;
+    }
+    this.acrediting = true;
   }
 }
