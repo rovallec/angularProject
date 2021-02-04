@@ -889,12 +889,16 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             db.forEach(debit => {
-                              totalDeb = totalDeb + Number(debit.amount);
-                              this.debits.push(debit);
+                              if(debit.status == "PENDING"){
+                                totalDeb = totalDeb + Number(debit.amount);
+                                this.debits.push(debit);
+                              }
                             })
                             cd.forEach(credit => {
-                              totalCred = totalCred + Number(credit.amount)
-                              this.credits.push(credit);
+                              if(credit.status == "PENDING"){
+                                totalCred = totalCred + Number(credit.amount)
+                                this.credits.push(credit);
+                              }
                             });
 
                             totalCred = totalCred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(decreto_credit.amount) + Number(ot_credit.amount) + Number(hld_credit.amount);
