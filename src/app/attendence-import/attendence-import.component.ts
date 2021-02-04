@@ -133,7 +133,7 @@ export class AttendenceImportComponent implements OnInit {
 
     this.apply.forEach(app => {
       let adj:attendences_adjustment = new attendences_adjustment;
-      adj.date = app.date;
+      adj.date = (new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + (new Date().getDate().toString()));
       adj.id_attendence = app.idattendences;
       adj.id_department = '4'; 
       adj.id_employee = app.id_employee;

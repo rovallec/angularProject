@@ -685,6 +685,13 @@ getFilteredPeriods_ph(any:any){
   return this.httpClient.post<periods>(`${this.PHP_API_SERVER}/phpscripts/getFilteredPeriods_ph.php`, any);
 }
 
+updateCredits(credits:credits){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateCredits.php`, credits);
+}
+
+updateDebits(debits:debits){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateCredits.php`, debits);
+}
 
   constructor(private httpClient:HttpClient) { }
 }

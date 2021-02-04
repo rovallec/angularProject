@@ -31,6 +31,7 @@ import { AttendanceReportComponent } from './attendance-report/attendance-report
 import { IsrmanagerComponent } from './isrmanager/isrmanager.component';
 import { AcphhomeComponent } from './acphhome/acphhome.component';
 import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
+import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component';
 
 const routes:Routes = [
   {
@@ -164,6 +165,11 @@ const routes:Routes = [
   {
     path:'periods_ph/:id',
     component:PeriodsPhComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'accprofiles_ph/:id',
+    component:AccprofilesPhComponent,
     canActivate:[AuthGuard]
   },
   {

@@ -48,4 +48,8 @@ export class AcphhomeComponent implements OnInit {
   gotoPeriod(period:periods){
     this.router.navigate(['./periods_ph', period.idperiods]);
   }
+
+  gotoEmployee(emp:employees){
+    this.router.navigate(['./accprofiles_ph', emp.idemployees]);
+  }
 }

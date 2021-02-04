@@ -1,25 +1,18 @@
-import { isNull } from '@angular/compiler/src/output/output_ast';
-import { splitAtColon } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouteConfigLoadEnd } from '@angular/router';
-import { promise } from 'protractor';
+import { ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods } from '../fullProcess';
-import { AuthGuard } from '../guard/auth-guard.service';
 import { process } from '../process';
-import { attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
-import { profiles } from '../profiles';
-import { Observable } from "rxjs";
-import { async } from '@angular/core/testing';
+import { attendences, credits, debits, leaves, payments, periods, terminations, vacations } from '../process_templates';
 
 @Component({
-  selector: 'app-accprofiles',
-  templateUrl: './accprofiles.component.html',
-  styleUrls: ['./accprofiles.component.css']
+  selector: 'app-accprofiles-ph',
+  templateUrl: './accprofiles-ph.component.html',
+  styleUrls: ['./accprofiles-ph.component.css']
 })
-export class AccprofilesComponent implements OnInit {
+export class AccprofilesPhComponent implements OnInit {
 
   employee: employees = new employees;
   activePaymentMethod:payment_methods = new payment_methods;
@@ -57,8 +50,6 @@ export class AccprofilesComponent implements OnInit {
   leaves:leaves[] = [];
   attendances:attendences[] = [];
   total:number;
-  termination:terminations = new terminations;
-  tvalid_Form:string = null;
   term_valid_from:string = null;
   setAcreditCredits:string = "0";
   setAcreditDebits:string = "0";
@@ -74,7 +65,7 @@ export class AccprofilesComponent implements OnInit {
     let peridos: periods = new periods;
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
-    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
+    this.apiService.getFilteredEmployees_ph({ dp: 'exact', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
       this.apiService.getPaymentMethods(emp[0]).subscribe((pymM:payment_methods[])=>{
         this.paymentMethods = pymM;
         this.getTerm();
@@ -181,46 +172,21 @@ export class AccprofilesComponent implements OnInit {
 
   getTerm(){
     let end_date:string = null;
-    let end_date_plus_one:string = null;
     let difference:number = null;
     let a_date:string = null;
     let b_date:string = null;
     let v_amount:number = 0;
-    let sum_payment: number = 0;
-    let average_salary: string = null;
-    let per:periods = new periods;
-    per.idperiods = 'all';
-    per.start = 'explicit';
-    per.status = this.employee.idemployees;    
-    
+
     let cred_indemnization:credits = new credits;
     let cred_aguinaldo:credits = new credits;
     let cred_bono14:credits = new credits;
     let cred_vacations:credits = new credits;
     let cred_pendings:credits = new credits;
-    let base_salary = function Salary(Aterm:terminations, Aempl:employees):string {
-      if (Aterm.base_for_salary=='Complete') {
-        return (Number(Aempl.base_payment) + Number(Aempl.productivity_payment)).toString();
-      } else {
-        return Number(Aempl.base_payment).toString();
-      };
-    };
-
-    let average_payment = function salaryAverage(Aterm:terminations, Apay:payments):string {
-      if (Aterm.base_for_salary=='Complete') {
-        return (Number(Apay.base_complete) + Number(Apay.productivity_complete)).toString();
-      } else {
-        return Number(Apay.base_complete).toString();
-      };
-    }
-
 
     this.apiService.getProcRecorded({id:this.employee.idemployees}).subscribe((pr:process[])=>{
-      this.apiService.getPayments(per).subscribe((pay:payments[])=>{
       pr.forEach(proc=>{
-        if(proc.name === "Termination"){          
-            this.apiService.getTerm(proc).subscribe((term:terminations)=>{
-            this.termination = term;
+        if(proc.name === "Termination"){
+          this.apiService.getTerm(proc).subscribe((term:terminations)=>{
             if(term.access_card != "YES"){
               let deb_access:debits = new debits;
               deb_access.type = "(-)Access Card Replacement";
@@ -232,105 +198,84 @@ export class AccprofilesComponent implements OnInit {
               deb_headsets.type = "(-)Headsets Replacement";
               deb_headsets.amount = "400.00";
               this.deb_benefits.push(deb_headsets);
-            }            
-            this.tvalid_Form = term.valid_from;            
-          }) // en promise                    
+            }
+            this.term_valid_from = term.valid_from;
+          })
           end_date = proc.prc_date;
           difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
         }
-      }) 
+      })
+      cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;
+      cred_indemnization.amount = (((((Number(this.employee.base_payment) + Number(this.employee.productivity_payment)) /12)*14)/365)*((new Date(end_date).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1).toFixed(2);
+      this.cred_benefits.push(cred_indemnization);
+
+      if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date.split("-")[0])-1).toString() + "-12-01").getTime()) >= 0)){
+        a_date = this.employee.hiring_date;
+      }else{
+        a_date = (new Date(end_date).getFullYear() - 1) + '-12-01'
+      }
+      cred_aguinaldo .type = "Aguinaldo Periodo del " + a_date + " al " + end_date;
+      cred_aguinaldo.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/365)*(((new Date(end_date).getTime() - (new Date(a_date).getTime())))/(1000*3600*24))+1).toFixed(2);
+      this.cred_benefits.push(cred_aguinaldo);
+
+      if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)){
+        b_date = this.employee.hiring_date;
+      }else{
+        b_date = (new Date(end_date).getFullYear() - 1) + "-07-01";
+      }
+      cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
+      cred_bono14.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/365)*((new Date(end_date).getTime() - new Date(b_date).getTime())/(1000*3600*24))+1).toFixed(2);
+      this.cred_benefits.push(cred_bono14);
+
+      this.apiService.getVacations({id:this.employee.id_profile}).subscribe((vacs:vacations[])=>{
+        vacs.forEach(vacation=>{
+          v_amount = v_amount + (1 * Number(vacation.count));
+        })
+        cred_vacations.type = "Vacaciones Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
+        cred_vacations.amount = (((Number(this.employee.base_payment) + Number(this.employee.productivity_payment))/30)*((((new Date(end_date).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1)/(1/(15/365)) - v_amount)).toFixed(2);
+        this.cred_benefits.push(cred_vacations);
+      })
       
-      pay.forEach(element => {
-        sum_payment = sum_payment + Number(average_payment(this.termination, element));            
-      });     
-    
-      average_salary = (sum_payment / pay.length).toFixed(2);  
-      });     
-
-      setTimeout(() => {
-        // esperamos 1 segundo para asignar el valor.  
-              
-        end_date = this.tvalid_Form;
-        end_date_plus_one = String(String(new Date(end_date).getFullYear())  + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate() + 2).toString());        
-
-        cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;      
-        cred_indemnization.amount = ((((Number(average_salary) /12)*14)/365)*((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1).toFixed(2);
-        this.cred_benefits.push(cred_indemnization);
-
-        if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0])-1).toString() + "-12-01").getTime()) >= 0)){
-          a_date = this.employee.hiring_date;
-        }else{
-          a_date = (new Date(end_date).getFullYear() - 1) + '-12-01'
-        }
-        cred_aguinaldo .type = "Aguinaldo Periodo del " + a_date + " al " + end_date;
-        cred_aguinaldo.amount = (((Number(base_salary(this.termination, this.employee)))/365)*(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))/(1000*3600*24))+1).toFixed(2);
-        this.cred_benefits.push(cred_aguinaldo);
-
-        if((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)){
-          b_date = this.employee.hiring_date;
-        }else{
-          b_date = (new Date(end_date).getFullYear() - 1) + "-07-01";
-        }
-        cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
-        cred_bono14.amount = (((Number(base_salary(this.termination, this.employee)))/365)*((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())/(1000*3600*24))+1).toFixed(2);
-        this.cred_benefits.push(cred_bono14);
-
-        this.apiService.getVacations({id:this.employee.id_profile}).subscribe((vacs:vacations[])=>{
-          vacs.forEach(vacation=>{
-            v_amount = v_amount + (1 * Number(vacation.count));
-          })
-          cred_vacations.type = "Vacaciones Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
-          cred_vacations.amount = (((Number(base_salary(this.termination, this.employee)))/30)*((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime())/(1000*3600*24))+1)/(1/(15/365)) - v_amount)).toFixed(2);
-          this.cred_benefits.push(cred_vacations);
-        })
-        
-        let p:periods = new periods;
-        p.start = 'explicit_employee';
-        p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
-        p.idperiods = "all";
-        //console.log(p);
-        this.apiService.getPayments(p).subscribe((pay:payments[])=>{
-          if(!isNullOrUndefined(pay)){
-            this.apiService.getCredits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((cred:credits[])=>{
-              cred.forEach(credit=>{
-                this.cred_benefits.push(credit);
-              })
-            });
-            this.apiService.getDebits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((deb:debits[])=>{
-              deb.forEach(debit=>{
-                this.deb_benefits.push(debit);
-              })
+      let p:periods = new periods;
+      p.start = 'explicit_employee';
+      p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
+      p.idperiods = "all";
+      this.apiService.getPayments(p).subscribe((pay:payments[])=>{
+        if(!isNullOrUndefined(pay)){
+          this.apiService.getCredits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((cred:credits[])=>{
+            cred.forEach(credit=>{
+              this.cred_benefits.push(credit);
             })
-          }
-        })
-      }, 1000);
+          });
+          this.apiService.getDebits({id:this.employee.idemployees, period:pay[0].id_period}).subscribe((deb:debits[])=>{
+            deb.forEach(debit=>{
+              this.deb_benefits.push(debit);
+            })
+          })
+        }
+      })
     })
   }
 
   completePayment(){
-    let p:periods = new periods;
-    
-      p.idperiods = 'all';
-      p.start = 'explicit';
-      p.status = this.employee.idemployees;
+    this.apiService.getPeriods().subscribe((p:periods[])=>{
+      p[p.length-1].start = 'explicit';
+      p[p.length-1].status = this.employee.idemployees;
       this.employee.state = "PAID";
-      this.employee.platform = "NONE";      
-      this.apiService.updateEmployee(this.employee).subscribe((_str:string)=>{
-        this.apiService.getPayments(p).subscribe((pay:payments[])=>{
+      this.employee.platform = "NONE";
+      this.apiService.updateEmployee(this.employee).subscribe((str:string)=>{
+        this.apiService.getPayments(this.period).subscribe((pay:payments[])=>{
           this.cred_benefits.forEach(cred=>{
             cred.idpayments = pay[0].idpayments;
             this.apiService.insertCredits(cred);
-            console.log(pay);
           })
-          console.log(pay);
           this.deb_benefits.forEach(deb=>{
             deb.idpayments = pay[0].idpayments;
-            console.log(pay);
             this.apiService.insertDebits(deb);
           })
         });
       });
-    
+    })
   }
 
   acreditSelection(){

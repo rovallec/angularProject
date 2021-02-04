@@ -110,14 +110,14 @@ if(mysqli_query($con,$sql2)){
     (SUM(`equipment`.amount) * (-1)) AS `equipment_discount`,
     ((coalesce(SUM(`equipment`.amount),0) + coalesce(SUM(`isr`.amount),0) +
         coalesce(SUM(`igss`.amount),0) + coalesce(SUM(`parking_car`.amount),0) +
-        coalesce(SUM(`bus`.amount),0) + coalesce(SUM(`parking_motorcycle`.amount),0)) * (-1)) AS `total_deductions`,
+        coalesce(SUM(`bus`.amount),0) + coalesce(SUM(`parking_motorcycle`.amount),0) + coalesce(SUM(`others_debits`.amount),0) + SUM(coalesce(`others_debits`.amount,0))) * (-1)) AS `total_deductions`,
     ROUND(((avg(`baseCredit`.amount) + avg(`prodCredit`.amount) + 
         avg(coalesce(`bonuses`.amount,0)) + coalesce(avg(payments.ot),0) + 
         coalesce(avg(payments.holidays),0) + avg(coalesce(`tresure_hunt`.amount,0)) + 
         SUM(coalesce(`adjustments`.amount,0)) - SUM(coalesce(`adjustments_deb`.amount,0))) - 
         coalesce(avg(`equipment`.amount),0) - coalesce(avg(`isr`.amount),0) - 
-        coalesce(avg(`igss`.amount),0) - coalesce(avg(`parking_car`.amount),0) - coalesce(avg(`parking_motorcycle`.amount),0) -
-        coalesce(avg(`bus`.amount),0) + coalesce(avg(`decreto`.amount),0)),2) AS `total_payment`,
+        coalesce(avg(`igss`.amount),0) - coalesce(avg(`parking_car`.amount),0) - coalesce(avg(`parking_motorcycle`.amount) - SUM(coalesce(`others_debits`.amount,0)),0) 
+        - SUM(coalesce(`others_debits`.amount,0)) - coalesce(avg(`bus`.amount),0) + coalesce(avg(`decreto`.amount),0)),2) AS `total_payment`,
     COUNT(`parking_car`.iddebits) AS `car_count`,
     COUNT(`parking_motorcycle`.iddebits) AS `motorcycle_count`
     FROM profiles
@@ -144,6 +144,7 @@ if(mysqli_query($con,$sql2)){
         LEFT JOIN debits AS `igss` ON `igss`.id_payment = payments.idpayments AND `igss`.type LIKE 'Descuento IGSS%'
         LEFT JOIN debits AS `isr` ON  `isr`.id_payment = payments.idpayments AND `isr`.type LIKE '%ISR%'
         LEFT JOIN debits AS `equipment` ON `equipment`.id_payment = payments.idpayments AND `equipment`.type LIKE '%Equipment Discount%'
+        LEFT JOIN debits AS `others_debits` ON `others_debits`.id_payment = payments.idpayments AND `others_debits`.type LIKE 'Discount%'
     WHERE active = 1  GROUP BY idpayments) AS `tst` WHERE `tst`.start between '$start' AND '$end' AND id_account IN($account) GROUP BY `tst`.id_employee;";
     $output = fopen("php://output", "w");
     fputcsv($output, array('#','Code','Avaya','Name','Minimum Wage','Incentive','Days discounted','7th deduction','Discounted hours','Minimum Wage Deductions','Incentive Deductions','Minimum Wage with deductions','Incentive with deductions','Overtime (hours)','Overtime (Q)','Holiday (hours)','Holiday (Q)','Bonuses','Treasure Hunt','Adjustments','Total income','Bus','Parking (Car)','Parking Motorcycle / bicycle','IGSS','ISR','Equipment','Total Deductions','Total Payment','BONUS 13','BONUS 13 BONIF','BONUS 14 ','BONUS 14 BONIF','VACATION RESERVES','VACATION RESERVES BONIF','SEVERANCE RESERVES','EMPLOYER IGSS','HEALTH INSURANCE','PARKING','BUS','TOTAL RESERVES AND FEES','TOTAL COST',));

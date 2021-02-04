@@ -59,7 +59,7 @@
                     <th>HIRING DATE</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let employee of employees">
+                    <tr *ngFor="let employee of employees" (click)="gotoEmployee(employee)">
                         <td>{{employee.name}}</td>
                         <td>{{employee.nearsol_id}}</td>
                         <td>{{employee.client_id}}</td>

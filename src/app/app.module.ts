@@ -36,7 +36,8 @@ import { OttrackerComponent } from './ottracker/ottracker.component';
 import { AttendanceReportComponent } from './attendance-report/attendance-report.component';
 import { IsrmanagerComponent } from './isrmanager/isrmanager.component';
 import { AcphhomeComponent } from './acphhome/acphhome.component';
-import { PeriodsPhComponent } from './periods-ph/periods-ph.component'
+import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
+import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component'
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { PeriodsPhComponent } from './periods-ph/periods-ph.component'
     AttendanceReportComponent,
     IsrmanagerComponent,
     AcphhomeComponent,
-    PeriodsPhComponent
+    PeriodsPhComponent,
+    AccprofilesPhComponent
   ],
   imports: [
     BrowserModule,
