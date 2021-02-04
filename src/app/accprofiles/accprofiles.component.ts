@@ -307,6 +307,10 @@ export class AccprofilesComponent implements OnInit {
     })
   }
 
+  completePaymentCalc() {
+    
+  }
+
   completePayment(){
     let p:periods = new periods;
     
