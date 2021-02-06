@@ -276,9 +276,6 @@ export class PeriodsComponent implements OnInit {
                                           this.roster = this.roster + Number(attendance.scheduled);
                                           if (Number(attendance.worked_time) == 0 && (attendance.date != ((new Date().getFullYear()).toString() + "-01-01"))) {
                                             if (non_show_2) {
-                                              if(attendance.id_employee == '5461'){
-                                                console.log("-8");
-                                              }
                                               this.absence = this.absence - 16;
                                               discounted = discounted - 16;
                                               svnth = svnth + 1;
@@ -313,7 +310,9 @@ export class PeriodsComponent implements OnInit {
                                         }
                                       }
                                     }
-                                    console.log(attendance.balance);
+                                    if(attendance.id_employee == '5461'){
+                                      console.log(attendance.balance);
+                                    }
                                   });
 
 
