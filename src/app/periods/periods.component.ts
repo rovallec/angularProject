@@ -199,21 +199,6 @@ export class PeriodsComponent implements OnInit {
 
                                       let dt: Date = new Date(attendance.date);
 
-                                      if (dt.getDay() === 6) {
-                                        non_show_2 = true;
-                                        if (nonShowCount == 5) {
-                                          discounted = discounted - 8;
-                                          this.absence = this.absence - 8;
-                                        }
-
-                                        if (janp_sequence == 5) {
-                                          discounted = discounted - 16;
-                                          this.absence = this.absence - 16;
-                                        }
-
-                                        janp_sequence = 0;
-                                        nonShowCount = 0;
-                                      }
 
                                       activeDp = false;
                                       activeVac = false;
@@ -309,9 +294,21 @@ export class PeriodsComponent implements OnInit {
                                           }
                                         }
                                       }
-                                    }
-                                    if(attendance.id_employee == '5461'){
-                                      console.log(attendance.balance);
+                                      if (dt.getDay() === 6) {
+                                        non_show_2 = true;
+                                        if (nonShowCount == 5) {
+                                          discounted = discounted - 8;
+                                          this.absence = this.absence - 8;
+                                        }
+
+                                        if (janp_sequence == 5) {
+                                          discounted = discounted - 16;
+                                          this.absence = this.absence - 16;
+                                        }
+
+                                        janp_sequence = 0;
+                                        nonShowCount = 0;
+                                      }
                                     }
                                   });
 
@@ -710,22 +707,6 @@ export class PeriodsComponent implements OnInit {
 
                             let dt: Date = new Date(attendance.date);
 
-                            if (dt.getDay() === 6) {
-                              this.non_show_2 = true;
-                              if (nonShowCount == 5) {
-                                discounted = discounted - 8;
-                                this.absence = this.absence - 8;
-                              }
-
-                              if (janp_sequence == 5) {
-                                discounted = discounted - 8;
-                                this.absence = this.absence - 8;
-                              }
-
-                              janp_sequence = 0;
-                              nonShowCount = 0;
-                            }
-
                             activeDp = false;
                             activeVac = false;
                             activeLeav = false;
@@ -823,6 +804,22 @@ export class PeriodsComponent implements OnInit {
                                   }
                                 }
                               }
+                              if (dt.getDay() === 6) {
+                                this.non_show_2 = true;
+                                if (nonShowCount == 5) {
+                                  discounted = discounted - 8;
+                                  this.absence = this.absence - 8;
+                                }
+  
+                                if (janp_sequence == 5) {
+                                  discounted = discounted - 8;
+                                  this.absence = this.absence - 8;
+                                }
+  
+                                janp_sequence = 0;
+                                nonShowCount = 0;
+                              }
+  
                             }
                           });
 
