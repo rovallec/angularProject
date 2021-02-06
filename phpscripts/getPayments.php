@@ -20,7 +20,7 @@ if($idperiods != 'all'){
     if($start != "explicit"){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status;";
     } else if($start == 'explicit'){
-        $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status AND `idperiods` IN ($idperiods)";
+        $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status AND `idperiods` IN ($idperiods);";
     } else if($start == 'explicit_Termination'){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status AND periods.end >= employees.HIRING_DATE ORDER BY periods.idperiods DESC LIMIT 0, 6;";
     } else if($start == 'explicit_employee'){
@@ -60,10 +60,10 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['account'] = $res['id_account'];
         $return[$i]['days'] = "0";
         $i++;
-    }    
+    }
     echo(json_encode($return));
 } else {
     echo($sql);
-}     
+}
 
 ?>

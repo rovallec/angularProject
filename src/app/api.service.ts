@@ -693,6 +693,10 @@ updateDebits(debits:debits){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateCredits.php`, debits);
 }
 
+updatehr_process(hrprocess:hrProcess){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updatehr_process.php`, hrprocess);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
 

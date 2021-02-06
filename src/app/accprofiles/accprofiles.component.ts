@@ -6,7 +6,7 @@ import { promise } from 'protractor';
 import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
-import { employees, payment_methods } from '../fullProcess';
+import { employees, payment_methods, hrProcess } from '../fullProcess';
 import { AuthGuard } from '../guard/auth-guard.service';
 import { process } from '../process';
 import { attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
@@ -63,6 +63,7 @@ export class AccprofilesComponent implements OnInit {
   setAcreditCredits: string = "0";
   setAcreditDebits: string = "0";
   acrediting: boolean = false;
+  process: hrProcess = new hrProcess;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -192,8 +193,8 @@ export class AccprofilesComponent implements OnInit {
     per.idperiods = 'all';
     per.start = 'explicit_Termination';
     per.status = this.employee.idemployees;
+    this.total = 0;
     let alert: boolean = false;
-
     let cred_indemnization: credits = new credits;
     let cred_aguinaldo: credits = new credits;
     let cred_bono14: credits = new credits;
@@ -224,7 +225,10 @@ export class AccprofilesComponent implements OnInit {
         if (!alert) {
           if (proc.name === "Termination") {
             alert = true;
-            this.apiService.getTerm(proc).subscribe((term: terminations) => {              
+            this.process.idhr_process = proc.idprocesses;
+            this.process.status = 'Acredit';
+
+            this.apiService.getTerm(proc).subscribe((term: terminations) => {
               this.termination = term;
               if (term.access_card != "YES") {
                 let deb_access: debits = new debits;
@@ -256,7 +260,8 @@ export class AccprofilesComponent implements OnInit {
                 cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;
                 cred_indemnization.amount = ((((Number(average_salary) / 12) * 14) / 365) * ((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)+ 1)).toFixed(2);
                 this.cred_benefits.push(cred_indemnization);
-                
+                this.total = this.total + Number(cred_indemnization.amount);
+
                 if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-12-01").getTime()) >= 0)) {
                   a_date = this.employee.hiring_date;
                 } else {
@@ -266,7 +271,8 @@ export class AccprofilesComponent implements OnInit {
                 cred_aguinaldo.type = "Aguinaldo Periodo del " + a_date + " al " + end_date;
                 cred_aguinaldo.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime()))) / (1000 * 3600 * 24)) + 1).toFixed(2);
                 this.cred_benefits.push(cred_aguinaldo);
-  
+                this.total = this.total + Number(cred_aguinaldo.amount);
+
                 if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)) {
                   b_date = this.employee.hiring_date;
                 } else {
@@ -275,7 +281,8 @@ export class AccprofilesComponent implements OnInit {
                 cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
                 cred_bono14.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * ((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime()) / (1000 * 3600 * 24)) + 1).toFixed(2);
                 this.cred_benefits.push(cred_bono14);
-  
+                this.total = this.total + Number(cred_bono14.amount);
+
                 this.apiService.getVacations({ id: this.employee.id_profile }).subscribe((vacs: vacations[]) => {
                   vacs.forEach(vacation => {
                     v_amount = v_amount + (1 * Number(vacation.count));
@@ -283,19 +290,21 @@ export class AccprofilesComponent implements OnInit {
                   cred_vacations.type = "Vacaciones Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
                   cred_vacations.amount = (((Number(base_salary(this.termination, this.employee))) / 30) * ((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)) + 1) / (1 / (15 / 365)) - v_amount)).toFixed(2);
                   this.cred_benefits.push(cred_vacations);
+                  this.total = this.total + Number(cred_vacations.amount);
                 })
-  
+
                 let p: periods = new periods;
                 p.start = 'explicit_employee';
                 p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
                 p.idperiods = "all";
-  
+
                 this.apiService.getPayments(p).subscribe((pay: payments[]) => {
                   if (!isNullOrUndefined(pay)) {
                     this.apiService.getCredits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((cred: credits[]) => {
                       if(!isNullOrUndefined(cred)){
                         cred.forEach(credit => {
                           this.cred_benefits.push(credit);
+                          this.total = this.total + Number(credit.amount);
                         })
                       }
                     });
@@ -303,16 +312,14 @@ export class AccprofilesComponent implements OnInit {
                       if(!isNullOrUndefined(deb)){
                         deb.forEach(debit => {
                           this.deb_benefits.push(debit);
+                          this.total = this.total - Number(debit.amount);
                         })
                       }
                     })
                   }
-                })                
+                })
               });
-
-
-              
-            }) // en promise                    
+            }) // en promise
             end_date = proc.prc_date;
             difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
           }
@@ -323,50 +330,31 @@ export class AccprofilesComponent implements OnInit {
 
   completePaymentCalc() {
     let p: periods = new periods;
-
     p.idperiods = 'all';
     p.start = 'explicit';
     p.status = this.employee.idemployees;
     this.employee.state = "PAID";
     this.employee.platform = "NONE";
-    
+
     this.apiService.updateEmployee(this.employee).subscribe((_str: string) => {
       this.apiService.getPayments(p).subscribe((pay: payments[]) => {
         this.cred_benefits.forEach(cred => {
           cred.idpayments = pay[0].idpayments;
           this.apiService.insertCredits(cred);
+          this.apiService.updatehr_process(this.process);
         })
 
         this.deb_benefits.forEach(deb => {
           deb.idpayments = pay[0].idpayments;
           this.apiService.insertDebits(deb);
+          this.apiService.updatehr_process(this.process);
         })
       });
     });
   }
 
   completePayment() {
-    let p: periods = new periods;
-
-    p.idperiods = 'all';
-    p.start = 'explicit';
-    p.status = this.employee.idemployees;
-    this.employee.state = "PAID";
-    this.employee.platform = "NONE";
-    this.apiService.updateEmployee(this.employee).subscribe((_str: string) => {
-      this.apiService.getPayments(p).subscribe((pay: payments[]) => {
-        this.cred_benefits.forEach(cred => {
-          cred.idpayments = pay[0].idpayments;
-          this.apiService.insertCredits(cred);
-        })
-
-        this.deb_benefits.forEach(deb => {
-          deb.idpayments = pay[0].idpayments;
-          this.apiService.insertDebits(deb);
-        })
-      });
-    });
-
+    this.apiService.updatehr_process(this.process);
   }
 
   acreditSelection() {
