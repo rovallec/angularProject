@@ -313,6 +313,7 @@ export class PeriodsComponent implements OnInit {
                                         }
                                       }
                                     }
+                                    console.log(attendance.balance);
                                   });
 
 
