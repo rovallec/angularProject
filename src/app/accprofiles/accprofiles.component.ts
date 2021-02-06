@@ -333,6 +333,7 @@ export class AccprofilesComponent implements OnInit {
     p.idperiods = 'all';
     p.start = 'explicit';
     p.status = this.employee.idemployees;
+    this.process.status = 'Accredit';
     this.employee.state = "PAID";
     this.employee.platform = "NONE";
 
@@ -354,6 +355,7 @@ export class AccprofilesComponent implements OnInit {
   }
 
   completePayment() {
+    this.process.status = 'Pay';
     this.apiService.updatehr_process(this.process);
   }
 
