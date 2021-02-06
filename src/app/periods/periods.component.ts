@@ -187,10 +187,14 @@ export class PeriodsComponent implements OnInit {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                         this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                           this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
+                            non_show_2 = false;
                             if (emp[0].active == "1" || emp[0].active == "0") { //emp[0].active == "1" Unicamente, se agrego el "0" para asemejarce al reporte de TimeKeeping
                               if (this.period.status == '1') {
                                 if (att.length != 0) {
                                   att.forEach(attendance => {
+                                    if(attendance.id_employee == '5461'){
+                                      console.log(discounted);
+                                    }
                                     if (attendance.scheduled == "0" || attendance.scheduled == "NaN") {
                                       this.absence = this.absence + 8;
                                       discounted = discounted + 8;
@@ -206,8 +210,8 @@ export class PeriodsComponent implements OnInit {
                                         }
 
                                         if (janp_sequence == 5) {
-                                          discounted = discounted - 8;
-                                          this.absence = this.absence - 8;
+                                          discounted = discounted - 16;
+                                          this.absence = this.absence - 16;
                                         }
 
                                         janp_sequence = 0;
@@ -275,6 +279,9 @@ export class PeriodsComponent implements OnInit {
                                           this.roster = this.roster + Number(attendance.scheduled);
                                           if (Number(attendance.worked_time) == 0 && (attendance.date != ((new Date().getFullYear()).toString() + "-01-01"))) {
                                             if (non_show_2) {
+                                              if(attendance.id_employee == '5461'){
+                                                console.log("-8");
+                                              }
                                               this.absence = this.absence - 16;
                                               discounted = discounted - 16;
                                               svnth = svnth + 1;
