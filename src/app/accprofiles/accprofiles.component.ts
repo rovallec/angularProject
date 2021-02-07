@@ -225,8 +225,9 @@ export class AccprofilesComponent implements OnInit {
         if (!alert) {
           if (proc.name === "Termination") {
             alert = true;
-            this.process.idhr_process = proc.idprocesses;
-            this.process.status = 'Acredit';
+            this.apiService.getHr_Processes(proc.idprocesses).subscribe((hrproc: hrProcess) => {
+              this.process = hrproc;
+            })
 
             this.apiService.getTerm(proc).subscribe((term: terminations) => {
               this.termination = term;
@@ -328,12 +329,12 @@ export class AccprofilesComponent implements OnInit {
     })
   }
 
-  completePaymentCalc() {
+  acreditPayment() {
     let p: periods = new periods;
     p.idperiods = 'all';
     p.start = 'explicit';
     p.status = this.employee.idemployees;
-    this.process.status = 'Accredit';
+    this.process.status = 'ACREDIT';
     this.employee.state = "PAID";
     this.employee.platform = "NONE";
 
@@ -342,21 +343,26 @@ export class AccprofilesComponent implements OnInit {
         this.cred_benefits.forEach(cred => {
           cred.idpayments = pay[0].idpayments;
           this.apiService.insertCredits(cred);
-          this.apiService.updatehr_process(this.process);
         })
 
         this.deb_benefits.forEach(deb => {
           deb.idpayments = pay[0].idpayments;
           this.apiService.insertDebits(deb);
-          this.apiService.updatehr_process(this.process);
         })
+
+        this.apiService.updatehr_process(this.process).subscribe((_str: string) => {
+          // no hace nada.
+          
+        });
       });
     });
   }
 
   completePayment() {
-    this.process.status = 'Pay';
-    this.apiService.updatehr_process(this.process);
+    this.process.status = 'PAID';
+    this.apiService.updatehr_process(this.process).subscribe((_str: string) => {
+      // no hace nada.
+    });
   }
 
   acreditSelection() {

@@ -697,6 +697,10 @@ updatehr_process(hrprocess:hrProcess){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updatehr_process.php`, hrprocess);
 }
 
+getHr_Processes(any:any){
+  return this.httpClient.post<hrProcess>(`${this.PHP_API_SERVER}/phpscripts/getHr_Processes.php`, any);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
 

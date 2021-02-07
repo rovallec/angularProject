@@ -379,18 +379,15 @@
                       </div>
                       <div class="col-md-1"></div>
                     </div>
-                    <div class="row col-md-12" style="margin-bottom: 15px;" *ngIf="employee.client_id!='NONE'">
-                        <div class="col-md-1">
+                    <div class="row col-md-12" style="margin-bottom: 15px;" *ngIf="employee.client_id=='NONE'">
+                        <div class="col-md-9">
                         </div>
                         <div class="col-md-2">
-                            <button class="form-control" (click)="completePaymentCalc()">Accredit</button>
+                            <button class="form-control" (click)="acreditPayment()" *ngIf="this.process.status=='CLOSED'">Accredit</button>
+                            <button class="form-control" (click)="completePayment()" *ngIf="this.process.status=='ACREDIT'">Pay</button>
                         </div>
                         <div class="col-md-1">
                         </div>
-                        <div class="col-md-2">
-                            <button class="form-control" (click)="completePayment()">Pay</button>
-                        </div>
-                        <div class="col-md-6"></div>
                     </div>
                 </div>
             </div>

@@ -6,11 +6,11 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$id_process = ($request->id_process);
+$idhr_process = ($request->idhr_processes);
 $status = ($request->status);
 
 
-$sql = "UPDATE hr_processes SET `status` = $status WHERE `idhr_processes` = $id_process;";
+$sql = "UPDATE hr_processes SET `status` = '$status' WHERE `idhr_processes` = $idhr_process;";
 
 if(mysqli_query($con,$sql)){
 	http_response_code(204);
