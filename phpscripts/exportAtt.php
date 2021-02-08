@@ -11,7 +11,7 @@ $to = $_GET['to'];
 
 $attendances = [];
 
-$sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*, id_account, SUM(`igss`.`amt`) AS `igss`, SUM(`aux`.`amt_aux`) AS `aux`, SUM(`correction`.`amt_corrections`) AS `corrections` from attendences
+$sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*, id_account, coalesce(SUM(`igss`.`amt`),0) AS `igss`, coalesce(SUM(`aux`.`amt_aux`),0) AS `aux`, coalesce(SUM(`correction`.`amt_corrections`),0) AS `corrections` from attendences
 INNER JOIN employees ON employees.idemployees = attendences.id_employee
 INNER JOIN hires ON hires.idhires = employees.id_hire
 INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
