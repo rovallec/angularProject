@@ -127,7 +127,7 @@ if(mysqli_query($con,$sql2)){
         INNER JOIN employees ON employees.id_hire = hires.idhires
         INNER JOIN payments ON payments.id_employee = employees.idemployees
         INNER JOIN periods ON periods.idperiods = payments.id_period
-        INNER JOIN accounts AS `accounts` ON `accounts`.`idaccounts` = `employees`.`idemployees`
+        INNER JOIN accounts AS `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
         LEFT JOIN credits AS `baseCredit` ON `baseCredit`.id_payment = payments.idpayments AND `baseCredit`.type = 'Salario Base'
         LEFT JOIN credits AS `prodCredit` ON `prodCredit`.id_payment = payments.idpayments AND `prodCredit`.type = 'Bonificacion Productividad'
         LEFT JOIN credits AS `bonuses` ON `bonuses`.id_payment = payments.idpayments
