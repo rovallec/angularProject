@@ -22,6 +22,7 @@ if(mysqli_query($con,$sql2)){
     `client_id`,CONCAT(`first_name`, ' ',
     `second_name`, ' ',`first_lastname`, ' ',
     `second_lastname`) AS `employee_name`,
+    `account_name`,
     SUM(`base`) AS `minimun_wage`,
     SUM(`incentive`) AS `incentive`,
     SUM(`discounted_days`) AS `days_discounted`,
@@ -81,6 +82,7 @@ if(mysqli_query($con,$sql2)){
     first_lastname,
     second_lastname,
     id_account,
+    `accounts`.`name` AS `account_name`,
     job,
     (payments.base_complete/2) AS `base`,
     (((payments.productivity_complete-250)/2) + 125) AS `incentive`,
@@ -125,6 +127,7 @@ if(mysqli_query($con,$sql2)){
         INNER JOIN employees ON employees.id_hire = hires.idhires
         INNER JOIN payments ON payments.id_employee = employees.idemployees
         INNER JOIN periods ON periods.idperiods = payments.id_period
+        INNER JOIN accounts AS `accounts` ON `accounts`.`idaccounts` = `employees`.`idemployees`
         LEFT JOIN credits AS `baseCredit` ON `baseCredit`.id_payment = payments.idpayments AND `baseCredit`.type = 'Salario Base'
         LEFT JOIN credits AS `prodCredit` ON `prodCredit`.id_payment = payments.idpayments AND `prodCredit`.type = 'Bonificacion Productividad'
         LEFT JOIN credits AS `bonuses` ON `bonuses`.id_payment = payments.idpayments
