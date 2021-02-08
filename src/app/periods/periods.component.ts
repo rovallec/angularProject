@@ -812,8 +812,8 @@ export class PeriodsComponent implements OnInit {
                                 }
   
                                 if (janp_sequence == 5) {
-                                  discounted = discounted - 8;
-                                  this.absence = this.absence - 8;
+                                  discounted = discounted - 16;
+                                  this.absence = this.absence - 16;
                                 }
   
                                 janp_sequence = 0;
