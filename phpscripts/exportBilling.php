@@ -54,8 +54,8 @@ if(mysqli_query($con,$sql2)){
     (SUM(`incentive`)/DAY(LAST_DAY('$end'))) * DAY(LAST_DAY('$end')) * (1/12) AS `bonus14_productivity`,
     (SUM(`base`)/DAY(LAST_DAY('$end'))) * DAY(LAST_DAY('$end')) * (0.0417) AS `vacations_base`,
     (SUM(`incentive`)/DAY(LAST_DAY('$end'))) * DAY(LAST_DAY('$end')) * (0.0417) AS `vacations_prdouctivity`,
-    (SUM(`base`)/Day(LAST_DAY('$end'))) * Day(LAST_DAY('$end')) * 0.0972	AS `severance_reserves`,
-    (SUM(`incentive`)/Day(LAST_DAY('$end'))) * Day(LAST_DAY('$end')) * 0.0972	AS `severance_productivity`,
+    (SUM(`base`)/Day(LAST_DAY('$end'))) * Day(LAST_DAY('$end')) * 0.0972	+
+    (SUM(`incentive`)/Day(LAST_DAY('$end'))) * Day(LAST_DAY('$end')) * 0.0972	AS `total_reserverances`,
     ((coalesce(SUM(`base_with_deductions`),0) + coalesce(SUM(`ot`),0) + coalesce(SUM(`holidays`),0)) * 0.1267) AS `igss_employeer`,
     '198.24' AS `health_insurance`,
     IF(SUM(`parking_car_discount`)=175,300,IF(SUM(`parking_car_discount`)=350,300,SUM(`car_count`)*21.43)) AS `client_car_parking`,
@@ -72,7 +72,7 @@ if(mysqli_query($con,$sql2)){
     ((coalesce(SUM(`base_with_deductions`),0) + coalesce(SUM(`ot`),0) + coalesce(SUM(`holidays`),0)) * 0.1267) +
     '198.24' +
     IF(SUM(`parking_car_discount`)=175,300,IF(SUM(`parking_car_discount`)=350,300,SUM(`car_count`)*21.43)) +
-    IF(SUM(`parking_motorcycle_discount`)=50,300,IF(SUM(`parking_motorcycle_discount`)=150,300,SUM(`motorcycle_count`)*21.43)) AS `total_reserves`
+    IF(SUM(`parking_motorcycle_discount`)=50,300,IF(SUM(`parking_motorcycle_discount`)=150,300,SUM(`motorcycle_count`)*21.43)) AS `total_reserves`,
 
     (SUM(`base`)/DAY(LAST_DAY('$end'))) * DAY(LAST_DAY('$end')) * (1/12) +
     (SUM(`incentive`)/DAY(LAST_DAY('$end'))) * DAY(LAST_DAY('$end')) * (1/12) +
