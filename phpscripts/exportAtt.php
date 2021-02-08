@@ -11,26 +11,26 @@ $to = $_GET['to'];
 
 $attendances = [];
 
-$sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*, id_account, coalesce(SUM(`igss`.amount), 0) AS `igss`, coalesce(SUM(`aux`.amount), 0) AS `aux`, coalesce(SUM(`correction`.amount),0) AS `corrections` from attendences
+$sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*, id_account, SUM(`igss`.`amt`) AS `igss`, SUM(`aux`.`amt_aux`) AS `aux`, SUM(`correction`.`amt_corrections`) AS `corrections` from attendences
 INNER JOIN employees ON employees.idemployees = attendences.id_employee
 INNER JOIN hires ON hires.idhires = employees.id_hire
 INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 INNER JOIN accounts ON accounts.idaccounts = employees.id_account
-LEFT JOIN (SELECT * from attendence_justifications
+LEFT JOIN (SELECT SUM(amount) AS `amt`, id_employee, id_attendence from attendence_justifications
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
-    WHERE id_department = 5) AS `igss` ON `igss`.id_attendence = attendences.idattendences
-LEFT JOIN (SELECT * from attendence_justifications
+    WHERE id_department = 5 GROUP BY id_employee, id_attendence) AS `igss` ON `igss`.id_attendence = attendences.idattendences
+LEFT JOIN (SELECT SUM(amount) AS `amt_aux`, id_employee, id_attendence from attendence_justifications
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
-    WHERE id_department != 5 AND attendence_justifications.reason NOT IN('IGSS', 'WFM Attendance correction')) AS `aux` ON `aux`.id_attendence = attendences.idattendences
-    LEFT JOIN (SELECT * from attendence_justifications
+    WHERE id_department != 5 AND attendence_justifications.reason NOT IN('IGSS', 'WFM Attendance correction') GROUP BY id_employee, id_attendence) AS `aux` ON `aux`.id_attendence = attendences.idattendences
+LEFT JOIN (SELECT SUM(amount) AS `amt_corrections`, id_employee, id_attendence from attendence_justifications
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
-    WHERE id_department != 5 AND attendence_justifications.reason IN('IGSS', 'WFM Attendance correction')) AS `correction` ON `correction`.id_attendence = attendences.idattendences
+    WHERE id_department != 5 AND attendence_justifications.reason IN('IGSS', 'WFM Attendance correction') GROUP BY id_employee, id_attendence) AS `correction` ON `correction`.id_attendence = attendences.idattendences
 WHERE attendences.date BETWEEN '$from' AND '$to' AND id_account in($account)
 GROUP BY idattendences;";
 
