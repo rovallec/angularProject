@@ -57,6 +57,7 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['state'] = $res['state'];
         $return[$i]['account'] = $res['id_account'];
         $return[$i]['days'] = "0";
+        $return[$i]['id_account_py'] = $res["id_account_py"];
         $i++;
     }
     echo(json_encode($return));

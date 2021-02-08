@@ -23,6 +23,7 @@ $holidays = validarDatos($request->holidays);
 $holidays_hours = validarDatos($request->holidays_hours);
 $base_complete = validarDatos($request->base_complete);
 $productivity_complete = validarDatos($request->productivity_complete);
+$id_account = validarDatos($request->id_account_py);
 
 $sql =  "UPDATE `payments` set `credits` = $credits, `debits` = $debits, `date` = '$date', " .
         "last_seventh = '$last_seventh', " .
@@ -31,6 +32,7 @@ $sql =  "UPDATE `payments` set `credits` = $credits, `debits` = $debits, `date` 
         "productivity = $productivity, sevenths = $sevenths, " .
         "holidays = $holidays, holidays_hours = $holidays_hours, " .
         "base_complete = $base_complete, productivity_complete = $productivity_complete " .
+        "id_account_py = $id_account" .
         "WHERE `idpayments` = $idpayment";
 
 if(mysqli_query($con, $sql)){

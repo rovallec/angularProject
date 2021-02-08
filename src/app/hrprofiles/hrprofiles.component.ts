@@ -4,7 +4,7 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
-import { employees, fullPreapproval, queryDoc_Proc } from '../fullProcess';
+import { employees, fullPreapproval, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
@@ -28,8 +28,8 @@ export class HrprofilesComponent implements OnInit {
 
   profile: profiles[] = [new profiles()];
   staffes: users[] = [];
-  family : profiles_family[] = [];
-  selected_family : profiles_family = new profiles_family;
+  family: profiles_family[] = [];
+  selected_family: profiles_family = new profiles_family;
 
   attAdjudjment: attendences_adjustment = new attendences_adjustment;
   activeVacation: vacations = new vacations;
@@ -120,6 +120,8 @@ export class HrprofilesComponent implements OnInit {
   earnVacations: number = 0;
   tookVacations: number = 0;
   availableVacations: number = 0;
+
+  original_account:string = null;
 
   approvals: users[] = [new users];
   motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid'];
@@ -260,7 +262,7 @@ export class HrprofilesComponent implements OnInit {
     this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
     this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
     this.getValidatingData();
-    this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {      
+    this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
       this.profile = prof;
       this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
         this.family = fam;
@@ -426,9 +428,9 @@ export class HrprofilesComponent implements OnInit {
     this.activeVacation.id_department = this.authUser.getAuthusr().department;
     this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
     this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
-    if(action == "Add"){
+    if (action == "Add") {
       this.activeVacation.status = "COMPLETED";
-    }else{
+    } else {
       this.activeVacation.status = 'PENDING';
     }
     this.activeVacation.count = '1';
@@ -868,6 +870,7 @@ export class HrprofilesComponent implements OnInit {
         })
         break;
       case 'Transfer':
+        this.original_account = this.accId;
         this.accChange = this.accId;
         break;
       default:
@@ -982,7 +985,40 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Transfer':
           this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
-            this.cancelView();
+            this.apiService.getPeriods().subscribe((p: periods[]) => {
+              this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
+                let py: payments = new payments;
+                let old_payment = new payments;
+                let period:periods = new periods;
+                py.id_employee = this.activeEmp;
+                if (!isNullOrUndefined(p_methods)) {
+                  py.id_period = p[p.length - 1].idperiods;
+                  p_methods.forEach(payment_method => {
+                    if (payment_method.predeterm == '1') {
+                      py.id_paymentmethod = payment_method.idpayment_methods;
+                    }
+                  })
+                  period.start = 'explicit';
+                  period.idperiods = p[p.length - 1].idperiods;
+                  period.status = this.activeEmp;
+                  this.apiService.getPayments(period).subscribe((actual_payments:payments[])=>{
+                    old_payment = actual_payments[0];
+                    old_payment.id_account_py = this.original_account;
+                    this.apiService.setPayment(old_payment).subscribe((str:string)=>{
+                      this.apiService.insertPayments(py).subscribe((str:string)=>{
+                        if(str == "1"){
+                          this.cancelView();            
+                        }else{
+                          window.alert("An error has occurred please contact your administrator");
+                        }
+                      })
+                    })
+                  })
+                }else{
+                  window.alert("There is no payment method available to this employee please communicate with Accounting to clarify this");
+                }
+              })
+            })
           })
           break;
         case 'Legal Discount':

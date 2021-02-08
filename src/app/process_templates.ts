@@ -747,6 +747,7 @@ export class payments {
     state: string;
     account: string;
     days: string;
+    id_account_py:string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;
@@ -775,6 +776,7 @@ export class payments {
         this.state = null;
         this.account = null;
         this.days = null;
+        this.id_account_py = null;
     }
 }
 
