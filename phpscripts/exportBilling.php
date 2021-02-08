@@ -173,6 +173,8 @@ if(mysqli_query($con,$sql2)){
         };
     }else{
         http_response_code(404);
+        echo($sql2);
+        echo(mysqli_error($con));
     }
 }else{
     echo($sql2);
