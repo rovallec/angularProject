@@ -54,8 +54,8 @@ if(mysqli_query($con,$sql2)){
     (SUM(`incentive`)/DAY(LAST_DAY('$end'))) * DAY(LAST_DAY('$end')) * (1/12) AS `bonus14_productivity`,
     (SUM(`base`)/DAY(LAST_DAY('$end'))) * DAY(LAST_DAY('$end')) * (0.0417) AS `vacations_base`,
     (SUM(`incentive`)/DAY(LAST_DAY('$end'))) * DAY(LAST_DAY('$end')) * (0.0417) AS `vacations_prdouctivity`,
-    (SUM(`base`)/Day(LAST_DAY('$end'))) * Day(LAST_DAY('$end')) * 0.0972 +
-    (SUM(`incentive`)/Day(LAST_DAY('$end'))) * Day(LAST_DAY('$end')) * 0.0972	AS `severance_reserves`,
+    (SUM(`base`)/Day(LAST_DAY('$end'))) * Day(LAST_DAY('$end')) * 0.0972	AS `severance_reserves`,
+    (SUM(`incentive`)/Day(LAST_DAY('$end'))) * Day(LAST_DAY('$end')) * 0.0972	AS `severance_productivity`,
     ((coalesce(SUM(`base_with_deductions`),0) + coalesce(SUM(`ot`),0) + coalesce(SUM(`holidays`),0)) * 0.1267) AS `igss_employeer`,
     '198.24' AS `health_insurance`,
     IF(SUM(`parking_car_discount`)=175,300,IF(SUM(`parking_car_discount`)=350,300,SUM(`car_count`)*21.43)) AS `client_car_parking`,
@@ -173,11 +173,8 @@ if(mysqli_query($con,$sql2)){
         };
     }else{
         http_response_code(404);
-        echo($sql2);
-        echo(mysqli_error($con));
     }
 }else{
-    http_response_code(404);
     echo($sql2);
     echo(mysqli_error($con));
 }
