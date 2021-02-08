@@ -37,7 +37,8 @@ import { AttendanceReportComponent } from './attendance-report/attendance-report
 import { IsrmanagerComponent } from './isrmanager/isrmanager.component';
 import { AcphhomeComponent } from './acphhome/acphhome.component';
 import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
-import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component'
+import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component';
+import { BonusesComponent } from './bonuses/bonuses.component'
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.componen
     IsrmanagerComponent,
     AcphhomeComponent,
     PeriodsPhComponent,
-    AccprofilesPhComponent
+    AccprofilesPhComponent,
+    BonusesComponent
   ],
   imports: [
     BrowserModule,
