@@ -25,7 +25,7 @@ if($idperiods != 'all'){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status;";
     }
 }
-
+echo($sql);
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){
         $return[$i]['idpayments'] = $res['idpayments'];
