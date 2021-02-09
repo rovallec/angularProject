@@ -40,8 +40,8 @@ $sql =  "UPDATE `payments` set `credits` = $credits, `debits` = $debits, `date` 
         "id_account_py = $id_account " .
         "WHERE `idpayments` = $idpayment";
 
+        
 if(mysqli_query($con, $sql)){
-    echo($sql);
     echo("1");
 }else{
     echo("0");
