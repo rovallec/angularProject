@@ -25,7 +25,12 @@ $base_complete = validarDatos($request->base_complete);
 $productivity_complete = validarDatos($request->productivity_complete);
 $id_account = validarDatos($request->id_account_py);
 
-$sql =  "UPDATE `payments` set `credits` = $credits, `debits` = $debits, `date` = '$date', " .
+if($date != "NULL"){
+    $date = "'".$date."'";
+}
+
+
+$sql =  "UPDATE `payments` set `credits` = $credits, `debits` = $debits, `date` = $date, " .
         "last_seventh = '$last_seventh', " .
         "ot = $ot, ot_hours = $ot_hours, base_hours = $base_hours, " .
         "productivity_hours = $productivity_hours, base = $base,  " .
