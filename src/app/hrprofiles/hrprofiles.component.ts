@@ -998,7 +998,7 @@ export class HrprofilesComponent implements OnInit {
                       py.id_paymentmethod = payment_method.idpayment_methods;
                     }
                   })
-                  period.start = 'explicit';
+                  period.start = 'explicit_employee';
                   period.idperiods = p[p.length - 1].idperiods;
                   period.status = this.workingEmployee.idemployees;
                   this.apiService.getPayments(period).subscribe((actual_payments:payments[])=>{
