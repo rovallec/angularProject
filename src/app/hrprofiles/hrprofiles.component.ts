@@ -992,7 +992,7 @@ export class HrprofilesComponent implements OnInit {
                 let period:periods = new periods;
                 py.id_employee = this.activeEmp;
                 if (!isNullOrUndefined(p_methods)) {
-                  py.id_period = p[p.length - 1].idperiods;
+                  py.id_period = p[0].idperiods;
                   p_methods.forEach(payment_method => {
                     if (payment_method.predeterm == '1') {
                       py.id_paymentmethod = payment_method.idpayment_methods;
@@ -1000,7 +1000,7 @@ export class HrprofilesComponent implements OnInit {
                   })
                   period.start = 'explicit';
                   period.idperiods = p[p.length - 1].idperiods;
-                  period.status = this.activeEmp;
+                  period.status = this.workingEmployee.idemployees;
                   this.apiService.getPayments(period).subscribe((actual_payments:payments[])=>{
                     old_payment = actual_payments[0];
                     old_payment.id_account_py = this.original_account;
