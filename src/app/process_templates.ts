@@ -449,6 +449,35 @@ export class terminations {
     }
 }
 
+export class employees_terminations {
+  idemployees: string;
+  nearsol_id: string;
+  name: string;
+  account: string;  
+  hiring_date: string;
+  days_to_pay: string;
+  base_payment: string;
+  complement: string;
+  base_calc: string;
+  average: string;
+  advances: string;
+  total: string;
+  constructor() {
+    this.idemployees = null;
+    this.nearsol_id = null;
+    this.name = null;
+    this.account = null;
+    this.hiring_date = null;
+    this.days_to_pay = null;
+    this.base_payment = null;
+    this.complement = null;
+    this.base_calc = null;
+    this.average = null;
+    this.advances = null;
+    this.total = null;
+  }
+}
+
 export class reports {
     //reports
     idreports: string;

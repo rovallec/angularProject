@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { Router } from '@angular/router';
+import { employees_terminations } from "../process_templates";
 import { employees } from '../fullProcess';
 
 @Component({
@@ -9,8 +10,9 @@ import { employees } from '../fullProcess';
   templateUrl: './bonuses.component.html',
   styleUrls: ['./bonuses.component.css']
 })
-export class BonusesComponent implements OnInit {
+export class BonusesComponent implements OnInit {  
   employees: employees[] = [];
+  employees_terminations: employees_terminations[] = [];
   filter: string = null;
   value: string = null;
   searching: boolean = false;
@@ -18,24 +20,24 @@ export class BonusesComponent implements OnInit {
   constructor(private apiService: ApiService, public router: Router, private authSrv: AuthServiceService) { }
 
   ngOnInit() {
-    this.getAllEmployees();
+    this.getAllTerminations();
   }
 
-  getAllEmployees() {
-    this.apiService.getallEmployees({ department: 'all' }).subscribe((emp: employees[]) => {
-      this.employees = emp;
+  getAllTerminations() {
+    this.apiService.getAllTerminations({ filter: this.filter, value: this.value, department: 'terminations' }).subscribe((emp: employees_terminations[]) => {
+      this.employees_terminations = emp;
     })
   }
 
   cancelSearch() {
-    this.getAllEmployees();
+    this.getAllTerminations();
     this.searching = false;
   }
 
   searchEmployee() {
     this.searching = true;
-    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: 'all' }).subscribe((emp: employees[]) => {
-      this.employees = emp;
+    this.apiService.getAllTerminations({ filter: this.filter, value: this.value, department: 'employee' }).subscribe((emp: employees_terminations[]) => {
+      this.employees_terminations = emp;
     })
   }
 

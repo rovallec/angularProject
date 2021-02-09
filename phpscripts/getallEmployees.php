@@ -32,28 +32,7 @@ if($nm=='27'){
             LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
             LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
             LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LIMIT 50;";  
-        } elseif($nm == 'terminations') {
-            $sql = "SELECT
-            d.nearsol_id,
-            CONCAT(TRIM(e.first_name), ' ', TRIM(e.second_name), ' ', TRIM(e.first_lastname), ' ', TRIM(e.second_lastname)) AS name,
-            c.name AS account,
-            a.hiring_date,
-            DATEDIFF(t.valid_from, a.hiring_date) AS day_to_pay,
-            0 AS base_payment,
-            0 AS complement,
-            0 AS base_calc,
-            0 AS average,
-            -0 AS advances,
-            0 AS total_average_advances
-          FROM employees a
-          INNER JOIN users b ON (a.reporter = b.idUser)
-          INNER JOIN accounts c ON (a.id_account = c.idaccounts)
-          INNER JOIN hires d ON (a.id_hire = d.idhires)          
-          INNER JOIN profiles e ON (e.idprofiles = d.id_profile) 
-          INNER JOIN hr_processes HR ON (a.idemployees = hr.id_employee)
-          INNER JOIN terminations t ON (hr.idhr_processes = t.id_process)
-          LIMIT 50;";
-        }
+        } 
     }
 }
 if($request = mysqli_query($con,$sql)){
