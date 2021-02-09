@@ -13,16 +13,15 @@ $status = ($request->status);
 
 $return = [];
 $i = 0;
-
-if($idperiods != 'all'){
-    $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_period` = $idperiods;";
-}else{
     if($start != "explicit"){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status;";
     }else if($start == 'explicit'){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status AND `idperiods` IN ($idperiods);";
     }else if($start == 'explicit_employee'){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_employee` = $status;";
+    }else{
+        if($idperiods != 'all'){
+        $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_period` = $idperiods;";
     }
 }
 if($result = mysqli_query($con, $sql)){
