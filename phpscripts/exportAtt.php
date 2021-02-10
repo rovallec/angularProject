@@ -11,7 +11,13 @@ $to = $_GET['to'];
 
 $attendances = [];
 
-$sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*, id_account, coalesce(SUM(`igss`.`amt`),0) AS `igss`, coalesce(SUM(`aux`.`amt_aux`),0) AS `aux`, coalesce(SUM(`correction`.`amt_corrections`),0) AS `corrections` from attendences
+$sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*,
+id_account, coalesce(SUM(`igss`.`amt`),0) AS `igss`,
+coalesce(SUM(`aux`.`amt_aux`),0) AS `aux`, coalesce(SUM(`correction`.`amt_corrections`),0) AS `corrections`,
+IF(COUNT(`vac`.idvacations) > 0, 'VAC', '-') AS `vacations`,
+IF(COUNT(`JANP`.idleaves) > 0, 'JANP', '-') AS `JANP`,
+IF(COUNT(`JAP`.idleaves) > 0, 'JAP', '-') AS `JAP`
+FROM attendences
 INNER JOIN employees ON employees.idemployees = attendences.id_employee
 INNER JOIN hires ON hires.idhires = employees.id_hire
 INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
@@ -31,6 +37,17 @@ LEFT JOIN (SELECT SUM(amount) AS `amt_corrections`, id_employee, id_attendence f
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
     WHERE id_department != 5 AND attendence_justifications.reason IN('IGSS', 'WFM Attendance correction') GROUP BY id_employee, id_attendence) AS `correction` ON `correction`.id_attendence = attendences.idattendences
+LEFT JOIN (SELECT vacations.*, hr_processes.id_employee, hr_processes.status FROM vacations
+			INNER JOIN hr_processes ON hr_processes.idhr_processes = vacations.id_process
+            WHERE action = 'TAKE' AND hr_processes.status = 'PENDING') AS `vac` ON `vac`.id_employee = attendences.id_employee AND `vac`.date = attendences.date
+LEFT JOIN (SELECT leaves.*, hr_processes.id_employee, hr_processes.status from leaves
+		   INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
+           WHERE hr_processes.status = 'PENDING' AND (leaves.motive = 'Leave of Absence Unpaid' OR leaves.motive = 'Others Unpaid')) AS `JANP`
+           ON `JANP`.id_employee = attendences.id_employee AND attendences.date BETWEEN `JANP`.start AND `JANP`.end
+LEFT JOIN (SELECT leaves.*, hr_processes.id_employee, hr_processes.status from leaves
+		   INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
+           WHERE hr_processes.status = 'PENDING' AND (leaves.motive = 'Maternity' OR leaves.motive = 'Others Paid')) AS `JAP`
+           ON `JAP`.id_employee = attendences.id_employee AND attendences.date BETWEEN `JAP`.start AND `JAP`.end
 WHERE attendences.date BETWEEN '$from' AND '$to' AND id_account in($account)
 GROUP BY idattendences;";
 
