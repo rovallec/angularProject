@@ -359,12 +359,35 @@
                         </div>
                         <div class="col-md-1"></div>
                     </div>
-                    <div class="row col-md-12" style="margin-bottom: 15px;" *ngIf="employee.client_id != 'NONE'">
-                        <div class="col-md-5"></div>
-                        <div class="col-md-2">
-                            <button class="form-control" (click)="completePayment()">Pay</button>
+                    <div class="row col-md-12" style="margin-top:20px">
+                      <div class="col-md-1"></div>
+                      <div class="col-md-10">
+                        <table style="width: 100;" class="table table-striped table-hover" style="width: 100%;text-align:center">
+                          <tbody>
+                            <tr>
+                              <td class="font-weight-bold text-right">
+                                <h5>Total</h5>
+                              </td>
+                              <td class="font-weight-bold text-right px-2">
+                                <h5>
+                                  {{ total | number: '3.1-2' }}
+                                </h5>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="col-md-1"></div>
+                    </div>
+                    <div class="row col-md-12" style="margin-bottom: 15px;" *ngIf="employee.client_id=='NONE'">
+                        <div class="col-md-9">
                         </div>
-                        <div class="col-md-5"></div>
+                        <div class="col-md-2">
+                            <button class="form-control" (click)="acreditPayment()" *ngIf="this.process.status=='CLOSED'">Accredit</button>
+                            <button class="form-control" (click)="completePayment()" *ngIf="this.process.status=='ACREDIT'">Pay</button>
+                        </div>
+                        <div class="col-md-1">
+                        </div>
                     </div>
                 </div>
             </div>

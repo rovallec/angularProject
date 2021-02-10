@@ -20,8 +20,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = "http://localhost"; // Desarrollo
-PHP_API_SERVER = "http://200.94.251.67";  // produccion
+PHP_API_SERVER = "http://localhost"; // Desarrollo
+//PHP_API_SERVER = "http://200.94.251.67";  // produccion
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
@@ -695,6 +695,14 @@ updateDebits(debits:debits){
 
 insertPayments(payment:payments){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPayments.php`, payment);
+}
+
+updatehr_process(hrprocess:hrProcess){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updatehr_process.php`, hrprocess);
+}
+
+getHr_Processes(any:any){
+  return this.httpClient.post<hrProcess>(`${this.PHP_API_SERVER}/phpscripts/getHr_Processes.php`, any);
 }
 
   constructor(private httpClient:HttpClient) { }

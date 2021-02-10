@@ -27,6 +27,7 @@ if($result = mysqli_query($con, $sql)){
         $user['bank_check'] = $row['bank_check'];
         $user['period_to_pay'] = $row['period_to_pay'];
         $user['supervisor_experience'] = $row['supervisor_experience'];
+        $user['base_for_salary'] = $row['base_for_salary'];
     };
     echo json_encode($user);
 }else{
