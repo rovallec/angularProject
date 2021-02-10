@@ -52,7 +52,7 @@ WHERE attendences.date BETWEEN '$from' AND '$to' AND id_account in($account)
 GROUP BY idattendences;";
 
 $output = fopen("php://output", "w");
-fputcsv($output, array("Nearsol ID", "Client ID", "Name", "Account", "Date", "Roster", "Worked", "IGSS", "AUX", "CORRECTION"));
+fputcsv($output, array("Nearsol ID", "Client ID", "Name", "Account", "Date", "Roster", "Worked", "IGSS", "AUX", "CORRECTION", "VAC", "JANP", "JAP"));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         $attendances[0] = $row['nearsol_id'];
@@ -65,6 +65,9 @@ if($result = mysqli_query($con,$sql)){
         $attendances[7] = $row['igss'];
         $attendances[8] = $row['aux'];
         $attendances[9] = $row['corrections'];
+        $attendances[10] = $row['vac'];
+        $attendances[11] = $row['JANP'];
+        $attendances[12] = $row['JAP'];
         fputcsv($output, $attendances, ",");
     };
 }else{
