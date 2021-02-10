@@ -13,6 +13,13 @@
           <label>Search:</label>
           <input type="text" class="form-control" [(ngModel)]="value" (keyup.enter)="searchEmployee()">
       </div>
+      <div class="form-group col-md-2">
+        <label>Filter Bonuses:</label>
+        <select class="form-control" [(ngModel)]="filterBonuses" (click)="searchType()">
+            <option Value="1" selected>Bono 14</option>
+            <option Value="2">Aguinaldo</option>
+        </select>
+      </div>
       <div class="form-group col-md-1; text-align:left">
           <i class="fas fa-search" aria-hidden="true" style="margin-top:255%" (click)="searchEmployee()"></i>
       </div>
