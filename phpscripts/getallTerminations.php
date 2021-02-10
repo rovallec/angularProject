@@ -41,7 +41,7 @@ if($nm=='terminations'){
   LEFT JOIN (SELECT * FROM periods WHERE type_period = 1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
   ORDER BY a.hiring_date DESC
-  LIMIT 5000;";
+  LIMIT 50;";
 } elseif ($filter === 'name') {
   $sql = "SELECT DISTINCT
     a.idemployees,
