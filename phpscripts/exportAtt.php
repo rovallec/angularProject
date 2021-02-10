@@ -14,7 +14,7 @@ $attendances = [];
 $sql = "SELECT accounts.name, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, hires.nearsol_id, employees.client_id ,attendences.*,
 id_account, coalesce(SUM(`igss`.`amt`),0) AS `igss`,
 coalesce(SUM(`aux`.`amt_aux`),0) AS `aux`, coalesce(SUM(`correction`.`amt_corrections`),0) AS `corrections`,
-IF(COUNT(`vac`.idvacations) > 0, 'VAC', '-') AS `vacations`,
+IF(COUNT(`vac`.idvacations) > 0, 'VAC', '-') AS `VAC`,
 IF(COUNT(`JANP`.idleaves) > 0, 'JANP', '-') AS `JANP`,
 IF(COUNT(`JAP`.idleaves) > 0, 'JAP', '-') AS `JAP`
 FROM attendences
@@ -65,7 +65,7 @@ if($result = mysqli_query($con,$sql)){
         $attendances[7] = $row['igss'];
         $attendances[8] = $row['aux'];
         $attendances[9] = $row['corrections'];
-        $attendances[10] = $row['vac'];
+        $attendances[10] = $row['VAC'];
         $attendances[11] = $row['JANP'];
         $attendances[12] = $row['JAP'];
         fputcsv($output, $attendances, ",");
