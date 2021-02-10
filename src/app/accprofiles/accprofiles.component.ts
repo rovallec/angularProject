@@ -282,9 +282,9 @@ export class AccprofilesComponent implements OnInit {
                 }
 
                 cred_aguinaldo.type = "Aguinaldo Periodo del " + a_date + " al " + end_date;
-                cred_aguinaldo.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (Number(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime()))).toFixed(0)) / (1000 * 3600 * 24))).toFixed(2);
+                cred_aguinaldo.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (Number(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
                 if(isChrome){
-                  cred_aguinaldo.amount = (Number(cred_aguinaldo.amount) - ((21600000/1000/3600/24)*((Number(average_salary) / 12) * 14) / 365)).toFixed(2);
+                  cred_aguinaldo.amount = (Number(cred_aguinaldo.amount) - ((21600000/1000/3600/24)*((Number(base_salary(this.termination, this.employee))) / 365))).toFixed(2);
                 }
                 this.cred_benefits.push(cred_aguinaldo);
                 this.total = this.total + Number(cred_aguinaldo.amount);
@@ -295,9 +295,9 @@ export class AccprofilesComponent implements OnInit {
                   b_date = (new Date(end_date).getFullYear() - 1) + "-07-01";
                 }
                 cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
-                cred_bono14.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (Number((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime()).toFixed(0)) / (1000 * 3600 * 24))).toFixed(2);
+                cred_bono14.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (Number((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
                 if(isChrome){
-                  cred_bono14.amount = (Number(cred_bono14.amount) - ((21600000/1000/3600/24)*((Number(average_salary) / 12) * 14) / 365)).toFixed(2);
+                  cred_bono14.amount = (Number(cred_bono14.amount) - ((21600000/1000/3600/24)*((Number(base_salary(this.termination, this.employee))) / 365))).toFixed(2);
                 }
                 this.cred_benefits.push(cred_bono14);
                 this.total = this.total + Number(cred_bono14.amount);
@@ -307,9 +307,9 @@ export class AccprofilesComponent implements OnInit {
                     v_amount = v_amount + (1 * Number(vacation.count));
                   })
                   cred_vacations.type = "Vacaciones Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
-                  cred_vacations.amount = (((Number(base_salary(this.termination, this.employee))) / 30) * (Number((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24))).toFixed(0)) / (1 / (15 / 365)) - v_amount)).toFixed(2);
+                  cred_vacations.amount = (((Number(base_salary(this.termination, this.employee))) / 30) * (Number((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)))) / (1 / (15 / 365)) - v_amount)).toFixed(2);
                   if(isChrome){
-                    cred_vacations.amount = (Number(cred_vacations.amount) - ((21600000/1000/3600/24)*((Number(average_salary) / 12) * 14) / 365)).toFixed(2);
+                    cred_vacations.amount = (Number(cred_vacations.amount) - (((21600000/1000/3600/24)*(((Number(base_salary(this.termination, this.employee))) / 30)))/(1/(15/365)))).toFixed(2);
                   }
                   this.cred_benefits.push(cred_vacations);
                   this.total = this.total + Number(cred_vacations.amount);
