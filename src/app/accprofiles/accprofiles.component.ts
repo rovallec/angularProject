@@ -257,11 +257,11 @@ export class AccprofilesComponent implements OnInit {
                 average_salary = (sum_payment / count).toFixed(2);
 
                 end_date = this.tvalid_Form;
-                end_date_plus_one = String(String(new Date(end_date).getFullYear()) + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate()+2).toString());
+                end_date_plus_one = String(String(new Date(end_date).getFullYear()) + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate()+2 + " 00:00:00").toString());
                 this.printDate = new Date(end_date_plus_one).getTime().toString();
 
                 cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;
-                cred_indemnization.amount = ((((Number(average_salary) / 12) * 14) / 365) * (((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)) - 0.25)).toFixed(2);
+                cred_indemnization.amount = ((((Number(average_salary) / 12) * 14) / 365) * (((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)))).toFixed(2);
                 this.cred_benefits.push(cred_indemnization);
                 this.total = this.total + Number(cred_indemnization.amount);
 
