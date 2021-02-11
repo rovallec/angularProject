@@ -12,10 +12,8 @@
     $date = ($request->date);
     $notes = ($request->notes);
     $status = ($request->state);
-    $start = ($request->start);
-    $end = ($request->end);
 
-    $sql = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`, `start`, `end`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status', '$start', '$end');";
+    $sql = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status');";
 
     if(mysqli_query($con, $sql)){
         $idprocess = mysqli_insert_id($con);
