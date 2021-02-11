@@ -44,7 +44,7 @@ if($nm=='terminations'){
   INNER JOIN accounts c ON (a.id_account = c.idaccounts)
   INNER JOIN hires d ON (a.id_hire = d.idhires)          
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
-  LEFT JOIN hr_processes HR ON (a.idemployees = hr.id_employee)
+  LEFT JOIN hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
   LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
@@ -69,7 +69,7 @@ if($nm=='terminations'){
   INNER JOIN accounts c ON (a.id_account = c.idaccounts)
   INNER JOIN hires d ON (a.id_hire = d.idhires)          
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
-  LEFT JOIN hr_processes HR ON (a.idemployees = hr.id_employee)
+  LEFT JOIN hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
   LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
@@ -94,7 +94,7 @@ if($nm=='terminations'){
   INNER JOIN accounts c ON (a.id_account = c.idaccounts)
   INNER JOIN hires d ON (a.id_hire = d.idhires)          
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
-  LEFT JOIN hr_processes HR ON (a.idemployees = hr.id_employee)
+  LEFT JOIN hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
   LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
@@ -119,7 +119,7 @@ if($nm=='terminations'){
   INNER JOIN accounts c ON (a.id_account = c.idaccounts)
   INNER JOIN hires d ON (a.id_hire = d.idhires)          
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
-  LEFT JOIN hr_processes HR ON (a.idemployees = hr.id_employee)
+  LEFT JOIN hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
   LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
@@ -144,7 +144,7 @@ if($nm=='terminations'){
   INNER JOIN accounts c ON (a.id_account = c.idaccounts)
   INNER JOIN hires d ON (a.id_hire = d.idhires)          
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
-  LEFT JOIN hr_processes HR ON (a.idemployees = hr.id_employee)
+  LEFT JOIN hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
   LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
@@ -233,7 +233,7 @@ if($request = mysqli_query($con,$sql)){
 } else 
 {
   echo($sql);
-  echo(mysqli_error($con));
+  echo(mysqli_error())
   http_response_code(400);
 }
 ?>
