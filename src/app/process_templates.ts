@@ -191,6 +191,8 @@ export class attendences_adjustment {
     time_after: string;
     amount: string;
     state: string;
+    start:string;
+    end:string;
     //justifications
     id_process: string;
     reason: string;
@@ -212,6 +214,8 @@ export class attendences_adjustment {
         this.time_after = null;
         this.amount = null;
         this.state = null;
+        this.start = null;
+        this.end = null;
         //justifications
         this.id_process = null;
         this.reason = null;

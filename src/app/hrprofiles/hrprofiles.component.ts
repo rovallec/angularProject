@@ -40,8 +40,6 @@ export class HrprofilesComponent implements OnInit {
   checkDate2: string;
   checkDay: string;
   vacationsEarned: number = 0;
-  temp_start: string = "12:00";
-  temp_end: string = "12:00";
   accId: string = '';
   addVac: boolean = true;
   useCompany: string = null;
@@ -367,8 +365,8 @@ export class HrprofilesComponent implements OnInit {
 
   addJustification(att: attendences) {
     this.attAdjudjment = new attendences_adjustment;
-    this.temp_end = "12:00";
-    this.temp_start = "12:00";
+    this.attAdjudjment.start = "12:00";
+    this.attAdjudjment.end = "12:00";
     this.editAdj = false;
     this.attAdjudjment.date = this.todayDate;
     this.attAdjudjment.state = "PENDING";
@@ -1391,8 +1389,8 @@ export class HrprofilesComponent implements OnInit {
   }
 
   change_time(any: any) {
-    let str_split: Date = new Date(2020, 1, 1, parseFloat(this.temp_start.split(":")[0]), parseFloat(this.temp_start.split(":")[1].split(" ")[0]));
-    let end_split: Date = new Date(2020, 1, 1, parseFloat(this.temp_end.split(":")[0]), parseFloat(this.temp_end.split(":")[1].split(" ")[0]));
+    let str_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.start.split(":")[0]), parseFloat(this.attAdjudjment.start.split(":")[1].split(" ")[0]));
+    let end_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.end.split(":")[0]), parseFloat(this.attAdjudjment.end.split(":")[1].split(" ")[0]));
 
     console.log(end_split.getTime() + " " + str_split.getTime());
 
