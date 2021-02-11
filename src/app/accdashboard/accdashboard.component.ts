@@ -63,7 +63,6 @@ export class AccdashboardComponent implements OnInit {
     this.getPeriods();
     this.getAllEmployees();
     this.searching = false;
-
   }
 
   gotoPeriod(id: string) {

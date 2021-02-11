@@ -70,6 +70,8 @@
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/dilyconvergent" style="color: white"
           [ngClass]="{'act':selectedOption=='DAILY'}" (click)="SetSel('DAILY')">DAILY CONVERGENT</a>
+          <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/bonuses"
+          style="color: white" [ngClass]="{'act':selectedOption=='bonuses'}" (click)="SetSel('bonuses')">BONUSES</a>
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
           routerLink="/attritionReport" style="color: white" [ngClass]="{'act':selectedOption=='ATTREP'}"
           (click)="SetSel('ATTREP')">ATTRITION REPORT</a>

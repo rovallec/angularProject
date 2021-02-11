@@ -32,7 +32,7 @@ if($nm=='27'){
             LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
             LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
             LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LIMIT 50;";  
-        }
+        } 
     }
 }
 if($request = mysqli_query($con,$sql)){
