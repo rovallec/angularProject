@@ -16,6 +16,7 @@
             $return[$i]['start'] = $res['start'];
             $return[$i]['end'] = $res['end'];
             $return[$i]['status'] = $res['status'];
+            $return[$i]['type_period'] = $res['type_period'];
             $i++;
         }
         echo(json_encode($return));

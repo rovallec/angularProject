@@ -676,10 +676,12 @@ export class periods {
     start: string;
     end: string;
     status: string;
+    type_period: string;
     constructor() {
         this.idperiods = null;
         this.start = null;
         this.end = null;
+        this.status = null;
         this.status = null;
     }
 }
