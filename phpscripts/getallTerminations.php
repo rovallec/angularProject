@@ -233,7 +233,7 @@ if($request = mysqli_query($con,$sql)){
 } else 
 {
   echo($sql);
-  echo(mysqli_error())
+  echo(mysqli_error($con));
   http_response_code(400);
 }
 ?>
