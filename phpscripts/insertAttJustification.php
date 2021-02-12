@@ -15,7 +15,7 @@
     $start = ($request->start);
     $end = ($request->end);
 
-    $sql = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`, `start`, `end`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status', '$start', '$end');";
+    $sql = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status');";
 
     if(mysqli_query($con, $sql)){
         $idprocess = mysqli_insert_id($con);
@@ -29,7 +29,7 @@
             $time_after = ($request->time_after);
             $amount = ($request->amount);
             $state = ($request->state);
-            $sql3 = "INSERT INTO `attendence_adjustemnt`(`idattendence_adjustemnt`, `id_attendence`, `id_justification`, `time_before`, `time_after`, `amount`, `state`) VALUES (NULL, '$idattendences', '$id_justification', '$time_before', '$time_after', '$amount', '$state');";
+            $sql3 = "INSERT INTO `attendence_adjustemnt`(`idattendence_adjustemnt`, `id_attendence`, `id_justification`, `time_before`, `time_after`, `amount`, `state`, `start`, `end`) VALUES (NULL, '$idattendences', '$id_justification', '$time_before', '$time_after', '$amount', '$state', '$start', '$end');";
             if(mysqli_query($con, $sql3)){
                 $sql4 = "UPDATE `attendences` SET `worked_time`= '$time_after' WHERE `idattendences` = '$idattendences';";
                 if(mysqli_query($con, $sql4)){
