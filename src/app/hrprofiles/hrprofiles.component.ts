@@ -1388,11 +1388,12 @@ export class HrprofilesComponent implements OnInit {
     })
   }
 
-  change_time(any: any) {
+  change_time(any: any, str:string) {
+
     let str_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.start.split(":")[0]), parseFloat(this.attAdjudjment.start.split(":")[1].split(" ")[0]));
     let end_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.end.split(":")[0]), parseFloat(this.attAdjudjment.end.split(":")[1].split(" ")[0]));
 
-    console.log(end_split.getTime() + " " + str_split.getTime());
+    console.log(this.attAdjudjment);
 
     this.attAdjudjment.amount = ((end_split.getTime() - str_split.getTime()) / 3600000).toFixed(2);
 
