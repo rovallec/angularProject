@@ -65,7 +65,7 @@ export class AppComponent {
     let end:string = null;
 
     if(dt.getDate() <= 16){
-      start = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-" + dt.getDate().toString();
+      start = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-01";
       end = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-15";
     }else{
       start = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-16";
