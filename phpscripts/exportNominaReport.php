@@ -213,7 +213,7 @@ $sql =  "SELECT  " .
         "  COALESCE(IF(i.type='ISR',                                        ROUND(i.amount, 2), 0.00), 0.00) AS 'ISREmpleados', " .
         "  COALESCE(IF(i.type='CAR PARKING',                                ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoEmpleados', " .
         "  COALESCE(IF(i.type='MOTORCYCLE PARKING',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoMotos', " .
-        "  COALESCE(IF(i.type='TARJETA DE ACCESO/PARQUEO',                  ROUND(i.amount, 2), 0.00), 0.00) AS 'TarjetaDeParqueo', " .
+        "  COALESCE(IF(i.type IN('Descuento Por Servicio de Active Parking', 'TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso'), ROUND(i.amount, 2), 0.00), 0.00) AS 'TarjetaDeParqueo', " .
         "  COALESCE(IF(i.type='BUS TRANSPORTATION',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'TransporteEnBus', " .
         "  COALESCE(IF(i.type='PERSONAL LOAN',                              ROUND(i.amount, 2), 0.00), 0.00) AS 'PrestamoPersonal',  " .
         "   /* Detalle de Bonos / Ajustes */ " .

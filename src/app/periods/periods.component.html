@@ -52,6 +52,7 @@
             <i class="fas fa-file-invoice-dollar" style="margin-left:5px" *ngIf="period.status == '0'" data-toggle="modal"
             data-target="#setBilling"></i>
             <i class="fas fa-money-check-alt d-inline-block" style="margin-left:5px" data-toggle="tooltip" data-placement="top" title="Bank Report" (click)="exportBankReport()" *ngIf="period.status == '0'"></i>
+            <i class="fas fa-file-contract" style="margin-left:5px" data-toggle="tooltip" data-placement="top" title="Save accounting policy" (click)="setAccountingPolicy()" *ngIf="period.status == '0'"></i>
         </div>
     </div>
 
