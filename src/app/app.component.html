@@ -91,7 +91,7 @@
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
           routerLink="/dpMaintenance" style="color: white" [ngClass]="{'act':selectedOption=='DPM'}"
           (click)="SetSel('DPM')">DP MAINTENANCE</a>
-          <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/exportatt" style="color: white"
+          <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
           [ngClass]="{'act':selectedOption=='EXPEX'}" (click)="getExceptions()">EXCEPTIONS REPORT</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
