@@ -175,6 +175,7 @@ export class PeriodsComponent implements OnInit {
         let non_show_2: boolean = true;
         let days_discounted:number = 0;
         let janp_onoff:number = 0;
+        let days_passed:number = 0;
 
         pushCredits = [];
         pusDebits = [];
@@ -226,7 +227,7 @@ export class PeriodsComponent implements OnInit {
                                               this.absence = this.absence - 8;
                                               days_discounted = days_discounted + 1;
                                               attendance.balance = 'JANP';
-                                                janp_sequence = janp_sequence + 1;
+                                              janp_sequence = janp_sequence + 1;
                                               }else{
                                                 janp_onoff = janp_onoff + 1;
                                               }
@@ -303,6 +304,7 @@ export class PeriodsComponent implements OnInit {
                                           }
                                         }
                                       }
+                                      days_passed = days_passed + 1;
                                       if (dt.getDay() === 6) {
                                         non_show_2 = true;
                                         if (nonShowCount == 5) {
@@ -317,6 +319,11 @@ export class PeriodsComponent implements OnInit {
                                           this.absence = this.absence - 16;
                                         }
 
+                                        if(days_passed == janp_onoff){
+                                          discounted = discounted - (janp_onoff*8);
+                                          days_discounted = days_discounted + janp_onoff;
+                                          this.absence = this.absence - (janp_onoff*8);
+                                        }
                                         janp_sequence = 0;
                                         nonShowCount = 0;
                                       }
