@@ -9,9 +9,8 @@ $start = $_GET['start'];
 $end = $_GET['end'];
 
 $exportRow = [];
-$i = 0;
 
-$sql = "SELECT accounts.name, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+$sql = "SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
 FROM
 	attendence_justifications
@@ -26,7 +25,7 @@ WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_departme
 
 UNION
 
-SELECT accounts.name, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'Seguro' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
 FROM
 	attendence_justifications
@@ -41,7 +40,7 @@ WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_departme
 
 UNION
 
-SELECT accounts.name, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'VAC' AS `type_of_payment`, DATE_FORMAT(vacations.date, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
 	vacations
@@ -56,7 +55,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 
 UNION
 
-SELECT accounts.name, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'JANP' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
 	leaves
@@ -73,7 +72,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 
 UNION
 
-SELECT accounts.name, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'LOA' AS `type_of_payment`, 
 DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
@@ -91,7 +90,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 
 UNION
 
-SELECT accounts.name, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'JAP' AS `type_of_payment`, 
 DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
@@ -112,7 +111,6 @@ fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " T
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         fputcsv($output, $row);
-        $i++;
     };
 }else{
     http_response_code(404);
