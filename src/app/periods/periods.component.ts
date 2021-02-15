@@ -218,7 +218,7 @@ export class PeriodsComponent implements OnInit {
 
                                       if (!activeDp) {
                                         leave.forEach(leav => {
-                                          if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "DISMISSED")) {
+                                          if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "DISMISSED" && leav.status != "COMPLETED")) {
                                             activeLeav = true;
                                             if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                               discounted = discounted - 8;
@@ -227,6 +227,7 @@ export class PeriodsComponent implements OnInit {
                                               attendance.balance = 'JANP';
                                               if (attendance.scheduled != 'OFF') {
                                                 janp_sequence = janp_sequence + 1;
+                                              }else{
                                                 janp_onoff = janp_onoff + 1;
                                               }
                                             } else {
@@ -310,15 +311,14 @@ export class PeriodsComponent implements OnInit {
                                           days_discounted = days_discounted + 1;
                                         }
 
-                                        if (janp_sequence >= 5) {
-                                          discounted = discounted - ((2-janp_onoff)*8);
+                                        if (janp_sequence == 5) {
+                                          discounted = discounted - (8*janp_onoff);
                                           days_discounted = days_discounted + 2;
-                                          this.absence = this.absence - ((2-janp_onoff)*8);
+                                          this.absence = this.absence - (8*janp_onoff);
                                         }
 
                                         janp_sequence = 0;
                                         nonShowCount = 0;
-                                        janp_onoff = 0;
                                       }
                                     }
                                   });
