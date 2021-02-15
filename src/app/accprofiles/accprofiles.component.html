@@ -73,7 +73,7 @@
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
-                    <div class="form-row col-sm-12">
+                    <div class="form-row col-sm-12" style="margin-top: 10px;">
                         <table class="table table-striped">
                             <thead>
                                 <th>REQUESTER</th>
@@ -84,11 +84,11 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let adv of advances">
-                                    <td>{{adv.user_name}}</td>
-                                    <td>{{adv.type}}</td>
-                                    <td>{{adv.amount}}</td>
-                                    <td>{{adv.status}}</td>
-                                    <td><button class="btn btn-success"><i class="fas fa-check"></i></button><button class="btn btn-danger"><i class="fas fas fa-ban"></i></button></td>
+                                    <td style="text-align: center; vertical-align: middle;">{{adv.user_name}}</td>
+                                    <td style="text-align: center; vertical-align: middle;">{{adv.type}}</td>
+                                    <td style="text-align: center; vertical-align: middle;">{{adv.amount}}</td>
+                                    <td><button class="btn btn-success" style="padding:0px; margin:0px" [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'"><i class="fas fa-check"></i></button><button style="padding:0px; margin:0px" class="btn btn-danger" [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'"><i class="fas fas fa-ban"></i></button></td>
+                                    <td style="text-align: center; vertical-align: middle;">{{adv.status}}</td>
                                 </tr>
                             </tbody>
                         </table>
