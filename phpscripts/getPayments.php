@@ -14,7 +14,7 @@ $status = ($request->status);
 $return = [];
 $i = 0;
 
-    if($idperiods != 'all_py'){
+    if($idperiods != 'all'){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile WHERE `id_period` = $idperiods;";
     }else{
     if($start != "explicit"){
