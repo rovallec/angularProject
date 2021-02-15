@@ -173,6 +173,7 @@ export class PeriodsComponent implements OnInit {
         let hld: number = 0;
         let last_seventh: boolean = true;
         let non_show_2: boolean = true;
+        let days_discounted: number = 0;
 
         pushCredits = [];
         pusDebits = [];
@@ -194,6 +195,7 @@ export class PeriodsComponent implements OnInit {
                                   att.forEach(attendance => {
                                     if (attendance.scheduled == "0" || attendance.scheduled == "NaN") {
                                       this.absence = this.absence + 8;
+                                      days_discounted = days_discounted + 1;
                                       discounted = discounted + 8;
                                     } else {
 
@@ -206,6 +208,7 @@ export class PeriodsComponent implements OnInit {
 
                                       dp.forEach(disciplinary => {
                                         if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != "DISMISSED")) {
+                                          days_discounted = days_discounted + 1;
                                           discounted = discounted - 8;
                                           attendance.balance = "SUSPENSION"
                                           activeDp = true;
@@ -218,10 +221,12 @@ export class PeriodsComponent implements OnInit {
                                             activeLeav = true;
                                             if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                               discounted = discounted - 8;
+                                              days_discounted = days_discounted + 1;
                                               this.absence = this.absence - 8;
                                               attendance.balance = 'JANP';
                                               if (attendance.scheduled != 'OFF') {
                                                 janp_sequence = janp_sequence + 1;
+                                                days_discounted = days_discounted + 1;
                                               }
                                             } else {
                                               if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
@@ -262,6 +267,7 @@ export class PeriodsComponent implements OnInit {
                                           if (Number(attendance.worked_time) == 0 && (attendance.date != ((new Date().getFullYear()).toString() + "-01-01"))) {
                                             if (non_show_2) {
                                               this.absence = this.absence - 16;
+                                              days_discounted = days_discounted + 2;
                                               discounted = discounted - 16;
                                               svnth = svnth + 1;
                                               non_show_2 = false;
@@ -271,7 +277,8 @@ export class PeriodsComponent implements OnInit {
                                                 last_seventh = true;
                                               }
                                             } else {
-                                              attendance.balance = "NS"
+                                              attendance.balance = "NS";
+                                              days_discounted = days_discounted + 1;
                                               nonShowCount = nonShowCount + 1;
                                               this.absence = this.absence - 8;
                                               discounted = discounted - 8;
@@ -298,11 +305,13 @@ export class PeriodsComponent implements OnInit {
                                         non_show_2 = true;
                                         if (nonShowCount == 5) {
                                           discounted = discounted - 8;
+                                          days_discounted = days_discounted + 1;
                                           this.absence = this.absence - 8;
                                         }
 
                                         if (janp_sequence == 5) {
                                           discounted = discounted - 16;
+                                          days_discounted = days_discounted + 2;
                                           this.absence = this.absence - 16;
                                         }
 
@@ -342,7 +351,7 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(hld_credit);
                                   }
 
-                                  if (discounted <= 0) {
+                                  if ((discounted+(days_discounted*8)) <= 0) {
                                     let p_end: Date = new Date(this.period.end);
                                     let p_start: Date = new Date(this.period.start);
                                     if ((((p_end.getTime() - p_start.getTime()) / 1000 / 3600 / 24) + 1) > att.length) {
@@ -659,7 +668,7 @@ export class PeriodsComponent implements OnInit {
     let janp_sequence: number = 0;
     let last_seventh: boolean = true;
     let hld: number = 0;
-
+    let days_discounted: number = 0;
     let non_show1: boolean = false;
     let non_show2: boolean = false;
     this.non_show_2 = true;
@@ -714,6 +723,7 @@ export class PeriodsComponent implements OnInit {
                             dp.forEach(disciplinary => {
                               if ((disciplinary.day_1 == attendance.date || disciplinary.day_2 == attendance.date || disciplinary.day_3 == attendance.date || disciplinary.day_4 == attendance.date) && (disciplinary.status != "COMPLETED" && disciplinary.status != "DISMISSED")) {
                                 this.absence = this.absence - 8;
+                                days_discounted = days_discounted + 1;
                                 discounted = discounted - 8;
                                 attendance.balance = "SUSPENSION"
                                 activeDp = true;
@@ -730,9 +740,11 @@ export class PeriodsComponent implements OnInit {
                                   if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                     discounted = discounted - 8;
                                     this.absence = this.absence - 8;
+                                    days_discounted = days_discounted + 1;
                                     attendance.balance = 'JANP';
                                     if (attendance.scheduled != 'OFF') {
                                       janp_sequence = janp_sequence + 1;
+                                      days_discounted = days_discounted + 1;
                                     }
                                   } else {
                                     if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
@@ -777,12 +789,14 @@ export class PeriodsComponent implements OnInit {
                                   if (this.non_show_2 && last_seventh) {
                                     this.absence = this.absence - 16;
                                     discounted = discounted - 16;
+                                    days_discounted = days_discounted + 2;
                                     this.seventh = this.seventh + 1;
                                     this.non_show_2 = false;
                                     attendance.balance = "NS";
                                     nonShowCount = nonShowCount + 1;
                                   } else {
-                                    attendance.balance = "NS"
+                                    attendance.balance = "NS";
+                                    days_discounted = days_discounted + 1;
                                     this.absence = this.absence - 8;
                                     discounted = discounted - 8;
                                     nonShowCount = nonShowCount + 1;
@@ -808,11 +822,13 @@ export class PeriodsComponent implements OnInit {
                                 this.non_show_2 = true;
                                 if (nonShowCount == 5) {
                                   discounted = discounted - 8;
+                                  days_discounted = days_discounted + 1;
                                   this.absence = this.absence - 8;
                                 }
   
                                 if (janp_sequence == 5) {
                                   discounted = discounted - 16;
+                                  days_discounted = days_discounted + 2;
                                   this.absence = this.absence - 16;
                                 }
   
@@ -859,7 +875,7 @@ export class PeriodsComponent implements OnInit {
                               ot_credit.amount = '0';
                               decreto_credit.amount = ((125 / 120) * (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence))).toFixed(2);
                             } else {
-                              if (this.absence <= 0) {
+                              if ((this.absence + (days_discounted*8)) <= 0) {
                                 base_credit.amount = (((120) + (this.absence)) * base_hour).toFixed(2);
                                 productivity_credit.amount = (((120) + (this.absence)) * productivity_hour).toFixed(2);
                                 ot_credit.amount = '0';
