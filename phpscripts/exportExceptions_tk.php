@@ -11,7 +11,7 @@ $end = $_GET['end'];
 $exportRow = [];
 $i = 0;
 
-$sql = "SELECT accounts.name, hires.nearsol_id, employees.client_id, accounts.name, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+$sql = "SELECT accounts.name, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
 FROM
 	attendence_justifications
