@@ -174,6 +174,7 @@ export class PeriodsComponent implements OnInit {
         let last_seventh: boolean = true;
         let non_show_2: boolean = true;
         let days_discounted:number = 0;
+        let janp_onoff:number = 0;
 
         pushCredits = [];
         pusDebits = [];
@@ -226,6 +227,7 @@ export class PeriodsComponent implements OnInit {
                                               attendance.balance = 'JANP';
                                               if (attendance.scheduled != 'OFF') {
                                                 janp_sequence = janp_sequence + 1;
+                                                janp_onoff = janp_onoff + 1;
                                               }
                                             } else {
                                               if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
@@ -308,14 +310,15 @@ export class PeriodsComponent implements OnInit {
                                           days_discounted = days_discounted + 1;
                                         }
 
-                                        if (janp_sequence == 5) {
-                                          discounted = discounted - 16;
+                                        if (janp_sequence >= 5) {
+                                          discounted = discounted - ((2-janp_onoff)*8);
                                           days_discounted = days_discounted + 2;
-                                          this.absence = this.absence - 16;
+                                          this.absence = this.absence - ((2-janp_onoff)*8);
                                         }
 
                                         janp_sequence = 0;
                                         nonShowCount = 0;
+                                        janp_onoff = 0;
                                       }
                                     }
                                   });
