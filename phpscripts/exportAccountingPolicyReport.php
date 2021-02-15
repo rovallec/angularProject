@@ -12,7 +12,6 @@ $i = 0;
 $sql1 = "SELECT COUNT(*) AS account FROM policies WHERE id_period = $AID_Period;";
 $result1 = mysqli_query($con,$sql1);
 $row1 = mysqli_fetch_assoc($result1);
-$allOk = false;
 
 
 if ($row1['account'] == 0) {
