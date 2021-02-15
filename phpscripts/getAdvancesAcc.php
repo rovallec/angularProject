@@ -8,6 +8,7 @@ $request = json_decode($postdata);
 $id = ($request->idemployees);
 
 $user = [];
+$i = 0;
 
 $sql = "SELECT * FROM advances INNER JOIN hr_processes ON hr_processes.idhr_processes = advances.id_process INNER JOIN users ON users.idUser = hr_processes.id_user WHERE id_employee = $id;";
 
