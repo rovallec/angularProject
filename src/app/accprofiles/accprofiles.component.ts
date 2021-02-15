@@ -93,9 +93,9 @@ export class AccprofilesComponent implements OnInit {
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
 
       if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-12-01").getTime()) >= 0)) {
-        a_date = this.employee.hiring_date;
+        a_date = (new Date(todayDate).getFullYear() - 1) + '-12-01';
       } else {
-        a_date = (new Date(todayDate).getFullYear() - 1) + '-12-01'
+        a_date = this.employee.hiring_date;
       }
       this.acumulated_ag = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number(((new Date(todayDate).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
       if (isChrome) {
@@ -103,9 +103,9 @@ export class AccprofilesComponent implements OnInit {
       }
 
       if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)) {
-        b_date = this.employee.hiring_date;
-      } else {
         b_date = (new Date(todayDate).getFullYear() - 1) + "-07-01";
+      } else {
+        b_date = this.employee.hiring_date; 
       }
       this.acumulated_b14 = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number((new Date(todayDate).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
       if (isChrome) {
