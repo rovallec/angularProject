@@ -57,3 +57,4 @@ angular.json
 phpscripts/database.php
 phpscripts/login.php
 phpscripts/database.php
+src/app/api.service.ts

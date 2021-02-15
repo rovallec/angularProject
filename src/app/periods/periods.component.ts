@@ -810,16 +810,16 @@ export class PeriodsComponent implements OnInit {
                                   discounted = discounted - 8;
                                   this.absence = this.absence - 8;
                                 }
-  
+
                                 if (janp_sequence == 5) {
                                   discounted = discounted - 16;
                                   this.absence = this.absence - 16;
                                 }
-  
+
                                 janp_sequence = 0;
                                 nonShowCount = 0;
                               }
-  
+
                             }
                           });
 
@@ -1133,5 +1133,6 @@ export class PeriodsComponent implements OnInit {
 
   setAccountingPolicy() {
     // Se encarga de generar la póliza contable al período en curso si no existiera.
+    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_self")
   }
 }
