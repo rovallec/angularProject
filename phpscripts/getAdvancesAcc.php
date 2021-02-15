@@ -26,7 +26,7 @@ if($result = mysqli_query($con, $sql)){
         $user[$i]['status'] = $row['status'];
         $user[$i]['username'] = $row['username'];
         $user[$i]['user_name'] = $row['user_name'];
-        $i
+        $i;
     };
     echo json_encode($user);
 }else{
