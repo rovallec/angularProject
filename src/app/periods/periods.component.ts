@@ -179,7 +179,7 @@ export class PeriodsComponent implements OnInit {
         pushCredits = [];
         pusDebits = [];
 
-        this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
+        this.apiService.getSearchEmployees({ dp: 'all_py', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
           this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
             this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
               this.apiService.getDPAtt({ id: emp[0].idemployees, date_1: this.period.start, date_2: this.period.end }).subscribe((dp: disciplinary_processes[]) => {
@@ -218,7 +218,7 @@ export class PeriodsComponent implements OnInit {
 
                                       if (!activeDp) {
                                         leave.forEach(leav => {
-                                          if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "DISMISSED" && leav.status != "COMPLETED")) {
+                                          if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "DISMISSED")) {
                                             activeLeav = true;
                                             if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                               discounted = discounted - 8;
