@@ -427,7 +427,7 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
                                   }
-                                  if((120+discounted)-(days_discounted*8) == 0){
+                                  if(((120+discounted)+(days_discounted*8)-120) >= 0){
                                     let ot: ot_manage = new ot_manage;
                                     ot.id_period = this.period.idperiods;
                                     ot.id_employee = emp[0].idemployees;
