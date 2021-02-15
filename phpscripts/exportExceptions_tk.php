@@ -57,8 +57,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 UNION
 
 SELECT accounts.name, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'JANP' AS `type_of_payment`, 
-DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
+'JANP' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
 	leaves
 	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
@@ -107,7 +106,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
       OR (leaves.end BETWEEN '$start' AND '$end'))
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))";
-
+echo($sql);
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH"));
 if($result = mysqli_query($con,$sql)){
