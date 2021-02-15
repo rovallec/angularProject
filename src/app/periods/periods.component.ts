@@ -221,11 +221,11 @@ export class PeriodsComponent implements OnInit {
                                           if (((new Date(leav.start)) <= (new Date(attendance.date)) && (new Date(leav.end)) >= (new Date(attendance.date))) && (leav.status != "DISMISSED")) {
                                             activeLeav = true;
                                             if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
+                                              if (attendance.scheduled != 'OFF') {
                                               discounted = discounted - 8;
                                               this.absence = this.absence - 8;
                                               days_discounted = days_discounted + 1;
                                               attendance.balance = 'JANP';
-                                              if (attendance.scheduled != 'OFF') {
                                                 janp_sequence = janp_sequence + 1;
                                               }else{
                                                 janp_onoff = janp_onoff + 1;
@@ -312,9 +312,9 @@ export class PeriodsComponent implements OnInit {
                                         }
 
                                         if (janp_sequence == 5) {
-                                          discounted = discounted - (8*janp_onoff);
+                                          discounted = discounted - 16;
                                           days_discounted = days_discounted + 2;
-                                          this.absence = this.absence - (8*janp_onoff);
+                                          this.absence = this.absence - 16;
                                         }
 
                                         janp_sequence = 0;
