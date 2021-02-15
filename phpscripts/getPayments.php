@@ -28,7 +28,6 @@ $i = 0;
     }
 }
 
-echo($sql);
 if($result = mysqli_query($con, $sql)){
     while($res = mysqli_fetch_assoc($result)){
         $return[$i]['idpayments'] = $res['idpayments'];
