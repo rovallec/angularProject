@@ -82,6 +82,7 @@ export class AccprofilesComponent implements OnInit {
     let a_date:string = null;
     let b_date:string = null;
     let todayDate:string = new Date().getFullYear().toString() + "-" + (new Date().getMonth()-1) + "-" + new Date().getDate().toString();
+    console.log(todayDate);
 
     if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && (<any>window).chrome) {
       isChrome = true;

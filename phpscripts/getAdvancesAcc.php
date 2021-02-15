@@ -5,11 +5,11 @@ require 'database.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-$id = ($request->idprocesses);
+$id = ($request->idemployees);
 
 $user = [];
 
-$sql = "SELECT * FROM advances INNER JOIN hr_processes ON hr_processes.idhr_processes = advances.id_process INNER JOIN users ON users.idUser = hr_processes.id_user;";
+$sql = "SELECT * FROM advances INNER JOIN hr_processes ON hr_processes.idhr_processes = advances.id_process INNER JOIN users ON users.idUser = hr_processes.id_user WHERE id_employee = $id;";
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
