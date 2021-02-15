@@ -58,8 +58,7 @@
             </nav>
 
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show" id="nav-adv" role="tabpanel"
-                    aria-labelledby="nav-adv-tab">
+                <div class="tab-pane fade show" id="nav-adv" role="tabpanel" aria-labelledby="nav-adv-tab">
                     <div class="row col-sm-12">
                         <div class="col-sm-2"></div>
                         <div class="col-sm-3">
@@ -76,18 +75,27 @@
                     <div class="form-row col-sm-12" style="margin-top: 10px;">
                         <table class="table table-striped">
                             <thead>
-                                <th>REQUESTER</th>
-                                <th>TYPE</th>
-                                <th>AMOUNT</th>
-                                <th>ACTION</th>
-                                <th>STATUS</th>
+                                <th style="text-align: center; vertical-align: middle;">REQUESTER</th>
+                                <th style="text-align: center; vertical-align: middle;">TYPE</th>
+                                <th style="text-align: center; vertical-align: middle;">AMOUNT</th>
+                                <th style="text-align: center; vertical-align: middle;">ACTION</th>
+                                <th style="text-align: center; vertical-align: middle;">STATUS</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let adv of advances">
                                     <td style="text-align: center; vertical-align: middle;">{{adv.user_name}}</td>
                                     <td style="text-align: center; vertical-align: middle;">{{adv.type}}</td>
                                     <td style="text-align: center; vertical-align: middle;">{{adv.amount}}</td>
-                                    <td><button class="btn btn-success" style="padding:0px; margin:0px" [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'"><i class="fas fa-check"></i></button><button style="padding:0px; margin:0px" class="btn btn-danger" [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'"><i class="fas fas fa-ban"></i></button></td>
+                                    <td style="padding: 0px; margin: 0px;">
+                                        <button class="btn btn-success" style="padding:0px; margin:0px; width:22px; height: 22px; height: 22px;"
+                                            [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'">
+                                            <i class="fas fa-check" style="padding:0px;margin:0px;height:15px;width:15px"></i>
+                                        </button>
+                                        <button style="padding:0px; margin:0px" class="btn btn-danger"
+                                            [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'">
+                                            <i class="fas fas fa-ban" style="padding:0px;margin:0px;height:15px;width:15px"></i>
+                                        </button>
+                                    </td>
                                     <td style="text-align: center; vertical-align: middle;">{{adv.status}}</td>
                                 </tr>
                             </tbody>
