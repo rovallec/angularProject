@@ -13,19 +13,20 @@ $sql = "SELECT * FROM advances INNER JOIN hr_processes ON hr_processes.idhr_proc
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
-        $user['idadvances'] = $row['idadvances'];
-        $user['id_process'] = $row['id_process'];
-        $user['type'] = $row['type'];
-        $user['description'] = $row['description'];
-        $user['classification'] = $row['classification'];
-        $user['amount'] = $row['amount'];
-        $user['idhr_processes'] = $row['idhr_processes'];
-        $user['id_employee'] = $row['id_employee'];
-        $user['date'] = $row['date'];
-        $user['notes'] = $row['notes'];
-        $user['status'] = $row['status'];
-        $user['username'] = $row['username'];
-        $user['user_name'] = $row['user_name'];
+        $user[$i]['idadvances'] = $row['idadvances'];
+        $user[$i]['id_process'] = $row['id_process'];
+        $user[$i]['type'] = $row['type'];
+        $user[$i]['description'] = $row['description'];
+        $user[$i]['classification'] = $row['classification'];
+        $user[$i]['amount'] = $row['amount'];
+        $user[$i]['idhr_processes'] = $row['idhr_processes'];
+        $user[$i]['id_employee'] = $row['id_employee'];
+        $user[$i]['date'] = $row['date'];
+        $user[$i]['notes'] = $row['notes'];
+        $user[$i]['status'] = $row['status'];
+        $user[$i]['username'] = $row['username'];
+        $user[$i]['user_name'] = $row['user_name'];
+        $i
     };
     echo json_encode($user);
 }else{
