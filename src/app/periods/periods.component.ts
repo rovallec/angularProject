@@ -1133,6 +1133,6 @@ export class PeriodsComponent implements OnInit {
 
   setAccountingPolicy() {
     // Se encarga de generar la póliza contable al período en curso si no existiera.
-    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_self")
+    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_blank")
   }
 }
