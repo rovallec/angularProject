@@ -775,6 +775,7 @@ export class PeriodsComponent implements OnInit {
                                     days_discounted = days_discounted + 1;
                                       janp_sequence = janp_sequence + 1;
                                     }else{
+                                      attendance.balance = "OFF";
                                       janp_onoff = janp_onoff + 1;
                                     }
                                   } else {
@@ -913,10 +914,10 @@ export class PeriodsComponent implements OnInit {
                               decreto_credit.amount = ((125 / 120) * (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence))).toFixed(2);
                             } else {
                               if (this.absence <= 0) {
-                                base_credit.amount = (((120) + (this.absence) - ((120+discounted)+(days_discounted*8)-120)) * base_hour).toFixed(2);
-                                productivity_credit.amount = (((120) + (this.absence) - ((120+discounted)+(days_discounted*8)-120)) * productivity_hour).toFixed(2);
+                                base_credit.amount = (((120) + (this.absence) - ((120+this.absence)+(days_discounted*8)-120)) * base_hour).toFixed(2);
+                                productivity_credit.amount = (((120) + (this.absence) - ((120+this.absence)+(days_discounted*8)-120)) * productivity_hour).toFixed(2);
                                 ot_credit.amount = '0';
-                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence)) - ((120+discounted)+(days_discounted*8)-120)).toFixed(2);
+                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence)) - ((120+this.absence)+(days_discounted*8)-120)).toFixed(2);
                               } else {
                                 productivity_credit.amount = ((120) * productivity_hour).toFixed(2);
                                 base_credit.amount = ((120) * base_hour).toFixed(2);
@@ -934,17 +935,17 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
 
-                            if(((120+discounted)+(days_discounted*8)-120) >= 0){
+                            if(((120+this.absence)+(days_discounted*8)-120) >= 0){
                               let ot: ot_manage = new ot_manage;
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
                               ot.name = emp[0].name;
                               ot.nearsol_id = emp[0].nearsol_id;
-                              ot_credit.type = "Horas Extra Laboradas: " + discounted.toFixed(2);
+                              ot_credit.type = "Horas Extra Laboradas: " + this.absence.toFixed(2);
                               if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
-                                ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120+discounted)+(days_discounted*8)-120)).toFixed(2);
+                                ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120+this.absence)+(days_discounted*8)-120)).toFixed(2);
                               } else {
-                                ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * ((120+discounted)+(days_discounted*8)-120)).toFixed(2);
+                                ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * ((120+this.absence)+(days_discounted*8)-120)).toFixed(2);
                               }
                               this.credits.push(ot_credit);
                             }
