@@ -925,10 +925,10 @@ export class PeriodsComponent implements OnInit {
                               decreto_credit.amount = ((125 / 120) * (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence))).toFixed(2);
                             } else {
                               if (this.absence <= 0) {
-                                base_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
-                                productivity_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
+                                base_credit.amount = (((120) + (this.absence)) * base_hour).toFixed(2);
+                                productivity_credit.amount = (((120) + (this.absence)) * productivity_hour).toFixed(2);
                                 ot_credit.amount = '0';
-                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence)) - ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
+                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence))).toFixed(2);
                               } else {
                                 productivity_credit.amount = ((120) * productivity_hour).toFixed(2);
                                 base_credit.amount = ((120) * base_hour).toFixed(2);
@@ -947,6 +947,9 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             if ((((120 + this.absence) + (days_discounted * 8) - 120) >= 0) || days_discounted > 0) {
+                              base_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
+                              productivity_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
+                              decreto_credit.amount = ((125 / 120) * ((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120))).toFixed(2);
                               let ot: ot_manage = new ot_manage;
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
