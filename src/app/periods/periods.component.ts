@@ -946,7 +946,7 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
 
-                            if (((120 + this.absence) + (days_discounted * 8) - 120) >= 0) {
+                            if ((((120 + this.absence) + (days_discounted * 8) - 120) >= 0) || days_discounted > 0) {
                               let ot: ot_manage = new ot_manage;
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
