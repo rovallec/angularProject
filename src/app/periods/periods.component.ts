@@ -173,9 +173,9 @@ export class PeriodsComponent implements OnInit {
         let hld: number = 0;
         let last_seventh: boolean = true;
         let non_show_2: boolean = true;
-        let days_discounted:number = 0;
-        let janp_onoff:number = 0;
-        let days_passed:number = 0;
+        let days_discounted: number = 0;
+        let janp_onoff: number = 0;
+        let days_passed: number = 0;
 
         pushCredits = [];
         pusDebits = [];
@@ -223,12 +223,12 @@ export class PeriodsComponent implements OnInit {
                                             activeLeav = true;
                                             if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                               if (attendance.scheduled != 'OFF') {
-                                              discounted = discounted - 8;
-                                              this.absence = this.absence - 8;
-                                              days_discounted = days_discounted + 1;
-                                              attendance.balance = 'JANP';
-                                              janp_sequence = janp_sequence + 1;
-                                              }else{
+                                                discounted = discounted - 8;
+                                                this.absence = this.absence - 8;
+                                                days_discounted = days_discounted + 1;
+                                                attendance.balance = 'JANP';
+                                                janp_sequence = janp_sequence + 1;
+                                              } else {
                                                 janp_onoff = janp_onoff + 1;
                                               }
                                             } else {
@@ -319,10 +319,10 @@ export class PeriodsComponent implements OnInit {
                                           this.absence = this.absence - 16;
                                         }
 
-                                        if(days_passed == janp_onoff){
-                                          discounted = discounted - (janp_onoff*8);
+                                        if (days_passed == janp_onoff) {
+                                          discounted = discounted - (janp_onoff * 8);
                                           days_discounted = days_discounted + janp_onoff;
-                                          this.absence = this.absence - (janp_onoff*8);
+                                          this.absence = this.absence - (janp_onoff * 8);
                                         }
                                         janp_sequence = 0;
                                         nonShowCount = 0;
@@ -377,13 +377,13 @@ export class PeriodsComponent implements OnInit {
                                       pay.base = base_credit.amount;
                                       pay.productivity = productivity_credit.amount;
                                     } else {
-                                      base_credit.amount = ((120 + (discounted) - ((120+discounted)+(days_discounted*8)-120)) * base_hour).toFixed(2);
-                                      productivity_credit.amount = ((120 + (discounted) - ((120+discounted)+(days_discounted*8)-120)) * productivity_hour).toFixed(2);
+                                      base_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
+                                      productivity_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
                                       ot_credit.amount = '0';
-                                      decreto_credit.amount = ((120 + (discounted) - ((120+discounted)+(days_discounted*8)-120)) * (125 / 120)).toFixed(2);
-                                      pay.days = ((120 + (discounted) - ((120+discounted)+(days_discounted*8)-120)) / 8).toFixed(4);
-                                      pay.base_hours = (120 + (discounted) - ((120+discounted)+(days_discounted*8)-120)).toFixed(4);
-                                      pay.productivity_hours = (120 + (discounted) - ((120+discounted)+(days_discounted*8)-120)).toFixed(4);
+                                      decreto_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * (125 / 120)).toFixed(2);
+                                      pay.days = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) / 8).toFixed(4);
+                                      pay.base_hours = (120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(4);
+                                      pay.productivity_hours = (120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(4);
                                       pay.ot_hours = '0';
                                       pay.ot = "0";
                                       pay.base = base_credit.amount;
@@ -428,7 +428,7 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
                                   }
-                                  if(((120+discounted)+(days_discounted*8)-120) >= 0){
+                                  if (((120 + discounted) + (days_discounted * 8) - 120) >= 0) {
                                     let ot: ot_manage = new ot_manage;
                                     ot.id_period = this.period.idperiods;
                                     ot.id_employee = emp[0].idemployees;
@@ -436,9 +436,9 @@ export class PeriodsComponent implements OnInit {
                                     ot.nearsol_id = emp[0].nearsol_id;
                                     ot_credit.type = "Horas Extra Laboradas: " + discounted.toFixed(2);
                                     if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
-                                      ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120+discounted)+(days_discounted*8)-120)).toFixed(2);
+                                      ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(2);
                                     } else {
-                                      ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * ((120+discounted)+(days_discounted*8)-120)).toFixed(2);
+                                      ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(2);
                                     }
                                     pay.ot = ot_credit.amount;
                                     ot_credit.idpayments = pay.idpayments;
@@ -471,13 +471,13 @@ export class PeriodsComponent implements OnInit {
                                     totalDeb = totalDeb + Number(igss_debit.amount);
 
                                     db.forEach(debit => {
-                                      if(debit.status == "PENDING"){
+                                      if (debit.status == "PENDING") {
                                         totalDeb = totalDeb + Number(debit.amount);
                                       }
                                     })
 
                                     cd.forEach(credit => {
-                                      if(credit.status == "PENDING"){
+                                      if (credit.status == "PENDING") {
                                         totalCred = totalCred + Number(credit.amount);
                                       }
                                     });
@@ -695,9 +695,11 @@ export class PeriodsComponent implements OnInit {
     let janp_sequence: number = 0;
     let last_seventh: boolean = true;
     let hld: number = 0;
-    let days_discounted:number = 0;
-    let janp_onoff:number = 0;
-    let days_passed:number = 0;
+    let days_discounted: number = 0;
+    let janp_onoff: number = 0;
+    let days_passed: number = 0;
+    let days_off_onweek: number = 0;
+    let acumulated_days_off: number = 0;
 
     let non_show1: boolean = false;
     let non_show2: boolean = false;
@@ -769,12 +771,12 @@ export class PeriodsComponent implements OnInit {
                                   activeLeav = true;
                                   if (leav.motive == 'Others Unpaid' || leav.motive == 'Leave of Absence Unpaid') {
                                     if (attendance.scheduled != 'OFF') {
-                                    discounted = discounted - 8;
-                                    this.absence = this.absence - 8;
-                                    attendance.balance = 'JANP';
-                                    days_discounted = days_discounted + 1;
+                                      discounted = discounted - 8;
+                                      this.absence = this.absence - 8;
+                                      attendance.balance = 'JANP';
+                                      days_discounted = days_discounted + 1;
                                       janp_sequence = janp_sequence + 1;
-                                    }else{
+                                    } else {
                                       attendance.balance = "OFF";
                                       janp_onoff = janp_onoff + 1;
                                     }
@@ -852,23 +854,26 @@ export class PeriodsComponent implements OnInit {
                               }
                               days_passed = days_passed + 1;
                               if (dt.getDay() === 6) {
+                                acumulated_days_off = acumulated_days_off + days_off_onweek;
+                                days_off_onweek = this.daysOff - acumulated_days_off;
                                 this.non_show_2 = true;
+
                                 if (nonShowCount == 5) {
-                                  discounted = discounted - 8;
-                                  this.absence = this.absence - 8;
-                                  days_discounted = days_discounted + 1;
+                                  discounted = discounted - (days_off_onweek*8);
+                                  this.absence = this.absence - (days_off_onweek*8);
+                                  days_discounted = days_discounted + days_off_onweek;
                                 }
 
                                 if (janp_sequence == 5) {
-                                  discounted = discounted - 16;
-                                  days_discounted = days_discounted + 2;
-                                  this.absence = this.absence - 16;
+                                  discounted = discounted - (days_off_onweek*8);
+                                  days_discounted = days_discounted + days_off_onweek;
+                                  this.absence = this.absence - (days_off_onweek*8);
                                 }
 
-                                if(days_passed == janp_onoff){
-                                  discounted = discounted - (janp_onoff*8);
+                                if (days_passed == janp_onoff) {
+                                  discounted = discounted - (janp_onoff * 8);
                                   days_discounted = days_discounted + janp_onoff;
-                                  this.absence = this.absence - (janp_onoff*8);
+                                  this.absence = this.absence - (janp_onoff * 8);
                                 }
                                 janp_sequence = 0;
                                 nonShowCount = 0;
@@ -914,10 +919,10 @@ export class PeriodsComponent implements OnInit {
                               decreto_credit.amount = ((125 / 120) * (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence))).toFixed(2);
                             } else {
                               if (this.absence <= 0) {
-                                base_credit.amount = (((120) + (this.absence) - ((120+this.absence)+(days_discounted*8)-120)) * base_hour).toFixed(2);
-                                productivity_credit.amount = (((120) + (this.absence) - ((120+this.absence)+(days_discounted*8)-120)) * productivity_hour).toFixed(2);
+                                base_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
+                                productivity_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
                                 ot_credit.amount = '0';
-                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence)) - ((120+this.absence)+(days_discounted*8)-120)).toFixed(2);
+                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence)) - ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
                               } else {
                                 productivity_credit.amount = ((120) * productivity_hour).toFixed(2);
                                 base_credit.amount = ((120) * base_hour).toFixed(2);
@@ -926,7 +931,7 @@ export class PeriodsComponent implements OnInit {
                                 ot.id_period = this.period.idperiods;
                                 ot.id_employee = emp[0].idemployees;
                                 ot_credit.type = "Horas Extra Laboradas: " + this.absence;
-                                if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23'  && emp[0].id_account != '22' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
+                                if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '23' && emp[0].id_account != '22' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                                   ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * this.absence).toFixed(2);
                                 } else {
                                   ot_credit.amount = ((((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240)) * 1.5 * this.absence).toFixed(2);
@@ -935,7 +940,7 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
 
-                            if(((120+this.absence)+(days_discounted*8)-120) >= 0){
+                            if (((120 + this.absence) + (days_discounted * 8) - 120) >= 0) {
                               let ot: ot_manage = new ot_manage;
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
@@ -943,9 +948,9 @@ export class PeriodsComponent implements OnInit {
                               ot.nearsol_id = emp[0].nearsol_id;
                               ot_credit.type = "Horas Extra Laboradas: " + this.absence.toFixed(2);
                               if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
-                                ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120+this.absence)+(days_discounted*8)-120)).toFixed(2);
+                                ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
                               } else {
-                                ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * ((120+this.absence)+(days_discounted*8)-120)).toFixed(2);
+                                ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 1.5 * ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
                               }
                               this.credits.push(ot_credit);
                             }
@@ -960,13 +965,13 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             db.forEach(debit => {
-                              if(debit.status == "PENDING"){
+                              if (debit.status == "PENDING") {
                                 totalDeb = totalDeb + Number(debit.amount);
                                 this.debits.push(debit);
                               }
                             })
                             cd.forEach(credit => {
-                              if(credit.status == "PENDING"){
+                              if (credit.status == "PENDING") {
                                 totalCred = totalCred + Number(credit.amount)
                                 this.credits.push(credit);
                               }
@@ -1044,13 +1049,13 @@ export class PeriodsComponent implements OnInit {
                           }
                         } else {
                           db.forEach(debit => {
-                            if(debit.status == "PENDING"){
+                            if (debit.status == "PENDING") {
                               totalDeb = totalDeb + Number(debit.amount);
                               this.debits.push(debit);
                             }
                           })
                           cd.forEach(credit => {
-                            if(credit.status == "PENDING"){
+                            if (credit.status == "PENDING") {
                               totalCred = totalCred + Number(credit.amount)
                               this.credits.push(credit);
                             }
