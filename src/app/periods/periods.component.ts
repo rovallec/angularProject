@@ -434,10 +434,10 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
                                   }
-                                  if ((((120 + discounted) + (days_discounted * 8) - 120) >= 0) || days_discounted > 0) {
-                                    base_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
-                                    productivity_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
-                                    decreto_credit.amount = ((125 / 120) * ((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120))).toFixed(2);
+                                  if ((((120 + discounted) + ((days_discounted * 8)) - 120) >= 0) || days_discounted > 0) {
+                                    base_credit.amount = (((120) + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
+                                    productivity_credit.amount = (((120) + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
+                                    decreto_credit.amount = ((125 / 120) * ((120) + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120))).toFixed(2);
                                     let ot: ot_manage = new ot_manage;
                                     ot.id_period = this.period.idperiods;
                                     ot.id_employee = emp[0].idemployees;
