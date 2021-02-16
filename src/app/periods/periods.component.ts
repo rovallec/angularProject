@@ -176,6 +176,8 @@ export class PeriodsComponent implements OnInit {
         let days_discounted: number = 0;
         let janp_onoff: number = 0;
         let days_passed: number = 0;
+        let acumulated_days_off:number = 0;
+        let days_off_onweek:number = 0;
 
         pushCredits = [];
         pusDebits = [];
@@ -305,20 +307,24 @@ export class PeriodsComponent implements OnInit {
                                         }
                                       }
                                       days_passed = days_passed + 1;
+
                                       if (dt.getDay() === 6) {
-                                        non_show_2 = true;
+                                        acumulated_days_off = acumulated_days_off + days_off_onweek;
+                                        days_off_onweek = this.daysOff - acumulated_days_off;
+                                        this.non_show_2 = true;
+        
                                         if (nonShowCount == 5) {
-                                          discounted = discounted - 8;
-                                          this.absence = this.absence - 8;
-                                          days_discounted = days_discounted + 1;
+                                          discounted = discounted - (days_off_onweek*8);
+                                          this.absence = this.absence - (days_off_onweek*8);
+                                          days_discounted = days_discounted + days_off_onweek;
                                         }
-
+        
                                         if (janp_sequence == 5) {
-                                          discounted = discounted - 16;
-                                          days_discounted = days_discounted + 2;
-                                          this.absence = this.absence - 16;
+                                          discounted = discounted - (days_off_onweek*8);
+                                          days_discounted = days_discounted + days_off_onweek;
+                                          this.absence = this.absence - (days_off_onweek*8);
                                         }
-
+        
                                         if (days_passed == janp_onoff) {
                                           discounted = discounted - (janp_onoff * 8);
                                           days_discounted = days_discounted + janp_onoff;
@@ -946,7 +952,7 @@ export class PeriodsComponent implements OnInit {
                               ot.id_employee = emp[0].idemployees;
                               ot.name = emp[0].name;
                               ot.nearsol_id = emp[0].nearsol_id;
-                              ot_credit.type = "Horas Extra Laboradas: " + this.absence.toFixed(2);
+                              ot_credit.type = "Horas Extra Laboradas: " + (120 + this.absence) + (days_discounted * 8).toFixed(2);
                               if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                                 ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
                               } else {
