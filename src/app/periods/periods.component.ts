@@ -383,13 +383,13 @@ export class PeriodsComponent implements OnInit {
                                       pay.base = base_credit.amount;
                                       pay.productivity = productivity_credit.amount;
                                     } else {
-                                      base_credit.amount = ((120 + (discounted)) * base_hour).toFixed(2);
-                                      productivity_credit.amount = ((120 + (discounted)) * productivity_hour).toFixed(2);
+                                      base_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
+                                      productivity_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
                                       ot_credit.amount = '0';
-                                      decreto_credit.amount = ((120 + (discounted)) * (125 / 120)).toFixed(2);
-                                      pay.days = ((120 + (discounted)) / 8).toFixed(4);
-                                      pay.base_hours = (120 + (discounted)).toFixed(4);
-                                      pay.productivity_hours = (120 + (discounted)).toFixed(4);
+                                      decreto_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * (125 / 120)).toFixed(2);
+                                      pay.days = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) / 8).toFixed(4);
+                                      pay.base_hours = (120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(4);
+                                      pay.productivity_hours = (120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(4);
                                       pay.ot_hours = '0';
                                       pay.ot = "0";
                                       pay.base = base_credit.amount;
@@ -434,10 +434,7 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
                                   }
-                                  if ((((120 + discounted) + ((days_discounted * 8)) - 120) >= 0) || days_discounted > 0) {
-                                    base_credit.amount = (((120) + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
-                                    productivity_credit.amount = (((120) + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
-                                    decreto_credit.amount = ((125 / 120) * ((120) + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120))).toFixed(2);
+                                  if ((((120 + discounted) + (days_discounted * 8) - 120) >= 0) || days_discounted > 0) {
                                     let ot: ot_manage = new ot_manage;
                                     ot.id_period = this.period.idperiods;
                                     ot.id_employee = emp[0].idemployees;
@@ -929,9 +926,9 @@ export class PeriodsComponent implements OnInit {
                             } else {
                               if (this.absence <= 0) {
                                 base_credit.amount = (((120) + (this.absence)) * base_hour).toFixed(2);
-                                productivity_credit.amount = (((120) + (this.absence)) * productivity_hour).toFixed(2);
+                                productivity_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
                                 ot_credit.amount = '0';
-                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence))).toFixed(2);
+                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence)) - ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
                               } else {
                                 productivity_credit.amount = ((120) * productivity_hour).toFixed(2);
                                 base_credit.amount = ((120) * base_hour).toFixed(2);
@@ -950,9 +947,6 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             if ((((120 + this.absence) + (days_discounted * 8) - 120) >= 0) || days_discounted > 0) {
-                              base_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
-                              productivity_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
-                              decreto_credit.amount = ((125 / 120) * ((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120))).toFixed(2);
                               let ot: ot_manage = new ot_manage;
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
