@@ -952,7 +952,7 @@ export class PeriodsComponent implements OnInit {
                               ot.id_employee = emp[0].idemployees;
                               ot.name = emp[0].name;
                               ot.nearsol_id = emp[0].nearsol_id;
-                              ot_credit.type = "Horas Extra Laboradas: " + (120 + this.absence) + (days_discounted * 8).toFixed(2);
+                              ot_credit.type = "Horas Extra Laboradas: " + ((120 + this.absence) + (days_discounted * 8)).toFixed(2);
                               if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                                 ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
                               } else {
