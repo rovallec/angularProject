@@ -56,8 +56,8 @@
         </a>
         <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/isrManager"
           style="color: white" [ngClass]="{'act':selectedOption=='ISR'}" (click)="SetSel('ISR')">ISR MANAGER</a>
-        <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link" routerLink="/hrdaily"
-          style="color: white" [ngClass]="{'act':selectedOption=='HRDAILY'}" (click)="SetSel('HRDAILY')">EXCEPTIONS</a>
+        <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
+          style="color: white" [ngClass]="{'act':selectedOption=='EXPEX'}" (click)="getExceptions()">EXCEPTIONS</a>
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/realtime"
           style="color: white; cursor:pointer" [ngClass]="{'act':selectedOption=='REAL'}" (click)="SetSel('REAL')">REAL
           TIME</a>

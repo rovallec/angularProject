@@ -176,8 +176,11 @@ export class PeriodsComponent implements OnInit {
         let days_discounted: number = 0;
         let janp_onoff: number = 0;
         let days_passed: number = 0;
-        let acumulated_days_off:number = 0;
-        let days_off_onweek:number = 0;
+        let acumulated_days_off: number = 0;
+        let days_off_onweek: number = 0;
+        let days_off:number = 0;
+        let attended:number = 0;
+        let leave_up:number = 0;
 
         pushCredits = [];
         pusDebits = [];
@@ -231,11 +234,13 @@ export class PeriodsComponent implements OnInit {
                                                 attendance.balance = 'JANP';
                                                 janp_sequence = janp_sequence + 1;
                                               } else {
+                                                days_off = days_off + 1;
                                                 janp_onoff = janp_onoff + 1;
                                               }
                                             } else {
                                               if (leav.motive == 'Maternity' || leav.motive == 'Others Paid') {
                                                 this.attended = this.attended + 8
+                                                attended = attended + 8;
                                                 attendance.balance = 'JAP';
                                               }
                                             }
@@ -250,9 +255,10 @@ export class PeriodsComponent implements OnInit {
                                               this.roster = this.roster + Number(attendance.scheduled);
                                               this.attended = this.attended + Number(attendance.scheduled);
                                               attendance.balance = 'VAC';
+                                              attended = attended + Number(attendance.scheduled);
                                             } else {
-                                              this.daysOff = this.daysOff + 1;
-                                              attendance.balance = "OFF";
+                                              days_off = days_off + 1;
+                                              attendance.balance = "OFF_VAC";
                                             }
                                             activeVac = true;
                                           }
@@ -261,11 +267,14 @@ export class PeriodsComponent implements OnInit {
 
                                       if (!activeLeav && !activeVac && !activeDp) {
                                         if (attendance.scheduled == 'OFF') {
-                                          this.daysOff = this.daysOff + 1;
+                                          days_off = days_off + 1;
                                           attendance.balance = "OFF";
                                           if (Number(attendance.worked_time) > 0) {
                                             attendance.balance = attendance.worked_time;
                                             discounted = discounted + Number(attendance.worked_time);
+                                            attended = attended + Number(attendance.worked_time);
+                                          }else{
+                                            attended = attended + 8;
                                           }
                                         } else {
                                           this.roster = this.roster + Number(attendance.scheduled);
@@ -306,41 +315,51 @@ export class PeriodsComponent implements OnInit {
                                           }
                                         }
                                       }
-                                      days_passed = days_passed + 1;
 
                                       if (dt.getDay() === 6) {
+                                        let agree:boolean = false
                                         acumulated_days_off = acumulated_days_off + days_off_onweek;
-                                        days_off_onweek = this.daysOff - acumulated_days_off;
-                                        this.non_show_2 = true;
-        
+                                        days_off_onweek = days_off - acumulated_days_off;
+                                        non_show_2 = true;
+
                                         if (nonShowCount == 5) {
-                                          discounted = discounted - (days_off_onweek*8);
-                                          this.absence = this.absence - (days_off_onweek*8);
-                                          days_discounted = days_discounted + days_off_onweek;
+                                          discounted = discounted - ((days_off_onweek-1) * 8);
+                                          this.absence = this.absence - ((days_off_onweek-1) * 8);
+                                          days_discounted = days_discounted + (days_off_onweek-1);
                                         }
-        
+
                                         if (janp_sequence == 5) {
-                                          discounted = discounted - (days_off_onweek*8);
+                                          agree = true;
+                                          discounted = discounted - (days_off_onweek * 8);
                                           days_discounted = days_discounted + days_off_onweek;
-                                          this.absence = this.absence - (days_off_onweek*8);
+                                          this.absence = this.absence - (days_off_onweek * 8);
                                         }
-        
+
                                         if (days_passed == janp_onoff) {
                                           discounted = discounted - (janp_onoff * 8);
                                           days_discounted = days_discounted + janp_onoff;
                                           this.absence = this.absence - (janp_onoff * 8);
                                         }
+
+                                        if(days_off_onweek == janp_onoff && !agree){
+                                          discounted = discounted - (janp_onoff * 8);
+                                          days_discounted = days_discounted + janp_onoff;
+                                          this.absence = this.absence - (janp_onoff * 8);
+                                        }
+
                                         janp_sequence = 0;
                                         nonShowCount = 0;
                                         janp_onoff = 0;
                                       }
+                                      days_passed = days_passed + 1;
                                     }
                                   });
 
 
                                   if (this.attended == 0 || discounted <= (-120)) {
                                     this.absence = (-120) + this.attended;
-                                    discounted = (-120) + this.attended;
+                                    discounted = (-120) + attended;
+                                    days_discounted = 0;
                                     svnth = 0;
                                   }
 
@@ -367,6 +386,8 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(hld_credit);
                                   }
 
+                                  let p_end: Date = new Date(this.period.end);
+                                  let p_start: Date = new Date(this.period.start);
                                   if (discounted <= 0) {
                                     let p_end: Date = new Date(this.period.end);
                                     let p_start: Date = new Date(this.period.start);
@@ -383,13 +404,23 @@ export class PeriodsComponent implements OnInit {
                                       pay.base = base_credit.amount;
                                       pay.productivity = productivity_credit.amount;
                                     } else {
+                                      if((((120 + discounted) + (days_discounted * 8) - 120) > 0)){
+                                      base_credit.amount = ((120 + discounted - ((120 + discounted) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
+                                      productivity_credit.amount = ((120 + discounted - ((120 + discounted) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
+                                      ot_credit.amount = '0';
+                                      decreto_credit.amount = ((120 + discounted - ((120 + discounted) + (days_discounted * 8) - 120)) * (125 / 120)).toFixed(2);
+                                      pay.days = (((120 + discounted - ((120 + discounted) + (days_discounted * 8) - 120)) / 8) - days_discounted).toFixed(4);
+                                      pay.base_hours = (120 + discounted - ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(4);
+                                      pay.productivity_hours = (120 + discounted - ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(4);
+                                    } else {
                                       base_credit.amount = ((120 + (discounted)) * base_hour).toFixed(2);
                                       productivity_credit.amount = ((120 + (discounted)) * productivity_hour).toFixed(2);
                                       ot_credit.amount = '0';
-                                      decreto_credit.amount = ((120 + (discounted)) * (125 / 120)).toFixed(2);
-                                      pay.days = ((120 + (discounted))/ 8).toFixed(4);
-                                      pay.base_hours = (120 + (discounted)).toFixed(4);
-                                      pay.productivity_hours = (120 + (discounted)).toFixed(4);
+                                      decreto_credit.amount = ((125 / 120) * ((120 + (discounted)))).toFixed(2);
+                                      pay.days = (((120 + discounted) / 8) - days_discounted).toFixed(4);
+                                      pay.base_hours = (120 + discounted).toFixed(4);
+                                      pay.productivity_hours = (120 + discounted).toFixed(4);
+                                    }
                                       pay.ot_hours = '0';
                                       pay.ot = "0";
                                       pay.base = base_credit.amount;
@@ -434,16 +465,17 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
                                   }
-                                  if ((((120 + discounted) + (days_discounted * 8) - 120) >= 0) || days_discounted > 0) {
-                                    base_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
-                                    productivity_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
-                                    decreto_credit.amount = ((120 + (discounted) - ((120 + discounted) + (days_discounted * 8) - 120)) * (125 / 120)).toFixed(2);
+
+                                  if ((((120 + discounted) + (days_discounted * 8) - 120) > 0) && discounted > (-120)) {
+                                    base_credit.amount = (((120 + discounted) - ((120 + discounted) - (120 - (days_discounted * 8)))) * base_hour).toFixed(2);
+                                    productivity_credit.amount = (((120 + discounted) - ((120 + discounted) - (120 - (days_discounted * 8)))) * productivity_hour).toFixed(2);
+                                    decreto_credit.amount = (((120 + discounted) - ((120 + discounted) - (120 - (days_discounted * 8)))) * (125 / 120)).toFixed(2);
                                     let ot: ot_manage = new ot_manage;
                                     ot.id_period = this.period.idperiods;
                                     ot.id_employee = emp[0].idemployees;
                                     ot.name = emp[0].name;
                                     ot.nearsol_id = emp[0].nearsol_id;
-                                    ot_credit.type = "Horas Extra Laboradas: " + discounted.toFixed(2);
+                                    ot_credit.type = "Horas Extra Laboradas: " + ((120 + discounted) + (days_discounted * 8) - 120).toFixed(2);
                                     if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                                       ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120 + discounted) + (days_discounted * 8) - 120)).toFixed(2);
                                     } else {
@@ -454,6 +486,7 @@ export class PeriodsComponent implements OnInit {
                                     pushCredits.push(ot_credit);
                                     this.global_credits.push(ot_credit);
                                   }
+
                                   igss_debit.amount = ((Number(base_credit.amount) + Number(hld_credit.amount) + Number(ot_credit.amount)) * 0.0483).toFixed(2);
                                   igss_debit.type = "Descuento IGSS";
 
@@ -786,7 +819,7 @@ export class PeriodsComponent implements OnInit {
                                       days_discounted = days_discounted + 1;
                                       janp_sequence = janp_sequence + 1;
                                     } else {
-                                      attendance.balance = "OFF";
+                                      attendance.balance = "JANP_OFF";
                                       janp_onoff = janp_onoff + 1;
                                     }
                                   } else {
@@ -861,22 +894,21 @@ export class PeriodsComponent implements OnInit {
                                   }
                                 }
                               }
-                              days_passed = days_passed + 1;
                               if (dt.getDay() === 6) {
                                 acumulated_days_off = acumulated_days_off + days_off_onweek;
                                 days_off_onweek = this.daysOff - acumulated_days_off;
                                 this.non_show_2 = true;
 
                                 if (nonShowCount == 5) {
-                                  discounted = discounted - (days_off_onweek*8);
-                                  this.absence = this.absence - (days_off_onweek*8);
-                                  days_discounted = days_discounted + days_off_onweek;
+                                  discounted = discounted - ((days_off_onweek-1)*8);
+                                  this.absence = this.absence - ((days_off_onweek-1)*8);
+                                  days_discounted = days_discounted + (days_off_onweek-1);
                                 }
 
                                 if (janp_sequence == 5) {
-                                  discounted = discounted - (days_off_onweek*8);
+                                  discounted = discounted - (days_off_onweek * 8);
                                   days_discounted = days_discounted + days_off_onweek;
-                                  this.absence = this.absence - (days_off_onweek*8);
+                                  this.absence = this.absence - (days_off_onweek * 8);
                                 }
 
                                 if (days_passed == janp_onoff) {
@@ -884,18 +916,27 @@ export class PeriodsComponent implements OnInit {
                                   days_discounted = days_discounted + janp_onoff;
                                   this.absence = this.absence - (janp_onoff * 8);
                                 }
+
+                                if(days_off_onweek == janp_onoff){
+                                  discounted = discounted - (janp_onoff * 8);
+                                  days_discounted = days_discounted + janp_onoff;
+                                  this.absence = this.absence - (janp_onoff * 8);
+                                }
+
                                 janp_sequence = 0;
                                 nonShowCount = 0;
                                 janp_onoff = 0;
                               }
+                              days_passed = days_passed + 1;
                             }
                           });
 
 
                           if (this.attended == 0 || discounted <= (-120)) {
-                            this.absence = (att.length * (-8)) + this.attended;
-                            discounted = (att.length * (-8)) + this.attended;
+                            this.absence = -120;
+                            discounted = -120;
                             this.seventh = 0;
+                            days_discounted = 0;
                           }
 
                           this.attendances = att;
@@ -927,11 +968,18 @@ export class PeriodsComponent implements OnInit {
                               ot_credit.amount = '0';
                               decreto_credit.amount = ((125 / 120) * (120 - ((new Date(this.period.end).getTime() - new Date(att[att.length - 1].date).getTime()) / 1000 / 3600 / 24) + (this.absence))).toFixed(2);
                             } else {
-                              if (this.absence <= 0) {
-                                base_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
-                                productivity_credit.amount = (((120) + (this.absence) - ((120 + this.absence) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
-                                ot_credit.amount = '0';
-                                decreto_credit.amount = ((125 / 120) * ((120) + (this.absence)) - ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
+                              if (this.absence < 0) {
+                                if (((120 + this.absence) + (days_discounted * 8) - 120) > 0) {
+                                  base_credit.amount = ((120 + ((120 + this.absence) + (days_discounted * 8) - 120)) * base_hour).toFixed(2);
+                                  productivity_credit.amount = ((120 + ((120 + this.absence) + (days_discounted * 8) - 120)) * productivity_hour).toFixed(2);
+                                  ot_credit.amount = '0';
+                                  decreto_credit.amount = ((125 / 120) * ((120 + (120 + this.absence) + (days_discounted * 8) - 120))).toFixed(2);
+                                } else {
+                                  base_credit.amount = ((120 + (this.absence)) * base_hour).toFixed(2);
+                                  productivity_credit.amount = ((120 + (this.absence)) * productivity_hour).toFixed(2);
+                                  ot_credit.amount = '0';
+                                  decreto_credit.amount = ((125 / 120) * ((120 + (this.absence)))).toFixed(2);
+                                }
                               } else {
                                 productivity_credit.amount = ((120) * productivity_hour).toFixed(2);
                                 base_credit.amount = ((120) * base_hour).toFixed(2);
@@ -949,13 +997,16 @@ export class PeriodsComponent implements OnInit {
                               }
                             }
 
-                            if (((120 + this.absence) + (days_discounted * 8) - 120) >= 0) {
+                            if (((120 + this.absence) + (days_discounted * 8) - 120) > 0 && days_discounted > 0) {
+                              base_credit.amount = (((120 + this.absence) - ((120 + this.absence) - (120 - (days_discounted * 8)))) * base_hour).toFixed(2);
+                              productivity_credit.amount = (((120 + this.absence) - ((120 + this.absence) - (120 - (days_discounted * 8)))) * productivity_hour).toFixed(2);
+                              decreto_credit.amount = (((120 + this.absence) - ((120 + this.absence) - (120 - (days_discounted * 8)))) * (125 / 120)).toFixed(2);
                               let ot: ot_manage = new ot_manage;
                               ot.id_period = this.period.idperiods;
                               ot.id_employee = emp[0].idemployees;
                               ot.name = emp[0].name;
                               ot.nearsol_id = emp[0].nearsol_id;
-                              ot_credit.type = "Horas Extra Laboradas: " + (120 + this.absence) + (days_discounted * 8).toFixed(2);
+                              ot_credit.type = "Horas Extra Laboradas: " + ((120 + this.absence) + (days_discounted * 8) - 120).toFixed(2);
                               if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                                 ot_credit.amount = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 240) * 2 * ((120 + this.absence) + (days_discounted * 8) - 120)).toFixed(2);
                               } else {
