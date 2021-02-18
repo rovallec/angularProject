@@ -86,12 +86,12 @@
                                     <td style="text-align: center; vertical-align: middle;">{{adv.user_name}}</td>
                                     <td style="text-align: center; vertical-align: middle;">{{adv.type}}</td>
                                     <td style="text-align: center; vertical-align: middle;">{{adv.amount}}</td>
-                                    <td style="padding: 0px; margin: 0px;">
+                                    <td style="padding: 0px; margin: 0px; text-align: center; vertical-align: middle;">
                                         <button class="btn btn-success" style="padding:0px; margin:0px; width:22px; height: 22px; height: 22px;"
                                             [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'">
                                             <i class="fas fa-check" style="padding:0px;margin:0px;height:15px;width:15px"></i>
                                         </button>
-                                        <button style="padding:0px; margin:0px" class="btn btn-danger"
+                                        <button style="padding:0px; margin:0px; width:22px; height: 22px; height: 22px;" class="btn btn-danger"
                                             [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'">
                                             <i class="fas fas fa-ban" style="padding:0px;margin:0px;height:15px;width:15px"></i>
                                         </button>
