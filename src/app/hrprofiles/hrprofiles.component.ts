@@ -4,7 +4,7 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
-import { employees, fullPreapproval, payment_methods, queryDoc_Proc } from '../fullProcess';
+import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
@@ -266,7 +266,6 @@ export class HrprofilesComponent implements OnInit {
       this.profile = prof;
       this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
         this.family = fam;
-        console.log(fam);
       });
     });
 
@@ -345,9 +344,9 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getAttendences({ id: this.route.snapshot.paramMap.get('id'), date: "<= '" + dt + "'" }).subscribe((att: attendences[]) => {
       this.showAttendences = att;
       this.showAttendences.forEach(att => {
-        if (this.complete_adjustment) {
-          this.complete_adjustment = false;
+        if (this.complete_adjustment == true) {
           if (this.attAdjudjment.id_attendence == att.idattendences) {
+            this.complete_adjustment = false;
             if (this.attAdjudjment.time_after == att.worked_time) {
               window.alert("Adjustment successfuly recorded");
             } else {
@@ -388,6 +387,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.id_attendence = att.idattendences;
     this.attAdjudjment.id_type = '2';
     this.attAdjudjment.id_employee = att.id_employee;
+    this.attAdjudjment.time_after = this.attAdjudjment.time_before;
     this.attAdjudjment.id_department = this.authUser.getAuthusr().department;
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
     this.addJ = true;
@@ -397,7 +397,6 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.insertAttJustification(this.attAdjudjment).subscribe((str: string) => {
       this.complete_adjustment = true;
       this.getAttendences(this.todayDate);
-      this.cancelView();
     });
   }
 
@@ -994,7 +993,6 @@ export class HrprofilesComponent implements OnInit {
                 cred.id_employee = this.workingEmployee.idemployees;
                 cred.id_user = this.authUser.getAuthusr().iduser;
                 cred.date = this.todayDate;
-                console.log(this.workingEmployee.idemployees);
                 payment.forEach(py => {
                   if (py.id_employee == this.workingEmployee.idemployees) {
                     cred.idpayments = py.idpayments;
@@ -1431,8 +1429,6 @@ export class HrprofilesComponent implements OnInit {
 
     let str_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.start.split(":")[0]), parseFloat(this.attAdjudjment.start.split(":")[1].split(" ")[0]));
     let end_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.end.split(":")[0]), parseFloat(this.attAdjudjment.end.split(":")[1].split(" ")[0]));
-
-    console.log(this.attAdjudjment);
 
     this.attAdjudjment.amount = ((end_split.getTime() - str_split.getTime()) / 3600000).toFixed(2);
 
@@ -1890,5 +1886,19 @@ export class HrprofilesComponent implements OnInit {
       element.doc_type = '';
     });
     this.selectedToMerge = val.idprofiles;
+  }
+
+  updateVacation(){
+    this.apiService.updateVacations(this.activeVacation).subscribe((str:string)=>{
+      window.alert("Change successfuly recorded");
+      this.cancelView();
+    })
+  }
+
+  updateLeave(){
+    this.apiService.updateLeaves(this.activeLeave).subscribe((str:string)=>{
+      window.alert("Change successfuly recorded");
+      this.cancelView();
+    })
   }
 }
