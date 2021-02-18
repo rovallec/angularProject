@@ -119,7 +119,9 @@ export class HrprofilesComponent implements OnInit {
   tookVacations: number = 0;
   availableVacations: number = 0;
 
-  original_account:string = null;
+  complete_adjustment: boolean = false;
+
+  original_account: string = null;
 
   approvals: users[] = [new users];
   motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid'];
@@ -343,6 +345,16 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getAttendences({ id: this.route.snapshot.paramMap.get('id'), date: "<= '" + dt + "'" }).subscribe((att: attendences[]) => {
       this.showAttendences = att;
       this.showAttendences.forEach(att => {
+        if (this.complete_adjustment) {
+          this.complete_adjustment = false;
+          if (this.attAdjudjment.id_attendence == att.idattendences) {
+            if (this.attAdjudjment.time_after == att.worked_time) {
+              window.alert("Adjustment successfuly recorded");
+            } else {
+              window.alert("Adjustment not applyed correctly please try again or contact your administrator");
+            }
+          }
+        }
         att.balance = (Number.parseFloat(att.worked_time) - Number.parseFloat(att.scheduled)).toString();
       })
       this.getAttAdjustemt();
@@ -383,6 +395,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertAdjustment() {
     this.apiService.insertAttJustification(this.attAdjudjment).subscribe((str: string) => {
+      this.complete_adjustment = true;
       this.getAttendences(this.todayDate);
       this.cancelView();
     });
@@ -401,12 +414,20 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getVacations() {
+    let found:boolean = false;
     this.earnVacations = this.vacationsEarned * 1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
       this.showVacations = res;
       res.forEach(vac => {
+        if (this.complete_adjustment) {
+          if (vac.date == this.activeVacation.date) {
+            found = true;
+            this.complete_adjustment = false;
+            window.alert("Vacation successfuly recorded");
+          }
+        }
         if (vac.action == "Add") {
           this.earnVacations = this.earnVacations + parseFloat(vac.count);
         }
@@ -414,6 +435,9 @@ export class HrprofilesComponent implements OnInit {
           this.tookVacations = this.tookVacations + parseFloat(vac.count);
         }
       })
+      if (this.complete_adjustment && !found) {
+        window.alert("Vacation not applyed correctly please try again or contact your administrator");
+      }
       this.availableVacations = this.earnVacations - this.tookVacations;
     })
   }
@@ -447,6 +471,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertVacation() {
     this.apiService.insertVacations(this.activeVacation).subscribe((str: any) => {
+      this.complete_adjustment = true;
       this.getVacations();
     })
     this.vacationAdd = false;
@@ -460,7 +485,20 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getLeaves() {
+    let found:boolean = false;
     this.apiService.getLeaves({ id: this.route.snapshot.paramMap.get('id') }).subscribe((leaves: leaves[]) => {
+      if(this.complete_adjustment){
+        leaves.forEach(lv=>{
+          if(lv.start == this.activeLeave.start && lv.end == this.activeLeave.end){
+            this.complete_adjustment = false;
+            found = true;
+            window.alert("Leave successfuly recorded");
+          }
+        })
+      }
+      if(this.complete_adjustment && !found){
+        window.alert("Leave not correctly applayed please try again latter or contact your administrator");
+      }
       this.leaves = leaves;
     })
   }
@@ -506,6 +544,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertLeave() {
     this.apiService.insertLeaves(this.activeLeave).subscribe((str: string) => {
+      this.complete_adjustment = true;
       this.getLeaves();
       this.cancelView();
     })
@@ -987,7 +1026,7 @@ export class HrprofilesComponent implements OnInit {
               this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
                 let py: payments = new payments;
                 let old_payment = new payments;
-                let period:periods = new periods;
+                let period: periods = new periods;
                 py.id_employee = this.activeEmp;
                 if (!isNullOrUndefined(p_methods)) {
                   py.id_period = p[0].idperiods;
@@ -999,20 +1038,20 @@ export class HrprofilesComponent implements OnInit {
                   period.start = 'explicit_employee';
                   period.idperiods = p[p.length - 1].idperiods;
                   period.status = this.workingEmployee.idemployees;
-                  this.apiService.getPayments(period).subscribe((actual_payments:payments[])=>{
+                  this.apiService.getPayments(period).subscribe((actual_payments: payments[]) => {
                     old_payment = actual_payments[0];
                     old_payment.id_account_py = this.original_account;
-                    this.apiService.setPayment(old_payment).subscribe((str:string)=>{
-                      this.apiService.insertPayments(py).subscribe((str:string)=>{
-                        if(str == "1"){
-                          this.cancelView();            
-                        }else{
+                    this.apiService.setPayment(old_payment).subscribe((str: string) => {
+                      this.apiService.insertPayments(py).subscribe((str: string) => {
+                        if (str == "1") {
+                          this.cancelView();
+                        } else {
                           window.alert("An error has occurred please contact your administrator");
                         }
                       })
                     })
                   })
-                }else{
+                } else {
                   window.alert("There is no payment method available to this employee please communicate with Accounting to clarify this");
                 }
               })

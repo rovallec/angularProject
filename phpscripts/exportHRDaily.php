@@ -107,15 +107,6 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
       OR (leaves.end BETWEEN '$start' AND '$end'))
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))  AND employees.id_account IN ($accounts)";
-
-$spliter = explode(',', $accounts);
-
-foreach ($spliter as $key => $value) {
-    $sql = $sql . " employees.id_account = '$value' OR";
-}
-
-$sql = $sql . " hr_processes.date BETWEEN '$from' AND '$to';";
-
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH"));
 if($result = mysqli_query($con,$sql)){
