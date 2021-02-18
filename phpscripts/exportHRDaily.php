@@ -117,7 +117,6 @@ foreach ($spliter as $key => $value) {
 $sql = $sql . " hr_processes.date BETWEEN '$from' AND '$to';";
 
 $output = fopen("php://output", "w");
-fputcsv($output, array("Account", "Client ID", "Date", "Name", "Nearsol ID", "Attendence", "Type", "Time Before", "Time After", "Makeup"));
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH"));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
