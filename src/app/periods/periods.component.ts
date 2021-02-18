@@ -195,7 +195,11 @@ export class PeriodsComponent implements OnInit {
                       this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((db: debits[]) => {
                         this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
                           this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.start }).subscribe((services: services[]) => {
-                            non_show_2 = true;
+                            if(pay.last_seventh == "1"){
+                              non_show_2 = false;
+                            }else{
+                              non_show_2 = true;
+                            }
                             if (emp[0].active == "1" || emp[0].active == "0") { //emp[0].active == "1" Unicamente, se agrego el "0" para asemejarce al reporte de TimeKeeping
                               if (this.period.status == '1') {
                                 if (att.length != 0) {
