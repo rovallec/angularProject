@@ -215,7 +215,7 @@ $sql =  "SELECT  " .
         "  COALESCE(IF(i.type='MOTORCYCLE PARKING',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoMotos', " .
         "  COALESCE(IF(i.type IN('Descuento Por Servicio de Active Parking', 'TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso'), ROUND(i.amount, 2), 0.00), 0.00) AS 'TarjetaDeParqueo', " .
         "  COALESCE(IF(i.type='BUS TRANSPORTATION',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'TransporteEnBus', " .
-        "  COALESCE(IF(i.type='PERSONAL LOAN',                              ROUND(i.amount, 2), 0.00), 0.00) AS 'PrestamoPersonal',  " .
+        "  COALESCE(IF(i.type='Prestamo Personal',                          ROUND(i.amount, 2), 0.00), 0.00) AS 'PrestamoPersonal',  " .
         "   /* Detalle de Bonos / Ajustes */ " .
         "  0.00 AS 'AjustesPeriodos', " .
         "  0.00 AS 'BonosDiversos', " .
