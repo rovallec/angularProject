@@ -9,7 +9,7 @@ import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods, hrProcess } from '../fullProcess';
 import { AuthGuard } from '../guard/auth-guard.service';
 import { process } from '../process';
-import { attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
+import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
 import { profiles } from '../profiles';
 import { Observable } from "rxjs";
 import { async } from '@angular/core/testing';
@@ -65,7 +65,10 @@ export class AccprofilesComponent implements OnInit {
   setAcreditDebits: string = "0";
   acrediting: boolean = false;
   process: hrProcess = new hrProcess;
-  printDate:string = null;
+  printDate: string = null;
+  acumulated_b14: string = null;
+  acumulated_ag: string = null;
+  advances:advances_acc[] = [];
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -75,9 +78,40 @@ export class AccprofilesComponent implements OnInit {
 
   start() {
     let peridos: periods = new periods;
+    let isChrome: boolean = false;
+    let a_date:string = null;
+    let b_date:string = null;
+    let todayDate:string = new Date().getFullYear().toString() + "-" + (new Date().getMonth()+1) + "-" + new Date().getDate().toString();
+    console.log(todayDate);
+
+    if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && (<any>window).chrome) {
+      isChrome = true;
+    }
+
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
+
+      if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-12-01").getTime()) <= 0)) {
+        a_date = (new Date(todayDate).getFullYear()-1) + '-12-01';
+      } else {
+        a_date = this.employee.hiring_date;
+      }
+      this.acumulated_ag = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number(((new Date(todayDate).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
+      if (isChrome) {
+        this.acumulated_ag = (Number(this.acumulated_ag) - ((21600000 / 1000 / 3600 / 24) * ((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365))).toFixed(2);
+      }
+
+      if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-07-01").getTime()) <= 0)) {
+        b_date = (new Date(todayDate).getFullYear() - 1) + "-07-01";
+      } else {
+        b_date = this.employee.hiring_date; 
+      }
+      this.acumulated_b14 = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number((new Date(todayDate).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
+      if (isChrome) {
+        this.acumulated_b14 = (Number(this.acumulated_b14) - ((21600000 / 1000 / 3600 / 24) * (((Number(emp[0].base_payment)+ Number(emp[0].productivity_payment))) / 365))).toFixed(2);
+      }
+
       this.apiService.getPaymentMethods(emp[0]).subscribe((pymM: payment_methods[]) => {
         this.paymentMethods = pymM;
         this.getTerm();
@@ -92,6 +126,11 @@ export class AccprofilesComponent implements OnInit {
         this.active_payment = pym[0];
         this.setPayment();
       });
+
+      this.apiService.getAdvancesAcc(emp[0]).subscribe((adv:advances_acc[])=>{
+        this.advances = adv;
+      })
+      
     })
   }
 
@@ -221,7 +260,7 @@ export class AccprofilesComponent implements OnInit {
     this.apiService.getProcRecorded({ id: this.employee.idemployees }).subscribe((pr: process[]) => {
 
       pr.forEach(proc => {
-        if(alert){
+        if (alert) {
           window.alert('There is a duplicity on "Termination", system will take first instance');
         }
         if (!alert) {
@@ -257,20 +296,20 @@ export class AccprofilesComponent implements OnInit {
                 })
                 average_salary = (sum_payment / count).toFixed(2);
 
-                let isChrome:boolean;
+                let isChrome: boolean;
 
-                if(window.navigator.userAgent.toLowerCase().indexOf('chrome')>-1 && (<any>window).chrome){
+                if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && (<any>window).chrome) {
                   isChrome = true;
                 }
 
                 end_date = this.tvalid_Form;
-                end_date_plus_one = String(String(new Date(end_date).getFullYear()) + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate()+2).toString());
+                end_date_plus_one = String(String(new Date(end_date).getFullYear()) + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate() + 2).toString());
 
 
                 cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;
                 cred_indemnization.amount = ((((Number(average_salary) / 12) * 14) / 365) * (((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)))).toFixed(2);
-                if(isChrome){
-                  cred_indemnization.amount = (Number(cred_indemnization.amount) - ((21600000/1000/3600/24)*((Number(average_salary) / 12) * 14) / 365)).toFixed(2);
+                if (isChrome) {
+                  cred_indemnization.amount = (Number(cred_indemnization.amount) - ((21600000 / 1000 / 3600 / 24) * ((Number(average_salary) / 12) * 14) / 365)).toFixed(2);
                 }
                 this.cred_benefits.push(cred_indemnization);
                 this.total = this.total + Number(cred_indemnization.amount);
@@ -283,8 +322,8 @@ export class AccprofilesComponent implements OnInit {
 
                 cred_aguinaldo.type = "Aguinaldo Periodo del " + a_date + " al " + end_date;
                 cred_aguinaldo.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (Number(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
-                if(isChrome){
-                  cred_aguinaldo.amount = (Number(cred_aguinaldo.amount) - ((21600000/1000/3600/24)*((Number(base_salary(this.termination, this.employee))) / 365))).toFixed(2);
+                if (isChrome) {
+                  cred_aguinaldo.amount = (Number(cred_aguinaldo.amount) - ((21600000 / 1000 / 3600 / 24) * ((Number(base_salary(this.termination, this.employee))) / 365))).toFixed(2);
                 }
                 this.cred_benefits.push(cred_aguinaldo);
                 this.total = this.total + Number(cred_aguinaldo.amount);
@@ -296,8 +335,8 @@ export class AccprofilesComponent implements OnInit {
                 }
                 cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
                 cred_bono14.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (Number((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
-                if(isChrome){
-                  cred_bono14.amount = (Number(cred_bono14.amount) - ((21600000/1000/3600/24)*((Number(base_salary(this.termination, this.employee))) / 365))).toFixed(2);
+                if (isChrome) {
+                  cred_bono14.amount = (Number(cred_bono14.amount) - ((21600000 / 1000 / 3600 / 24) * ((Number(base_salary(this.termination, this.employee))) / 365))).toFixed(2);
                 }
                 this.cred_benefits.push(cred_bono14);
                 this.total = this.total + Number(cred_bono14.amount);
@@ -308,8 +347,8 @@ export class AccprofilesComponent implements OnInit {
                   })
                   cred_vacations.type = "Vacaciones Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
                   cred_vacations.amount = (((Number(base_salary(this.termination, this.employee))) / 30) * (Number((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)))) / (1 / (15 / 365)) - v_amount)).toFixed(2);
-                  if(isChrome){
-                    cred_vacations.amount = (Number(cred_vacations.amount) - (((21600000/1000/3600/24)*(((Number(base_salary(this.termination, this.employee))) / 30)))/(1/(15/365)))).toFixed(2);
+                  if (isChrome) {
+                    cred_vacations.amount = (Number(cred_vacations.amount) - (((21600000 / 1000 / 3600 / 24) * (((Number(base_salary(this.termination, this.employee))) / 30))) / (1 / (15 / 365)))).toFixed(2);
                   }
                   this.cred_benefits.push(cred_vacations);
                   this.total = this.total + Number(cred_vacations.amount);
@@ -323,7 +362,7 @@ export class AccprofilesComponent implements OnInit {
                 this.apiService.getPayments(p).subscribe((pay: payments[]) => {
                   if (!isNullOrUndefined(pay)) {
                     this.apiService.getCredits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((cred: credits[]) => {
-                      if(!isNullOrUndefined(cred)){
+                      if (!isNullOrUndefined(cred)) {
                         cred.forEach(credit => {
                           this.cred_benefits.push(credit);
                           this.total = this.total + Number(credit.amount);
@@ -331,7 +370,7 @@ export class AccprofilesComponent implements OnInit {
                       }
                     });
                     this.apiService.getDebits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((deb: debits[]) => {
-                      if(!isNullOrUndefined(deb)){
+                      if (!isNullOrUndefined(deb)) {
                         deb.forEach(debit => {
                           this.deb_benefits.push(debit);
                           this.total = this.total - Number(debit.amount);
@@ -373,7 +412,7 @@ export class AccprofilesComponent implements OnInit {
 
         this.apiService.updatehr_process(this.process).subscribe((_str: string) => {
           // no hace nada.
-          
+
         });
       });
     });

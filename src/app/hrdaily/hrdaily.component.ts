@@ -98,6 +98,7 @@ export class HrdailyComponent implements OnInit {
         }
         acId = acId + itm.idaccounts;
       })
+      console.log("http://200.94.251.67/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId);
       window.open("http://200.94.251.67/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId)
     }
   }

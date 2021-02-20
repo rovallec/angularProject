@@ -1157,3 +1157,34 @@ export class payroll_ph{
     this.net_take_home = null;
     }
 }
+
+export class advances_acc{
+    idadvances:string;
+    id_process:string;
+    type:string;
+    description:string;
+    classification:string;
+    amount:string;
+    idhr_processes:string;
+    id_employee:string;
+    date:string;
+    notes:string;
+    status:string;
+    username:string;
+    user_name:string;
+    constructor(){
+    this.idadvances = null;
+    this.id_process = null;
+    this.type = null;
+    this.description = null;
+    this.classification = null;
+    this.amount = null;
+    this.idhr_processes = null;
+    this.id_employee = null;
+    this.date = null;
+    this.notes = null;
+    this.status = null;
+    this.username = null;
+    this.user_name = null;
+    }
+}

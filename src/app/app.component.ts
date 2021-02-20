@@ -57,4 +57,22 @@ export class AppComponent {
     this.SetSel("EMPD");
     window.open("http://200.94.251.67/phpscripts/exportEmployeesData.php", "_blank");
   }
+
+  
+  getExceptions(){
+    let dt:Date = new Date();
+    let start:string = null;
+    let end:string = null;
+
+    if(dt.getDate() <= 16){
+      start = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-01";
+      end = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-15";
+    }else{
+      start = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-16";
+      let nwDate:Date = new Date(dt.getFullYear(), (dt.getMonth() + 2),0);
+      end = nwDate.getFullYear().toString() + "-" + (nwDate.getMonth() + 1).toString() + "-" + nwDate.getDate().toString();
+    }
+    this.SetSel("EXPEX");
+    window.open("http://200.94.251.67/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end , "_blank");
+  }
 }
