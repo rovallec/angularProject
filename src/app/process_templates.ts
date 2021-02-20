@@ -517,12 +517,14 @@ export class advances {
     type: string;
     description: string;
     classification: string;
+    amount: string;
     constructor() {
         this.idadvances = null;
         this.id_process = null;
         this.type = null;
         this.description = null;
         this.classification = null;
+        this.amount = null;
     }
 }
 
