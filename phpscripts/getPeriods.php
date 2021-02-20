@@ -14,8 +14,14 @@
         while($res = mysqli_fetch_assoc($result)){
             $return[$i]['idperiods'] = $res['idperiods'];
             $return[$i]['start'] = $res['start'];
-            $return[$i]['end'] = $res['end'];
-            $return[$i]['status'] = $res['status'];
+            $return[$i]['end'] = $res['end'];            
+            if ($res['status'] == '0') {
+                $return[$i]['status'] = 'CLOSE';
+            } else if($res['status'] == 1) {
+                $return[$i]['status'] = 'OPEN';
+            } else {
+                $return[$i]['status'] = $res['status'];
+            }
             $return[$i]['type_period'] = $res['type_period'];
             $i++;
         }
