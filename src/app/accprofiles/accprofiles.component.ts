@@ -127,9 +127,11 @@ export class AccprofilesComponent implements OnInit {
   }
 
   newDeduction(str: string) {
+    this.activeCred = new credits;
     this.activeCred.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
     this.insertN = str;
     this.insertNew = true;
+    this.record = false;
   }
 
   setPaymentMethod(paymentMethod: payment_methods) {
@@ -373,7 +375,7 @@ export class AccprofilesComponent implements OnInit {
 
         this.apiService.updatehr_process(this.process).subscribe((_str: string) => {
           // no hace nada.
-          
+
         });
       });
     });

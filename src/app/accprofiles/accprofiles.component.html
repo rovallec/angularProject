@@ -213,7 +213,7 @@
                                     <button class="form-control" (click)="cancelDeduction()">Cancel</button>
                                 </div>
                                 <div class="form-group col-md-6"></div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2" *ngIf="!record">
                                     <button class="form-control" (click)="insertDeduction()">Aceptar</button>
                                 </div>
                                 <div class="form-group col-md-1"></div>
