@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { Router } from '@angular/router';
-import { waves_template, schedules, hires_template, periods } from '../process_templates'
+import { waves_template, schedules, hires_template, periods, payments } from '../process_templates'
 import { employees, payment_methods } from '../fullProcess';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { isNull, isNullOrUndefined } from 'util';
@@ -98,6 +98,12 @@ export class AccdashboardComponent implements OnInit {
             paymentMethod.predeterm = '1';
             paymentMethod.id_employee = emp[0].idemployees;
             this.apiService.insertPaymentMethod(paymentMethod).subscribe((str: string) => {
+              let Payment: payments = new payments;
+                /*
+                  Pendiente llenar este Pago antes de insertarlo en la Base de Datos.
+                */
+              this.apiService.insertPayments(Payment).subscribe((_str: string) => {
+              })
             })
           })
         }

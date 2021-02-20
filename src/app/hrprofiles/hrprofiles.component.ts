@@ -868,6 +868,9 @@ export class HrprofilesComponent implements OnInit {
       case 'Supervisor Survey':
         this.actuallProc.descritpion = null;
         break;
+      case 'Advance':
+        this.actuallProc.status = 'PENDING';
+        break;
       case 'Pay Vacations':
         if (this.availableVacations < 1) {
           this.addVac = false;
@@ -954,14 +957,14 @@ export class HrprofilesComponent implements OnInit {
         case 'Rise':
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
-          this.workingEmployee.productivity_payment = (parseFloat(this.workingEmployee.productivity_payment) + parseFloat(this.riseIncrease)).toString();
-          this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
+          this.actualRise.new_productivity_payment = (Number(this.actualRise.new_salary) - Number(this.workingEmployee.base_payment)).toString();
+          this.apiService.insertRise(this.actualRise).subscribe((_str: string) => {
             this.cancelView();
           })
           break;
         case 'Call Tracker':
           this.actualCallTracker.id_process = str;
-          this.apiService.insertCallTracker(this.actualCallTracker).subscribe((str: string) => {
+          this.apiService.insertCallTracker(this.actualCallTracker).subscribe((_str: string) => {
             this.cancelView();
           })
           break;

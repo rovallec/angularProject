@@ -361,7 +361,7 @@ getAdvances(proc:process){
   return this.httpClient.post<advances>(`${this.PHP_API_SERVER}/phpscripts/getAdvances.php`, proc);
 }
 
-insertRise(rs:rises){
+insertRise(rs:rises){  
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertRises.php`, rs);
 }
 

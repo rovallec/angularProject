@@ -557,6 +557,7 @@ export class rises {
     id_employee: string;
     id_process: string;
     new_position: string;
+    new_salary: string;
     new_base_salary: string;
     new_productivity_payment: string;
     approved_by: string;
@@ -568,6 +569,7 @@ export class rises {
         this.id_employee = null;
         this.id_process = null;
         this.new_position = null;
+        this.new_salary = null;
         this.new_base_salary = null;
         this.new_productivity_payment = null;
         this.approved_by = null;
