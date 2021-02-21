@@ -407,8 +407,7 @@
                                     <input type="text" class="form-control" *ngIf="!showLeave || activeLeave.status != 'PENDING'"
                                         [(ngModel)]="activeLeave.status" [disabled]="true">
                                     <select [(ngModel)]="activeVacation.status" class="form-control" *ngIf="showLeave && activeLeave.status == 'PENDING'" (change)="updateLeave()">
-                                        <option *ngIf="activeLeave.status == 'PENDING'">PENDING</option>
-                                        <option *ngIf="activeLeave.status == 'COMPLETED'">COMPLETED</option>
+                                        <option *ngIf="activeLeave.status === 'PENDING'">PENDING</option>
                                         <option>DISMISSED</option>
                                     </select>
                                 </div>
@@ -465,7 +464,6 @@
                                         [(ngModel)]="activeVacation.status" [disabled]="true">
                                     <select [(ngModel)]="activeVacation.status" class="form-control" *ngIf="!editVac && activeVacation.status == 'PENDING'" (change)="updateVacation()">
                                         <option *ngIf="activeVacation.status == 'PENDING'">PENDING</option>
-                                        <option *ngIf="activeVacation.status == 'COMPLETED'">COMPLETED</option>
                                         <option>DISMISSED</option>
                                     </select>
                                 </div>
