@@ -956,7 +956,7 @@ export class HrprofilesComponent implements OnInit {
         case 'Rise':
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
-          this.workingEmployee.productivity_payment = (parseFloat(this.workingEmployee.productivity_payment) + parseFloat(this.riseIncrease)).toString();
+          this.workingEmployee.productivity_payment = (Number(this.actualRise.new_salary) - Number(this.workingEmployee.base_payment)).toFixed(2);
           this.apiService.insertRise(this.actualRise).subscribe((_str: string) => {
             this.cancelView();
           })
