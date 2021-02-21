@@ -4,8 +4,8 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
-import { employees, fullPreapproval, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
+import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
 import { Time, TranslationWidth } from '@angular/common';
@@ -118,7 +118,7 @@ export class HrprofilesComponent implements OnInit {
   earnVacations: number = 0;
   tookVacations: number = 0;
   availableVacations: number = 0;
-
+  complete_adjustment: boolean = false;
   original_account:string = null;
 
   approvals: users[] = [new users];
@@ -264,7 +264,6 @@ export class HrprofilesComponent implements OnInit {
       this.profile = prof;
       this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
         this.family = fam;
-        console.log(fam);
       });
     });
 
@@ -343,6 +342,16 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.getAttendences({ id: this.route.snapshot.paramMap.get('id'), date: "<= '" + dt + "'" }).subscribe((att: attendences[]) => {
       this.showAttendences = att;
       this.showAttendences.forEach(att => {
+        if (this.complete_adjustment == true) {
+          if (this.attAdjudjment.id_attendence == att.idattendences) {
+            this.complete_adjustment = false;
+            if (this.attAdjudjment.time_after == att.worked_time) {
+              window.alert("Adjustment successfuly recorded");
+            } else {
+              window.alert("Adjustment not applyed correctly please try again or contact your administrator");
+            }
+          }
+        }
         att.balance = (Number.parseFloat(att.worked_time) - Number.parseFloat(att.scheduled)).toString();
       })
       this.getAttAdjustemt();
@@ -376,6 +385,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.id_attendence = att.idattendences;
     this.attAdjudjment.id_type = '2';
     this.attAdjudjment.id_employee = att.id_employee;
+    this.attAdjudjment.time_after = this.attAdjudjment.time_before;
     this.attAdjudjment.id_department = this.authUser.getAuthusr().department;
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
     this.addJ = true;
@@ -383,6 +393,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertAdjustment() {
     this.apiService.insertAttJustification(this.attAdjudjment).subscribe((str: string) => {
+      this.complete_adjustment = true;
       this.getAttendences(this.todayDate);
       this.cancelView();
     });
@@ -401,12 +412,20 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getVacations() {
+    let found:boolean = false;
     this.earnVacations = this.vacationsEarned * 1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
       this.showVacations = res;
       res.forEach(vac => {
+        if (this.complete_adjustment) {
+          if (vac.date == this.activeVacation.date) {
+            found = true;
+            this.complete_adjustment = false;
+            window.alert("Vacation successfuly recorded");
+          }
+        }
         if (vac.action == "Add") {
           this.earnVacations = this.earnVacations + parseFloat(vac.count);
         }
@@ -414,6 +433,9 @@ export class HrprofilesComponent implements OnInit {
           this.tookVacations = this.tookVacations + parseFloat(vac.count);
         }
       })
+      if (this.complete_adjustment && !found) {
+        window.alert("Vacation not applyed correctly please try again or contact your administrator");
+      }
       this.availableVacations = this.earnVacations - this.tookVacations;
     })
   }
@@ -447,6 +469,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertVacation() {
     this.apiService.insertVacations(this.activeVacation).subscribe((str: any) => {
+      this.complete_adjustment = true;
       this.getVacations();
     })
     this.vacationAdd = false;
@@ -460,7 +483,20 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getLeaves() {
+    let found:boolean = false;
     this.apiService.getLeaves({ id: this.route.snapshot.paramMap.get('id') }).subscribe((leaves: leaves[]) => {
+      if(this.complete_adjustment){
+        leaves.forEach(lv=>{
+          if(lv.start == this.activeLeave.start && lv.end == this.activeLeave.end){
+            this.complete_adjustment = false;
+            found = true;
+            window.alert("Leave successfuly recorded");
+          }
+        })
+      }
+      if(this.complete_adjustment && !found){
+        window.alert("Leave not correctly applayed please try again latter or contact your administrator");
+      }
       this.leaves = leaves;
     })
   }
@@ -506,6 +542,7 @@ export class HrprofilesComponent implements OnInit {
 
   insertLeave() {
     this.apiService.insertLeaves(this.activeLeave).subscribe((str: string) => {
+      this.complete_adjustment = true;
       this.getLeaves();
       this.cancelView();
     })
@@ -830,6 +867,9 @@ export class HrprofilesComponent implements OnInit {
       case 'Supervisor Survey':
         this.actuallProc.descritpion = null;
         break;
+      case 'Advance':
+          this.actuallProc.status = 'PENDING';
+          break;
       case 'Pay Vacations':
         if (this.availableVacations < 1) {
           this.addVac = false;
@@ -917,13 +957,13 @@ export class HrprofilesComponent implements OnInit {
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
           this.workingEmployee.productivity_payment = (parseFloat(this.workingEmployee.productivity_payment) + parseFloat(this.riseIncrease)).toString();
-          this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
+          this.apiService.insertRise(this.actualRise).subscribe((_str: string) => {
             this.cancelView();
           })
           break;
         case 'Call Tracker':
           this.actualCallTracker.id_process = str;
-          this.apiService.insertCallTracker(this.actualCallTracker).subscribe((str: string) => {
+          this.apiService.insertCallTracker(this.actualCallTracker).subscribe((_str: string) => {
             this.cancelView();
           })
           break;
@@ -933,7 +973,7 @@ export class HrprofilesComponent implements OnInit {
             this.actualLetters.base_salary = emp.base_payment;
             this.actualLetters.productivity_salary = emp.productivity_payment;
           })
-          this.apiService.insertLetters(this.actualLetters).subscribe((str: string) => {
+          this.apiService.insertLetters(this.actualLetters).subscribe((_str: string) => {
             this.cancelView();
           })
           break;
@@ -955,7 +995,6 @@ export class HrprofilesComponent implements OnInit {
                 cred.id_employee = this.workingEmployee.idemployees;
                 cred.id_user = this.authUser.getAuthusr().iduser;
                 cred.date = this.todayDate;
-                console.log(this.workingEmployee.idemployees);
                 payment.forEach(py => {
                   if (py.id_employee == this.workingEmployee.idemployees) {
                     cred.idpayments = py.idpayments;
@@ -1005,7 +1044,7 @@ export class HrprofilesComponent implements OnInit {
                     this.apiService.setPayment(old_payment).subscribe((str:string)=>{
                       this.apiService.insertPayments(py).subscribe((str:string)=>{
                         if(str == "1"){
-                          this.cancelView();            
+                          this.cancelView();
                         }else{
                           window.alert("An error has occurred please contact your administrator");
                         }
@@ -1391,11 +1430,7 @@ export class HrprofilesComponent implements OnInit {
   change_time(any: any) {
     let str_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.start.split(":")[0]), parseFloat(this.attAdjudjment.start.split(":")[1].split(" ")[0]));
     let end_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.end.split(":")[0]), parseFloat(this.attAdjudjment.end.split(":")[1].split(" ")[0]));
-
-    console.log(end_split.getTime() + " " + str_split.getTime());
-
     this.attAdjudjment.amount = ((end_split.getTime() - str_split.getTime()) / 3600000).toFixed(2);
-
     this.attAdjudjment.time_after = (parseFloat(this.attAdjudjment.time_before) + parseFloat(this.attAdjudjment.amount)).toFixed(2);
   }
 
@@ -1850,5 +1885,19 @@ export class HrprofilesComponent implements OnInit {
       element.doc_type = '';
     });
     this.selectedToMerge = val.idprofiles;
+  }
+
+  updateVacation(){
+    this.apiService.updateVacations(this.activeVacation).subscribe((str:string)=>{
+      window.alert("Change successfuly recorded");
+      this.cancelView();
+    })
+  }
+
+  updateLeave(){
+    this.apiService.updateLeaves(this.activeLeave).subscribe((str:string)=>{
+      window.alert("Change successfuly recorded");
+      this.cancelView();
+    })
   }
 }

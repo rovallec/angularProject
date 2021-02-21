@@ -459,7 +459,7 @@ export class employees_terminations {
   idemployees: string;
   nearsol_id: string;
   name: string;
-  account: string;  
+  account: string;
   hiring_date: string;
   days_to_pay: string;
   base_payment: string;
@@ -562,6 +562,8 @@ export class rises {
     effective_date: string;
     trial_start: string;
     trial_end: string;
+    old_position: string;
+    old_salary: string;
     constructor() {
         this.id_employee = null;
         this.id_process = null;
@@ -573,6 +575,8 @@ export class rises {
         this.effective_date = null;
         this.trial_start = null;
         this.trial_end = null;
+        this.old_position = null;
+        this.old_salary = null;
     }
 }
 
