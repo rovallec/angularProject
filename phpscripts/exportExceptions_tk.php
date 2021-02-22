@@ -110,7 +110,7 @@ UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'JANP' AS `type_of_payment`, 
-DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' ', hr_processes.notes
+DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
     suspensions
     INNER JOIN disciplinary_processes ON disciplinary_processes.iddisciplinary_processes = suspensions.id_disciplinary_process
