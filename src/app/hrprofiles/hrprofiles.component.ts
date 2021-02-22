@@ -939,7 +939,7 @@ export class HrprofilesComponent implements OnInit {
             if(str == "1"){
             this.cancelView();
             }else{
-              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+              window.alert("An error has occured:\n" + str.split("|")[1]);
             }
           })
           break;
