@@ -924,6 +924,7 @@ export class HrprofilesComponent implements OnInit {
 
   setToDate(str: string) {
     this.checkDate2 = str;
+  
   }
 
   setValidFrom(str: string) {
