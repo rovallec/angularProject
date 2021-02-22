@@ -28,10 +28,18 @@ if(mysqli_query($con,$sql)){
     if(mysqli_query($con, $sql2)){
         $sql3 = "UPDATE `profiles` SET `status` = '$rehireable' WHERE idprofiles = (SELECT id_profile FROM `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` WHERE `idemployees` = (SELECT id_employee  FROM `hr_processes` WHERE idhr_processes = '$id_process'));";
         if(mysqli_query($con, $sql3)){
+            echo("1");
             http_response_code(200);
         }else{
             http_response_code(400);
+            echo($sql3 . "|" . mysqli_error($con));
         }
+    }else{
+        http_response_code(400)
+        echo($sql3 . "|" . mysqli_error($con));
     }
+}else{
+    http_build_query(400)
+    echo($sql3 . "|" . mysqli_error($con));
 }
 ?>

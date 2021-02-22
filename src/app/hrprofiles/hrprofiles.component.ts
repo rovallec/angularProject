@@ -936,7 +936,11 @@ export class HrprofilesComponent implements OnInit {
         case 'Termination':
           this.actualTerm.id_process = str;
           this.apiService.insertTerm(this.actualTerm).subscribe((str: string) => {
+            if(str == "1"){
             this.cancelView();
+            }else{
+              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+            }
           })
           break;
         case 'Report':
