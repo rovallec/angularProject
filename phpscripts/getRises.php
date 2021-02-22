@@ -23,8 +23,6 @@ if($result = mysqli_query($con, $sql)){
         $user['effective_date'] = $row['effective_date'];
         $user['trial_start'] = $row['trial_start'];
         $user['trial_end'] = $row['trial_end'];
-        $user['notes'] = $row['notes'];
-        $user['status'] = $row['status'];
     };
     echo json_encode($user);
 }else{

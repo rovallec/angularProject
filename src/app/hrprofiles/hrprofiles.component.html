@@ -406,7 +406,6 @@
                                     <label>Status:</label>
                                     <select [(ngModel)]="activeLeave.status" class="form-control" *ngIf="showLeave && activeLeave.status == 'PENDING'" (change)="updateLeave()">
                                         <option *ngIf="activeLeave.status != 'PENDING'">PENDING</option>
-                                        <option *ngIf="activeLeave.status != 'COMPLETED'">COMPLETED</option>
                                         <option>DISMISSED</option>
                                     </select>
                                 </div>
@@ -463,7 +462,6 @@
                                         [(ngModel)]="activeVacation.status" [disabled]="true">
                                     <select [(ngModel)]="activeVacation.status" class="form-control" *ngIf="!editVac && activeVacation.status == 'PENDING'" (change)="updateVacation()">
                                         <option *ngIf="activeVacation.status == 'PENDING'">PENDING</option>
-                                        <option *ngIf="activeVacation.status == 'COMPLETED'">COMPLETED</option>
                                         <option>DISMISSED</option>
                                     </select>
                                 </div>
@@ -1814,7 +1812,12 @@
                                 <input type="text" class="form-control" [(ngModel)]="actualRise.new_position"
                                     [disabled]="viewRecProd">
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-2">
+                              <label>Old Position</label>
+                              <input type="text" class="form-control" [(ngModel)]="actualRise.old_position"
+                                [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-2">
                                 <label>New Payment:</label>
                                 <input type="text" class="form-control" [(ngModel)]="actualRise.new_salary"
                                     [disabled]="viewRecProd">
