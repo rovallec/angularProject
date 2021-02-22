@@ -31,15 +31,15 @@ if(mysqli_query($con,$sql)){
             echo("1");
             http_response_code(200);
         }else{
-            http_response_code(400);
             echo($sql3 . "|" . mysqli_error($con));
+            http_response_code(400);
         }
     }else{
-        http_response_code(400)
         echo($sql3 . "|" . mysqli_error($con));
+        http_response_code(400);
     }
 }else{
-    http_build_query(400)
     echo($sql3 . "|" . mysqli_error($con));
+    http_build_query(400);
 }
 ?>
