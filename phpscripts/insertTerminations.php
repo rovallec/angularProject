@@ -35,11 +35,11 @@ if(mysqli_query($con,$sql)){
             http_response_code(400);
         }
     }else{
-        echo($sql3 . "|" . mysqli_error($con));
+        echo($sql2 . "|" . mysqli_error($con));
         http_response_code(400);
     }
 }else{
-    echo($sql3 . "|" . mysqli_error($con));
+    echo($sql . "|" . mysqli_error($con));
     http_build_query(400);
 }
 ?>
