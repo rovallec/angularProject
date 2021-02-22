@@ -109,7 +109,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'SUSPENSION' AS `type_of_payment`, 
+'JANP' AS `type_of_payment`, 
 DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' ', hr_processes.notes
 FROM
     suspensions
