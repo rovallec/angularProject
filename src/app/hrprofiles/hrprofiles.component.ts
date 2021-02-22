@@ -958,8 +958,7 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Advance':
-          this.actualAdvance.id_process = str;
-          console.log(this.actualAdvance);
+          this.actualAdvance.id_process = str;          
           this.apiService.insertAdvances(this.actualAdvance).subscribe((str: string) => {
             this.cancelView();
           })

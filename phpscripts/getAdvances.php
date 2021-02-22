@@ -18,6 +18,7 @@ if($result = mysqli_query($con, $sql)){
         $user['type'] = $row['type'];
         $user['description'] = $row['description'];
         $user['classification'] = $row['classification'];
+        $user['amount'] = $row['amount'];
     };
     echo json_encode($user);
 }else{
