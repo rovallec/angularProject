@@ -357,6 +357,7 @@ export class HrprofilesComponent implements OnInit {
         att.balance = (Number.parseFloat(att.worked_time) - Number.parseFloat(att.scheduled)).toString();
       })
       this.getAttAdjustemt();
+      this.cancelView();
     });
     this.editAdj = false;
   }
