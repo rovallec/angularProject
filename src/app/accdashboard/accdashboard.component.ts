@@ -37,6 +37,13 @@ export class AccdashboardComponent implements OnInit {
 
   getPeriods() {
     this.apiService.getPeriods().subscribe((prd: periods[]) => {
+      prd.forEach(per => {
+        if (per.status=='0'){
+          per.status = 'CLOSED';
+        } else if (per.status=='1') {
+          per.status = 'OPEN';
+        }
+      });
       this.periods = prd;
     });
   }

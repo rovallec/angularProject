@@ -135,10 +135,12 @@ export class AccprofilesComponent implements OnInit {
   }
 
   setPayment() {
-    this.apiService.getDebits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((deb: debits[]) => {
-      this.apiService.getCredits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((cred: credits[]) => {
-        this.credits = cred;
-        this.debits = deb;
+    this.apiService.setPayment(this.active_payment).subscribe((_str) => {
+      this.apiService.getDebits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((deb: debits[]) => {
+        this.apiService.getCredits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((cred: credits[]) => {
+          this.credits = cred;
+          this.debits = deb;
+        })
       })
     })
   }
@@ -166,9 +168,11 @@ export class AccprofilesComponent implements OnInit {
   }
 
   newDeduction(str: string) {
+    this.activeCred = new credits;
     this.activeCred.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
     this.insertN = str;
     this.insertNew = true;
+    this.record = false;
   }
 
   setPaymentMethod(paymentMethod: payment_methods) {
@@ -181,6 +185,7 @@ export class AccprofilesComponent implements OnInit {
     this.activeCred.idpayments = this.active_payment.idpayments;
     this.activeCred.id_employee = this.employe_id;
     if (this.insertN == 'Debit') {
+      this.active_payment.debits = (Number(this.active_payment.debits) + Number(this.activeCred.amount)).toFixed(2);
       this.apiService.insertDebits(this.activeCred).subscribe((str: string) => {
         this.activeCred.iddebits = str;
         this.apiService.insertPushedDebit(this.activeCred).subscribe((str: string) => {
@@ -188,6 +193,7 @@ export class AccprofilesComponent implements OnInit {
         })
       })
     } else {
+      this.active_payment.credits = (Number(this.active_payment.credits) + Number(this.activeCred.amount)).toFixed(2);
       this.apiService.insertCredits(this.activeCred).subscribe((str: string) => {
         this.activeCred.iddebits = str;
         this.apiService.insertPushedCredit(this.activeCred).subscribe((str: string) => {

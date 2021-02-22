@@ -213,9 +213,9 @@ $sql =  "SELECT  " .
         "  COALESCE(IF(i.type='ISR',                                        ROUND(i.amount, 2), 0.00), 0.00) AS 'ISREmpleados', " .
         "  COALESCE(IF(i.type='CAR PARKING',                                ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoEmpleados', " .
         "  COALESCE(IF(i.type='MOTORCYCLE PARKING',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoMotos', " .
-        "  COALESCE(IF(i.type='TARJETA DE ACCESO/PARQUEO',                  ROUND(i.amount, 2), 0.00), 0.00) AS 'TarjetaDeParqueo', " .
+        "  COALESCE(IF(i.type IN('Descuento Por Servicio de Active Parking', 'TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso'), ROUND(i.amount, 2), 0.00), 0.00) AS 'TarjetaDeParqueo', " .
         "  COALESCE(IF(i.type='BUS TRANSPORTATION',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'TransporteEnBus', " .
-        "  COALESCE(IF(i.type='PERSONAL LOAN',                              ROUND(i.amount, 2), 0.00), 0.00) AS 'PrestamoPersonal',  " .
+        "  COALESCE(IF(i.type='Prestamo Personal',                              ROUND(i.amount, 2), 0.00), 0.00) AS 'PrestamoPersonal',  " .
         "   /* Detalle de Bonos / Ajustes */ " .
         "  0.00 AS 'AjustesPeriodos', " .
         "  0.00 AS 'BonosDiversos', " .
@@ -247,7 +247,7 @@ $title = ['Empleado', 'Cliente', 'Nombre Del Trabajador', 'Jornada', 'Seccion', 
 $output = fopen("php://output", "w");
 fputcsv($output, $title);
 if($result = mysqli_query($con,$sql)){
-    while($row = mysqli_fetch_assoc($result)){                
+    while($row = mysqli_fetch_assoc($result)){
         $exportRow[0] = $row['IdEmployees'];
         $exportRow[1] = $row['Client_ID'];
         $exportRow[2] = $row['NombreDelTrabajador'];

@@ -1272,4 +1272,9 @@ export class PeriodsComponent implements OnInit {
     let end: Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]) + 1, 0);
     window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])) + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + end.getMonth().toString() + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
   }
+
+  setAccountingPolicy() {
+    // Se encarga de generar la póliza contable al período en curso si no existiera.
+    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_blank")
+  }
 }

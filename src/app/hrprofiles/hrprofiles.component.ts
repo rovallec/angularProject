@@ -868,6 +868,12 @@ export class HrprofilesComponent implements OnInit {
       case 'Supervisor Survey':
         this.actuallProc.descritpion = null;
         break;
+      case 'Advance':
+          this.actuallProc.status = 'PENDING';
+          break;
+      case 'Rise':
+        this.actualRise.old_position = this.workingEmployee.job;
+        break;
       case 'Pay Vacations':
         if (this.availableVacations < 1) {
           this.addVac = false;
@@ -952,6 +958,7 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Advance':
           this.actualAdvance.id_process = str;
+          console.log(this.actualAdvance);
           this.apiService.insertAdvances(this.actualAdvance).subscribe((str: string) => {
             this.cancelView();
           })
@@ -959,9 +966,14 @@ export class HrprofilesComponent implements OnInit {
         case 'Rise':
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
-          this.workingEmployee.productivity_payment = (parseFloat(this.workingEmployee.productivity_payment) + parseFloat(this.riseIncrease)).toString();
-          this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
-            this.cancelView();
+          this.actualRise.old_salary = (Number(this.workingEmployee.productivity_payment) + Number(this.workingEmployee.base_payment)).toFixed(2);
+          this.actualRise.new_productivity_payment = (Number(this.actualRise.new_salary) - Number(this.workingEmployee.base_payment)).toFixed(2);
+          this.apiService.insertRise(this.actualRise).subscribe((_str: string) => {
+              if (str=="1"){
+              this.cancelView();
+              } else {
+                window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+              }
           })
           break;
         case 'Call Tracker':

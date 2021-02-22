@@ -6,6 +6,9 @@
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata);
     $i = 0;
+    if (empty($request->id) || is_null($request->id) || isset($request->id)) {
+      exit;
+    } else {
     $id = ($request->id);
     $return = [];
 
@@ -23,4 +26,5 @@
         }
         echo(json_encode($return));
     }
+  }
 ?>

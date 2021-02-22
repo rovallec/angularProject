@@ -1831,9 +1831,14 @@
                                 <input type="text" class="form-control" [(ngModel)]="actualRise.new_position"
                                     [disabled]="viewRecProd">
                             </div>
-                            <div class="form-group col-md-4">
-                                <label>Payment Increase:</label>
-                                <input type="text" class="form-control" [(ngModel)]="riseIncrease"
+                            <div class="form-group col-md-2">
+                              <label>Old Position</label>
+                              <input type="text" class="form-control" [(ngModel)]="actualRise.old_position"
+                                [disabled]="true">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label>New Payment:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.new_salary"
                                     [disabled]="viewRecProd">
                             </div>
                             <div class="form-group col-md-3">
@@ -1922,7 +1927,11 @@
                                     <option>Aguinaldo</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-4">
+                              <label>Monto:</label>
+                              <input type="text" class="form-control" [(ngModel)]="actualAdvance.amount"
+                                [disabled]="viewRecProd">
+                            </div>
                             <div class="form-group col-md-4">
                                 <label>Classification:</label>
                                 <input type="text" class="form-control" [(ngModel)]="actualAdvance.classification"

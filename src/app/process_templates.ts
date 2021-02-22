@@ -517,12 +517,14 @@ export class advances {
     type: string;
     description: string;
     classification: string;
+    amount: string;
     constructor() {
         this.idadvances = null;
         this.id_process = null;
         this.type = null;
         this.description = null;
         this.classification = null;
+        this.amount = null;
     }
 }
 
@@ -562,6 +564,9 @@ export class rises {
     effective_date: string;
     trial_start: string;
     trial_end: string;
+    old_position: string;
+    new_salary: string;
+    old_salary: string;
     constructor() {
         this.id_employee = null;
         this.id_process = null;
@@ -573,6 +578,9 @@ export class rises {
         this.effective_date = null;
         this.trial_start = null;
         this.trial_end = null;
+        this.old_position = null;
+        this.new_salary = null;
+        this.old_salary = null;
     }
 }
 
