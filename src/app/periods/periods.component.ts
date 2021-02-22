@@ -150,8 +150,11 @@ export class PeriodsComponent implements OnInit {
 
     let end: number = 0;
     let provitional_period: periods = new periods;
-    provitional_period = this.period;
+    provitional_period.end = this.period.end;
+    provitional_period.idperiods = this.period.idperiods;
     provitional_period.start = "from_close";
+    provitional_period.status = this.period.status;
+    provitional_period.type_period = this.period.type_period;
     this.apiService.getPayments(provitional_period).subscribe((payments: payments[]) => {
       if (payments.length === 0) {
         this.working = false;
