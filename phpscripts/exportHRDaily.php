@@ -106,7 +106,24 @@ FROM
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
       OR (leaves.end BETWEEN '$start' AND '$end'))
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))  AND employees.id_account IN ($accounts)";
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))  AND employees.id_account IN ($accounts)
+
+UNION
+
+SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+'SUSPENSION' AS `type_of_payment`, 
+DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' ', hr_processes.notes
+FROM
+    suspensions
+    INNER JOIN disciplinary_processes ON disciplinary_processes.iddisciplinary_processes = suspensions.id_disciplinary_process
+    INNER JOIN disciplinary_requests ON disciplinary_requests.iddisciplinary_requests = id_request
+    INNER JOIN hr_processes ON hr_processes.idhr_processes = disciplinary_requests.id_process
+	INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
+    INNER JOIN hires ON hires.idhires = employees.id_hire
+    INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
+    INNER JOIN attendences ON (attendences.date = suspensions.day_1 OR attendences.date = suspensions.day_2 OR attendences.date = suspensions.day_3 OR attendences.date = suspensions.day_3) AND attendences.id_employee = employees.idemployees
+WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETWEEN '$start' AND '$end')";
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH", "NOTES"));
 if($result = mysqli_query($con,$sql)){
