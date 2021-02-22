@@ -4,8 +4,8 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
 import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
-import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
+import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
 import { Time, TranslationWidth } from '@angular/common';
@@ -118,10 +118,8 @@ export class HrprofilesComponent implements OnInit {
   earnVacations: number = 0;
   tookVacations: number = 0;
   availableVacations: number = 0;
-
   complete_adjustment: boolean = false;
-
-  original_account: string = null;
+  original_account:string = null;
 
   approvals: users[] = [new users];
   motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid'];
@@ -397,6 +395,7 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.insertAttJustification(this.attAdjudjment).subscribe((str: string) => {
       this.complete_adjustment = true;
       this.getAttendences(this.todayDate);
+      this.cancelView();
     });
   }
 
@@ -930,7 +929,6 @@ export class HrprofilesComponent implements OnInit {
 
   setToDate(str: string) {
     this.checkDate2 = str;
-  
   }
 
   setValidFrom(str: string) {
@@ -978,7 +976,7 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Call Tracker':
           this.actualCallTracker.id_process = str;
-          this.apiService.insertCallTracker(this.actualCallTracker).subscribe((str: string) => {
+          this.apiService.insertCallTracker(this.actualCallTracker).subscribe((_str: string) => {
             this.cancelView();
           })
           break;
@@ -988,7 +986,7 @@ export class HrprofilesComponent implements OnInit {
             this.actualLetters.base_salary = emp.base_payment;
             this.actualLetters.productivity_salary = emp.productivity_payment;
           })
-          this.apiService.insertLetters(this.actualLetters).subscribe((str: string) => {
+          this.apiService.insertLetters(this.actualLetters).subscribe((_str: string) => {
             this.cancelView();
           })
           break;
@@ -1041,7 +1039,7 @@ export class HrprofilesComponent implements OnInit {
               this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
                 let py: payments = new payments;
                 let old_payment = new payments;
-                let period: periods = new periods;
+                let period:periods = new periods;
                 py.id_employee = this.activeEmp;
                 if (!isNullOrUndefined(p_methods)) {
                   py.id_period = p[0].idperiods;
@@ -1053,20 +1051,20 @@ export class HrprofilesComponent implements OnInit {
                   period.start = 'explicit_employee';
                   period.idperiods = p[p.length - 1].idperiods;
                   period.status = this.workingEmployee.idemployees;
-                  this.apiService.getPayments(period).subscribe((actual_payments: payments[]) => {
+                  this.apiService.getPayments(period).subscribe((actual_payments:payments[])=>{
                     old_payment = actual_payments[0];
                     old_payment.id_account_py = this.original_account;
-                    this.apiService.setPayment(old_payment).subscribe((str: string) => {
-                      this.apiService.insertPayments(py).subscribe((str: string) => {
-                        if (str == "1") {
+                    this.apiService.setPayment(old_payment).subscribe((str:string)=>{
+                      this.apiService.insertPayments(py).subscribe((str:string)=>{
+                        if(str == "1"){
                           this.cancelView();
-                        } else {
+                        }else{
                           window.alert("An error has occurred please contact your administrator");
                         }
                       })
                     })
                   })
-                } else {
+                }else{
                   window.alert("There is no payment method available to this employee please communicate with Accounting to clarify this");
                 }
               })
@@ -1443,12 +1441,9 @@ export class HrprofilesComponent implements OnInit {
   }
 
   change_time(any: any) {
-
     let str_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.start.split(":")[0]), parseFloat(this.attAdjudjment.start.split(":")[1].split(" ")[0]));
     let end_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.end.split(":")[0]), parseFloat(this.attAdjudjment.end.split(":")[1].split(" ")[0]));
-
     this.attAdjudjment.amount = ((end_split.getTime() - str_split.getTime()) / 3600000).toFixed(2);
-
     this.attAdjudjment.time_after = (parseFloat(this.attAdjudjment.time_before) + parseFloat(this.attAdjudjment.amount)).toFixed(2);
   }
 
