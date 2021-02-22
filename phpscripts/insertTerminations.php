@@ -33,14 +33,14 @@ if(mysqli_query($con,$sql)){
             http_response_code(200);
         }else{
             $str = $sql3 . "|" . mysqli_error($con);
-            echo(json_encoded($str));
+            echo(json_encode($str));
         }
     }else{
         $str = $sql2 . "|" . mysqli_error($con);
-        echo(json_encoded($str));
+        echo(json_encode($str));
     }
 }else{
     $str = $sql . "|" . mysqli_error($con);
-    echo(json_encoded($str));
+    echo(json_encode($str));
 }
 ?>
