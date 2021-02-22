@@ -149,8 +149,10 @@ export class PeriodsComponent implements OnInit {
     this.debits = [];
 
     let end: number = 0;
-    this.period.start = "from_close";
-    this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
+    let provitional_period: periods = new periods;
+    provitional_period = this.period;
+    provitional_period.start = "from_close";
+    this.apiService.getPayments(provitional_period).subscribe((payments: payments[]) => {
       if (payments.length === 0) {
         this.working = false;
       }
