@@ -91,7 +91,7 @@
                     <a class="nav-item nav-link" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab"
                         aria-controls="nav-data" aria-selected="false">Data Validation</a>
                     <a class="nav-item nav-link" id="nav-family-tab" data-toggle="tab" href="#nav-family" role="tab"
-                        aria-controls="nav-family" aria-selected="false">Family</a>                        
+                        aria-controls="nav-family" aria-selected="false">Family</a>
                 </div>
             </nav>
 
@@ -404,11 +404,9 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Status:</label>
-                                    <input type="text" class="form-control" *ngIf="!showLeave || activeLeave.status != 'PENDING'"
-                                        [(ngModel)]="activeLeave.status" [disabled]="true">
                                     <select [(ngModel)]="activeLeave.status" class="form-control" *ngIf="showLeave && activeLeave.status == 'PENDING'" (change)="updateLeave()">
-                                        <option *ngIf="activeLeave.status == 'PENDING'">PENDING</option>
-                                        <option *ngIf="activeLeave.status == 'COMPLETED'">COMPLETED</option>
+                                        <option *ngIf="activeLeave.status != 'PENDING'">PENDING</option>
+                                        <option *ngIf="activeLeave.status != 'COMPLETED'">COMPLETED</option>
                                         <option>DISMISSED</option>
                                     </select>
                                 </div>
@@ -995,7 +993,7 @@
                 </div>
 
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                    <div class="form-row" style="margin-top:30px">                        
+                    <div class="form-row" style="margin-top:30px">
                         <div class="form-group col-sm-12">
                             <div class="form-group col-md-12">
                                 <div class="form-row">
@@ -1165,7 +1163,7 @@
                         <div class="form-group col-md-12" *ngIf="validating">
                             <label style="font-size: 18px; font-weight: bold; margin-left:45%;margin-top: 50px;">MERGE SUCCEED</label>
                         </div>
-                    </div> 
+                    </div>
                     <div class="form-row col-md-12" *ngIf="!validating">
                         <div class="form-group col-sm-6">
                             <label style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">
@@ -1238,23 +1236,23 @@
                         <div class="form-group col-md-4">
                             <label for="families">Families</label>
                             <div class="list-group w-100" id="list-tab" role="tablist" >
-                                <a (click)="getFamily(fam)" 
-                                    class="list-group-item list-group-item-action w-100 fam" 
-                                    *ngFor="let fam of family" 
+                                <a (click)="getFamily(fam)"
+                                    class="list-group-item list-group-item-action w-100 fam"
+                                    *ngFor="let fam of family"
                                     [tabindex]="fam.affinity_idfamilies">
                                     {{ fam.affinity_first_name }} {{ fam.affinity_second_name }} {{ fam.affinity_first_last_name }} {{ fam.affinity_second_last_name }}
                                 </a>
                             </div>
                             <div class="form-group col-sm-7"></div>
-                                <div class="form-group col-sm-1">                                
+                                <div class="form-group col-sm-1">
                                     <button class="form-control fam-button-add" type="button" style="border: #007bff 1px solid;"
                                         data-toggle="tooltip" data-placement="top" title="Add">
                                         <i class="fa fa-plus-square">
                                         </i>
                                     </button>
-                                </div>                  
+                                </div>
                             </div>
-                            
+
                         <div class="form-group col-md-8 fam-group form-group" style="margin-top: 15px;">
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-6">
@@ -1291,7 +1289,7 @@
                                 </div>
                             </div>
                             <!--   Botones de family -->
-                            <div class="form-row col-sm-12">                                
+                            <div class="form-row col-sm-12">
                                 <div class="form-group col-sm-9"></div>
                                 <div class="form-group col-sm-1">
                                     <button class="form-control fam-button-add" type="button" style="border: #007bff 1px solid;"
@@ -1301,14 +1299,14 @@
                                     </button>
                                 </div>
                                 <div class=" form-group col-sm-1">
-                                    <button class="form-control fam-button-edit" type="button" style="border: #28a745 1px solid;" 
+                                    <button class="form-control fam-button-edit" type="button" style="border: #28a745 1px solid;"
                                         data-toggle="tooltip" data-placement="top" title="Edit">
                                         <i class="fa fa-edit">
                                         </i>
                                     </button>
-                                </div>                                
+                                </div>
                                 <div class="form-group col-sm-1">
-                                    <button class="form-control fam-button-del" type="button" style="border: #dc3545 1px solid;" 
+                                    <button class="form-control fam-button-del" type="button" style="border: #dc3545 1px solid;"
                                         data-toggle="tooltip" data-placement="top" title="Delete">
                                         <i class="fa fa-trash">
                                         </i>
@@ -1316,7 +1314,7 @@
                                 </div>
                             </div> <!--   Botones de family -->
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </td>
@@ -1909,7 +1907,7 @@
                             </div>
                             <div class="form-group col-md-4">
                               <label>Monto:</label>
-                              <input type="text" class="form-control" [(ngModel)]="actualAdvance.amount" 
+                              <input type="text" class="form-control" [(ngModel)]="actualAdvance.amount"
                                 [disabled]="viewRecProd">
                             </div>
                             <div class="form-group col-md-4">

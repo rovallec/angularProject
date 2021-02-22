@@ -149,6 +149,7 @@ export class PeriodsComponent implements OnInit {
     this.debits = [];
 
     let end: number = 0;
+    this.period.start = "from_close";
     this.apiService.getPayments(this.period).subscribe((payments: payments[]) => {
       if (payments.length === 0) {
         this.working = false;
@@ -779,7 +780,7 @@ export class PeriodsComponent implements OnInit {
                                     discounted = discounted - 16;
                                     this.seventh = this.seventh + 1;
                                     this.non_show_2 = false;
-                                    attendance.balance = "NS";
+                                    attendance.balance = "NS_SEVENTH";
                                     nonShowCount = nonShowCount + 1;
                                   } else {
                                     attendance.balance = "NS"
