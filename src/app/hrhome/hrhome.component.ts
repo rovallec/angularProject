@@ -142,7 +142,6 @@ export class HrhomeComponent implements OnInit {
   }
 
   showEmployeesAt(wv: waves_template) {
-
     this.showAttendenceDetails[this.wavesToShow.indexOf(wv)] = true;
     this.apiService.getAttendences({ id: wv.idwaves, date: this.stringDate }).subscribe((rs: attendences[]) => {
       this.emplAttendences = rs;
