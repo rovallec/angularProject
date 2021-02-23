@@ -18,17 +18,19 @@ $trial_start = ($request->trial_start);
 $trial_end = ($request->trial_end);
 
 $sql = "INSERT INTO `rises` (`idrises`, `id_process`, `new_position`, `new_salary`, `approved_by`, `approved_date`, `effective_date`, `trial_start`, `trial_end`) VALUES (NULL, '$id_process', '$new_position', '$new_salary', '$approved_by', '$approved_date', '$effective_date', '$trial_start', '$trial_end');";
-if(mysqli_query($con,$sql)){
-    $sql2 = "UPDATE `employees` SET `productivity_payment` = $new_productivity_payment WHERE `idemployees` = $id_employee;";
-    if(mysqli_query($con,$sql2)){
-        http_response_code(200);
-        echo("1");
-    }else{
-        http_response_code(402);
-        echo($sql2 . "|" . mysqli_error($con));
-    }
-}else{
-    http_response_code(401);
-    echo($sql . "|" . mysqli_error($con));
+if(mysqli_query($con,$sql)) {
+  $sql2 = "UPDATE `employees` SET `productivity_payment` = $new_productivity_payment WHERE `idemployees` = $id_employee;";
+  if(mysqli_query($con,$sql2)) {
+    http_response_code(200);
+    echo("1");
+  } else {
+    http_response_code(402);
+    $error = $sql2 . "|" . mysqli_error($con);
+    echo(json_encode($error));
+  }
+} else {
+  http_response_code(401);
+  $error = $sql . "|" . mysqli_error($con);
+  echo(json_encode($error));
 }
 ?>
