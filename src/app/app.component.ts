@@ -69,7 +69,7 @@ export class AppComponent {
       end = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-15";
     }else{
       start = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-16";
-      let nwDate:Date = new Date(dt.getFullYear(), (dt.getMonth() + 2),0);
+      let nwDate:Date = new Date(dt.getFullYear(), (dt.getMonth() + 1),0);
       end = nwDate.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-" + nwDate.getDate().toString();
     }
     this.SetSel("EXPEX");
