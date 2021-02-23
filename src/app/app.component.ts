@@ -70,7 +70,7 @@ export class AppComponent {
     }else{
       start = dt.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-16";
       let nwDate:Date = new Date(dt.getFullYear(), (dt.getMonth() + 2),0);
-      end = nwDate.getFullYear().toString() + "-" + (nwDate.getMonth() + 1).toString() + "-" + nwDate.getDate().toString();
+      end = nwDate.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString() + "-" + nwDate.getDate().toString();
     }
     this.SetSel("EXPEX");
     window.open("http://200.94.251.67/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end , "_blank");
