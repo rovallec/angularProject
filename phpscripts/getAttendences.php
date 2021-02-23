@@ -34,7 +34,7 @@ if(explode(" ", $date)[0] === "<=" || explode(" ", $date)[0] ===  "<"){
 				LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`
 				LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule`
 				LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires`
-				LEFT JOIN (SELECT * FROM `attendences` WHERE `date` = '$date') AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` `attend` WHERE `id_wave` = $id  ORDER BY `date` ASC";
+				LEFT JOIN (SELECT * FROM `attendences` WHERE `date` = '$date') AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `id_wave` = $id  ORDER BY `date` ASC";
 				}
 			}
 		}
