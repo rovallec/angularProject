@@ -67,7 +67,10 @@ FROM
     INNER JOIN attendences ON attendences.id_employee = employees.idemployees AND attendences.date BETWEEN leaves.start AND leaves.end
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end'))
+      OR (leaves.end BETWEEN '$start' AND '$end')      
+      OR (leaves.end > '$start')
+      OR (leaves.start < '$end'))
+      AND (attendences.date between '$start' AND '$end')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Others Unpaid')
 
 UNION
@@ -85,7 +88,10 @@ FROM
     INNER JOIN attendences ON attendences.id_employee = employees.idemployees AND attendences.date BETWEEN leaves.start AND leaves.end
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end'))
+      OR (leaves.end BETWEEN '$start' AND '$end')     
+      OR (leaves.end > '$start')
+      OR (leaves.start < '$end'))
+      AND (attendences.date between '$start' AND '$end')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Leave of Absence Unpaid')
 
 UNION
@@ -103,7 +109,10 @@ FROM
     INNER JOIN attendences ON attendences.id_employee = employees.idemployees AND attendences.date BETWEEN leaves.start AND leaves.end
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end'))
+      OR (leaves.end BETWEEN '$start' AND '$end')
+      OR (leaves.end > '$start')
+      OR (leaves.start < '$end'))
+      AND (attendences.date between '$start' AND '$end')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))
 
 UNION
