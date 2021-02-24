@@ -10,7 +10,7 @@ $end = $_GET['end'];
 
 $exportRow = [];
 $sql2 = "SET @row = 0";
-mysqli_query($sql2, $con);
+mysqli_query($con, $sql2);
 $sql = "SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
 FROM
