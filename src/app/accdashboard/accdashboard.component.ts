@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { Router } from '@angular/router';
-import { waves_template, schedules, hires_template, periods } from '../process_templates'
+import { waves_template, schedules, hires_template, periods, payments } from '../process_templates'
 import { employees, payment_methods } from '../fullProcess';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { isNull, isNullOrUndefined } from 'util';

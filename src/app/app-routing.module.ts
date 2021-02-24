@@ -33,6 +33,7 @@ import { AcphhomeComponent } from './acphhome/acphhome.component';
 import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
 import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component';
 import { BonusesComponent } from './bonuses/bonuses.component';
+import { ClosingTkComponent } from './closing-tk/closing-tk.component';
 
 const routes:Routes = [
   {
@@ -176,6 +177,11 @@ const routes:Routes = [
   {
     path:'bonuses',
     component:BonusesComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'closing',
+    component:ClosingTkComponent,
     canActivate:[AuthGuard]
   },
   {

@@ -215,7 +215,7 @@ export class PeriodsComponent implements OnInit {
                                       days_discounted = days_discounted + 1;
                                       discounted = discounted + 8;
                                     } else {
-
+//IF 0, 0 no tomar en cuenta
                                       let dt: Date = new Date(attendance.date);
 
 

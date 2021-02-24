@@ -38,7 +38,8 @@ import { IsrmanagerComponent } from './isrmanager/isrmanager.component';
 import { AcphhomeComponent } from './acphhome/acphhome.component';
 import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
 import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component';
-import { BonusesComponent } from './bonuses/bonuses.component'
+import { BonusesComponent } from './bonuses/bonuses.component';
+import { ClosingTkComponent } from './closing-tk/closing-tk.component'
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { BonusesComponent } from './bonuses/bonuses.component'
     AcphhomeComponent,
     PeriodsPhComponent,
     AccprofilesPhComponent,
-    BonusesComponent
+    BonusesComponent,
+    ClosingTkComponent
   ],
   imports: [
     BrowserModule,
