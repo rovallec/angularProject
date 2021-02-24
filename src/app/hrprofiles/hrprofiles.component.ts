@@ -1090,7 +1090,7 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView();
           })
           break;
-        case 'Irtra Request':
+        case 'IRTRA Request':
           this.actualIrtrarequests.idprocess = str;
           this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str: string) => {
             this.getIrtra();
@@ -1190,7 +1190,7 @@ export class HrprofilesComponent implements OnInit {
           this.actualJudicial = jdc;
         })
         break;
-      case 'Irtra Request':
+      case 'IRTRA Request':
         this.apiService.getIrtra_request(this.actuallProc).subscribe((irt: irtra_requests) => {
           this.actualIrtrarequests = irt;
         })

@@ -7,9 +7,7 @@ require 'database.php';
 
 $start = $_GET['start'];
 $end = $_GET['end'];
-
 $exportRow = [];
-
 $sql = "SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
 FROM
@@ -21,7 +19,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
-WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_department != 28 AND attendence_justifications.reason = 'IGSS'
+WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_department != 28 AND attendence_justifications.reason = 'IGSS' 
 
 UNION
 
@@ -36,7 +34,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
-WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_department != 28 AND attendence_justifications.reason = 'Private Doctor'
+WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_department != 28 AND attendence_justifications.reason = 'Private Doctor' 
 
 UNION
 
@@ -51,12 +49,12 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (vacations.date BETWEEN '$start' AND '$end'))
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4 AND hr_processes.status = 'PENDING')
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4 AND hr_processes.status = 'PENDING') 
 
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'JANP' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
+'JANP' AS `type_of_payment`, DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
 	leaves
 	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
@@ -64,20 +62,29 @@ FROM
     INNER JOIN hires ON hires.idhires = employees.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
-    INNER JOIN attendences ON attendences.id_employee = employees.idemployees AND attendences.date BETWEEN leaves.start AND leaves.end
+    INNER JOIN (
+		select date_add('$start', interval `row` day) AS `dates` from
+		( 
+			SELECT @rowa := @rowa + 1 as `row` FROM 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
+			(SELECT @rowa:=-1) r
+		) sequence
+		where date_add('$start', interval `row` day) <= '$end'
+    ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end')      
-      OR (leaves.end > '$start')
-      OR (leaves.start < '$end'))
-      AND (attendences.date between '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Others Unpaid')
+      OR (leaves.end BETWEEN '$start' AND '$end'))
+      AND (`dt`.`dates` BETWEEN '$start' AND '$end')
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Others Unpaid') 
 
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'LOA' AS `type_of_payment`, 
-DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
+DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
 	leaves
 	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
@@ -85,20 +92,31 @@ FROM
     INNER JOIN hires ON hires.idhires = employees.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
-    INNER JOIN attendences ON attendences.id_employee = employees.idemployees AND attendences.date BETWEEN leaves.start AND leaves.end
+    INNER JOIN (
+		select date_add('$start', interval `row` day) AS `dates` from
+		( 
+			SELECT @rowb := @rowb + 1 as `row` FROM 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
+			(SELECT @rowb:=-1) r
+		) sequence
+		where date_add('$start', interval `row` day) <= '$end'
+    ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end')     
+      OR (leaves.end BETWEEN '$start' AND '$end')      
       OR (leaves.end > '$start')
       OR (leaves.start < '$end'))
-      AND (attendences.date between '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Leave of Absence Unpaid')
+      AND (`dt`.`dates` between '$start' AND '$end')
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Leave of Absence Unpaid') 
 
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'JAP' AS `type_of_payment`, 
-DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
+DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
 	leaves
 	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
@@ -106,20 +124,31 @@ FROM
     INNER JOIN hires ON hires.idhires = employees.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
-    INNER JOIN attendences ON attendences.id_employee = employees.idemployees AND attendences.date BETWEEN leaves.start AND leaves.end
+    INNER JOIN (
+		select date_add('$start', interval `row` day) AS `dates` from
+		( 
+			SELECT @rowc := @rowc + 1 as `row` FROM 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
+			(SELECT @rowc:=-1) r
+		) sequence
+		where date_add('$start', interval `row` day) <= '$end'
+    ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end')
+      OR (leaves.end BETWEEN '$start' AND '$end')      
       OR (leaves.end > '$start')
       OR (leaves.start < '$end'))
-      AND (attendences.date between '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))
+      AND (`dt`.`dates` between '$start' AND '$end')
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))  
 
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'JANP' AS `type_of_payment`, 
-DATE_FORMAT(attendences.date, '%Y/%m/%d'), ' ', ' ', ' '
+DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' '
 FROM
     suspensions
     INNER JOIN disciplinary_processes ON disciplinary_processes.iddisciplinary_processes = suspensions.id_disciplinary_process
@@ -129,8 +158,20 @@ FROM
     INNER JOIN hires ON hires.idhires = employees.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
-    INNER JOIN attendences ON (attendences.date = suspensions.day_1 OR attendences.date = suspensions.day_2 OR attendences.date = suspensions.day_3 OR attendences.date = suspensions.day_3) AND attendences.id_employee = employees.idemployees
-WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETWEEN '$start' AND '$end')";
+   INNER JOIN (
+		select date_add('$start', interval `row` day) AS `dates` from
+		( 
+			SELECT @rowd := @rowd + 1 as `row` FROM 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
+			(SELECT @rowd:=-1) r
+		) sequence
+		where date_add('$start', interval `row` day) <= '$end'
+    ) AS `dt` ON `dt`.`dates` = suspensions.day_1 OR `dt`.`dates` = suspensions.day_2 OR `dt`.`dates` = suspensions.day_3 OR `dt`.`dates` = suspensions.day_4
+WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '$start' AND '$end');";
+
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH"));
 if($result = mysqli_query($con,$sql)){
