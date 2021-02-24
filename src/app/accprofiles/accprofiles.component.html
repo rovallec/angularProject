@@ -527,11 +527,13 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-warning" (click)="cancelPayments(adv)"
-          [disabled]="adv.status == 'CLOSED' || adv.status == 'PAID' || adv.status == 'REJECTED'">
+          [disabled]="adv.status == 'CLOSED' || adv.status == 'PAID' || adv.status == 'REJECTED' || adv.notes == ''"
+          data-dismiss="modal">
           DISMISS
         </button>
         <button type="button" class="btn btn-success" (click)="setPayments(adv)" 
-          [disabled]="adv.status == 'CLOSED' || adv.status == 'PAID' || adv.status == 'REJECTED'">
+          [disabled]="adv.status == 'CLOSED' || adv.status == 'PAID' || adv.status == 'REJECTED' || adv.notes == ''"
+          data-dismiss="modal">
           APPROVE
         </button>
       </div>

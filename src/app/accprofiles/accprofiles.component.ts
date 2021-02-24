@@ -489,11 +489,8 @@ export class AccprofilesComponent implements OnInit {
         }
       });
       cred.notes = adv.notes;
-      cred.type  = adv.type;
-      this.process.idhr_process = adv.id_process;
-      this.process.status = adv.status;
-      this.process.notes = this.process.notes + '|' + adv.notes;      
-      this.apiService.getHr_Processes(this.process.idhr_process).subscribe((proc: hrProcess) => {
+      cred.type  = adv.type;      
+      this.apiService.getHr_Processes(adv.id_process).subscribe((proc: hrProcess) => {
         proc.status = adv.status;
         if (isNullOrUndefined(proc.notes)) {
           proc.notes = adv.notes;
@@ -523,11 +520,7 @@ export class AccprofilesComponent implements OnInit {
 
   cancelPayments(adv: advances_acc) {    
     adv.status = 'DISMISSED';
-
-    this.process.idhr_process = adv.id_process;
-    this.process.status = adv.status;
-    this.process.notes = this.process.notes + '|' + adv.notes;
-    this.apiService.getHr_Processes(this.process.idhr_process).subscribe((proc: hrProcess) => {
+    this.apiService.getHr_Processes(adv.id_process).subscribe((proc: hrProcess) => {
       proc.status = adv.status;
       if (isNullOrUndefined(proc.notes)) {
         proc.notes = adv.notes;
