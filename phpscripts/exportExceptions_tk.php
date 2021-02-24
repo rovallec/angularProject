@@ -7,11 +7,6 @@ require 'database.php';
 
 $start = $_GET['start'];
 $end = $_GET['end'];
-$sql2 = "SET @rowa = 0;
-         SET @rowb = 0;
-         SET @rowc = 0;
-         SET @rowd = 0;";
-mysqli_query($con,$sql2);
 $exportRow = [];
 $sql = "SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
@@ -24,7 +19,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
-WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_department != 28 AND attendence_justifications.reason = 'IGSS' 
+WHERE hr_processes.date BETWEEN '2021-02-16' AND '2021-02-28' AND hr_processes.id_department != 28 AND attendence_justifications.reason = 'IGSS' 
 
 UNION
 
@@ -39,7 +34,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
-WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_department != 28 AND attendence_justifications.reason = 'Private Doctor' 
+WHERE hr_processes.date BETWEEN '2021-02-16' AND '2021-02-28' AND hr_processes.id_department != 28 AND attendence_justifications.reason = 'Private Doctor' 
 
 UNION
 
@@ -52,8 +47,8 @@ FROM
     INNER JOIN hires ON hires.idhires = employees.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
-WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
-	  OR (vacations.date BETWEEN '$start' AND '$end'))
+WHERE ((hr_processes.date BETWEEN '2021-02-16' AND '2021-02-28')
+	  OR (vacations.date BETWEEN '2021-02-16' AND '2021-02-28'))
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4 AND hr_processes.status = 'PENDING') 
 
 UNION
@@ -68,7 +63,7 @@ FROM
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN (
-		select date_add('$start', interval `row` day) AS `dates` from
+		select date_add('2021-02-16', interval `row` day) AS `dates` from
 		( 
 			SELECT @rowa := @rowa + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
@@ -77,12 +72,12 @@ FROM
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
 			(SELECT @rowa:=-1) r
 		) sequence
-		where date_add('$start', interval `row` day) <= '$end'
+		where date_add('2021-02-16', interval `row` day) <= '2021-02-28'
     ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
-WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
-	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end'))
-      AND (`dt`.`dates` BETWEEN '$start' AND '$end')
+WHERE ((hr_processes.date BETWEEN '2021-02-16' AND '2021-02-28')
+	  OR (leaves.start BETWEEN '2021-02-16' AND '2021-02-28')
+      OR (leaves.end BETWEEN '2021-02-16' AND '2021-02-28'))
+      AND (`dt`.`dates` BETWEEN '2021-02-16' AND '2021-02-28')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Others Unpaid') 
 
 UNION
@@ -98,7 +93,7 @@ FROM
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN (
-		select date_add('$start', interval `row` day) AS `dates` from
+		select date_add('2021-02-16', interval `row` day) AS `dates` from
 		( 
 			SELECT @rowb := @rowb + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
@@ -107,14 +102,14 @@ FROM
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
 			(SELECT @rowb:=-1) r
 		) sequence
-		where date_add('$start', interval `row` day) <= '$end'
+		where date_add('2021-02-16', interval `row` day) <= '2021-02-28'
     ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
-WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
-	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end')      
-      OR (leaves.end > '$start')
-      OR (leaves.start < '$end'))
-      AND (`dt`.`dates` between '$start' AND '$end')
+WHERE ((hr_processes.date BETWEEN '2021-02-16' AND '2021-02-28')
+	  OR (leaves.start BETWEEN '2021-02-16' AND '2021-02-28')
+      OR (leaves.end BETWEEN '2021-02-16' AND '2021-02-28')      
+      OR (leaves.end > '2021-02-16')
+      OR (leaves.start < '2021-02-28'))
+      AND (`dt`.`dates` between '2021-02-16' AND '2021-02-28')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Leave of Absence Unpaid') 
 
 UNION
@@ -130,7 +125,7 @@ FROM
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN (
-		select date_add('$start', interval `row` day) AS `dates` from
+		select date_add('2021-02-16', interval `row` day) AS `dates` from
 		( 
 			SELECT @rowc := @rowc + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
@@ -139,14 +134,14 @@ FROM
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
 			(SELECT @rowc:=-1) r
 		) sequence
-		where date_add('$start', interval `row` day) <= '$end'
+		where date_add('2021-02-16', interval `row` day) <= '2021-02-28'
     ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
-WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
-	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end')      
-      OR (leaves.end > '$start')
-      OR (leaves.start < '$end'))
-      AND (`dt`.`dates` between '$start' AND '$end')
+WHERE ((hr_processes.date BETWEEN '2021-02-16' AND '2021-02-28')
+	  OR (leaves.start BETWEEN '2021-02-16' AND '2021-02-28')
+      OR (leaves.end BETWEEN '2021-02-16' AND '2021-02-28')      
+      OR (leaves.end > '2021-02-16')
+      OR (leaves.start < '2021-02-28'))
+      AND (`dt`.`dates` between '2021-02-16' AND '2021-02-28')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))  
 
 UNION
@@ -164,7 +159,7 @@ FROM
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
    INNER JOIN (
-		select date_add('$start', interval `row` day) AS `dates` from
+		select date_add('2021-02-16', interval `row` day) AS `dates` from
 		( 
 			SELECT @rowd := @rowd + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
@@ -173,9 +168,9 @@ FROM
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
 			(SELECT @rowd:=-1) r
 		) sequence
-		where date_add('$start', interval `row` day) <= '$end'
+		where date_add('2021-02-16', interval `row` day) <= '2021-02-28'
     ) AS `dt` ON `dt`.`dates` = suspensions.day_1 OR `dt`.`dates` = suspensions.day_2 OR `dt`.`dates` = suspensions.day_3 OR `dt`.`dates` = suspensions.day_4
-WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '$start' AND '$end')";
+WHERE (hr_processes.date BETWEEN '2021-02-16' AND '2021-02-28') OR (`dt`.`dates` BETWEEN '2021-02-16' AND '2021-02-28')";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH"));
