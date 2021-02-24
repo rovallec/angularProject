@@ -12,10 +12,14 @@ $id_employee = ($request->id_employee);
 $date = ($request->date);
 $notes = ($request->notes);
 
-
 $sql = "INSERT INTO `minearsol`.`pushed_credits` (`idacc_processes`, `id_credit`, `id_user`, `id_employee`, `name`, `date`, `notes`) VALUES (NULL, $id_debit, $id_user, $id_employee, 'Credit', '$date', '$notes');";
 
 if(mysqli_query($con,$sql)){
-    echo(mysqli_insert_id($con));
+  echo(mysqli_insert_id($con));
+  http_response_code(200);
+} else {
+  http_response_code(400);
+  $error = "0|" . $sql . "|" . mysqli_error($con);
+  echo(json_encode($error));
 }
 ?>

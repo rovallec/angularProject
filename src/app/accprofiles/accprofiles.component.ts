@@ -9,7 +9,7 @@ import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods, hrProcess } from '../fullProcess';
 import { AuthGuard } from '../guard/auth-guard.service';
 import { process } from '../process';
-import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations } from '../process_templates';
+import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha } from '../process_templates';
 import { profiles } from '../profiles';
 import { Observable } from "rxjs";
 import { async } from '@angular/core/testing';
@@ -54,6 +54,7 @@ export class AccprofilesComponent implements OnInit {
   totalDebits: number = 0;
   absence_fixed: string = null;
   period: periods = new periods;
+  actualPeriod: periods = new periods;
   term_date: string = null;
   leaves: leaves[] = [];
   attendances: attendences[] = [];
@@ -69,6 +70,7 @@ export class AccprofilesComponent implements OnInit {
   acumulated_b14: string = null;
   acumulated_ag: string = null;
   advances:advances_acc[] = [];
+  adv: advances_acc = new advances_acc;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -130,7 +132,14 @@ export class AccprofilesComponent implements OnInit {
       this.apiService.getAdvancesAcc(emp[0]).subscribe((adv:advances_acc[])=>{
         this.advances = adv;
       })
-      
+
+      this.apiService.getPeriods().subscribe((per: periods[]) => {
+        per.forEach(p => {
+          if ((p.type_period == '0') && (p.status == '1')) {
+            this.actualPeriod = p;
+          }
+        })
+      })
     })
   }
 
@@ -448,7 +457,6 @@ export class AccprofilesComponent implements OnInit {
     this.acrediting = false;
   }
 
-
   selectedCredit(event) {
     if (event.target.checked) {
       this.setAcreditCredits = this.setAcreditCredits + "," + event.target.value;
@@ -461,5 +469,79 @@ export class AccprofilesComponent implements OnInit {
       this.setAcreditDebits = this.setAcreditDebits + "," + event.target.value;
     }
     this.acrediting = true;
+  }
+
+  setPayments(adv: advances_acc) {
+    let per: periods = this.actualPeriod;    
+    adv.status = 'APPROVED';
+    per.start = 'explicit_employee';
+    per.status = this.employee.idemployees;
+    this.apiService.getPayments(per).subscribe((payment: payments[]) => {
+      let cred: credits = new credits;
+      let date: Fecha = new Fecha;
+      cred.amount = adv.amount;
+      cred.id_employee = this.employee.idemployees;
+      cred.id_user = this.authUser.getAuthusr().iduser;
+      cred.date = date.today;
+      payment.forEach(py => {
+        if ((py.id_employee == this.employee.idemployees) && (py.id_period == this.actualPeriod.idperiods)) {
+          cred.idpayments = py.idpayments;
+        }
+      });
+      cred.notes = adv.notes;
+      cred.type  = adv.type;
+      this.process.idhr_process = adv.id_process;
+      this.process.status = adv.status;
+      this.process.notes = this.process.notes + '|' + adv.notes;      
+      this.apiService.getHr_Processes(this.process.idhr_process).subscribe((proc: hrProcess) => {
+        proc.status = adv.status;
+        if (isNullOrUndefined(proc.notes)) {
+          proc.notes = adv.notes;
+        } else  {
+          proc.notes = proc.notes + '|' + adv.notes;
+        }
+        this.apiService.updatehr_process(proc).subscribe((_str: string) => {
+          this.apiService.insertCredits(cred).subscribe((str: string) => {
+            if (String(str).split("|")[0] != '0') {
+              cred.iddebits = str;
+              cred.status = adv.status;
+              this.apiService.insertPushedCredit(cred).subscribe((str: string) => {  
+                if (String(str).split("|")[0] != '0') {                            
+                  this.start();              
+                } else {
+                  window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+                }
+              })
+            } else {
+              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+            }
+          })
+        })
+      })
+    })   
+  }
+
+  cancelPayments(adv: advances_acc) {    
+    adv.status = 'DISMISSED';
+
+    this.process.idhr_process = adv.id_process;
+    this.process.status = adv.status;
+    this.process.notes = this.process.notes + '|' + adv.notes;
+    this.apiService.getHr_Processes(this.process.idhr_process).subscribe((proc: hrProcess) => {
+      proc.status = adv.status;
+      if (isNullOrUndefined(proc.notes)) {
+        proc.notes = adv.notes;
+      } else  {
+        proc.notes = proc.notes + '|' + adv.notes;
+      }      
+      this.apiService.updatehr_process(proc).subscribe((_str: string) => {
+        // no hace nada por el momento.
+      })
+    })
+  }
+
+  assignAdvance(adv) {
+    this.adv = adv;
+    this.adv.notes = '';
   }
 }

@@ -14,9 +14,11 @@ $amount = ($request->amount);
 
 $sql = "INSERT INTO `advances` (`idadvances`, `id_process`, `type`, `description`, `classification`, `amount`) VALUES (NULL, '$id_process', '$type', '$description', '$classification', '$amount');";
 if(mysqli_query($con,$sql)){
-    http_response_code(200);
+  http_response_code(200);
+  echo("1");
 }else{
-    http_response_code(400);
-    echo($sql);
+  http_response_code(400);
+  $error = $sql . "|" . mysqli_error($con);
+  echo(json_encode($error));
 }
 ?>

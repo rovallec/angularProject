@@ -694,7 +694,7 @@ export class periods {
         this.start = null;
         this.end = null;
         this.status = null;
-        this.status = null;
+        this.type_period = null;
     }
 }
 
