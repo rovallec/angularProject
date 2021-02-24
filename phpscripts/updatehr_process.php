@@ -8,14 +8,14 @@ $request = json_decode($postdata);
 
 $idhr_process = ($request->idhr_processes);
 $status = ($request->status);
+$notes = ($request->notes);
 
-
-$sql = "UPDATE hr_processes SET `status` = '$status' WHERE `idhr_processes` = $idhr_process;";
+$sql = "UPDATE hr_processes SET status = '$status', notes = '$notes' WHERE idhr_processes = $idhr_process;";
 
 if(mysqli_query($con,$sql)){
 	http_response_code(204);
 }else{
-  echo($sql);
-	http_response_code(400);
+  http_response_code(400);
+	echo($sql);
 }
 ?>

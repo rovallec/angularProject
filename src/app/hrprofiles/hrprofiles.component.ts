@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -118,7 +118,7 @@ export class HrprofilesComponent implements OnInit {
   earnVacations: number = 0;
   tookVacations: number = 0;
   availableVacations: number = 0;
-
+  actualPeriod: periods = new periods;
   complete_adjustment: boolean = false;
 
   original_account: string = null;
@@ -267,6 +267,10 @@ export class HrprofilesComponent implements OnInit {
       this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
         this.family = fam;
       });
+    });
+
+    this.apiService.getPeriods().subscribe((p: periods[]) => {
+      this.actualPeriod = p[p.length -1];
     });
 
     this.apiService.getApprovers().subscribe((usrs: users[]) => {
@@ -528,6 +532,9 @@ export class HrprofilesComponent implements OnInit {
     this.actualTerm = new terminations;
     this.actualReport = new reports;
     this.actuallProc = new process;
+    this.apiService.getPeriods().subscribe((p: periods[]) => {
+      this.actualPeriod = p[p.length -1];
+    })
   }
 
   setLeave() {
@@ -958,10 +965,13 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Advance':
-          this.actualAdvance.id_process = str;
-          console.log(this.actualAdvance);
+          this.actualAdvance.id_process = str;          
           this.apiService.insertAdvances(this.actualAdvance).subscribe((str: string) => {
-            this.cancelView();
+            if (str=="1"){                            
+              this.cancelView();           
+            } else {
+              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+            }
           })
           break;
         case 'Rise':
