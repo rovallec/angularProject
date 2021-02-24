@@ -11,7 +11,6 @@ $accounts = $_GET['accounts'];
 
 $spliter = [];
 $exportRow = [];
-
 $sql = "SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount, hr_processes.notes
 FROM
@@ -69,12 +68,12 @@ FROM
     INNER JOIN (
 		select date_add('$start', interval `row` day) AS `dates` from
 		( 
-			SELECT @row := @row + 1 as `row` FROM 
+			SELECT @rowa := @rowa + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t,
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
-			(SELECT @row:=-1) r
+			(SELECT @rowa:=-1) r
 		) sequence
 		where date_add('$start', interval `row` day) <= '$end'
     ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
@@ -99,12 +98,12 @@ FROM
     INNER JOIN (
 		select date_add('$start', interval `row` day) AS `dates` from
 		( 
-			SELECT @row := @row + 1 as `row` FROM 
+			SELECT @rowb := @rowb + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t,
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
-			(SELECT @row:=-1) r
+			(SELECT @rowb:=-1) r
 		) sequence
 		where date_add('$start', interval `row` day) <= '$end'
     ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
@@ -131,12 +130,12 @@ FROM
     INNER JOIN (
 		select date_add('$start', interval `row` day) AS `dates` from
 		( 
-			SELECT @row := @row + 1 as `row` FROM 
+			SELECT @rowc := @rowc + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t,
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
-			(SELECT @row:=-1) r
+			(SELECT @rowc:=-1) r
 		) sequence
 		where date_add('$start', interval `row` day) <= '$end'
     ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
@@ -165,12 +164,12 @@ FROM
    INNER JOIN (
 		select date_add('$start', interval `row` day) AS `dates` from
 		( 
-			SELECT @row := @row + 1 as `row` FROM 
+			SELECT @rowd := @rowd + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t,
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
 			(select 0 union all select 1 union all select 3 union all select 4 union all select 5 union all select 6 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
-			(SELECT @row:=-1) r
+			(SELECT @rowd:=-1) r
 		) sequence
 		where date_add('$start', interval `row` day) <= '$end'
     ) AS `dt` ON `dt`.`dates` = suspensions.day_1 OR `dt`.`dates` = suspensions.day_2 OR `dt`.`dates` = suspensions.day_3 OR `dt`.`dates` = suspensions.day_4
