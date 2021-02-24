@@ -98,6 +98,8 @@
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
           style="color: white; cursor:pointer;" (click)="getEmployeeData()"
           [ngClass]="{'act':selectedOption=='EMPD'}">EMPLOYEE DATA</a>
+          <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
+          [ngClass]="{'act':selectedOption=='CLOSING'}" (click)="SetSel('CLOSING')" routerLink="/closing">CLOSING</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
