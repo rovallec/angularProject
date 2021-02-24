@@ -157,7 +157,7 @@ FROM
     INNER JOIN disciplinary_processes ON disciplinary_processes.iddisciplinary_processes = suspensions.id_disciplinary_process
     INNER JOIN disciplinary_requests ON disciplinary_requests.iddisciplinary_requests = id_request
     INNER JOIN hr_processes ON hr_processes.idhr_processes = disciplinary_requests.id_process
-	INNER JOIN (SELECT * FROM employees WHERE id_account IN($accounts)) ON `emp`.idemployees = hr_processes.id_employee
+	INNER JOIN (SELECT * FROM employees WHERE id_account IN($accounts)) AS `emp` ON `emp`.idemployees = hr_processes.id_employee
     INNER JOIN hires ON hires.idhires = `emp`.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = `emp`.id_account
