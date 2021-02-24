@@ -70,6 +70,7 @@ FROM
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
       OR (leaves.end BETWEEN '$start' AND '$end'))
+      AND (attendences.date BETWEEN '$start' AND '$end')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Others Unpaid') AND employees.id_account IN ($accounts)
 
 UNION
@@ -87,7 +88,10 @@ FROM
     INNER JOIN attendences ON attendences.id_employee = employees.idemployees AND attendences.date BETWEEN leaves.start AND leaves.end
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end'))
+      OR (leaves.end BETWEEN '$start' AND '$end')      
+      OR (leaves.end > '$start')
+      OR (leaves.start < '$end'))
+      AND (attendences.date between '$start' AND '$end')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Leave of Absence Unpaid') AND employees.id_account IN ($accounts)
 
 UNION
@@ -105,7 +109,10 @@ FROM
     INNER JOIN attendences ON attendences.id_employee = employees.idemployees AND attendences.date BETWEEN leaves.start AND leaves.end
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
-      OR (leaves.end BETWEEN '$start' AND '$end'))
+      OR (leaves.end BETWEEN '$start' AND '$end')      
+      OR (leaves.end > '$start')
+      OR (leaves.start < '$end'))
+      AND (attendences.date between '$start' AND '$end')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))  AND employees.id_account IN ($accounts)
 
 UNION
@@ -123,7 +130,7 @@ FROM
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN attendences ON (attendences.date = suspensions.day_1 OR attendences.date = suspensions.day_2 OR attendences.date = suspensions.day_3 OR attendences.date = suspensions.day_3) AND attendences.id_employee = employees.idemployees
-WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETWEEN '$start' AND '$end')";
+WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETWEEN '$start' AND '$end') AND employees.id_account IN ($accounts)";
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH", "NOTES"));
 if($result = mysqli_query($con,$sql)){

@@ -66,13 +66,13 @@ export class AttendenceImportComponent implements OnInit {
             if (element['Scheduled'] == 'OFF') {
               nwAtt.scheduled = 'OFF';
             } else {
-              nwAtt.scheduled = parseFloat(element['Scheduled']).toFixed(2);
+              nwAtt.scheduled = parseFloat(element['Scheduled']).toFixed(3);
             }
-            nwAtt.worked_time = parseFloat(element['Worked']).toFixed(2);
+            nwAtt.worked_time = parseFloat(element['Worked']).toFixed(3);
             if (nwAtt.scheduled == 'OFF') {
               nwAtt.balance = nwAtt.worked_time;
             } else {
-              nwAtt.balance = parseFloat((parseFloat(nwAtt.worked_time) - parseFloat(nwAtt.scheduled)).toString()).toFixed(2);
+              nwAtt.balance = parseFloat((parseFloat(nwAtt.worked_time) - parseFloat(nwAtt.scheduled)).toString()).toFixed(3);
             }
             this.attendences.push(nwAtt);
           } catch (error) {
