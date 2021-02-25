@@ -1,6 +1,9 @@
+import { TypeModifier } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
+import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
-import { accounts, clients, payments, periods } from '../process_templates';
+import { employees } from '../fullProcess';
+import { accounts, attendences, clients, disciplinary_processes, leaves, payments, payroll_values, payroll_values_gt, periods, vacations } from '../process_templates';
 
 @Component({
   selector: 'app-closing-tk',
@@ -19,6 +22,18 @@ export class ClosingTkComponent implements OnInit {
   actualPeriod: periods = new periods;
   selectedYear: string = new Date().getFullYear().toString();
   payments: payments[] = [];
+  payroll_values: payroll_values_gt[] = [];
+  show_payroll_values: payroll_values_gt[] = [];
+  isLoading:boolean = false;
+  finished:boolean = true;
+  progress:number = 0;
+  max_progress:number = 0;
+  step:string = null;
+  show_attendances:attendences[] = [];
+  save_attendances:attendences[] = [];
+  selected_payroll_value:payroll_values_gt = new payroll_values_gt;
+  close_period:boolean = false;
+  waitForfinish:boolean = false;
 
   constructor(public apiServices: ApiService) { }
 
@@ -47,9 +62,8 @@ export class ClosingTkComponent implements OnInit {
           this.years.push(element.start.split("-")[0]);
         }
       });
-    })
-
     this.setYear();
+    })
   }
 
   setClient(cl: string) {
@@ -61,15 +75,18 @@ export class ClosingTkComponent implements OnInit {
         }
       });
       this.selectedAccount = this.accounts[0];
+      this.setPayments();
     })
   }
 
   setPeriod(p: string) {
+    this.isLoading = true;
     this.periods.forEach(element => {
       if (element.idperiods == p) {
         this.actualPeriod = element;
       }
     })
+    this.setPayments();
   }
 
   setYear() {
@@ -78,31 +95,283 @@ export class ClosingTkComponent implements OnInit {
       p.forEach(pe => {
         if (pe.start.split("-")[0] == this.selectedYear) {
           this.periods.push(pe);
-          this.selectedPeriod = pe.idperiods
+          this.selectedPeriod = pe.idperiods;
+          this.actualPeriod = pe;
         }
       })
+      this.isLoading = true;
+      this.setPayments();
     })
   }
 
   setAccount(acc: accounts) {
+    this.selectedAccount = acc;
+    this.setPayments();
+  }
+
+  setPayments() {
+    this.show_attendances = [];
+    this.save_attendances = [];
+    this.finished = false;
+    this.progress = 0;
+    this.step = "Getting necessary information";
     if (this.actualPeriod.status == '1') {
       let provitional_period: periods = new periods;
       provitional_period.end = this.actualPeriod.end;
       provitional_period.idperiods = this.actualPeriod.idperiods;
       provitional_period.start = "from_close";
       provitional_period.status = this.actualPeriod.status;
-      provitional_period.type_period = this.actualPeriod.type_period;
-      this.apiServices.getPayments(provitional_period).subscribe((py:payments[])=>{
-        let activeVacation:boolean = false;
-        let activeLeave:boolean = false;
-        let activeSuspension:boolean = false;
-        let non_show:boolean = false;
-        let discounted_days:number = 0;
-        
-        py.forEach(pay=>{
-          
+      provitional_period.type_period = this.actualPeriod.type_period;      
+      this.apiServices.getPayments(provitional_period).subscribe((pys: payments[]) => {
+        let cnt:number = 0;
+        if(pys[0].idpayments == "ERROR"){
+          this.show_attendances = [];
+          this.save_attendances = [];
+          this.finished = true;
+          this.progress = 0;
+          this.max_progress = 0;
+        }else{
+          this.step = "Building the array";
+        let py:payments[] = [];
+        if(!this.close_period){
+          pys.forEach(p=>{
+            if(p.account == this.selectedAccount.idaccounts){
+              py.push(p);
+            }
+          })
+        }else{
+          py = pys;
+        }
+        this.max_progress = py.length;
+        py.forEach(pay => {
+          this.step = "Calculating discounts";
+          this.payroll_values = [];
+          this.apiServices.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
+            this.apiServices.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
+              this.apiServices.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
+                this.apiServices.getDPAtt({ id: emp[0].idemployees, date_1: this.actualPeriod.start, date_2: this.actualPeriod.end }).subscribe((dp: disciplinary_processes[]) => {
+                  this.apiServices.getAttPeriod({ id: emp[0].idemployees, date_1: this.actualPeriod.start, date_2: this.actualPeriod.end }).subscribe((att: attendences[]) => {
+                    let activeVacation: boolean = false;
+                    let activeLeave: boolean = false;
+                    let activeSuspension: boolean = false;
+                    let non_show: boolean = false;
+                    let sevenths: number = 0;
+                    let discounted_days: number = 0;
+                    let discounted_hours: number = 0;
+                    let ot_hours: number = 0;
+                    let hld_hours: number = 0;
+                    let performance_bonus: number = 0;
+                    let treasure_hunt: number = 0;
+                    let janp_sequence: number = 0;
+                    let janp_on_off: number = 0;
+                    let non_show_sequence: number = 0;
+                    let days_off: number = 0;
+                    let off_on_week: number = 0;
+                    if (pay.last_seventh == '1') {
+                      non_show = true;
+                    }
+                    discounted_days = Number((Number((((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24)) - (Number(att.length - 1))).toFixed(0)));
+                    att.forEach(attendance => {
+                      activeVacation = false;
+                      activeLeave = false;
+                      activeSuspension = false;
+
+                      dp.forEach(disciplinary_process => {
+                        if (disciplinary_process.day_1 == attendance.date || disciplinary_process.day_2 == attendance.date || disciplinary_process.day_3 == attendance.date || disciplinary_process.day_4 == attendance.date) {
+                          activeSuspension = true;
+                          attendance.balance = 'JANP';
+                          discounted_days = discounted_days + 1;
+                          janp_sequence = janp_sequence + 1;
+                        }
+                      })
+
+                      if (!activeSuspension) {
+                        vac.forEach(vacation => {
+                          if (vacation.status != 'DISMISSED' && vacation.took_date == attendance.date && vacation.action == "Take") {
+                            activeVacation = true;
+                            if (attendance.scheduled == 'OFF') {
+                              days_off = days_off + 1;
+                            }
+                            attendance.balance = 'VAC';
+                          }
+                        })
+                      }
+
+                      if (!activeSuspension && !activeVacation) {
+                        leave.forEach(lv => {
+                          if (lv.status != 'DISMISSED' && (new Date(lv.start).getTime()) <= (new Date(attendance.date).getTime()) && (new Date(lv.end).getTime()) >= (new Date(attendance.date).getTime())) {
+                            activeLeave = true;
+                            if (lv.motive == 'Leave of Absence Unpaid') {
+                              attendance.balance = 'LOA';
+                              discounted_days = discounted_days + 1;
+                              janp_sequence = janp_sequence + 1;
+                              if (attendance.scheduled == 'OFF') {
+                                days_off = days_off + 1;
+                                janp_on_off = janp_on_off + 1;
+                              }
+                            }
+                            if (lv.motive == 'Others Unpaid') {
+                              attendance.balance = 'JANP';
+                              discounted_days = discounted_days + 1;
+                              janp_sequence = janp_sequence + 1;
+                              if (attendance.scheduled == 'OFF') {
+                                days_off = days_off + 1;
+                                janp_on_off = janp_on_off + 1;
+                              }
+                            }
+                            if (lv.motive == 'Maternity' || lv.motive == 'Others Paid') {
+                              attendance.balance = 'JAP';
+                            }
+                          }
+                        })
+                      }
+
+                      if (!activeVacation && !activeSuspension && !activeLeave) {
+                        if (attendance.scheduled == "OFF") {
+                          attendance.balance = "OFF";
+                          days_off = days_off + 1;
+                          if(Number(attendance.worked_time) > 0){
+                            attendance.balance = (Number(attendance.worked_time)).toFixed(3);
+                            discounted_hours = discounted_hours + Number(attendance.worked_time);
+                          }
+                        } else {
+                          if (attendance.date != (new Date().getFullYear + "-01-01")) {
+                            if (Number(attendance.scheduled) > 0) {
+                              if (Number(attendance.worked_time) == 0) {
+                                attendance.balance = "NS";
+                                if (!non_show) {
+                                  non_show = true;
+                                  discounted_days = discounted_days + 1;
+                                  sevenths = sevenths + 1;
+                                  non_show_sequence = non_show_sequence + 1;
+                                } else {
+                                  discounted_days = discounted_days + 1;
+                                  non_show_sequence = non_show_sequence + 1;
+                                }
+                              } else {
+                                attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toString();
+                                discounted_hours = discounted_hours + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                              }
+                            } else {
+                              discounted_days = discounted_days + 1;
+                            }
+                          } else {
+                            if (Number(attendance.worked_time) > 0) {
+                              hld_hours = hld_hours + Number(attendance.worked_time);
+                            }
+                          }
+                        }
+                      }
+
+                      if (new Date(attendance.date).getDay() == 6) {
+                        off_on_week = days_off - off_on_week;
+
+                        if (janp_sequence >= 5) {
+                          discounted_days = discounted_days + (off_on_week - janp_on_off - 1);
+                          sevenths = sevenths + 1;
+                        }
+
+                        if (non_show_sequence == 5) {
+                          discounted_days = discounted_days + 1
+                        }
+
+                        janp_on_off = 0;
+                        non_show_sequence = 0;
+                        non_show = false;
+                      }
+                    })
+                    let payroll_value: payroll_values_gt = new payroll_values_gt;                    
+                    payroll_value.client_id = pay.client_id;
+                    payroll_value.discounted_days = discounted_days.toString();
+                    payroll_value.discounted_hours = discounted_hours.toString();
+                    payroll_value.holidays_hours = hld_hours.toString();
+                    if(isNullOrUndefined(pay.id_account_py)){
+                      payroll_value.id_account = emp[0].id_account;
+                    }else{
+                      payroll_value.id_account = pay.id_account_py;
+                    }
+                    payroll_value.id_employee = pay.id_employee;
+                    payroll_value.id_payment = pay.idpayments;
+                    payroll_value.id_period = pay.id_period;
+                    if(this.close_period){
+                      payroll_value.id_reporter = emp[0].reporter;
+                    }else{
+                      payroll_value.id_reporter = emp[0].user_name;
+                    }
+                    payroll_value.nearsol_id = emp[0].nearsol_id;
+                    payroll_value.agent_name = pay.employee_name;
+                    payroll_value.account_name = this.selectedAccount.name;
+                    if (discounted_hours >= 0) {
+                      payroll_value.ot_hours = discounted_hours.toString()
+                      payroll_value.discounted_hours = "0";
+                    } else {
+                      payroll_value.ot_hours = "0";
+                      payroll_value.discounted_hours = discounted_hours.toString();
+                    }
+                    payroll_value.agent_status = emp[0].status;
+                    payroll_value.seventh = sevenths.toString();
+
+                    if(!this.close_period){
+                      if(payroll_value.id_account == this.selectedAccount.idaccounts){
+                        this.payroll_values.push(payroll_value);
+                        att.forEach(attendance=>{
+                          this.save_attendances.push(attendance);
+                        });
+                      }
+                    }else{
+                      this.payroll_values.push(payroll_value);
+                      att.forEach(attendance=>{
+                        this.save_attendances.push(attendance);
+                      })
+                    }
+                    this.progress = this.progress + 1;
+                    if(this.progress == this.max_progress || this.progress == (pys.length - 1)){
+                      this.step = "Formating table";
+                      this.finished = true;
+                      console.log(this.progress);
+                      if(this.close_period && this.progress != (pys.length - 1)){
+                      this.apiServices.insertPayroll_values_gt(this.payroll_values).subscribe((pays:payroll_values_gt[])=>{
+                        this.payroll_values = pays;
+                      })
+                    }
+                    }
+                  })
+                })
+              })
+            })
+          })
+          if(pay.account == this.selectedAccount.idaccounts){
+            cnt = cnt + 1;
+          }
         })
+        if(cnt == 0){
+          this.show_attendances = [];
+          this.show_payroll_values = [];
+          this.save_attendances = [];
+          this.payroll_values = [];
+          this.finished = true;
+          this.isLoading = false;
+          window.alert("No records to show");
+        }
+        this.isLoading = false;
+        }
       })
     }
+  }
+
+  saveClosing(){
+    this.close_period = true;
+    this.setPayments();
+  }
+
+  setAttendance(py:payroll_values_gt){
+    this.selected_payroll_value = py;
+    this.selected_payroll_value.total_days = (Number(this.selected_payroll_value.discounted_days) + Number(this.selected_payroll_value.seventh)).toFixed(0);
+    this.show_attendances = [];
+    this.save_attendances.forEach(att=>{
+      if(att.id_employee == this.selected_payroll_value.id_employee){
+        this.show_attendances.push(att);
+      }
+    })
   }
 }

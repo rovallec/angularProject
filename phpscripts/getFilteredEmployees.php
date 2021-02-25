@@ -55,6 +55,8 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['productivity_payment'] = $row['productivity_payment'];
         $res[$i]['hiring_date'] = $row['hiring_date'];
         $res[$i]['active'] = $row['active'];
+        $res[$i]['status'] = $row['state'];
+        $res[$i]['reporter'] = $row['reporter'];
         $i++;
     }
     echo(json_encode($res));

@@ -1071,6 +1071,7 @@ export class payroll_values{
     ot_holiday:string;
     holiday_regular:string;
     holiday_special:string;
+    total_days:string;
     constructor(){
         this.idpayroll_values = null;
         this.id_employee = null;
@@ -1087,6 +1088,7 @@ export class payroll_values{
         this.ot_holiday = null;
         this.holiday_regular = null;
         this.holiday_special = null;
+        this.total_days = null;
     }
 }
 
@@ -1203,5 +1205,48 @@ export class Fecha{
         let mm: string = String(fecha.getMonth() + 1).padStart(2, '0');
         let yyyy: string = fecha.getFullYear().toString();
         this.today = (yyyy + '-' + mm + '-' + dd);
+    }
+}
+
+export class payroll_values_gt{
+    idpayroll_values:string = null;
+    id_employee:string = null;
+    id_reporter:string = null;
+    id_account:string = null;
+    id_period:string = null;
+    id_payment:string = null;
+    client_id:string = null;
+    nearsol_id:string = null;
+    discounted_days:string = null;
+    seventh:string = null;
+    discounted_hours:string = null;
+    ot_hours:string = null;
+    holidays_hours:string = null;
+    performance_bonus:string = null;
+    treasure_hunt:string = null;
+    agent_name:string = null;
+    account_name:string = null;
+    agent_status:string = null;
+    total_days:string = null;
+    constructor(){
+        this.total_days = null;
+        this.idpayroll_values = null;
+        this.id_employee = null;
+        this.id_reporter = null;
+        this.id_account = null;
+        this.id_period = null;
+        this.id_payment = null;
+        this.client_id = null;
+        this.nearsol_id = null;
+        this.discounted_days = null;
+        this.seventh = null;
+        this.discounted_hours = null;
+        this.ot_hours = null;
+        this.holidays_hours = null;
+        this.performance_bonus = null;
+        this.treasure_hunt = null;
+        this.agent_name = null;
+        this.account_name = null;
+        this.agent_status = null;
     }
 }

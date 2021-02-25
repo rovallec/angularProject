@@ -64,7 +64,8 @@ if($result = mysqli_query($con, $sql)){
     }
     echo(json_encode($return));
 } else {
-    echo($sql);
+    $r = $r[0]['idpayments'] = "ERROR";
+    echo(json_encode($r));
 }
 
 ?>

@@ -3,15 +3,20 @@
         <div class="row" style="margin-top:25px">
             <div class="d-flex justify-content-between mb-3 w-100">
                 <div class="p-2">
-                    <button class="btn btn-outline-danger" [disabled]="actualPeriod.status == '3'"><i
+                    <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'"><i
                             class="fas fa-ban"></i></button>
                 </div>
-                <div class="p-2">
-                    <button class="btn btn-outline-warning" [disabled]="actualPeriod.status == '1'"><i
-                            class="far fa-calendar-check"></i></button>
+                <div class="p-2" *ngIf="actualPeriod != '3'">
+                    <button class="btn btn-outline-warning" [disabled]="actualPeriod.status != '1'"
+                            data-toggle="modal"
+                            data-target="#alert_modal"><i class="far fa-save"></i></button>
+                </div>
+                <div class="p-2" *ngIf="actualPeriod == '3'">
+                    <button class="btn btn-outline-warning" (click)="changeClosing()"><i
+                            class="far fa-save"></i></button>
                 </div>
                 <div class="p-2">
-                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status == '3'"><i
+                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"><i
                             class="fas fa-check"></i></button>
                 </div>
             </div>
@@ -25,12 +30,24 @@
             <div class="list-group w-100" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
                     [tabindex]="acc.idaccounts" [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}"
-                    style="cursor: pointer;">{{acc.name}}</a>
+                    style="cursor: pointer;" (click)="setAccount(acc)">{{acc.name}}</a>
             </div>
         </div>
     </div>
     <div class="col-md-10">
-        <div class="row col-md-12" style="margin-top:25px">
+        <div class="row col-md-12" *ngIf="isLoading">
+            <div class="d-flex justify-content-center col-md-12">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden"></span>
+                </div>
+            </div>
+        </div>
+        <div class="progress" style="margin-top:50px" *ngIf="!finished && !isLoading">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                [style.width]="progress + '%'" [attr.aria-valuenow]="progress" aria-valuemin="0"
+                [attr.aria-valuemax]="max_progress">{{step}}</div>
+        </div>
+        <div class="row col-md-12" *ngIf="!isLoading && finished">
             <div class="col-md-2"></div>
             <div class="col-md-2">
                 <label>YEAR:</label>
@@ -42,38 +59,131 @@
             <div class="col-md-4">
                 <label>PERIOD:</label>
                 <select class="form-control" [(ngModel)]="selectedPeriod" (change)="setPeriod($event.target.value)">
-                    <option *ngFor="let period of periods" [value]="period.idperiods">{{period.start}} TO {{period.end}}</option>
+                    <option *ngFor="let period of periods" [value]="period.idperiods">{{period.start}} TO {{period.end}}
+                    </option>
                 </select>
             </div>
             <div class="col-md-2"></div>
         </div>
-        <div class="row col-md-12" *ngIf="actualPeriod.status === '1'">
+        <div class="row col-md-12" *ngIf="actualPeriod.status === '1'" style="margin-top:25px">
             <table class="table table-striped">
                 <thead>
                     <th>ID</th>
                     <th>NEARSOL ID</th>
                     <th>CLIENT ID</th>
-                    <th>ACCOUNT</th>
                     <th>NAME</th>
+                    <th>ACCOUNT</th>
                     <th>DISCOUNTED DAYS</th>
                     <th>HOURS</th>
                     <th>SEVENTH</th>
                     <th>OT</th>
                     <th>HOLIDAYS</th>
+                    <th>STATUS</th>
                 </thead>
-                <tr *ngFor="let pay of payments">
-                    <td>{{pay.idpayments}}</td>
-                    <td>{{pay.nearsol_id}}</td>
-                    <td>{{pay.client_id}}</td>
-                    <td>{{pay.account}}</td>
-                    <td>{{pay.employee_name}}</td>
-                    <td>{{pay.days}}</td>
-                    <td>{{pay.hours}}</td>
-                    <td>{{pay.seventh}}</td>
-                    <td>{{pay.ot}}</td>
-                    <td>{{pay.holidays}}</td>
-                </tr>
+                <tbody>
+                    <tr *ngFor="let pay of payroll_values" (click)="setAttendance(pay)" data-toggle="modal"
+                        data-target="#attendance_detail">
+                        <td>{{pay.id_payment}}</td>
+                        <td>{{pay.nearsol_id}}</td>
+                        <td>{{pay.client_id}}</td>
+                        <td>{{pay.agent_name}}</td>
+                        <td>{{pay.account_name}}</td>
+                        <td>{{pay.discounted_days}}</td>
+                        <td>{{pay.discounted_hours}}</td>
+                        <td>{{pay.seventh}}</td>
+                        <td>{{pay.ot_hours}}</td>
+                        <td>{{pay.holidays_hours}}</td>
+                        <td>{{pay.agent_status}}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
+<!----------------------------------------------------------------------------------------------ALERT MODAL---------------------------------------------------------------->
+<div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="alert_modallLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alert_modalLabel">FREEZE PERIOD</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="modal-body d-flex justify-content-center">
+                    <div class="p-2">
+                        <p>This action will freeze the selected period from</p>
+                        <p>for all clients are you sure to proceed?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="saveClosing()">ACCEPCT</button>
+            </div>
+        </div>
+    </div>
+<!----------------------------------------------------------------------------------------------DETAILS MODAL-------------------------------------------------------------->
+<div class="modal fade" id="attendance_detail" tabindex="-1" role="dialog" aria-labelledby="eattendance_detailLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="attendance_detailLabel">{{selected_payroll_value.agent_name}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="modal-body d-flex justify-content-center">
+                    <div class="p-2">
+                        <table style="width: 100%;" class="table table-hover">
+                            <thead class="thead-dark">
+                                <th>DATE</th>
+                                <th>SCHEDULED</th>
+                                <th>WORKED</th>
+                                <th>BALANCE</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let at of show_attendances table-hover" [ngClass]="{'table-danger':(at.balance === 'JANP' || at.balance === 'NS' || at.balance === 'LOA'), 'table-success':at.balance > 0,
+                         'table-info':(at.balance === 'OFF' || at.balance === 'VAC' || at.balance === 'JAP'), 
+                         'table-light':at.balance === '0', 'table-warning':at.balance < 0}">
+                                    <td>{{at.date}}</td>
+                                    <td>{{at.scheduled}}</td>
+                                    <td>{{at.worked_time}}</td>
+                                    <td>{{at.balance}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-md-12">
+                <div class="col-md-3">
+                    <label>TOTAL +/-:</label>
+                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_hours"
+                        *ngIf="selected_payroll_value.discounted_hours <= 0" [disabled]="true">
+                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.ot_hours"
+                        *ngIf="selected_payroll_value.ot_hours > 0" [disabled]="true">
+                </div>
+                <div class="col-md-3">
+                    <label>REGULAR:</label>
+                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_days" [disabled]="true">
+                </div>
+                <div class="col-md-3">
+                    <label>SEVENTH:</label>
+                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.seventh" [disabled]="true">
+                </div>
+                <div class="col-md-3">
+                    <label>TOTAL:</label>
+                    <input type="text" class="form-control"
+                        [(ngModel)]="selected_payroll_value.total_days" [disabled]="true">
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-right mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>

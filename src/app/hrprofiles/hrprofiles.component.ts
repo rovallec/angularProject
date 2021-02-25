@@ -949,12 +949,17 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.insertProc(this.actuallProc).subscribe((str: string) => {
       switch (this.actuallProc.name) {
         case 'Termination':
+          let proc:hrProcess = new hrProcess;
+          proc.idhr_process = str;
           this.actualTerm.id_process = str;
           this.apiService.insertTerm(this.actualTerm).subscribe((str: string) => {
             if(str == "1"){
             this.cancelView();
             }else{
               window.alert("An error has occured:\n" + str.split("|")[1]);
+              proc.notes = this.actuallProc.descritpion + "|" + ("An error has occured:" + str.split("|")[1]);
+              console.log(proc);
+              this.apiService.updatehr_process(proc).subscribe((str:string)=>{});
             }
           })
           break;
