@@ -1197,11 +1197,15 @@ export class advances_acc{
 
 export class Fecha{
     today: string;    
-    constructor() {
+
+    getToday(): string {
         let fecha: Date = new Date();
         let dd: string = String(fecha.getDate()).padStart(2,'0');
         let mm: string = String(fecha.getMonth() + 1).padStart(2, '0');
         let yyyy: string = fecha.getFullYear().toString();
-        this.today = (yyyy + '-' + mm + '-' + dd);
+        return (yyyy + '-' + mm + '-' + dd);
+    }
+    constructor() {
+        this.today = this.getToday();
     }
 }
