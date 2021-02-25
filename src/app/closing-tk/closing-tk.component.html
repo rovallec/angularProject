@@ -164,9 +164,9 @@
                 <div class="col-md-3">
                     <label>TOTAL +/-:</label>
                     <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_hours"
-                        *ngIf="selected_payroll_value.discounted_hours <= 0" [disabled]="true">
+                        *ngIf="selected_payroll_value.hrs <= 0" [disabled]="true">
                     <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.ot_hours"
-                        *ngIf="selected_payroll_value.ot_hours > 0" [disabled]="true">
+                        *ngIf="selected_payroll_value.hrs > 0" [disabled]="true">
                 </div>
                 <div class="col-md-3">
                     <label>REGULAR:</label>
