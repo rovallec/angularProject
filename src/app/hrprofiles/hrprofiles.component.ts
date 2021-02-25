@@ -9,12 +9,13 @@ import { users } from '../users';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
 import { Time, TranslationWidth } from '@angular/common';
-import { ThrowStmt } from '@angular/compiler';
+import { isEmptyExpression, ThrowStmt } from '@angular/compiler';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { time } from 'console';
 import { parse } from 'querystring';
 import { Z_STREAM_END } from 'zlib';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { exit } from 'process';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -532,9 +533,11 @@ export class HrprofilesComponent implements OnInit {
     this.actualTerm = new terminations;
     this.actualReport = new reports;
     this.actuallProc = new process;
+    this.actualRise = new rises;
+    this.actualAdvance = new advances;
     this.apiService.getPeriods().subscribe((p: periods[]) => {
       this.actualPeriod = p[p.length -1];
-    })
+    })    
   }
 
   setLeave() {
@@ -877,9 +880,12 @@ export class HrprofilesComponent implements OnInit {
         this.actuallProc.descritpion = null;
         break;
       case 'Advance':
+          this.actuallProc = new process;
           this.actuallProc.status = 'PENDING';
           break;
       case 'Rise':
+        this.actualRise = new rises;
+        this.actualRise.new_position = this.workingEmployee.job;
         this.actualRise.old_position = this.workingEmployee.job;
         break;
       case 'Pay Vacations':
@@ -946,6 +952,8 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertProc() {
+    let Abort: AbortController = new AbortController;
+    
     this.apiService.insertProc(this.actuallProc).subscribe((str: string) => {
       switch (this.actuallProc.name) {
         case 'Termination':
@@ -972,25 +980,44 @@ export class HrprofilesComponent implements OnInit {
         case 'Advance':
           this.actualAdvance.id_process = str;          
           this.apiService.insertAdvances(this.actualAdvance).subscribe((str: string) => {
-            if (str=="1"){                            
+            if (str.split("|")[0]=="1"){   
+              window.alert("Action successfuly recorded.");                         
               this.cancelView();           
             } else {
-              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+              window.alert("An error has occured:\n" + str.split("|")[1]);
+                console.log(str.split("|")[0]);
             }
           })
           break;
         case 'Rise':
+          let end:boolean = false;
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
           this.actualRise.old_salary = (Number(this.workingEmployee.productivity_payment) + Number(this.workingEmployee.base_payment)).toFixed(2);
           this.actualRise.new_productivity_payment = (Number(this.actualRise.new_salary) - Number(this.workingEmployee.base_payment)).toFixed(2);
-          this.apiService.insertRise(this.actualRise).subscribe((_str: string) => {
-              if (str=="1"){
-              this.cancelView();
+          try {
+            if (isNullOrUndefined(this.actualRise.approved_date) || isNullOrUndefined(this.actualRise.approved_by) ||
+              isNullOrUndefined(this.actualRise.effective_date) || isNullOrUndefined(this.actualRise.trial_start) || isNullOrUndefined(this.actualRise.trial_end)) {
+              throw new Error('Incomplete data.');
+            } else {
+              end = false;
+            }
+          } catch (error) {
+            window.alert(error);
+            end = true;
+          }
+
+          if(!end) {
+            this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
+              if (str.split("|")[0]=="1"){
+                window.alert("Action successfuly recorded.");
+                this.cancelView();
               } else {
-                window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+                window.alert("An error has occured:\n" + str.split("|")[1]);
+                console.log(str.split("|")[0]);
               }
-          })
+            })        
+          }
           break;
         case 'Call Tracker':
           this.actualCallTracker.id_process = str;
