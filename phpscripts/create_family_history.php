@@ -22,10 +22,10 @@ header('Access-Control-Allow-Headers: *');
             $sql = "INSERT INTO `families`(`id_profile`, `first_name`, `second_name`,`first_last_name`, `second_last_name`, `phone`, `relationship`, `birthdate`)
                     VALUES ('{$r_val_id_profile}','{$r_val_first_name}','{$r_val_second_name}','{$r_val_first_last_name}','{$r_val_second_last_name}','{$r_val_phone}','{$r_val_relationship}','{$r_val_birthdate}');";
             if(mysqli_query($con,$sql)){					
-                http_response_code(200);
+                echo(json_encode("1|1"));
             }else{
-                http_response_code(422);
-                echo($sql);
+                $error = $sql . "|" . mysqli_error($con);
+                echo(json_encode($error));
             }
         }
     }
