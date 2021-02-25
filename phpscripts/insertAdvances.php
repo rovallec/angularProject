@@ -13,11 +13,9 @@ $classification = ($request->classification);
 $amount = ($request->amount);
 
 $sql = "INSERT INTO `advances` (`idadvances`, `id_process`, `type`, `description`, `classification`, `amount`) VALUES (NULL, '$id_process', '$type', '$description', '$classification', '$amount');";
-if(mysqli_query($con,$sql)){
-  http_response_code(200);
-  echo("1");
-}else{
-  http_response_code(400);
+if(mysqli_query($con,$sql)){  
+  echo(json_encode("1|1"));
+}else{  
   $error = $sql . "|" . mysqli_error($con);
   echo(json_encode($error));
 }
