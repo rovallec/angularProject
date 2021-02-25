@@ -1232,6 +1232,7 @@ export class payroll_values_gt{
     account_name:string = null;
     agent_status:string = null;
     total_days:string = null;
+    hrs:number = null;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;
@@ -1252,5 +1253,6 @@ export class payroll_values_gt{
         this.agent_name = null;
         this.account_name = null;
         this.agent_status = null;
+        this.hrs = null;
     }
 }

@@ -308,6 +308,7 @@ export class ClosingTkComponent implements OnInit {
                       payroll_value.ot_hours = "0";
                       payroll_value.discounted_hours = discounted_hours.toString();
                     }
+                    payroll_value.hrs = discounted_hours;
                     payroll_value.agent_status = emp[0].status;
                     payroll_value.seventh = sevenths.toString();
 
