@@ -6,11 +6,13 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$idhr_process = ($request->idhr_processes);
+$idhr_process = ($request->idhr_process);
 $status = ($request->status);
 $notes = ($request->notes);
 
-$sql = "UPDATE hr_processes SET status = '$status', notes = '$notes' WHERE idhr_processes = $idhr_process;";
+$notes = str_replace('\'', " ",$notes);
+
+$sql = "UPDATE hr_processes SET notes = '$notes' WHERE idhr_processes = $idhr_process;";
 
 if(mysqli_query($con,$sql)){
 	http_response_code(204);
