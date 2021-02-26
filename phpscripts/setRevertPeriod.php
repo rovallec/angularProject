@@ -47,7 +47,7 @@ try {
     throw new Exception($error);
   }
 
-  $sql2 =  "SELECT COUNT(start) AS count FROM periods WHERE START = $v_start";
+  $sql2 = "SELECT COUNT(*) AS count FROM periods WHERE idperiods = $id_period AND type_period = 0";
   if ($result2 = $transact->query($sql2)) {
     $row2 = $result2->fetch_assoc();
     $count = $row2['count'];
@@ -58,40 +58,29 @@ try {
   }
   
   if ($count = 0) {
-    $sql3 =  "INSERT INTO periods (idperiods, start, end, status, tyipe_period) VALUES (NULL, $v_start, $v_end_day, 1, 0);";
-    if ($result3 = $transact->query($sql3)) {
-      $lastInsert = $conn->insert_id;
-      $v_new_id_period = $lastInsert;
-    } else {
-      $error =  mysqli_error($transact);
-      echo("<br>Error 2: " . $error . "<br>");
-      throw new Exception($error);
-    }
-
-    $sql5 =  "SELECT " .
+    $sql3 =  "SELECT " .
                 "  attendence_adjustemnt.idattendence_adjustemnt, " .
                 "  attendence_justifications.id_process " .
                 "from attendence_adjustemnt " .
                 "  INNER JOIN attendence_justifications ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification " .
                 "  INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process " .
-                "WHERE hr_processes.date BETWEEN $v_start AND $v_end_day " .
-                "  AND attendence_adjustemnt.state = 'PENDING';";
+                "WHERE hr_processes.id_period = $id_period " .
+                "  AND attendence_adjustemnt.state = 'CCOMPLETED';";
 
-    if ($result5 = $transact->query($sql5)) {
-      while($row5 = $result->fetch_assoc()){
-        $v_idattendence_adjustement = $row5['idattendence_adjustemnt'];
-        $v_id_process = $row5['id_process'];
+    if ($result3 = $transact->query($sql3)) {
+      while($row3 = $result->fetch_assoc()){
+        $v_idattendence_adjustement = $row3['idattendence_adjustemnt'];
+        $v_id_process = $row3['id_process'];
 
-        $sql6 = "UPDATE hr_processes SET " .
-                "status = 'COMPLETED', " .
-                "notes = CONCAT( 'CLOSED ON END OF PERIOD ' $v_end ,' | ', notes), " .
-                "id_period = $id_period " .
+        $sql4 = "UPDATE hr_processes SET " .
+                "status = 'PENDING', " .                
+                "id_period = NULL " .
                 "WHERE idhr_processes = $v_id_process; ";   
-        $sql7 = "UPDATE attendence_adjustemnt SET  " .
-                "state =  'COMPLETED' " .
+        $sql5 = "UPDATE attendence_adjustemnt SET  " .
+                "state =  'PENDING' " .
                 "WHERE idattendence_adjustemnt = $v_idattendence_adjustement;";
-        if ($result6 = $transact->query($sql6)) {
-          if ($result7 = $transact->query($sql7)) {
+        if ($result4 = $transact->query($sql4)) {
+          if ($result5 = $transact->query($sql5)) {
             // Proceso ejecutado correctamente, no es necesario hacer nada.
           } else {
             $error =  mysqli_error($transact);
@@ -110,22 +99,21 @@ try {
       throw new Exception($error);
     }
     
-    $sql8 = "SELECT distinct(hr_processes.idhr_processes) FROM vacations " .
+    $sql6 = "SELECT distinct(hr_processes.idhr_processes) FROM vacations " .
             "INNER JOIN hr_processes ON hr_processes.idhr_processes = vacations.id_process " .
-            "WHERE hr_processes.status = 'PENDING' " .
-            "AND vacations.date <= $v_end " .
-            "AND hr_processes.date <= $v_end;";
+            "WHERE hr_processes.status = 'COMPLETED' " .            
+            "AND hr_processes.id_period = $id_period;";
    
-    if ($result8 = $transact->query($sql8)) {
-      while($row8 = $result->fetch_assoc()){
-        $id_process = $row8['idhr_processes'];
+    if ($result6 = $transact->query($sql6)) {
+      while($row6 = $result->fetch_assoc()){
+        $id_process = $row6['idhr_processes'];
         $v_id_process = $id_process;
-        $sql9 = "UPDATE hr_processes SET " .
-                "status = 'COMPLETED', notes = CONCAT( 'CLOSED ON END OF PERIOD' ,' | ', notes), " .
-                "id_period = $id_period " .
+        $sql7 = "UPDATE hr_processes SET " .
+                "status = 'PENDING', " .
+                "id_period = NULL " .
                 "WHERE idhr_processes = $v_id_process;";
 
-        if ($result9 = $transact->query($sql9)) {
+        if ($result7 = $transact->query($sql7)) {
           // Proceso ejecutado correctamente, no es necesario hacer nada.
         } else {
           $error =  mysqli_error($transact);
@@ -139,11 +127,8 @@ try {
       throw new Exception($error);
     }
 
-    $sql10 =  "INSERT INTO payments (idpayments, id_employee, id_paymentmethod, id_period, credits, debits, date) " .
-              "SELECT NULL, idemployees, idpayment_methods, $v_new_id_period AS ID_PERIOD, '0.00', '0.00', null FROM payment_methods " .
-              "  INNER JOIN employees ON employees.idemployees = payment_methods.id_employee " .
-              "WHERE predeterm = 1 AND active = 1;";
-    if ($result10 = $transact->query($sql10)) {
+    $sql8 = "DELETE FROM payments where id_period = $id_period;";
+    if ($result8 = $transact->query($sql8)) {
       // Proceso ejecutado correctamente, no es necesario hacer nada.
     } else {
       $error =  mysqli_error($transact);
@@ -152,54 +137,46 @@ try {
     }
   }
   
-  $sql13 = "SELECT DISTINCT Z.idhr_processes FROM ( " .
+  $sql9 = "SELECT DISTINCT Z.idhr_processes FROM ( " .
   "  SELECT a.idhr_processes FROM hr_processes a " .
   "    INNER JOIN vacations b ON (a.idhr_processes = b.id_process) " .
-  "  WHERE a.date <= $v_end  " .
-  "    AND b.date <= $v_end " .
-  "    AND a.status NOT IN('COMPLETED', 'DISMISSED') " .
+  "  WHERE a.id_period = $id_period " .
+  "    AND a.status IN('COMPLETED', 'DISMISSED') " .
   "    AND a.id_type = 4 " .
   "  UNION                            " .
   "  SELECT a.idhr_processes FROM hr_processes a " .
   "    INNER JOIN leaves b ON (a.idhr_processes = b.id_process) " .
-  "  WHERE a.date <= $v_end " .
-  "    AND b.end <= $v_end " .
-  "    AND a.status NOT IN('COMPLETED', 'DISMISSED') " .
+  "  WHERE a.id_period = $id_period " .
+  "    AND a.status IN('COMPLETED', 'DISMISSED') " .
   "    AND a.id_type = 5 " .
   "  UNION  " .
   "  SELECT a.idhr_processes FROM hr_processes a " .
   "    INNER JOIN disciplinary_requests b  ON ( a.idhr_processes = b.id_process ) " .
   "    INNER JOIN disciplinary_processes c ON (b.iddisciplinary_requests = c.id_request) " .
   "    INNER JOIN  suspensions d ON (c.iddisciplinary_processes = d.id_disciplinary_process) " .
-  "  WHERE a.date <= $v_end " .
-  "    AND (d.day_1 <= $v_end " .
-  "      AND d.day_2 <= $v_end " .
-  "      AND d.day_3 <= $v_end " .
-  "      AND d.day_4 <= $v_end) " .
-  "    AND a.status <> 'COMPLETED' " .
+  "  WHERE a.id_period = $id_period " .
+    "    AND a.status = 'COMPLETED' " .
   "    AND a.id_type = 6 " .
   "  UNION  " .
   "  SELECT a.idhr_processes FROM hr_processes a " .
   "    INNER JOIN attendence_justifications b ON (a.idhr_processes = b.id_process) " .
   "    INNER JOIN attendence_adjustemnt c ON (b.idattendence_justifications = c.id_justification) " .
   "    INNER JOIN attendences d on (c.id_attendence = d.idattendences) " .
-  "  WHERE a.status != 'COMPLETED' " .
-  "    AND a.date <= $v_end " .
-  "    AND d.date <= $v_end " .
+  "  WHERE a.status = 'COMPLETED' " .
+  "    AND a.id_period = $id_period " .  
   "    AND a.id_type = 2 " .
   ") AS Z;";
 
-  if ($result13 = $transact->query($sql13)) {
-    while($row13 = $result13->fetch_assoc()){
-      $idhr_processes = $row13['idhr_processes'];
+  if ($result9 = $transact->query($sql9)) {
+    while($row9 = $result9->fetch_assoc()){
+      $idhr_processes = $row9['idhr_processes'];
 
-      $sql14 = "UPDATE `hr_processes` SET `status` = 'COMPLETED', `notes` = CONCAT( 'CLOSED ON END OF PERIOD' ,' | ', `notes`), id_period = $id_period WHERE `hr_processes`.`idhr_processes` = $idhr_processes;";
-      if ($result14 = $transact->query($sql14)) {
-        $message = "<br>Info:  |<br>The period was successfully reversed.";  
-        echo(json_encode($message));
+      $sql10 = "UPDATE `hr_processes` SET `status` = 'PENDING', id_period = NULL WHERE `hr_processes`.`idhr_processes` = $idhr_processes;";
+      if ($result10 = $transact->query($sql10)) {
+        // No es necesario hacer nada.
       } else {
         $error =  mysqli_error($transact);
-        echo("<br>Error 15: " . $error . "<br>");
+        echo("<br>Error 10: " . $error . "<br>");
         throw new Exception($error);
       }
     }
@@ -207,30 +184,29 @@ try {
     echo(json_encode($message));
   } else {
     $error =  mysqli_error($transact);
-    echo("<br>Error 12: " . $error . "<br>");
+    echo("<br>Error 9: " . $error . "<br>");
     throw new Exception($error);
   }
   
-  $sql15 = "UPDATE periods SET STATUS = 0 WHERE idperiods = $id_period;";
-  if ($result15 = $transact->query($sql15)) {
+  $sql11 = "UPDATE periods SET STATUS = 1 WHERE idperiods = $id_period;";
+  if ($result11 = $transact->query($sql11)) {
     $message = "<br>Info:  |<br>The period was successfully reversed.";  
     echo(json_encode($message));
   } else {
     $error =  mysqli_error($transact);
-    echo("<br>Error 12: " . $error . "<br>");
+    echo("<br>Error 11: " . $error . "<br>");
     throw new Exception($error);
   }
 
-  if(!$result1 || !$result2 || !$result3 || !$result5 || !$result6 || !$result7 ||
-    !$result8 || !$result9 || !$result10 || !$result11 || !$result12 || !$result13 ||
-    !$result14) 
+  if(!$result1 || !$result2 || !$result3 || !$result4 || !$result5 || !$result6 || 
+    !$result7 || !$result8 || !$result9 || !$result10 || !$result11)
   {
     $transact->rollback();
   } else {
     $transact->commit();
   }
-} catch(\Throwable $e) {  
-  $error = "<br>Error:  |<br>The period could not be closed due to the following error: |" . $e->getMessage() . "|<br>The changes will be reversed.";  
+} catch(\Throwable $e) {
+  $error = "<br>Error:  |<br>The period could not be reversed due to the following error: |" . $e->getMessage() . "|<br>The changes will be reversed.";  
   echo(json_encode($error));
   $transact->rollback();
 }
