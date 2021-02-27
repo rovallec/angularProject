@@ -6,7 +6,7 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$id_period = ($request->idperiods);
+$id_period = ($request->id_period);
   
   $v_start = '1899-01-01';
   $v_end_day = '1899-01-01';
@@ -38,8 +38,7 @@ try {
         $year = $year + 1;
         $end_day = $year . "-" . $month . "-15";
       }
-    }
-    echo("Prueba error: " .$end_day);
+    }    
     $v_end_day = $end_day;
   } else {
     $error =  mysqli_error($transact);
@@ -59,7 +58,7 @@ try {
   
   if ($count = 0) {
     $sql3 =  "INSERT INTO periods (idperiods, start, end, status, tyipe_period) VALUES (NULL, $v_start, $v_end_day, 1, 0);";
-    if ($result3 = $transact->query($sql3)) {
+    if ($transact->query($sql3) === true) {
       $lastInsert = $conn->insert_id;
       $v_new_id_period = $lastInsert;
     } else {
@@ -78,7 +77,7 @@ try {
                 "  AND attendence_adjustemnt.state = 'PENDING';";
 
     if ($result5 = $transact->query($sql5)) {
-      while($row5 = $result->fetch_assoc()){
+      while($row5 = $result5->fetch_assoc()){
         $v_idattendence_adjustement = $row5['idattendence_adjustemnt'];
         $v_id_process = $row5['id_process'];
 
@@ -90,8 +89,8 @@ try {
         $sql7 = "UPDATE attendence_adjustemnt SET  " .
                 "state =  'COMPLETED' " .
                 "WHERE idattendence_adjustemnt = $v_idattendence_adjustement;";
-        if ($result6 = $transact->query($sql6)) {
-          if ($result7 = $transact->query($sql7)) {
+        if ($transact->query($sql6) === true) {
+          if ($transact->query($sql7) === true) {
             // Proceso ejecutado correctamente, no es necesario hacer nada.
           } else {
             $error =  mysqli_error($transact);
@@ -125,7 +124,7 @@ try {
                 "id_period = $id_period " .
                 "WHERE idhr_processes = $v_id_process;";
 
-        if ($result9 = $transact->query($sql9)) {
+        if ($transact->query($sql9) === true) {
           // Proceso ejecutado correctamente, no es necesario hacer nada.
         } else {
           $error =  mysqli_error($transact);
@@ -134,7 +133,7 @@ try {
         }
       }
     } else {
-      $error =  mysqli_error($transact);
+      $error = mysqli_error($transact);
       echo("<br>Error 7: " . $error . "<br>");
       throw new Exception($error);
     }
@@ -143,7 +142,7 @@ try {
               "SELECT NULL, idemployees, idpayment_methods, $v_new_id_period AS ID_PERIOD, '0.00', '0.00', null FROM payment_methods " .
               "  INNER JOIN employees ON employees.idemployees = payment_methods.id_employee " .
               "WHERE predeterm = 1 AND active = 1;";
-    if ($result10 = $transact->query($sql10)) {
+    if ($transact->query($sql10) === true) {
       // Proceso ejecutado correctamente, no es necesario hacer nada.
     } else {
       $error =  mysqli_error($transact);
@@ -194,8 +193,8 @@ try {
       $idhr_processes = $row13['idhr_processes'];
 
       $sql14 = "UPDATE `hr_processes` SET `status` = 'COMPLETED', `notes` = CONCAT( 'CLOSED ON END OF PERIOD' ,' | ', `notes`), id_period = $id_period WHERE `hr_processes`.`idhr_processes` = $idhr_processes;";
-      if ($result14 = $transact->query($sql14)) {
-        $message = "<br>Info:  |<br>The period was successfully reversed.";  
+      if ($transact->query($sql14) === true) {
+        // No es necesario hacer nada.
         echo(json_encode($message));
       } else {
         $error =  mysqli_error($transact);
@@ -203,8 +202,6 @@ try {
         throw new Exception($error);
       }
     }
-    $message = "<br>Info:  |<br>The period was successfully reversed.";  
-    echo(json_encode($message));
   } else {
     $error =  mysqli_error($transact);
     echo("<br>Error 12: " . $error . "<br>");
@@ -212,22 +209,21 @@ try {
   }
   
   $sql15 = "UPDATE periods SET STATUS = 0 WHERE idperiods = $id_period;";
-  if ($result15 = $transact->query($sql15)) {
-    $message = "<br>Info:  |<br>The period was successfully reversed.";  
-    echo(json_encode($message));
+  if ($transact->query($sql15) === true) {
+    // No es necesario hacer nada.
   } else {
     $error =  mysqli_error($transact);
     echo("<br>Error 12: " . $error . "<br>");
     throw new Exception($error);
   }
 
-  if(!$result1 || !$result2 || !$result3 || !$result5 || !$result6 || !$result7 ||
-    !$result8 || !$result9 || !$result10 || !$result11 || !$result12 || !$result13 ||
-    !$result14) 
+  if(!$result1 || !$result2 || !$result5 || !$result8 || !$result13 )
   {
     $transact->rollback();
   } else {
     $transact->commit();
+    $message = "<br>Info:|<br>The period was successfully closed.";
+    echo(json_encode($message));
   }
 } catch(\Throwable $e) {  
   $error = "<br>Error:  |<br>The period could not be closed due to the following error: |" . $e->getMessage() . "|<br>The changes will be reversed.";  

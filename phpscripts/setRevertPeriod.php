@@ -6,7 +6,7 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$id_period = ($request->idperiods);
+$id_period = ($request->id_period);
   
   $v_start = '1899-01-01';
   $v_end_day = '1899-01-01';
@@ -79,8 +79,8 @@ try {
         $sql5 = "UPDATE attendence_adjustemnt SET  " .
                 "state =  'PENDING' " .
                 "WHERE idattendence_adjustemnt = $v_idattendence_adjustement;";
-        if ($result4 = $transact->query($sql4)) {
-          if ($result5 = $transact->query($sql5)) {
+        if ($transact->query($sql4) === true) {
+          if ($transact->query($sql5) === true) {
             // Proceso ejecutado correctamente, no es necesario hacer nada.
           } else {
             $error =  mysqli_error($transact);
@@ -105,7 +105,7 @@ try {
             "AND hr_processes.id_period = $id_period;";
    
     if ($result6 = $transact->query($sql6)) {
-      while($row6 = $result->fetch_assoc()){
+      while($row6 = $result6->fetch_assoc()){
         $id_process = $row6['idhr_processes'];
         $v_id_process = $id_process;
         $sql7 = "UPDATE hr_processes SET " .
@@ -113,7 +113,7 @@ try {
                 "id_period = NULL " .
                 "WHERE idhr_processes = $v_id_process;";
 
-        if ($result7 = $transact->query($sql7)) {
+        if ($transact->query($sql7) === true) {
           // Proceso ejecutado correctamente, no es necesario hacer nada.
         } else {
           $error =  mysqli_error($transact);
@@ -128,7 +128,7 @@ try {
     }
 
     $sql8 = "DELETE FROM payments where id_period = $id_period;";
-    if ($result8 = $transact->query($sql8)) {
+    if ($transact->query($sql8) === true) {
       // Proceso ejecutado correctamente, no es necesario hacer nada.
     } else {
       $error =  mysqli_error($transact);
@@ -172,16 +172,14 @@ try {
       $idhr_processes = $row9['idhr_processes'];
 
       $sql10 = "UPDATE `hr_processes` SET `status` = 'PENDING', id_period = NULL WHERE `hr_processes`.`idhr_processes` = $idhr_processes;";
-      if ($result10 = $transact->query($sql10)) {
+      if ($transact->query($sql10) === true) {
         // No es necesario hacer nada.
       } else {
         $error =  mysqli_error($transact);
         echo("<br>Error 10: " . $error . "<br>");
         throw new Exception($error);
       }
-    }
-    $message = "<br>Info:  |<br>The period was successfully reversed.";  
-    echo(json_encode($message));
+    }    
   } else {
     $error =  mysqli_error($transact);
     echo("<br>Error 9: " . $error . "<br>");
@@ -189,21 +187,21 @@ try {
   }
   
   $sql11 = "UPDATE periods SET STATUS = 1 WHERE idperiods = $id_period;";
-  if ($result11 = $transact->query($sql11)) {
-    $message = "<br>Info:  |<br>The period was successfully reversed.";  
-    echo(json_encode($message));
+  if ($transact->query($sql11) === true) {
+    // no es necesario hacer nada.
   } else {
     $error =  mysqli_error($transact);
     echo("<br>Error 11: " . $error . "<br>");
     throw new Exception($error);
   }
 
-  if(!$result1 || !$result2 || !$result3 || !$result4 || !$result5 || !$result6 || 
-    !$result7 || !$result8 || !$result9 || !$result10 || !$result11)
+  if(!$result1 || !$result2 || !$result3 || !$result6 || !$result9)
   {
     $transact->rollback();
   } else {
     $transact->commit();
+    $message = "<br>Info:|<br>The period was successfully reversed.";  
+    echo(json_encode($message));
   }
 } catch(\Throwable $e) {
   $error = "<br>Error:  |<br>The period could not be reversed due to the following error: |" . $e->getMessage() . "|<br>The changes will be reversed.";  
