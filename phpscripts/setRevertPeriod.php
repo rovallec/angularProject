@@ -8,45 +8,17 @@ $request = json_decode($postdata);
 
 $id_period = ($request->id_period);
   
-  $v_start = '1899-01-01';
-  $v_end_day = '1899-01-01';
-  $v_id_process = 0;
-  $v_idattendence_adjustement = 0;
-  $v_new_id_period = 0;
-  
-  $sql1 = "SELECT start, end, DAY(start) AS day, MONTH(start) AS month, YEAR(start) AS year, LAST_DAY(start) AS end_day FROM periods WHERE idperiods = $id_period;";
-  
-$transact->begin_transaction();
-try {
-  if ($result1 = $transact->query($sql1)) {
-    $row1 = $result1->fetch_assoc();
-    $v_start = $row1['start'];
-    $v_end = $row1['end'];
-    $day = $row1['day'];
-    $month = $row1['month'];
-    $year = $row1['year'];
+$v_start = '1899-01-01';  
+$v_id_process = 0;
+$v_idattendence_adjustement = 0;
+$v_new_id_period = 0;
+$result3 = true;
+$result6 = true;
+$result9 = true;
 
-    if ($day < 16) {
-      $day = 16;
-    } else {
-      $end_day = $year . "-" . $month . "-15";
 
-      if ($month !=12) {
-        $month = $month + 1;
-      } else {
-        $month = 1;
-        $year = $year + 1;
-        $end_day = $year . "-" . $month . "-15";
-      }
-    }
-    echo("Prueba error: " .$end_day);
-    $v_end_day = $end_day;
-  } else {
-    $error =  mysqli_error($transact);
-    echo("<br>Error 1: " . $error . "<br>");
-    throw new Exception($error);
-  }
-
+try 
+{
   $sql2 = "SELECT COUNT(*) AS count FROM periods WHERE idperiods = $id_period AND type_period = 0";
   if ($result2 = $transact->query($sql2)) {
     $row2 = $result2->fetch_assoc();
@@ -68,7 +40,7 @@ try {
                 "  AND attendence_adjustemnt.state = 'CCOMPLETED';";
 
     if ($result3 = $transact->query($sql3)) {
-      while($row3 = $result->fetch_assoc()){
+      while($row3 = $result3->fetch_assoc()){
         $v_idattendence_adjustement = $row3['idattendence_adjustemnt'];
         $v_id_process = $row3['id_process'];
 
@@ -195,16 +167,16 @@ try {
     throw new Exception($error);
   }
 
-  if(!$result1 || !$result2 || !$result3 || !$result6 || !$result9)
+  if(!$result2 || !$result3 || !$result6 || !$result9)
   {
     $transact->rollback();
   } else {
     $transact->commit();
-    $message = "<br>Info:|<br>The period was successfully reversed.";  
+    $message = "Info:|The period was successfully reversed.| | ";  
     echo(json_encode($message));
   }
 } catch(\Throwable $e) {
-  $error = "<br>Error:  |<br>The period could not be reversed due to the following error: |" . $e->getMessage() . "|<br>The changes will be reversed.";  
+  $error = "Error:  |The period could not be reversed due to the following error: |" . $e->getMessage() . "|The changes will be reversed.";  
   echo(json_encode($error));
   $transact->rollback();
 }

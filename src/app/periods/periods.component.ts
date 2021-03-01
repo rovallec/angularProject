@@ -704,7 +704,7 @@ export class PeriodsComponent implements OnInit {
             if (str.split("|")[0] == 'Info:') {
               window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
               this.loading = false;
-              this.getHome();
+              this.start();
 
             } else {
               window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
@@ -719,11 +719,11 @@ export class PeriodsComponent implements OnInit {
   };
 
   revertClosePeriod() {    
-    this.apiService.setClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
+    this.apiService.setRevertClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
       if (str.split("|")[0] == 'Info:') {
         window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
         this.loading = false;
-        this.getHome();
+        this.start();
 
       } else {
         window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
