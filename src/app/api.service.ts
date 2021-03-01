@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, employees_terminations, advances_acc, payroll_values_gt } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, employees_terminations, advances_acc, payroll_values_gt, paid_attendances } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -730,7 +730,19 @@ getAdvancesAcc(emp:employees){
 }
 
 insertPayroll_values_gt(py:payroll_values_gt[]){
-  return this.httpClient.post<payroll_values_gt[]>(`${this.PHP_API_SERVER}/phpscripts/insertPayroll_values_gt.php`, py);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPayroll_values_gt.php`, py);
+}
+
+getPayroll_values_gt(period:periods){
+  return this.httpClient.post<payroll_values_gt[]>(`${this.PHP_API_SERVER}/phpscripts/getPayroll_values_gt.php`, period);
+}
+
+insertPaidAttendances_gt(paid_attendances:paid_attendances[]){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertPaidAttendances.php`, paid_attendances);
+}
+
+getPaidAttendances(period:periods){
+  return this.httpClient.post<paid_attendances[]>(`${this.PHP_API_SERVER}/phpscripts/getPaidAttendances_gt.php`, period);
 }
 
   constructor(private httpClient:HttpClient) { }
