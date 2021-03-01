@@ -1256,3 +1256,22 @@ export class payroll_values_gt{
         this.hrs = null;
     }
 }
+
+export class paid_attendances{
+    idpaid_attendances:string;
+    id_payroll_value:string;
+    date:string;
+    scheduled:string;
+    worked:string;
+    balance:string;
+    id_employee:string;
+    constructor(){
+        this.idpaid_attendances = null;
+        this.id_payroll_value = null;
+        this.date = null;
+        this.scheduled = null;
+        this.worked = null;
+        this.balance = null;
+        this.id_employee = null;
+    }
+}

@@ -7,13 +7,11 @@
                             class="fas fa-ban"></i></button>
                 </div>
                 <div class="p-2" *ngIf="actualPeriod.status != '3'">
-                    <button class="btn btn-outline-warning"
-                            data-toggle="modal"
-                            data-target="#alert_modal"><i class="far fa-save"></i></button>
+                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"><i
+                            class="far fa-save"></i></button>
                 </div>
                 <div class="p-2" *ngIf="actualPeriod.status == '3'">
-                    <button class="btn btn-outline-warning"><i
-                            class="far fa-save"></i></button>
+                    <button class="btn btn-outline-warning"><i class="far fa-save"></i></button>
                 </div>
                 <div class="p-2">
                     <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"><i
@@ -121,10 +119,12 @@
             </div>
             <div class="modal-footer d-flex justify-content-between mt-2">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCEL</button>
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="saveClosing()">ACCEPCT</button>
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                    (click)="saveClosing()">ACCEPCT</button>
             </div>
         </div>
     </div>
+</div>
 <!----------------------------------------------------------------------------------------------DETAILS MODAL-------------------------------------------------------------->
 <div class="modal fade" id="attendance_detail" tabindex="-1" role="dialog" aria-labelledby="eattendance_detailLabel"
     aria-hidden="true">
@@ -170,16 +170,18 @@
                 </div>
                 <div class="col-md-3">
                     <label>REGULAR:</label>
-                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_days" [disabled]="true">
+                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_days"
+                        [disabled]="true">
                 </div>
                 <div class="col-md-3">
                     <label>SEVENTH:</label>
-                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.seventh" [disabled]="true">
+                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.seventh"
+                        [disabled]="true">
                 </div>
                 <div class="col-md-3">
                     <label>TOTAL:</label>
-                    <input type="text" class="form-control"
-                        [(ngModel)]="selected_payroll_value.total_days" [disabled]="true">
+                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.total_days"
+                        [disabled]="true">
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-right mt-2">

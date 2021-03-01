@@ -43,13 +43,9 @@ for ($i=0; $i < (count($request) - 1); $i++) {
            "(NULL,$id_employee, $id_reporter, $id_account, $id_period, $id_payment, '$client_id', '$nearsol_id', $discounted_days, $seventh, $discounted_hours, $ot_hours, $holidays_hours, $performance_bonus, $treasure_hunt)";
 }
 if(mysqli_query($con,$sql)){
-    $sql2 = "SELECT * FROM payroll_values WHERE id_period = $id_select_period";
-    if($result =mysqli_query($con,$sql)){
-    while($row = mysqli_fetch_assoc($result)){
-            $r[$i] = $row;
-            $i++;
-    }
-    echo(json_encode($r));
-    ]
+    echo("1");
+}else{
+    $str = $sql2 . "|" . mysqli_error($con);
+    echo(json_encode($str));
 }
 ?>
