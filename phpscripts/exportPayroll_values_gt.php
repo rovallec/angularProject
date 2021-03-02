@@ -1,6 +1,8 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
+header('Content-Type: text/csv; charset=utf-8');
+header('Content-Disposition: attachment; filename="' . "payrollValues.csv" . '"');
 require 'database.php';
 
 $postdata = file_get_contents("php://input");
