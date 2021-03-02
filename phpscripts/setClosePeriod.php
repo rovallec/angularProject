@@ -3,12 +3,11 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
-//$postdata = file_get_contents("php://input");
-//$request = json_decode($postdata);
+$postdata = file_get_contents("php://input");
+$request = json_decode($postdata);
 
-//$id_period = ($request->id_period);
-$id_period = 26;
-  
+$id_period = ($request->id_period);
+
 $v_start = '1899-01-01';
 $v_end = '1899-01-01';
 $v_end_day = '1899-01-01';

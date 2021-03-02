@@ -11,7 +11,7 @@ $id = ($request->idperiods);
 $res = [];
 $i = 0;
 
-$sql = "SELECT * FROM payroll_values WHERE id_period = $id";
+$sql = "SELECT * FROM payroll_values WHERE id_period = $id ORDER BY idpayroll_values";
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
         $res[$i]['idpayroll_values'] = $row['idpayroll_values'];

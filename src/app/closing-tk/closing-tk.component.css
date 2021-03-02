@@ -204,3 +204,40 @@ i{
  .progress-circle.p98 .value-bar { transform: rotate(353deg); }
  .progress-circle.p99 .value-bar { transform: rotate(356deg); }
  .progress-circle.p100 .value-bar { transform: rotate(360deg); }
+
+.slider{
+  position:absolute;
+  width:1000px;
+  height:25px;
+  overflow-x: hidden;
+  margin:10px 300px;
+}
+
+.line{
+  position:absolute;
+  opacity: 0.4;
+  background:#4a8df8;
+  width:150%;
+  height:25px;
+}
+
+.subline{
+  position:absolute;
+  background:#4a8df8;
+  height:25px; 
+}
+.inc{
+  animation: increase 2s infinite;
+}
+.dec{
+  animation: decrease 2s 0.5s infinite;
+}
+
+@keyframes increase {
+    from { left: -5%; width: 5%; }
+    to { left: 130%; width: 100%;}
+}
+@keyframes decrease {
+    from { left: -80%; width: 80%; }
+    to { left: 110%; width: 10%;}
+}

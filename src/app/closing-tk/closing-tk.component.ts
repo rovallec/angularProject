@@ -1,8 +1,10 @@
+import { CompileShallowModuleMetadata } from '@angular/compiler';
 import { isNull, TypeModifier } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
+import { PeriodsComponent } from "../periods/periods.component";
 import { accounts, attendences, clients, disciplinary_processes, leaves, paid_attendances, payments, payroll_values, payroll_values_gt, periods, vacations } from '../process_templates';
 
 @Component({
@@ -33,7 +35,8 @@ export class ClosingTkComponent implements OnInit {
   save_attendances: attendences[] = [];
   selected_payroll_value: payroll_values_gt = new payroll_values_gt;
   close_period: boolean = false;
-  waitForfinish: boolean = false;
+  waitForfinish: boolean = false; 
+  isClosing: boolean = false;
 
   constructor(public apiServices: ApiService) { }
 
@@ -376,7 +379,21 @@ export class ClosingTkComponent implements OnInit {
                                         att_sh.balance = paid_attendance_retrieve.balance;
                                         this.show_attendances.push(att_sh);
                                       })
-                                      window.alert("Period with values and attendances successfuly closed");
+                                      window.alert("Period with values and attendances successfuly frozen\n  Next steep: freeze processes.");
+                                      /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
+                                      if (!this.finished && !this.isLoading) {
+                                        this.isClosing = true;
+                                        this.apiServices.setClosePeriods(this.actualPeriod.idperiods).subscribe((str: string) => {
+                                          if (str.split("|")[0] == 'Info:') {
+                                            window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
+                                          } else {
+                                            const audio = new Audio('./assets/toasty.mp3');
+                                            audio.play;
+                                            window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
+                                          }                                            
+                                          this.isClosing = false;
+                                        })
+                                      }
                                       this.finished = true;
                                       this.isLoading = true;
                                     })
