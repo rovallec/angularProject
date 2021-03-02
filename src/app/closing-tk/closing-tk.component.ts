@@ -387,8 +387,6 @@ export class ClosingTkComponent implements OnInit {
                                           if (str.split("|")[0] == 'Info:') {
                                             window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
                                           } else {
-                                            const audio = new Audio('./assets/toasty.mp3');
-                                            audio.play;
                                             window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
                                           }                                            
                                           this.isClosing = false;
