@@ -26,8 +26,8 @@
                 <option *ngFor="let ac of accounts" [value]="ac.idaccounts">{{ac.name}}</option>
             </select>
         </div>
-        <div class="form-group col-md-1">
-            <i class="far fa-plus-square" (click)="addAccount()" style="margin-top: 30%; cursor:pointer;"></i>
+        <div class="d-flex justify-content-center col-md-1">
+            <button class="btn btn-outline-primary" (click)="addAccount()" style="height:50px">Add <i class="fas fa-angle-double-right"></i></button>
         </div>
         <div class="form-group col-md-8">
             <label

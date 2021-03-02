@@ -3,19 +3,20 @@
         <div class="row" style="margin-top:25px">
             <div class="d-flex justify-content-between mb-3 w-100">
                 <div class="p-2">
-                    <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'"><i
-                            class="fas fa-ban"></i></button>
+                    <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'" title="Download Attendance" (click)="exportPayroll_values()"><i
+                            class="fas fa-file-download"></i></button>
                 </div>
                 <div class="p-2" *ngIf="actualPeriod.status != '3'">
-                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"><i
+                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal" tittle="Close Period"><i
                             class="far fa-save"></i></button>
                 </div>
-                <div class="p-2" *ngIf="actualPeriod.status == '3'">
-                    <button class="btn btn-outline-warning"><i class="far fa-save"></i></button>
+                <div class="p-2">
+                    <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal" tittle="Search"><i
+                            class="fas fa-search"></i></button>
                 </div>
                 <div class="p-2">
-                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"><i
-                            class="fas fa-check"></i></button>
+                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'" title="Downlaod Payroll Values"><i
+                            class="fas fa-file-export"></i></button>
                 </div>
             </div>
         </div>
@@ -74,7 +75,7 @@
             </div>
             <div class="col-md-2"></div>
         </div>
-        <div class="row col-md-12" *ngIf="actualPeriod.status === '1'" style="margin-top:25px">
+        <div class="row col-md-12" style="margin-top:25px">
             <table class="table table-striped">
                 <thead>
                     <th>ID</th>
@@ -106,6 +107,41 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+<!----------------------------------------------------------------------------------------------SEARCH MODAL--------------------------------------------------------------->
+<div class="modal fade" id="search_modal" tabindex="-1" role="dialog" aria-labelledby="search_modal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="search_modalLabel">SEARCH</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="modal-body d-flex justify-content-between">
+                    <div class="p-2 form-group">
+                        <label>Filter:</label>
+                        <select class="form-control" [(ngModel)]="searchFilter">
+                            <option value="name">Name:</option>
+                            <option value="client_id">Client ID:</option>
+                            <option value="nearsol_id">Nearsol ID:</option>
+                        </select>
+                    </div>
+                    <div class="p-2 form-group">
+                        <label>Value:</label>
+                        <input class="form-control" [(ngModel)]="searchValue">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                    (click)="searchNow()">ACCEPCT</button>
+            </div>
         </div>
     </div>
 </div>
@@ -160,7 +196,7 @@
                             <tbody>
                                 <tr *ngFor="let at of show_attendances table-hover" [ngClass]="{'table-danger':(at.balance === 'JANP' || at.balance === 'NS' || at.balance === 'LOA'), 'table-success':at.balance > 0,
                          'table-info':(at.balance === 'OFF' || at.balance === 'VAC' || at.balance === 'JAP'), 
-                         'table-light':at.balance === '0', 'table-warning':at.balance < 0}">
+                         'table-light':at.balance === '0', 'table-warning':at.balance < 0, 'table-secondary':at.balance === 'TERM'}">
                                     <td>{{at.date}}</td>
                                     <td>{{at.scheduled}}</td>
                                     <td>{{at.worked_time}}</td>

@@ -11,7 +11,7 @@ $id = ($request->idperiods);
 $res = [];
 $i = 0;
 
-$sql = "SELECT * FROM paid_attendances INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.idpaid_attendances WHERE id_period = $id";
+$sql = "SELECT * FROM paid_attendances INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value WHERE id_period = $id";
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
         $res[$i]['id_payroll_value'] = $row['id_payroll_value'];

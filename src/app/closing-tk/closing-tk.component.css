@@ -234,10 +234,16 @@ i{
 }
 
 @keyframes increase {
-    from { left: -5%; width: 5%; }
-    to { left: 130%; width: 100%;}
+  from { left: -5%; width: 5%; }
+  to { left: 130%; width: 100%;}
 }
 @keyframes decrease {
-    from { left: -80%; width: 80%; }
-    to { left: 110%; width: 10%;}
+  from { left: -80%; width: 80%; }
+  to { left: 110%; width: 10%;}
+}
+
+.list-group-item.active{
+  background-color:#003b71;
+  color:white;
+  border-color: #003b71;
 }
