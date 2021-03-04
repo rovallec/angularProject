@@ -80,7 +80,6 @@ if($result = mysqli_query($con,$sql)){
             $b_days = $b_diff->format("%a");
         };
         $isr[8] = number_format(($row['base']) * ($b_days/365),2);
-        $isr[4] = number_format($isr[4] + ($row['productivity'] * ($a_days/365)) + ($row['productivity']*($b_days/365)),2);
         $isr[9] = '0';
         $isr[10] = '0';
         $isr[11] = '0';

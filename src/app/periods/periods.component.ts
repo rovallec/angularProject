@@ -1272,8 +1272,8 @@ export class PeriodsComponent implements OnInit {
         this.selected_accounts = this.selected_accounts + "," + acc.idaccounts;
       })
     }
-    let end: Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]) + 1, 0);
-    window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])) + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + end.getMonth().toString() + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
+    let end: Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]), 0);
+    window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])).toString().padStart(2,"0") + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + (end.getMonth() + 1).toString().padStart(2,"0") + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
   }
 
   setAccountingPolicy() {

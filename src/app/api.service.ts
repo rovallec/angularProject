@@ -729,6 +729,10 @@ getPaidAttendances(period:periods){
   return this.httpClient.post<paid_attendances[]>(`${this.PHP_API_SERVER}/phpscripts/getPaidAttendances_gt.php`, period);
 }
 
+getTransfers(any:any){
+  return this.httpClient.post<hrProcess>(`${this.PHP_API_SERVER}/phpscripts/getTransfers.php`, any);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
 
