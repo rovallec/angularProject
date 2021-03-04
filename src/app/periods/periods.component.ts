@@ -701,13 +701,10 @@ export class PeriodsComponent implements OnInit {
         cnt = cnt + 1;
         if (cnt == this.payments.length - 1) {
           this.apiService.setClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
-            if (str.split("|")[0] == 'Info:') {
-              window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
+            if (str != '1') {
               this.loading = false;
-              this.start();
-
+              this.getHome();
             } else {
-              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
               this.loading = false;
             }
           }); //Fin del if.
@@ -717,20 +714,6 @@ export class PeriodsComponent implements OnInit {
     }
     );
   };
-
-  revertClosePeriod() {    
-    this.apiService.setRevertClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
-      if (str.split("|")[0] == 'Info:') {
-        window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
-        this.loading = false;
-        this.start();
-
-      } else {
-        window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
-        this.loading = false;
-      }
-    }); //Fin del if.
-  }
 
   getHome() {
     window.open("./", "_self");
@@ -1289,8 +1272,8 @@ export class PeriodsComponent implements OnInit {
         this.selected_accounts = this.selected_accounts + "," + acc.idaccounts;
       })
     }
-    let end: Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]) + 1, 0);
-    window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])) + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + end.getMonth().toString() + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
+    let end: Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]), 0);
+    window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])).toString().padStart(2,"0") + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + (end.getMonth() + 1).toString().padStart(2,"0") + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
   }
 
   setAccountingPolicy() {

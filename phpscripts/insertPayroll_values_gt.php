@@ -43,7 +43,7 @@ for ($i=0; $i < (count($request) - 1); $i++) {
            "(NULL,$id_employee, $id_reporter, $id_account, $id_period, $id_payment, '$client_id', '$nearsol_id', $discounted_days, $seventh, $discounted_hours, $ot_hours, $holidays_hours, $performance_bonus, $treasure_hunt)";
 }
 if(mysqli_query($con,$sql)){
-    echo(json_encode("1| "));
+    echo("1");
 }else{
     $str = $sql2 . "|" . mysqli_error($con);
     echo(json_encode($str));

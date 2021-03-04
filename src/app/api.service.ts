@@ -107,18 +107,6 @@ getFamilies(profile:profiles):Observable<profiles_family[]>{
   return this.httpClient.post<profiles_family[]>(`${this.PHP_API_SERVER}/phpscripts/getfamilies.php`, profile);
 }
 
-delFamily(family:profiles_family):Observable<string>{
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/delete_family.php`, family);
-}
-
-createFamily(family:profiles_family):Observable<string>{
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insert_family.php`, family);
-}
-
-updateFamily(family:profiles_family):Observable<string>{
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/update_family.php`, family);
-}
-
 authUsr(users:users):Observable<users[]>{
   return this.httpClient.post<users[]>(`${this.PHP_API_SERVER}/phpscripts/login.php`, users);
 }
@@ -505,10 +493,6 @@ setClosePeriods(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setClosePeriod.php`, any);
 }
 
-setRevertClosePeriods(any:any){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setRevertPeriod.php`, any);
-}
-
 getDPAtt(any:any){
   return this.httpClient.post<disciplinary_processes[]>(`${this.PHP_API_SERVER}/phpscripts/getDPAtt.php`, any);
 }
@@ -743,6 +727,10 @@ insertPaidAttendances_gt(paid_attendances:paid_attendances[]){
 
 getPaidAttendances(period:periods){
   return this.httpClient.post<paid_attendances[]>(`${this.PHP_API_SERVER}/phpscripts/getPaidAttendances_gt.php`, period);
+}
+
+getTransfers(any:any){
+  return this.httpClient.post<hrProcess>(`${this.PHP_API_SERVER}/phpscripts/getTransfers.php`, any);
 }
 
   constructor(private httpClient:HttpClient) { }

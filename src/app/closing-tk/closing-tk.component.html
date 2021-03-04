@@ -33,30 +33,19 @@
             </div>
         </div>
     </div>
-    <div class="col-md-10">        
-        <div class="row col-md-12" *ngIf="isLoading && !isClosing">
+    <div class="col-md-10">
+        <div class="row col-md-12" *ngIf="isLoading">
             <div class="d-flex justify-content-center col-md-12">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden"></span>
                 </div>
             </div>
         </div>
-        <div class="progress" style="margin-top:50px" *ngIf="!finished && !isLoading && !isClosing">
+        <div class="progress" style="margin-top:50px" *ngIf="!finished && !isLoading">
             <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                 [style.width]="progress + '%'" [attr.aria-valuenow]="progress" aria-valuemin="0"
-                [attr.aria-valuemax]="max_progress">{{step}}
-            </div>
-        </div>        
-        <!--  Se ejecuta el procedimiento ClosePeriod. -->
-        <div class="content" *ngIf="!finished && !isLoading && isClosing">
-            <div class="slider">
-                <div class="line"></div>
-                <div class="subline inc"></div>
-                <div class="subline dec"></div>
-            </div>
+                [attr.aria-valuemax]="max_progress">{{step}}</div>
         </div>
-    
-
         <div class="row col-md-12" *ngIf="!isLoading && finished">
             <div class="col-md-2"></div>
             <div class="col-md-2">

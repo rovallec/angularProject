@@ -46,7 +46,6 @@
             <i class="fas fa-check-circle" style="margin-left:5px"  data-toggle="tooltip" data-placement="top" title="Save Close Period" (click)="completePeriod()"
                 *ngIf="showPayments && !completed && period.status == '1'"></i>
             <i class="fas fa-store-slash" style="margin-left:5px" data-toggle="tooltip" data-placement="top" title="Calc Close Period" (click)="closePeriod()" *ngIf="!showPayments"></i>
-            <i class="fas fa-history btn-danger" style="margin-left:5px" data-toggle="tooltip" data-placement="top" title="Revert Close Period" (click)="revertClosePeriod()" *ngIf="period.status == '0'"></i>
             <i class="fas fa-arrow-circle-up" style="margin-left:5px" (click)="activeImport()"
                 *ngIf="!showPayments && period.status == '1'"></i>
             <i class="fas fa-download" style="margin-left:5px" data-toggle="tooltip" data-placement="top"  title="Payroll Report" (click)="exportPayrollReport()" *ngIf="period.status == '0'"></i>

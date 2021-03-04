@@ -32,11 +32,4 @@ function connect()
 }
 
 $con = connect();
-
-function transaction() {
-	$connect = new mysqli(db_host,db_user,db_password,db_name);
-	return $connect;
-}
-
-$transact = transaction();
 ?>
