@@ -5,7 +5,7 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 
 if(isset($postdata) && !empty($postdata)){
-  $request = json_decode($postdata);       
+  $request = json_decode($postdata);
   $val2 = $request;
   if (!empty($val2->affinity_idfamilies) && isset($val2->affinity_idfamilies)) {
     $r_val_idfamilies = ($val2->affinity_idfamilies);
@@ -19,7 +19,7 @@ if(isset($postdata) && !empty($postdata)){
 
     $sql = "update families set first_name = '{$r_val_first_name}', second_name = '{$r_val_second_name}', first_last_name = '{$r_val_first_last_name}', second_last_name = '{$r_val_second_last_name}', phone = '{$r_val_phone}', relationship = '{$r_val_relationship}', birthdate = '{$r_val_birthdate}' where idfamilies = {$r_val_idfamilies};";
 
-    if(mysqli_query($con,$sql)){				
+    if(mysqli_query($con,$sql)){
       echo(json_encode("1|1"));
     }else{
       $error = $sql . "|" . mysqli_error($con);
@@ -29,4 +29,4 @@ if(isset($postdata) && !empty($postdata)){
 } else {
   echo("Empty Object");
 }
-?> 
+?>

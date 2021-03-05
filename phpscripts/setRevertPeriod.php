@@ -7,15 +7,14 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id_period = ($request->id_period);
-  
-$v_start = '1899-01-01';  
+
+$v_start = '1899-01-01';
 $v_id_process = 0;
 $v_idattendence_adjustement = 0;
 $v_new_id_period = 0;
 $result3 = true;
 $result6 = true;
 $result9 = true;
-
 
 try 
 {
@@ -45,9 +44,9 @@ try
         $v_id_process = $row3['id_process'];
 
         $sql4 = "UPDATE hr_processes SET " .
-                "status = 'PENDING', " .                
+                "status = 'PENDING', " .
                 "id_period = NULL " .
-                "WHERE idhr_processes = $v_id_process; ";   
+                "WHERE idhr_processes = $v_id_process; ";
         $sql5 = "UPDATE attendence_adjustemnt SET  " .
                 "state =  'PENDING' " .
                 "WHERE idattendence_adjustemnt = $v_idattendence_adjustement;";

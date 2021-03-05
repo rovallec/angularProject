@@ -195,8 +195,7 @@ export class ClosingTkComponent implements OnInit {
                               }
                             }
 
-                            if(!isNullOrUndefined(trns)){
-                              console.log(new Date(trns.date).getTime() + " | " + new Date(attendance.date).getTime() + " | " + pay.id_account_py + " | " + pay.id_account_py + " | " + pay.idpayments);
+                            if(!isNullOrUndefined(trns)){                              
                               if(new Date(trns.date).getTime() <= new Date(attendance.date).getTime() && pay.id_account_py != emp[0].id_account){
                                 valid_transfer = true;
                               }else if(new Date(trns.date).getTime() > new Date(attendance.date).getTime() && emp[0].id_account == pay.id_account_py){
@@ -408,27 +407,13 @@ export class ClosingTkComponent implements OnInit {
                                           this.progress = this.progress + 1;
                                           this.step = "Saving Attendances: " + this.progress + "/" + this.max_progress;
                                         }
-                                      })
-                                      window.alert("Period with values and attendances successfuly frozen\n  Next steep: freeze processes.");
-                                      /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
-                                      if (!this.finished && !this.isLoading) {
-                                        this.isClosing = true;
-                                        this.apiServices.setClosePeriods(this.actualPeriod.idperiods).subscribe((str: string) => {
-                                          if (str.split("|")[0] == 'Info:') {
-                                            window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
-                                          } else {
-                                            window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
-                                          }                                            
-                                          this.isClosing = false;
-                                        })
-                                      }
+                                      })                                      
                                       this.apiServices.insertPaidAttendances_gt(paid_attendances_insert).subscribe((str2: string) => {
                                         if (str2 == "1") {
                                           window.alert("Period successfuly frozen\n" + "Next step retrieve information");
                                           this.show_attendances = [];
                                           this.save_attendances = [];
                                           this.apiServices.getPaidAttendances(this.actualPeriod).subscribe((pd_att: paid_attendances[]) => {
-                                            console.log(att);
                                             pd_att.forEach(paid_attendance_retrieve => {
                                               let att_sh: attendences = new attendences;
                                               att_sh.id_employee = paid_attendance_retrieve.id_employee;
@@ -455,6 +440,19 @@ export class ClosingTkComponent implements OnInit {
                                             this.finished = true;
                                             this.isLoading = true;
                                           })
+                                          window.alert("Period with values and attendances successfuly frozen\n  Next steep: freeze processes.");
+                                          /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
+                                          if (!this.finished && !this.isLoading) {
+                                            this.isClosing = true;
+                                            this.apiServices.setClosePeriods(this.actualPeriod.idperiods).subscribe((str: string) => {
+                                              if (str.split("|")[0] == 'Info:') {
+                                                window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
+                                              } else {
+                                                window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
+                                              }                                            
+                                              this.isClosing = false;
+                                            })
+                                          }
                                         } else {
                                           window.alert("Please contact your administrator with the following information:\n" + str.split("|")[1]);
                                         }

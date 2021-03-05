@@ -13,7 +13,7 @@
       http_response_code(200);                
     }else{
       http_response_code(422);
-      echo($sql);            
+      echo($sql);
     }
   }
 ?> 
