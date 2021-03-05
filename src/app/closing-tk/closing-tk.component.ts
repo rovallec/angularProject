@@ -426,7 +426,7 @@ export class ClosingTkComponent implements OnInit {
                                             window.alert("Period with values and attendances successfuly closed");
                                             if (!this.finished && !this.isLoading) {
                                               this.isClosing = true;
-                                              this.apiServices.setClosePeriods(this.actualPeriod.idperiods).subscribe((str: string) => {
+                                              this.apiServices.setClosePeriods({id_periods: this.actualPeriod.idperiods}).subscribe((str: string) => {
                                                 if (str.split("|")[0] == 'Info:') {
                                                   window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
                                                 } else {
