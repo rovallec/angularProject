@@ -33,10 +33,10 @@ export class ClosingTkComponent implements OnInit {
   save_attendances: attendences[] = [];
   selected_payroll_value: payroll_values_gt = new payroll_values_gt;
   close_period: boolean = false;
-  waitForfinish: boolean = false; 
-  isClosing: boolean = false;  
-  searchFilter:string = null;
-  searchValue:string = null;
+  waitForfinish: boolean = false;
+  isClosing: boolean = false;
+  searchFilter: string = null;
+  searchValue: string = null;
 
   constructor(public apiServices: ApiService) { }
 
@@ -140,7 +140,7 @@ export class ClosingTkComponent implements OnInit {
             pys.forEach(p => {
               if (p.account == this.selectedAccount.idaccounts && p.id_account_py != this.selectedAccount.idaccounts) {
                 py.push(p);
-              }else if(p.id_account_py == this.selectedAccount.idaccounts){
+              } else if (p.id_account_py == this.selectedAccount.idaccounts) {
                 py.push(p);
               }
             })
@@ -176,7 +176,7 @@ export class ClosingTkComponent implements OnInit {
                           let off_on_week: number = 0;
                           let cnt_days: number = 0;
                           let valid_trm: boolean = false;
-                          let valid_transfer:boolean = false;
+                          let valid_transfer: boolean = false;
 
                           if (pay.last_seventh == '1') {
                             non_show = true;
@@ -195,10 +195,10 @@ export class ClosingTkComponent implements OnInit {
                               }
                             }
 
-                            if(!isNullOrUndefined(trns)){                              
-                              if(new Date(trns.date).getTime() <= new Date(attendance.date).getTime() && pay.id_account_py != emp[0].id_account){
+                            if (!isNullOrUndefined(trns)) {
+                              if (new Date(trns.date).getTime() <= new Date(attendance.date).getTime() && pay.id_account_py != emp[0].id_account) {
                                 valid_transfer = true;
-                              }else if(new Date(trns.date).getTime() > new Date(attendance.date).getTime() && emp[0].id_account == pay.id_account_py){
+                              } else if (new Date(trns.date).getTime() > new Date(attendance.date).getTime() && emp[0].id_account == pay.id_account_py) {
                                 valid_trm = true;
                               }
                             }
@@ -311,9 +311,9 @@ export class ClosingTkComponent implements OnInit {
                                 non_show_sequence = 0;
                                 non_show = false;
                               }
-                            } else if(valid_trm){
+                            } else if (valid_trm) {
                               attendance.balance = "TERM";
-                            }else if(valid_transfer){
+                            } else if (valid_transfer) {
                               attendance.balance = "TRANSFER";
                             }
                           })
@@ -407,58 +407,58 @@ export class ClosingTkComponent implements OnInit {
                                           this.progress = this.progress + 1;
                                           this.step = "Saving Attendances: " + this.progress + "/" + this.max_progress;
                                         }
-                                      })                                      
-                                      this.apiServices.insertPaidAttendances_gt(paid_attendances_insert).subscribe((str2: string) => {
-                                        if (str2 == "1") {
-                                          window.alert("Period successfuly frozen\n" + "Next step retrieve information");
-                                          this.show_attendances = [];
-                                          this.save_attendances = [];
-                                          this.apiServices.getPaidAttendances(this.actualPeriod).subscribe((pd_att: paid_attendances[]) => {
-                                            pd_att.forEach(paid_attendance_retrieve => {
-                                              let att_sh: attendences = new attendences;
-                                              att_sh.id_employee = paid_attendance_retrieve.id_employee;
-                                              att_sh.date = paid_attendance_retrieve.date;
-                                              att_sh.scheduled = paid_attendance_retrieve.scheduled;
-                                              att_sh.worked_time = paid_attendance_retrieve.worked;
-                                              att_sh.balance = paid_attendance_retrieve.balance;
-                                              this.show_attendances.push(att_sh);
-                                            })
-                                            window.alert("Period with values and attendances successfuly closed");
-                                            if (!this.finished && !this.isLoading) {
-                                              this.isClosing = true;
-                                              this.apiServices.setClosePeriods({id_periods: this.actualPeriod.idperiods}).subscribe((str: string) => {
-                                                if (str.split("|")[0] == 'Info:') {
-                                                  window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
-                                                } else {
-                                                  const audio = new Audio('./assets/toasty.mp3');
-                                                  audio.play;
-                                                  window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
-                                                }
-                                                this.isClosing = false;
-                                              })
-                                            }
-                                            this.finished = true;
-                                            this.isLoading = true;
+                                      })
+                                    })
+                                    this.apiServices.insertPaidAttendances_gt(paid_attendances_insert).subscribe((str2: string) => {
+                                      if (str2 == "1") {
+                                        window.alert("Period successfuly frozen\n" + "Next step retrieve information");
+                                        this.show_attendances = [];
+                                        this.save_attendances = [];
+                                        this.apiServices.getPaidAttendances(this.actualPeriod).subscribe((pd_att: paid_attendances[]) => {
+                                          pd_att.forEach(paid_attendance_retrieve => {
+                                            let att_sh: attendences = new attendences;
+                                            att_sh.id_employee = paid_attendance_retrieve.id_employee;
+                                            att_sh.date = paid_attendance_retrieve.date;
+                                            att_sh.scheduled = paid_attendance_retrieve.scheduled;
+                                            att_sh.worked_time = paid_attendance_retrieve.worked;
+                                            att_sh.balance = paid_attendance_retrieve.balance;
+                                            this.show_attendances.push(att_sh);
                                           })
-                                          window.alert("Period with values and attendances successfuly frozen\n  Next steep: freeze processes.");
-                                          /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
+                                          window.alert("Period with values and attendances successfuly closed");
                                           if (!this.finished && !this.isLoading) {
                                             this.isClosing = true;
-                                            this.apiServices.setClosePeriods(this.actualPeriod.idperiods).subscribe((str: string) => {
+                                            this.apiServices.setClosePeriods({ id_periods: this.actualPeriod.idperiods }).subscribe((str: string) => {
                                               if (str.split("|")[0] == 'Info:') {
                                                 window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
                                               } else {
+                                                const audio = new Audio('./assets/toasty.mp3');
+                                                audio.play;
                                                 window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
-                                              }                                            
+                                              }
                                               this.isClosing = false;
                                             })
                                           }
-                                        } else {
-                                          window.alert("Please contact your administrator with the following information:\n" + str.split("|")[1]);
+                                          this.finished = true;
+                                          this.isLoading = true;
+                                        })
+                                        window.alert("Period with values and attendances successfuly frozen\n  Next steep: freeze processes.");
+                                        /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
+                                        if (!this.finished && !this.isLoading) {
+                                          this.isClosing = true;
+                                          this.apiServices.setClosePeriods(this.actualPeriod.idperiods).subscribe((str: string) => {
+                                            if (str.split("|")[0] == 'Info:') {
+                                              window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
+                                            } else {
+                                              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
+                                            }
+                                            this.isClosing = false;
+                                          })
                                         }
-                                        this.finished = true;
-                                        this.isLoading = true;
-                                      }) 
+                                      } else {
+                                        window.alert("Please contact your administrator with the following information:\n" + str.split("|")[1]);
+                                      }
+                                      this.finished = true;
+                                      this.isLoading = true;
                                     })
                                   })
                                 } else {
