@@ -733,6 +733,23 @@ getTransfers(any:any){
   return this.httpClient.post<hrProcess>(`${this.PHP_API_SERVER}/phpscripts/getTransfers.php`, any);
 }
 
+updateFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/update_family.php`, family);
+}
+
+delFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/delete_family.php`, family);
+}
+
+createFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insert_family.php`, family);
+}
+
+setRevertClosePeriods(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setRevertPeriod.php`, any);
+}
+
+
   constructor(private httpClient:HttpClient) { }
 }
 

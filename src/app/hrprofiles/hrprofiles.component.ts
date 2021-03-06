@@ -81,8 +81,8 @@ export class HrprofilesComponent implements OnInit {
   municipio: string = null;
   zone: string = null;
   first_line: string = null;
-
-  edition_status: boolean = false;
+  
+  edition_status: string = 'Browse';
   editInview: boolean = false;
   viewRecProd: boolean = false;
   addProc: boolean = false;
@@ -1946,6 +1946,72 @@ export class HrprofilesComponent implements OnInit {
       element.doc_type = '';
     });
     this.selectedToMerge = val.idprofiles;
+  }
+
+  setEdit(state: string) {
+    this.edition_status = state;
+  }
+
+  addFamily() {
+    this.setEdit('Insert');
+    this.selected_family = new profiles_family;
+    this.selected_family.affinity_id_profile = Number(this.profile[0].idprofiles);
+  }
+
+  delFamily() {
+    this.apiService.delFamily(this.selected_family).subscribe((_fams: string) => {
+      this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
+        this.family = fam;
+      })
+    })
+  }
+
+  empty_family() {
+    if (isNullOrUndefined(this.selected_family.affinity_first_name) || (this.selected_family.affinity_first_name=='') || 
+        isNullOrUndefined(this.selected_family.affinity_first_last_name) || (this.selected_family.affinity_first_last_name=='') || 
+        (this.selected_family.affinity_id_profile==0)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  saveFamily() {
+    if (!this.empty_family()) {      
+      if (this.edition_status=='Insert') {
+        this.apiService.createFamily(this.selected_family).subscribe((fams: string) => {
+          if (fams.split("|")[0]=="1"){   
+            window.alert("Action successfuly recorded.");
+            this.cancelView();
+            this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
+              this.family = fam;
+            });
+          } else {
+            window.alert("An error has occured:\n" + fams.split("|")[1]);
+              console.log(fams.split("|")[0]);
+          }          
+        });
+      } else if (this.edition_status=='Edit') {
+        this.apiService.updateFamily(this.selected_family).subscribe((fams: string) => {
+          if (fams.split("|")[0]=="1"){   
+            window.alert("Action successfuly recorded.");
+            this.cancelView();
+            this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
+              this.family = fam;
+            });
+          } else {
+            window.alert("An error has occured:\n" + fams.split("|")[1]);
+              console.log(fams.split("|")[0]);
+          }          
+        });
+      }
+    }
+    this.setEdit('Browse');
+  }
+
+  cancelFamily() {
+    this.selected_family = new profiles_family;
+    this.setEdit('Browse');
   }
 
   updateVacation(){

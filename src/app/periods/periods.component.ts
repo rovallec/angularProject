@@ -701,10 +701,13 @@ export class PeriodsComponent implements OnInit {
         cnt = cnt + 1;
         if (cnt == this.payments.length - 1) {
           this.apiService.setClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
-            if (str != '1') {
+            if (str.split("|")[0] == 'Info:') {
+              window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
               this.loading = false;
-              this.getHome();
+              this.start();
+
             } else {
+              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
               this.loading = false;
             }
           }); //Fin del if.
@@ -714,6 +717,20 @@ export class PeriodsComponent implements OnInit {
     }
     );
   };
+
+  revertClosePeriod() {    
+    this.apiService.setRevertClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
+      if (str.split("|")[0] == 'Info:') {
+        window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
+        this.loading = false;
+        this.start();
+
+      } else {
+        window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
+        this.loading = false;
+      }
+    }); //Fin del if.
+  }
 
   getHome() {
     window.open("./", "_self");
