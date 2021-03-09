@@ -749,6 +749,9 @@ setRevertClosePeriods(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setRevertPeriod.php`, any);
 }
 
+getClosingRise(any:any){
+  return this.httpClient.post<rises>(`${this.PHP_API_SERVER}/phpscripts/getRises_closing`,any);
+}
 
   constructor(private httpClient:HttpClient) { }
 }

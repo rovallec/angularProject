@@ -31,6 +31,7 @@ export class ClosingTkComponent implements OnInit {
   step: string = null;
   show_attendances: attendences[] = [];
   save_attendances: attendences[] = [];
+  saved_paid: paid_attendances[] = [];
   selected_payroll_value: payroll_values_gt = new payroll_values_gt;
   close_period: boolean = false;
   waitForfinish: boolean = false;
@@ -138,7 +139,7 @@ export class ClosingTkComponent implements OnInit {
           let py: payments[] = [];
           if (!this.close_period) {
             pys.forEach(p => {
-              if (p.account == this.selectedAccount.idaccounts && p.id_account_py != this.selectedAccount.idaccounts) {
+              if (p.account == this.selectedAccount.idaccounts && isNullOrUndefined(p.id_account_py)) {
                 py.push(p);
               } else if (p.id_account_py == this.selectedAccount.idaccounts) {
                 py.push(p);
@@ -177,6 +178,7 @@ export class ClosingTkComponent implements OnInit {
                           let cnt_days: number = 0;
                           let valid_trm: boolean = false;
                           let valid_transfer: boolean = false;
+                          let ult_seventh:number = 0;
 
                           if (pay.last_seventh == '1') {
                             non_show = true;
@@ -196,10 +198,10 @@ export class ClosingTkComponent implements OnInit {
                             }
 
                             if (!isNullOrUndefined(trns)) {
-                              if (new Date(trns.date).getTime() <= new Date(attendance.date).getTime() && pay.id_account_py != emp[0].id_account) {
+                              if (new Date(trns.date).getTime() <= new Date(attendance.date).getTime() && pay.id_account_py != emp[0].id_account && !isNullOrUndefined(pay.id_account_py)) {
                                 valid_transfer = true;
-                              } else if (new Date(trns.date).getTime() > new Date(attendance.date).getTime() && emp[0].id_account == pay.id_account_py) {
-                                valid_trm = true;
+                              } else if (new Date(trns.date).getTime() > new Date(attendance.date).getTime() && isNullOrUndefined(pay.id_account_py)) {
+                                valid_transfer = true;
                               }
                             }
 
@@ -272,6 +274,7 @@ export class ClosingTkComponent implements OnInit {
                                           discounted_days = discounted_days + 1;
                                           sevenths = sevenths + 1;
                                           non_show_sequence = non_show_sequence + 1;
+                                          ult_seventh = 1;
                                         } else {
                                           discounted_days = discounted_days + 1;
                                           non_show_sequence = non_show_sequence + 1;
@@ -310,6 +313,7 @@ export class ClosingTkComponent implements OnInit {
                                 janp_on_off = 0;
                                 non_show_sequence = 0;
                                 non_show = false;
+                                ult_seventh = 0;
                               }
                             } else if (valid_trm) {
                               attendance.balance = "TERM";
@@ -341,6 +345,7 @@ export class ClosingTkComponent implements OnInit {
                           payroll_value.id_employee = pay.id_employee;
                           payroll_value.id_payment = pay.idpayments;
                           payroll_value.id_period = pay.id_period;
+                          payroll_value.next_seventh = ult_seventh;
                           if (this.close_period) {
                             payroll_value.id_reporter = emp[0].reporter;
                           } else {
@@ -415,45 +420,13 @@ export class ClosingTkComponent implements OnInit {
                                         this.show_attendances = [];
                                         this.save_attendances = [];
                                         this.apiServices.getPaidAttendances(this.actualPeriod).subscribe((pd_att: paid_attendances[]) => {
-                                          pd_att.forEach(paid_attendance_retrieve => {
-                                            let att_sh: attendences = new attendences;
-                                            att_sh.id_employee = paid_attendance_retrieve.id_employee;
-                                            att_sh.date = paid_attendance_retrieve.date;
-                                            att_sh.scheduled = paid_attendance_retrieve.scheduled;
-                                            att_sh.worked_time = paid_attendance_retrieve.worked;
-                                            att_sh.balance = paid_attendance_retrieve.balance;
-                                            this.show_attendances.push(att_sh);
-                                          })
+                                          this.saved_paid = pd_att;
                                           window.alert("Period with values and attendances successfuly closed");
-                                          if (!this.finished && !this.isLoading) {
-                                            this.isClosing = true;
-                                            this.apiServices.setClosePeriods({ id_period: this.actualPeriod.idperiods }).subscribe((str: string) => {
-                                              if (str.split("|")[0] == 'Info:') {
-                                                window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
-                                              } else {
-                                                const audio = new Audio('./assets/toasty.mp3');
-                                                audio.play;
-                                                window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
-                                              }
-                                              this.isClosing = false;
-                                            })
-                                          }
                                           this.finished = true;
                                           this.isLoading = true;
                                         })
                                         window.alert("Period with values and attendances successfuly frozen\n  Next steep: freeze processes.");
                                         /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
-                                        if (!this.finished && !this.isLoading) {
-                                          this.isClosing = true;
-                                          this.apiServices.setClosePeriods(this.actualPeriod.idperiods).subscribe((str: string) => {
-                                            if (str.split("|")[0] == 'Info:') {
-                                              window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
-                                            } else {
-                                              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
-                                            }
-                                            this.isClosing = false;
-                                          })
-                                        }
                                       } else {
                                         window.alert("Please contact your administrator with the following information:\n" + str.split("|")[1]);
                                       }
@@ -503,15 +476,7 @@ export class ClosingTkComponent implements OnInit {
                 this.payroll_values.push(payroll_val);
               }
             })
-            att.forEach(paid_attendance_retrieve => {
-              let att_sh: attendences = new attendences;
-              att_sh.id_employee = paid_attendance_retrieve.id_employee;
-              att_sh.date = paid_attendance_retrieve.date;
-              att_sh.scheduled = paid_attendance_retrieve.scheduled;
-              att_sh.worked_time = paid_attendance_retrieve.worked;
-              att_sh.balance = paid_attendance_retrieve.balance;
-              this.save_attendances.push(att_sh);
-            })
+            this.saved_paid = att;
           } else {
             if (isNullOrUndefined(this.actualPeriod.idperiods)) {
               window.alert("There's no data to show");
@@ -528,14 +493,31 @@ export class ClosingTkComponent implements OnInit {
   }
 
   setAttendance(py: payroll_values_gt) {
-    this.selected_payroll_value = py;
-    this.selected_payroll_value.total_days = (Number(this.selected_payroll_value.discounted_days) + Number(this.selected_payroll_value.seventh)).toFixed(0);
-    this.show_attendances = [];
-    this.save_attendances.forEach(att => {
-      if (att.id_employee == this.selected_payroll_value.id_employee) {
-        this.show_attendances.push(att);
-      }
-    })
+    if (this.actualPeriod.status == '1') {
+      this.selected_payroll_value = py;
+      this.selected_payroll_value.total_days = (Number(this.selected_payroll_value.discounted_days) + Number(this.selected_payroll_value.seventh)).toFixed(0);
+      this.show_attendances = [];
+      this.save_attendances.forEach(att => {
+        if (att.id_employee == this.selected_payroll_value.id_employee) {
+          this.show_attendances.push(att);
+        }
+      })
+    } else {
+      console.log(py.idpayroll_values);
+      this.selected_payroll_value = py;
+      this.selected_payroll_value.total_days = (Number(this.selected_payroll_value.discounted_days) + Number(this.selected_payroll_value.seventh)).toFixed(0);
+      this.show_attendances = [];
+      this.saved_paid.forEach(att => {
+        if (att.id_payroll_value == this.selected_payroll_value.idpayroll_values) {
+          let attend: attendences = new attendences;
+          attend.date = att.date;
+          attend.scheduled = att.scheduled;
+          attend.worked_time = att.worked;
+          attend.balance = att.balance;
+          this.show_attendances.push(attend)
+        }
+      })
+    }
   }
 
   exportPayroll_values() {
