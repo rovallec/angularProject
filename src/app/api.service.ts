@@ -20,8 +20,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-PHP_API_SERVER = "http://172.18.2.226"; // Desarrollo
-//PHP_API_SERVER = "http://200.94.251.67";  // produccion
+//PHP_API_SERVER = "http://172.18.2.226"; // Desarrollo
+PHP_API_SERVER = "http://200.94.251.67";  // produccion
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
@@ -105,6 +105,18 @@ getProfile(prof:profiles):Observable<profiles[]>{
 
 getFamilies(profile:profiles):Observable<profiles_family[]>{
   return this.httpClient.post<profiles_family[]>(`${this.PHP_API_SERVER}/phpscripts/getfamilies.php`, profile);
+}
+
+delFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/delete_family.php`, family);
+}
+
+createFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insert_family.php`, family);
+}
+
+updateFamily(family:profiles_family):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/update_family.php`, family);
 }
 
 authUsr(users:users):Observable<users[]>{
@@ -405,6 +417,10 @@ insertTransfer(employee:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertTransfer.php`, employee);
 }
 
+getTransfers(_employee:any){
+  return 1;
+}
+
 insertJudicials(judicials:judicials){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertJudicials.php`, judicials);
 }
@@ -491,6 +507,10 @@ closePeriod(period:periods){
 
 setClosePeriods(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setClosePeriod.php`, any);
+}
+
+setRevertClosePeriods(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setRevertPeriod.php`, any);
 }
 
 getDPAtt(any:any){
@@ -727,10 +747,6 @@ insertPaidAttendances_gt(paid_attendances:paid_attendances[]){
 
 getPaidAttendances(period:periods){
   return this.httpClient.post<paid_attendances[]>(`${this.PHP_API_SERVER}/phpscripts/getPaidAttendances_gt.php`, period);
-}
-
-getTransfers(any:any){
-  return this.httpClient.post<hrProcess>(`${this.PHP_API_SERVER}/phpscripts/getTransfers.php`, any);
 }
 
   constructor(private httpClient:HttpClient) { }

@@ -519,7 +519,7 @@ export class AccprofilesComponent implements OnInit {
   }
 
   cancelPayments(adv: advances_acc) {    
-    adv.status = 'DISMISSED';
+    adv.status = 'REJECTED';
     this.apiService.getHr_Processes(adv.id_process).subscribe((proc: hrProcess) => {
       proc.status = adv.status;
       if (isNullOrUndefined(proc.notes)) {

@@ -87,20 +87,10 @@
                                     <td style="text-align: center; vertical-align: middle;">{{adv.type}}</td>
                                     <td style="text-align: center; vertical-align: middle;">{{adv.amount}}</td>
                                     <td style="padding: 0px; margin: 0px; text-align: center; vertical-align: middle;">
-                                        <button type="button" class="btn btn-primary" style="height: 1.5em; padding-top: 0rem;" data-toggle="modal" data-target="#advanceModal"
+                                        <button type="button" class="btn btn-outline-info" style="height: 1.5em; padding-top: 0rem;" data-toggle="modal" data-target="#advanceModal"
                                           (click)="assignAdvance(adv)">
-                                          Aprovee or Dismiss
+                                          <i class="fas fa-exchange-alt"></i>
                                         </button>
-                                        <!--
-                                        <button class="btn btn-success" style="padding:0px; margin:0px; width:22px; height: 22px; height: 22px;"
-                                            [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'">
-                                            <i class="fas fa-check" style="padding:0px;margin:0px;height:15px;width:15px" (click)="setPayments(adv)"></i>
-                                        </button>
-                                        <button style="padding:0px; margin:0px; width:22px; height: 22px; height: 22px;" class="btn btn-danger"
-                                            [disabled]="adv.status != 'CLOSED' || adv.status != 'PAID' || adv.status != 'REJECTED'">
-                                            <i class="fas fas fa-ban" style="padding:0px;margin:0px;height:15px;width:15px"></i>
-                                        </button>
-                                        -->
                                     </td>
                                     <td style="text-align: center; vertical-align: middle;">{{adv.status}}</td>
                                 </tr>
@@ -513,29 +503,35 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="advanceModalLabel">Approve or Dismiss Advance</h5>
+        <h5 class="modal-title" id="advanceModalLabel">Advance</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <label>
-          Insert reason to approve or dismiss
+          Insert reason to approve or reject
         </label>
         <input type="text" [(ngModel)]="adv.notes" class="form-control w250">
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-warning" (click)="cancelPayments(adv)"
-          [disabled]="adv.status == 'CLOSED' || adv.status == 'PAID' || adv.status == 'REJECTED' || adv.notes == ''"
-          data-dismiss="modal">
-          DISMISS
-        </button>
-        <button type="button" class="btn btn-success" (click)="setPayments(adv)" 
-          [disabled]="adv.status == 'CLOSED' || adv.status == 'PAID' || adv.status == 'REJECTED' || adv.notes == ''"
-          data-dismiss="modal">
-          APPROVE
-        </button>
+      <div class="modal-footer d-flex">        
+        <div class="mr-auto p-2">
+          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">CLOSE</button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn btn-outline-secondary" (click)="cancelPayments(adv)"
+            [disabled]="adv.status == 'CLOSED' || adv.status == 'PAID' || adv.status == 'REJECTED' || adv.notes == ''"
+            data-dismiss="modal">
+            REJECTED
+          </button>
+        </div>
+        <div class="p-2">
+          <button type="button" class="btn btn-outline-success" (click)="setPayments(adv)" 
+            [disabled]="adv.status == 'CLOSED' || adv.status == 'PAID' || adv.status == 'REJECTED' || adv.notes == ''"
+            data-dismiss="modal">
+            APPROVE
+          </button>
+        </div>
       </div>
     </div>
   </div>

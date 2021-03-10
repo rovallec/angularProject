@@ -31,7 +31,7 @@ header('Access-Control-Allow-Headers: *');
 			echo json_encode($families);
 		}else{      
       http_response_code(400);
-      
+      echo($sql);
 		}
 ?>
 
