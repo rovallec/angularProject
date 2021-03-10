@@ -795,6 +795,7 @@ export class payments {
     account: string;
     days: string;
     id_account_py:string;
+    idpayroll_values:string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;
@@ -826,6 +827,7 @@ export class payments {
         this.account = null;
         this.days = null;
         this.id_account_py = null;
+        this.idpayroll_values = null;
     }
 }
 
@@ -1233,6 +1235,7 @@ export class payroll_values_gt{
     agent_status:string = null;
     total_days:string = null;
     hrs:number = null;
+    next_seventh = null;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;
@@ -1254,6 +1257,7 @@ export class payroll_values_gt{
         this.account_name = null;
         this.agent_status = null;
         this.hrs = null;
+        this.next_seventh = null;
     }
 }
 

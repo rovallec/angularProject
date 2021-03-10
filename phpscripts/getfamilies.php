@@ -34,4 +34,3 @@ header('Access-Control-Allow-Headers: *');
       echo($sql);
 		}
 ?>
-
