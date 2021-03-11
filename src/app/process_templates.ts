@@ -1200,15 +1200,23 @@ export class advances_acc{
 }
 
 export class Fecha{
-    today: string;    
+    today: string;
 
     getToday(): string {
         let fecha: Date = new Date();
         let dd: string = String(fecha.getDate()).padStart(2,'0');
-        let mm: string = String(fecha.getMonth() + 1).padStart(2, '0');
+        let MM: string = String(fecha.getMonth() + 1).padStart(2, '0');
         let yyyy: string = fecha.getFullYear().toString();
-        return (yyyy + '-' + mm + '-' + dd);
+        return (yyyy + '-' + MM + '-' + dd);
     }
+
+    transform(Adate: Date): string {
+        let dd: string = String(Adate.getDate()).padStart(2,'0');
+        let MM: string = String(Adate.getMonth() + 1).padStart(2, '0');
+        let yyyy: string = Adate.getFullYear().toString();
+        return (yyyy + '-' + MM + '-' + dd);
+    }
+
     constructor() {
         this.today = this.getToday();
     }
