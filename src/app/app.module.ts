@@ -39,7 +39,8 @@ import { AcphhomeComponent } from './acphhome/acphhome.component';
 import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
 import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component';
 import { BonusesComponent } from './bonuses/bonuses.component';
-import { ClosingTkComponent } from './closing-tk/closing-tk.component'
+import { ClosingTkComponent } from './closing-tk/closing-tk.component';
+import { ImportWavesComponent } from './import-waves/import-waves.component'
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ClosingTkComponent } from './closing-tk/closing-tk.component'
     PeriodsPhComponent,
     AccprofilesPhComponent,
     BonusesComponent,
-    ClosingTkComponent
+    ClosingTkComponent,
+    ImportWavesComponent
   ],
   imports: [
     BrowserModule,
