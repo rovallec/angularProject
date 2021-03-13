@@ -27,6 +27,7 @@ export class ImportWavesComponent implements OnInit {
   date: string = null;
   start_time: string = null;
   end_time: string = null;
+  enableFile: boolean = false;
   // file
   file: any;
   completed: boolean = false;
@@ -77,9 +78,25 @@ export class ImportWavesComponent implements OnInit {
     if (this.end_time=='') {
       error = true;
       window.alert("An error has occured:\n" + "It is not possible to record changes without established schedules.");
-    }    
+    }
+    if (this.actualReporter.username=='') {
+      error = true;
+      window.alert("An error has occured:\n" + "It is not possible to record changes without established reporter.");
+    }
+    if (this.waves.name=='') {
+      error = true;
+      window.alert("An error has occured:\n" + "It is not possible to save changes without the name of the wave.");
+    }
+    if (this.waves.prefix=='') {
+      error = true;
+      window.alert("An error has occured:\n" + "It is not possible to save changes without the name of the wave.");
+    }
 
-    if (!error) {
+    
+
+
+
+    if (!error && this.enableFile) {
       // ya hechas las validaciones correspondientes envia la información a grabarse en la BD.
     }
   }
