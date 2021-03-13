@@ -1287,3 +1287,14 @@ export class paid_attendances{
         this.id_employee = null;
     }
 }
+
+export class reporters {
+    idUser: string;
+    username: string;
+    signature: string;
+    constructor(){
+        this.idUser = null;
+        this.username = null;
+        this.signature = null;
+    }
+}

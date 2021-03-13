@@ -1,1 +1,100 @@
-<p>import-waves works!</p>
+<div class="col-md-12 row">
+  <div class="col-md-2">
+    <div class="row" style="margin-top:25px">
+      <div class="d-flex justify-content-between mb-3 w-100">
+        <div class="p-2">
+          <button class="btn btn-outline-danger" title="Download Attendance" (click)="cancelWave()">
+            <i class="fas fa-ban"></i>
+          </button>
+        </div>
+        <div class="p-2" *ngIf="showdiv">
+          <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal" tittle="Close Period">
+            <i class="far fa-save"></i>
+          </button>
+        </div>
+        <div class="p-2" *ngIf="showdiv">
+          <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal" tittle="Search">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <div class="p-2">
+          <button class="btn btn-outline-success" title="Save wave" (click)="saveWave()">
+            <i class="fas fa-save"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row p-2">
+      <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
+        <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
+      </select>
+    </div>
+    <div class="row p-2">
+      <div class="list-group w-100" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts" [tabindex]="acc.idaccounts"
+          [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}" style="cursor: pointer;"
+          (click)="setAccount(acc)">{{acc.name}}</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-10">
+    <div class="row col-md-12" *ngIf="isLoading">
+      <div class="d-flex justify-content-center col-md-12">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden"></span>
+        </div>
+      </div>
+    </div>
+    <div class="progress" style="margin-top:50px" *ngIf="!finished && !isLoading">
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+        [style.width]="progress + '%'" [attr.aria-valuenow]="progress" aria-valuemin="0"
+        [attr.aria-valuemax]="max_progress">{{step}}</div>
+    </div>
+    <div class="row col-md-12" *ngIf="!isLoading && finished">
+      <div class="col-md-3">
+        <label>REPORTER:</label>
+        <select class="form-control" [(ngModel)]="reporters">
+          <option *ngFor="let rep of reporters" value="{{ rep.idUser }}" (click)="setReporter(rep)">{{rep.username}}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>WAVE:</label>
+        <input type="text" class="form-control" [(ngModel)]="waves.name">
+      </div>
+      <div class="col-md-2">
+        <label>PREFIX:</label>
+        <input type="text" class="form-control" [(ngModel)]="waves.prefix">
+      </div>
+      <div class="col-md-2">
+        <label>DATE:</label>
+        <input type="date" class="form-control" [(ngModel)]="date">
+      </div>
+      <div class="col-md-2">
+      </div>
+    </div>
+    <div class="row col-md-12" *ngIf="!isLoading && finished">
+      <div class="col-md-3">
+        <label>TRAINING SCHEDULE:</label>
+        <div class="row">
+          <div class="col-md-6">
+            <input type="time" class="form-control" [(ngModel)]="start_time" (change)="setSchedule()">
+          </div>
+          <div class="col-md-6">
+            <input type="time" class="form-control" [(ngModel)]="end_time" (change)="setSchedule()">
+          </div>
+        </div>
+      </div>      
+      <div class="col-md-5">
+        <label for="formFile" class="form-label">IMPORT:</label>
+        <input type="file" class="form-control  form-control" (change)="addfile($event)">
+      </div>
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-1">
+      </div>
+
+
+
+
+  </div>

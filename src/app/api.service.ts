@@ -5,7 +5,11 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, employees_terminations, advances_acc, payroll_values_gt, paid_attendances } from './process_templates';
+import {  process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, 
+          vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, 
+          letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, 
+          change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, employees_terminations, advances_acc, 
+          payroll_values_gt, paid_attendances, reporters } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -759,6 +763,10 @@ setRevertClosePeriods(any:any){
 
 getClosingRise(any:any){
   return this.httpClient.post<rises>(`${this.PHP_API_SERVER}/phpscripts/getRises_closing`,any);
+}
+
+getReporter() {
+  return this.httpClient.get<reporters[]>(`${this.PHP_API_SERVER}/phpscripts/getReporter.php`);
 }
 
   constructor(private httpClient:HttpClient) { }
