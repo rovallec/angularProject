@@ -206,8 +206,7 @@
                     <th>AMOUNT</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let deduction of deductions"
-                        (click)="setPayTime(deduction.idemployees, deduction.idprofiles)">
+                    <tr *ngFor="let deduction of deductions">
                         <td>{{deduction.iddeductions}}</td>
                         <td>{{deduction.name}}</td>
                         <td>{{deduction.type}}</td>
@@ -225,7 +224,7 @@
                     <th>ACCOUNT</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let emp of employees" (click)="setPayTime(emp.idemployees, emp.id_profile)">
+                    <tr *ngFor="let emp of employees">
                         <td>{{emp.id_profile}}</td>
                         <td>{{emp.name}}</td>
                         <td>{{emp.account}}</td>
