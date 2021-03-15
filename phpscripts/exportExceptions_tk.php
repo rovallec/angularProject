@@ -39,7 +39,7 @@ WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_departme
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'VAC' AS `type_of_payment`, DATE_FORMAT(vacations.date, '%Y/%m/%d'), ' ', ' ', ' '
+'VAC' AS `type_of_payment`, DATE_FORMAT(vacations.date, '%Y/%m/%d'), ' ', ' ', vacations.count
 FROM
 	vacations
     INNER JOIN hr_processes ON hr_processes.idhr_processes = vacations.id_process

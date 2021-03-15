@@ -475,6 +475,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertVacation() {
+    console.log(this.activeVacation);
     this.apiService.insertVacations(this.activeVacation).subscribe((str: any) => {
       this.complete_adjustment = true;
       this.getVacations();

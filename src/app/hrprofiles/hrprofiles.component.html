@@ -457,8 +457,10 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Days:</label>
-                                    <input type="text" class="form-control" disabled="true"
-                                        [(ngModel)]="activeVacation.count">
+                                    <select class="form-control" [(ngModel)]="activeVacation.count" [disabled]="!editVac">
+                                        <option>1</option>
+                                        <option>0.5</option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Status:</label>
