@@ -10,7 +10,7 @@ import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { schedule_visit } from '../addTemplate';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises } from '../process_templates';
+import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
@@ -19,6 +19,7 @@ import { DH_NOT_SUITABLE_GENERATOR } from 'constants';
 import { runInThisContext } from 'vm';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { process } from '../process';
+import { JsonpClientBackend } from '@angular/common/http';
 
 
 @Component({
@@ -47,6 +48,8 @@ export class PeriodsComponent implements OnInit {
   global_debits: debits[] = [];
   global_judicials: judicials[] = [];
   global_services: services[] = [];
+  credits_updates: credits[] = [];
+  debits_updates: debits[] = [];
   backUp_payments: payments[];
   selected_accounts: string = 'GET ALL';
   period: periods = new periods;
@@ -69,12 +72,23 @@ export class PeriodsComponent implements OnInit {
   importActive: boolean = false;
   working: boolean = false;
   count_payments: number = 0;
-  importType: string = null;
-  importString: string = null;
+  importType: string = 'Bonus';
+  importString: string = 'Bonos Diversos';
   loading: boolean = false;
   isrs: isr[] = [];
   accounts: accounts[] = [];
   payroll_values: payroll_values_gt[] = [];
+  max_progress: number = 0;
+  selectedPayment: payments = new payments;
+  detailed_attendance: paid_attendances[] = [];
+  detailed_credits: credits[] = [];
+  detailed_debits: debits[] = [];
+  selected_payroll_value: payroll_values_gt = new payroll_values_gt;
+  detailed_hrs: string = null;
+  selectedAccount: accounts = new accounts;
+  clients: clients[] = [];
+  show_payments: payments[] = [];
+  selectedClient: string = null;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
@@ -89,6 +103,21 @@ export class PeriodsComponent implements OnInit {
     this.getDeductions();
     this.apiService.getFilteredPeriods({ id: this.route.snapshot.paramMap.get('id') }).subscribe((p: periods) => {
       this.period = p;
+      if (this.period.status == '0') {
+        let provitional_period: periods = new periods;
+        provitional_period.start = 'from_close';
+        provitional_period.idperiods = this.period.idperiods;
+        provitional_period.end = this.period.end;
+        provitional_period.status = this.period.status;
+        this.apiService.getPayments(provitional_period).subscribe((py: payments[]) => {
+          this.payments = py;
+          this.apiService.getClients().subscribe((cl: clients[]) => {
+            this.clients = cl;
+            this.setClient(cl[0].idclients);
+          })
+        })
+        this.showPayments = true;
+      };
     });
     this.daysOff = 0;
     this.roster = 0;
@@ -96,6 +125,10 @@ export class PeriodsComponent implements OnInit {
     this.diff = 0;
     this.totalDebits = 0;
     this.totalCredits = 0;
+    this.apiService.getClients().subscribe((cl: clients[]) => {
+      this.clients = cl;
+      this.setClient(cl[0].idclients);
+    })
   }
 
   getDeductions() {
@@ -136,80 +169,249 @@ export class PeriodsComponent implements OnInit {
 
 
   closePeriod() {
-    this.payments = [];
-    let cnt: number = 0;
-    this.showPayments = false;
-    this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
-      pv.forEach(payroll_value => {
-        let is_trm: boolean = false;
-        let py: payments = new payments;
-        this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_value.id_employee }).subscribe((emp: employees[]) => {
-          this.apiService.getTermdt(emp[0]).subscribe((trm: terminations) => {
-            if (!isNullOrUndefined(trm.valid_from)) {
-              is_trm = true;
-              if (new Date(trm.valid_from).getTime() >= new Date(this.period.start).getTime()) {
-                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(this.period.end).getTime()) - (new Date(trm.valid_from).getTime())) / (1000 * 3600 * 24) + 1)).toFixed(2);
-              }
-            } else {
-              py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh)).toFixed(2);
-            }
-            let base_salary: number = Number(emp[0].base_payment)/(240);
-            let productivity_salary: number = 0;
+    if (this.period.status != '3') {
+      window.alert("Period is still open, TimeKeeping must frozen it before run this closing");
+    } else {
+      this.working = true;
+      this.loading = true;
+      this.payments = [];
+      this.global_credits = [];
+      this.global_debits = [];
+      this.global_judicials = [];
+      this.credits_updates = [];
+      this.debits_updates = [];
+      let cnt: number = 0;
+      this.showPayments = false;
+      this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
+        this.max_progress = pv.length - 1;
+        pv.forEach(payroll_value => {
+          let is_trm: boolean = false;
+          let py: payments = new payments;
+          this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_value.id_employee }).subscribe((emp: employees[]) => {
+            this.apiService.getTermdt(emp[0]).subscribe((trm: terminations) => {
+              this.apiService.getClosingRise({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((rises: rises) => {
+                this.apiService.getTransfers({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((trns: hrProcess) => {
+                  this.apiService.getCredits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((cred: credits[]) => {
+                    this.apiService.getDebits({ id: emp[0].idemployees, period: this.period.idperiods }).subscribe((deb: debits[]) => {
+                      this.apiService.getJudicialDiscounts({ id: emp[0].idemployees }).subscribe((judicials: judicials[]) => {
+                        this.apiService.getServicesDiscounts({ id: emp[0].idemployees, date: this.period.end }).subscribe((services: services[]) => {
 
-            this.apiService.getClosingRise({id_employee:emp[0].idemployees, start:this.period.start, end:this.period.end}).subscribe((rises:rises)=>{
-              if(!isNullOrUndefined(rises.effective_date)){
-                productivity_salary = ((Number(rises.old_salary) - Number(emp[0].base_payment) - 250)/30) * (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)));
-                productivity_salary = (productivity_salary + ((Number(emp[0].productivity_payment) - 250) * ((new Date(this.period.end).getTime() - new Date(rises.effective_date).getTime())/(1000*3600*24))))/(240);
-              }else{
-                productivity_salary = (Number(emp[0].productivity_payment) - 250)/240
-              }
-            
+                          if (!isNullOrUndefined(trm.valid_from) && (new Date(trm.valid_from).getTime() >= new Date(this.period.start).getTime()) && (new Date(trm.valid_from).getTime() <= new Date(this.period.end).getTime())) {
+                            is_trm = true;                            
+                            py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) + (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime()))/(1000*3600*24)) + 1) - 15) - ((((new Date(this.period.end).getTime()) - (new Date(trm.valid_from).getTime())) / (1000 * 3600 * 24)) + 1)).toFixed(2);
+                            console.log((Number(payroll_value.discounted_hours) + 120) / 8) + "|" + Number(payroll_value.discounted_days + "|" + (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime()))/(1000*3600*24)) + 1) - 15) + "|" + ((((new Date(this.period.end).getTime()) - (new Date(trm.valid_from).getTime())) / (1000 * 3600 * 24)) + 1));
+                          } else {
+                            py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh)).toFixed(2);
+                            if(new Date(trm.valid_from).getTime() <= new Date(this.period.start).getTime()){
+                              py.days = '0';
+                              console.log(emp[0].nearsol_id);
+                            }
+                          }
 
-            this.apiService.getTransfers({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((trns: hrProcess) => {
-              if (!isNullOrUndefined(trns)) {
-                if (new Date(trns.date).getTime() >= new Date(this.period.start).getTime()) {
-                  if (payroll_value.id_account == emp[0].id_account) {
-                    py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(trns.date).getTime() - (new Date(this.period.start).getTime()))) / (1000 * 3600 * 24))).toFixed(2);
-                  } else {
-                    py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(this.period.end).getTime()) - (new Date(trns.date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
-                  }
-                }
-              }
-              py.id_employee = payroll_value.id_employee;
-              py.idpayments = payroll_value.id_payment;
-              py.id_period = payroll_value.id_period;
-              py.nearsol_id = payroll_value.nearsol_id;
-              py.ot_hours = payroll_value.ot_hours;
-              py.productivity_complete = emp[0].productivity_payment;
-              py.productivity_hours = (Number(py.days) * 8).toFixed(2);
-              py.seventh = payroll_value.seventh;
-              py.account = payroll_value.account_name;
-              py.base_complete = emp[0].base_payment;
-              py.base_hours = (Number(py.days) * 8).toFixed(2);
-              py.client_id = payroll_value.client_id;
-              py.employee_name = emp[0].name;
-              py.holidays_hours = payroll_value.holidays_hours;
-              py.idpayroll_values = payroll_value.idpayroll_values;
-              py.holidays = (Number(payroll_value.holidays_hours) * (base_salary + productivity_salary) * 2).toFixed(2);
-              py.base = (Number(base_salary) * Number(py.base_hours)).toFixed(2);
-              py.productivity = (Number(productivity_salary) * Number(py.productivity_hours)).toFixed(2);
-              if(emp[0].id_account != '2' && emp[0].id_account != '4' && emp[0].id_account != '5' && emp[0].id_account != '25' && emp[0].id_account != '26' && emp[0].id_account != '27' && emp[0].id_account != '29' && emp[0].id_account != '33' && emp[0].id_account != '35' && emp[0].id_account != '20'){
-                py.ot = ((Number(base_salary) + Number(productivity_salary)) * Number(py.ot_hours) * 2).toFixed(2)
-              }else{
-                py.ot = ((Number(base_salary) + Number(productivity_salary)) * Number(py.ot_hours) * 1.5).toFixed(2)
-              }
-              this.payments.push(py);
-              cnt = cnt + 1;
-              if (cnt == (pv.length - 1)) {
-                this.showPayments = true;
-                this.importActive = false;
-              }
+                          let base_salary: number = Number(emp[0].base_payment) / (240);
+                          let productivity_salary: number = 0;
+
+
+                          if (!isNullOrUndefined(rises.effective_date)) {
+                            productivity_salary = ((Number(rises.old_salary) - Number(emp[0].base_payment) - 250) / 30) * (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24)));
+                            productivity_salary = productivity_salary + ((Number(rises.new_salary) - Number(emp[0].base_payment) - 250) / 30) * (15 - (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24))));
+                            productivity_salary = productivity_salary / 120;
+                          } else {
+                            productivity_salary = ((Number(emp[0].productivity_payment) - 250) / 240);
+                          }
+
+                          if (new Date(emp[0].hiring_date).getTime() > new Date(this.period.start).getTime()) {
+                            py.days = (Number(py.days) - ((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24))).toFixed(2);
+                          }
+
+
+                          if (!isNullOrUndefined(trns)) {
+                            if (new Date(trns.date).getTime() >= new Date(this.period.start).getTime()) {
+                              if (payroll_value.id_account == emp[0].id_account) {
+                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(trns.date).getTime() - (new Date(this.period.start).getTime()))) / (1000 * 3600 * 24))).toFixed(2);
+                              } else {
+                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(this.period.end).getTime()) - (new Date(trns.date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
+                              }
+                            }
+                          }
+
+                          if((Number(py.days)) >= (((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) && (((Number(payroll_value.discounted_hours) * (- 1))/8) + Number(payroll_value.discounted_days) + Number(payroll_value.seventh)) == 0){
+                            py.days = "15";
+                          }
+
+                          if(Number(py.days) >= 15){
+                            py.days = "15";
+                          }
+
+                          if(Number(py.days)<=0){
+                            py.days = "0";
+                          }
+
+                          if(is_trm){
+                            if((Number(payroll_value.discounted_days) + Number(payroll_value.seventh) + (((new Date(this.period.end).getTime()) - (new Date(trm.valid_from).getTime())) / (1000 * 3600 * 24) + 1)) >= (((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1)){
+                              py.days = '0';
+                            }
+                          }
+
+                          py.id_employee = payroll_value.id_employee;
+                          py.idpayments = payroll_value.id_payment;
+                          py.id_period = payroll_value.id_period;
+                          py.nearsol_id = payroll_value.nearsol_id;
+                          py.ot_hours = payroll_value.ot_hours;
+                          py.productivity_complete = emp[0].productivity_payment;
+                          py.productivity_hours = (Number(py.days) * 8).toFixed(2);
+                          py.seventh = payroll_value.seventh;
+                          py.account = payroll_value.account_name;
+                          py.base_complete = emp[0].base_payment;
+                          py.base_hours = (Number(py.days) * 8).toFixed(2);
+                          py.client_id = payroll_value.client_id;
+                          py.employee_name = emp[0].name;
+                          py.holidays_hours = payroll_value.holidays_hours;
+                          py.idpayroll_values = payroll_value.idpayroll_values;
+                          py.holidays = (Number(payroll_value.holidays_hours) * (base_salary + productivity_salary) * 2).toFixed(2);
+                          py.base = (Number(base_salary) * Number(py.base_hours)).toFixed(2);
+                          py.productivity = (Number(productivity_salary) * Number(py.productivity_hours)).toFixed(2);
+
+
+                          if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
+                            py.ot = ((Number(base_salary) + Number(productivity_salary) + (250 / 240)) * Number(py.ot_hours) * 2).toFixed(2)
+                          } else {
+                            py.ot = ((Number(base_salary) + Number(productivity_salary) + (250 / 240)) * Number(py.ot_hours) * 1.5).toFixed(2)
+                          }
+
+                          let base_credit: credits = new credits;
+                          let productivity_credit: credits = new credits;
+                          let decreot_credit: credits = new credits;
+                          let ot_credit: credits = new credits;
+                          let holiday_credit: credits = new credits;
+                          let isr: number = 0;
+
+                          let igss_debit: debits = new debits;
+
+                          base_credit.amount = py.base;
+                          base_credit.idpayments = py.idpayments;
+                          base_credit.type = "Salario Base";
+
+                          productivity_credit.amount = py.productivity;
+                          productivity_credit.idpayments = py.idpayments;
+                          productivity_credit.type = "Bonificacion Productividad";
+
+                          decreot_credit.amount = ((250 / 240) * (Number(py.base_hours))).toFixed(2);
+                          decreot_credit.idpayments = py.idpayments;
+                          decreot_credit.type = "Bonificacion Decreto";
+
+                          if (Number(py.ot) > 0) {
+                            ot_credit.amount = py.ot;
+                            ot_credit.idpayments = py.idpayments;
+                            ot_credit.type = "Horas Extra Laboradas: " + py.ot_hours;
+                            this.global_credits.push(ot_credit);
+                          }
+
+                          if (Number(holiday_credit.amount) > 0) {
+                            holiday_credit.amount = py.ot;
+                            holiday_credit.idpayments = py.idpayments;
+                            holiday_credit.type = "Horas De Asueto: " + py.holidays_hours;
+                            this.global_credits.push(holiday_credit);
+                          }
+
+                          igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * 0.0483).toFixed(2);
+                          igss_debit.idpayments = py.idpayments;
+                          igss_debit.type = "Descuento IGSS";
+
+                          this.global_credits.push(base_credit);
+                          this.global_credits.push(productivity_credit);
+                          this.global_debits.push(igss_debit);
+
+
+                          let sum_cred: number = 0
+                          cred.forEach(credit => {
+                            if (credit.status == "PENDING") {
+                              sum_cred = sum_cred + Number(credit.amount);
+                            }
+                          })
+                          py.credits = (sum_cred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount)).toFixed(2);
+
+
+
+                          let sum_deb: number = 0
+                          deb.forEach(debit => {
+                            if (debit.status == "PENDING") {
+                              sum_deb = sum_deb + Number(debit.amount);
+                              if (debit.type = "ISR") {
+                                isr = Number(debit.amount);
+                              }
+                            }
+                          })
+                          py.debits = (sum_deb + Number(igss_debit.amount)).toFixed(2);
+
+
+
+                          services.forEach(service => {
+                            if (Number(service.max) == 0 || Number(service.max) > (Number(service.current) + Number(service.amount))) {
+                              let service_debit: debits = new debits;
+                              service_debit.amount = Number(service.amount).toFixed(2);
+                              service_debit.type = service.name;
+                              service_debit.idpayments = py.idpayments;
+                              py.debits = (Number(py.debits) + Number(service.amount)).toFixed(2);
+                              service.current = (Number(service.current) + Number(service.amount)).toFixed(2);
+                              this.global_debits.push(service_debit);
+                            } else if (Number(service.max) != 0) {
+                              if (Number(service.max) <= (Number(service.current) + Number(service.amount))) {
+                                let service_debit: debits = new debits;
+                                service_debit.amount = (Number(service.max) - Number(service.current)).toFixed(2);
+                                service_debit.type = service.name;
+                                service_debit.idpayments = py.idpayments;
+                                py.debits = (Number(py.debits) + Number(service.amount)).toFixed(2);
+                                service.current = (Number(service.current) + Number(service_debit.amount)).toFixed(2);
+                                service.status = '0';
+                                this.global_debits.push(service_debit);
+                              }
+                            }
+                            this.global_services.push(service);
+                          })
+
+
+
+                          judicials.forEach(judicial => {
+                            if (Number(judicial.max) == 0 || Number(judicial.max) < (Number(judicial.current) + (((Number(py.credits) - Number(igss_debit.amount) - Number(isr)) - Number(judicial.amount)) * (Number(judicial.amount) / 100)))) {
+                              judicial.current = (Number(judicial.current) + (((Number(py.credits) - Number(igss_debit.amount) - Number(isr)) - Number(judicial.amount)) * (Number(judicial.amount) / 100))).toFixed(2);
+                              let judicial_discount: debits = new debits;
+                              judicial_discount.amount = (((Number(py.credits) - Number(igss_debit.amount) - Number(isr)) - Number(judicial.amount)) * (Number(judicial.amount) / 100)).toFixed(2);
+                              judicial_discount.type = "Descuento Judicial";
+                              judicial_discount.idpayments = py.idpayments;
+                              this.global_debits.push(judicial_discount);
+                              this.global_judicials.push(judicial);
+                            } else if (Number(judicial.max) < (Number(judicial.current) + (((Number(py.credits) - Number(igss_debit.amount) - Number(isr)) - Number(judicial.amount)) * (Number(judicial.amount) / 100)))) {
+                              judicial.current = (Number(judicial.current) + (((Number(py.credits) - Number(igss_debit.amount) - Number(isr)) - Number(judicial.amount)) * (Number(judicial.amount) / 100))).toFixed(2);
+                              this.global_judicials.push(judicial);
+                            }
+                          })
+
+
+                          py.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate());
+                          py.total = (Number(py.credits) - Number(py.debits)).toFixed(2);
+
+                          this.payments.push(py);
+                          cnt = cnt + 1;
+                          this.progress = cnt;
+                          this.loading = false;
+                          if (cnt >= (pv.length)) {
+                            this.working = false;
+                            this.showPayments = true;
+                            this.importActive = false;
+                            this.setAccount_sh(this.selectedAccount);
+                          }
+                        })
+                      })
+                    })
+                  })
+                })
+              })
             })
           })
         })
       })
-    })
-    })
+    }
   }
 
   searchCloseEmployee() {
@@ -243,48 +445,6 @@ export class PeriodsComponent implements OnInit {
     this.showPayments = false;
   }
 
-  proceedClosePeriod() {
-    let cnt: number = 0;
-    let failed: payments[] = [];
-
-    return this.payments.forEach(pay => {
-      this.apiService.setPayment(pay).subscribe((str: string) => { // Inserta los pagos ya calculados.
-        if (str != '1') {
-          failed.push(pay);
-        }
-        cnt = cnt + 1;
-        if (cnt == this.payments.length - 1) {
-          this.apiService.setClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
-            if (str.split("|")[0] == 'Info:') {
-              window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
-              this.loading = false;
-              this.start();
-
-            } else {
-              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
-              this.loading = false;
-            }
-          }); //Fin del if.
-        }
-        return str;
-      })
-    }
-    );
-  };
-
-  revertClosePeriod() {
-    this.apiService.setRevertClosePeriods({ id_period: this.period.idperiods }).subscribe((str: string) => { // ejecuta proceso de Cierre de período. CLOSE_PERIODS
-      if (str.split("|")[0] == 'Info:') {
-        window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
-        this.loading = false;
-        this.start();
-
-      } else {
-        window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
-        this.loading = false;
-      }
-    }); //Fin del if.
-  }
 
   getHome() {
     window.open("./", "_self");
@@ -300,14 +460,73 @@ export class PeriodsComponent implements OnInit {
       }
       this.apiService.updateServices(service).subscribe((str: string) => { });
     });
-
+    this.global_judicials.forEach(judicial => {
+      this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
+        if (str_r.split("|")[0] == '0') {
+          window.alert("Error updating Legal Deductions");
+        }
+      })
+    })
+    this.payments.forEach(py => {
+      this.apiService.setPayment(py).subscribe((str_3: string) => {
+        if (str_3.split("|")[0] == "0") {
+          window.alert("Error updating Payments");
+        }
+      })
+    })
     this.start();
-    let respuesta: any;
-    respuesta = this.proceedClosePeriod();
   }
 
-  setPayTime(id_employee: string, id_profile: string) {
+  setPayTime(payment: payments) {
+    this.selectedPayment = payment;
+    this.detailed_attendance = [];
+    this.detailed_credits = [];
+    this.detailed_debits = [];
+    this.apiService.getPaidAttendances(this.period).subscribe((p_att: paid_attendances[]) => {
+      this.apiService.getCredits({ id: payment.id_employee, period: this.period.idperiods }).subscribe((cred: credits[]) => {
+        this.apiService.getDebits({ id: payment.id_employee, period: this.period.idperiods }).subscribe((deb: debits[]) => {
+          this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
 
+            pv.forEach(p => {
+              if (p.idpayroll_values == payment.idpayroll_values) {
+                this.selected_payroll_value = p;
+                this.detailed_hrs = (Number(p.discounted_hours) + Number(p.ot_hours)).toFixed(2);
+              }
+            })
+
+            p_att.forEach(paid_att => {
+              if (paid_att.id_payroll_value == payment.idpayroll_values) {
+                this.detailed_attendance.push(paid_att);
+              }
+            })
+
+            cred.forEach(credit => {
+              if (credit.status == "PENDING") {
+                this.detailed_credits.push(credit);
+              }
+            })
+
+            deb.forEach(debit => {
+              if (debit.status == "PENDING") {
+                this.detailed_debits.push(debit);
+              }
+            })
+
+            this.global_credits.forEach(global_cred => {
+              if (global_cred.idpayments == payment.idpayments) {
+                this.detailed_credits.push(global_cred);
+              }
+            })
+
+            this.global_debits.forEach(global_deb => {
+              if (global_deb.idpayments == payment.idpayments) {
+                this.detailed_debits.push(global_deb);
+              }
+            })
+          })
+        })
+      })
+    })
   }
 
   activeImport() {
@@ -331,6 +550,12 @@ export class PeriodsComponent implements OnInit {
     let partial_credits: credits[] = [];
     let fileReader = new FileReader();
     let found: boolean = false;
+    let provitional_period: periods = new periods;
+    provitional_period.end = this.period.end;
+    provitional_period.idperiods = this.period.idperiods;
+    provitional_period.start = "from_close";
+    provitional_period.status = this.period.status;
+    provitional_period.type_period = this.period.type_period;
 
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
@@ -351,7 +576,7 @@ export class PeriodsComponent implements OnInit {
           partial_credits.push(cred);
         })
         let count: number = 0;
-        this.apiService.getPayments(this.period).subscribe((paymnts: payments[]) => {
+        this.apiService.getPayments(provitional_period).subscribe((paymnts: payments[]) => {
           partial_credits.forEach(ele => {
             this.apiService.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits }).subscribe((emp: employees[]) => {
               ele.type = this.importType;
@@ -367,6 +592,7 @@ export class PeriodsComponent implements OnInit {
               }
               count = count + 1;
               if (this.importType == "Bonus") {
+                ele.type = this.importString;
                 this.credits.push(ele);
               } else if (this.importType == "Discount") {
                 let deb: debits = new debits;
@@ -376,7 +602,7 @@ export class PeriodsComponent implements OnInit {
                 deb.id_employee = ele.id_employee;
                 deb.idpayments = ele.idpayments;
                 deb.notes = ele.notes;
-                deb.type = ele.type;
+                deb.type = this.importString;
                 this.debits.push(deb);
               }
 
@@ -437,5 +663,28 @@ export class PeriodsComponent implements OnInit {
   setAccountingPolicy() {
     // Se encarga de generar la póliza contable al período en curso si no existiera.
     window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_blank")
+  }
+
+  setClient(cl: string) {
+    this.accounts = [];
+    this.selectedClient = cl;
+    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
+      acc.forEach(account => {
+        if (account.id_client == cl) {
+          this.accounts.push(account);
+        }
+      });
+      this.setAccount_sh(this.accounts[0]);
+    })
+  }
+
+  setAccount_sh(acc: accounts) {
+    this.selectedAccount = acc;
+    this.show_payments = [];
+    this.payments.forEach(p => {
+      //if (p.account == acc.name || p.account == acc.idaccounts) {
+        this.show_payments.push(p);
+      //}
+    })
   }
 }

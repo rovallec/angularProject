@@ -3,20 +3,21 @@
         <div class="row" style="margin-top:25px">
             <div class="d-flex justify-content-between mb-3 w-100">
                 <div class="p-2">
-                    <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'" title="Download Attendance" (click)="exportPayroll_values()"><i
+                    <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'"
+                        title="Download Attendance" (click)="exportPayroll_values()"><i
                             class="fas fa-file-download"></i></button>
                 </div>
                 <div class="p-2" *ngIf="actualPeriod.status != '3'">
-                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal" tittle="Close Period"><i
-                            class="far fa-save"></i></button>
+                    <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"
+                        tittle="Close Period"><i class="far fa-save"></i></button>
                 </div>
                 <div class="p-2">
-                    <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal" tittle="Search"><i
-                            class="fas fa-search"></i></button>
+                    <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal"
+                        tittle="Search"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="p-2">
-                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'" title="Downlaod Payroll Values"><i
-                            class="fas fa-file-export"></i></button>
+                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"
+                        title="Downlaod Payroll Values"><i class="fas fa-file-export"></i></button>
                 </div>
             </div>
         </div>
@@ -64,164 +65,210 @@
             </div>
             <div class="col-md-2"></div>
         </div>
-        <div class="row col-md-12" style="margin-top:25px">
-            <table class="table table-striped">
-                <thead>
-                    <th>ID</th>
-                    <th>NEARSOL ID</th>
-                    <th>CLIENT ID</th>
-                    <th>NAME</th>
-                    <th>ACCOUNT</th>
-                    <th>DISCOUNTED DAYS</th>
-                    <th>HOURS</th>
-                    <th>SEVENTH</th>
-                    <th>OT</th>
-                    <th>HOLIDAYS</th>
-                    <th>STATUS</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let pay of payroll_values" (click)="setAttendance(pay)" data-toggle="modal"
-                        data-target="#attendance_detail">
-                        <td>{{pay.id_payment}}</td>
-                        <td>{{pay.nearsol_id}}</td>
-                        <td>{{pay.client_id}}</td>
-                        <td>{{pay.agent_name}}</td>
-                        <td>{{pay.account_name}}</td>
-                        <td>{{pay.discounted_days}}</td>
-                        <td>{{pay.discounted_hours}}</td>
-                        <td>{{pay.seventh}}</td>
-                        <td>{{pay.ot_hours}}</td>
-                        <td>{{pay.holidays_hours}}</td>
-                        <td>{{pay.agent_status}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-<!----------------------------------------------------------------------------------------------SEARCH MODAL--------------------------------------------------------------->
-<div class="modal fade" id="search_modal" tabindex="-1" role="dialog" aria-labelledby="search_modal"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="search_modalLabel">SEARCH</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="row">
-                <div class="modal-body d-flex justify-content-between">
-                    <div class="p-2 form-group">
-                        <label>Filter:</label>
-                        <select class="form-control" [(ngModel)]="searchFilter">
-                            <option value="name">Name:</option>
-                            <option value="client_id">Client ID:</option>
-                            <option value="nearsol_id">Nearsol ID:</option>
-                        </select>
+        <div class="row" style="margin-top:25px">
+            <div class="col-md-12">
+                <nav width=100% style="border-top: 4px solid #e3f2fd;">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
+                        <a class="nav-item nav-link active" id="nav-payroll-tab" data-toggle="tab" href="#nav-payroll"
+                            role="tab" aria-controls="nav-payroll" aria-selected="true">Payroll Values</a>
+                        <a class="nav-item nav-link" id="nav-resume-tab" data-toggle="tab" href="#nav-resume" role="tab"
+                            aria-controls="nav-resume" aria-selected="true">Resume</a>
                     </div>
-                    <div class="p-2 form-group">
-                        <label>Value:</label>
-                        <input class="form-control" [(ngModel)]="searchValue">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-between mt-2">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCEL</button>
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
-                    (click)="searchNow()">ACCEPCT</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!----------------------------------------------------------------------------------------------ALERT MODAL---------------------------------------------------------------->
-<div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="alert_modallLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="alert_modalLabel">FREEZE PERIOD</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="row">
-                <div class="modal-body d-flex justify-content-center">
-                    <div class="p-2">
-                        <p>This action will freeze the selected period from</p>
-                        <p>for all clients are you sure to proceed?</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-between mt-2">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCEL</button>
-                <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
-                    (click)="saveClosing()">ACCEPCT</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!----------------------------------------------------------------------------------------------DETAILS MODAL-------------------------------------------------------------->
-<div class="modal fade" id="attendance_detail" tabindex="-1" role="dialog" aria-labelledby="eattendance_detailLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="attendance_detailLabel">{{selected_payroll_value.agent_name}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="row">
-                <div class="modal-body d-flex justify-content-center">
-                    <div class="p-2">
-                        <table style="width: 100%;" class="table table-hover">
-                            <thead class="thead-dark">
-                                <th>DATE</th>
-                                <th>SCHEDULED</th>
-                                <th>WORKED</th>
-                                <th>BALANCE</th>
+                </nav>
+                <div class="tab-content" id="nav-tabContent" style="margin-top:10px">
+                    <div class="tab-pane fade show active" id="nav-payroll" role="tabpanel"
+                        aria-labelledby="nav-payroll-tab">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>ID</th>
+                                <th>NEARSOL ID</th>
+                                <th>CLIENT ID</th>
+                                <th>NAME</th>
+                                <th>ACCOUNT</th>
+                                <th>DISCOUNTED DAYS</th>
+                                <th>HOURS</th>
+                                <th>SEVENTH</th>
+                                <th>OT</th>
+                                <th>HOLIDAYS</th>
+                                <th>STATUS</th>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let at of show_attendances table-hover" [ngClass]="{'table-danger':(at.balance === 'JANP' || at.balance === 'NS' || at.balance === 'LOA'), 'table-success':at.balance > 0,
-                         'table-info':(at.balance === 'OFF' || at.balance === 'VAC' || at.balance === 'JAP'), 
-                         'table-light':at.balance === '0', 'table-warning':at.balance < 0, 'table-secondary':at.balance === 'TERM' || at.balance === 'TRANSFER'}">
-                                    <td>{{at.date}}</td>
-                                    <td>{{at.scheduled}}</td>
-                                    <td>{{at.worked_time}}</td>
-                                    <td>{{at.balance}}</td>
+                                <tr *ngFor="let pay of payroll_values" (click)="setAttendance(pay)" data-toggle="modal"
+                                    data-target="#attendance_detail">
+                                    <td>{{pay.id_payment}}</td>
+                                    <td>{{pay.nearsol_id}}</td>
+                                    <td>{{pay.client_id}}</td>
+                                    <td>{{pay.agent_name}}</td>
+                                    <td>{{pay.account_name}}</td>
+                                    <td>{{pay.discounted_days}}</td>
+                                    <td>{{pay.discounted_hours}}</td>
+                                    <td>{{pay.seventh}}</td>
+                                    <td>{{pay.ot_hours}}</td>
+                                    <td>{{pay.holidays_hours}}</td>
+                                    <td *ngIf="pay.agent_status == '1'">ACTIVE</td>
+                                    <td *ngIf="pay.agent_status == '0'">INACTIVE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade " id="nav-resume" role="tabpanel" aria-labelledby="nav-resume-tab">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>NEARSOL ID</th>
+                                <th>CLIENT ID</th>
+                                <th>NAME</th>
+                                <th>VACATIONS</th>
+                                <th>JANP</th>
+                                <th>JAP</th>
+                                <th>IGSS</th>
+                                <th>IGSS Hrs.</th>
+                                <th>INSURANCE</th>
+                                <th>OTHER Hrs.</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let r of resumes">
+                                    <td>{{r.nearsol_id}}</td>
+                                    <td>{{r.client_id}}</td>
+                                    <td>{{r.name}}</td>
+                                    <td>{{r.vacations}}</td>
+                                    <td>{{r.janp}}</td>
+                                    <td>{{r.jap}}</td>
+                                    <td>{{r.igss}}</td>
+                                    <td>{{r.igss_hrs}}</td>
+                                    <td>{{r.insurance}}</td>
+                                    <td>{{r.other_hrs}}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="row col-md-12">
-                <div class="col-md-3">
-                    <label>TOTAL +/-:</label>
-                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_hours"
-                        *ngIf="selected_payroll_value.hrs <= 0" [disabled]="true">
-                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.ot_hours"
-                        *ngIf="selected_payroll_value.hrs > 0" [disabled]="true">
+        </div>
+    </div>
+    <!----------------------------------------------------------------------------------------------SEARCH MODAL--------------------------------------------------------------->
+    <div class="modal fade" id="search_modal" tabindex="-1" role="dialog" aria-labelledby="search_modal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="search_modalLabel">SEARCH</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="col-md-3">
-                    <label>REGULAR:</label>
-                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_days"
-                        [disabled]="true">
+                <div class="row">
+                    <div class="modal-body d-flex justify-content-between">
+                        <div class="p-2 form-group">
+                            <label>Filter:</label>
+                            <select class="form-control" [(ngModel)]="searchFilter">
+                                <option value="name">Name:</option>
+                                <option value="client_id">Client ID:</option>
+                                <option value="nearsol_id">Nearsol ID:</option>
+                            </select>
+                        </div>
+                        <div class="p-2 form-group">
+                            <label>Value:</label>
+                            <input class="form-control" [(ngModel)]="searchValue">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label>SEVENTH:</label>
-                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.seventh"
-                        [disabled]="true">
+                <div class="modal-footer d-flex justify-content-between mt-2">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCEL</button>
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                        (click)="searchNow()">ACCEPCT</button>
                 </div>
-                <div class="col-md-3">
-                    <label>TOTAL:</label>
-                    <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.total_days"
-                        [disabled]="true">
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-right mt-2">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+    <!----------------------------------------------------------------------------------------------ALERT MODAL---------------------------------------------------------------->
+    <div class="modal fade" id="alert_modal" tabindex="-1" role="dialog" aria-labelledby="alert_modallLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alert_modalLabel">FREEZE PERIOD</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="modal-body d-flex justify-content-center">
+                        <div class="p-2">
+                            <p>This action will freeze the selected period from</p>
+                            <p>for all clients are you sure to proceed?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between mt-2">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCEL</button>
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                        (click)="saveClosing()">ACCEPCT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!----------------------------------------------------------------------------------------------DETAILS MODAL-------------------------------------------------------------->
+    <div class="modal fade" id="attendance_detail" tabindex="-1" role="dialog" aria-labelledby="eattendance_detailLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="attendance_detailLabel">{{selected_payroll_value.agent_name}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="modal-body d-flex justify-content-center">
+                        <div class="p-2">
+                            <table style="width: 100%;" class="table table-hover">
+                                <thead class="thead-dark">
+                                    <th>DATE</th>
+                                    <th>SCHEDULED</th>
+                                    <th>WORKED</th>
+                                    <th>BALANCE</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let at of show_attendances table-hover"
+                                        [ngClass]="{'table-danger':(at.balance === 'JANP' || at.balance === 'NS' || at.balance === 'LOA'), 'table-success':at.balance > 0,
+                         'table-info':(at.balance === 'OFF' || at.balance === 'VAC' || at.balance === 'JAP'), 
+                         'table-light':at.balance === '0', 'table-warning':at.balance < 0, 'table-secondary':at.balance === 'TERM' || at.balance === 'TRANSFER'}">
+                                        <td>{{at.date}}</td>
+                                        <td>{{at.scheduled}}</td>
+                                        <td>{{at.worked_time}}</td>
+                                        <td>{{at.balance}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-3">
+                        <label>TOTAL +/-:</label>
+                        <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_hours"
+                            *ngIf="selected_payroll_value.hrs <= 0" [disabled]="true">
+                        <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.ot_hours"
+                            *ngIf="selected_payroll_value.hrs > 0" [disabled]="true">
+                    </div>
+                    <div class="col-md-3">
+                        <label>REGULAR:</label>
+                        <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.discounted_days"
+                            [disabled]="true">
+                    </div>
+                    <div class="col-md-3">
+                        <label>SEVENTH:</label>
+                        <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.seventh"
+                            [disabled]="true">
+                    </div>
+                    <div class="col-md-3">
+                        <label>TOTAL:</label>
+                        <input type="text" class="form-control" [(ngModel)]="selected_payroll_value.total_days"
+                            [disabled]="true">
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-right mt-2">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>

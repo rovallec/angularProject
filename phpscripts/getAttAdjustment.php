@@ -8,13 +8,22 @@
     $id = ($request->justify);
     $resp = [];
     $id = $id . ";";
+    $temp = "";
+    $period = "";
 
     if(explode(";", $id)[0] == 'id'){
         $emp =  explode(";", $id)[1];
         $sql = "SELECT *,  `attendences`.`date` AS `attdate` FROM attendence_adjustemnt LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp";
     }else{
-        $emp = explode(";",$id)[0];
-        $sql =  "SELECT *,  `attendences`.`date` AS `attdate` FROM attendence_adjustemnt LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp;";
+        if(explode(";", $id)[0] == 'id|p'){
+            $temp = explode(";",$id)[1];
+            $emp = explode("|",$temp)[0];
+            $period = explode("|",$temp)[1];
+            $sql =  "SELECT *,  `attendences`.`date` AS `attdate` FROM attendence_adjustemnt LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp AND attendences.date BETWEEN $period;";
+        }else{
+            $emp = explode(";",$id)[0];
+            $sql =  "SELECT *,  `attendences`.`date` AS `attdate` FROM attendence_adjustemnt LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE hr_processes.id_employee  = $emp;";
+        }
     }
        
     $sql = "SELECT *,  `attendences`.`date` AS `attdate` FROM attendence_adjustemnt LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE attendence_justifications.idattendence_justifications  = $id";

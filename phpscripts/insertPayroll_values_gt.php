@@ -12,7 +12,7 @@ $i = 0;
 $sql = "INSERT INTO `minearsol`.`payroll_values` (`idpayroll_values`,`id_employee`, `id_reporter`, `id_account`, `id_period`, `id_payment`, `client_id`," .
         " `nearsol_id`, `discounted_days`, `seventh`, `discounted_hours`, `ot_hours`, `holidays_hours`, `performance_bonus`, `treasure_hunt`,`next_seventh`) VALUES";
 
-for ($i=0; $i < (count($request) - 1); $i++) { 
+for ($i=0; $i < (count($request)); $i++) { 
     if($i != 0){
         $sql = $sql . ",";
     }

@@ -11,7 +11,7 @@ $r = [];
 $i = 0;
 $sql = "INSERT INTO `minearsol`.`paid_attendances` (`idpaid_attendances`,`id_payroll_value`, `date`, `scheduled`, `worked`, `balance`) VALUES";
 
-for ($i=0; $i < (count($request) - 1); $i++) { 
+for ($i=0; $i < (count($request)); $i++) { 
     if($i != 0){
         $sql = $sql . ",";
     }

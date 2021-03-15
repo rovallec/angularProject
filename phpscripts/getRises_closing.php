@@ -11,7 +11,7 @@ $end = ($request->end);
 
 $user = [];
 
-$sql = "SELECT * FROM `rises` WHERE `id_employee` = '$id' AND effective_date BETWEEN '$start' AND '$end';";
+$sql = "SELECT * FROM `rises` INNER JOIN hr_processes ON hr_processes.idhr_processes = rises.id_process WHERE `id_employee` = '$id' AND effective_date BETWEEN '$start' AND '$end';";
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
@@ -28,7 +28,7 @@ if($result = mysqli_query($con, $sql)){
     };
     echo json_encode($user);
 }else{
-    http_response_code(404);
+    echo($sql);
 }
 
 ?>

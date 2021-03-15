@@ -37,7 +37,7 @@ $sql =  "UPDATE `payments` set `credits` = $credits, `debits` = $debits, `date` 
         "productivity = $productivity, sevenths = $sevenths, " .
         "holidays = $holidays, holidays_hours = $holidays_hours, " .
         "base_complete = $base_complete, productivity_complete = $productivity_complete, " .
-        "id_account_py = $id_account " .
+        "id_account_py = IF(id_account_py IS NULL, $id_account, id_account_py) " .
         "WHERE `idpayments` = $idpayment";
 
         

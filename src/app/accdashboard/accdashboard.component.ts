@@ -44,6 +44,8 @@ export class AccdashboardComponent implements OnInit {
         } else if (per.status=='1') {
           per.status = 'OPEN';
           this.actualPeriod = per;
+        }else if(per.status == '3'){
+          per.status = 'FROZEN';
         }
       })
       this.periods = prd;

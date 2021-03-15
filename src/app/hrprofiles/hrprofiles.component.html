@@ -275,6 +275,7 @@
                                         <th>ACTION</th>
                                         <th>COUNT</th>
                                         <th>DATE</th>
+                                        <th>STATUS</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let vacation of showVacations" (click)="getVacation(vacation)"
@@ -283,6 +284,7 @@
                                             <td>{{vacation.action}}</td>
                                             <td>{{vacation.count}}</td>
                                             <td>{{vacation.took_date}}</td>
+                                            <td>{{vacation.status}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

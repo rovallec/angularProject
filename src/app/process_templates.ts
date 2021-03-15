@@ -725,7 +725,7 @@ export class debits {
         this.iddebits = null;
         this.idpayments = null;
         this.type = null;
-        this.amount = null;
+        this.amount = '0';
         this.status = null;
         //process
         this.id_process = null;
@@ -753,7 +753,7 @@ export class credits {
         this.iddebits = null;
         this.idpayments = null;
         this.type = null;
-        this.amount = null;
+        this.amount = '0';
         this.status = null;
         //process
         this.id_process = null;
@@ -1277,5 +1277,30 @@ export class paid_attendances{
         this.worked = null;
         this.balance = null;
         this.id_employee = null;
+    }
+}
+
+export class payroll_resume{
+    nearsol_id:string;
+    client_id:string;
+    name:string;
+    vacations:string;
+    janp:string;
+    jap:string;
+    igss:string;
+    igss_hrs:string;
+    insurance:string;
+    other_hrs:string;
+    constructor(){
+        this.nearsol_id = null;
+        this.client_id = null;
+        this.name = null;
+        this.vacations = '0';
+        this.janp = '0';
+        this.jap = '0';
+        this.igss = '0';
+        this.igss_hrs = '0';
+        this.insurance = '0';
+        this.other_hrs = '0';
     }
 }

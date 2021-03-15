@@ -50,7 +50,7 @@ export class SupExceptionsComponent implements OnInit {
             adjustment.reason = 'Supervisor Exception';
             adjustment.id_attendence = attendance[0].idattendences;
             adjustment.time_before = attendance[0].worked_time;
-            adjustment.time_after = (parseFloat(sup.time) + parseFloat(attendance[0].worked_time)).toFixed(2);
+            adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
             adjustment.amount = sup.time;
             adjustment.state = "PENDING";
             this.apiService.insertAttJustification(adjustment).subscribe((str:string)=>{
