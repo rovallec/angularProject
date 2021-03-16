@@ -111,7 +111,7 @@ export class HrdailyComponent implements OnInit {
       if (this.me.department == '28') {
         window.open("http://200.94.251.67/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo, "_blank");
       } else {
-        window.open("http://200.94.251.67/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId)
+        window.open("http://200.94.251.67/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId, "_blank");
       }
     }
   }

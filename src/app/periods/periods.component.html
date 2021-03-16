@@ -66,8 +66,22 @@
         </div>
     </div>
 
-    <div class="form-row col-md-12" *ngIf="importActive">
-        <div class="form-row col-md-12">
+    <div class="row col-md-12">
+        <div class="col-md-2">
+            <div class="row p-2">
+                <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
+                    <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
+                </select>
+            </div>
+            <div class="row p-2">
+                <div class="list-group w-100" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
+                        [tabindex]="acc.idaccounts" [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}"
+                        style="cursor: pointer;" (click)="setAccount_sh(acc)">{{acc.name}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10" *ngIf="importActive">
             <div class="form-group col-md-3"></div>
             <div class="form-group col-md-2">
                 <select class="form-control" [(ngModel)]="importType" (change)="setType()">
@@ -92,7 +106,7 @@
             <div class="form-group col-md-3"></div>
         </div>
 
-        <div class="form-row col-md-12" *ngIf="importEnd  && importType == 'Bonus'">
+        <div class="col-md-10" *ngIf="importEnd  && importType == 'Bonus'">
             <table class="table table-striped table-hover" style="width: 100%;text-align:center">
                 <thead>
                     <th>NEARSOL ID</th>
@@ -113,7 +127,7 @@
             </table>
         </div>
 
-        <div class="form-row col-md-12" *ngIf="importEnd && importType == 'Discount'">
+        <div class="col-md-10" *ngIf="importEnd && importType == 'Discount'">
             <table class="table table-striped table-hover" style="width: 100%;text-align:center">
                 <thead>
                     <th>NEARSOL ID</th>
@@ -132,22 +146,6 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div class="row col-md-12">
-        <div class="col-md-2">
-            <div class="row p-2">
-                <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
-                    <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
-                </select>
-            </div>
-            <div class="row p-2">
-                <div class="list-group w-100" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
-                        [tabindex]="acc.idaccounts" [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}"
-                        style="cursor: pointer;" (click)="setAccount_sh(acc)">{{acc.name}}</a>
-                </div>
-            </div>
         </div>
         <div class="col-md-10" *ngIf="showPayments && !importActive">
             <div class="form-group col-md-12">
@@ -194,43 +192,43 @@
                 </table>
             </div>
         </div>
-    </div>
-    <div class="from-row col-md-12" *ngIf="!showPayments && !importActive">
-        <div class="form-group col-md-12" *ngIf="ded">
-            <table class="table table-striped table-hover" style="width: 100%;text-align:center">
-                <thead>
-                    <th>ID</th>
-                    <th>NAME</th>
-                    <th>TYPE</th>
-                    <th>REASON</th>
-                    <th>AMOUNT</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let deduction of deductions">
-                        <td>{{deduction.iddeductions}}</td>
-                        <td>{{deduction.name}}</td>
-                        <td>{{deduction.type}}</td>
-                        <td>{{deduction.reason}}</td>
-                        <td>{{deduction.amount}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="form-group col-md-12" *ngIf="!ded">
-            <table class="table table-striped table-hover" style="width: 100%;text-align:center">
-                <thead>
-                    <th>ID</th>
-                    <th>NAME</th>
-                    <th>ACCOUNT</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let emp of employees">
-                        <td>{{emp.id_profile}}</td>
-                        <td>{{emp.name}}</td>
-                        <td>{{emp.account}}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="col-md-10" *ngIf="!showPayments && !importActive">
+            <div class="form-group col-md-12" *ngIf="ded">
+                <table class="table table-striped table-hover" style="width: 100%;text-align:center">
+                    <thead>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>TYPE</th>
+                        <th>REASON</th>
+                        <th>AMOUNT</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let deduction of deductions">
+                            <td>{{deduction.iddeductions}}</td>
+                            <td>{{deduction.name}}</td>
+                            <td>{{deduction.type}}</td>
+                            <td>{{deduction.reason}}</td>
+                            <td>{{deduction.amount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group col-md-10" *ngIf="!ded">
+                <table class="table table-striped table-hover" style="width: 100%;text-align:center">
+                    <thead>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>ACCOUNT</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let emp of employees">
+                            <td>{{emp.id_profile}}</td>
+                            <td>{{emp.name}}</td>
+                            <td>{{emp.account}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

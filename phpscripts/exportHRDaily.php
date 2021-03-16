@@ -42,7 +42,7 @@ WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_departme
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'CERT' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
+'CERT' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount, hr_processes.notes
 FROM
 	attendence_justifications
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
@@ -52,7 +52,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
-WHERE hr_processes.date BETWEEN '2021-03-01' AND '2021-03-16' AND hr_processes.id_department != 28 AND attendence_justifications.reason IN ('Marriage Certificate', 'Death Certificate', 'Birth Certificate')
+WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_department != 28 AND attendence_justifications.reason IN ('Marriage Certificate', 'Death Certificate', 'Birth Certificate') AND employees.id_account IN($accounts);
 
 UNION
 
