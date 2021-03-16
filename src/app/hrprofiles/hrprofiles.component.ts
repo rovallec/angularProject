@@ -929,6 +929,7 @@ export class HrprofilesComponent implements OnInit {
       case 'Transfer':
         this.original_account = this.accId;
         this.accChange = this.accId;
+        this.newProcess = true;
         break;
       default:
         break;
@@ -1107,6 +1108,7 @@ export class HrprofilesComponent implements OnInit {
                         } else {
                           window.alert("An error has occurred please contact your administrator");
                         }
+                        this.newProcess = false;
                       })
                     })
                   })

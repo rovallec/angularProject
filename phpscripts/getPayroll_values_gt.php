@@ -37,7 +37,7 @@ if($result = mysqli_query($con, $sql)){
         $res[$i]['treasure_hunt'] = $row['treasure_hunt'];
         $res[$i]['agent_name'] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         $res[$i]['account_name'] = $row['name'];
-        $res[$i]['agent_status'] = $row['state'];
+        $res[$i]['agent_status'] = $row['active'];
         $i++;
     }
     echo(json_encode($res));

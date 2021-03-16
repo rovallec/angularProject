@@ -22,12 +22,13 @@
     <div class="form-row col-md-12">
         <div class="form-group col-md-2">
             <label>Accounts:</label>
-            <select class="form-control" [(ngModel)]="accountAdd">
+            <select class="form-control" [(ngModel)]="accountAdd" [disabled]="me.department == '28'">
                 <option *ngFor="let ac of accounts" [value]="ac.idaccounts">{{ac.name}}</option>
+                <option *ngIf="me.department == '28'" value="g1">GET ALL</option>
             </select>
         </div>
         <div class="d-flex justify-content-center col-md-1">
-            <button class="btn btn-outline-primary" (click)="addAccount()" style="height:50px">Add <i class="fas fa-angle-double-right"></i></button>
+            <button class="btn btn-outline-primary" (click)="addAccount()" style="height:50px; margin-top:20%">Add <i class="fas fa-angle-double-right"></i></button>
         </div>
         <div class="form-group col-md-8">
             <label

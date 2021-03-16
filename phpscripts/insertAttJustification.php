@@ -14,6 +14,7 @@
     $status = ($request->state);
     $start = ($request->start);
     $end = ($request->end);
+    $str = "";
 
     $sql = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status');";
 
@@ -31,12 +32,27 @@
             $state = ($request->state);
             $sql3 = "INSERT INTO `attendence_adjustemnt`(`idattendence_adjustemnt`, `id_attendence`, `id_justification`, `time_before`, `time_after`, `amount`, `state`, `start`, `end`) VALUES (NULL, '$idattendences', '$id_justification', '$time_before', '$time_after', '$amount', '$state', '$start', '$end');";
             if(mysqli_query($con, $sql3)){
-                $sql4 = "UPDATE `attendences` SET `worked_time`= '$time_after' WHERE `idattendences` = '$idattendences';";
-                if(mysqli_query($con, $sql4)){
+                if($reason != "Closing Exception"){
+                    $sql4 = "UPDATE `attendences` SET `worked_time`= '$time_after' WHERE `idattendences` = '$idattendences';";
+                    if(mysqli_query($con, $sql4)){
+                        echo("1");
+                    }else{
+                        $str = $sql4 . "|" . mysqli_error($con);
+                        echo(json_encode($str));
+                    }
                 }else{
-                    http_response_code(404);
+                    echo("1");
                 }
+            }else{
+                $str = $sql3 . "|" . mysqli_error($con);
+                echo(json_encode($str));
             }
+        }else{
+            $str = $sql2 . "|" . mysqli_error($con);
+            echo(json_encode($str));
         }
+    }else{
+        $str = $sql . "|" . mysqli_error($con);
+        echo(json_encode($str));
     }
 ?>

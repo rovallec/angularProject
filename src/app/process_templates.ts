@@ -204,6 +204,10 @@ export class attendences_adjustment {
     date: string;
     notes: string;
     status: string;
+    id_period:string;
+    error:string;
+    nearsol_id:string;
+    adj_type:string;
     constructor() {
         //adjustments
         this.idattendence_adjustemnt = null;
@@ -227,6 +231,10 @@ export class attendences_adjustment {
         this.date = null;
         this.notes = null;
         this.status = null;
+        this.id_period = null;
+        this.error = null;
+        this.nearsol_id = null;
+        this.adj_type = null;
     }
 }
 
@@ -1281,6 +1289,10 @@ export class paid_attendances{
 }
 
 export class payroll_resume{
+    idpayroll_resume:string;
+    id_employee:string;
+    id_period:string;
+    account:string;
     nearsol_id:string;
     client_id:string;
     name:string;

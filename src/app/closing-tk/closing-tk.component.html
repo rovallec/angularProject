@@ -4,8 +4,8 @@
             <div class="d-flex justify-content-between mb-3 w-100">
                 <div class="p-2">
                     <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'"
-                        title="Download Attendance" (click)="exportPayroll_values()"><i
-                            class="fas fa-file-download"></i></button>
+                        title="Import Closing Exceptions" data-toggle="modal" data-target="#import_modal"><i
+                            class="fas fa-cloud-upload-alt"></i></button>
                 </div>
                 <div class="p-2" *ngIf="actualPeriod.status != '3'">
                     <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"
@@ -73,6 +73,8 @@
                             role="tab" aria-controls="nav-payroll" aria-selected="true">Payroll Values</a>
                         <a class="nav-item nav-link" id="nav-resume-tab" data-toggle="tab" href="#nav-resume" role="tab"
                             aria-controls="nav-resume" aria-selected="true">Resume</a>
+                        <a class="nav-item nav-link" id="nav-excep-tab" data-toggle="tab" href="#nav-excep" role="tab"
+                            aria-controls="nav-excep" aria-selected="true">Closing Exceptions</a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent" style="margin-top:10px">
@@ -141,6 +143,58 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="tab-pane fade" id="nav-excep" role="tabpanel" aria-labelledby="nav-excep-tab">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>NEARSOL ID</th>
+                                <th>NAME</th>
+                                <th>NOTES</th>
+                                <th>AMOUNT</th>
+                                <th>RESULT</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let adjust of adjustments">
+                                    <td>{{adjust.nearsol_id}}</td>
+                                    <td>{{adjust.name}}</td>
+                                    <td>{{adjust.notes}}</td>
+                                    <td>{{adjust.amount}}</td>
+                                    <td>{{adjust.error}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!----------------------------------------------------------------------------------------------IMPORT MODAL--------------------------------------------------------------->
+    <div class="modal fade" id="import_modal" tabindex="-1" role="dialog" aria-labelledby="search_modal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="search_modalLabel">IMPORT CLOSING EXCEPTIONS</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="modal-body d-flex justify-content-between">
+                        <div class="p-2">
+                            <label>File:</label>
+                        </div>
+                        <div class="p-2">
+                            <input type="file" class="form-control" (change)="setFile($event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-right mt-2">
+                    <button class="btn btn-outline-secondary" type="button" disabled *ngIf="waitForfinish">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                        *ngIf="!waitForfinish" #closeModalButton id="closeModalButton">Close</button>
                 </div>
             </div>
         </div>
