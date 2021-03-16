@@ -796,8 +796,8 @@ export class ClosingTkComponent implements OnInit {
                                 py_v.discounted_hours = (Number(py_v.discounted_hours) + Number(adj.amount)).toFixed(3);
                               }
                             }else{
-                              py_v.discounted_hours = '0';
                               py_v.ot_hours = (Number(py_v.ot_hours) + Number(adj.amount) + Number(py_v.discounted_hours)).toFixed(3);
+                              py_v.discounted_hours = '0';
                             }
                             this.apiServices.updatePayroll_values(py_v).subscribe((str2: string) => {
                               if (str2 == '1') {
