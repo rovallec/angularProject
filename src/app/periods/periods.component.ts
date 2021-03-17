@@ -20,6 +20,7 @@ import { runInThisContext } from 'vm';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { process } from '../process';
 import { JsonpClientBackend } from '@angular/common/http';
+import { ɵangular_packages_platform_browser_dynamic_testing_testing_a } from '@angular/platform-browser-dynamic/testing';
 
 
 @Component({
@@ -89,6 +90,8 @@ export class PeriodsComponent implements OnInit {
   clients: clients[] = [];
   show_payments: payments[] = [];
   selectedClient: string = null;
+  base:boolean = false;;
+  emp_set:string = null;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute) { }
 
@@ -184,6 +187,16 @@ export class PeriodsComponent implements OnInit {
       this.showPayments = false;
       this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
         this.max_progress = pv.length - 1;
+        if(this.base){
+          let p_toset:payroll_values_gt = new payroll_values_gt;
+          pv.forEach(p=>{
+            if(p.id_employee == this.emp_set){
+              p_toset = p;
+            }
+          })
+          pv = [];
+          pv.push(p_toset);
+        }
         pv.forEach(payroll_value => {
           let is_trm: boolean = false;
           let py: payments = new payments;
@@ -367,6 +380,9 @@ export class PeriodsComponent implements OnInit {
                                 this.global_debits.push(service_debit);
                               }
                             }
+                            if(service.frecuency == "UNIQUE"){
+                              service.status = '0';
+                            }
                             this.global_services.push(service);
                           })
 
@@ -395,6 +411,9 @@ export class PeriodsComponent implements OnInit {
                           cnt = cnt + 1;
                           this.progress = cnt;
                           this.loading = false;
+                          if(this.base){
+                            this.setPayTime(py);
+                          }
                           if (cnt >= (pv.length)) {
                             this.working = false;
                             this.showPayments = true;
@@ -440,6 +459,8 @@ export class PeriodsComponent implements OnInit {
 
   closeClose() {
     this.searchClosed = true;
+    this.payments = [];
+    this.payroll_values =[];
     this.start();
     this.ded = true;
     this.showPayments = false;
@@ -455,7 +476,7 @@ export class PeriodsComponent implements OnInit {
     this.pushDeductions('credits', this.global_credits);
     this.pushDeductions('debits', this.global_debits);
     this.global_services.forEach(service => {
-      if (Number(service.max) === Number(service.current)) {
+      if (Number(service.max) === Number(service.current) || service.frecuency == "UNIQUE") {
         service.status = '0';
       }
       this.apiService.updateServices(service).subscribe((str: string) => { });
@@ -527,6 +548,12 @@ export class PeriodsComponent implements OnInit {
         })
       })
     })
+  }
+
+  setPayTimeEmp(emp:employees){
+        this.emp_set = emp.idemployees;
+        this.base = true;
+        this.closePeriod();
   }
 
   activeImport() {

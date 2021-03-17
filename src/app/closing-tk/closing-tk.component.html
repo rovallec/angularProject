@@ -17,7 +17,11 @@
                 </div>
                 <div class="p-2">
                     <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"
-                        title="Downlaod Payroll Values"><i class="fas fa-file-export"></i></button>
+                        title="Downlaod Payroll Values" (click)="exportPayroll_values()"><i class="fas fa-file-export"></i></button>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"
+                        title="Downlaod Paid Attendances" (click)="exportPaidAttendances()"><i class="fas fa-file-download"></i></button>
                 </div>
             </div>
         </div>

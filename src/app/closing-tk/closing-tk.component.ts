@@ -620,7 +620,11 @@ export class ClosingTkComponent implements OnInit {
   }
 
   exportPayroll_values() {
+    window.open("http://200.94.251.67/phpscripts/exportPayroll_values.php?id_period="+this.actualPeriod.idperiods, "_blank");
+  }
 
+  exportPaidAttendances(){
+    window.open("http://200.94.251.67/phpscripts/exportPaid_attendances.php?id_period="+this.actualPeriod.idperiods, "_blank");
   }
 
   searchNow() {
