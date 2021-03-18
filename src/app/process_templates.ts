@@ -1,4 +1,6 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { employees } from './fullProcess';
+import { profiles, profiles_family, profiles_histories } from './profiles';
 
 export class process_templates {
     idprocess_templates: string;
@@ -977,9 +979,11 @@ export class attendance_accounts {
 export class clients {
     idclients: string;
     name: string;
+    description: string;
     constructor() {
         this.idclients = null;
         this.name = null;
+        this.description = null;
     }
 }
 
@@ -1296,5 +1300,99 @@ export class reporters {
         this.idUser = null;
         this.username = null;
         this.signature = null;
+    }
+}
+
+class contact_details {
+    id_profile: string;
+    primary_phone: string;
+    secondary_phone: string;
+    address: string;
+    city: string;
+    email: string;
+    constructor(){
+        this.id_profile = null;
+        this.primary_phone = null;
+        this.secondary_phone = null;
+        this.address = null;
+        this.city = null;
+        this.email = null;
+    }
+}
+
+export class full_profiles {
+    wave: waves_template;
+    schedule: schedules;
+    profile: profiles;
+    hire: hires_template;
+    employee: employees; 
+    contact_detail: contact_details;        
+    emergency_first_name: string;
+    emergency_second_name: string;
+    emergency_first_lastname: string;
+    emergency_second_lastname: string;
+    phone: string;
+    relationship: string;    
+    medical_treatment: string;
+    medical_prescription: string;
+    family: profiles_family[];
+    job_history: profiles_histories[];    
+    current_level: string;
+    further_education: string;
+    currently_studing: string;
+    institution_name: string;
+    degree: string;
+    // marketing_details
+    sourse: string;
+    post: string;
+    refer: string;
+    about: string;
+    // Profiles_details
+    english_level: string;
+    transport: string;
+    first_language: string;
+    second_language: string;
+    third_language: string;
+    // Process
+    name: string;
+    description: string;
+    id_user: string;
+    //services
+    amount: string;
+    constructor() {
+        this.wave = new waves_template;
+        this.schedule = new schedules;
+        this.profile = new profiles;
+        this.hire = new hires_template;
+        this.employee = new employees;
+        this.contact_detail = new contact_details;
+        this.emergency_first_name = null;
+        this.emergency_second_lastname = null;
+        this.emergency_first_lastname = null;
+        this.emergency_second_lastname = null;
+        this.phone = null;
+        this.relationship = null;
+        this.medical_treatment = null;
+        this.medical_prescription = null;
+        this.family = [];
+        this.job_history = [];
+        this.current_level = null;
+        this.further_education = null;
+        this.currently_studing = null;
+        this.institution_name = null;
+        this.degree = null;
+        this.sourse = null;
+        this.post = null;
+        this.refer = null;
+        this.about = null;
+        this.english_level = null;
+        this.transport = null;
+        this.first_language = null;
+        this.second_language = null;
+        this.third_language = null;
+        this.name = null;
+        this.description = null;
+        this.id_user = null;
+        this.amount = null;
     }
 }

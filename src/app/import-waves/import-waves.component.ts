@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { accounts, clients, Fecha, reporters, waves_template  } from '../process_templates';
+import { accounts, clients, Fecha, reporters, waves_template, full_profiles } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { isNullOrUndefined } from 'util';
 
@@ -36,6 +36,7 @@ export class ImportWavesComponent implements OnInit {
   importType: string = null;
   importString: string = null;
   importEnd: boolean = false;
+  fullprofiles: full_profiles[] = [];
 
   constructor(public apiServices: ApiService) { }
 
@@ -135,6 +136,9 @@ export class ImportWavesComponent implements OnInit {
     //let partial_credits: credits[] = [];
     let fileReader = new FileReader();
     let found: boolean = false;
+    let profilef: full_profiles = new full_profiles;
+
+    //profilef.wave.job = 
 
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
@@ -149,6 +153,8 @@ export class ImportWavesComponent implements OnInit {
         var worksheet = workbook.Sheets[first_sheet_name];
         let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
         sheetToJson.forEach(element => {
+          profilef = new full_profiles;
+          
          // let cred: credits = new credits;
           //cred.iddebits = element['Nearsol ID'];
           //cred.amount = element['Amount'];

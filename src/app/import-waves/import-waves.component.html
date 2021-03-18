@@ -54,7 +54,7 @@
       <div class="col-md-3">
         <label>REPORTER:</label>
         <select class="form-control" [(ngModel)]="reporters">
-          <option *ngFor="let rep of reporters" value="{{ rep.idUser }}" (click)="setReporter(rep)">{{rep.username}}
+          <option *ngFor="let rep of reporters" value="{{ rep }}" (click)="setReporter(rep)">{{rep.username}}
           </option>
         </select>
       </div>

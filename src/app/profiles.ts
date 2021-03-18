@@ -80,9 +80,9 @@ export class profiles_histories{
     working: string;
 }
 
-export class profiles_family{    
-    idaffinity_details: number;    
-    affinity_idfamilies: number;    
+export class profiles_family{
+    idaffinity_details: number;
+    affinity_idfamilies: number;
     affinity_id_profile: number;
     affinity_first_name: string;
     affinity_second_name: string;
