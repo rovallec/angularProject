@@ -11,7 +11,9 @@ $date = ($request->date);
 $i = 0;
 $adjustes = [];
 
-$sql = "SELECT * FROM attendences LEFT JOIN attendence_adjustemnt ON attendence_adjustemnt.id_attendence = attendences.idattendences WHERE id_employee = $id AND `date` < '$date' AND `state` = 'PENDING'";
+$sql = "SELECT * FROM attendences
+        LEFT JOIN attendence_adjustemnt ON attendence_adjustemnt.id_attendence = attendences.idattendences 
+        INNER JOIN employees ON employees.idemployees = attendences.idemployees WHERE id_employee = $id AND `date` < '$date'";
 
 
 if($result = mysqli_query($con,$sql)){
@@ -24,6 +26,7 @@ if($result = mysqli_query($con,$sql)){
         $adjustes[$i]['amount'] = $res['amount'];
         $adjustes[$i]['state'] = $res['state'];
         $adjustes[$i]['date'] = $res['date'];
+        $adjustes[$i]['account'] = $res['employees.id_account'];
         $i++;
     }
 }

@@ -31,12 +31,12 @@ LEFT JOIN (SELECT SUM(amount) AS `amt_aux`, id_employee, id_attendence from atte
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
-    WHERE id_department != 5 AND attendence_justifications.reason NOT IN('IGSS', 'WFM Attendance correction') GROUP BY id_employee, id_attendence) AS `aux` ON `aux`.id_attendence = attendences.idattendences
+    WHERE id_department != 5 AND attendence_justifications.reason NOT IN('IGSS', 'WFM Attendance correction', 'Private Doctor', 'Marriage Certificate', 'Death Certificate', 'Birth Certificate') GROUP BY id_employee, id_attendence) AS `aux` ON `aux`.id_attendence = attendences.idattendences
 LEFT JOIN (SELECT SUM(amount) AS `amt_corrections`, id_employee, id_attendence from attendence_justifications
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
     INNER JOIN users ON users.idUser = hr_processes.id_user
-    WHERE id_department != 5 AND attendence_justifications.reason IN('IGSS', 'WFM Attendance correction') GROUP BY id_employee, id_attendence) AS `correction` ON `correction`.id_attendence = attendences.idattendences
+    WHERE id_department != 5 AND attendence_justifications.reason IN('WFM Attendance correction') GROUP BY id_employee, id_attendence) AS `correction` ON `correction`.id_attendence = attendences.idattendences
 LEFT JOIN (SELECT vacations.*, hr_processes.id_employee, hr_processes.status FROM vacations
 			INNER JOIN hr_processes ON hr_processes.idhr_processes = vacations.id_process
             WHERE action = 'TAKE' AND hr_processes.status = 'PENDING') AS `vac` ON `vac`.id_employee = attendences.id_employee AND `vac`.date = attendences.date

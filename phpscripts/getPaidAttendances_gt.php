@@ -7,11 +7,19 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id = ($request->idperiods);
+$start = ($request->start);
+$end = ($request->end);
 
 $res = [];
 $i = 0;
+if($start != 'explicit'){
+    $sql = "SELECT * FROM paid_attendances INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value WHERE id_period = $id";
+}else{
+    $sql = "SELECT * FROM paid_attendances 
+            INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value 
+            WHERE id_employee = $id AND paid_attendances.date BETWEEN $end"
+}a
 
-$sql = "SELECT * FROM paid_attendances INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value WHERE id_period = $id";
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
         $res[$i]['id_payroll_value'] = $row['id_payroll_value'];

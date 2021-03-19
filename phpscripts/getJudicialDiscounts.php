@@ -9,7 +9,7 @@ $id = ($request->id);
 $user = [];
 $i = 0;
 
-$sql = "SELECT * FROM `judicials` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `judicials`.`id_process` WHERE `max` > `current` AND `id_employee` = $id;";
+$sql = "SELECT * FROM `judicials` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `judicials`.`id_process` WHERE (`max` > `current` OR `max` = 0) AND `id_employee` = $id;";
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){

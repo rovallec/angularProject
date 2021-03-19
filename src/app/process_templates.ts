@@ -208,6 +208,7 @@ export class attendences_adjustment {
     error:string;
     nearsol_id:string;
     adj_type:string;
+    account:string;
     constructor() {
         //adjustments
         this.idattendence_adjustemnt = null;

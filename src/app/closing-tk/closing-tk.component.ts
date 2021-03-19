@@ -9,6 +9,7 @@ import { AuthServiceService } from '../auth-service.service';
 import { DESTRUCTION } from 'dns';
 import { exit } from 'process';
 import { ViewChild, ElementRef } from '@angular/core';
+import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-closing-tk',
@@ -180,6 +181,16 @@ export class ClosingTkComponent implements OnInit {
                           ot_manager.id_period = this.actualPeriod.idperiods;
                           this.apiServices.getApprovedOt(ot_manager).subscribe((ot_mng: ot_manage) => {
                             this.apiServices.getAttAdjustments({ id: "id|p;" + emp[0].idemployees + "|'" + this.actualPeriod.start + "' AND '" + this.actualPeriod.end + "'" }).subscribe((just: attendences_adjustment[]) => {
+                              let prov_period:periods = new periods;
+                              let dt:Date = new Date(this.actualPeriod.start);
+                              dt.setDate(dt.getDate() - (7 - dt.getDate()))
+                              prov_period.idperiods = emp[0].idemployees;
+                              prov_period.end = "'" + this.actualPeriod.start + "' AND '" + 
+                              dt.getFullYear() + "-" +
+                              (dt.getMonth()).toString().padStart(2,"0") + "-" +
+                              (dt.getDate()).toString().padStart(2,"0") + "' AND `balance` = 'NS'";
+                              console.log(prov_period.end);
+                              this.apiServices.getPaidAttendances(prov_period).subscribe((p_at:paid_attendances[])=>{
                               let activeVacation: boolean = false;
                               let activeLeave: boolean = false;
                               let activeSuspension: boolean = false;
@@ -200,9 +211,18 @@ export class ClosingTkComponent implements OnInit {
                               let valid_trm: boolean = false;
                               let valid_transfer: boolean = false;
                               let ult_seventh: number = 0;
+                              let worked_days:number = 0;
+                              let ns_count:number = 0;
+                              let janp_on_off_2:number = 0;
 
                               if (pay.last_seventh == '1') {
                                 non_show = true;
+                              }
+
+                              if(!isNullOrUndefined(p_at)){
+                                if(p_at.length > 0){
+                                  non_show = true;
+                                }
                               }
 
                               att.forEach(attendance => {
@@ -241,11 +261,17 @@ export class ClosingTkComponent implements OnInit {
                                     vac.forEach(vacation => {
                                       if (vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == attendance.date && vacation.action == "Take") {
                                         activeVacation = true;
+                                        worked_days++;
                                         if (attendance.scheduled == 'OFF') {
                                           days_off = days_off + 1;
                                         }
                                         attendance.balance = 'VAC';
-                                        rs.vacations = (Number(rs.vacations) + 1).toFixed(0);
+                                        rs.vacations = (Number(rs.vacations) + Number(vacation.count)).toFixed(0);
+                                        if(Number(vacation.count) < 1){
+                                          if(attendance.scheduled != "OFF"){
+                                            attendance.worked_time = (Number(attendance.worked_time) + (Number(attendance.scheduled) * Number(vacation.count))).toFixed(5);
+                                          }
+                                        }
                                       }
                                     })
                                   }
@@ -280,6 +306,7 @@ export class ClosingTkComponent implements OnInit {
                                         }
                                         if (lv.motive == 'Maternity' || lv.motive == 'Others Paid') {
                                           attendance.balance = 'JAP';
+                                          worked_days++;
                                           rs.jap = (Number(rs.jap) + 1).toFixed(0);
                                         }
                                       }
@@ -299,6 +326,7 @@ export class ClosingTkComponent implements OnInit {
                                         if (Number(attendance.scheduled) > 0) {
                                           if (Number(attendance.worked_time) == 0) {
                                             attendance.balance = "NS";
+                                            ns_count++;
                                             if (!non_show) {
                                               non_show = true;
                                               discounted_days = discounted_days + 1;
@@ -310,6 +338,7 @@ export class ClosingTkComponent implements OnInit {
                                               non_show_sequence = non_show_sequence + 1;
                                             }
                                           } else {
+                                            worked_days++;
                                             attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toString();
                                             discounted_hours = discounted_hours + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                           }
@@ -346,6 +375,7 @@ export class ClosingTkComponent implements OnInit {
                                       discounted_days = discounted_days + 1;
                                     }
 
+                                    janp_on_off_2 = janp_on_off_2 + janp_on_off;
                                     janp_on_off = 0;
                                     non_show_sequence = 0;
                                     non_show = false;
@@ -358,6 +388,13 @@ export class ClosingTkComponent implements OnInit {
                                   attendance.balance = "TRANSFER";
                                 }
                               })
+                              if(valid_trm){
+                                if(ult_seventh){
+                                  if(new Date(trm.valid_from).getDay() != 6){
+                                    sevenths = sevenths - 1;
+                                  }
+                                }
+                              }
 
                               if ((discounted_days + sevenths) >= 15) {
                                 let max_days: number = 0;
@@ -365,12 +402,17 @@ export class ClosingTkComponent implements OnInit {
                                 if (discounted_hours != 0) {
                                   discounted_days = 15 - (discounted_days + (max_days - 15));
                                 }
-                                discounted_days = (15 - max_days) + max_days;
+                                discounted_days = (15 - max_days) + max_days - worked_days;
                                 sevenths = 0;
                               }
 
                               if ((((new Date(this.actualPeriod.end).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24)) + 1) <= (discounted_days + sevenths)) {
                                 discounted_days = (15 - sevenths);
+                              }
+
+                              if(ns_count + days_off >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24) || Number(rs.janp) + days_off - janp_on_off_2 >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24)){
+                                discounted_days = 15;
+                                sevenths = 0;
                               }
 
                               just.forEach(justification => {
@@ -539,6 +581,7 @@ export class ClosingTkComponent implements OnInit {
                     })
                   })
                 })
+                })
               })
             })
             if (pay.account == this.selectedAccount.idaccounts) {
@@ -562,12 +605,18 @@ export class ClosingTkComponent implements OnInit {
       this.isLoading = false;
       this.payroll_values = [];
       this.save_attendances = [];
+      this.adjustments = [];
       this.apiServices.getPayroll_values_gt(this.actualPeriod).subscribe((p: payroll_values_gt[]) => {
         this.apiServices.getPaidAttendances(this.actualPeriod).subscribe((att: paid_attendances[]) => {
           this.apiServices.getPayroll_resume({ id_period: this.actualPeriod.idperiods, id_account: this.selectedAccount.idaccounts }).subscribe((pr_res: payroll_resume[]) => {
             this.apiServices.getAttAdjustments({ id: "id|p|t;'" + this.actualPeriod.start + "' AND '" + this.actualPeriod.end + "'" }).subscribe((ad: attendences_adjustment[]) => {
               if (!isNullOrUndefined(p) && !isNullOrUndefined(att) && !isNullOrUndefined(pr_res)) {
-                this.adjustments = ad;
+                console.log(ad);
+                ad.forEach(adjustment=>{
+                  if(adjustment.account == this.selectedAccount.idaccounts){
+                    this.adjustments.push(adjustment);
+                  }
+                })
                 p.forEach(payroll_val => {
                   if (payroll_val.id_account == this.selectedAccount.idaccounts) {
                     this.payroll_values.push(payroll_val);
@@ -741,7 +790,7 @@ export class ClosingTkComponent implements OnInit {
                       if (str == "1") {
                         this.payroll_values.forEach(py_v => {
                           if (py_v.id_employee == emp[0].idemployees) {
-                            py_v.discounted_days = (Number(py_v.discounted_hours) + Number(adj.amount)).toFixed(3);
+                            py_v.discounted_days = (Number(py_v.discounted_days) + Number(adj.amount)).toFixed(3);
                             this.apiServices.updatePayroll_values(py_v).subscribe((str2: string) => {
                               console.log(str2);
                               if (str2 == '1') {

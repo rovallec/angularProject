@@ -10,8 +10,11 @@ $id_period = $_GET['id_period'];
 $exportRow = [];
 $i = 0;
 
-$sql = "SELECT employees.client_id, hires.nearsol_id, accounts.name, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `full_name`,
-        users.user_name, IF(`term`.valid_from IS NULL, 'ACTIVE', `term`.valid_from) AS `termination_date`, paid_attendances.date, paid_attendances.balance
+$sql = "SELECT hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ',
+        profiles.first_lastname, ' ', profiles.second_lastname) AS `full_name`, accounts.name,
+        IF(employees.active = 1, 'ACTIVE', 'INACTIVE') AS `st`, users.user_name, 
+        IF(`term`.valid_from IS NULL, 'ACTIVE', `term`.valid_from) AS `termination_date`,
+        paid_attendances.date, paid_attendances.scheduled, paid_attendances.worked, paid_attendances.balance
         FROM paid_attendances
         INNER JOIN payroll_values on payroll_values.idpayroll_values = paid_attendances.id_payroll_value
         INNER JOIN payments ON payments.idpayments = payroll_values.id_payment
@@ -26,7 +29,7 @@ $sql = "SELECT employees.client_id, hires.nearsol_id, accounts.name, CONCAT(prof
         WHERE payroll_values.id_period = $id_period";
 
 $output = fopen("php://output", "w");
-fputcsv($output, array('ID', 'Nearsol ID', 'Full Name', 'Supervisor', 'Are', 'Name', 'Supervisor', 'Termination Date', 'Date', 'Balance'));
+fputcsv($output, array('ID', 'Nearsol ID', 'Full Name', 'Area', 'Status', 'Supervisor', 'Termination Date', 'Date', 'Roster', 'Worked', 'Balance'));
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         fputcsv($output, $row);
