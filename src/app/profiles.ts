@@ -7,11 +7,11 @@ export class profiles {
     second_lastname: string;
     day_of_birth: string;
     nationality: string;
-    gender:string;
-    etnia:string;
-    bank:string;
-    account:string;    
-    account_type:string;  
+    gender: string;
+    etnia: string;
+    bank: string;
+    account: string;
+    account_type: string;
     marital_status: string;
     dpi: string;
     nit: string;
@@ -30,6 +30,7 @@ export class profiles {
     date_joining: string;
     date_end: string;
     position: string;
+    birth_place: string;
     reference_name: string;
     reference_lastname: string;
     reference_position: string;
@@ -64,9 +65,78 @@ export class profiles {
     iddocuments: string;
     doc_type: string;
     doc_path: string;
+
+    constructor() {
+        this.idprofiles = null;
+        this.tittle = null;
+        this.first_name = null;
+        this.second_name = null;
+        this.first_lastname = null;
+        this.second_lastname = null;
+        this.day_of_birth = null;
+        this.nationality = null;
+        this.gender = null;
+        this.etnia = null;
+        this.bank = null;
+        this.account = null;
+        this.account_type = null;
+        this.marital_status = null;
+        this.dpi = null;
+        this.nit = null;
+        this.iggs = null;
+        this.irtra = null;
+        this.status = null;
+        this.idcontact_details = null;
+        this.id_profile = null;
+        this.primary_phone = null;
+        this.secondary_phone = null;
+        this.address = null;
+        this.city = null;
+        this.email = null;
+        this.idjob_histories = null;
+        this.company = null;
+        this.date_joining = null;
+        this.date_end = null;
+        this.position = null;
+        this.birth_place = null;
+        this.reference_name = null;
+        this.reference_lastname = null;
+        this.reference_position = null;
+        this.reference_email = null;
+        this.reference_phone = null;
+        this.working = null;
+        this.idprofile_details = null;
+        this.english_level = null;
+        this.transport = null;
+        this.start_date = null;
+        this.unavialable_days = null;
+        this.marketing_campaing = null;
+        this.first_lenguage = null;
+        this.second_lenguage = null;
+        this.third_lenguage = null;
+        this.idemergency_details = null;
+        this.emergency_first_name = null;
+        this.emergency_second_name = null;
+        this.emergency_first_lastname = null;
+        this.emergency_second_lastname = null;
+        this.phone = null;
+        this.relationship = null;
+        this.idmedical_details = null;
+        this.medical_treatment = null;
+        this.medical_prescription = null;
+        this.ideducation_details = null;
+        this.current_level = null;
+        this.further_education = null;
+        this.currently_studing = null;
+        this.institution_name = null;
+        this.degree = null;
+        this.iddocuments = null;
+        this.doc_type = null;
+        this.doc_path = null;
+    }
 }
 
-export class profiles_histories{
+export class profiles_histories {
     idjob_histories: string;
     company: string;
     date_joining: string;
@@ -80,7 +150,7 @@ export class profiles_histories{
     working: string;
 }
 
-export class profiles_family{
+export class profiles_family {
     idaffinity_details: number;
     affinity_idfamilies: number;
     affinity_id_profile: number;

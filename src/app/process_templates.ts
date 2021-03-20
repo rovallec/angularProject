@@ -1321,22 +1321,28 @@ class contact_details {
 }
 
 export class full_profiles {
+    No: string;
+    nearsol_id: string;
+    id_user: string;
     wave: waves_template;
     schedule: schedules;
     profile: profiles;
     hire: hires_template;
     employee: employees; 
-    contact_detail: contact_details;        
+    contact_detail: contact_details;   
+    // emergency_details
     emergency_first_name: string;
     emergency_second_name: string;
     emergency_first_lastname: string;
     emergency_second_lastname: string;
-    phone: string;
-    relationship: string;    
+    emergency_phone: string;
+    emergency_relationship: string; 
+    // medical_details
     medical_treatment: string;
     medical_prescription: string;
     family: profiles_family[];
-    job_history: profiles_histories[];    
+    job_history: profiles_histories[];  
+    // education_details  
     current_level: string;
     further_education: string;
     currently_studing: string;
@@ -1356,13 +1362,20 @@ export class full_profiles {
     // Process
     name: string;
     description: string;
-    id_user: string;
+    id_userpr: string;
     //services
     amount: string;
+    loaded: string;
     constructor() {
+        this.No = '0';
+        this.nearsol_id = '';
+        this.id_user = null;
         this.wave = new waves_template;
         this.schedule = new schedules;
         this.profile = new profiles;
+        this.profile.birth_place = null;
+        this.profile.bank = null;
+        this.profile.etnia = null;
         this.hire = new hires_template;
         this.employee = new employees;
         this.contact_detail = new contact_details;
@@ -1370,8 +1383,8 @@ export class full_profiles {
         this.emergency_second_lastname = null;
         this.emergency_first_lastname = null;
         this.emergency_second_lastname = null;
-        this.phone = null;
-        this.relationship = null;
+        this.emergency_phone = null;
+        this.emergency_relationship = null;
         this.medical_treatment = null;
         this.medical_prescription = null;
         this.family = [];
@@ -1392,7 +1405,8 @@ export class full_profiles {
         this.third_language = null;
         this.name = null;
         this.description = null;
-        this.id_user = null;
+        this.id_userpr = null;
         this.amount = null;
+        this.loaded = null;
     }
 }

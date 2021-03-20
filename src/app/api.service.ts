@@ -769,6 +769,22 @@ getReporter() {
   return this.httpClient.get<reporters[]>(`${this.PHP_API_SERVER}/phpscripts/getReporter.php`);
 }
 
+insertProfile(any:any) {
+  return this.httpClient.post<any>(`${this.PHP_API_SERVER}/phpscripts/insert_profile.php`, any);
+}
+
+insertProfileDetails(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/create_details.php`, any);
+}
+
+insertcontact(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/create_contact.php`, any);
+}
+
+insertjobhistory(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/create_job_history.php`, any);
+}
+
   constructor(private httpClient:HttpClient) { }
 }
 

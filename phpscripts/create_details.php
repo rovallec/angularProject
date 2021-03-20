@@ -18,9 +18,7 @@ header('Access-Control-Allow-Headers: *');
 		$second_lenguage = ($request->second_lenguage);
 		$third_lenguage = ($request->third_lenguage);
 
-		$sql = "INSERT INTO `profile_details`(`idprofile_details`, `id_profile`, `english_level`, `transport`, `start_date`, `unavialable_days`, `marketing_campaing`, `first_lenguage`, `second_lenguage`, `third_lenguage`) VALUES ('{$id_profile}', '{$english_level}', '{$transport}', '{$start_date}', '{$unavialable_days}', '{$marketing_campaing}', '{$first_lenguage}', '{$second_lenguage}', '{$third_lenguage}');";
-
-echo $sql;
+		$sql = "INSERT INTO profile_details(idprofile_details, id_profile, english_level, transport, start_date, unavialable_days, marketing_campaing, first_lenguage, second_lenguage, third_lenguage) VALUES (null, '{$id_profile}', '{$english_level}', '{$transport}', '{$start_date}', '{$unavialable_days}', '{$marketing_campaing}', '{$first_lenguage}', '{$second_lenguage}', '{$third_lenguage}');";
 
 		if(mysqli_query($con, $sql))
 		{
@@ -28,6 +26,7 @@ echo $sql;
 			echo $id_profile_details;
 		}else{
 			http_response_code(422);
+      echo $sql;
 		}
 	}
 ?>
