@@ -76,7 +76,7 @@ if(isset($postdata) && !empty($postdata)){
     echo $id_profile;
 
     $sql2 = "INSERT INTO hires (id_hires, id_profile, id_wave, nearsol_id, reports_to, id_schedule) " .
-            "VALUES (null, $id_profile, $id_wave, '$nearsol_id', $reports_to, $id_schedule);"
+            "VALUES (null, $id_profile, $id_wave, '$nearsol_id', $reports_to, $id_schedule);";
 
     if($result2 = mysqli_query($con, $sql2))
     {
