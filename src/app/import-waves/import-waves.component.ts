@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { accounts, clients, Fecha, reporters, waves_template, full_profiles, schedules } from '../process_templates';
+import { accounts, clients, Fecha, reporters, waves_template, full_profiles, schedules, ids_profiles } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { isNullOrUndefined } from 'util';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -123,15 +123,22 @@ export class ImportWavesComponent implements OnInit {
       // ya hechas las validaciones correspondientes envia la información a grabarse en la BD.
 
       this.apiServices.insertNewWave(this.waves).subscribe((idwave: string) => {
-        this.waves.idwaves = idwave;
+        this.waves.idwaves = idwave;        
         this.schedule.id_wave = this.waves.idwaves;
         this.apiServices.insertNewSchedule(this.schedule).subscribe((idschedules: string) => {
           this.schedule.idschedules = idschedules;
           this.fullprofiles.forEach(element => {
             element.wave = this.waves;
             element.schedule = this.schedule;
+            element.id_wave = this.waves.idwaves;
+            element.id_schedule = this.schedule.idschedules;
             element.id_user = this.actualReporter.idUser;
-            this.apiServices.insertProfile(element).subscribe((_str: string) => {
+            element.reports_to = this.actualReporter.idUser;
+            this.apiServices.insertProfile(element).subscribe((ids: ids_profiles) => {
+              element.idprofiles = ids[0];
+              element.id_profile = ids[0];
+              element.contact_detail.id_profile = ids[0];
+              element.employee.id_profile = ids[0];
               this.apiServices.insertProfileDetails(element).subscribe((_str: string) => {
                 this.apiServices.insertcontact(element.contact_detail).subscribe((_str: string) => {
                   element.family.forEach(fam => {
@@ -184,8 +191,16 @@ export class ImportWavesComponent implements OnInit {
     this.actualReporter = reporters;
   }
 
+  validateEmptyStr(Adata: string): string{
+    if (isNullOrUndefined(Adata)) {
+      Adata = '';
+    }
+    return Adata;
+  }
+
   addfile(event) {
-    let fecha = new Fecha;
+    let fecha: Fecha = new Fecha;    
+    let ldate: Date = new Date;
     this.file = event.target.files[0];
 
     let fileReader = new FileReader();
@@ -243,109 +258,120 @@ export class ImportWavesComponent implements OnInit {
             profilef.schedule = this.schedule;
             profilef.nearsol_id = profilef.wave.prefix + profilef.No;            
             // profiles
-            profilef.profile.tittle = element['title'];
-            profilef.profile.first_name = element['first_name'];
-            profilef.profile.second_name = element['second_name'];
-            profilef.profile.first_lastname = element['first_lastname'];
-            profilef.profile.second_lastname = element['second_lastname'];
-            profilef.profile.day_of_birth = element['day_of_birth'];
-            profilef.profile.nationality = element['nationality'];
-            profilef.profile.marital_status = element['marital_status'];
-            profilef.profile.dpi = element['dpi'];
-            profilef.profile.nit = element['nit'];
-            profilef.profile.iggs = element['igss'];
-            profilef.profile.irtra = element['irtra'];
-            profilef.profile.gender = element['gender'];
-            profilef.profile.etnia = element['etnia'];
-            profilef.profile.position = element['position'];
-            profilef.profile.birth_place = element['birth_place'];
-            profilef.profile.account_type = element['account_type'];
-            profilef.profile.account = element['account'];
-            profilef.profile.bank = element['bank'];
+            profilef.tittle = this.validateEmptyStr(element['tittle']);
+            profilef.first_name = this.validateEmptyStr(element['first_name']);
+            profilef.second_name = this.validateEmptyStr(element['second_name']);
+            profilef.first_lastname = this.validateEmptyStr(element['first_lastname']);
+            profilef.second_lastname = this.validateEmptyStr(element['second_lastname']);
+            ldate = new Date(this.validateEmptyStr(element['day_of_birth']));
+            profilef.day_of_birth = fecha.transform(ldate);
+            profilef.nationality = this.validateEmptyStr(element['nationality']);
+            profilef.marital_status = this.validateEmptyStr(element['marital_status']);
+            profilef.dpi = this.validateEmptyStr(element['dpi']);
+            profilef.nit = this.validateEmptyStr(element['nit']);
+            profilef.igss = this.validateEmptyStr(element['igss']);
+            profilef.irtra = this.validateEmptyStr(element['irtra']);
+            profilef.gender = this.validateEmptyStr(element['gender']);
+            profilef.etnia = this.validateEmptyStr(element['etnia']);
+            profilef.profesion = this.validateEmptyStr(element['profesion']);
+            profilef.birth_place = this.validateEmptyStr(element['birth_place']);
+            profilef.account_type = this.validateEmptyStr(element['account_type']);
+            profilef.account = this.validateEmptyStr(element['account']);
+            profilef.bank = this.validateEmptyStr(element['bank']);
             // employees
-            profilef.employee.job = element['job'];
-            profilef.employee.base_payment = element['base_payment'];
-            profilef.employee.productivity_payment = element['productivity_payment'];
-            profilef.employee.platform = element['platform'];
-            // contact_details
-            profilef.contact_detail.primary_phone = element['primary_phone'];
-            profilef.contact_detail.secondary_phone = element['secondary_phone'];
-            profilef.contact_detail.address = element['address'];
-            profilef.contact_detail.city = element['city'];
-            profilef.contact_detail.email = element['email'];
+            profilef.employee.job = this.validateEmptyStr(element['job']);
+            profilef.employee.base_payment = this.validateEmptyStr(element['base_payment']);
+            profilef.employee.productivity_payment = this.validateEmptyStr(element['productivity_payment']);
+            profilef.employee.platform = this.validateEmptyStr(element['platform']);
+            profilef.employee.hiring_date = this.date;
+            profilef.employee.reporter = this.actualReporter.idUser;
+            profilef.employee.client_id = profilef.nearsol_id;
+            profilef.employee.id_account = this.selectedAccount.idaccounts;
+            // contact_details            
+            profilef.contact_detail.primary_phone = this.validateEmptyStr(element['primary_phone']);
+            profilef.contact_detail.secondary_phone = this.validateEmptyStr(element['secondary_phone']);
+            profilef.contact_detail.address = this.validateEmptyStr(element['address']);
+            profilef.contact_detail.city = this.validateEmptyStr(element['city']);
+            profilef.contact_detail.email = this.validateEmptyStr(element['email']);
             // emergency_details
-            profilef.emergency_first_name = element['e_first_name'];
-            profilef.emergency_second_name = element['e_second_name'];
-            profilef.emergency_first_lastname = element['e_first_lastname'];
-            profilef.emergency_second_lastname = element['e_second_lastname'];
-            profilef.emergency_phone = element['e_phone'];
-            profilef.emergency_relationship = element['e_relationship'];
+            profilef.emergency_first_name = this.validateEmptyStr(element['e_first_name']);
+            profilef.emergency_second_name = this.validateEmptyStr(element['e_second_name']);
+            profilef.emergency_first_lastname = this.validateEmptyStr(element['e_first_lastname']);
+            profilef.emergency_second_lastname = this.validateEmptyStr(element['e_second_lastname']);
+            profilef.emergency_phone = this.validateEmptyStr(element['e_phone']);
+            profilef.emergency_relationship = this.validateEmptyStr(element['e_relationship']);
             // medical_details
-            profilef.medical_treatment = element['medical_treatment'];
-            profilef.medical_prescription = element['medical_prescription'];            
+            profilef.medical_treatment = this.validateEmptyStr(element['medical_treatment']);
+            profilef.medical_prescription = this.validateEmptyStr(element['medical_prescription']);
             // families
             if ((element['f1_first_name'] == '') && (element['f1_second_name'] == '') && (element['f1_first_last_name'] == '') && (element['f1_second_last_name'] == '')) {
               return;
             } else {
-              fam.affinity_first_name = element['f1_first_name'];
-              fam.affinity_second_name = element['f1_second_name'];
-              fam.affinity_first_last_name = element['f1_first_last_name'];
-              fam.affinity_second_last_name = element['f1_second_last_name'];
-              fam.affinity_phone = element['f1_phone'];
-              fam.affinity_relationship = element['f1_relationship'];
-              fam.affinity_birthdate = element['f1_birthdate'];
+              fam.affinity_first_name = this.validateEmptyStr(element['f1_first_name']);
+              fam.affinity_second_name = this.validateEmptyStr(element['f1_second_name']);
+              fam.affinity_first_last_name = this.validateEmptyStr(element['f1_first_last_name']);
+              fam.affinity_second_last_name = this.validateEmptyStr(element['f1_second_last_name']);
+              fam.affinity_phone = this.validateEmptyStr(element['f1_phone']);
+              fam.affinity_relationship = this.validateEmptyStr(element['f1_relationship']);
+              ldate = new Date(this.validateEmptyStr(element['f1_birthdate']));
+              fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }
             
             if ((element['f2_first_name'] == '') && (element['f2_second_name'] == '') && (element['f2_first_last_name'] == '') && (element['f2_second_last_name'] == '')) {
               return;
             } else {
-              fam.affinity_first_name = element['f2_first_name'];
-              fam.affinity_second_name = element['f2_second_name'];
-              fam.affinity_first_last_name = element['f2_first_last_name'];
-              fam.affinity_second_last_name = element['f2_second_last_name'];
-              fam.affinity_phone = element['f2_phone'];
-              fam.affinity_relationship = element['f2_relationship'];
-              fam.affinity_birthdate = element['f2_birthdate'];
+              fam.affinity_first_name = this.validateEmptyStr(element['f2_first_name']);
+              fam.affinity_second_name = this.validateEmptyStr(element['f2_second_name']);
+              fam.affinity_first_last_name = this.validateEmptyStr(element['f2_first_last_name']);
+              fam.affinity_second_last_name = this.validateEmptyStr(element['f2_second_last_name']);
+              fam.affinity_phone = this.validateEmptyStr(element['f2_phone']);
+              fam.affinity_relationship = this.validateEmptyStr(element['f2_relationship']);
+              fam.affinity_relationship = this.validateEmptyStr(element['f1_relationship']);
+              ldate = new Date(this.validateEmptyStr(element['f2_birthdate']));
+              fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }
             
             if ((element['f3_first_name'] == '') && (element['f3_second_name'] == '') && (element['f3_first_last_name'] == '') && (element['f3_second_last_name'] == '')) {
               return;
             } else {
-              fam.affinity_first_name = element['f3_first_name'];
-              fam.affinity_second_name = element['f3_second_name'];
-              fam.affinity_first_last_name = element['f3_first_last_name'];
-              fam.affinity_second_last_name = element['f3_second_last_name'];
-              fam.affinity_phone = element['f3_phone'];
-              fam.affinity_relationship = element['f3_relationship'];
-              fam.affinity_birthdate = element['f3_birthdate'];
+              fam.affinity_first_name = this.validateEmptyStr(element['f3_first_name']);
+              fam.affinity_second_name = this.validateEmptyStr(element['f3_second_name']);
+              fam.affinity_first_last_name = this.validateEmptyStr(element['f3_first_last_name']);
+              fam.affinity_second_last_name = this.validateEmptyStr(element['f3_second_last_name']);
+              fam.affinity_phone = this.validateEmptyStr(element['f3_phone']);
+              fam.affinity_relationship = this.validateEmptyStr(element['f3_relationship']);
+              ldate = new Date(this.validateEmptyStr(element['f3_birthdate']));
+              fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }
             
             if ((element['f4_first_name'] == '') && (element['f4_second_name'] == '') && (element['f4_first_last_name'] == '') && (element['f4_second_last_name'] == '')) {
               return;
             } else {
-              fam.affinity_first_name = element['f4_first_name'];
-              fam.affinity_second_name = element['f4_second_name'];
-              fam.affinity_first_last_name = element['f4_first_last_name'];
-              fam.affinity_second_last_name = element['f4_second_last_name'];
-              fam.affinity_phone = element['f4_phone'];
-              fam.affinity_relationship = element['f4_relationship'];
-              fam.affinity_birthdate = element['f4_birthdate'];
+              fam.affinity_first_name = this.validateEmptyStr(element['f4_first_name']);
+              fam.affinity_second_name = this.validateEmptyStr(element['f4_second_name']);
+              fam.affinity_first_last_name = this.validateEmptyStr(element['f4_first_last_name']);
+              fam.affinity_second_last_name = this.validateEmptyStr(element['f4_second_last_name']);
+              fam.affinity_phone = this.validateEmptyStr(element['f4_phone']);
+              fam.affinity_relationship = this.validateEmptyStr(element['f4_relationship']);
+              ldate = new Date(this.validateEmptyStr(element['f4_birthdate']));
+              fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }
             
             if ((element['f5_first_name'] == '') && (element['f5_second_name'] == '') && (element['f5_first_last_name'] == '') && (element['f5_second_last_name'] == '')) {
               return;
             } else {
-              fam.affinity_first_name = element['f5_first_name'];
-              fam.affinity_second_name = element['f5_second_name'];
-              fam.affinity_first_last_name = element['f5_first_last_name'];
-              fam.affinity_second_last_name = element['f5_second_last_name'];
-              fam.affinity_phone = element['f5_phone'];
-              fam.affinity_relationship = element['f5_relationship'];
-              fam.affinity_birthdate = element['f5_birthdate'];
+              fam.affinity_first_name = this.validateEmptyStr(element['f5_first_name']);
+              fam.affinity_second_name = this.validateEmptyStr(element['f5_second_name']);
+              fam.affinity_first_last_name = this.validateEmptyStr(element['f5_first_last_name']);
+              fam.affinity_second_last_name = this.validateEmptyStr(element['f5_second_last_name']);
+              fam.affinity_phone = this.validateEmptyStr(element['f5_phone']);
+              fam.affinity_relationship = this.validateEmptyStr(element['f5_relationship']);
+              ldate = new Date(this.validateEmptyStr(element['f5_birthdate']));
+              fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }            
             // job_histories
@@ -353,17 +379,20 @@ export class ImportWavesComponent implements OnInit {
               (element['jh1_reference_name'] == '') && (element['jh1_reference_phone'] == '')) {
               return;
             } else {
-              job.company = element['jh1_company'];
-              job.date_joining = element['jh1_date_joining'];
-              job.date_end = element['jh1_date_end'];
-              job.position = element['jh1_position'];
-              job.reference_name = element['jh1_reference_name'];
-              job.reference_lastname = element['jh1_reference_lastname'];
-              job.reference_position = element['jh1_reference_position'];
-              job.reference_email = element['jh1_reference_email'];
-              job.reference_phone = element['jh1_reference_phone'];
-              job.working = element['jh1_working'];
-              profilef.job_history.push(job)
+              job.company = this.validateEmptyStr(element['jh1_company']);
+              ldate = new Date(this.validateEmptyStr(element['jh1_date_joining']));
+              job.date_joining = fecha.transform(ldate);
+              ldate = new Date(this.validateEmptyStr(element['jh1_date_end']));
+              job.date_end = fecha.transform(ldate);
+              job.date_end = this.validateEmptyStr(element['jh1_date_end']);
+              job.position = this.validateEmptyStr(element['jh1_position']);
+              job.reference_name = this.validateEmptyStr(element['jh1_reference_name']);
+              job.reference_lastname = this.validateEmptyStr(element['jh1_reference_lastname']);
+              job.reference_position = this.validateEmptyStr(element['jh1_reference_position']);
+              job.reference_email = this.validateEmptyStr(element['jh1_reference_email']);
+              job.reference_phone = this.validateEmptyStr(element['jh1_reference_phone']);
+              job.working = this.validateEmptyStr(element['jh1_working']);
+              profilef.job_history.push(job);
             }
             
             if ((element['jh2_company'] == '') && (element['jh2_date_joining'] = '') && (element['jh2_date_end'] == '') &&
@@ -371,17 +400,19 @@ export class ImportWavesComponent implements OnInit {
               return;
             } else {
               job = new profiles_histories;
-              job.company = element['jh2_company'];
-              job.date_joining = element['jh2_date_joining'];
-              job.date_end = element['jh2_date_end'];
-              job.position = element['jh2_position'];
-              job.reference_name = element['jh2_reference_name'];
-              job.reference_lastname = element['jh2_reference_lastname'];
-              job.reference_position = element['jh2_reference_position'];
-              job.reference_email = element['jh2_reference_email'];
-              job.reference_phone = element['jh2_reference_phone'];
-              job.working = element['jh2_working'];
-              profilef.job_history.push(job)
+              job.company = this.validateEmptyStr(element['jh2_company']);
+              ldate = new Date(this.validateEmptyStr(element['jh2_date_joining']));
+              job.date_joining = fecha.transform(ldate);
+              ldate = new Date(this.validateEmptyStr(element['jh2_date_end']));
+              job.date_end = fecha.transform(ldate);
+              job.position = this.validateEmptyStr(element['jh2_position']);
+              job.reference_name = this.validateEmptyStr(element['jh2_reference_name']);
+              job.reference_lastname = this.validateEmptyStr(element['jh2_reference_lastname']);
+              job.reference_position = this.validateEmptyStr(element['jh2_reference_position']);
+              job.reference_email = this.validateEmptyStr(element['jh2_reference_email']);
+              job.reference_phone = this.validateEmptyStr(element['jh2_reference_phone']);
+              job.working = this.validateEmptyStr(element['jh2_working']);
+              profilef.job_history.push(job);
             }
             
             if ((element['jh3_company'] == '') && (element['jh3_date_joining'] = '') && (element['jh3_date_end'] == '') &&
@@ -389,46 +420,51 @@ export class ImportWavesComponent implements OnInit {
               return;
             } else {
               job = new profiles_histories;
-              job.company = element['jh3_company'];
-              job.date_joining = element['jh3_date_joining'];
-              job.date_end = element['jh3_date_end'];
-              job.position = element['jh3_position'];
-              job.reference_name = element['jh3_reference_name'];
-              job.reference_lastname = element['jh3_reference_lastname'];
-              job.reference_position = element['jh3_reference_position'];
-              job.reference_email = element['jh3_reference_email'];
-              job.reference_phone = element['jh3_reference_phone'];
-              job.working = element['jh3_working'];
-              profilef.job_history.push(job)
+              job.company = this.validateEmptyStr(element['jh3_company']);
+              ldate = new Date(this.validateEmptyStr(element['jh3_date_joining']));
+              job.date_joining = fecha.transform(ldate);
+              ldate = new Date(this.validateEmptyStr(element['jh3_date_end']));
+              job.date_end = fecha.transform(ldate);
+              job.position = this.validateEmptyStr(element['jh3_position']);
+              job.reference_name = this.validateEmptyStr(element['jh3_reference_name']);
+              job.reference_lastname = this.validateEmptyStr(element['jh3_reference_lastname']);
+              job.reference_position = this.validateEmptyStr(element['jh3_reference_position']);
+              job.reference_email = this.validateEmptyStr(element['jh3_reference_email']);
+              job.reference_phone = this.validateEmptyStr(element['jh3_reference_phone']);
+              job.working = this.validateEmptyStr(element['jh3_working']);
+              profilef.job_history.push(job);
             }            
             // education_details
-            profilef.current_level = element['current_level'];
-            profilef.further_education = element['further_education'];
-            profilef.currently_studing = element['currently_studing'];
-            profilef.institution_name = element['institution_name'];
-            profilef.degree = element['degree'];
+            profilef.current_level = this.validateEmptyStr(element['current_level']);
+            profilef.further_education = this.validateEmptyStr(element['further_education']);
+            profilef.currently_studing = this.validateEmptyStr(element['currently_studing']);
+            profilef.institution_name = this.validateEmptyStr(element['institution_name']);
+            profilef.degree = this.validateEmptyStr(element['degree']);
             // marketing_details
-            profilef.sourse = element['sourse'];
-            profilef.post = element['post'];
-            profilef.refer = element['refer'];
-            profilef.about = element['about'];
+            profilef.sourse = this.validateEmptyStr(element['sourse']);
+            profilef.post = this.validateEmptyStr(element['post']);
+            profilef.refer = this.validateEmptyStr(element['refer']);
+            profilef.about = this.validateEmptyStr(element['about']);
             // profile_details
-            profilef.english_level = element['english_level'];
-            profilef.transport = element['transport'];
-            profilef.first_language = element['first_language'];
-            profilef.second_language = element['second_language'];
-            profilef.third_language = element['third_language'];
+            profilef.english_level = this.validateEmptyStr(element['english_level']);
+            profilef.transport = this.validateEmptyStr(element['transport']);
+            profilef.start_date = this.date;
+            profilef.unavialable_days = this.days_off;
+            profilef.marketing_campaing = profilef.post;
+            profilef.first_language = this.validateEmptyStr(element['first_language']);
+            profilef.second_language = this.validateEmptyStr(element['second_language']);
+            profilef.third_language = this.validateEmptyStr(element['third_language']);
             // processes
-            profilef.name = element['name'];
-            profilef.description = element['description'];
+            profilef.name = this.validateEmptyStr(element['name']);
+            profilef.description = this.validateEmptyStr(element['description']);
             // ************************************************************************ \\
             // ************************************************************************ \\
             // *pendiente implementar la consulta para que cambie el valor por el id. * \\
             // ************************************************************************ \\
             // ************************************************************************ \\
-            profilef.id_user = element['id_user'];
+            profilef.id_userpr = this.validateEmptyStr(element['id_user']);
             // services
-            profilef.amount = element['amount'];
+            profilef.amount = this.validateEmptyStr(element['amount']);
             profilef.loaded = 'true';
             this.fullprofiles.push(profilef);
             count++;
@@ -440,7 +476,7 @@ export class ImportWavesComponent implements OnInit {
           if (count == (this.max_progress)) {
             this.importEnd = true;
             this.completed = true;
-            console.log('proceso finalizado, total de contadores: ' + count);
+            console.log(profilef);
           }
         }
       }
@@ -449,7 +485,7 @@ export class ImportWavesComponent implements OnInit {
       console.log("Ocurrió un Error: " + exception);
       profilef.loaded = exception;
       this.isLoading = false;
-      this.finished = false;
+      this.finished = true;
       this.completed = false;
       this.importEnd = false;
     }

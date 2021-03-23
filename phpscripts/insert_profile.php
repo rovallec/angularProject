@@ -2,51 +2,40 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
+require 'funcionesVarias.php';
 
-mysqli_begin_transaction($con, MYSQLI_TRANS_START_READ_ONLY);
+mysqli_begin_transaction($con, MYSQLI_TRANS_START_READ_WRITE);
 mysqli_autocommit($con, FALSE);
+
 
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){	
-  $request = json_decode($postdata);		
-  $tittle = ($request->profile->tittle);
-  $first_name = ($request->profile->first_name);
-  $second_name = ($request->profile->second_name);
-  $first_lastname = ($request->profile->first_lastname);
-  $second_lastname = ($request->profile->second_lastname);
-  $day_of_birthday = ($request->profile->day_of_birthday);
-  $nationality = ($request->profile->nationality);
-  $marital_status = ($request->profile->marital_status);
-  $dpi = ($request->profile->dpi);
-  $nit = ($request->profile->nit);
-  $igss = ($request->profile->igss);
-  $irtra = ($request->profile->irtra);
-  $status = ($request->profile->status);
-  $bank = ($request->profile->bank);
-  $account = ($request->profile->account);
-  $account_type = ($request->profile->account_type);
-  $gender = ($request->profile->gender);
-  $etnia = ($request->profile->etnia);
-  $profesion = ($request->profile->profesion);
-  $birth_place = ($request->profile->birth_place);
-  $id_wave = ($request->hire->id_wave);
-  $nearsol_id = ($request->hire->nearsol_id);
-  $reports_to = ($request->hire->reports_to);
-  $id_schedule = ($request->hire->id_schedule);  
-  $id_account = ($request->employee->id_account);
-  $reporter = ($request->employee->reporter);
-  $client_id = ($request->employee->client_id);
-  $hiring_date = ($request->employee->hiring_date);
-  $job = ($request->employee->job);
-  $base_payment = ($request->employee->base_payment);
-  $productivity_payment = ($request->employee->productivity_payment);
-  $platform = ($request->employee->platform);
-  $first_name = ($request->emergency_first_name);
-  $second_name = ($request->emergency_second_name);
-  $first_lastname = ($request->emergency_first_lastname);
-  $second_lastname = ($request->emergency_second_lastname);
-  $phone = ($request->emergency_phone);
-  $relationship = ($request->relationship);
+  $request = json_decode($postdata);
+  $tittle = ($request->tittle);
+  $first_name = ($request->first_name);
+  $second_name = ($request->second_name);
+  $first_lastname = ($request->first_lastname);
+  $second_lastname = ($request->second_lastname);
+  $day_of_birthday = ($request->day_of_birth);
+  $nationality = ($request->nationality);
+  $marital_status = ($request->marital_status);
+  $dpi = ($request->dpi);
+  $nit = ($request->nit);
+  $igss = ($request->igss);
+  $irtra = ($request->irtra);
+  $bank = ($request->bank);
+  $account = ($request->account);
+  $account_type = ($request->account_type);
+  $gender = ($request->gender);
+  $etnia = ($request->etnia);
+  $profesion = ($request->profesion);
+  $birth_place = ($request->birth_place);
+  $emergency_first_name = ($request->emergency_first_name);
+  $emergency_second_name = ($request->emergency_second_name);
+  $emergency_first_lastname = ($request->emergency_first_lastname);
+  $emergency_second_lastname = ($request->emergency_second_lastname);
+  $emergency_phone = ($request->emergency_phone);
+  $emergency_relationship = ($request->emergency_relationship);
   $medical_treatment = ($request->medical_treatment);
   $medical_prescription = ($request->medical_prescription);
 	$current_level = ($request->current_level);
@@ -56,169 +45,177 @@ if(isset($postdata) && !empty($postdata)){
   $degree = ($request->degree);  
   $name = ($request->name);
   $description = ($request->description);
-  $date = ($request->waves->starting_date);
+  $waves = json_decode(json_encode($request->wave));
+  $date = ($waves->starting_date);
   $id_userpr = ($request->id_userpr);
   $id_user = ($request->id_user);
   $amount = ($request->amount);
+  // hires
+  $id_wave = ($request->id_wave);
+  $nearsol_id = ($request->nearsol_id);
+  $reports_to = ($request->reports_to);
+  $id_schedule = ($request->id_schedule);
 
-      
+  //Marketing_details
+  $source = ($request->sourse);
+  $post = ($request->post);
+  $refer = ($request->refer);
+  $about = ($request->about);
+  
+  $employee = json_decode(json_encode($request->employee));
+  $id_account = ($employee->id_account);
+  $reporter = ($employee->reporter);
+  $client_id = ($employee->client_id);
+  $hiring_date = ($employee->hiring_date);
+  $job = ($employee->job);
+  $base_payment = ($employee->base_payment);
+  $productivity_payment = ($employee->productivity_payment);
+  $platform = ($employee->platform);
+ 
   $sql =  "INSERT INTO profiles (tittle, first_name, second_name, first_lastname, second_lastname, day_of_birth, " .
           "nationality, marital_status, dpi, nit, iggs, irtra, status, bank, account, account_type, gender, etnia, " . 
           "profesion, birth_place) " .
-          "VALUE ('{$tittle}','{$first_name}','{$second_name}','{$first_lastname}','{$second_lastname}', " .
+          "VALUE ('{$tittle}', '{$first_name}','{$second_name}','{$first_lastname}','{$second_lastname}', " .
           "'{$day_of_birthday}' ,'{$nationality}','{$marital_status}','{$dpi}','{$nit}','{$igss}', " .
-          "'{$irtra}','{$status}', '{$bank}', '{$account}', '{$account_type}', '{$gender}', '{$etnia}', " .
-          "'{$profesion}', '{$birth_place}');";
+          "'{$irtra}','EMPLOYEE', '{$bank}', '{$account}', '{$account_type}', '{$gender}', '{$etnia}', " .
+          "'{$profesion}', '{$birth_place}');";  
+
   
-  if($result = mysqli_query($con, $sql))
+  if(mysqli_query($con, $sql))
   {
-    $id_profile = mysqli_insert_id($con);
-    echo $id_profile;
+    $id_profile = mysqli_insert_id($con);    
 
-    $sql2 = "INSERT INTO hires (id_hires, id_profile, id_wave, nearsol_id, reports_to, id_schedule) " .
-            "VALUES (null, $id_profile, $id_wave, '$nearsol_id', $reports_to, $id_schedule);";
+    $sql2 = "INSERT INTO hires (idhires, id_profile, id_wave, nearsol_id, reports_to, id_schedule) " .
+            "VALUES (null, '$id_profile', '$id_wave', '$nearsol_id', '$reports_to', '$id_schedule');";
 
-    if($result2 = mysqli_query($con, $sql2))
+    if(mysqli_query($con, $sql2))
     {
       $id_hire = mysqli_insert_id($con);
-      echo $id_hire;
-      
+
       $sql3 = "INSERT INTO employees(idemployees, id_hire, id_account, reporter, client_id, " .
               "hiring_date, job, base_payment, state, productivity_payment, active, platform) " .
               "VALUES (null, $id_hire, $id_account, $reporter, '$client_id', '$hiring_date', '$job', " .
               "$base_payment, 'EMPLOYEE', $productivity_payment, 1, '$platform');";
 
-      if($result3 = mysqli_query($con, $sql3))
+      if(mysqli_query($con, $sql3))
       {
         $id_employees = mysqli_insert_id($con);
-        echo $id_employees;
 
         $sql4 = "INSERT INTO emergency_details(id_profile, e_first_name, e_second_name, e_first_lastname, " .
-                "e_second_lastname, phone, relationship) VALUES ('{$id_profile}','{$first_name}', " . 
-                "'{$second_name}', '{$first_lastname}', '{$second_lastname}', '{$phone}', '{$relationship}');";
+                "e_second_lastname, phone, relationship) VALUES ('{$id_profile}','{$emergency_first_name}', " . 
+                "'{$emergency_second_name}', '{$emergency_first_lastname}', '{$emergency_second_lastname}', '{$emergency_phone}', '{$emergency_relationship}');";
 
-        if($result4 = mysqli_query($con, $sql4))
+        if(mysqli_query($con, $sql4))
         {
           $idemergency_Details = mysqli_insert_id($con);
-          echo $id_employees;
 
           $sql5 = "INSERT INTO medical_details (idmedical_details, id_profile, medical_treatment, medical_prescription) " .
                   "VALUES (null, $id_profile, '$medical_treatment', '$medical_prescription');";
 
-          if($result5 = mysqli_query($con, $sql5))
+          if(mysqli_query($con, $sql5))
           {
             $idmedical_details = mysqli_insert_id($con);
-            echo $id_employees;
 
             $sql6 = "INSERT INTO education_details(ideducation_details, id_profile, current_level, " . 
                     "further_education, currently_studing, institution_name, `degree`) ".
                     "VALUES (null, $id_profile, '$current_level', '$further_education', '$currently_studing', ". 
                     "'$institution_name', '$degree');";
                     
-            if($result6 = mysqli_query($con, $sql6))
+            if(mysqli_query($con, $sql6))
             {
               $ideducation_details = mysqli_insert_id($con);
-              echo $id_employees;
 
               $sql7 = "INSERT INTO processes (id_role, id_profile, name, description, prc_date, id_user, status) " .
                       "VALUES (1, $id_profile, '$name', '$description', '$date', $id_userpr, 'CLOSED');";
 
-              if($result7 = mysqli_query($con, $sql7))
+              if(mysqli_query($con, $sql7))
               {
                 $id_process = mysqli_insert_id($con);
-                echo $id_process;
 
                 $sql8 = "INSERT INTO marketing_details(id_process, source, post, referrer, about) " .
-                        "VALUES ($id_process, '$source', '$post', '$referrer', '$about');";
+                        "VALUES ($id_process, '$source', '$post', '$refer', '$about');";
                         
-                if($result8 = mysqli_query($con, $sql8))
+                if(mysqli_query($con, $sql8))
                 {
                   $idmarketing_details = mysqli_insert_id($con);
-                  echo $idmarketing_details;
-
+                  
                   $sql9 = "INSERT INTO process_details(id_process, name, value) " .
                           "VALUES ($id_process, 'Notes', 'Contratacion Completada'), ($id_process, 'Result', 'Aproved');";
 
-                  if($result9 = mysqli_query($con, $sql9))
+                  if(mysqli_query($con, $sql9))
                   {
                     $idprocess_details = mysqli_insert_id($con);
-                    echo $idprocess_details;
 
                     $sql10= "INSERT INTO internal_processes(id_user, id_employee, name, date, status, notes) " .
-                            "VALUES ($id_user, $id_employee, 'hiring bonus', '$date', 'COMPLETED', 'Hiring bonus.');";
+                            "VALUES ($id_user, $id_employees, 'hiring bonus', '$date', 'COMPLETED', 'Hiring bonus.');";
 
-                    if($result10 = mysqli_query($con, $sql10))
+                    if(mysqli_query($con, $sql10))
                     {
                       $idinternal_processes = mysqli_insert_id($con);
-                      echo $idinternal_processes;
 
                       $sql11= "INSERT INTO services(id_process, name, amount, max, frecuency, status, `current`) " .
                               "VALUES ($idinternal_processes, 'hiring modules', $amount, 0, 'UNIKE', 1, 0);";
 
-                      if($result11 = mysqli_query($con, $sql11))
+                      if(mysqli_query($con, $sql11))
                       {
                         $idservices = mysqli_insert_id($con);
-                        echo $idservices;
-                        mysqli_commit($con);
+                        //mysqli_commit($con);
                       }else{
-                        http_response_code(411);
+                        //mysqli_rollback($con);
+                        echo(mysqli_error($con));
                         echo($sql11);
                       }
                     }else{
-                      http_response_code(410);
+                      echo(mysqli_error($con));
                       echo($sql10);
                     }
                   }else{
-                    http_response_code(409);
+                    echo(mysqli_error($con));
                     echo($sql9);
                   }
                 }else{
-                  http_response_code(408);
+                  echo(mysqli_error($con));
                   echo($sql8);
                 }
               }else{
-                http_response_code(407);
+                echo(mysqli_error($con));
                 echo($sql7);
               }
             }else{
-              http_response_code(406);
+              echo(mysqli_error($con));
               echo($sql6);
             }
           }else{
-            http_response_code(405);
+            echo(mysqli_error($con));
             echo($sql5);
           }
         }else{
-          http_response_code(404);
+          echo(mysqli_error($con));
           echo($sql4);
         }
       }else{
-        http_response_code(403);
+        echo(mysqli_error($con));
         echo($sql3);
       }
     }else{
-      http_response_code(402);
+      echo(mysqli_error($con));
       echo($sql2);
     }
   }else{
-    http_response_code(401);
+    echo(mysqli_error($con));
     echo($sql);
   }
 }
 
+//$data = "{id_profile: $id_profile, id_hire: $id_hire, id_employees: $id_employees, idemergency_Details: $idemergency_Details, idmedical_details: $idmedical_details, ideducation_details: $ideducation_details, id_process: $id_process, idmarketing_details: $idmarketing_details, idprocess_details: $idprocess_details, idinternal_processes: $idinternal_processes, idservices: $idservices}";
+$data = [$id_profile, $id_hire, $id_employees, $idemergency_Details, $idmedical_details, $ideducation_details, $id_process, $idmarketing_details, $idprocess_details, $idinternal_processes, $idservices];
+//$data = json_decode($data);
+echo(json_encode($data));
+
+//mysqli_rollback($con);
 mysqli_commit($con);
 
 mysqli_autocommit($con, TRUE);
-mysqli_free_result($result);
-mysqli_free_result($result2);
-mysqli_free_result($result3);
-mysqli_free_result($result4);
-mysqli_free_result($result5);
-mysqli_free_result($result6);
-mysqli_free_result($result7);
-mysqli_free_result($result8);
-mysqli_free_result($result9);
-mysqli_free_result($result10);
-mysqli_free_result($result11);
 mysqli_close($con);
+
 ?>

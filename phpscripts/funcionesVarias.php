@@ -19,4 +19,11 @@ function validateDataToZero($adato) {
 }
 
 
+function validarDatosString($adato) {
+    if (empty($adato) || is_null($adato)) {
+        $adato = '';
+    } 
+    return $adato;
+}
+
 ?>

@@ -6,7 +6,7 @@ $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)) {
   $request = json_decode($postdata);
 
-  $idcontact_details = ($request->idcontact_details);
+  //$idcontact_details = ($request->idcontact_details);
   $id_profile = ($request->id_profile);
   $primary_phone = ($request->primary_phone);
   $secondary_phone = ($request->secondary_phone);

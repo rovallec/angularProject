@@ -6,8 +6,7 @@ header('Access-Control-Allow-Headers: *');
 	if(isset($postdata) && !empty($postdata))
 	{
 		$request = json_decode($postdata);
-
-		$idprofile_details = ($request->idprofile_details);
+		
 		$id_profile = ($request->id_profile);
 		$english_level = ($request->english_level);
 		$transport = ($request->transport);
@@ -23,7 +22,7 @@ header('Access-Control-Allow-Headers: *');
 		if(mysqli_query($con, $sql))
 		{
 			$id_contact = mysqli_insert_id($con);
-			echo $id_profile_details;
+			echo $id_contact;
 		}else{
 			http_response_code(422);
       echo $sql;

@@ -48,3 +48,8 @@ tbody tr{
 i{
   cursor: pointer;
 }
+
+.table-hover tbody tr:hover td{
+  background:#003b71;
+  color:white;
+}

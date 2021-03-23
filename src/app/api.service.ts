@@ -9,7 +9,7 @@ import {  process_templates, waves_template, hires_template, schedules, accounts
           vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, 
           letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, 
           change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, employees_terminations, advances_acc, 
-          payroll_values_gt, paid_attendances, reporters } from './process_templates';
+          payroll_values_gt, paid_attendances, reporters, ids_profiles } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -24,7 +24,7 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-PHP_API_SERVER = "http://localhost"; // Desarrollo
+PHP_API_SERVER = "http://172.18.2.226"; // Desarrollo
 //PHP_API_SERVER = "http://200.94.251.67";  // produccion
 
 readProfiles():Observable<profiles[]>{
@@ -770,7 +770,7 @@ getReporter() {
 }
 
 insertProfile(any:any) {
-  return this.httpClient.post<any>(`${this.PHP_API_SERVER}/phpscripts/insert_profile.php`, any);
+  return this.httpClient.post<ids_profiles>(`${this.PHP_API_SERVER}/phpscripts/insert_profile.php`, any);
 }
 
 insertProfileDetails(any: any) {
