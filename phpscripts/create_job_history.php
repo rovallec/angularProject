@@ -24,10 +24,9 @@ header('Access-Control-Allow-Headers: *');
             
             if(mysqli_query($con,$sql)){					
                 http_response_code(200);
-                echo("Ingresado correctamente");
             }else{
-                echo(mysqli_error($con) . " Err No.: " . mysqli_errno());
-                http_response_code(422);                
+                http_response_code(422);
+                echo(mysqli_error($con));
             }
         }
     }
