@@ -24,6 +24,7 @@ header('Access-Control-Allow-Headers: *');
             if(mysqli_query($con,$sql)){					
                 http_response_code(200);
             }else{
+                echo(mysqli_error($con));
                 http_response_code(422);                
             }
         }

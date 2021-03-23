@@ -8,6 +8,7 @@ $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){
   $request = json_decode($postdata);
   $val2 = $request;
+  echo(json_encode($val2));
 
   if (!empty($val2->affinity_id_profile) && isset($val2->affinity_id_profile)) {
     $r_val_id_profile = ($val2->affinity_id_profile);

@@ -32,18 +32,6 @@
     </div>
   </div>
   <div class="col-md-10">
-    <div class="row col-md-12" *ngIf="isLoading && !finished">
-      <div class="d-flex justify-content-center col-md-12">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden"></span>
-        </div>
-      </div>
-    </div>
-    <div class="progress" style="margin-top:50px" *ngIf="!finished && !isLoading">
-      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-        [style.width]="progress + '%'" [attr.aria-valuenow]="progress" aria-valuemin="0"
-        [attr.aria-valuemax]="max_progress">{{step}}</div>
-    </div>
     <div class="row col-md-12">
       <div class="col-md-3">
         <label>REPORTER:</label>
@@ -145,8 +133,15 @@
               {{ prof.second_lastname }}
             </td>
             <td>
-              <i class="fas fa-check-double btn-outline-secondary" *ngIf="prof.loaded=='true'"></i>
-              <i class="fas fa-ban btn-outline-warning" *ngIf="prof.loaded!='true'"></i>
+              <button class="btn-outline-warning" *ngIf="prof.state=='Error'" disabled="true">
+                <i class="fas fa-ban" *ngIf="prof.state=='Error'" ></i>
+              </button>
+              <button class="btn-outline-info" *ngIf="prof.state=='Loaded'" disabled="true">
+                <i class="fas fa-check-double" *ngIf="prof.state=='Loaded'"></i>
+              </button>
+              <button class="btn-outline-success" *ngIf="prof.state=='Saved'" disabled="true">
+                <i class="fas fa-ban" *ngIf="prof.state=='Saved'" ></i>
+              </button>
             </td>
           </tr>
           <tr *ngIf="fullprofiles.length>0">

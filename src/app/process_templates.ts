@@ -1218,7 +1218,11 @@ export class Fecha{
         let dd: string = String(Adate.getDate()).padStart(2,'0');
         let MM: string = String(Adate.getMonth() + 1).padStart(2, '0');
         let yyyy: string = Adate.getFullYear().toString();
-        return (yyyy + '-' + MM + '-' + dd);
+        let sdate: string = (yyyy + '-' + MM + '-' + dd);
+        if (sdate == 'NaN-NaN-NaN') {
+            sdate = '1900-01-01';
+        }
+        return sdate;
     }
 
     constructor() {
@@ -1320,6 +1324,33 @@ class contact_details {
     }
 }
 
+export class job_histories {
+    id_profile: string;
+    company: string;
+    date_joining: string;
+    date_end: string;
+    position: string;
+    reference_name: string;
+    reference_lastname: string;
+    reference_position: string;
+    reference_mail: string;
+    reference_phone: string;
+    working: string;
+    constructor() {
+        this.id_profile = null;
+        this.company = null;
+        this.date_joining = null;
+        this.date_end = null;
+        this.position = null;
+        this.reference_name = null;
+        this.reference_lastname = null;
+        this.reference_position = null;
+        this.reference_mail = null;
+        this.reference_phone = null;
+        this.working = null;
+    }
+}
+
 export class full_profiles {
     No: string;
     nearsol_id: string;
@@ -1361,12 +1392,6 @@ export class full_profiles {
     date_end: string;
     profesion: string;
     birth_place: string;
-    reference_name: string;
-    reference_lastname: string;
-    reference_position: string;
-    reference_email: string;
-    reference_phone: string;
-    working: string;
     id_profile_details: string;
     start_date: string;
     unavialable_days: string;
@@ -1399,7 +1424,7 @@ export class full_profiles {
     medical_treatment: string;
     medical_prescription: string;
     family: profiles_family[];
-    job_history: profiles_histories[];  
+    job_history: job_histories[];  
     // education_details  
     current_level: string;
     further_education: string;
@@ -1423,7 +1448,7 @@ export class full_profiles {
     id_userpr: string;
     //services
     amount: string;
-    loaded: string;
+    state: string;
     constructor() {
         this.No = '0';
         this.nearsol_id = '';
@@ -1463,12 +1488,6 @@ export class full_profiles {
         this.date_end = null;
         this.profesion = null;
         this.birth_place = null;
-        this.reference_name = null;
-        this.reference_lastname = null;
-        this.reference_position = null;
-        this.reference_email = null;
-        this.reference_phone = null;
-        this.working = null;
         this.id_profile_details = null;
         this.english_level = null;
         this.transport = null;
@@ -1532,7 +1551,7 @@ export class full_profiles {
         this.description = null;
         this.id_userpr = null;
         this.amount = null;
-        this.loaded = null;
+        this.state = null;
     }
 }
 

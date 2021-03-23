@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { accounts, clients, Fecha, reporters, waves_template, full_profiles, schedules, ids_profiles } from '../process_templates';
+import { accounts, clients, Fecha, reporters, waves_template, full_profiles, schedules, ids_profiles, job_histories } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { isNullOrUndefined } from 'util';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
@@ -49,14 +49,19 @@ export class ImportWavesComponent implements OnInit {
 
   start() {
     let fecha: Fecha = new Fecha;
+    this.waves = new waves_template;
+    this.days_off = null;
+    this.start_time = null;
+    this.end_time = null;
+    this.date = fecha.today;    
+    this.isLoading = false;
+    this.fullprofiles = [];
     this.apiServices.getClients().subscribe((cls: clients[]) => {
       this.clients = cls;
       this.selectedClient = cls[0].idclients;
       this.setClient(this.selectedClient);
     })
     this.getReporter();
-    this.date = fecha.today;    
-    this.isLoading = false;
   }
 
   setClient(cl: string) {
@@ -139,17 +144,28 @@ export class ImportWavesComponent implements OnInit {
               element.id_profile = ids[0];
               element.contact_detail.id_profile = ids[0];
               element.employee.id_profile = ids[0];
+              let i = 0;
+              element.job_history.forEach(_job => {
+                element.job_history[i].id_profile = element.id_profile;
+                i++;
+              })
               this.apiServices.insertProfileDetails(element).subscribe((_str: string) => {
-                this.apiServices.insertcontact(element.contact_detail).subscribe((_str: string) => {
-                  element.family.forEach(fam => {
-                    this.apiServices.createFamily(fam).subscribe((_str: string) => {
-                      element.job_history.forEach(job => {
-                        this.apiServices.insertjobhistory(job).subscribe((_str: string) => {
-                          window.alert("All documents saved correctly.");
-                        })
+                this.apiServices.insertcontact(element.contact_detail).subscribe(async (_str: string) => {
+                  for await (const fam of element.family) {
+                    this.apiServices.createFamily(fam).subscribe((fstr: string) => {
+                      if (String(fstr).split("|")[0]=="1"){   
+                        element.state = 'Saved';
+                        //window.alert("Action successfuly recorded.");
+                      } else {
+                        //element.state = "An error has occured:\n" + String(fstr).split("|")[1];
+                        element.state = 'Error';
+                          console.log(String(fstr).split("|")[0]);
+                      }
+                      this.apiServices.insertjobhistory(element.job_history).subscribe((_str: string) => {
+                        //window.alert("All documents saved correctly.");
                       })
                     })
-                  })
+                  }
                 })
               })
             })
@@ -246,7 +262,7 @@ export class ImportWavesComponent implements OnInit {
           sheetToJson.forEach(element => {
             profilef = new full_profiles;
             let fam: profiles_family = new profiles_family;
-            let job: profiles_histories = new profiles_histories;
+            let job: job_histories = new job_histories;
             if (count < 10) {
               num = '0' + count.toString();
             } else {
@@ -254,7 +270,7 @@ export class ImportWavesComponent implements OnInit {
             }            
             profilef.No = num;
             profilef.wave = this.waves;
-            profilef.loaded = 'false';
+            profilef.state = 'No Loaded';
             profilef.schedule = this.schedule;
             profilef.nearsol_id = profilef.wave.prefix + profilef.No;            
             // profiles
@@ -304,8 +320,8 @@ export class ImportWavesComponent implements OnInit {
             profilef.medical_treatment = this.validateEmptyStr(element['medical_treatment']);
             profilef.medical_prescription = this.validateEmptyStr(element['medical_prescription']);
             // families
-            if ((element['f1_first_name'] == '') && (element['f1_second_name'] == '') && (element['f1_first_last_name'] == '') && (element['f1_second_last_name'] == '')) {
-              return;
+            if (this.isEmpty(element['f1_first_name']) && this.isEmpty(element['f1_second_name']) && this.isEmpty(element['f1_first_last_name']) && this.isEmpty(element['f1_second_last_name'])) {
+              //
             } else {
               fam.affinity_first_name = this.validateEmptyStr(element['f1_first_name']);
               fam.affinity_second_name = this.validateEmptyStr(element['f1_second_name']);
@@ -318,8 +334,8 @@ export class ImportWavesComponent implements OnInit {
               profilef.family.push(fam);
             }
             
-            if ((element['f2_first_name'] == '') && (element['f2_second_name'] == '') && (element['f2_first_last_name'] == '') && (element['f2_second_last_name'] == '')) {
-              return;
+            if (this.isEmpty(element['f2_first_name']) && this.isEmpty(element['f2_second_name']) && this.isEmpty(element['f2_first_last_name']) && this.isEmpty(element['f2_second_last_name'])) {
+//              return;
             } else {
               fam.affinity_first_name = this.validateEmptyStr(element['f2_first_name']);
               fam.affinity_second_name = this.validateEmptyStr(element['f2_second_name']);
@@ -333,8 +349,8 @@ export class ImportWavesComponent implements OnInit {
               profilef.family.push(fam);
             }
             
-            if ((element['f3_first_name'] == '') && (element['f3_second_name'] == '') && (element['f3_first_last_name'] == '') && (element['f3_second_last_name'] == '')) {
-              return;
+            if (this.isEmpty(element['f3_first_name']) && this.isEmpty(element['f3_second_name']) && this.isEmpty(element['f3_first_last_name']) && this.isEmpty(element['f3_second_last_name'])) {
+              //return;
             } else {
               fam.affinity_first_name = this.validateEmptyStr(element['f3_first_name']);
               fam.affinity_second_name = this.validateEmptyStr(element['f3_second_name']);
@@ -347,8 +363,8 @@ export class ImportWavesComponent implements OnInit {
               profilef.family.push(fam);
             }
             
-            if ((element['f4_first_name'] == '') && (element['f4_second_name'] == '') && (element['f4_first_last_name'] == '') && (element['f4_second_last_name'] == '')) {
-              return;
+            if (this.isEmpty(element['f4_first_name']) && this.isEmpty(element['f4_second_name']) && this.isEmpty(element['f4_first_last_name']) && this.isEmpty(element['f4_second_last_name'])) {
+              //return;
             } else {
               fam.affinity_first_name = this.validateEmptyStr(element['f4_first_name']);
               fam.affinity_second_name = this.validateEmptyStr(element['f4_second_name']);
@@ -361,8 +377,8 @@ export class ImportWavesComponent implements OnInit {
               profilef.family.push(fam);
             }
             
-            if ((element['f5_first_name'] == '') && (element['f5_second_name'] == '') && (element['f5_first_last_name'] == '') && (element['f5_second_last_name'] == '')) {
-              return;
+            if (this.isEmpty(element['f5_first_name']) && this.isEmpty(element['f5_second_name']) && this.isEmpty(element['f5_first_last_name']) && this.isEmpty(element['f5_second_last_name'])) {
+              //return;
             } else {
               fam.affinity_first_name = this.validateEmptyStr(element['f5_first_name']);
               fam.affinity_second_name = this.validateEmptyStr(element['f5_second_name']);
@@ -375,31 +391,32 @@ export class ImportWavesComponent implements OnInit {
               profilef.family.push(fam);
             }            
             // job_histories
-            if ((element['jh1_company'] == '') && (element['jh1_date_joining'] = '') && (element['jh1_date_end'] == '') &&
-              (element['jh1_reference_name'] == '') && (element['jh1_reference_phone'] == '')) {
-              return;
+            if (this.isEmpty(element['jh1_company']) && this.isEmpty(element['jh1_date_joining']) && 
+              this.isEmpty(element['jh1_date_end']) && this.isEmpty(element['jh1_reference_name']) && 
+              this.isEmpty(element['jh1_reference_phone'])) {
+              //return;
             } else {
               job.company = this.validateEmptyStr(element['jh1_company']);
               ldate = new Date(this.validateEmptyStr(element['jh1_date_joining']));
               job.date_joining = fecha.transform(ldate);
               ldate = new Date(this.validateEmptyStr(element['jh1_date_end']));
               job.date_end = fecha.transform(ldate);
-              job.date_end = this.validateEmptyStr(element['jh1_date_end']);
               job.position = this.validateEmptyStr(element['jh1_position']);
               job.reference_name = this.validateEmptyStr(element['jh1_reference_name']);
               job.reference_lastname = this.validateEmptyStr(element['jh1_reference_lastname']);
               job.reference_position = this.validateEmptyStr(element['jh1_reference_position']);
-              job.reference_email = this.validateEmptyStr(element['jh1_reference_email']);
+              job.reference_mail = this.validateEmptyStr(element['jh1_reference_mail']);
               job.reference_phone = this.validateEmptyStr(element['jh1_reference_phone']);
               job.working = this.validateEmptyStr(element['jh1_working']);
               profilef.job_history.push(job);
             }
             
-            if ((element['jh2_company'] == '') && (element['jh2_date_joining'] = '') && (element['jh2_date_end'] == '') &&
-              (element['jh2_reference_name'] == '') && (element['jh2_reference_phone'] == '')) {
-              return;
+            if (this.isEmpty(element['jh2_company']) && this.isEmpty(element['jh2_date_joining']) && 
+              this.isEmpty(element['jh2_date_end']) && this.isEmpty(element['jh2_reference_name']) && 
+              this.isEmpty(element['jh2_reference_phone'])) {
+              //return;
             } else {
-              job = new profiles_histories;
+              job = new job_histories;
               job.company = this.validateEmptyStr(element['jh2_company']);
               ldate = new Date(this.validateEmptyStr(element['jh2_date_joining']));
               job.date_joining = fecha.transform(ldate);
@@ -409,17 +426,18 @@ export class ImportWavesComponent implements OnInit {
               job.reference_name = this.validateEmptyStr(element['jh2_reference_name']);
               job.reference_lastname = this.validateEmptyStr(element['jh2_reference_lastname']);
               job.reference_position = this.validateEmptyStr(element['jh2_reference_position']);
-              job.reference_email = this.validateEmptyStr(element['jh2_reference_email']);
+              job.reference_mail = this.validateEmptyStr(element['jh2_reference_mail']);
               job.reference_phone = this.validateEmptyStr(element['jh2_reference_phone']);
               job.working = this.validateEmptyStr(element['jh2_working']);
               profilef.job_history.push(job);
             }
             
-            if ((element['jh3_company'] == '') && (element['jh3_date_joining'] = '') && (element['jh3_date_end'] == '') &&
-              (element['jh3_reference_name'] == '') && (element['jh3_reference_phone'] == '')) {
-              return;
+            if (this.isEmpty(element['jh3_company']) && this.isEmpty(element['jh3_date_joining']) && 
+              this.isEmpty(element['jh3_date_end']) && this.isEmpty(element['jh3_reference_name']) && 
+              this.isEmpty(element['jh3_reference_phone'])) {
+              //return;
             } else {
-              job = new profiles_histories;
+              job = new job_histories;
               job.company = this.validateEmptyStr(element['jh3_company']);
               ldate = new Date(this.validateEmptyStr(element['jh3_date_joining']));
               job.date_joining = fecha.transform(ldate);
@@ -429,7 +447,7 @@ export class ImportWavesComponent implements OnInit {
               job.reference_name = this.validateEmptyStr(element['jh3_reference_name']);
               job.reference_lastname = this.validateEmptyStr(element['jh3_reference_lastname']);
               job.reference_position = this.validateEmptyStr(element['jh3_reference_position']);
-              job.reference_email = this.validateEmptyStr(element['jh3_reference_email']);
+              job.reference_mail = this.validateEmptyStr(element['jh3_reference_mail']);
               job.reference_phone = this.validateEmptyStr(element['jh3_reference_phone']);
               job.working = this.validateEmptyStr(element['jh3_working']);
               profilef.job_history.push(job);
@@ -465,7 +483,7 @@ export class ImportWavesComponent implements OnInit {
             profilef.id_userpr = this.validateEmptyStr(element['id_user']);
             // services
             profilef.amount = this.validateEmptyStr(element['amount']);
-            profilef.loaded = 'true';
+            profilef.state = 'Loaded';
             this.fullprofiles.push(profilef);
             count++;
             this.progress = count;
@@ -483,17 +501,11 @@ export class ImportWavesComponent implements OnInit {
     }
     catch (exception) {
       console.log("Ocurrió un Error: " + exception);
-      profilef.loaded = exception;
+      profilef.state = exception;
       this.isLoading = false;
-      this.finished = true;
-      this.completed = false;
-      this.importEnd = false;
     }
     finally {
       this.isLoading = false;
-      /*this.finished = true;
-      this.completed = true;
-      this.importEnd = true;*/
     }
   }
 }

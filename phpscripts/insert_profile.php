@@ -80,132 +80,150 @@ if(isset($postdata) && !empty($postdata)){
           "'{$irtra}','EMPLOYEE', '{$bank}', '{$account}', '{$account_type}', '{$gender}', '{$etnia}', " .
           "'{$profesion}', '{$birth_place}');";  
 
-  
-  if(mysqli_query($con, $sql))
+  try 
   {
-    $id_profile = mysqli_insert_id($con);    
-
-    $sql2 = "INSERT INTO hires (idhires, id_profile, id_wave, nearsol_id, reports_to, id_schedule) " .
-            "VALUES (null, '$id_profile', '$id_wave', '$nearsol_id', '$reports_to', '$id_schedule');";
-
-    if(mysqli_query($con, $sql2))
+    if(mysqli_query($con, $sql))
     {
-      $id_hire = mysqli_insert_id($con);
+      $id_profile = mysqli_insert_id($con);    
 
-      $sql3 = "INSERT INTO employees(idemployees, id_hire, id_account, reporter, client_id, " .
-              "hiring_date, job, base_payment, state, productivity_payment, active, platform) " .
-              "VALUES (null, $id_hire, $id_account, $reporter, '$client_id', '$hiring_date', '$job', " .
-              "$base_payment, 'EMPLOYEE', $productivity_payment, 1, '$platform');";
+      $sql2 = "INSERT INTO hires (idhires, id_profile, id_wave, nearsol_id, reports_to, id_schedule) " .
+              "VALUES (null, '$id_profile', '$id_wave', '$nearsol_id', '$reports_to', '$id_schedule');";
 
-      if(mysqli_query($con, $sql3))
+      if(mysqli_query($con, $sql2))
       {
-        $id_employees = mysqli_insert_id($con);
+        $id_hire = mysqli_insert_id($con);
 
-        $sql4 = "INSERT INTO emergency_details(id_profile, e_first_name, e_second_name, e_first_lastname, " .
-                "e_second_lastname, phone, relationship) VALUES ('{$id_profile}','{$emergency_first_name}', " . 
-                "'{$emergency_second_name}', '{$emergency_first_lastname}', '{$emergency_second_lastname}', '{$emergency_phone}', '{$emergency_relationship}');";
+        $sql3 = "INSERT INTO employees(idemployees, id_hire, id_account, reporter, client_id, " .
+                "hiring_date, job, base_payment, state, productivity_payment, active, platform) " .
+                "VALUES (null, $id_hire, $id_account, $reporter, '$client_id', '$hiring_date', '$job', " .
+                "$base_payment, 'EMPLOYEE', $productivity_payment, 1, '$platform');";
 
-        if(mysqli_query($con, $sql4))
+        if(mysqli_query($con, $sql3))
         {
-          $idemergency_Details = mysqli_insert_id($con);
+          $id_employees = mysqli_insert_id($con);
 
-          $sql5 = "INSERT INTO medical_details (idmedical_details, id_profile, medical_treatment, medical_prescription) " .
-                  "VALUES (null, $id_profile, '$medical_treatment', '$medical_prescription');";
+          $sql4 = "INSERT INTO emergency_details(id_profile, e_first_name, e_second_name, e_first_lastname, " .
+                  "e_second_lastname, phone, relationship) VALUES ('{$id_profile}','{$emergency_first_name}', " . 
+                  "'{$emergency_second_name}', '{$emergency_first_lastname}', '{$emergency_second_lastname}', '{$emergency_phone}', '{$emergency_relationship}');";
 
-          if(mysqli_query($con, $sql5))
+          if(mysqli_query($con, $sql4))
           {
-            $idmedical_details = mysqli_insert_id($con);
+            $idemergency_Details = mysqli_insert_id($con);
 
-            $sql6 = "INSERT INTO education_details(ideducation_details, id_profile, current_level, " . 
-                    "further_education, currently_studing, institution_name, `degree`) ".
-                    "VALUES (null, $id_profile, '$current_level', '$further_education', '$currently_studing', ". 
-                    "'$institution_name', '$degree');";
-                    
-            if(mysqli_query($con, $sql6))
+            $sql5 = "INSERT INTO medical_details (idmedical_details, id_profile, medical_treatment, medical_prescription) " .
+                    "VALUES (null, $id_profile, '$medical_treatment', '$medical_prescription');";
+
+            if(mysqli_query($con, $sql5))
             {
-              $ideducation_details = mysqli_insert_id($con);
+              $idmedical_details = mysqli_insert_id($con);
 
-              $sql7 = "INSERT INTO processes (id_role, id_profile, name, description, prc_date, id_user, status) " .
-                      "VALUES (1, $id_profile, '$name', '$description', '$date', $id_userpr, 'CLOSED');";
-
-              if(mysqli_query($con, $sql7))
+              $sql6 = "INSERT INTO education_details(ideducation_details, id_profile, current_level, " . 
+                      "further_education, currently_studing, institution_name, `degree`) ".
+                      "VALUES (null, $id_profile, '$current_level', '$further_education', '$currently_studing', ". 
+                      "'$institution_name', '$degree');";
+                      
+              if(mysqli_query($con, $sql6))
               {
-                $id_process = mysqli_insert_id($con);
+                $ideducation_details = mysqli_insert_id($con);
 
-                $sql8 = "INSERT INTO marketing_details(id_process, source, post, referrer, about) " .
-                        "VALUES ($id_process, '$source', '$post', '$refer', '$about');";
-                        
-                if(mysqli_query($con, $sql8))
+                $sql7 = "INSERT INTO processes (id_role, id_profile, name, description, prc_date, id_user, status) " .
+                        "VALUES (1, $id_profile, '$name', '$description', '$date', $id_userpr, 'CLOSED');";
+
+                if(mysqli_query($con, $sql7))
                 {
-                  $idmarketing_details = mysqli_insert_id($con);
-                  
-                  $sql9 = "INSERT INTO process_details(id_process, name, value) " .
-                          "VALUES ($id_process, 'Notes', 'Contratacion Completada'), ($id_process, 'Result', 'Aproved');";
+                  $id_process = mysqli_insert_id($con);
 
-                  if(mysqli_query($con, $sql9))
+                  $sql8 = "INSERT INTO marketing_details(id_process, source, post, referrer, about) " .
+                          "VALUES ($id_process, '$source', '$post', '$refer', '$about');";
+                          
+                  if(mysqli_query($con, $sql8))
                   {
-                    $idprocess_details = mysqli_insert_id($con);
+                    $idmarketing_details = mysqli_insert_id($con);
+                    
+                    $sql9 = "INSERT INTO process_details(id_process, name, value) " .
+                            "VALUES ($id_process, 'Notes', 'Contratacion Completada'), ($id_process, 'Result', 'Aproved');";
 
-                    $sql10= "INSERT INTO internal_processes(id_user, id_employee, name, date, status, notes) " .
-                            "VALUES ($id_user, $id_employees, 'hiring bonus', '$date', 'COMPLETED', 'Hiring bonus.');";
-
-                    if(mysqli_query($con, $sql10))
+                    if(mysqli_query($con, $sql9))
                     {
-                      $idinternal_processes = mysqli_insert_id($con);
+                      $idprocess_details = mysqli_insert_id($con);
 
-                      $sql11= "INSERT INTO services(id_process, name, amount, max, frecuency, status, `current`) " .
-                              "VALUES ($idinternal_processes, 'hiring modules', $amount, 0, 'UNIKE', 1, 0);";
+                      $sql10= "INSERT INTO internal_processes(id_user, id_employee, name, date, status, notes) " .
+                              "VALUES ($id_user, $id_employees, 'hiring bonus', '$date', 'COMPLETED', 'Hiring bonus.');";
 
-                      if(mysqli_query($con, $sql11))
+                      if(mysqli_query($con, $sql10))
                       {
-                        $idservices = mysqli_insert_id($con);
-                        //mysqli_commit($con);
+                        $idinternal_processes = mysqli_insert_id($con);
+
+                        $sql11= "INSERT INTO services(id_process, name, amount, max, frecuency, status, `current`) " .
+                                "VALUES ($idinternal_processes, 'hiring modules', $amount, 0, 'UNIKE', 1, 0);";
+
+                        if(mysqli_query($con, $sql11))
+                        {
+                          $idservices = mysqli_insert_id($con);
+                          //mysqli_commit($con);
+                        }else{
+                          //mysqli_rollback($con);
+                          $error = mysqli_error($con);
+                          throw new MiExcepción($error);
+                          echo($sql11);
+                        }
                       }else{
-                        //mysqli_rollback($con);
-                        echo(mysqli_error($con));
-                        echo($sql11);
+                        $error = mysqli_error($con);
+                        throw new MiExcepción($error);
+                        echo($sql10);
                       }
                     }else{
-                      echo(mysqli_error($con));
-                      echo($sql10);
+                      $error = mysqli_error($con);
+                      throw new MiExcepción($error);
+                      echo($sql9);
                     }
                   }else{
-                    echo(mysqli_error($con));
-                    echo($sql9);
+                    $error = mysqli_error($con);
+                    throw new MiExcepción($error);
+                    echo($sql8);
                   }
                 }else{
-                  echo(mysqli_error($con));
-                  echo($sql8);
+                  $error = mysqli_error($con);
+                  throw new MiExcepción($error);
+                  echo($sql7);
                 }
               }else{
-                echo(mysqli_error($con));
-                echo($sql7);
+                $error = mysqli_error($con);
+                throw new MiExcepción($error);
+                echo($sql6);
               }
             }else{
-              echo(mysqli_error($con));
-              echo($sql6);
+              $error = mysqli_error($con);
+              throw new MiExcepción($error);
+              echo($sql5);
             }
           }else{
-            echo(mysqli_error($con));
-            echo($sql5);
+            $error = mysqli_error($con);
+            throw new MiExcepción($error);
+            echo($sql4);
           }
         }else{
-          echo(mysqli_error($con));
-          echo($sql4);
+          echo($sql3);
+          $error = mysqli_error($con);
+          throw new MiExcepción($error);
         }
       }else{
-        echo(mysqli_error($con));
-        echo($sql3);
+        $error = mysqli_error($con);
+        throw new MiExcepción($error);
+        echo($sql2);
       }
     }else{
-      echo(mysqli_error($con));
-      echo($sql2);
+      $error = mysqli_error($con);
+      throw new MiExcepción($error);
+      echo($sql);
     }
-  }else{
-    echo(mysqli_error($con));
-    echo($sql);
   }
-}
+  catch (Exception $e){
+    mysqli_rollback($con);
+    echo('Error: ' . $e->getMessage() . "\n");
+  }
+}  
+
 
 //$data = "{id_profile: $id_profile, id_hire: $id_hire, id_employees: $id_employees, idemergency_Details: $idemergency_Details, idmedical_details: $idmedical_details, ideducation_details: $ideducation_details, id_process: $id_process, idmarketing_details: $idmarketing_details, idprocess_details: $idprocess_details, idinternal_processes: $idinternal_processes, idservices: $idservices}";
 $data = [$id_profile, $id_hire, $id_employees, $idemergency_Details, $idmedical_details, $ideducation_details, $id_process, $idmarketing_details, $idprocess_details, $idinternal_processes, $idservices];
