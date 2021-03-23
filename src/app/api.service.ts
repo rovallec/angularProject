@@ -8,7 +8,7 @@ import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, 
 import {  process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, 
           vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, 
           letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, 
-          change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, employees_terminations, advances_acc, 
+          change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, employees_Bonuses, advances_acc, 
           payroll_values_gt, paid_attendances, reporters, ids_profiles } from './process_templates';
 
 import { Observable } from 'rxjs';
@@ -229,8 +229,8 @@ getallEmployees(nm:any){
   return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getallEmployees.php`,nm);
 }
 
-getAllTerminations(nm:any) {
-  return this.httpClient.post<employees_terminations[]>(`${this.PHP_API_SERVER}/phpscripts/getallTerminations.php`,nm);
+getAllBonuses(nm:any) {
+  return this.httpClient.post<employees_Bonuses[]>(`${this.PHP_API_SERVER}/phpscripts/getAllBonuses.php`,nm);
 }
 
 getallHrProcesses(){

@@ -457,7 +457,7 @@ export class terminations {
     }
 }
 
-export class employees_terminations {
+export class employees_Bonuses {
   idemployees: string;
   nearsol_id: string;
   name: string;
@@ -1378,7 +1378,6 @@ export class full_profiles {
     nit: string;
     igss: string;
     irtra: string;
-    status: string;
     idcontact_details: string;
     id_profile: string;
     primary_phone: string;
@@ -1474,7 +1473,6 @@ export class full_profiles {
         this.nit = null;
         this.igss = null;
         this.irtra = null;
-        this.status = null;
         this.idcontact_details = null;
         this.id_profile = null;
         this.primary_phone = null;
