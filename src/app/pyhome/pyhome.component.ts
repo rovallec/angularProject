@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, hrProcess } from '../fullProcess';
 import { process } from '../process';
-import { attendance_accounts, attendences, hires_template, schedules, waves_template } from '../process_templates';
+import { attendance_accounts, attendences, hires_template, schedules, terminations, waves_template } from '../process_templates';
 import { profiles } from '../profiles';
 
 @Component({
@@ -26,7 +27,7 @@ export class PyhomeComponent implements OnInit {
   transfers: process[] = [];
   profilesTransfer: employees[] = [];
   profilesTerm: employees[] = [];
-  overlaps:employees[] = [];
+  overlaps: employees[] = [];
   filter: string = null;
   value: string = null;
   searching: boolean = false;
@@ -43,14 +44,14 @@ export class PyhomeComponent implements OnInit {
     this.getOverlaps();
   }
 
-  getOverlaps(){
+  getOverlaps() {
     let date: Date = new Date();
     let start: string = null;
     let end: string = null;
     start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
     end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 2, 0).getDate().toString());
-    
-    this.apiService.getOverlaps({start:start, end:end}).subscribe((emp:employees[])=>{
+
+    this.apiService.getOverlaps({ start: start, end: end }).subscribe((emp: employees[]) => {
       this.overlaps = emp;
     })
   }
@@ -62,7 +63,7 @@ export class PyhomeComponent implements OnInit {
     if (date.getDate() > 15) {
       start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '16';
       end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
-    }else{
+    } else {
       start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
       end = end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + "15";
     }
@@ -192,6 +193,7 @@ export class PyhomeComponent implements OnInit {
 
   getTerminations() {
     let term: process[] = [];
+    let terminated: terminations[] = [];
     let date: Date = new Date();
     let start: string = null;
     let end: string = null;
@@ -199,7 +201,7 @@ export class PyhomeComponent implements OnInit {
     if (date.getDate() > 15) {
       start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '16';
       end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
-    }else{
+    } else {
       start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
       end = end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + "15";
     }
@@ -207,15 +209,16 @@ export class PyhomeComponent implements OnInit {
     this.apiService.getProcRecorded({ id: 'all' }).subscribe((proc: process[]) => {
       proc.forEach(proc => {
         if (proc.name == "Termination" && new Date(proc.prc_date) < new Date(end) && new Date(proc.prc_date) > new Date(start)) {
-          term.push(proc);
+          this.apiService.getTerm(proc).subscribe((termed: terminations) => {
+            this.apiService.getSearchEmployees({ filter: 'idemployees', value: proc.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
+              emp[0].platform = "NO DATE SET";
+              if (!isNullOrUndefined(termed.valid_from)) {
+                emp[0].platform = termed.valid_from;
+              }
+              this.profilesTerm.push(emp[0]);
+            })
+          })
         }
-      })
-      
-      term.forEach(termed => {
-        this.apiService.getSearchEmployees({ filter: 'idemployees', value: termed.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
-          emp[0].platform = termed.prc_date;
-          this.profilesTerm.push(emp[0]);
-        })
       })
     })
   }

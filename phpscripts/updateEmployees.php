@@ -11,7 +11,7 @@ $id = ($request->id_profile);
 $status = ($request->state);
 
 if($platform != 'WAH' && $platform != 'ON SITE'){
-	$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `client_id` = '$platform' WHERE `id_profile` = '$id';";
+	$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `client_id` = '$platform', `state` = '$status' WHERE `id_profile` = '$id';";
 }else{
 		$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `platform` = '$platform' WHERE `id_profile` = '$id';";
 }

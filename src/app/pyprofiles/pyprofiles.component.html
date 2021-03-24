@@ -22,21 +22,25 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="txt_name">DPI:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile.dpi">
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="txt_birth">Birthday:</label>
-                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile.day_of_birth">
-                    </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="txt_nationality">Client ID:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="employee.client_id">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label>Joining Date:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="employee.hiring_date">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txt_birth">Termination Date:</label>
+                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile.day_of_birth">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txt_birth">Termination Notification:</label>
+                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile.day_of_birth">
                     </div>
                 </div>
             </div>

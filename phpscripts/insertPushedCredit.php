@@ -15,8 +15,7 @@ $notes = ($request->notes);
 $sql = "INSERT INTO `minearsol`.`pushed_credits` (`idacc_processes`, `id_credit`, `id_user`, `id_employee`, `name`, `date`, `notes`) VALUES (NULL, $id_debit, $id_user, $id_employee, 'Credit', '$date', '$notes');";
 
 if(mysqli_query($con,$sql)){
-  echo(mysqli_insert_id($con));
-  http_response_code(200);
+  echo("1");
 } else {
   http_response_code(400);
   $error = "0|" . $sql . "|" . mysqli_error($con);

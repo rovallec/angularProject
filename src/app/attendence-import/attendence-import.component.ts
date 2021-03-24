@@ -54,7 +54,6 @@ export class AttendenceImportComponent implements OnInit {
         var first_sheet_name = workbook.SheetNames[0];
         var first_sheet_name_2 = workbook.SheetNames[1];
         var worksheet = workbook.Sheets[first_sheet_name];
-        var worksheet_2 = workbook.Sheets[first_sheet_name_2];
         //TAB 1
         let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
         sheetToJson.forEach(element => {
@@ -107,30 +106,35 @@ export class AttendenceImportComponent implements OnInit {
           att.push(elem);
         });
 
-        //TAB 2
-        let sheetToJson_2 = XLSX.utils.sheet_to_json(worksheet_2, { raw: true });
-        sheetToJson_2.forEach(element => {
-          try {
-            let supervisors: sup_exception = new sup_exception;
-            supervisors.avaya = element['AVAYA'];
-            supervisors.date = element['DATE'];
-            supervisors.name = element['NAME'];
-            supervisors.notes = element['NOTES'];
-            supervisors.reason = element['REASON'];
-            supervisors.supervisor = element['SUPERVISOR'];
-            supervisors.time = element['TIME'];
-            this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: supervisors.avaya }).subscribe((emp: employees[]) => {
-              if (isNull(emp)) {
-                supervisors.status = 'FALSE';
-              } else {
-                supervisors.status = 'TRUE';
-              }
-              this.sups.push(supervisors);
-            })
-          } catch (error) {
-
-          }
-        })
+        try {
+          //TAB 2
+          var worksheet_2 = workbook.Sheets[first_sheet_name_2];
+          let sheetToJson_2 = XLSX.utils.sheet_to_json(worksheet_2, { raw: true });
+          sheetToJson_2.forEach(element => {
+            try {
+              let supervisors: sup_exception = new sup_exception;
+              supervisors.avaya = element['AVAYA'];
+              supervisors.date = element['DATE'];
+              supervisors.name = element['NAME'];
+              supervisors.notes = element['NOTES'];
+              supervisors.reason = element['REASON'];
+              supervisors.supervisor = element['SUPERVISOR'];
+              supervisors.time = element['TIME'];
+              this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: supervisors.avaya }).subscribe((emp: employees[]) => {
+                if (isNull(emp)) {
+                  supervisors.status = 'FALSE';
+                } else {
+                  supervisors.status = 'TRUE';
+                }
+                this.sups.push(supervisors);
+              })
+            } catch (error2) {
+  
+            }
+          })
+        } catch (error) {
+          
+        }
         this.attendences = att;
         this.failCount = this.attendences.length - this.checkedCount;
         this.completed = true;
@@ -181,40 +185,42 @@ export class AttendenceImportComponent implements OnInit {
       })
     });
 
-    this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {
-      this.importCompleted = true;
-      //TAB 2
-      let adjustments: attendences_adjustment[] = [];
-      let i: number = 0;
-      this.sups.forEach(sup => {
-        i = i + 1;
-        if (sup.status == 'TRUE') {
-          this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya }).subscribe((emp: employees[]) => {
-            this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: emp[0].idemployees }).subscribe((attendance: attendences[]) => {
-              let adjustment: attendences_adjustment = new attendences_adjustment;
-              adjustment.id_employee = emp[0].idemployees;
-              adjustment.id_user = this.authService.getAuthusr().iduser;
-              adjustment.id_type = '2';
-              adjustment.id_department = '28';
-              adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString());
-              adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
-              adjustment.status = 'PENDING';
-              adjustment.reason = 'Supervisor Exception';
-              adjustment.id_attendence = attendance[0].idattendences;
-              adjustment.time_before = attendance[0].worked_time;
-              adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
-              adjustment.amount = sup.time;
-              adjustment.state = "PENDING";
-              this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {
-                if (i == this.sups.length) {
-                  this.completed = true;
-                }
+    if(this.correct.length > 0){
+      this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {
+        this.importCompleted = true;
+        //TAB 2
+        let adjustments: attendences_adjustment[] = [];
+        let i: number = 0;
+        this.sups.forEach(sup => {
+          i = i + 1;
+          if (sup.status == 'TRUE') {
+            this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya }).subscribe((emp: employees[]) => {
+              this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: emp[0].idemployees }).subscribe((attendance: attendences[]) => {
+                let adjustment: attendences_adjustment = new attendences_adjustment;
+                adjustment.id_employee = emp[0].idemployees;
+                adjustment.id_user = this.authService.getAuthusr().iduser;
+                adjustment.id_type = '2';
+                adjustment.id_department = '28';
+                adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString());
+                adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
+                adjustment.status = 'PENDING';
+                adjustment.reason = 'Supervisor Exception';
+                adjustment.id_attendence = attendance[0].idattendences;
+                adjustment.time_before = attendance[0].worked_time;
+                adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
+                adjustment.amount = sup.time;
+                adjustment.state = "PENDING";
+                this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {
+                  if (i == this.sups.length) {
+                    this.completed = true;
+                  }
+                })
               })
             })
-          })
-        }
-      })
-    });
+          }
+        })
+      });
+    }
   }
 
   activeRoster() {

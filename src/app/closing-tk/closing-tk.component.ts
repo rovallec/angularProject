@@ -181,15 +181,16 @@ export class ClosingTkComponent implements OnInit {
                           ot_manager.id_period = this.actualPeriod.idperiods;
                           this.apiServices.getApprovedOt(ot_manager).subscribe((ot_mng: ot_manage) => {
                             this.apiServices.getAttAdjustments({ id: "id|p;" + emp[0].idemployees + "|'" + this.actualPeriod.start + "' AND '" + this.actualPeriod.end + "'" }).subscribe((just: attendences_adjustment[]) => {
+
                               let prov_period:periods = new periods;
                               let dt:Date = new Date(this.actualPeriod.start);
-                              dt.setDate(dt.getDate() - (7 - dt.getDate()))
+                              dt.setDate(dt.getDate() - (dt.getDay() + 1));
                               prov_period.idperiods = emp[0].idemployees;
-                              prov_period.end = "'" + this.actualPeriod.start + "' AND '" + 
-                              dt.getFullYear() + "-" +
-                              (dt.getMonth()).toString().padStart(2,"0") + "-" +
-                              (dt.getDate()).toString().padStart(2,"0") + "' AND `balance` = 'NS'";
-                              console.log(prov_period.end);
+                              prov_period.end = "'" + dt.getFullYear() + "-" +
+                              (dt.getMonth() + 1).toString().padStart(2,"0") + "-" +
+                              (dt.getDate()).toString().padStart(2,"0") + "' AND '" + 
+                              this.actualPeriod.start + "' AND `balance` = 'NS'";
+                              prov_period.start = "explicit";
                               this.apiServices.getPaidAttendances(prov_period).subscribe((p_at:paid_attendances[])=>{
                               let activeVacation: boolean = false;
                               let activeLeave: boolean = false;
@@ -214,6 +215,7 @@ export class ClosingTkComponent implements OnInit {
                               let worked_days:number = 0;
                               let ns_count:number = 0;
                               let janp_on_off_2:number = 0;
+                              let carry_seventh:boolean = null;
 
                               if (pay.last_seventh == '1') {
                                 non_show = true;
@@ -221,7 +223,10 @@ export class ClosingTkComponent implements OnInit {
 
                               if(!isNullOrUndefined(p_at)){
                                 if(p_at.length > 0){
+                                  carry_seventh = true;
                                   non_show = true;
+                                  non_show_sequence = p_at.length;
+                                  console.log(prov_period.end);
                                 }
                               }
 
@@ -363,6 +368,9 @@ export class ClosingTkComponent implements OnInit {
                                     }
 
                                     if (non_show_sequence == 5) {
+                                      if(carry_seventh){
+                                        discounted_days = discounted_days + 1;
+                                      }
                                       disc = true;
                                       discounted_days = discounted_days + 1
                                     }
@@ -611,7 +619,6 @@ export class ClosingTkComponent implements OnInit {
           this.apiServices.getPayroll_resume({ id_period: this.actualPeriod.idperiods, id_account: this.selectedAccount.idaccounts }).subscribe((pr_res: payroll_resume[]) => {
             this.apiServices.getAttAdjustments({ id: "id|p|t;'" + this.actualPeriod.start + "' AND '" + this.actualPeriod.end + "'" }).subscribe((ad: attendences_adjustment[]) => {
               if (!isNullOrUndefined(p) && !isNullOrUndefined(att) && !isNullOrUndefined(pr_res)) {
-                console.log(ad);
                 ad.forEach(adjustment=>{
                   if(adjustment.account == this.selectedAccount.idaccounts){
                     this.adjustments.push(adjustment);

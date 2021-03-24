@@ -169,6 +169,8 @@ export class employees{
     user_name:string;
     active:string;
     status:string;
+    society:string;
+    dpi:string;
     constructor(){
         this.id_profile = null;
         this.idemployees = null;
@@ -186,6 +188,8 @@ export class employees{
         this.platform = null;
         this.nearsol_id = null;
         this.status = null;
+        this.society = null;
+        this.dpi = null;
     }
 }
 

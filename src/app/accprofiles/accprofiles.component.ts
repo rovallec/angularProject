@@ -14,6 +14,7 @@ import { profiles } from '../profiles';
 import { Observable } from "rxjs";
 import { async } from '@angular/core/testing';
 import { Agent } from 'http';
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Component({
   selector: 'app-accprofiles',
@@ -69,8 +70,10 @@ export class AccprofilesComponent implements OnInit {
   printDate: string = null;
   acumulated_b14: string = null;
   acumulated_ag: string = null;
-  advances:advances_acc[] = [];
+  advances: advances_acc[] = [];
   adv: advances_acc = new advances_acc;
+  selected_detail: credits = new credits;
+  hover: string = null;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -81,10 +84,9 @@ export class AccprofilesComponent implements OnInit {
   start() {
     let peridos: periods = new periods;
     let isChrome: boolean = false;
-    let a_date:string = null;
-    let b_date:string = null;
-    let todayDate:string = new Date().getFullYear().toString() + "-" + (new Date().getMonth()+1) + "-" + new Date().getDate().toString();
-    console.log(todayDate);
+    let a_date: string = null;
+    let b_date: string = null;
+    let todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate().toString();
 
     if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && (<any>window).chrome) {
       isChrome = true;
@@ -95,7 +97,7 @@ export class AccprofilesComponent implements OnInit {
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
 
       if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-12-01").getTime()) <= 0)) {
-        a_date = (new Date(todayDate).getFullYear()-1) + '-12-01';
+        a_date = (new Date(todayDate).getFullYear() - 1) + '-12-01';
       } else {
         a_date = this.employee.hiring_date;
       }
@@ -107,11 +109,11 @@ export class AccprofilesComponent implements OnInit {
       if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-07-01").getTime()) <= 0)) {
         b_date = (new Date(todayDate).getFullYear() - 1) + "-07-01";
       } else {
-        b_date = this.employee.hiring_date; 
+        b_date = this.employee.hiring_date;
       }
       this.acumulated_b14 = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number((new Date(todayDate).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
       if (isChrome) {
-        this.acumulated_b14 = (Number(this.acumulated_b14) - ((21600000 / 1000 / 3600 / 24) * (((Number(emp[0].base_payment)+ Number(emp[0].productivity_payment))) / 365))).toFixed(2);
+        this.acumulated_b14 = (Number(this.acumulated_b14) - ((21600000 / 1000 / 3600 / 24) * (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))) / 365))).toFixed(2);
       }
 
       this.apiService.getPaymentMethods(emp[0]).subscribe((pymM: payment_methods[]) => {
@@ -129,7 +131,7 @@ export class AccprofilesComponent implements OnInit {
         this.setPayment();
       });
 
-      this.apiService.getAdvancesAcc(emp[0]).subscribe((adv:advances_acc[])=>{
+      this.apiService.getAdvancesAcc(emp[0]).subscribe((adv: advances_acc[]) => {
         this.advances = adv;
       })
 
@@ -149,6 +151,17 @@ export class AccprofilesComponent implements OnInit {
         this.apiService.getCredits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((cred: credits[]) => {
           this.credits = cred;
           this.debits = deb;
+          if (this.process.status != "CLOSED") {
+            this.cred_benefits = cred;
+            this.deb_benefits = deb;
+            this.total = 0;
+            cred.forEach(c=>{
+              this.total = this.total + Number(c.amount);
+            })
+            deb.forEach(d=>{
+              this.total = this.total - Number(d.amount);
+            })
+          }
         })
       })
     })
@@ -252,17 +265,17 @@ export class AccprofilesComponent implements OnInit {
     this.total = 0;
     let alert: boolean = false;
     let cred_indemnization: credits = new credits;
-    let cred_aguinaldo: credits = new credits;
-    let cred_bono14: credits = new credits;
-    let cred_vacations: credits = new credits;
+    let cred_aguinaldo_base: credits = new credits;
+    let cred_aguinaldo_productivity: credits = new credits;
+    let cred_bono14_base: credits = new credits;
+    let cred_bono14_productivity: credits = new credits;
+    let cred_vacations_base: credits = new credits;
+    let cred_vacations_productivity: credits = new credits;
     let cred_pendings: credits = new credits;
-    let base_salary = function Salary(Aterm: terminations, Aempl: employees): string {
-      if (Aterm.base_for_salary == 'Complete') {
-        return (Number(Aempl.base_payment) + Number(Aempl.productivity_payment)).toString();
-      } else {
-        return Number(Aempl.base_payment).toString();
-      };
-    };
+
+    let avg_base: number = 0;
+    let avg_productivity: number = 0
+
 
     let average_payment = function salaryAverage(Aterm: terminations, Apay: payments): string {
       if (Aterm.base_for_salary == 'Complete') {
@@ -272,10 +285,12 @@ export class AccprofilesComponent implements OnInit {
       };
     }
 
-    this.apiService.getProcRecorded({ id: this.employee.idemployees }).subscribe((pr: process[]) => {
+    let fix: boolean = false;
 
+    this.apiService.getProcRecorded({ id: this.employee.idemployees }).subscribe((pr: process[]) => {
       pr.forEach(proc => {
-        if (alert) {
+        if (alert && !fix) {
+          fix = true;
           window.alert('There is a duplicity on "Termination", system will take first instance');
         }
         if (!alert) {
@@ -283,121 +298,208 @@ export class AccprofilesComponent implements OnInit {
             alert = true;
             this.apiService.getHr_Processes(proc.idprocesses).subscribe((hrproc: hrProcess) => {
               this.process = hrproc;
-            })
-
-            this.apiService.getTerm(proc).subscribe((term: terminations) => {
-              this.termination = term;
-              if (term.access_card != "YES") {
-                let deb_access: debits = new debits;
-                deb_access.type = "(-)Access Card Replacement";
-                deb_access.amount = '125.00';
-                this.deb_benefits.push(deb_access);
-              }
-              if (term.headsets != "YES") {
-                let deb_headsets: debits = new debits;
-                deb_headsets.type = "(-)Headsets Replacement";
-                deb_headsets.amount = "400.00";
-                this.deb_benefits.push(deb_headsets);
-              }
-              this.tvalid_Form = term.valid_from;
-
-              this.apiService.getPayments(per).subscribe((pay: payments[]) => {
-                let count: number = 0;
-                pay.forEach(element => {
-                  if (Number(element.base_complete) > 0) {
-                    sum_payment = sum_payment + Number(average_payment(this.termination, element));
-                    count++;
+              this.apiService.getTerm(proc).subscribe((term: terminations) => {
+                this.termination = term;
+                this.tvalid_Form = term.valid_from;
+                if (this.process.status == "CLOSED") {
+                  if (term.access_card != "YES") {
+                    let deb_access: debits = new debits;
+                    deb_access.type = "(-)Access Card Replacement";
+                    deb_access.amount = '125.00';
+                    this.deb_benefits.push(deb_access);
+                    this.total = this.total - 125;
                   }
-                })
-                average_salary = (sum_payment / count).toFixed(2);
-
-                let isChrome: boolean;
-
-                if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && (<any>window).chrome) {
-                  isChrome = true;
-                }
-
-                end_date = this.tvalid_Form;
-                end_date_plus_one = String(String(new Date(end_date).getFullYear()) + "-" + String(new Date(end_date).getMonth() + 1) + "-" + Number(new Date(end_date).getDate() + 2).toString());
-
-
-                cred_indemnization.type = "Indemnizacion Periodo del " + this.employee.hiring_date + " al " + end_date;
-                cred_indemnization.amount = ((((Number(average_salary) / 12) * 14) / 365) * (((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)))).toFixed(2);
-                if (isChrome) {
-                  cred_indemnization.amount = (Number(cred_indemnization.amount) - ((21600000 / 1000 / 3600 / 24) * ((Number(average_salary) / 12) * 14) / 365)).toFixed(2);
-                }
-                this.cred_benefits.push(cred_indemnization);
-                this.total = this.total + Number(cred_indemnization.amount);
-
-                if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-12-01").getTime()) >= 0)) {
-                  a_date = this.employee.hiring_date;
-                } else {
-                  a_date = (new Date(end_date).getFullYear() - 1) + '-12-01'
-                }
-
-                cred_aguinaldo.type = "Aguinaldo Periodo del " + a_date + " al " + end_date;
-                cred_aguinaldo.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (Number(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
-                if (isChrome) {
-                  cred_aguinaldo.amount = (Number(cred_aguinaldo.amount) - ((21600000 / 1000 / 3600 / 24) * ((Number(base_salary(this.termination, this.employee))) / 365))).toFixed(2);
-                }
-                this.cred_benefits.push(cred_aguinaldo);
-                this.total = this.total + Number(cred_aguinaldo.amount);
-
-                if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)) {
-                  b_date = this.employee.hiring_date;
-                } else {
-                  b_date = (new Date(end_date).getFullYear() - 1) + "-07-01";
-                }
-                cred_bono14.type = "Bono 14 Periodo del " + b_date + " al " + end_date;
-                cred_bono14.amount = (((Number(base_salary(this.termination, this.employee))) / 365) * (Number((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
-                if (isChrome) {
-                  cred_bono14.amount = (Number(cred_bono14.amount) - ((21600000 / 1000 / 3600 / 24) * ((Number(base_salary(this.termination, this.employee))) / 365))).toFixed(2);
-                }
-                this.cred_benefits.push(cred_bono14);
-                this.total = this.total + Number(cred_bono14.amount);
-
-                this.apiService.getVacations({ id: this.employee.id_profile }).subscribe((vacs: vacations[]) => {
-                  vacs.forEach(vacation => {
-                    v_amount = v_amount + (1 * Number(vacation.count));
-                  })
-                  cred_vacations.type = "Vacaciones Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
-                  cred_vacations.amount = (((Number(base_salary(this.termination, this.employee))) / 30) * (Number((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)))) / (1 / (15 / 365)) - v_amount)).toFixed(2);
-                  if (isChrome) {
-                    cred_vacations.amount = (Number(cred_vacations.amount) - (((21600000 / 1000 / 3600 / 24) * (((Number(base_salary(this.termination, this.employee))) / 30))) / (1 / (15 / 365)))).toFixed(2);
+                  if (term.headsets != "YES") {
+                    let deb_headsets: debits = new debits;
+                    deb_headsets.type = "(-)Headsets Replacement";
+                    deb_headsets.amount = "400.00";
+                    this.deb_benefits.push(deb_headsets);
+                    this.total = this.total - 400;
                   }
-                  this.cred_benefits.push(cred_vacations);
-                  this.total = this.total + Number(cred_vacations.amount);
-                })
 
-                let p: periods = new periods;
-                p.start = 'explicit_employee';
-                p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
-                p.idperiods = "all";
+                  this.apiService.getPayments(per).subscribe((pay: payments[]) => {
+                    let count: number = 0;
+                    if (!isNullOrUndefined(pay)) {
+                      pay.forEach(element => {
+                        if (Number(element.base_complete) > 0) {
+                          avg_base = avg_base + (Number(element.base_complete) + 250);
+                          avg_productivity = avg_productivity + (Number(element.productivity_complete) - 250);
+                          count++;
+                        }
+                      })
+                      avg_base = (avg_base / count);
+                      avg_productivity = (avg_productivity / count);
+                    } else {
+                      avg_base = Number(this.employee.base_payment) + 250;
+                      avg_productivity = Number(this.employee.productivity_payment) - 250;
+                    }
 
-                this.apiService.getPayments(p).subscribe((pay: payments[]) => {
-                  if (!isNullOrUndefined(pay)) {
-                    this.apiService.getCredits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((cred: credits[]) => {
-                      if (!isNullOrUndefined(cred)) {
-                        cred.forEach(credit => {
-                          this.cred_benefits.push(credit);
-                          this.total = this.total + Number(credit.amount);
-                        })
+                    if (term.base_for_salary == "Complete") {
+                      average_salary = (avg_base + avg_productivity).toFixed(2);
+                    } else {
+                      average_salary = (avg_base).toFixed(2);
+                    }
+
+                    let isChrome: boolean;
+
+                    if (window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1 && (<any>window).chrome) {
+                      isChrome = true;
+                    }
+
+                    end_date = this.tvalid_Form;
+                    let d: Date = new Date(new Date().getTime() + (1000 * 3600 * 24));
+                    end_date_plus_one = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+
+                    if (term.motive == "Reestructuracion") {
+                      cred_indemnization.type = "Indemnizacion: Periodo del " + this.employee.hiring_date + " al " + end_date;
+                      cred_indemnization.amount = ((((Number(average_salary) / 12) * 14) / 365) * (((new Date(end_date_plus_one).getTime() -
+                        new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24)))).toFixed(2);
+                      cred_indemnization.notes = Number(average_salary) + "/ 12) * 14) / 365) *" +
+                        (((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) / (1000 * 3600 * 24))).toFixed(2)
+                        + " = " + cred_indemnization.amount;
+                      if (isChrome) {
+                        cred_indemnization.amount = ((((Number(average_salary) / 12) * 14) / 365) * (((new Date(end_date_plus_one).getTime() -
+                          new Date(this.employee.hiring_date).getTime() - 21600000) / (1000 * 3600 * 24)))).toFixed(2)
+                          + " = " + cred_indemnization.amount;
                       }
-                    });
-                    this.apiService.getDebits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((deb: debits[]) => {
-                      if (!isNullOrUndefined(deb)) {
-                        deb.forEach(debit => {
-                          this.deb_benefits.push(debit);
-                          this.total = this.total - Number(debit.amount);
+
+
+                      this.cred_benefits.push(cred_indemnization);
+                      this.total = this.total + Number(cred_indemnization.amount);
+                    }
+
+
+                    if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-12-01").getTime()) >= 0)) {
+                      a_date = this.employee.hiring_date;
+                    } else {
+                      a_date = (new Date(end_date).getFullYear() - 1) + '-12-01'
+                    }
+
+                    cred_aguinaldo_base.type = "Aguinaldo Base: Periodo del " + a_date + " al " + end_date;
+                    cred_aguinaldo_productivity.type = "Aguinaldo Productividad: Periodo del " + a_date + " al " + end_date;
+                    cred_aguinaldo_base.amount = (((avg_base) / 365) * (Number(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
+                    cred_aguinaldo_productivity.amount = (((avg_productivity) / 365) * (Number(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
+
+                    cred_aguinaldo_base.notes = avg_base + "/ 365 *" + (Number(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24)).toFixed(2) + " = " + cred_aguinaldo_base.amount;
+                    cred_aguinaldo_productivity.notes = avg_productivity + "/ 365 *" + (Number(((new Date(end_date_plus_one).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24)).toFixed(2) + " = " + cred_aguinaldo_productivity.amount;
+
+                    if (isChrome) {
+                      cred_aguinaldo_base.amount = (((avg_base) / 365) * (Number((((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
+                      cred_aguinaldo_productivity.amount = (((avg_productivity) / 365) * (Number((((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
+
+                      cred_aguinaldo_base.notes = avg_base + "/ 365 *" + (Number((((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(a_date).getTime())))) / (1000 * 3600 * 24)).toFixed(2) + " = " + cred_aguinaldo_base.amount;
+                      cred_aguinaldo_productivity.notes = avg_productivity + "/ 365 *" + (Number((((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(a_date).getTime())))) / (1000 * 3600 * 24)).toFixed(2) + " = " + cred_aguinaldo_productivity.amount;
+                    }
+                    this.cred_benefits.push(cred_aguinaldo_base);
+                    this.cred_benefits.push(cred_aguinaldo_productivity);
+                    this.total = this.total + Number(cred_aguinaldo_base.amount) + Number(cred_aguinaldo_productivity.amount);
+
+                    if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)) {
+                      b_date = this.employee.hiring_date;
+                    } else {
+                      b_date = (new Date(end_date).getFullYear() - 1) + "-07-01";
+                    }
+                    cred_bono14_base.type = "Bono 14 Base: Periodo del " + b_date + " al " + end_date;
+                    cred_bono14_productivity.type = "Bono 14 Productividad: Periodo del " + b_date + " al " + end_date;
+                    cred_bono14_base.amount = (((avg_base) / 365) *
+                      (Number((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
+                    cred_bono14_productivity.amount = (((avg_productivity) / 365) *
+                      (Number((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
+
+                    cred_bono14_base.notes = avg_base + "/ 365 * " +
+                      (Number((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24)).toFixed(2)
+                      + " = " + cred_bono14_base.amount;
+                    cred_bono14_productivity.notes = avg_productivity + "/ 365 * " +
+                      (Number((new Date(end_date_plus_one).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24)).toFixed(2)
+                      + " = " + cred_bono14_productivity.amount;
+                    if (isChrome) {
+                      cred_bono14_base.amount = (((avg_base) / 365) *
+                        (Number(((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(b_date).getTime()))) / (1000 * 3600 * 24))).toFixed(2);
+                      cred_bono14_productivity.amount = (((avg_productivity) / 365) *
+                        (Number(((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(b_date).getTime()))) / (1000 * 3600 * 24))).toFixed(2);
+
+                      cred_bono14_base.notes = avg_base + "/ 365 * " +
+                        (Number(((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(b_date).getTime()))) / (1000 * 3600 * 24)).toFixed(2)
+                        + " = " + cred_bono14_base.amount;
+                      cred_bono14_productivity.notes = avg_productivity + "/ 365 * " +
+                        (Number(((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(b_date).getTime()))) / (1000 * 3600 * 24)).toFixed(2)
+                        + " = " + cred_bono14_productivity.amount;
+                    }
+
+                    this.cred_benefits.push(cred_bono14_base);
+                    this.cred_benefits.push(cred_bono14_productivity);
+                    this.total = this.total + Number(cred_bono14_productivity.amount) + Number(cred_bono14_productivity.amount);
+
+                    this.apiService.getVacations({ id: this.employee.id_profile }).subscribe((vacs: vacations[]) => {
+                      vacs.forEach(vacation => {
+                        if (vacation.status != "DISMISSED" && vacation.action == "Take") {
+                          v_amount = v_amount + (1 * Number(vacation.count));
+                        }
+                      })
+
+                      cred_vacations_base.type = "Vacaciones Base: Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
+                      cred_vacations_productivity.type = "Vacaciones Productividad: Periodo del " + this.employee.hiring_date + " al " + end_date + " habiendo gozado: " + v_amount;
+                      cred_vacations_base.amount = (((avg_base) / 30) * (Number((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) /
+                        (1000 * 3600 * 24)))) / (1 / (15 / 365)) - v_amount)).toFixed(2);
+                      cred_vacations_productivity.amount = (((avg_productivity) / 30) * (Number((((new Date(end_date_plus_one).getTime() - new Date(this.employee.hiring_date).getTime()) /
+                        (1000 * 3600 * 24)))) / (1 / (15 / 365)) - v_amount)).toFixed(2);
+
+                      cred_vacations_base.notes = avg_base + "/ 30 *" + (Number(new Date(end_date_plus_one).getTime()) - new Date(this.employee.hiring_date).getTime()) /
+                        (1000 * 3600 * 24) + "/" + (1 / (15 / 365)).toFixed(3) + "-" + v_amount + " = " + cred_vacations_base.amount;;
+
+                      cred_vacations_productivity.notes = avg_productivity + "/ 30 *" + (Number(new Date(end_date_plus_one).getTime()) - new Date(this.employee.hiring_date).getTime()) /
+                        (1000 * 3600 * 24) + "/" + (1 / (15 / 365)).toFixed(3) + "-" + v_amount + " = " + cred_vacations_productivity.amount;
+                      if (isChrome) {
+                        cred_vacations_productivity.amount = (((avg_productivity) / 30) * (Number(((((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(this.employee.hiring_date).getTime())) /
+                          (1000 * 3600 * 24)))) / (1 / (15 / 365)) - v_amount)).toFixed(2);
+                        cred_vacations_base.amount = (((avg_base) / 30) * (Number(((((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(this.employee.hiring_date).getTime())) /
+                          (1000 * 3600 * 24)))) / (1 / (15 / 365)) - v_amount)).toFixed(2);
+
+                        cred_vacations_base.notes = avg_base + "/ 30 *" + ((new Date(end_date_plus_one).getTime() - 21600000) - new Date(this.employee.hiring_date).getTime()) /
+                          (1000 * 3600 * 24) + "/" + (1 / (15 / 365)).toFixed(3) + "-" + v_amount + " = " + cred_vacations_base.amount;;
+                        cred_vacations_productivity.notes = avg_productivity + "/ 30 *" + ((new Date(end_date_plus_one).getTime() - 21600000) - new Date(this.employee.hiring_date).getTime()) /
+                          (1000 * 3600 * 24) + "/" + (1 / (15 / 365)).toFixed(3) + "-" + v_amount + " = " + cred_vacations_productivity.amount;;
+                      }
+                      this.cred_benefits.push(cred_vacations_base);
+                      this.cred_benefits.push(cred_vacations_productivity);
+                      this.total = this.total + Number(cred_vacations_base.amount);
+                      this.total = this.total + Number(cred_vacations_productivity.amount);
+                    })
+
+                    let p: periods = new periods;
+                    p.start = 'explicit_employee';
+                    p.status = this.employe_id + " ORDER BY idpayments DESC LIMIT 1";
+                    p.idperiods = "all";
+
+                    this.apiService.getPayments(p).subscribe((pay: payments[]) => {
+                      if (!isNullOrUndefined(pay)) {
+                        this.apiService.getCredits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((cred: credits[]) => {
+                          if (!isNullOrUndefined(cred)) {
+                            cred.forEach(credit => {
+                              this.cred_benefits.push(credit);
+                              this.total = this.total + Number(credit.amount);
+                            })
+                          }
+                        });
+                        this.apiService.getDebits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((deb: debits[]) => {
+                          if (!isNullOrUndefined(deb)) {
+                            deb.forEach(debit => {
+                              this.deb_benefits.push(debit);
+                              this.total = this.total - Number(debit.amount);
+                            })
+                          }
                         })
                       }
                     })
-                  }
-                })
-              });
-            }) // en promise
-            end_date = proc.prc_date;
-            difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
+                  });
+                } else {
+                  this.active_payment = this.payments[this.payments.length - 1];
+                  this.setPayment();
+                }
+              }) // en promise
+              end_date = proc.prc_date;
+              difference = (((new Date(proc.prc_date).getFullYear()) - (new Date(this.employee.hiring_date).getFullYear())) * 12) + ((new Date(proc.prc_date).getMonth()) - (new Date(this.employee.hiring_date).getMonth()) + 1);
+            })
           }
         }
       })
@@ -415,29 +517,49 @@ export class AccprofilesComponent implements OnInit {
 
     this.apiService.updateEmployee(this.employee).subscribe((_str: string) => {
       this.apiService.getPayments(p).subscribe((pay: payments[]) => {
+
         this.cred_benefits.forEach(cred => {
-          cred.idpayments = pay[0].idpayments;
-          this.apiService.insertCredits(cred);
+          if (cred.type != "Salario Base" && cred.type != "Bonificacion Productividad") {
+            cred.idpayments = pay[pay.length - 1].idpayments;
+            this.apiService.insertCredits(cred).subscribe((str3: string) => {
+              if (Number(str3) > 0) {
+                cred.iddebits = str3;
+                cred.id_user = this.authUser.getAuthusr().iduser;
+                cred.id_employee = this.employee.idemployees;
+                cred.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                this.apiService.insertPushedCredit(cred).subscribe((str: string) => {
+                })
+              }
+            })
+          }
         })
 
         this.deb_benefits.forEach(deb => {
-          deb.idpayments = pay[0].idpayments;
-          this.apiService.insertDebits(deb);
+          if (deb.type != "ISR" && deb.type != "Descuento IGSS") {
+            deb.idpayments = pay[pay.length - 1].idpayments;
+            this.apiService.insertDebits(deb).subscribe((str4: string) => {
+              this.apiService.insertPushedDebit(deb).subscribe((str2: string) => {
+                if (Number(str4) > 0) {
+                  deb.iddebits = str4;
+                  deb.id_user = this.authUser.getAuthusr().iduser;
+                  deb.id_employee = this.employee.idemployees;
+                  deb.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                  this.apiService.insertPushedDebit(deb).subscribe((str: string) => {
+                  })
+                }
+              })
+            })
+          }
         })
 
-        this.apiService.updatehr_process(this.process).subscribe((_str: string) => {
-          // no hace nada.
-
-        });
+        this.apiService.updatehr_process(this.process).subscribe((str: string) => { });
       });
     });
   }
 
   completePayment() {
     this.process.status = 'PAID';
-    this.apiService.updatehr_process(this.process).subscribe((_str: string) => {
-      // no hace nada.
-    });
+    this.apiService.updatehr_process(this.process).subscribe((str: string) => { });
   }
 
   acreditSelection() {
@@ -472,7 +594,7 @@ export class AccprofilesComponent implements OnInit {
   }
 
   setPayments(adv: advances_acc) {
-    let per: periods = this.actualPeriod;    
+    let per: periods = this.actualPeriod;
     adv.status = 'APPROVED';
     per.start = 'explicit_employee';
     per.status = this.employee.idemployees;
@@ -489,12 +611,12 @@ export class AccprofilesComponent implements OnInit {
         }
       });
       cred.notes = adv.notes;
-      cred.type  = adv.type;      
+      cred.type = adv.type;
       this.apiService.getHr_Processes(adv.id_process).subscribe((proc: hrProcess) => {
         proc.status = adv.status;
         if (isNullOrUndefined(proc.notes)) {
           proc.notes = adv.notes;
-        } else  {
+        } else {
           proc.notes = proc.notes + '|' + adv.notes;
         }
         this.apiService.updatehr_process(proc).subscribe((_str: string) => {
@@ -502,9 +624,9 @@ export class AccprofilesComponent implements OnInit {
             if (String(str).split("|")[0] != '0') {
               cred.iddebits = str;
               cred.status = adv.status;
-              this.apiService.insertPushedCredit(cred).subscribe((str: string) => {  
-                if (String(str).split("|")[0] != '0') {                            
-                  this.start();              
+              this.apiService.insertPushedCredit(cred).subscribe((str: string) => {
+                if (String(str).split("|")[0] != '0') {
+                  this.start();
                 } else {
                   window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
                 }
@@ -515,18 +637,18 @@ export class AccprofilesComponent implements OnInit {
           })
         })
       })
-    })   
+    })
   }
 
-  cancelPayments(adv: advances_acc) {    
+  cancelPayments(adv: advances_acc) {
     adv.status = 'REJECTED';
     this.apiService.getHr_Processes(adv.id_process).subscribe((proc: hrProcess) => {
       proc.status = adv.status;
       if (isNullOrUndefined(proc.notes)) {
         proc.notes = adv.notes;
-      } else  {
+      } else {
         proc.notes = proc.notes + '|' + adv.notes;
-      }      
+      }
       this.apiService.updatehr_process(proc).subscribe((_str: string) => {
         // no hace nada por el momento.
       })
@@ -536,5 +658,87 @@ export class AccprofilesComponent implements OnInit {
   assignAdvance(adv) {
     this.adv = adv;
     this.adv.notes = '';
+  }
+
+  setSelectedDetail(cred: credits) {
+    this.selected_detail.type = cred.type;
+    let i: number = 0;
+    if (this.termination.motive == "Restructuracion") {
+      i = 0;
+    } else {
+      i = 1;
+    }
+    this.selected_detail.status = this.selected_detail.type.split(":")[1]
+    if (this.selected_detail.type.includes("Aguinaldo")) {
+      this.selected_detail.notes = this.cred_benefits[1 - i].notes;
+      this.selected_detail.type = "Aguinaldo";
+      this.selected_detail.amount = (Number(this.cred_benefits[1 - i].amount) + Number(this.cred_benefits[2 - i].amount)).toFixed(2);
+    } else if (this.selected_detail.type.includes("Bono 14")) {
+      this.selected_detail.notes = this.cred_benefits[3 - i].notes;
+      this.selected_detail.type = "Bono 14";
+      this.selected_detail.amount = (Number(this.cred_benefits[3 - i].amount) + Number(this.cred_benefits[4 - i].amount)).toFixed(2);
+    } else if (this.selected_detail.type.includes("Vacaciones")) {
+      this.selected_detail.notes = this.cred_benefits[5 - i].notes;
+      this.selected_detail.type = "Vacaciones";
+      this.selected_detail.amount = (Number(this.cred_benefits[5 - i].amount) + Number(this.cred_benefits[6 - i].amount)).toFixed(2);
+    }
+  }
+
+  setHover(x: string) {
+    this.hover = x;
+  }
+
+  printSettlement() {
+    this.apiService.getCredits({ period: this.payments[this.payments.length - 1].id_period, id: this.employee.idemployees }).subscribe((cred: credits[]) => {
+      this.apiService.getDebits({ period: this.payments[this.payments.length - 1].id_period, id: this.employee.idemployees }).subscribe((deb: debits[]) => {
+        this.apiService.getFilteredPeriods({ id: this.payments[this.payments.length - 1].id_period }).subscribe((period: periods) => {
+
+          let indemnizacion: number = 0;
+          let aguinaldo: number = 0;
+          let bono_14: number = 0;
+          let vacaciones: number = 0;
+          let sueldos: number = 0;
+          let bonificacion: number = 0;
+          let isr: number = 0;
+          let compensacion: number = 0;
+          let descuentos: number = 0;
+
+          cred.forEach(credit => {
+            if (!isNullOrUndefined(credit.type.split(":")[0])) {
+              if (credit.type.split(":")[0] == 'Indemnizacion') {
+                indemnizacion = Number(credit.amount);
+              } else if (credit.type.split(":")[0] == 'Aguinaldo Base') {
+                aguinaldo = Number(credit.amount);
+              } else if (credit.type.split(":")[0] == 'Bono 14 Base') {
+                bono_14 = Number(credit.amount);
+              } else if (credit.type.split(":")[0] == 'Vacaciones Base') {
+                vacaciones = Number(credit.amount);
+              } else {
+                bonificacion = bonificacion + Number(credit.amount);
+              }
+            } else if (credit.type.split(":")[0] == 'Salario Base') {
+              sueldos = Number(credit.amount);
+            } else {
+              bonificacion = bonificacion + Number(credit.amount);
+            }
+          })
+
+          deb.forEach(debit => {
+            if (debit.type == 'ISR') {
+              isr = Number(debit.amount);
+            } else {
+              descuentos = descuentos + Number(debit.amount);
+            }
+          })
+
+          window.open("http://200.94.251.67/phpscripts/finiquito_laboral.php?company=" + this.employee.society
+            + "&hiring_date=" + this.employee.hiring_date + "&term_date=" + this.tvalid_Form + "&name=" + this.employee.name +
+            "&dpi=" + this.employee.dpi + "&indemnizacion=" + indemnizacion.toFixed(2) +
+            "&aguinaldo=" + aguinaldo.toFixed(2) + "&bono_14=" + bono_14.toFixed(2) +
+            "&vacaciones=" + vacaciones.toFixed(2) + "&acumulados=0&end=" + period.end + "&start=" + period.start +
+            "&isr=" + isr.toFixed(2) + "&credits=" + compensacion.toFixed(2) + "&debits=" + descuentos.toFixed(2) + "&bonuses=" + bonificacion.toFixed(2), "_blank");
+        })
+      })
+    })
   }
 }

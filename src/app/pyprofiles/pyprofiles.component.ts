@@ -4,7 +4,7 @@ import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { process } from '../process';
-import { attendences, attendences_adjustment, change_id, disciplinary_processes, leaves, payments, periods, process_templates, vacations } from '../process_templates';
+import { attendences, attendences_adjustment, change_id, disciplinary_processes, leaves, payments, periods, process_templates, terminations, vacations } from '../process_templates';
 import { profiles } from '../profiles';
 
 @Component({
@@ -38,6 +38,7 @@ export class PyprofilesComponent implements OnInit {
   daysOff: number = 0;
   absence_fixed:string = null;
   showRegs:boolean = false;
+  termination:terminations = new terminations;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -83,7 +84,7 @@ export class PyprofilesComponent implements OnInit {
 
   start() {
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees[]) => {
-      this.employee = emp[0]
+      this.employee = emp[0];
       this.setPayTime(this.employee.idemployees, this.employee.id_profile);
       let prof: profiles = new profiles;
       prof.idprofiles = emp[0].id_profile;
