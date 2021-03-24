@@ -786,7 +786,7 @@ updatePaid_attendances(p_att:paid_attendances){
 }
 
 getReporter() {
-  return this.httpClient.get<reporters>(`${this.PHP_API_SERVER}/phpscripts/getReporter.php`);
+  return this.httpClient.get<reporters[]>(`${this.PHP_API_SERVER}/phpscripts/getReporter.php`);
 }
 
 insertProfile(any:any) {
