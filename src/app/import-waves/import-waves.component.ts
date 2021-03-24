@@ -6,6 +6,8 @@ import { isNullOrUndefined } from 'util';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { profiles_family, profiles_histories } from '../profiles';
 import { exception } from 'console';
+import { AppComponent } from '../app.component';
+import { AuthServiceService } from '../auth-service.service';
 
 @Component({
   selector: 'app-import-waves',
@@ -40,6 +42,7 @@ export class ImportWavesComponent implements OnInit {
   importString: string = null;
   importEnd: boolean = false;
   fullprofiles: full_profiles[] = [];
+  any: any = null;
 
   constructor(public apiServices: ApiService) { }
 
@@ -62,6 +65,10 @@ export class ImportWavesComponent implements OnInit {
       this.setClient(this.selectedClient);
     })
     this.getReporter();
+    this.any = null;
+    this.arrayBuffer = null;
+    this.filelist = null;
+    this.file = null;
   }
 
   setClient(cl: string) {
@@ -185,7 +192,12 @@ export class ImportWavesComponent implements OnInit {
   }
 
   cancelWave() {
-    // Cancelar.
+    window.alert('Limpiando...');
+    this.start();
+    //let authSrv: AuthServiceService;
+    //let app: AppComponent = new AppComponent(authSrv, this.apiServices);
+    //app.selectedOption=='IMPWAVES';
+    //app.SetSel('IMPWAVES');
   }
 
   setAccount(acc) {
@@ -215,11 +227,11 @@ export class ImportWavesComponent implements OnInit {
   }
 
   corrigeDatos(Adata: string): string{
-    Adata = Adata.toUpperCase();
-    Adata = Adata.trim();
+    Adata = String(Adata).toUpperCase().trim();
     Adata.replace('-', '');
     Adata.replace(' ', '');
     Adata.replace('_', '');
+    Adata.replace('.', '');
     return Adata;
   }
 

@@ -3,7 +3,7 @@
     <div class="row" style="margin-top:25px">
       <div class="d-flex justify-content-between mb-3 w-100">
         <div class="p-2">
-          <button class="btn btn-outline-danger" title="Download Attendance" (click)="cancelWave()">
+          <button class="btn btn-outline-danger" title="Download Attendance" routerLink="/rehome">
             <i class="fas fa-ban"></i>
           </button>
         </div>
@@ -85,7 +85,7 @@
       </div>
       <div class="col-md-5">
         <label for="formFile" class="form-label">IMPORT:</label>
-        <input type="file" class="form-control" (change)="addfile($event)">
+        <input type="file" class="form-control" (change)="addfile($event)" [(ngModel)]='any'>
       </div>
     </div>
 

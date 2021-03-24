@@ -3,6 +3,7 @@ import { AuthServiceService } from './auth-service.service';
 import {Form} from '@angular/forms'
 import { users } from './users';
 import { ApiService } from './api.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -26,7 +27,13 @@ export class AppComponent {
   selectedOption:string = 'HOME';
   uploadFile:string = null;
 
-  constructor(private authSrv:AuthServiceService, private apiService:ApiService){
+  constructor(private authSrv:AuthServiceService, private apiService:ApiService, private route: ActivatedRoute){
+  }
+
+  ngOnInit() {
+    if (this.route.snapshot.url[1].toString()=='HOME' ) {
+      this.SetSel('HOME');
+    }
   }
 
   getAuth(){
