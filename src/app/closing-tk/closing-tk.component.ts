@@ -410,6 +410,16 @@ export class ClosingTkComponent implements OnInit {
                                 }
                               }
 
+                              if(!isNullOrUndefined(trm.valid_from) && worked_days > 0){
+                                console.log(non_show_sequence + "+" + days_off + "+" + janp_sequence + "+" + sevenths);
+                                sevenths = sevenths + ((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime())/(1000*3600*24) - (non_show_sequence + days_off + janp_sequence + sevenths + trm_count)) - worked_days;
+                              }
+
+                              if(discounted_days + sevenths > att.length){
+                                sevenths = days_off;
+                                discounted_days = att.length - days_off + worked_days;
+                              }
+
                               if ((discounted_days + sevenths) >= 15) {
                                 let max_days: number = 0;
                                 max_days = ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24);
@@ -427,11 +437,6 @@ export class ClosingTkComponent implements OnInit {
                               if(ns_count + days_off >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24) || Number(rs.janp) + days_off - janp_on_off_2 >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24)){
                                 discounted_days = 15;
                                 sevenths = 0;
-                              }
-
-                              if(!isNullOrUndefined(trm.valid_from) && worked_days > 0){
-                                console.log(non_show_sequence + "+" + days_off + "+" + janp_sequence + "+" + sevenths);
-                                sevenths = sevenths + ((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime())/(1000*3600*24) - (non_show_sequence + days_off + janp_sequence + sevenths + trm_count)) - worked_days;
                               }
 
                               just.forEach(justification => {
