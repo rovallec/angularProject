@@ -58,4 +58,12 @@ function getMonth($amonth){
         break;
     }
 }
+
+function validarDatosString($adato) {
+    if (empty($adato) || is_null($adato)) {
+        $adato = '';
+    } 
+    return $adato;
+}
+
 ?>

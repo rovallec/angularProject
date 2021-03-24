@@ -6,6 +6,7 @@ header('Access-Control-Allow-Headers: *');
 
     if(isset($postdata) && !empty($postdata)){
         $request = json_decode($postdata);
+
         foreach ($request as $val) {
             $r_val_id_profile = ($val->id_profile);
             $r_val_company = ($val->company);
@@ -24,7 +25,8 @@ header('Access-Control-Allow-Headers: *');
             if(mysqli_query($con,$sql)){					
                 http_response_code(200);
             }else{
-                http_response_code(422);                
+                http_response_code(422);
+                echo(mysqli_error($con));
             }
         }
     }

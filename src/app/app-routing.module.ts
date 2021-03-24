@@ -34,6 +34,7 @@ import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
 import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component';
 import { BonusesComponent } from './bonuses/bonuses.component';
 import { ClosingTkComponent } from './closing-tk/closing-tk.component';
+import { ImportWavesComponent } from './import-waves/import-waves.component';
 
 const routes:Routes = [
   {
@@ -182,6 +183,11 @@ const routes:Routes = [
   {
     path:'closing',
     component:ClosingTkComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'import-waves',
+    component:ImportWavesComponent,
     canActivate:[AuthGuard]
   },
   {

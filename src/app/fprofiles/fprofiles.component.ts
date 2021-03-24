@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
-import { card_assignation, process_templates, services } from '../process_templates';
+import { card_assignation, Fecha, process_templates, services } from '../process_templates';
 import { profiles } from '../profiles';
 
 @Component({
@@ -30,7 +30,7 @@ export class FprofilesComponent implements OnInit {
   processes_template:process_templates[] = [];
   activeProc:process_templates = new process_templates;
   activeCardAssignation:card_assignation = new card_assignation;
-
+  status: string = 'Browse';
 
   ngOnInit() {
     this.todayDate = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString())
@@ -55,8 +55,7 @@ export class FprofilesComponent implements OnInit {
   }
 
   activeParking(){
-    this.parking = true;
-    this.activeService = new services;
+    this.parking = true;    
     this.activeService = new services;
     this.activeService.id_user = this.authUser.getAuthusr().user_name;
     this.activeService.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
@@ -64,9 +63,10 @@ export class FprofilesComponent implements OnInit {
     this.activeService.status = "1";
     this.activeService.current = '0';
     this.activeService.id_employee = this.route.snapshot.paramMap.get('id');
+    this.status = 'Insert';
   }
 
-  insertService(str:string){
+  insertService(str:string){    
     this.activeService.proc_status = "COMPLETED";
     if(str == 'bus'){
       this.activeService.proc_name = "Active Bus";
@@ -82,9 +82,10 @@ export class FprofilesComponent implements OnInit {
       }
     }
     this.activeService.id_user = this.authUser.getAuthusr().iduser;
-    this.apiService.insertService(this.activeService).subscribe((str:string)=>{
+    this.apiService.insertService(this.activeService).subscribe((_str:string)=>{
       this.start();
     })
+    this.status = 'Browse';
   }
 
   setService(str:string){
@@ -132,7 +133,7 @@ export class FprofilesComponent implements OnInit {
         this.activeProc = process;
         this.activeCardAssignation = new card_assignation;
         this.activeCardAssignation.date = this.todayDate;
-        this.activeCardAssignation.id_user = this.authUser.getAuthusr().user_name;   
+        this.activeCardAssignation.id_user = this.authUser.getAuthusr().user_name;
         break;
     
       default:
@@ -154,6 +155,45 @@ export class FprofilesComponent implements OnInit {
     
       default:
         break;
+    }
+  }
+
+  editService() {
+    this.status = 'Edit';
+  }
+
+  updateService() {
+    let fecha = new Fecha;
+    this.activeService.id_user = this.authUser.getAuthusr().iduser;
+    this.activeService.notes = this.activeService.notes + "|| Updated by: " + this.authUser.getAuthusr().user_name + " Date: " + fecha.today;
+    this.activeService.date = fecha.today;
+    this.apiService.updateService(this.activeService).subscribe((_str:string)=>{
+      this.start();
+    })
+    this.status = 'Browse';
+  }
+
+  cancelService() {
+    this.status = 'Browse';    
+    this.storedParking = false;    
+    this.parking = (this.status=='Insert');
+    this.start();
+  }
+
+  delService() {    
+    let fecha = new Fecha;      
+      this.activeService.notes = this.activeService.notes + "|| Deleted by: " + this.authUser.getAuthusr().user_name + " Date: " + fecha.today;
+      this.apiService.deleteService(this.activeService).subscribe((_str:string)=>{
+        this.start();
+      })
+    this.status = 'Browse';
+  }
+
+  saveService() {
+    if(this.status=='Insert') {
+      this.insertService('parking');
+    } else if(this.status=='Edit') {
+      this.updateService();
     }
   }
 }

@@ -190,8 +190,9 @@ export class AccprofilesComponent implements OnInit {
   }
 
   newDeduction(str: string) {
+    let date: Fecha = new Fecha;
     this.activeCred = new credits;
-    this.activeCred.date = new Date().getFullYear().toString() + "-" + new Date().getMonth().toString() + "-" + new Date().getDate().toString();
+    this.activeCred.date = date.today;
     this.insertN = str;
     this.insertNew = true;
     this.record = false;

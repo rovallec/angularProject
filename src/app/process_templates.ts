@@ -1,4 +1,6 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { employees } from './fullProcess';
+import { profiles, profiles_family, profiles_histories } from './profiles';
 
 export class process_templates {
     idprocess_templates: string;
@@ -464,7 +466,7 @@ export class terminations {
     }
 }
 
-export class employees_terminations {
+export class employees_Bonuses {
   idemployees: string;
   nearsol_id: string;
   name: string;
@@ -986,9 +988,11 @@ export class attendance_accounts {
 export class clients {
     idclients: string;
     name: string;
+    description: string;
     constructor() {
         this.idclients = null;
         this.name = null;
+        this.description = null;
     }
 }
 
@@ -1209,15 +1213,27 @@ export class advances_acc{
 }
 
 export class Fecha{
-    today: string;    
+    today: string;
 
     getToday(): string {
         let fecha: Date = new Date();
         let dd: string = String(fecha.getDate()).padStart(2,'0');
-        let mm: string = String(fecha.getMonth() + 1).padStart(2, '0');
+        let MM: string = String(fecha.getMonth() + 1).padStart(2, '0');
         let yyyy: string = fecha.getFullYear().toString();
-        return (yyyy + '-' + mm + '-' + dd);
+        return (yyyy + '-' + MM + '-' + dd);
     }
+
+    transform(Adate: Date): string {
+        let dd: string = String(Adate.getDate()).padStart(2,'0');
+        let MM: string = String(Adate.getMonth() + 1).padStart(2, '0');
+        let yyyy: string = Adate.getFullYear().toString();
+        let sdate: string = (yyyy + '-' + MM + '-' + dd);
+        if (sdate == 'NaN-NaN-NaN') {
+            sdate = '1900-01-01';
+        }
+        return sdate;
+    }
+
     constructor() {
         this.today = this.getToday();
     }
@@ -1287,6 +1303,278 @@ export class paid_attendances{
         this.balance = null;
         this.id_employee = null;
     }
+}
+
+export class reporters {
+    idUser: string;
+    username: string;
+    signature: string;
+    constructor(){
+        this.idUser = null;
+        this.username = null;
+        this.signature = null;
+    }
+}
+
+class contact_details {
+    id_profile: string;
+    primary_phone: string;
+    secondary_phone: string;
+    address: string;
+    city: string;
+    email: string;
+    constructor(){
+        this.id_profile = null;
+        this.primary_phone = null;
+        this.secondary_phone = null;
+        this.address = null;
+        this.city = null;
+        this.email = null;
+    }
+}
+
+export class job_histories {
+    id_profile: string;
+    company: string;
+    date_joining: string;
+    date_end: string;
+    position: string;
+    reference_name: string;
+    reference_lastname: string;
+    reference_position: string;
+    reference_mail: string;
+    reference_phone: string;
+    working: string;
+    constructor() {
+        this.id_profile = null;
+        this.company = null;
+        this.date_joining = null;
+        this.date_end = null;
+        this.position = null;
+        this.reference_name = null;
+        this.reference_lastname = null;
+        this.reference_position = null;
+        this.reference_mail = null;
+        this.reference_phone = null;
+        this.working = null;
+    }
+}
+
+export class full_profiles {
+    No: string;
+    nearsol_id: string;
+    id_user: string;
+    wave: waves_template;
+    schedule: schedules;
+    employee: employees; 
+    contact_detail: contact_details;   
+    // profiles
+    idprofiles: string;
+    tittle: string;
+    first_name: string;
+    second_name: string;
+    first_lastname: string;
+    second_lastname: string;
+    day_of_birth: string;
+    nationality: string;
+    gender: string;
+    etnia: string;
+    bank: string;
+    account: string;
+    account_type: string;
+    marital_status: string;
+    dpi: string;
+    nit: string;
+    igss: string;
+    irtra: string;
+    idcontact_details: string;
+    id_profile: string;
+    primary_phone: string;
+    secondary_phone: string;
+    address: string;
+    city: string;
+    email: string;
+    idjob_histories: string;
+    company: string;
+    date_joining: string;
+    date_end: string;
+    profesion: string;
+    birth_place: string;
+    id_profile_details: string;
+    start_date: string;
+    unavialable_days: string;
+    marketing_campaing: string;
+    first_lenguage: string;
+    second_lenguage: string;
+    third_lenguage: string;
+    idemergency_details: string;    
+    phone: string;
+    relationship: string;
+    idmedical_details: string;    
+    ideducation_details: string;
+    iddocuments: string;
+    doc_type: string;
+    doc_path: string;
+
+    // hires
+    idhires: string;    
+    id_wave: string;    
+    id_schedule: string;    
+    reports_to: string;
+    // emergency_details
+    emergency_first_name: string;
+    emergency_second_name: string;
+    emergency_first_lastname: string;
+    emergency_second_lastname: string;
+    emergency_phone: string;
+    emergency_relationship: string; 
+    // medical_details
+    medical_treatment: string;
+    medical_prescription: string;
+    family: profiles_family[];
+    job_history: job_histories[];  
+    // education_details  
+    current_level: string;
+    further_education: string;
+    currently_studing: string;
+    institution_name: string;
+    degree: string;
+    // marketing_details
+    sourse: string;
+    post: string;
+    refer: string;
+    about: string;
+    // Profiles_details
+    english_level: string;
+    transport: string;
+    first_language: string;
+    second_language: string;
+    third_language: string;
+    // Process
+    name: string;
+    description: string;
+    id_userpr: string;
+    //services
+    amount: string;
+    state: string;
+    constructor() {
+        this.No = '0';
+        this.nearsol_id = '';
+        this.id_user = null;
+        this.wave = new waves_template;
+        this.schedule = new schedules;
+        // profiles
+        this.idprofiles = null;
+        this.tittle = null;
+        this.first_name = null;
+        this.second_name = null;
+        this.first_lastname = null;
+        this.second_lastname = null;
+        this.day_of_birth = null;
+        this.nationality = null;
+        this.gender = null;
+        this.etnia = null;
+        this.bank = null;
+        this.account = null;
+        this.account_type = null;
+        this.marital_status = null;
+        this.dpi = null;
+        this.nit = null;
+        this.igss = null;
+        this.irtra = null;
+        this.idcontact_details = null;
+        this.id_profile = null;
+        this.primary_phone = null;
+        this.secondary_phone = null;
+        this.address = null;
+        this.city = null;
+        this.email = null;
+        this.idjob_histories = null;
+        this.company = null;
+        this.date_joining = null;
+        this.date_end = null;
+        this.profesion = null;
+        this.birth_place = null;
+        this.id_profile_details = null;
+        this.english_level = null;
+        this.transport = null;
+        this.start_date = null;
+        this.unavialable_days = null;
+        this.marketing_campaing = null;
+        this.first_lenguage = null;
+        this.second_lenguage = null;
+        this.third_lenguage = null;
+        this.idemergency_details = null;
+        this.emergency_first_name = null;
+        this.emergency_second_name = null;
+        this.emergency_first_lastname = null;
+        this.emergency_second_lastname = null;
+        this.phone = null;
+        this.relationship = null;
+        this.idmedical_details = null;
+        this.medical_treatment = null;
+        this.medical_prescription = null;
+        this.ideducation_details = null;
+        this.current_level = null;
+        this.further_education = null;
+        this.currently_studing = null;
+        this.institution_name = null;
+        this.degree = null;
+        this.iddocuments = null;
+        this.doc_type = null;
+        this.doc_path = null;
+        // hires
+        this.idhires = null;    
+        this.id_wave = null;    
+        this.id_schedule = null;    
+        this.reports_to = null;
+        this.employee = new employees;
+        this.contact_detail = new contact_details;
+        this.emergency_first_name = null;
+        this.emergency_second_lastname = null;
+        this.emergency_first_lastname = null;
+        this.emergency_second_lastname = null;
+        this.emergency_phone = null;
+        this.emergency_relationship = null;
+        this.medical_treatment = null;
+        this.medical_prescription = null;
+        this.family = [];
+        this.job_history = [];
+        this.current_level = null;
+        this.further_education = null;
+        this.currently_studing = null;
+        this.institution_name = null;
+        this.degree = null;
+        this.sourse = null;
+        this.post = null;
+        this.refer = null;
+        this.about = null;
+        this.english_level = null;
+        this.transport = null;
+        this.first_language = null;
+        this.second_language = null;
+        this.third_language = null;
+        this.name = null;
+        this.description = null;
+        this.id_userpr = null;
+        this.amount = null;
+        this.state = null;
+    }
+}
+
+export class ids_profiles {
+    id_profile: string;
+    id_hire: string;
+    id_employees: string;
+    idemergency_Details: string;
+    idmedical_details: string;
+    ideducation_details: string;
+    id_process: string;
+    idmarketing_details: string;
+    idprocess_details: string;
+    idinternal_processes: string;
+    idservices: string;
+    desarrollo
 }
 
 export class payroll_resume{

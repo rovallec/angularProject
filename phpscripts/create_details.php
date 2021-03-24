@@ -6,8 +6,7 @@ header('Access-Control-Allow-Headers: *');
 	if(isset($postdata) && !empty($postdata))
 	{
 		$request = json_decode($postdata);
-
-		$idprofile_details = ($request->idprofile_details);
+		
 		$id_profile = ($request->id_profile);
 		$english_level = ($request->english_level);
 		$transport = ($request->transport);
@@ -18,16 +17,15 @@ header('Access-Control-Allow-Headers: *');
 		$second_lenguage = ($request->second_lenguage);
 		$third_lenguage = ($request->third_lenguage);
 
-		$sql = "INSERT INTO `profile_details`(`idprofile_details`, `id_profile`, `english_level`, `transport`, `start_date`, `unavialable_days`, `marketing_campaing`, `first_lenguage`, `second_lenguage`, `third_lenguage`) VALUES ('{$id_profile}', '{$english_level}', '{$transport}', '{$start_date}', '{$unavialable_days}', '{$marketing_campaing}', '{$first_lenguage}', '{$second_lenguage}', '{$third_lenguage}');";
-
-echo $sql;
+		$sql = "INSERT INTO profile_details(idprofile_details, id_profile, english_level, transport, start_date, unavialable_days, marketing_campaing, first_lenguage, second_lenguage, third_lenguage) VALUES (null, '{$id_profile}', '{$english_level}', '{$transport}', '{$start_date}', '{$unavialable_days}', '{$marketing_campaing}', '{$first_lenguage}', '{$second_lenguage}', '{$third_lenguage}');";
 
 		if(mysqli_query($con, $sql))
 		{
 			$id_contact = mysqli_insert_id($con);
-			echo $id_profile_details;
+			echo $id_contact;
 		}else{
 			http_response_code(422);
+      echo $sql;
 		}
 	}
 ?>

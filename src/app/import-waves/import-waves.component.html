@@ -1,0 +1,155 @@
+<div class="col-md-12 row">
+  <div class="col-md-2">
+    <div class="row" style="margin-top:25px">
+      <div class="d-flex justify-content-between mb-3 w-100">
+        <div class="p-2">
+          <button class="btn btn-outline-danger" title="Download Attendance" routerLink="/rehome">
+            <i class="fas fa-ban"></i>
+          </button>
+        </div>
+        <div class="p-2" *ngIf="showdiv">          
+        </div>
+        <div class="p-2" *ngIf="showdiv">          
+        </div>
+        <div class="p-2">
+          <button class="btn btn-outline-success" title="Save wave" (click)="saveWave()">
+            <i class="fas fa-save"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row p-2">
+      <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
+        <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
+      </select>
+    </div>
+    <div class="row p-2">
+      <div class="list-group w-100" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts" [tabindex]="acc.idaccounts"
+          [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}" style="cursor: pointer;"
+          (click)="setAccount(acc)">{{acc.name}}</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-10">
+    <div class="row col-md-12">
+      <div class="col-md-3">
+        <label>REPORTER:</label>
+        <select class="form-control" [(ngModel)]="actualReporter.idUser">
+          <option *ngFor="let rep of reporters" [value]="rep.idUser" (click)="setReporter(rep)">
+            {{ rep.username }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>WAVE:</label>
+        <input type="text" class="form-control" [(ngModel)]="waves.name">
+      </div>
+      <div class="col-md-2">
+        <label>PREFIX:</label>
+        <input type="text" class="form-control" [(ngModel)]="waves.prefix">
+      </div>
+      <div class="col-md-2">
+        <label>DATE:</label>
+        <input type="date" class="form-control" [(ngModel)]="date">
+      </div>
+      <div class="col-md-2">
+      </div>
+    </div>
+    <div class="row col-md-12">
+      <div class="col-md-3">
+        <label>TRAINING SCHEDULE:</label>
+        <div class="row">
+          <div class="col-md-6">
+            <input type="time" class="form-control" [(ngModel)]="start_time" (change)="setSchedule()">
+          </div>
+          <div class="col-md-6">
+            <input type="time" class="form-control" [(ngModel)]="end_time" (change)="setSchedule()">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label for="formFile" class="form-label">JOB:</label>
+        <input type="text" class="form-control" [(ngModel)]="waves.job">
+      </div>
+      <div class="col-md-3">
+        <label>DAYS OFF:</label>
+        <input type="text" class="form-control" [(ngModel)]="days_off">        
+      </div>
+      <div class="col-md-1">
+      </div>
+    </div>
+    <div class="row col-md-12">
+      <div class="col-md-3">        
+
+      </div>
+      <div class="col-md-5">
+        <label for="formFile" class="form-label">IMPORT:</label>
+        <input type="file" class="form-control" (change)="addfile($event)" [(ngModel)]='any'>
+      </div>
+    </div>
+
+
+    <div class="table-responsive-sm">
+      <caption style="width: 200px;">List of loaded profiles</caption>
+      <table class="table table-hover table-ligth">
+        <thead>
+          <tr>
+            <th scope="col">
+              Code
+            </th>
+            <th scope="col">
+              First Name
+            </th>
+            <th scope="col">
+              second Name
+            </th>
+            <th scope="col">
+              First Last Name
+            </th>
+            <th scope="col">
+              Second Last Name
+            </th>
+            <th scope="col">
+              State
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let prof of fullprofiles">                      
+            <td>
+              {{ prof.nearsol_id }}
+            </td>
+            <td>
+              {{ prof.first_name }}
+            </td>
+            <td>
+              {{ prof.second_name }}
+            </td>
+            <td>
+              {{ prof.first_lastname }}
+            </td>
+            <td>
+              {{ prof.second_lastname }}
+            </td>
+            <td>
+              <button class="btn-outline-warning" *ngIf="prof.state=='Error'" disabled="true">
+                <i class="fas fa-ban" *ngIf="prof.state=='Error'" ></i>
+              </button>
+              <button class="btn-outline-info" *ngIf="prof.state=='Loaded'" disabled="true">
+                <i class="fas fa-check-double" *ngIf="prof.state=='Loaded'"></i>
+              </button>
+              <button class="btn-outline-success" *ngIf="prof.state=='Saved'" disabled="true">
+                <i class="fas fa-ban" *ngIf="prof.state=='Saved'" ></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="fullprofiles.length>0">
+            <td style="align-content: center;" colspan="6">
+              DOCUMENT LOADED
+            </td>
+          </tr>
+        </tbody>
+      </table>      
+    </div>
+  </div>
