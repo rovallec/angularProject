@@ -6,6 +6,17 @@ require 'funcionesVarias.php';
 
 mysqli_begin_transaction($con, MYSQLI_TRANS_START_READ_WRITE);
 mysqli_autocommit($con, FALSE);
+$id_profile ='';
+$id_hire =''; 
+$id_employees=''; 
+$idemergency_Details=''; 
+$idmedical_details='';
+$ideducation_details='';
+$id_process='';
+$idmarketing_details=''; 
+$idprocess_details='';
+$idinternal_processes='';
+$idservices='';
 
 
 $postdata = file_get_contents("php://input");
@@ -164,58 +175,58 @@ if(isset($postdata) && !empty($postdata)){
                         }else{
                           //mysqli_rollback($con);
                           $error = mysqli_error($con);
-                          throw new MiExcepción($error);
                           echo($sql11);
+                          throw new Exception($error);
                         }
                       }else{
                         $error = mysqli_error($con);
-                        throw new MiExcepción($error);
                         echo($sql10);
+                        throw new Exception($error);
                       }
                     }else{
                       $error = mysqli_error($con);
-                      throw new MiExcepción($error);
                       echo($sql9);
+                      throw new Exception($error);
                     }
                   }else{
                     $error = mysqli_error($con);
-                    throw new MiExcepción($error);
                     echo($sql8);
+                    throw new Exception($error);
                   }
                 }else{
                   $error = mysqli_error($con);
-                  throw new MiExcepción($error);
                   echo($sql7);
+                  throw new Exception($error);
                 }
               }else{
                 $error = mysqli_error($con);
-                throw new MiExcepción($error);
                 echo($sql6);
+                throw new Exception($error);
               }
             }else{
               $error = mysqli_error($con);
-              throw new MiExcepción($error);
               echo($sql5);
+              throw new Exception($error);
             }
           }else{
             $error = mysqli_error($con);
-            throw new MiExcepción($error);
             echo($sql4);
+            throw new Exception($error);
           }
         }else{
-          echo($sql3);
           $error = mysqli_error($con);
-          throw new MiExcepción($error);
+          echo($sql13);
+          throw new Exception($error);
         }
       }else{
         $error = mysqli_error($con);
-        throw new MiExcepción($error);
         echo($sql2);
+        throw new Exception($error);
       }
     }else{
       $error = mysqli_error($con);
-      throw new MiExcepción($error);
       echo($sql);
+      throw new Exception($error);
     }
   }
   catch (Exception $e){

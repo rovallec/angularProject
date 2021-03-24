@@ -4,6 +4,7 @@ import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
 import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { DESTRUCTION } from 'dns';
@@ -18,6 +19,8 @@ import { stringify } from '@angular/compiler/src/util';
 })
 
 export class ClosingTkComponent implements OnInit {
+
+  @ViewChild('userTable', {static:false}) userTable: ElementRef;
 
   accounts: accounts[] = [];
   periods: periods[] = [];
@@ -50,6 +53,7 @@ export class ClosingTkComponent implements OnInit {
   arrayBuffer: any;
   fileWait: boolean;
   adjustments: attendences_adjustment[] = [];
+  printing:boolean = false;
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
@@ -676,7 +680,14 @@ export class ClosingTkComponent implements OnInit {
   }
 
   exportPayroll_values() {
+    this.printing = true;
+    if(this.actualPeriod.status == '3'){
     window.open("http://200.94.251.67/phpscripts/exportPayroll_values.php?id_period="+this.actualPeriod.idperiods, "_blank");
+    }else{
+      this.exportTableElmToExcel(this.userTable, 'user_data');
+      window.alert("Data Successfully exported");
+      this.printing = false;
+    }
   }
 
   exportPaidAttendances(){
@@ -926,4 +937,16 @@ export class ClosingTkComponent implements OnInit {
       })
     }
   }
+
+  exportTableElmToExcel(element: ElementRef, fileName: string): void {
+    const EXCEL_EXTENSION = '.xlsx';
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element.nativeElement);
+    // generate workbook and add the worksheet
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, ws, 'Sheet1');
+    // save to file
+    XLSX.writeFile(workbook, `${fileName}${EXCEL_EXTENSION}`);
+
+  }
+
 }
