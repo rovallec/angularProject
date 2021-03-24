@@ -188,7 +188,7 @@ export class ClosingTkComponent implements OnInit {
 
                               let prov_period:periods = new periods;
                               let dt:Date = new Date(this.actualPeriod.start);
-                              dt.setDate(dt.getDate() - (dt.getDay() + 1));
+                              dt.setDate((dt.getDate() + 1) - (dt.getDay()));
                               prov_period.idperiods = emp[0].idemployees;
                               prov_period.end = "'" + dt.getFullYear() + "-" +
                               (dt.getMonth() + 1).toString().padStart(2,"0") + "-" +
