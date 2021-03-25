@@ -8,6 +8,7 @@ import { profiles_family, profiles_histories } from '../profiles';
 import { exception } from 'console';
 import { AppComponent } from '../app.component';
 import { AuthServiceService } from '../auth-service.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-import-waves',
@@ -44,7 +45,7 @@ export class ImportWavesComponent implements OnInit {
   fullprofiles: full_profiles[] = [];
   any: any = null;
 
-  constructor(public apiServices: ApiService) { }
+  constructor(public apiServices: ApiService, public router: Router) { }
 
   ngOnInit() {
     this.start();
@@ -165,11 +166,18 @@ export class ImportWavesComponent implements OnInit {
                         //window.alert("Action successfuly recorded.");
                       } else {
                         //element.state = "An error has occured:\n" + String(fstr).split("|")[1];
+                        error = true;
                         element.state = 'Error';
                           console.log(String(fstr).split("|")[0]);
                       }
-                      this.apiServices.insertjobhistory(element.job_history).subscribe((_str: string) => {
+                      this.apiServices.insertjobhistory(element.job_history).subscribe((str: string) => {
+                        if (str != '') {
+                          error = true;
+                        };
                         //window.alert("All documents saved correctly.");
+                        if (error==false) {
+                          this.router.navigate(['/rehome']);
+                        }
                       })
                     })
                   }
@@ -228,10 +236,10 @@ export class ImportWavesComponent implements OnInit {
 
   corrigeDatos(Adata: string): string{
     Adata = String(Adata).toUpperCase().trim();
-    Adata.replace('-', '');
-    Adata.replace(' ', '');
-    Adata.replace('_', '');
-    Adata.replace('.', '');
+    Adata = Adata.replace('-', '');
+    Adata = Adata.replace(' ', '');
+    Adata = Adata.replace('_', '');
+    Adata = Adata.replace('.', '');
     return Adata;
   }
 
@@ -537,7 +545,6 @@ export class ImportWavesComponent implements OnInit {
     catch (exception) {
       console.log("Ocurrió un Error: " + exception);
       profilef.state = exception;
-      this.isLoading = false;
     }
     finally {
       this.isLoading = false;

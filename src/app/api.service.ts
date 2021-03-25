@@ -24,8 +24,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-PHP_API_SERVER = "http://172.18.2.226"; // Desarrollo
-//PHP_API_SERVER = "http://200.94.251.67";  // produccion
+//PHP_API_SERVER = "http://172.18.2.226"; // Desarrollo
+PHP_API_SERVER = "http://200.94.251.67";  // produccion
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
@@ -453,6 +453,10 @@ getPeriods(){
   return this.httpClient.get<periods[]>(`${this.PHP_API_SERVER}/phpscripts/getPeriods.php`);
 }
 
+getAllPeriods(){
+  return this.httpClient.get<periods[]>(`${this.PHP_API_SERVER}/phpscripts/getAllPeriods.php`);
+}
+
 getDeductions(any:any){
   return this.httpClient.post<deductions[]>(`${this.PHP_API_SERVER}/phpscripts/getDeductions.php`,any);
 }
@@ -491,6 +495,10 @@ insertDebits(debits:credits){
 
 closePeriod(period:periods){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/closePeriod.php`, period);
+}
+
+closePeriodBonuses(period:periods) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/closePeriodBonuses.php`, period);
 }
 
 setClosePeriods(any:any){
