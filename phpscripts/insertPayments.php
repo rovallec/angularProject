@@ -21,7 +21,7 @@ $id_account_py = validateDataToZero($request->id_account_py);
 $sql =  "INSERT INTO payments (`idpayments`, `id_employee`, `id_paymentmethod`, `id_period`, `credits`, `debits`, `last_seventh`, `base_complete`, `productivity_complete`, `id_account_py`) VALUES (NULL, $id_employee, $id_payment_method, $id_period, $credits, $debits, $last_seventh, $base_complete, $productivity_complete, $id_account_py);";
 
 if(mysqli_query($con, $sql)){
-  echo("1");
+  echo(mysqli_insert_id($con));
 }else{
   http_response_code(404);
   $error = $sql . "|" . mysqli_error($con);
