@@ -24,7 +24,7 @@ if(mysqli_query($con, $sql)){
   echo(mysqli_insert_id($con));
 }else{
   http_response_code(404);
-  $error = $sql . "|" . mysqli_error($con);
+  $error = "0|" . mysqli_error($con);
   echo(json_encode($error));
 }
 ?>

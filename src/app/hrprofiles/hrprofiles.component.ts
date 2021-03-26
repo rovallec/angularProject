@@ -1103,10 +1103,12 @@ export class HrprofilesComponent implements OnInit {
                     old_payment.id_account_py = this.original_account;
                     this.apiService.setPayment(old_payment).subscribe((str: string) => {
                       this.apiService.insertPayments(py).subscribe((str: string) => {
-                        if (str == "1") {
+                        if (isNullOrUndefined(str.toString().split("|"))) {
+                          window.alert("An error has occurred please contact your administrator");
                           this.cancelView();
                         } else {
-                          window.alert("An error has occurred please contact your administrator");
+                          window.alert("Record successfuly inserted");
+                          this.cancelView();
                         }
                         this.newProcess = false;
                       })
