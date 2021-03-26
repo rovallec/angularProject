@@ -27,7 +27,7 @@ if(isset($postdata) && !empty($postdata)){
   $second_name = ($request->second_name);
   $first_lastname = ($request->first_lastname);
   $second_lastname = ($request->second_lastname);
-  $day_of_birthday = ($request->day_of_birth);
+  $day_of_birthday = formatDates($request->day_of_birth);
   $nationality = ($request->nationality);
   $marital_status = ($request->marital_status);
   $dpi = ($request->dpi);
@@ -57,7 +57,7 @@ if(isset($postdata) && !empty($postdata)){
   $name = ($request->name);
   $description = ($request->description);
   $waves = json_decode(json_encode($request->wave));
-  $date = ($waves->starting_date);
+  $date = formatDates(($waves->starting_date));
   $id_userpr = ($request->id_userpr);
   $id_user = ($request->id_user);
   $amount = ($request->amount);
@@ -77,7 +77,7 @@ if(isset($postdata) && !empty($postdata)){
   $id_account = ($employee->id_account);
   $reporter = ($employee->reporter);
   $client_id = ($employee->client_id);
-  $hiring_date = ($employee->hiring_date);
+  $hiring_date = formatDates(($employee->hiring_date));
   $job = ($employee->job);
   $base_payment = ($employee->base_payment);
   $productivity_payment = ($employee->productivity_payment);
@@ -120,7 +120,7 @@ if(isset($postdata) && !empty($postdata)){
           if(mysqli_query($con, $sql4))
           {
             $idemergency_Details = mysqli_insert_id($con);
-
+            //if ((validarDatosString($medical_treatment)!='') && (validarDatosString($medical_prescription)!='')) {
             $sql5 = "INSERT INTO medical_details (idmedical_details, id_profile, medical_treatment, medical_prescription) " .
                     "VALUES (null, $id_profile, '$medical_treatment', '$medical_prescription');";
 
@@ -158,30 +158,32 @@ if(isset($postdata) && !empty($postdata)){
                     {
                       $idprocess_details = mysqli_insert_id($con);
 
-                      $sql10= "INSERT INTO internal_processes(id_user, id_employee, name, date, status, notes) " .
-                              "VALUES ($id_user, $id_employees, 'hiring bonus', '$date', 'COMPLETED', 'Hiring bonus.');";
+                      if (validarDatosString($amount)!='') {
+                        $sql10= "INSERT INTO internal_processes(id_user, id_employee, name, date, status, notes) " .
+                                "VALUES ($id_user, $id_employees, 'hiring bonus', '$date', 'COMPLETED', 'Hiring bonus.');";
 
-                      if(mysqli_query($con, $sql10))
-                      {
-                        $idinternal_processes = mysqli_insert_id($con);
-
-                        $sql11= "INSERT INTO services(id_process, name, amount, max, frecuency, status, `current`) " .
-                                "VALUES ($idinternal_processes, 'hiring modules', $amount, 0, 'UNIKE', 1, 0);";
-
-                        if(mysqli_query($con, $sql11))
+                        if(mysqli_query($con, $sql10))
                         {
-                          $idservices = mysqli_insert_id($con);
-                          //mysqli_commit($con);
+                          $idinternal_processes = mysqli_insert_id($con);
+
+                          $sql11= "INSERT INTO services(id_process, name, amount, max, frecuency, status, `current`) " .
+                                  "VALUES ($idinternal_processes, 'hiring modules', $amount, 0, 'UNIKE', 1, 0);";
+
+                          if(mysqli_query($con, $sql11))
+                          {
+                            $idservices = mysqli_insert_id($con);
+                            //mysqli_commit($con);
+                          }else{
+                            //mysqli_rollback($con);
+                            $error = mysqli_error($con);
+                            echo($sql11);
+                            throw new Exception($error);
+                          }
                         }else{
-                          //mysqli_rollback($con);
                           $error = mysqli_error($con);
-                          echo($sql11);
+                          echo($sql10);
                           throw new Exception($error);
                         }
-                      }else{
-                        $error = mysqli_error($con);
-                        echo($sql10);
-                        throw new Exception($error);
                       }
                     }else{
                       $error = mysqli_error($con);
@@ -215,7 +217,7 @@ if(isset($postdata) && !empty($postdata)){
           }
         }else{
           $error = mysqli_error($con);
-          echo($sql13);
+          echo($sql3);
           throw new Exception($error);
         }
       }else{
@@ -246,5 +248,4 @@ mysqli_commit($con);
 
 mysqli_autocommit($con, TRUE);
 mysqli_close($con);
-
 ?>

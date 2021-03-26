@@ -30,12 +30,6 @@ export class AppComponent {
   constructor(private authSrv:AuthServiceService, private apiService:ApiService, private route: ActivatedRoute){
   }
 
-  ngOnInit() {
-    if (this.route.snapshot.url[1].toString()=='HOME' ) {
-      this.SetSel('HOME');
-    }
-  }
-
   getAuth(){
     return this.authSrv.isAuthenticated();
   }

@@ -1,4 +1,9 @@
 <div style="margin-left:15px; margin-right: 15px; padding-top:20px; width:98%;">
+    <div class="progress" style="margin-top:50px" *ngIf="loading">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+            [style.width]="progress + '%'" [attr.aria-valuenow]="progress" aria-valuemin="0"
+            [attr.aria-valuemax]="max">{{step}}</div>
+    </div>
   <div class="form-row">
       <div class="form-group col-md-3">
           <label>Filter:</label>
@@ -21,11 +26,14 @@
         </select>
       </div>
       <div class="form-group col-md-1; text-align:left">
-          <i class="fas fa-search" aria-hidden="true" style="margin-top:255%" (click)="searchEmployee()"></i>
+          <i class="fas fa-search" aria-hidden="true" style="margin-top:255%" (click)="searchEmployee()" data-toggle="tooltip" data-placement="top" title="Search"></i>
       </div>
       <div class="form-group col-md-1; text-align:left">
-          <i class="fas fa-minus-circle" style="margin-top:250%" (click)="cancelSearch()"></i>
+          <i class="fas fa-minus-circle" style="margin-top:250%" (click)="cancelSearch()" data-toggle="tooltip" data-placement="top" title="Cancel filter"></i>
       </div>
+      <div class="form-group col-md-1; text-align:left">
+        <i class="fas fa-unlock-alt" style="margin-top:280%" (click)="closePeriod()" data-toggle="tooltip" data-placement="top" title="Close period"></i>
+    </div>
   </div>
   <div style="margin-top:40px" class="from-row col-md-12">
     <table style="width: 100%">
@@ -56,7 +64,7 @@
                         <th scope="col">Total</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let employee of employees_terminations" (click)="gotoProfile(employee)">
+                        <tr *ngFor="let employee of employees_bonuses" (click)="gotoProfile(employee)">
                             <td>{{employee.nearsol_id}}</td>
                             <td>{{employee.name}}</td>
                             <td>{{employee.account}}</td>

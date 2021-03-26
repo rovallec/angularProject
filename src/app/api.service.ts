@@ -449,6 +449,10 @@ getPeriods(){
   return this.httpClient.get<periods[]>(`${this.PHP_API_SERVER}/phpscripts/getPeriods.php`);
 }
 
+getAllPeriods(){
+  return this.httpClient.get<periods[]>(`${this.PHP_API_SERVER}/phpscripts/getAllPeriods.php`);
+}
+
 getDeductions(any:any){
   return this.httpClient.post<deductions[]>(`${this.PHP_API_SERVER}/phpscripts/getDeductions.php`,any);
 }
@@ -487,6 +491,10 @@ insertDebits(debits:credits){
 
 closePeriod(period:periods){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/closePeriod.php`, period);
+}
+
+closePeriodBonuses(period:periods) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/closePeriodBonuses.php`, period);
 }
 
 setClosePeriods(any:any){
@@ -541,7 +549,7 @@ getPushedDebits(debit:debits){
   return this.httpClient.post<credits>(`${this.PHP_API_SERVER}/phpscripts/getPushedDebits.php`, debit);
 }
 
-getPaymentMethods(employee:employees){
+getPaymentMethods(employee:any){
   return this.httpClient.post<payment_methods[]>(`${this.PHP_API_SERVER}/phpscripts/getPaymentMethods.php`, employee);
 }
 
@@ -717,7 +725,7 @@ getHr_Processes(any:any){
   return this.httpClient.post<hrProcess>(`${this.PHP_API_SERVER}/phpscripts/getHr_Processes.php`, any);
 }
 
-getAdvancesAcc(emp:employees){
+getAdvancesAcc(emp:any){
   return this.httpClient.post<advances_acc[]>(`${this.PHP_API_SERVER}/phpscripts/getAdvancesAcc.php`, emp);
 }
 

@@ -12,7 +12,7 @@ $notes = ($request->notes);
 
 $notes = str_replace('\'', " ",$notes);
 
-$sql = "UPDATE hr_processes SET notes = '$notes', `status` = '$status' WHERE idhr_processes = $idhr_processes;";
+$sql = "UPDATE hr_processes SET notes = '$notes', status = '$status' WHERE idhr_processes = $idhr_process;";
 
 if(mysqli_query($con,$sql)){
 	http_response_code(200);
