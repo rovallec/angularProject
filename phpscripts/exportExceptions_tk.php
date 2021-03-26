@@ -93,7 +93,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (leaves.start BETWEEN '$start' AND '$end')
       OR (leaves.end BETWEEN '$start' AND '$end'))
       AND (`dt`.`dates` BETWEEN '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND leaves.motive = 'Others Unpaid') 
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Unpaid' OR leaves.motive = 'IGSS Unpaid' OR leaves.motive = 'VTO Unpaid') 
 
 UNION
 

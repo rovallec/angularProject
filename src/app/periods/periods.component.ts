@@ -21,6 +21,7 @@ import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { process } from '../process';
 import { JsonpClientBackend } from '@angular/common/http';
 import { ɵangular_packages_platform_browser_dynamic_testing_testing_a } from '@angular/platform-browser-dynamic/testing';
+import { AuthServiceService } from '../auth-service.service';
 
 
 @Component({
@@ -92,8 +93,9 @@ export class PeriodsComponent implements OnInit {
   selectedClient: string = null;
   base: boolean = false;;
   emp_set: string = null;
+  selected_patrono:string = 'PRG Recurso Humano, S.A.';
 
-  constructor(public apiService: ApiService, public route: ActivatedRoute) { }
+  constructor(public apiService: ApiService, public route: ActivatedRoute, public authService:AuthServiceService) { }
 
   ngOnInit() {
     this.start();
@@ -211,7 +213,6 @@ export class PeriodsComponent implements OnInit {
                           if (!isNullOrUndefined(trm.valid_from) && (new Date(trm.valid_from).getTime() >= new Date(this.period.start).getTime()) && (new Date(trm.valid_from).getTime() <= new Date(this.period.end).getTime())) {
                             is_trm = true;
                             py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) + (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())) / (1000 * 3600 * 24)) + 1) - 15) - ((((new Date(this.period.end).getTime()) - (new Date(trm.valid_from).getTime())) / (1000 * 3600 * 24)) + 1)).toFixed(2);
-                            console.log((Number(payroll_value.discounted_hours) + 120) / 8) + "|" + Number(payroll_value.discounted_days + "|" + (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())) / (1000 * 3600 * 24)) + 1) - 15) + "|" + ((((new Date(this.period.end).getTime()) - (new Date(trm.valid_from).getTime())) / (1000 * 3600 * 24)) + 1));
                           } else {
                             py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh)).toFixed(2);
                             if (new Date(trm.valid_from).getTime() <= new Date(this.period.start).getTime()) {
@@ -333,6 +334,7 @@ export class PeriodsComponent implements OnInit {
                           this.global_credits.push(base_credit);
                           this.global_credits.push(productivity_credit);
                           this.global_debits.push(igss_debit);
+                          this.global_credits.push(decreot_credit);
 
 
                           let sum_cred: number = 0
@@ -718,5 +720,20 @@ export class PeriodsComponent implements OnInit {
       this.show_payments.push(p);
       //}
     })
+  }
+
+  exportIgss(){
+    let user:string = this.authService.getAuthusr().signature;
+    let patrono:string = this.selected_patrono;
+    let address:string = "20 Calle 5-25";
+    let nit_patrono:string = null;
+    let patronal_number:string = null;
+    if(patrono == 'PRG Recurso Humano, S.A.'){
+      nit_patrono = "92956971";
+      patronal_number = "145998";
+    }
+    let t_period:string = this.period.idperiods;
+    window.open("http://200.94.251.67/phpscripts/igssTest.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
+
   }
 }

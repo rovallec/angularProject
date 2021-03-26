@@ -520,7 +520,7 @@ export class AccprofilesComponent implements OnInit {
       this.apiService.getPayments(p).subscribe((pay: payments[]) => {
 
         this.cred_benefits.forEach(cred => {
-          if (cred.type != "Salario Base" && cred.type != "Bonificacion Productividad") {
+          if (cred.type != "Salario Base" && cred.type != "Bonificacion Productividad" && cred.type != "Bonificacion Decreto") {
             cred.idpayments = pay[pay.length - 1].idpayments;
             this.apiService.insertCredits(cred).subscribe((str3: string) => {
               if (Number(str3) > 0) {

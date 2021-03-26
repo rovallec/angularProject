@@ -125,7 +125,7 @@ export class HrprofilesComponent implements OnInit {
   original_account: string = null;
 
   approvals: users[] = [new users];
-  motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid'];
+  motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid'];
 
   reasons: string[] = [
     "Asistencia",
