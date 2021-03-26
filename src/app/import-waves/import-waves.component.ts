@@ -94,6 +94,7 @@ export class ImportWavesComponent implements OnInit {
 
   saveWave() {
     let error: boolean = false;
+    let i = 0;
     // grabar la wave y todo el sistema.
     if (this.isEmpty(this.start_time)) {
       error = true;
@@ -183,6 +184,10 @@ export class ImportWavesComponent implements OnInit {
                   }
                 })
               })
+              i++;
+              if ((i>=this.fullprofiles.length) && (error==false)) {
+                console.log("Perfiles creados.");
+              }
             })
           })
         })
@@ -260,7 +265,6 @@ export class ImportWavesComponent implements OnInit {
     let fecha: Fecha = new Fecha;    
     let ldate: Date = new Date;
     this.file = event.target.files[0];
-
     let fileReader = new FileReader();
     let profilef: full_profiles = new full_profiles;
     let count: number = 0;
@@ -321,8 +325,7 @@ export class ImportWavesComponent implements OnInit {
             profilef.second_name = this.validateEmptyStr(element['second_name']);
             profilef.first_lastname = this.validateEmptyStr(element['first_lastname']);
             profilef.second_lastname = this.validateEmptyStr(element['second_lastname']);
-            ldate = new Date(this.validateEmptyStr(element['day_of_birth']));
-            profilef.day_of_birth = fecha.transform(ldate);
+            profilef.day_of_birth = this.validateEmptyStr(element['day_of_birth']);
             profilef.nationality = this.validateEmptyStr(element['nationality']);
             profilef.marital_status = this.validateEmptyStr(element['marital_status']);
             profilef.dpi = this.corrigeDatos(this.validateEmptyStr(element['dpi']));

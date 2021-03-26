@@ -1220,7 +1220,7 @@ export class Fecha{
         let yyyy: string = Adate.getFullYear().toString();
         let sdate: string = (yyyy + '-' + MM + '-' + dd);
         if (sdate == 'NaN-NaN-NaN') {
-            sdate = '1900-01-01';
+            sdate = '1970-01-01';
         }
         return sdate;
     }

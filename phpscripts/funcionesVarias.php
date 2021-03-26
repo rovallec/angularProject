@@ -26,4 +26,11 @@ function validarDatosString($adato) {
     return $adato;
 }
 
+function formatDates($adate) {
+    $format = 'Y-m-d';
+    $adate = intval($adate);
+    $date = new DateTime("@$adate");
+    return $date->format($format);
+}
+
 ?>
