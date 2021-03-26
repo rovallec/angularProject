@@ -18,7 +18,7 @@ if($start != 'explicit'){
     $sql = "SELECT * FROM paid_attendances 
             INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value 
             WHERE id_employee = $id AND paid_attendances.date BETWEEN $end"
-}a
+}
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
