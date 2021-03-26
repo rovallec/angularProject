@@ -409,7 +409,7 @@ export class ClosingTkComponent implements OnInit {
                                   }
                                 }
 
-                                if (!isNullOrUndefined(trm.valid_from) && worked_days > 0 && discounted_days > 0) {
+                                if (!isNullOrUndefined(trm.valid_from) && worked_days == 0 && discounted_days > 0) {
                                   if (new Date(trm.valid_from).getTime() > new Date(this.actualPeriod.start).getTime()) {
                                     sevenths = sevenths + ((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24) - (non_show_sequence + days_off + janp_sequence + sevenths + trm_count)) - worked_days;
                                     console.log(sevenths + "|" + new Date(trm.valid_from).getTime() + "|" + new Date(this.actualPeriod.start).getTime());
