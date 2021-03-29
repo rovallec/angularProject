@@ -9,7 +9,7 @@ import {  process_templates, waves_template, hires_template, schedules, accounts
           vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, 
           letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, 
           change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, employees_Bonuses, advances_acc, 
-          payroll_values_gt, paid_attendances, reporters, ids_profiles, formerEmplorer } from './process_templates';
+          payroll_values_gt, paid_attendances, reporters, ids_profiles, formerEmployer } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -793,16 +793,16 @@ insertjobhistory(any: any) {
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/create_job_history.php`, any);
 }
 
-getFormerEmplorer() {
-  return this.httpClient.get<formerEmplorer[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
+getFormerEmployer() {
+  return this.httpClient.get<formerEmployer[]>(`${this.PHP_API_SERVER}/phpscripts/getFormerEmployer.php`);
 }
 
-insertFormerEmplorer(any: any) {
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insetFormerEmplorer.php`, any);
+insertFormerEmployer(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insetFormerEmployer.php`, any);
 }
 
-updateFormerEmplorer(any: any) {
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateFormerEmplorer.php`, any);
+updateFormerEmployer(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateFormerEmployer.php`, any);
 }
 
 

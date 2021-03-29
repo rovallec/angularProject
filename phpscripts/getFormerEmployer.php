@@ -10,7 +10,7 @@
     $r = [];
     $i = 0;
 
-    $sql = "SELECT * from formerexplorer where id_profile = $id_profile;";
+    $sql = "SELECT * from formeremployer where id_profile = $id_profile;";
     if($res = mysqli_query($con, $sql)){
         while($result = mysqli_fetch_assoc($res)){
             $r[$i]['idformer_emplores'] = $result['idformer_emplores'];

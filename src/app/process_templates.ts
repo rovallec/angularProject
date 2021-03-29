@@ -1567,8 +1567,9 @@ export class ids_profiles {
     idservices: string;
 }
 
-export class formerEmplorer {
+export class formerEmployer {
     id_profile: string;
+    name: string;
     idemnization: string;
     aguinaldo: string;
     bono14: string;
