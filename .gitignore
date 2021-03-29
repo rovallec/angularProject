@@ -45,16 +45,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-phpscripts/database.php
-phpscripts/database.php
-src/app/api.service.ts
-phpscripts/database.php
-src/app/api.service.ts
-phpscripts/database.php
-src/app/api.service.ts
-src/app/api.service.ts
-angular.json
-phpscripts/database.php
-phpscripts/login.php
-phpscripts/database.php
 commit.bat
