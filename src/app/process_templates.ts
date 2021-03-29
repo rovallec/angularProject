@@ -1566,3 +1566,20 @@ export class ids_profiles {
     idinternal_processes: string;
     idservices: string;
 }
+
+export class formerEmplorer {
+    id_profile: string;
+    idemnization: string;
+    aguinaldo: string;
+    bono14: string;
+    igss: string;
+    taxPendingPayment: string;
+    constructor() {
+        this.id_profile = null;
+        this.idemnization = null;
+        this.aguinaldo = null;
+        this.bono14 = null;
+        this.igss = null;
+        this.taxPendingPayment = null;
+    }
+}

@@ -78,6 +78,8 @@
                                                 *ngIf="wave.show === '1' && edit_bank" (click)="completeWave()"></i>
                                             <i class="fas fa-edit" (click)="editW(wave);" *ngIf="wave.show === '0' && !edit_bank"
                                             style="margin-left:5px; cursor: pointer;"></i>
+                                            <i class="fas fa-user-edit" (click)="editFormerEmplorer();" *ngIf="wave.show === '1' && !iseditFormerEmplorer"
+                                            style="margin-left:5px; cursor: pointer;"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -125,9 +127,28 @@
                                             <td>{{hr.status}}</td>
                                             <td><input type="text" class="form-control" [(ngModel)]="hr.bank" [disabled]="hr.bool"></td>
                                             <td><input type="text" class="form-control" [(ngModel)]="hr.account" [disabled]="hr.bool"></td>
-                                            <!-- 
-                                                Insertar inputs aquí.
-                                            -->
+                                        </tr>                                        
+                                    </tbody>
+                                </table>                                
+                            </td>
+                        </tr>
+                        <tr style="width:100%;margin-top:10px" *ngIf="isformerEmplorer">
+                            <td rowspan="6">
+                                <table class="table table-striped table-hover" style="width:100%;margin-top:10px">
+                                    <thead>
+                                        <th>IDEMNIZACIÓN</th>
+                                        <th>AGUINALDO</th>
+                                        <th>BONO14</th>
+                                        <th>IGSS</th>
+                                        <th>TAX PENDING PAYMENT</th>                                                    
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let fe of formerEmplorer">
+                                            <td> {{ fe.idemnization }}</td>
+                                            <td> {{ fe.aguinaldo }}</td>
+                                            <td> {{ fe.bono14 }}</td>
+                                            <td> {{ fe.igss }}</td>
+                                            <td> {{ fe.taxPendingPayment }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

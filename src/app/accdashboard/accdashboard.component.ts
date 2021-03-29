@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { Router } from '@angular/router';
-import { waves_template, schedules, hires_template, periods, payments, Fecha } from '../process_templates'
+import { waves_template, schedules, hires_template, periods, payments, Fecha, formerEmplorer } from '../process_templates'
 import { employees, payment_methods } from '../fullProcess';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { isNull, isNullOrUndefined } from 'util';
@@ -27,6 +27,8 @@ export class AccdashboardComponent implements OnInit {
   value: string = null;
   searching: boolean = false;
   edit_bank: boolean = false;
+  isformerEmplorer: boolean = false;
+  formerEmplorer: formerEmplorer = new formerEmplorer;
 
   constructor(private apiService: ApiService, public router: Router, private authSrv: AuthServiceService) { }
 
@@ -218,5 +220,25 @@ export class AccdashboardComponent implements OnInit {
     this.getWavesAll();
     this.getPeriods();
     this.getAllEmployees();
+  }
+
+  insertFormerEmplorer() {
+    this.apiService.insertFormerEmplorer(formerEmplorer).subscribe((str: string) => { 
+    //
+    })
+  }
+
+  getFormerExplorer() {
+    this.apiService.updateFormerEmplorer(formerEmplorer).subscribe((str: string) => { 
+      //
+      })
+  }
+
+  editFormerEmplorer() {
+    this.isformerEmplorer = true;
+  }
+
+  cancelFormerEmplorer(){
+
   }
 }
