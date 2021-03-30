@@ -18,7 +18,7 @@ $sql = "SELECT users.*, employees.*, `term`.*, hires.*, profiles.*, accounts.nam
         LEFT JOIN profiles on profiles.idprofiles = hires.id_profile 
         LEFT JOIN users ON users.idUser = employees.reporter 
         LEFT JOIN accounts ON accounts.idaccounts = employees.id_account 
-        WHERE employees.id_account in(SELECT idaccounts FROM accounts WHERE id_client != 2) AND `employees`.`job` = 'Representante de Servicio al Cliente';";
+        WHERE employees.id_account in(SELECT idaccounts FROM accounts WHERE id_client != 2) AND (`employees`.`job` = 'Representante de Servicio al Cliente' OR `employees`.`job` = 'Supervisor De Operaciones');";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("Site", "Onsite Employee/Remote Employee", "Company Name", "Business Class", "Industry", "Department", "Work Category", "Employee Number", "Employee First Name", "Employee Last Name", "Employee Status", "Employment Status Reason", "Gender Code (M/F)", "Gross Pay (Annual)", "Org Hire Date", "Hire Date", "Termination Date", "Job Title", "Pay Group", "Pay Class", "Pay Type", "Supervisor Name"));
@@ -34,20 +34,26 @@ if($result = mysqli_query($con,$sql)){
         $exportRow[8]=$row['nearsol_id'];
         $exportRow[9]=$row['first_name'];
         $exportRow[10]=$row['first_lastname'];
-        if($row['state'] == 'EMPLOYEE'){
+        if($row['active'] == '1'){
             $exportRow[11]="Active";
         }else{
             $exportRow[11]="Inactive";
         }
-        if($row['kind'] == "Despido"){
-            $exportRow[12]="Dismissal";
+        if($row['active']!='1'){
+            if($row['kind'] == "Despido"){
+                $exportRow[12]="Dismissal";
+            }else{
+                $exportRow[12]="Quit";
+            }
         }else{
-            $exportRow[12]="Quit";
+            $exportRow[12] = '';
         }
-        if($row['gender'] == 'Masculino'){
-            $exportRow[13]="Male";
+        if($row['gender'] == 'Masculino' || $row['gender'] == 'Male'){
+            $exportRow[13]="M";
+        }else if($row['gender'] == 'Femenino' || $row['gender'] == 'Female'){
+            $exportRow[13]="F";
         }else{
-            $exportRow[13]="Female";
+            $exportRow[13] = '';
         }
         $exportRow[14]=((float)($row['base_payment'])+(float)($row['productivity_payment']))*12;
         $exportRow[15]=$row['hiring_date'];

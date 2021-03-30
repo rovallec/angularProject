@@ -1089,7 +1089,7 @@ export class HrprofilesComponent implements OnInit {
                 let period: periods = new periods;
                 py.id_employee = this.activeEmp;
                 if (!isNullOrUndefined(p_methods)) {
-                  py.id_period = p[0].idperiods;
+                  py.id_period = p[p.length-1].idperiods;
                   p_methods.forEach(payment_method => {
                     if (payment_method.predeterm == '1') {
                       py.id_paymentmethod = payment_method.idpayment_methods;

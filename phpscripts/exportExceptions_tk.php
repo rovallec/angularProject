@@ -5,6 +5,8 @@ header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="' . "hr_exceptions.csv" . '"');
 require 'database.php';
 
+echo "\xEF\xBB\xBF";
+
 $start = $_GET['start'];
 $end = $_GET['end'];
 $exportRow = [];

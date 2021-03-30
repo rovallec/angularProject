@@ -54,6 +54,7 @@ export class ClosingTkComponent implements OnInit {
   fileWait: boolean;
   adjustments: attendences_adjustment[] = [];
   printing: boolean = false;
+  isSearching:boolean = false;
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
@@ -125,6 +126,7 @@ export class ClosingTkComponent implements OnInit {
   }
 
   setAccount(acc: accounts) {
+    this.isSearching = false;
     this.selectedAccount = acc;
     this.apiServices.getPayroll_resume({ id_account: this.selectedAccount.idaccounts, id_period: this.actualPeriod.idperiods }).subscribe((p: payroll_resume[]) => {
       this.resumes = p;
@@ -159,11 +161,28 @@ export class ClosingTkComponent implements OnInit {
           let py: payments[] = [];
           if (!this.close_period) {
             pys.forEach(p => {
+              if(!this.isSearching){
               if (p.account == this.selectedAccount.idaccounts && isNullOrUndefined(p.id_account_py)) {
                 py.push(p);
               } else if (p.id_account_py == this.selectedAccount.idaccounts) {
                 py.push(p);
               }
+            }else{
+              this.selectedAccount = new accounts;
+              if(this.searchFilter == 'name'){
+                if(p.employee_name.toUpperCase().includes(this.searchValue.toUpperCase())){
+                  py.push(p);
+                }
+              }else if(this.searchFilter == 'client_id'){
+                if(p.client_id.toUpperCase().includes(this.searchValue.toUpperCase())){
+                  py.push(p);
+                }
+              }else if(this.searchFilter == 'nearsol_id'){
+                if(p.nearsol_id.toUpperCase().includes(this.searchValue.toUpperCase())){
+                  py.push(p);
+                }
+              }
+            }
             })
           } else {
             py = pys;
@@ -409,10 +428,9 @@ export class ClosingTkComponent implements OnInit {
                                   }
                                 }
 
-                                if (!isNullOrUndefined(trm.valid_from) && worked_days > 0 && discounted_days > 0) {
+                                if (!isNullOrUndefined(trm.valid_from) && worked_days == 0 && discounted_days > 0) {
                                   if (new Date(trm.valid_from).getTime() > new Date(this.actualPeriod.start).getTime()) {
-                                    sevenths = sevenths + ((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24) - (non_show_sequence + days_off + janp_sequence + trm_count)) - worked_days;
-                                    console.log(sevenths + "|" + new Date(trm.valid_from).getTime() + "|" + new Date(this.actualPeriod.start).getTime());
+                                    sevenths = (((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24)) - (ns_count + janp_sequence));
                                   }
                                 } else if(isNullOrUndefined(trm.valid_from)){
                                   if (discounted_days + sevenths > att.length) {
@@ -500,12 +518,20 @@ export class ClosingTkComponent implements OnInit {
                                 payroll_value.seventh = sevenths.toString();
 
                                 if (!this.close_period) {
+                                  if(!this.isSearching){
                                   if (payroll_value.id_account == this.selectedAccount.idaccounts) {
                                     this.payroll_values.push(payroll_value);
                                     att.forEach(attendance => {
                                       this.save_attendances.push(attendance);
                                     });
                                   }
+                                }else{
+                                  payroll_value.account_name = pay.account;
+                                  this.payroll_values.push(payroll_value);
+                                  att.forEach(attendance=>{
+                                    this.save_attendances.push(attendance);
+                                  })
+                                }
                                 } else {
                                   this.payroll_values.push(payroll_value);
                                   att.forEach(attendance => {
@@ -609,7 +635,7 @@ export class ClosingTkComponent implements OnInit {
                 })
               })
             })
-            if (pay.account == this.selectedAccount.idaccounts) {
+            if (pay.account == this.selectedAccount.idaccounts || pay.id_account_py == this.selectedAccount.idaccounts) {
               cnt = cnt + 1;
             }
           })
@@ -708,7 +734,8 @@ export class ClosingTkComponent implements OnInit {
   }
 
   searchNow() {
-
+    this.isSearching = true;
+    this.setPayments();
   }
 
   setFile(event: any) {
