@@ -798,11 +798,15 @@ getFormerEmployer() {
 }
 
 insertFormerEmployer(any: any) {
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insetFormerEmployer.php`, any);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertFormerEmployer.php`, any);
 }
 
 updateFormerEmployer(any: any) {
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateFormerEmployer.php`, any);
+}
+
+deleteFormerEmployer(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteFormerEmployer.php`, any);
 }
 
 

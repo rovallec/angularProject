@@ -12,20 +12,13 @@ $aguinaldo = ($request->aguinaldo);
 $bono14 = ($request->bono14);
 $igss = ($request->igss);
 $taxpendingpayment = ($request->taxpendingpayment);
-$id_employee = ($request->id_employee);
 
+$sql = "INSERT INTO `formeremployer` VALUES (NULL, $id_employee, '$idemnization', '$aguinaldo', '$bono14', '$igss', '$taxpendingpayment');";
 
-$sql = "UPDATE formeremployer SET 
-        idemnization = '$idemnization',
-        aguinaldo = '$aguinaldo',
-        bono14 = '$bono14',
-        igss = '$igss',
-        taxpendingpayment = '$taxpendingpayment'
-        WHERE id_employee = $id_employee";
-
-if(mysqli_query($con,$sql)){
-  echo(mysqli_insert_id($con));
-} else {
-  echo($sql);
+if(mysqli_query($con, $sql)){
+  http_response_code(200);
+}else{
+  http_response_code(400);
+  echo(json_encode($sql));
 }
 ?>

@@ -1553,6 +1553,29 @@ export class full_profiles {
     }
 }
 
+export class formerEmployer {
+    idformer_employes: string;
+    id_employee: string;
+    name: string;
+    idemnization: string;
+    aguinaldo: string;
+    bono14: string;
+    igss: string;
+    taxpendingpayment: string;
+    state: string;
+    constructor() {
+        this.idformer_employes = null;
+        this.id_employee = null;
+        this.name = null;
+        this.idemnization = null;
+        this.aguinaldo = null;
+        this.bono14 = null;
+        this.igss = null;
+        this.taxpendingpayment = null;
+        this.state = null;
+    }
+}
+
 export class ids_profiles {
     id_profile: string;
     id_hire: string;
@@ -1565,22 +1588,4 @@ export class ids_profiles {
     idprocess_details: string;
     idinternal_processes: string;
     idservices: string;
-}
-
-export class formerEmployer {
-    id_profile: string;
-    name: string;
-    idemnization: string;
-    aguinaldo: string;
-    bono14: string;
-    igss: string;
-    taxPendingPayment: string;
-    constructor() {
-        this.id_profile = null;
-        this.idemnization = null;
-        this.aguinaldo = null;
-        this.bono14 = null;
-        this.igss = null;
-        this.taxPendingPayment = null;
-    }
 }
