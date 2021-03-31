@@ -77,7 +77,11 @@
                                             <i class="fas fa-vote-yea" style="margin-left:5px; cursor: pointer;"
                                                 *ngIf="wave.show === '1' && edit_bank" (click)="completeWave()"></i>
                                             <i class="fas fa-edit" (click)="editW(wave);" *ngIf="wave.show === '0' && !edit_bank"
-                                            style="margin-left:5px; cursor: pointer;"></i>
+                                                style="margin-left:5px; cursor: pointer;"></i>
+                                            <i class="fas fa-user-tie" (click)="showFormerEmployer();" *ngIf="wave.show === '1' && stateFormerEmployer=='Browser' || !isformerEmployer"
+                                                style="margin-left:5px; cursor: pointer;"></i>
+                                            <i class="fas fa-user-times" (click)="cancelFormerEmployer();" *ngIf="wave.show === '1' && stateFormerEmployer!='Browser' || isformerEmployer"
+                                                style="margin-left:5px; cursor: pointer;"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -90,7 +94,6 @@
                                     <thead>
                                         <th>ID</th>
                                         <th>NEARSOL ID</th>
-                                        <th>REPORT TO</th>
                                         <th>NAME</th>
                                         <th>STATUS</th>
                                         <th>BANK</th>
@@ -100,7 +103,6 @@
                                         <tr *ngFor="let hr of hires">
                                             <td>{{hr.idhires}}</td>
                                             <td>{{hr.nearsol_id}}</td>
-                                            <td>{{hr.reports_to}}</td>
                                             <td>{{hr.first_name}} {{hr.second_name}} {{hr.first_lastname}}
                                                 {{hr.second_lastname}}</td>
                                             <td>{{hr.status}}</td>
@@ -113,21 +115,72 @@
                                     <thead>
                                         <th>ID</th>
                                         <th>NEARSOL ID</th>
-                                        <th>REPORT TO</th>
                                         <th>NAME</th>
                                         <th>STATUS</th>
+                                        <th>BANK</th>
                                         <th>ACCOUNT</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let hr of hires">
                                             <td>{{hr.idhires}}</td>
                                             <td>{{hr.nearsol_id}}</td>
-                                            <td>{{hr.reports_to}}</td>
                                             <td>{{hr.first_name}} {{hr.second_name}} {{hr.first_lastname}}
                                                 {{hr.second_lastname}}</td>
                                             <td>{{hr.status}}</td>
                                             <td><input type="text" class="form-control" [(ngModel)]="hr.bank" [disabled]="hr.bool"></td>
                                             <td><input type="text" class="form-control" [(ngModel)]="hr.account" [disabled]="hr.bool"></td>
+                                        </tr>                                        
+                                    </tbody>
+                                </table>                                
+                            </td>
+                        </tr>
+                        <tr style="width:100%;margin-top:10px" *ngIf="wave.show === '1' && isformerEmployer">
+                            <td>
+                                <table class="table table-striped table-hover" style="width:100%;margin-top:10px">
+                                    <thead>
+                                        <th>ID</th>
+                                        <th>NAME</th>
+                                        <th>IDEMNIZACIÓN</th>
+                                        <th>AGUINALDO</th>
+                                        <th>BONO14</th>
+                                        <th>IGSS</th>
+                                        <th>TAX PENDING PAYMENT
+                                            <i class="fas fa-user-edit" (click)="editFormerEmployer();" *ngIf="wave.show === '1' && stateFormerEmployer=='Browser'"
+                                                style="margin-left:5px; cursor: pointer;"></i>
+                                            <i class="fas fa-user-check" (click)="saveFormerEmployer();" *ngIf="wave.show === '1' && stateFormerEmployer!='Browser'"
+                                                style="margin-left:5px; cursor: pointer;"></i>
+                                        </th>
+                                    </thead>
+                                    <tbody *ngIf="stateFormerEmployer=='Browser'">
+                                        <tr *ngFor="let fe of waveFormerEmployer">
+                                            <td> {{ fe.id_employee }} </td>
+                                            <td> {{ fe.name }} </td>
+                                            <td> {{ fe.idemnization }} </td>
+                                            <td> {{ fe.aguinaldo }} </td>
+                                            <td> {{ fe.bono14 }} </td>
+                                            <td> {{ fe.igss }} </td>
+                                            <td> {{ fe.taxpendingpayment }} </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="stateFormerEmployer!='Browser'">
+                                        <tr *ngFor="let fe of waveFormerEmployer">
+                                            <td>{{ fe.id_employee }}</td>
+                                            <td>{{ fe.name }}</td>
+                                            <td> 
+                                                <input type="text" class="form-control" [(ngModel)]="fe.idemnization" [disabled]="stateFormerEmployer=='Browser'">
+                                            </td>
+                                            <td> 
+                                                <input type="text" class="form-control" [(ngModel)]="fe.aguinaldo" [disabled]="stateFormerEmployer=='Browser'">
+                                            </td>
+                                            <td> 
+                                                <input type="text" class="form-control" [(ngModel)]="fe.bono14" [disabled]="stateFormerEmployer=='Browser'">
+                                            </td>
+                                            <td> 
+                                                <input type="text" class="form-control" [(ngModel)]="fe.igss" [disabled]="stateFormerEmployer=='Browser'">
+                                            </td>
+                                            <td> 
+                                                <input type="text" class="form-control" [(ngModel)]="fe.taxpendingpayment" [disabled]="stateFormerEmployer=='Browser'">
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

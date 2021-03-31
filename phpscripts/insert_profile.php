@@ -18,6 +18,12 @@ $idprocess_details='';
 $idinternal_processes='';
 $idservices='';
 
+function strReplace($Astring) : string {
+  $Astring = String($Astring).toUpperCase().trim();
+  $caracters = ['-', '_', '.', ' '];
+  $Astring = str_replace($caracters, '', $Astring);
+  return $Astring;
+}
 
 $postdata = file_get_contents("php://input");
 if(isset($postdata) && !empty($postdata)){	
@@ -30,10 +36,10 @@ if(isset($postdata) && !empty($postdata)){
   $day_of_birthday = formatDates($request->day_of_birth);
   $nationality = ($request->nationality);
   $marital_status = ($request->marital_status);
-  $dpi = ($request->dpi);
-  $nit = ($request->nit);
-  $igss = ($request->igss);
-  $irtra = ($request->irtra);
+  $dpi = strReplace($request->dpi);
+  $nit = strReplace($request->nit);
+  $igss = strReplace($request->igss);
+  $irtra = strReplace($request->irtra);
   $bank = ($request->bank);
   $account = ($request->account);
   $account_type = ($request->account_type);
@@ -172,9 +178,7 @@ if(isset($postdata) && !empty($postdata)){
                           if(mysqli_query($con, $sql11))
                           {
                             $idservices = mysqli_insert_id($con);
-                            //mysqli_commit($con);
                           }else{
-                            //mysqli_rollback($con);
                             $error = mysqli_error($con);
                             echo($sql11);
                             throw new Exception($error);
@@ -236,7 +240,6 @@ if(isset($postdata) && !empty($postdata)){
     echo('Error: ' . $e->getMessage() . "\n");
   }
 }  
-
 
 //$data = "{id_profile: $id_profile, id_hire: $id_hire, id_employees: $id_employees, idemergency_Details: $idemergency_Details, idmedical_details: $idmedical_details, ideducation_details: $ideducation_details, id_process: $id_process, idmarketing_details: $idmarketing_details, idprocess_details: $idprocess_details, idinternal_processes: $idinternal_processes, idservices: $idservices}";
 $data = [$id_profile, $id_hire, $id_employees, $idemergency_Details, $idmedical_details, $ideducation_details, $id_process, $idmarketing_details, $idprocess_details, $idinternal_processes, $idservices];

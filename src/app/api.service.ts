@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -812,6 +812,24 @@ insertcontact(any: any) {
 insertjobhistory(any: any) {
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/create_job_history.php`, any);
 }
+
+getFormerEmployer() {
+  return this.httpClient.get<formerEmployer[]>(`${this.PHP_API_SERVER}/phpscripts/getFormerEmployer.php`);
+}
+
+insertFormerEmployer(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertFormerEmployer.php`, any);
+}
+
+updateFormerEmployer(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateFormerEmployer.php`, any);
+}
+
+deleteFormerEmployer(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteFormerEmployer.php`, any);
+}
+
+
 
   constructor(private httpClient:HttpClient) { }
 }
