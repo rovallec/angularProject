@@ -474,7 +474,9 @@ export class ClosingTkComponent implements OnInit {
                                 rs.id_period = this.actualPeriod.idperiods;
                                 rs.id_employee = emp[0].idemployees;
                                 rs.name = emp[0].name;
-                                this.resumes.push(rs);
+                                if (!isNullOrUndefined(rs)) {
+                                  this.resumes.push(rs);
+                                }
                                 payroll_value.client_id = pay.client_id;
                                 payroll_value.discounted_days = discounted_days.toString();
                                 payroll_value.discounted_hours = discounted_hours.toString();
@@ -592,10 +594,20 @@ export class ClosingTkComponent implements OnInit {
                                                         this.resumes = [];
                                                         this.apiServices.getPayroll_resume({ id_period: this.actualPeriod.idperiods, id_account: this.selectedAccount.idaccounts }).subscribe((pr: payroll_resume[]) => {
                                                           /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
-                                                          this.resumes = pr;
-                                                          window.alert("Process Completed");
-                                                          this.isLoading = false;
-                                                          this.finished = true;
+                                                          this.apiServices.setCompleted(this.actualPeriod).subscribe((str: string) => {
+                                                            if (String(str).split("|")[0]=='Info:') {
+                                                              window.alert(String(str).split("|")[0]);
+                                                            }
+                                                            else {
+                                                              window.alert( String(str).split("|")[0] + "\n" + 
+                                                                            String(str).split("|")[1] + "\n" + 
+                                                                            String(str).split("|")[2]);
+                                                            }
+                                                            this.resumes = pr;
+                                                            window.alert("Process Completed");
+                                                            this.isLoading = false;
+                                                            this.finished = true;
+                                                          })
                                                         })
                                                       } else {
                                                         window.alert("Error on insert " + str.split("|")[1]);
