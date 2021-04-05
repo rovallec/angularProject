@@ -185,7 +185,7 @@ FROM
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
-			(SELECT @rowd:=-1) r
+			(SELECT @rowd:=-1)
 		) sequence
 		where date_add('$start', interval `row` day) <= '$end'
     ) AS `dt` ON `dt`.`dates` = suspensions.day_1 OR `dt`.`dates` = suspensions.day_2 OR `dt`.`dates` = suspensions.day_3 OR `dt`.`dates` = suspensions.day_4
