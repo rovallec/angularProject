@@ -5,9 +5,7 @@ require 'database.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-
 $id_period = ($request->id_period);
-
 $v_start = '1899-01-01';
 $v_end = '1899-01-01';
 $v_end_day = '1899-01-01';
@@ -128,21 +126,7 @@ try {
     echo("<br>Error 8: " . $error . "<br>");
     throw new Exception($error);
   }
-  /*
-  if ($count = 0) {
-    $sql10 =  "INSERT INTO payments (idpayments, id_employee, id_paymentmethod, id_period, credits, debits, date) " .
-              "SELECT NULL, idemployees, idpayment_methods, $v_new_id_period AS ID_PERIOD, '0.00', '0.00', null FROM payment_methods " .
-              "  INNER JOIN employees ON employees.idemployees = payment_methods.id_employee " .
-              "WHERE predeterm = 1 AND active = 1;";
-    if ($transact->query($sql10) === true) {
-      // Proceso ejecutado correctamente, no es necesario hacer nada.
-    } else {
-      $error =  mysqli_error($transact);
-      echo("<br>Error 10: " . $error . "<br>" . $sql10);
-      throw new Exception($error);
-    }
-  }
-  */
+
   $sql13 = "SELECT DISTINCT Z.idhr_processes FROM ( " .
   "  SELECT a.idhr_processes FROM hr_processes a " .
   "    INNER JOIN vacations b ON (a.idhr_processes = b.id_process) " .
@@ -199,16 +183,7 @@ try {
     echo("<br>Error 13: " . $error . "<br>");
     throw new Exception($error);
   }
-  /*
-  $sql15 = "UPDATE periods SET STATUS = 0 WHERE idperiods = $id_period;";
-  if ($transact->query($sql15) === true) {
-    // No es necesario hacer nada.
-  } else {
-    $error =  mysqli_error($transact);
-    echo("<br>Error 12: " . $error . "<br>");
-    throw new Exception($error);
-  }
-  */
+
   if(!$result1 || !$result2 || !$result13 )
   {
     $transact->rollback();

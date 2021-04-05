@@ -387,7 +387,6 @@ export class PeriodsComponent implements OnInit {
                             this.global_services.push(service);
                           })
 
-
                           console.log(judicials);
                           judicials.forEach(judicial => {
                             if (Number(judicial.max) == 0 || Number(judicial.max) < (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100)))) {
@@ -403,7 +402,6 @@ export class PeriodsComponent implements OnInit {
                               this.global_judicials.push(judicial);
                             }
                           })
-
 
                           py.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate());
                           py.total = (Number(py.credits) - Number(py.debits)).toFixed(2);
@@ -421,6 +419,17 @@ export class PeriodsComponent implements OnInit {
                             this.importActive = false;
                             this.setAccount_sh(this.selectedAccount);
                           }
+                          this.apiService.setCloseActualPeriods({ id_period: this.period.idperiods }).subscribe((str: string) => {
+                            if (str.split("|")[0] == 'Info:') {
+                              window.alert(str.split("|")[0] + "\n" + str.split("|")[1]);
+                              this.loading = false;
+                              this.start();
+                
+                            } else {
+                              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1] + str.split("|")[2] + "\n" + str.split("|")[3]);
+                              this.loading = false;
+                            }
+                          })
                         })
                       })
                     })

@@ -501,6 +501,10 @@ setClosePeriods(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setClosePeriod.php`, any);
 }
 
+setCloseActualPeriods(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setCloseActualPeriod.php`, any);
+}
+
 setCompleted(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setCompleted.php`, any);
 }
