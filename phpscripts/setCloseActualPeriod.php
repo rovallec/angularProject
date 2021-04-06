@@ -26,6 +26,7 @@ try {
     $day = $row1['day'];
     $month = $row1['month'];
     $year = $row1['year'];
+    $end_day = $row1['end_day'];
 
     if ($day < 16) {
       $day = 16;
@@ -41,14 +42,14 @@ try {
       }
     }    
     $v_start_day = $year . "-" . $month . "-" . $day;
-    $v_end_day = $end_day;    
+    $v_end_day = $end_day;
   } else {
     $error =  mysqli_error($transact);
     echo("<br>Error 1: " . $error . "<br>");
     throw new Exception($error);
   }
 
-  $sql2 =  "SELECT COUNT(start) AS count FROM periods WHERE START = $v_start";
+  $sql2 =  "SELECT COUNT(start) AS count FROM periods WHERE start = $v_start_day AND type_period=0;";
   if ($result2 = $transact->query($sql2)) {
     $row2 = $result2->fetch_assoc();
     $count = $row2['count'];          
@@ -58,21 +59,21 @@ try {
     throw new Exception($error);
   }
   
-  if ($count = 0) {
-    $sql3 =  "INSERT INTO periods (idperiods, start, end, status, tyipe_period) VALUES (NULL, $v_start_day, $v_end_day, 1, 0);";
+  if ($count == 0) {
+    $sql3 =  "INSERT INTO periods (idperiods, start, end, status, type_period) VALUES (NULL, '$v_start_day', '$v_end_day', 1, 0);";
     if ($transact->query($sql3) === true) {
       
-      $lastInsert = $conn->insert_id;
+      $lastInsert = $transact->insert_id;
       $v_new_id_period = $lastInsert;
       
     } else {
       $error =  mysqli_error($transact);
-      echo("<br>Error 2: " . $error . "<br>");
+      echo("<br>Error 3: " . $error . "<br>" . $sql3);
       throw new Exception($error);
     }
   }
 
-  if ($count = 0) {
+  if ($count == 0) {
     $sql10 =  "INSERT INTO payments (idpayments, id_employee, id_paymentmethod, id_period, credits, debits, date) " .
               "SELECT NULL, idemployees, idpayment_methods, $v_new_id_period AS ID_PERIOD, '0.00', '0.00', null FROM payment_methods " .
               "  INNER JOIN employees ON employees.idemployees = payment_methods.id_employee " .
@@ -95,7 +96,7 @@ try {
     throw new Exception($error);
   }
 
-  if(!$result1 || !$result2 || !$result13 )
+  if(!$result1 || !$result2 )
   {
     $transact->rollback();
   } else {
