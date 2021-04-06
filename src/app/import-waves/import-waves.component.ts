@@ -207,10 +207,6 @@ export class ImportWavesComponent implements OnInit {
   cancelWave() {
     window.alert('Limpiando...');
     this.start();
-    //let authSrv: AuthServiceService;
-    //let app: AppComponent = new AppComponent(authSrv, this.apiServices);
-    //app.selectedOption=='IMPWAVES';
-    //app.SetSel('IMPWAVES');
   }
 
   setAccount(acc) {
@@ -268,6 +264,7 @@ export class ImportWavesComponent implements OnInit {
     let fileReader = new FileReader();
     let profilef: full_profiles = new full_profiles;
     let count: number = 0;
+    let address: string = '';
     
     this.waves.id_account = this.selectedAccount.idaccounts;
     this.waves.starting_date = fecha.today;
@@ -351,7 +348,9 @@ export class ImportWavesComponent implements OnInit {
             // contact_details            
             profilef.contact_detail.primary_phone = this.corrigeDatos(this.validateEmptyStr(element['primary_phone']));
             profilef.contact_detail.secondary_phone = this.corrigeDatos(this.validateEmptyStr(element['secondary_phone']));
-            profilef.contact_detail.address = this.validateEmptyStr(element['address']);
+            address = this.validateEmptyStr(element['first line']) + ', ' + this.validateEmptyStr(element['district'])
+                      + ', Zone: ' + this.validateEmptyStr(element['zone']);
+            profilef.contact_detail.address = address;
             profilef.contact_detail.city = this.validateEmptyStr(element['city']);
             profilef.contact_detail.email = this.validateEmptyStr(element['email']);
             // emergency_details

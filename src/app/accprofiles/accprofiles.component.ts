@@ -127,7 +127,7 @@ export class AccprofilesComponent implements OnInit {
 
       this.apiService.getPayments(peridos).subscribe((pym: payments[]) => {
         this.payments = pym;
-        this.active_payment = pym[0];
+        this.active_payment = pym[pym.length -1];
         this.setPayment();
       });
 
