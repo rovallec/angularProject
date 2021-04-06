@@ -885,7 +885,7 @@ export class HrprofilesComponent implements OnInit {
         this.actuallProc.descritpion = null;
         break;
       case 'Advance':
-          this.actualAdvance = null;
+          this.actualAdvance = new advances;
           this.actuallProc.status = 'PENDING';
           break;
       case 'Rise':
