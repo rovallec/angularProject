@@ -596,7 +596,7 @@ export class ClosingTkComponent implements OnInit {
                                                           /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
                                                           this.apiServices.setCompleted(this.actualPeriod).subscribe((str: string) => {
                                                             if (String(str).split("|")[0]=='Info:') {
-                                                              window.alert(String(str).split("|")[0]);
+                                                              window.alert(String(str).split("|")[1]);
                                                             }
                                                             else {
                                                               window.alert( String(str).split("|")[0] + "\n" + 
