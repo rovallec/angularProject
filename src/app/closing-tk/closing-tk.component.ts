@@ -1,6 +1,6 @@
 import { isNull, TypeModifier } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined, isNumber } from 'util';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
 import * as XLSX from 'xlsx';
@@ -259,6 +259,11 @@ export class ClosingTkComponent implements OnInit {
                                   activeVacation = false;
                                   activeLeave = false;
                                   activeSuspension = false;
+                                  if(isNullOrUndefined(pay.id_account_py)){
+                                    attendance.id_wave = emp[0].id_account;
+                                  }else{
+                                    attendance.id_wave = pay.id_account_py;
+                                  }
 
                                   if (!isNullOrUndefined(trm.valid_from)) {
                                     if (new Date(trm.valid_from).getTime() <= new Date(attendance.date).getTime()) {
@@ -559,7 +564,7 @@ export class ClosingTkComponent implements OnInit {
                                           let paid_attendances_insert: paid_attendances[] = [];
                                           this.save_attendances.forEach(att_close => {
                                             py_close.forEach(payroll_value_close => {
-                                              if (payroll_value_close.id_employee == att_close.id_employee) {
+                                              if (payroll_value_close.id_employee == att_close.id_employee && payroll_value_close.id_account == att_close.id_wave) {
                                                 let paid_attendance: paid_attendances = new paid_attendances;
                                                 paid_attendance.date = att_close.date;
                                                 paid_attendance.id_payroll_value = payroll_value_close.idpayroll_values;

@@ -16,7 +16,7 @@ if($start != 'explicit'){
     $sql = "SELECT paid_attendances.id_payroll_value AS `pv`, paid_attendances.*, payroll_values.* 
             FROM paid_attendances INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value WHERE id_period = $id";
 }else{
-    $sql = "SELECT * FROM paid_attendances 
+    $sql = "SELECT paid_attendances.id_payroll_value AS `pv`, paid_attendances.*, payroll_values.* FROM paid_attendances 
             INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value 
             WHERE id_employee = $id AND paid_attendances.date BETWEEN $end";
 }
