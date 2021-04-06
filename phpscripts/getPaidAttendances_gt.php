@@ -23,7 +23,7 @@ if($start != 'explicit'){
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
-        $res[$i]['id_payroll_value'] = $row['id_payroll_value'];
+        $res[$i]['id_payroll_value'] = $row['pv'];
         $res[$i]['date'] = $row['date'];
         $res[$i]['scheduled'] = $row['scheduled'];
         $res[$i]['worked'] = $row['worked'];
