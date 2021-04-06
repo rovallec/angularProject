@@ -13,7 +13,8 @@ $end = ($request->end);
 $res = [];
 $i = 0;
 if($start != 'explicit'){
-    $sql = "SELECT * FROM paid_attendances INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value WHERE id_period = $id";
+    $sql = "SELECT paid_attendances.id_payroll_value AS `pv`, paid_attendances.*, payroll_values.* 
+            FROM paid_attendances INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value WHERE id_period = $id";
 }else{
     $sql = "SELECT * FROM paid_attendances 
             INNER JOIN payroll_values ON payroll_values.idpayroll_values = paid_attendances.id_payroll_value 
