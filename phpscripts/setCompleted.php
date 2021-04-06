@@ -5,7 +5,7 @@ require 'database.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-$id_period = ($request->id_period);
+$id_period = ($request->idperiods);
 $v_start = '1899-01-01';
 $v_end = '1899-01-01';
 $v_end_day = '1899-01-01';
@@ -72,7 +72,7 @@ try {
       
       $sql6 = "UPDATE hr_processes SET " .
               "status = 'COMPLETED', " .
-              "notes = CONCAT( 'CLOSED ON END OF PERIOD','$v_end' , '| ', notes), " .
+              "notes = CONCAT( 'CLOSED AT END OF PERIOD','$v_end' , '| ', notes), " .
               "id_period = $id_period " .
               "WHERE idhr_processes = $v_id_process; ";   
       $sql7 = "UPDATE attendence_adjustemnt SET  " .
@@ -109,7 +109,7 @@ try {
       $id_process = $row8['idhr_processes'];
       $v_id_process = $id_process;
       $sql9 = "UPDATE hr_processes SET " .
-              "status = 'COMPLETED', notes = CONCAT( 'CLOSED ON END OF PERIOD' ,' | ', notes), " .
+              "status = 'COMPLETED', notes = CONCAT( 'CLOSED AT END OF PERIOD' ,' | ', notes), " .
               "id_period = $id_period " .
               "WHERE idhr_processes = $v_id_process;";
 
@@ -168,7 +168,7 @@ try {
     while($row13 = $result13->fetch_assoc()){
       $idhr_processes = $row13['idhr_processes'];
 
-      $sql14 = "UPDATE `hr_processes` SET `status` = 'COMPLETED', `notes` = CONCAT( 'CLOSED ON END OF PERIOD' ,' | ', `notes`), id_period = $id_period WHERE `hr_processes`.`idhr_processes` = $idhr_processes;";
+      $sql14 = "UPDATE `hr_processes` SET `status` = 'COMPLETED', `notes` = CONCAT( 'CLOSED AT END OF PERIOD' ,' | ', `notes`), id_period = $id_period WHERE `hr_processes`.`idhr_processes` = $idhr_processes;";
       if ($transact->query($sql14) === true) {        
         // No es necesario hacer nada.
         
