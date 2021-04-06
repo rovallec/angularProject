@@ -186,7 +186,7 @@ export class ImportWavesComponent implements OnInit {
               })
               i++;
               if ((i>=this.fullprofiles.length) && (error==false)) {
-                console.log("Perfiles creados.");
+                window.alert("Profiles successfuly created");
               }
             })
           })

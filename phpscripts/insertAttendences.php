@@ -64,8 +64,6 @@
                         $att[$i]['date'] = $row['date'];
                         $att[$i]['worked_time'] = $row['worked_time'];
                         $att[$i]['scheduled'] = $row['scheduled'];
-                        $att[$i]['day_off1'] = explode(",", $row['days_off'])[0];
-                        $att[$i]['day_off2'] = explode(",", $row['days_off'])[1];
                         $att[$i]['status'] = $row['status'];
                         $i++;
                     }

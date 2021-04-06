@@ -217,7 +217,6 @@ export class PeriodsComponent implements OnInit {
                             py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh)).toFixed(2);
                             if (new Date(trm.valid_from).getTime() <= new Date(this.period.start).getTime()) {
                               py.days = '0';
-                              console.log(emp[0].nearsol_id);
                             }
                           }
 
@@ -234,12 +233,12 @@ export class PeriodsComponent implements OnInit {
                           }
 
                           if (new Date(emp[0].hiring_date).getTime() > new Date(this.period.start).getTime()) {
-                            py.days = (Number(py.days) - ((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24))).toFixed(2);
+                            py.days = (Number(py.days) - ((new Date(this.period.end).getTime() - new Date(emp[0].hiring_date).getTime()) / (1000*3600*24))).toFixed(2);
                           }
 
 
                           if (!isNullOrUndefined(trns)) {
-                            if (new Date(trns.date).getTime() >= new Date(this.period.start).getTime()) {
+                            if (new Date(trns.date).getTime() >= new Date(this.period.start).getTime() && new Date(trns.date) <= new Date(this.period.end)) {
                               if (payroll_value.id_account == emp[0].id_account) {
                                 py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(trns.date).getTime() - (new Date(this.period.start).getTime()))) / (1000 * 3600 * 24))).toFixed(2);
                               } else {
@@ -386,8 +385,7 @@ export class PeriodsComponent implements OnInit {
                             }
                             this.global_services.push(service);
                           })
-
-                          console.log(judicials);
+                          
                           judicials.forEach(judicial => {
                             if (Number(judicial.max) == 0 || Number(judicial.max) < (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100)))) {
                               judicial.current = (Number(judicial.current) + (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))).toFixed(2);
@@ -635,7 +633,6 @@ export class PeriodsComponent implements OnInit {
           ws++;
         })
         let count: number = 0;
-        console.log(partial_credits);
         this.apiService.getPayments(provitional_period).subscribe((paymnts: payments[]) => {
           partial_credits.forEach(ele => {
             this.apiService.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits }).subscribe((emp: employees[]) => {

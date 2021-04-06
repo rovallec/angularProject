@@ -1538,7 +1538,7 @@
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
                                 <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="!newProcess">
+                                    [disabled]="!newProcess" [min]="minDate" [max]="maxDate">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
