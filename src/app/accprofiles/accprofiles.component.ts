@@ -581,8 +581,11 @@ export class AccprofilesComponent implements OnInit {
   }
 
   selectedCredit(event) {
+    let val: string = "," + event.target.value;
     if (event.target.checked) {
-      this.setAcreditCredits = this.setAcreditCredits + "," + event.target.value;
+      this.setAcreditCredits = this.setAcreditCredits + val;
+    } else {
+      this.setAcreditCredits.replace(val, '');
     }
     this.acrediting = true;
   }
