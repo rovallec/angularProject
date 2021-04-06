@@ -259,11 +259,6 @@ export class ClosingTkComponent implements OnInit {
                                   activeVacation = false;
                                   activeLeave = false;
                                   activeSuspension = false;
-                                  if(isNullOrUndefined(pay.id_account_py)){
-                                    attendance.id_wave = emp[0].id_account;
-                                  }else{
-                                    attendance.id_wave = pay.id_account_py;
-                                  }
 
                                   if (!isNullOrUndefined(trm.valid_from)) {
                                     if (new Date(trm.valid_from).getTime() <= new Date(attendance.date).getTime()) {
@@ -424,6 +419,15 @@ export class ClosingTkComponent implements OnInit {
                                   } else if (valid_transfer) {
                                     attendance.balance = "TRANSFER";
                                   }
+
+                                  if(isNullOrUndefined(pay.id_account_py)){
+                                    console.log(attendance);
+                                    attendance.id_wave = emp[0].id_account;
+                                  }else{
+                                    console.log(attendance);
+                                    attendance.id_wave = pay.id_account_py;
+                                  }
+
                                 })
                                 if (valid_trm) {
                                   if (ult_seventh) {
