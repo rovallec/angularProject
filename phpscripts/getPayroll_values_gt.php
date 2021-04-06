@@ -11,7 +11,7 @@ $id = ($request->idperiods);
 $res = [];
 $i = 0;
 
-$sql = "SELECT * FROM payroll_values
+$sql = "SELECT payroll_values.id_account AS `acc`, employees.*, hires.*, profiles.*, accounts.* FROM payroll_values
     INNER JOIN employees ON employees.idemployees = payroll_values.id_employee
     INNER JOIN hires ON hires.idhires = employees.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
@@ -23,7 +23,7 @@ if($result = mysqli_query($con, $sql)){
         $res[$i]['idpayroll_values'] = $row['idpayroll_values'];
         $res[$i]['id_employee'] = $row['id_employee'];
         $res[$i]['id_reporter'] = $row['id_reporter'];
-        $res[$i]['id_account'] = $row['id_account'];
+        $res[$i]['id_account'] = $row['acc'];
         $res[$i]['id_period'] = $row['id_period'];
         $res[$i]['id_payment'] = $row['id_payment'];
         $res[$i]['client_id'] = $row['client_id'];
