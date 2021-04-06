@@ -13,8 +13,8 @@ $sql = "UPDATE `judicials` SET `current` = $current WHERE `idjudicials` = $idjud
 
 if(mysqli_query($con,$sql)){
     echo (json_encode("1|"));
-}else{
+} else {
     $r = json_encode("0|" . mysqli_error($con));
-    echo ($r)
+    echo ($r);
 }
 ?>

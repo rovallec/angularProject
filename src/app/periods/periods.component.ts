@@ -387,7 +387,6 @@ export class PeriodsComponent implements OnInit {
                             this.global_services.push(service);
                           })
 
-
                           console.log(judicials);
                           judicials.forEach(judicial => {
                             if (Number(judicial.max) == 0 || Number(judicial.max) < (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100)))) {
@@ -403,7 +402,6 @@ export class PeriodsComponent implements OnInit {
                               this.global_judicials.push(judicial);
                             }
                           })
-
 
                           py.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + (new Date().getDate());
                           py.total = (Number(py.credits) - Number(py.debits)).toFixed(2);
@@ -475,29 +473,57 @@ export class PeriodsComponent implements OnInit {
 
   completePeriod() {
     this.loading = true;
-    this.pushDeductions('credits', this.global_credits);
-    this.pushDeductions('debits', this.global_debits);
-    this.global_services.forEach(service => {
-      if (Number(service.max) === Number(service.current) || service.frecuency == "UNIQUE") {
-        service.status = '0';
-      }
-      this.apiService.updateServices(service).subscribe((str: string) => { });
-    });
-    this.global_judicials.forEach(judicial => {
-      this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
-        if (str_r.split("|")[0] == '0') {
-          window.alert("Error updating Legal Deductions");
+    this.progress = 1;
+    this.working = true;
+    try {
+      this.pushDeductions('credits', this.global_credits);
+      this.pushDeductions('debits', this.global_debits);
+      this.max_progress = this.global_services.length;
+      this.progress = 1;
+      this.working = true;
+      this.global_services.forEach(service => {
+        this.progress = this.progress +1 ;
+        if (Number(service.max) === Number(service.current) || service.frecuency == "UNIQUE") {
+          service.status = '0';
+        }
+        this.apiService.updateServices(service).subscribe((str: string) => { });
+      });
+      this.max_progress = this.global_judicials.length;
+      this.progress = 1;
+      this.global_judicials.forEach(judicial => {
+        this.progress = this.progress +1;
+        this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
+          if (str_r.split("|")[0] == '0') {
+            throw new Error('Error updating Legal Deductions');
+          }
+        })
+      })
+      this.max_progress = this.payments.length;
+      this.progress = 1;
+      this.payments.forEach(py => {
+        this.progress = this.progress +1;
+        this.apiService.setPayment(py).subscribe((str_3: string) => {
+          if (String(str_3).split("|")[0] == "0") {
+            throw new Error('Error updating Payments');
+          }
+        })
+      })
+      this.apiService.setCloseActualPeriods({ id_period: this.period.idperiods }).subscribe((str: string) => {
+        if (str.split("|")[0] == 'Info:') {
+          window.alert(String(str).split("|")[0] + "\n" + String(str).split("|")[1]);
+          this.start();
+        } else {
+          throw new Error(String(str).split("|")[0] + "\n" + String(str).split("|")[1] + String(str).split("|")[2] + "\n" + String(str).split("|")[3]);
         }
       })
-    })
-    this.payments.forEach(py => {
-      this.apiService.setPayment(py).subscribe((str_3: string) => {
-        if (str_3.split("|")[0] == "0") {
-          window.alert("Error updating Payments");
-        }
-      })
-    })
-    this.start();
+    } catch (error) {
+      let e:Error = error;
+      window.alert("An error has occured:\n" + e.message);
+    } finally {
+      this.loading = false;
+      this.working = false;
+      this.progress = 0;
+    }
   }
 
   setPayTime(payment: payments) {
