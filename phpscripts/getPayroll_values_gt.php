@@ -11,7 +11,7 @@ $id = ($request->idperiods);
 $res = [];
 $i = 0;
 
-$sql = "SELECT * FROM payroll_values
+$sql = "SELECT payroll_values.id_account AS `acc`, * FROM payroll_values
     INNER JOIN employees ON employees.idemployees = payroll_values.id_employee
     INNER JOIN hires ON hires.idhires = employees.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
