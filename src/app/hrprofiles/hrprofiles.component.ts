@@ -127,6 +127,10 @@ export class HrprofilesComponent implements OnInit {
   approvals: users[] = [new users];
   motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid'];
 
+  maxDate:string = null;
+  minDate:string = null;
+
+
   reasons: string[] = [
     "Asistencia",
     "Calidad",
@@ -927,6 +931,13 @@ export class HrprofilesComponent implements OnInit {
         })
         break;
       case 'Transfer':
+        if(Number(this.todayDate.split("-")[2]) <= 15){
+          this.minDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-01";
+          this.maxDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-15";
+        }else{
+          this.minDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-16";
+          this.maxDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + new Date(Number(this.todayDate.split('-')[0]), (Number(this.todayDate.split('-')[1]) + 1), 0);
+        }
         this.original_account = this.accId;
         this.accChange = this.accId;
         this.newProcess = true;

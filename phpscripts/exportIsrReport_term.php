@@ -57,7 +57,7 @@ FROM employees
 				WHERE credits.type LIKE '%Aguinaldo Periodo%' GROUP BY id_employee) AS `ag` ON `ag`.id_employee = employees.idemployees
 	LEFT JOIN (SELECT SUM(credits.amount) AS `indemnization`, id_employee
 			    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
-				WHERE credits.type LIKE '%Indemnizacion Periodo%'
+				WHERE credits.type LIKE '%Indemnizacion: Periodo%'
 				GROUP BY id_employee) AS `indemn` ON `indemn`.id_employee = employees.idemployees
 	LEFT JOIN (SELECT SUM(debits.amount) AS `igss_deb`, id_employee
 			    FROM debits INNER JOIN payments on payments.idpayments = debits.id_payment 
