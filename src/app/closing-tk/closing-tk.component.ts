@@ -193,8 +193,8 @@ export class ClosingTkComponent implements OnInit {
             this.step = "Calculating discounts";
             this.payroll_values = [];
             this.apiServices.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
-              this.apiServices.getVacations({ id: emp[0].idemployees }).subscribe((vac: vacations[]) => {
-                this.apiServices.getLeaves({ id: emp[0].idemployees }).subscribe((leave: leaves[]) => {
+              this.apiServices.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
+                this.apiServices.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
                   this.apiServices.getDPAtt({ id: emp[0].idemployees, date_1: this.actualPeriod.start, date_2: this.actualPeriod.end }).subscribe((dp: disciplinary_processes[]) => {
                     this.apiServices.getAttPeriod({ id: emp[0].idemployees, date_1: this.actualPeriod.start, date_2: this.actualPeriod.end }).subscribe((att: attendences[]) => {
                       this.apiServices.getTermdt(emp[0]).subscribe((trm: terminations) => {
