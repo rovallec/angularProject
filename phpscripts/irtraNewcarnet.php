@@ -56,7 +56,7 @@ echo("
                                         Guatemala</td>
                                 </tr>
                                 <tr>
-                                    <td style='text-align: center'>PBX:2423-9000 / 2423-9100</td>
+                                    <td style='text-align: center'>Tel.: 1501 ext.: 321</td>
                                 </tr>
                                 <tr>
                                     <td style='font-size:10px'>e-mail: afiliaciones@irtra.org.gt</td>
