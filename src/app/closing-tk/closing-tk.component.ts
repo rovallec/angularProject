@@ -421,10 +421,9 @@ export class ClosingTkComponent implements OnInit {
                                   }
 
                                   if(isNullOrUndefined(pay.id_account_py)){
-                                    console.log(attendance);
+
                                     attendance.id_wave = emp[0].id_account;
                                   }else{
-                                    console.log(attendance);
                                     attendance.id_wave = pay.id_account_py;
                                   }
 
