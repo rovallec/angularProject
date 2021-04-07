@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
-import { DESTRUCTION } from 'dns';
+import { BADFLAGS, DESTRUCTION } from 'dns';
 import { exit } from 'process';
 import { ViewChild, ElementRef } from '@angular/core';
 import { stringify } from '@angular/compiler/src/util';
@@ -376,6 +376,13 @@ export class ClosingTkComponent implements OnInit {
                                         } else {
                                           if (Number(attendance.worked_time) > 0) {
                                             hld_hours = hld_hours + Number(attendance.worked_time);
+                                            attendance.balance = 'HLD';
+                                          }
+                                          if(attendance.scheduled != "OFF"){
+                                            if(Number(attendance.worked_time) > Number(attendance.scheduled)){
+                                              discounted_hours = discounted_hours + (Number(attendance.worked_time) - Number(attendance.scheduled));
+                                              attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                                            }
                                           }
                                         }
                                       }
