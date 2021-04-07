@@ -398,7 +398,7 @@ export class ClosingTkComponent implements OnInit {
                                         discounted_days = discounted_days + 1
                                       }
 
-                                      if (off_on_week == cnt_days) {
+                                      if (off_on_week == cnt_days && (non_show_sequence >= 1 || janp_sequence >= 1)) {
                                         discounted_days = discounted_days + cnt_days;
                                       }
 
@@ -421,7 +421,6 @@ export class ClosingTkComponent implements OnInit {
                                   }
 
                                   if(isNullOrUndefined(pay.id_account_py)){
-
                                     attendance.id_wave = emp[0].id_account;
                                   }else{
                                     attendance.id_wave = pay.id_account_py;
