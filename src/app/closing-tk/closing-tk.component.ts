@@ -411,8 +411,8 @@ export class ClosingTkComponent implements OnInit {
                                         discounted_days = discounted_days + 1
                                       }
 
-                                      if (off_on_week == cnt_days && (non_show_sequence >= 1 || janp_sequence >= 1)) {
-                                        discounted_days = discounted_days + cnt_days - hld;
+                                      if (off_on_week == cnt_days) {
+                                        discounted_days = discounted_days + cnt_days;
                                       }
 
                                       if ((janp_sequence + non_show_sequence) == 5 && !disc) {
