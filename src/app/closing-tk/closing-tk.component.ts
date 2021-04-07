@@ -240,6 +240,8 @@ export class ClosingTkComponent implements OnInit {
                                 let janp_on_off_2: number = 0;
                                 let carry_seventh: boolean = null;
                                 let trm_count: number = 0;
+                                let hld:number= 0;
+                                let hldT:number= 0;
 
                                 if (pay.last_seventh == '1') {
                                   non_show = true;
@@ -374,14 +376,18 @@ export class ClosingTkComponent implements OnInit {
                                             discounted_days = discounted_days + 1;
                                           }
                                         } else {
-                                          if (Number(attendance.worked_time) > 0) {
-                                            hld_hours = hld_hours + Number(attendance.worked_time);
-                                            attendance.balance = 'HLD';
-                                          }
+                                          hld = hld + 1;
+                                          hldT = hldT + 1;
                                           if(attendance.scheduled != "OFF"){
                                             if(Number(attendance.worked_time) > Number(attendance.scheduled)){
+                                              hld_hours = hld_hours + Number(attendance.scheduled);
                                               discounted_hours = discounted_hours + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                               attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(2);
+                                            }else{
+                                              if (Number(attendance.worked_time) > 0) {
+                                                hld_hours = hld_hours + (Number(attendance.worked_time));
+                                                attendance.balance = 'HLD';
+                                              }
                                             }
                                           }
                                         }
@@ -406,7 +412,7 @@ export class ClosingTkComponent implements OnInit {
                                       }
 
                                       if (off_on_week == cnt_days && (non_show_sequence >= 1 || janp_sequence >= 1)) {
-                                        discounted_days = discounted_days + cnt_days;
+                                        discounted_days = discounted_days + cnt_days - hld;
                                       }
 
                                       if ((janp_sequence + non_show_sequence) == 5 && !disc) {
@@ -418,7 +424,8 @@ export class ClosingTkComponent implements OnInit {
                                       non_show_sequence = 0;
                                       non_show = false;
                                       ult_seventh = 0;
-                                      janp_sequence = 0
+                                      janp_sequence = 0;
+                                      hld = 0;
                                     }
                                   } else if (valid_trm) {
                                     attendance.balance = "TERM";
@@ -444,7 +451,7 @@ export class ClosingTkComponent implements OnInit {
 
                                 if (!isNullOrUndefined(trm.valid_from) && worked_days == 0 && discounted_days > 0) {
                                   if (new Date(trm.valid_from).getTime() > new Date(this.actualPeriod.start).getTime()) {
-                                    sevenths = (((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24)) - (ns_count + janp_sequence));
+                                    sevenths = (((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24)) - (ns_count + janp_sequence + hldT));
                                   }
                                 } else if(isNullOrUndefined(trm.valid_from)){
                                   if (discounted_days + sevenths > att.length) {
