@@ -48,8 +48,8 @@ export class PyhomeComponent implements OnInit {
     let date: Date = new Date();
     let start: string = null;
     let end: string = null;
-    start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + '01';
-    end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString() + "-" + (new Date(date.getFullYear(), date.getMonth() + 2, 0).getDate().toString());
+    start = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString().padStart(2,"0") + "-" + '01';
+    end = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString().padStart(2,"0") + "-" + (new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate().toString());
 
     this.apiService.getOverlaps({ start: start, end: end }).subscribe((emp: employees[]) => {
       this.overlaps = emp;
