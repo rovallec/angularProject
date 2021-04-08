@@ -153,10 +153,10 @@ export class ImportWavesComponent implements OnInit {
               element.id_profile = ids[0];
               element.contact_detail.id_profile = ids[0];
               element.employee.id_profile = ids[0];
-              let i = 0;
+              let j = 0;
               element.job_history.forEach(_job => {
-                element.job_history[i].id_profile = element.id_profile;
-                i++;
+                element.job_history[j].id_profile = element.id_profile;
+                j++;
               })
               this.apiServices.insertProfileDetails(element).subscribe((_str: string) => {
                 this.apiServices.insertcontact(element.contact_detail).subscribe(async (_str: string) => {
@@ -169,7 +169,8 @@ export class ImportWavesComponent implements OnInit {
                         //element.state = "An error has occured:\n" + String(fstr).split("|")[1];
                         error = true;
                         element.state = 'Error';
-                          console.log(String(fstr).split("|")[0]);
+                        element.error_message = String(fstr).split("|")[0];
+                        console.log(String(fstr).split("|")[0]);
                       }
                       this.apiServices.insertjobhistory(element.job_history).subscribe((str: string) => {
                         if (str != '') {
@@ -184,6 +185,7 @@ export class ImportWavesComponent implements OnInit {
                   }
                 })
               })
+              element.state = 'Saved';
               i++;
               if ((i>=this.fullprofiles.length) && (error==false)) {
                 window.alert("Profiles successfuly created");
@@ -264,7 +266,8 @@ export class ImportWavesComponent implements OnInit {
     })
 
     if (isTrue == false) {
-      Aprofile.state =  'The marital status must be entered in Spanish. \n The allowed values ar the following: \n' + 
+      Aprofile.state = 'Error';
+      Aprofile.error_message = 'The marital status must be entered in Spanish. \n The allowed values ar the following: \n' + 
                           'Soltero(a), Casado(a), Viudo(a), Separado(a), Divorciado(a).';
     }
   }
@@ -558,7 +561,8 @@ export class ImportWavesComponent implements OnInit {
     }
     catch (exception) {
       console.log("Ocurrió un Error: " + exception);
-      profilef.state = exception;
+      profilef.state = 'Error';
+      profilef.error_message = exception;
     }
     finally {
       this.isLoading = false;

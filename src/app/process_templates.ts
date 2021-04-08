@@ -1457,6 +1457,7 @@ export class full_profiles {
     //services
     amount: string;
     state: string;
+    error_message: string;
     constructor() {
         this.No = '0';
         this.nearsol_id = '';
@@ -1559,6 +1560,7 @@ export class full_profiles {
         this.id_userpr = null;
         this.amount = null;
         this.state = null;
+        this.error_message = null;
     }
 }
 
