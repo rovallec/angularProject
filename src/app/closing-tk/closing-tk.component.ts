@@ -421,10 +421,8 @@ export class ClosingTkComponent implements OnInit {
                                   }
 
                                   if(isNullOrUndefined(pay.id_account_py)){
-                                    console.log(attendance);
                                     attendance.id_wave = emp[0].id_account;
                                   }else{
-                                    console.log(attendance);
                                     attendance.id_wave = pay.id_account_py;
                                   }
 
@@ -632,14 +630,14 @@ export class ClosingTkComponent implements OnInit {
                                                 })
                                               })
                                             } else {
-                                              window.alert("Please contact your administrator with the following information:\n" + str.split("|")[1]);
+                                              window.alert("1. Please contact your administrator with the following information:\n" + str.split("|")[1]);
                                               this.isLoading = false;
                                               this.finished = true;
                                             }
                                           })
                                         })
                                       } else {
-                                        window.alert("Please contact your administrator with the following information:\n" + str.split("|")[1]);
+                                        window.alert("0. Please contact your administrator with the following information:\n" + str.split("|")[1]);
                                         this.isLoading = false;
                                         this.finished = true;
                                       }

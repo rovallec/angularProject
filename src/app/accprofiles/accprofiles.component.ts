@@ -587,7 +587,7 @@ export class AccprofilesComponent implements OnInit {
     } else {
       this.setAcreditCredits.replace(val, '');
     }
-    this.acrediting = true;
+    this.acrediting = this.setAcreditCredits == '0';
   }
 
   selectedDebit(event) {

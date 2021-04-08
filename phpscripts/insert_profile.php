@@ -19,7 +19,7 @@ $idinternal_processes='';
 $idservices='';
 
 function strReplace($Astring) : string {
-  $Astring = String($Astring).toUpperCase().trim();
+  $Astring = strtoupper(trim($Astring));
   $caracters = ['-', '_', '.', ' '];
   $Astring = str_replace($caracters, '', $Astring);
   return $Astring;

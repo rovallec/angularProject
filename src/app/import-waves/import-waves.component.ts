@@ -224,8 +224,12 @@ export class ImportWavesComponent implements OnInit {
     })
   }
 
-  setReporter(reporters: reporters) {
-    this.actualReporter = reporters;
+  setReporter(AidUser: string) {
+    this.reporters.forEach(rep => {
+      if (rep.idUser == AidUser) {
+        this.actualReporter = rep;
+      }
+    })
   }
 
   validateEmptyStr(Adata: string): string{
@@ -245,15 +249,23 @@ export class ImportWavesComponent implements OnInit {
   }
 
   validateProfile(Aprofile: full_profiles) {
+    let isTrue: boolean = false;
+    let states: string[] = ['SOLTERO', 'SOLTERA', 'CASADO', 'CASADA', 'VIUDO', 'VIUDA', 'SEPARADO', 'SEPARADA', 'DIVORCIADO', 'DIVORCIADA'];
+
     Aprofile.first_name = Aprofile.first_name.toUpperCase();
     Aprofile.second_name = Aprofile.second_name.toUpperCase();
     Aprofile.first_lastname = Aprofile.first_lastname.toUpperCase();
     Aprofile.second_lastname = Aprofile.second_lastname.toUpperCase();
 
-    if (Aprofile.marital_status.toUpperCase() != 'SOLTERO' || 'SOLTERA' || 'CASADO' || 'CASADA' || 'VIUDO' || 'VIUDA' ||
-        'SEPARADO' || 'SEPARADA' || 'DIVORCIADO' || 'DIVORCIADA') {
+    states.forEach(s => {
+      if (Aprofile.marital_status.toUpperCase() == s) {
+        isTrue = true;
+      }
+    })
+
+    if (isTrue == false) {
       Aprofile.state =  'The marital status must be entered in Spanish. \n The allowed values ar the following: \n' + 
-                        'Soltero(a), Casado(a), Viudo(a), Separado(a), Divorciado(a).';
+                          'Soltero(a), Casado(a), Viudo(a), Separado(a), Divorciado(a).';
     }
   }
 
@@ -270,7 +282,7 @@ export class ImportWavesComponent implements OnInit {
     this.waves.starting_date = fecha.today;
     this.waves.end_date = fecha.today;
     this.waves.ops_start = this.date;
-    this.waves.state = '1,1,1,1';
+    this.waves.state = '0,0,0,0';
     // se setean valores default ya que no afecta el salario del empleado. Solo se usa para crear la Wave;
     this.waves.base_payment = '2825.10';
     this.waves.productivity_payment = '2174.90';
@@ -313,7 +325,7 @@ export class ImportWavesComponent implements OnInit {
             }            
             profilef.No = num;
             profilef.wave = this.waves;
-            profilef.state = 'No Loaded';
+            profilef.state = 'Loaded';
             profilef.schedule = this.schedule;
             profilef.nearsol_id = profilef.wave.prefix + profilef.No;            
             // profiles

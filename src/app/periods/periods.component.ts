@@ -470,15 +470,12 @@ export class PeriodsComponent implements OnInit {
   }
 
   completePeriod() {
-    this.loading = true;
     this.progress = 1;
     this.working = true;
+    this.max_progress = this.global_services.length;
     try {
       this.pushDeductions('credits', this.global_credits);
       this.pushDeductions('debits', this.global_debits);
-      this.max_progress = this.global_services.length;
-      this.progress = 1;
-      this.working = true;
       this.global_services.forEach(service => {
         this.progress = this.progress +1 ;
         if (Number(service.max) === Number(service.current) || service.frecuency == "UNIQUE") {
@@ -518,7 +515,6 @@ export class PeriodsComponent implements OnInit {
       let e:Error = error;
       window.alert("An error has occured:\n" + e.message);
     } finally {
-      this.loading = false;
       this.working = false;
       this.progress = 0;
     }
