@@ -35,8 +35,8 @@
     <div class="row col-md-12">
       <div class="col-md-3">
         <label>REPORTER:</label>
-        <select class="form-control" [(ngModel)]="actualReporter.idUser">
-          <option *ngFor="let rep of reporters" [value]="rep.idUser" (click)="setReporter(rep)">
+        <select class="form-control" [(ngModel)]="actualReporter.idUser" (change)="setReporter(actualReporter.idUser)">
+          <option *ngFor="let rep of reporters" [value]="rep.idUser">
             {{ rep.username }}
           </option>
         </select>
@@ -133,13 +133,16 @@
               {{ prof.second_lastname }}
             </td>
             <td>
-              <button class="btn-outline-warning" *ngIf="prof.state=='Error'" disabled="true">
+              <button class="btn-outline-warning" *ngIf="prof.state=='Error'" disabled="true" data-toggle="tooltip"
+                data-placement="top" title="File Error">
                 <i class="fas fa-ban" *ngIf="prof.state=='Error'" ></i>
               </button>
-              <button class="btn-outline-info" *ngIf="prof.state=='Loaded'" disabled="true">
+              <button class="btn-outline-info" *ngIf="prof.state=='Loaded'" disabled="true" data-toggle="tooltip"
+                data-placement="top" title="File Loaded">
                 <i class="fas fa-check-double" *ngIf="prof.state=='Loaded'"></i>
               </button>
-              <button class="btn-outline-success" *ngIf="prof.state=='Saved'" disabled="true">
+              <button class="btn-outline-success" *ngIf="prof.state=='Saved'" disabled="true" data-toggle="tooltip"
+                data-placement="top" title="File Saved">
                 <i class="fas fa-ban" *ngIf="prof.state=='Saved'" ></i>
               </button>
             </td>

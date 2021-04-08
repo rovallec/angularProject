@@ -127,7 +127,7 @@ export class AccprofilesComponent implements OnInit {
 
       this.apiService.getPayments(peridos).subscribe((pym: payments[]) => {
         this.payments = pym;
-        this.active_payment = pym[0];
+        this.active_payment = pym[pym.length -1];
         this.setPayment();
       });
 
@@ -581,10 +581,13 @@ export class AccprofilesComponent implements OnInit {
   }
 
   selectedCredit(event) {
+    let val: string = "," + event.target.value;
     if (event.target.checked) {
-      this.setAcreditCredits = this.setAcreditCredits + "," + event.target.value;
+      this.setAcreditCredits = this.setAcreditCredits + val;
+    } else {
+      this.setAcreditCredits.replace(val, '');
     }
-    this.acrediting = true;
+    this.acrediting = this.setAcreditCredits == '0';
   }
 
   selectedDebit(event) {

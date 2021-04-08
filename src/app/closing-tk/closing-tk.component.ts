@@ -617,7 +617,7 @@ export class ClosingTkComponent implements OnInit {
                                                           /*ASEGURARSE QUE SEIEMPRE ESTE EN FALSE EN CUALQUIERA DE LOS DEMAS CASOS */
                                                           this.apiServices.setCompleted(this.actualPeriod).subscribe((str: string) => {
                                                             if (String(str).split("|")[0]=='Info:') {
-                                                              window.alert(String(str).split("|")[0]);
+                                                              window.alert(String(str).split("|")[1]);
                                                             }
                                                             else {
                                                               window.alert( String(str).split("|")[0] + "\n" + 
@@ -644,14 +644,14 @@ export class ClosingTkComponent implements OnInit {
                                                 })
                                               })
                                             } else {
-                                              window.alert("Please contact your administrator with the following information:\n" + str.split("|")[1]);
+                                              window.alert("1. Please contact your administrator with the following information:\n" + str.split("|")[1]);
                                               this.isLoading = false;
                                               this.finished = true;
                                             }
                                           })
                                         })
                                       } else {
-                                        window.alert("Please contact your administrator with the following information:\n" + str.split("|")[1]);
+                                        window.alert("0. Please contact your administrator with the following information:\n" + str.split("|")[1]);
                                         this.isLoading = false;
                                         this.finished = true;
                                       }

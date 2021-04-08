@@ -3,16 +3,9 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
-/* por el momento no se le envía ningún parámetro.
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata);
-$id = ($request->idprocesses);
-*/
-
-
 $user = [];
 
-$sql = "SELECT idUser, username, signature FROM users WHERE id_role IN(6,7) AND valid = 1;";
+$sql = "SELECT idUser, username, signature FROM users WHERE id_role IN(6,7) AND valid = 1 ORDER BY idUser;";
 
 if($result = mysqli_query($con, $sql)){
     $i = 0;
@@ -25,6 +18,7 @@ if($result = mysqli_query($con, $sql)){
     echo json_encode($user);
 }else{
     http_response_code(404);
+    echo json_encode($sql);
 }
 
 ?>
