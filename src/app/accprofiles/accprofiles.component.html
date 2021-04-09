@@ -90,7 +90,8 @@
                                         <button type="button" class="btn btn-outline-secondary"
                                             style="height: 1.5em; padding-top: 0rem;" data-toggle="modal"
                                             data-target="#advanceModal" (click)="assignAdvance(adv)"
-                                            data-placement="top" title="Aprovee or Dismiss">
+                                            data-placement="top" title="Aprovee or Dismiss"
+                                            [disabled]="adv.status!='PENDING'">
                                             <i class="fas fa-exchange-alt"></i>
                                         </button>
                                     </td>
