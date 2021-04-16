@@ -270,7 +270,7 @@ export class PeriodsComponent implements OnInit {
                           py.id_period = payroll_value.id_period;
                           py.nearsol_id = payroll_value.nearsol_id;
                           py.ot_hours = payroll_value.ot_hours;
-                          py.productivity_complete = emp[0].productivity_payment;
+                          py.productivity_complete = (Number(emp[0].productivity_payment) - 250).toFixed(2);
                           py.productivity_hours = (Number(py.days) * 8).toFixed(2);
                           py.seventh = payroll_value.seventh;
                           py.account = payroll_value.account_name;
@@ -319,8 +319,8 @@ export class PeriodsComponent implements OnInit {
                             this.global_credits.push(ot_credit);
                           }
 
-                          if (Number(holiday_credit.amount) > 0) {
-                            holiday_credit.amount = py.ot;
+                          if (Number(py.holidays) > 0) {
+                            holiday_credit.amount = py.holidays;
                             holiday_credit.idpayments = py.idpayments;
                             holiday_credit.type = "Horas De Asueto: " + py.holidays_hours;
                             this.global_credits.push(holiday_credit);
@@ -544,15 +544,23 @@ export class PeriodsComponent implements OnInit {
             })
 
             cred.forEach(credit => {
+              if(this.period.status == "3"){
               if (credit.status == "PENDING") {
+                this.detailed_credits.push(credit);
+              }
+              }else{
                 this.detailed_credits.push(credit);
               }
             })
 
             deb.forEach(debit => {
+              if(this.period.status == "3"){
               if (debit.status == "PENDING") {
                 this.detailed_debits.push(debit);
               }
+            }else{
+              this.detailed_debits.push(debit);
+            }
             })
 
             this.global_credits.forEach(global_cred => {
