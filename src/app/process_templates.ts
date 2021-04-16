@@ -1457,6 +1457,7 @@ export class full_profiles {
     //services
     amount: string;
     state: string;
+    error_message: string;
     constructor() {
         this.No = '0';
         this.nearsol_id = '';
@@ -1559,6 +1560,7 @@ export class full_profiles {
         this.id_userpr = null;
         this.amount = null;
         this.state = null;
+        this.error_message = null;
     }
 }
 
@@ -1627,4 +1629,40 @@ export class payroll_resume{
         this.insurance = '0';
         this.other_hrs = '0';
     }
+}
+
+export class accountingPolicies {
+    external_id: string;
+    name: string;
+    clasif: string;
+    department: string;
+    class: string;
+    site: string;
+    amount: string;
+    clientNetSuite: string;
+    constructor() {
+        this.external_id = null;
+        this.name = null;
+        this.clasif = null;
+        this.department = null;
+        this.class = null;
+        this.site = null;
+        this.amount = null;
+        this.clientNetSuite = null;
+    }
+}
+
+export class AccountingAccounts {
+    idaccounting_accounts: string;
+    external_id: string;
+    name: string;
+    clasif: string;
+    idperiod: string;
+    constructor() {
+        this.idaccounting_accounts = null;
+        this.external_id = null;
+        this.name = null;
+        this.clasif = null;
+        this.clasif = null;
+    }    
 }

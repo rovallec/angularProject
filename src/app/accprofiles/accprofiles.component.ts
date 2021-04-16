@@ -624,19 +624,25 @@ export class AccprofilesComponent implements OnInit {
           proc.notes = proc.notes + '|' + adv.notes;
         }
         this.apiService.updatehr_process(proc).subscribe((_str: string) => {
-          this.apiService.insertCredits(cred).subscribe((str: string) => {
+          this.apiService.updateAdvances(adv).subscribe((str: string) => {
             if (String(str).split("|")[0] != '0') {
-              cred.iddebits = str;
-              cred.status = adv.status;
-              this.apiService.insertPushedCredit(cred).subscribe((str: string) => {
+              this.apiService.insertCredits(cred).subscribe((str: string) => {
                 if (String(str).split("|")[0] != '0') {
-                  this.start();
+                  cred.iddebits = str;
+                  cred.status = adv.status;
+                  this.apiService.insertPushedCredit(cred).subscribe((str: string) => {
+                    if (String(str).split("|")[0] != '0') {
+                      this.start();
+                    } else {
+                      window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+                    }
+                  })
                 } else {
                   window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
                 }
               })
             } else {
-              window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
+              window.alert("An error has occured:\n" + String(str).split("|")[0] + "\n" + String(str).split("|")[1]);
             }
           })
         })
@@ -663,7 +669,7 @@ export class AccprofilesComponent implements OnInit {
     this.adv = adv;
     this.adv.notes = '';
   }
-
+  
   setSelectedDetail(cred: credits) {
     this.selected_detail.type = cred.type;
     let i: number = 0;

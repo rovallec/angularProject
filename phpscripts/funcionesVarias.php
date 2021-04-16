@@ -1,5 +1,6 @@
 <?php
 
+require 'Classes/phpExcel.php';
 function validarDatos($adato) {
   if (empty($adato) || is_null($adato)) {
     $adato = "NULL";
@@ -68,9 +69,16 @@ function validarDatosString($adato) {
 
 function formatDates($adate) {
   $format = 'Y-m-d';
-  $adate = intval($adate);
-  $date = new DateTime("@$adate");
-  return $date->format($format);
+  if (is_numeric($adate)) {
+    $adate = PHPExcel_Shared_Date::ExcelToPHP($adate);
+    $date = new DateTime("@$adate");
+    return $date->format($format);
+  } else if (is_string($adate)) {
+    $date = new DateTime($adate);
+    return $date->format($format);
+  } else {
+    return $adate;
+  }
 }
 
 function removeCommas($avalue) {

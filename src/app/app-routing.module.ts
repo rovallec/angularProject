@@ -35,6 +35,7 @@ import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.componen
 import { BonusesComponent } from './bonuses/bonuses.component';
 import { ClosingTkComponent } from './closing-tk/closing-tk.component';
 import { ImportWavesComponent } from './import-waves/import-waves.component';
+import { AccountingPoliciesComponent } from './accounting-policies/accounting-policies.component';
 
 const routes:Routes = [
   {
@@ -178,6 +179,11 @@ const routes:Routes = [
   {
     path:'bonuses',
     component:BonusesComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'accounting',
+    component:AccountingPoliciesComponent,
     canActivate:[AuthGuard]
   },
   {

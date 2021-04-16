@@ -18,8 +18,6 @@ $AID_Period = $_GET['AID_Period'];
 
 $i = 0;
 
- 
-
 $sql =  "SELECT 
 A1.idpayments,
 A1.idemployees AS 'IdEmployees',
@@ -90,7 +88,7 @@ SELECT DISTINCT
   c.dpi, 
   c.iggs,
   CONCAT(h.start, ' - ', h.end) AS PERIODO,
-  g.base AS Salario,
+  IF(COALESCE(g.base_complete, 0.00) = 0.00, 0.00, g.base_complete / 2) AS Salario,
   ROUND(g.base_hours / 8, 0) AS 'DiasTrabajados',
   g.base_hours AS 'HorasOrdinarias',
   g.ot_hours AS 'HorasExtraordinarias',
@@ -123,7 +121,7 @@ SELECT DISTINCT
   COALESCE(ROUND(
   IF(COALESCE(g.base_complete, 0.00) = 0.00, 0.00,
   ROUND(COALESCE(g.base_complete / 2, 0.00), 2)) + IF(COALESCE(g.ot, 0.00) = 0.00, 0.00, COALESCE(g.ot, 0.00)) + 0.00 + IF(COALESCE(g.holidays, 0.00) = 0.00, 0.00, COALESCE(g.holidays, 0.00)) + /* Salario Base (SalarioTotal) */ 
-  ROUND(if(COALESCE(g.base_hours, 0.00) = 0.00, 0.00, (if(COALESCE(g.base_complete,0.00) = 0.00, 0.00, g.base - (g.base_complete/2))), 2) +  /* Ausencias ES LO MISMO QUE BASE - CREDITO DE SALARIO BASE*/
+  ROUND(if(COALESCE(g.base_hours, 0.00) = 0.00, 0.00, (COALESCE(g.base_hours, 0.00)-120) / (120 / COALESCE(g.base_complete / 2, 0.00))), 2) +  /* Ausencias */
   0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + /* DEDUCCIONES VARIAS */ 
   0.00 + /* BonificacionIncentivo */ 
   COALESCE(k.amount, 0.00), 2), 0.00) AS 'LiquidoARecibir', /* OtrasBonificacioneseincentivos */
@@ -388,7 +386,6 @@ INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod =
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits i on (g.idpayments = i.id_payment and i.type='Bonificacion Decreto')
 AND h.idperiods = $AID_Period  
-
 ) A1 
 GROUP BY A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JORNADA,A1.SECCION,A1.bank,
 A1.`Transferencia/Cheque`,

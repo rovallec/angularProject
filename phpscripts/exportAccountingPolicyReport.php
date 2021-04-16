@@ -42,8 +42,6 @@ $account = $row1['account'];
 
 if ($account == 0) {
   $sql2 = "SELECT idaccounts FROM accounts;";
-  $sql4 = "SELECT LAST_INSERT_ID() AS V_ID_POLICIES;";
-  $sql5 = "SELECT DISTINCT idaccounting_accounts, external_id FROM accounting_accounts;";
   $today = date("Y/m/d");
 
   if($result2 = mysqli_query($con,$sql2)){
@@ -51,10 +49,11 @@ if ($account == 0) {
       $v_account = $row2['idaccounts'];
       $sql3 = "INSERT INTO policies (idpolicies, id_period, id_account, close_date) VALUES (NULL, $AID_Period, $v_account, '$today');";
       if(mysqli_query($con,$sql3)){
+        $sql4 = "SELECT LAST_INSERT_ID() AS V_ID_POLICIES;";
         if($result4 = mysqli_query($con,$sql4)){
           $row4 = mysqli_fetch_assoc($result4);
           $V_ID_POLICIES = $row4['V_ID_POLICIES'];
-
+          $sql5 = "SELECT DISTINCT idaccounting_accounts, external_id FROM accounting_accounts;";
           if($result5 = mysqli_query($con,$sql5)){
             while($row5 = mysqli_fetch_assoc($result5)) {
               $V_ID_ACCOUNTING = $row5['idaccounting_accounts'];

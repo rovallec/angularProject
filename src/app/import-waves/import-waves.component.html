@@ -134,7 +134,7 @@
             </td>
             <td>
               <button class="btn-outline-warning" *ngIf="prof.state=='Error'" disabled="true" data-toggle="tooltip"
-                data-placement="top" title="File Error">
+                data-placement="top" title="{{ prof.error_message }}">
                 <i class="fas fa-ban" *ngIf="prof.state=='Error'" ></i>
               </button>
               <button class="btn-outline-info" *ngIf="prof.state=='Loaded'" disabled="true" data-toggle="tooltip"
@@ -143,7 +143,7 @@
               </button>
               <button class="btn-outline-success" *ngIf="prof.state=='Saved'" disabled="true" data-toggle="tooltip"
                 data-placement="top" title="File Saved">
-                <i class="fas fa-ban" *ngIf="prof.state=='Saved'" ></i>
+                <i class="fas fa-check-circle" *ngIf="prof.state=='Saved'" ></i>
               </button>
             </td>
           </tr>
