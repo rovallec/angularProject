@@ -40,7 +40,8 @@ import { PeriodsPhComponent } from './periods-ph/periods-ph.component';
 import { AccprofilesPhComponent } from './accprofiles-ph/accprofiles-ph.component';
 import { BonusesComponent } from './bonuses/bonuses.component';
 import { ClosingTkComponent } from './closing-tk/closing-tk.component';
-import { ImportWavesComponent } from './import-waves/import-waves.component'
+import { ImportWavesComponent } from './import-waves/import-waves.component';
+import { AccountingPoliciesComponent } from './accounting-policies/accounting-policies.component'
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { ImportWavesComponent } from './import-waves/import-waves.component'
     AccprofilesPhComponent,
     BonusesComponent,
     ClosingTkComponent,
-    ImportWavesComponent
+    ImportWavesComponent,
+    AccountingPoliciesComponent
   ],
   imports: [
     BrowserModule,
