@@ -223,11 +223,12 @@ export class PeriodsComponent implements OnInit {
                           let base_salary: number = Number(emp[0].base_payment) / (240);
                           let productivity_salary: number = 0;
 
-
+                          console.log(rises.effective_date);
                           if (!isNullOrUndefined(rises.effective_date)) {
                             productivity_salary = ((Number(rises.old_salary) - Number(emp[0].base_payment) - 250) / 30) * (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24)));
                             productivity_salary = productivity_salary + ((Number(rises.new_salary) - Number(emp[0].base_payment) - 250) / 30) * (15 - (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24))));
                             productivity_salary = productivity_salary / 120;
+
                           } else {
                             productivity_salary = ((Number(emp[0].productivity_payment) - 250) / 240);
                           }
@@ -280,7 +281,7 @@ export class PeriodsComponent implements OnInit {
                           py.employee_name = emp[0].name;
                           py.holidays_hours = payroll_value.holidays_hours;
                           py.idpayroll_values = payroll_value.idpayroll_values;
-                          py.holidays = (Number(payroll_value.holidays_hours) * (base_salary + productivity_salary) * 2).toFixed(2);
+                          py.holidays = (Number(payroll_value.holidays_hours) * (base_salary + productivity_salary + (250/240)) * 1.5).toFixed(2);
                           py.base = (Number(base_salary) * Number(py.base_hours)).toFixed(2);
                           py.productivity = (Number(productivity_salary) * Number(py.productivity_hours)).toFixed(2);
 

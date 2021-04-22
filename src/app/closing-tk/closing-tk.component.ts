@@ -441,13 +441,6 @@ export class ClosingTkComponent implements OnInit {
                                   }
 
                                 })
-                                if (valid_trm) {
-                                  if (ult_seventh) {
-                                    if (new Date(trm.valid_from).getDay() != 6) {
-                                      sevenths = sevenths - 1;
-                                    }
-                                  }
-                                }
 
                                 if (!isNullOrUndefined(trm.valid_from) && worked_days == 0 && discounted_days > 0) {
                                   if (new Date(trm.valid_from).getTime() > new Date(this.actualPeriod.start).getTime()) {
