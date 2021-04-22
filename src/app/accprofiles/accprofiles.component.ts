@@ -580,14 +580,21 @@ export class AccprofilesComponent implements OnInit {
     this.acrediting = false;
   }
 
+  CancelAcreditSelection(){
+    this.setAcreditCredits = "0";
+    this.setAcreditDebits = "0";
+    this.acrediting = false;
+    this.setPayment();
+  }
+
   selectedCredit(event) {
     let val: string = "," + event.target.value;
     if (event.target.checked) {
       this.setAcreditCredits = this.setAcreditCredits + val;
+      this.acrediting = true;
     } else {
       this.setAcreditCredits.replace(val, '');
     }
-    this.acrediting = this.setAcreditCredits == '0';
   }
 
   selectedDebit(event) {
@@ -609,15 +616,17 @@ export class AccprofilesComponent implements OnInit {
       cred.id_employee = this.employee.idemployees;
       cred.id_user = this.authUser.getAuthusr().iduser;
       cred.date = date.today;
+      cred.idpayments = this.payments[this.payments.length - 1].idpayments;
       payment.forEach(py => {
         if ((py.id_employee == this.employee.idemployees) && (py.id_period == this.actualPeriod.idperiods)) {
           cred.idpayments = py.idpayments;
         }
       });
       cred.notes = adv.notes;
-      cred.type = adv.type;
+      cred.type = "Adelanto " + adv.type;
       this.apiService.getHr_Processes(adv.id_process).subscribe((proc: hrProcess) => {
         proc.status = adv.status;
+        proc.idhr_process = proc.idhr_processes;
         if (isNullOrUndefined(proc.notes)) {
           proc.notes = adv.notes;
         } else {

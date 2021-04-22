@@ -251,10 +251,11 @@ export class AccdashboardComponent implements OnInit {
   saveFormerEmployer(){
     this.waveFormerEmployer.forEach(emp => {
       this.actualFormerEmployer = emp;
+      console.log(emp);
       if (emp.idformer_employes == null) {
-        if (!(((this.actualFormerEmployer.idemnization == '') && (this.actualFormerEmployer.aguinaldo == '') && 
+        if (!(((this.actualFormerEmployer.indemnization == '') && (this.actualFormerEmployer.aguinaldo == '') && 
         (this.actualFormerEmployer.bono14 == '') && (this.actualFormerEmployer.igss == '') 
-        && (this.actualFormerEmployer.taxpendingpayment == '')) || ((this.actualFormerEmployer.idemnization == null) && (this.actualFormerEmployer.aguinaldo == null) && 
+        && (this.actualFormerEmployer.taxpendingpayment == '')) || ((this.actualFormerEmployer.indemnization == null) && (this.actualFormerEmployer.aguinaldo == null) && 
         (this.actualFormerEmployer.bono14 == null) && (this.actualFormerEmployer.igss == null) 
         && (this.actualFormerEmployer.taxpendingpayment == null)))) {
           this.insertFormerEmployer();

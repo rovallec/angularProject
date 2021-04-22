@@ -926,10 +926,11 @@ export class MiprofilesComponent implements OnInit {
   }
 
   getTemplates() {
-    this.procAdd = !this.procAdd
+    this.procAdd = !this.procAdd;
     if (this.procAdd) {
       this.apiservice.getProctemplates(this.queryInfo).subscribe((temp: process_templates[]) => {
         this.templates = temp;
+        console.log(this.templates);
       });
     } else {
       this.getProcesses();
