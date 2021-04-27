@@ -1,12 +1,21 @@
 <?php
+
 header('Access-Control-Allow-Origin: *');
+
 header('Access-Control-Allow-Headers: *');
+
 header('Content-Type: text/csv; charset=utf-8');
+
 header('Content-Disposition: attachment; filename="' . "reporteNomina.csv" . '"');
+
 require 'database.php';
 
+ 
+
 echo "\xEF\xBB\xBF";
+
 $AID_Period = $_GET['AID_Period'];
+
 $i = 0;
 
 $sql =  "SELECT 
@@ -387,69 +396,135 @@ LIMIT 0, 10000;";
 
 
 $title = ['Empleado', 'Cliente', 'Nombre Del Trabajador', 'Jornada', 'Seccion', 'banco', 'Transferencia / Cheque', 'DPI', 'No. De IGSS', 'Periodo', 'Salario', 'Dias Trabajados', 'Horas Ordinarias', 'Horas Extraordinarias', 'Horas Asuetos', 'Salario Base', 'Salario Extraordinario', 'Salario Comisiones', 'Salario Septimos', 'Salario Asuetos', 'Salario Total', 'Ausencias', 'Salario Neto', 'IGSS', 'Otras', 'Descuentos', 'Anticipo Sobre Sueldo', 'Total Deducciones', 'Aguinaldo', 'Bono 14', 'Vacaciones', 'Idemnizacion', 'Ventajas Economicas', 'Ajuste Salarial', 'Bonificacion Incentivo', 'Otras Bonificaciones e Incentivos', 'Liquido A Recibir', 'Observaciones', 'Boleto De Ornato', 'Descuento De Seguro', 'Descuentos Judiciales', 'HeadSet', 'ISR Empleados', 'Parqueo Empleados', 'ParqueoMotos', 'Tarjeta De Parqueo', 'Transporte En Bus', 'Prestamo Personal', 'Ajustes Periodos', 'Bonos Diversos', 'Bono Por Asistencia', 'Treasure Hunt', 'Bonos Por Referidos', 'Bonos Por Reclutamiento'];
+
 $output = fopen("php://output", "w");
+
 fputcsv($output, $title);
+
 if($result = mysqli_query($con,$sql)){
+
     while($row = mysqli_fetch_assoc($result)){
+
         $exportRow[0] = $row['IdEmployees'];
+
         $exportRow[1] = $row['Client_ID'];
+
         $exportRow[2] = $row['NombreDelTrabajador'];
+
         $exportRow[3] = $row['Jornada'];
+
         $exportRow[4] = $row['Seccion'];
+
         $exportRow[5] = $row['bank'];
+
         $exportRow[6] = $row['Transferencia/Cheque'];
+
         $exportRow[7] = $row['DPI'];
+
         $exportRow[8] = $row['No.DeIGSS'];
+
         $exportRow[9] = $row['Periodo'];
+
         $exportRow[10] = $row['Salario'];
+
         $exportRow[11] = $row['DiasTrabajados'];
+
         $exportRow[12] = $row['HorasOrdinarias'];
+
         $exportRow[13] = $row['HorasExtraordinarias'];
+
         $exportRow[14] = $row['HorasAsuetos'];
+
         $exportRow[15] = $row['SalarioBase'];
+
         $exportRow[16] = $row['SalarioExtraordinario'];
+
         $exportRow[17] = $row['SalarioComisiones'];
+
         $exportRow[18] = $row['SalarioSeptimos'];
+
         $exportRow[19] = $row['SalarioAsuetos'];
+
         $exportRow[20] = $row['SalarioTotal'];
+
         $exportRow[21] = $row['Ausencias'];
+
         $exportRow[22] = $row['SalarioNeto'];
+
         $exportRow[23] = $row['IGSS'];
+
         $exportRow[24] = $row['Otras'];
+
         $exportRow[25] = $row['Descuentos'];
+
         $exportRow[26] = $row['AnticipoSobreSueldo'];
+
         $exportRow[27] = $row['TotalDeducciones'];
+
         $exportRow[28] = $row['Aguinaldo'];
+
         $exportRow[29] = $row['Bono14'];
+
         $exportRow[30] = $row['Vacaciones'];
+
         $exportRow[31] = $row['Idemnizacion'];
+
         $exportRow[32] = $row['VentajasEconomicas'];
+
         $exportRow[33] = $row['AjusteSalarial'];
+
         $exportRow[34] = $row['BonificacionIncentivo'];
+
         $exportRow[35] = $row['OtrasBonificacioneseIncentivos'];
+
         $exportRow[36] = $row['LiquidoARecibir'];
+
         $exportRow[37] = $row['Observaciones'];
+
         $exportRow[38] = $row['BoletoDeOrnato'];
+
         $exportRow[39] = $row['DescuentoSeguro'];
+
         $exportRow[40] = $row['DescuentosJudiciales'];
+
         $exportRow[41] = $row['HeadSet'];
+
         $exportRow[42] = $row['ISREmpleados'];
+
         $exportRow[43] = $row['ParqueoEmpleados'];
+
         $exportRow[44] = $row['ParqueoMotos'];
+
         $exportRow[45] = $row['TarjetaDeParqueo'];
+
         $exportRow[46] = $row['TransporteEnBus'];
+
         $exportRow[47] = $row['PrestamoPersonal'];
+
         $exportRow[48] = $row['AjustesPeriodos'];
+
         $exportRow[49] = $row['BonosDiversos'];
+
         $exportRow[50] = $row['BonoPorAsistencia'];
+
         $exportRow[51] = $row['TreasureHunt'];
+
         $exportRow[52] = $row['BonosPorReferidos'];
+
         $exportRow[53] = $row['BonosPorReclutamiento'];
+
         fputcsv($output, $exportRow,",");
+
         $i++;
+
     };
+
 }else{
+
     http_response_code(404);
+
 }
+
 fclose($output);
+
 ?>

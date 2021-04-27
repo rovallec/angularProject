@@ -11,7 +11,7 @@ $start = $_GET['start'];
 $end = $_GET['end'];
 $exportRow = [];
 $sql = "SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
+'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount, hr_processes.notes, DATE_FORMAT(hr_processes.time, '%H:%i:%s') AS `time`
 FROM
 	attendence_justifications
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
@@ -26,7 +26,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETW
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'Seguro' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
+'Seguro' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount,hr_processes.notes, DATE_FORMAT(hr_processes.time, '%H:%i:%s') AS `time`
 FROM
 	attendence_justifications
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
@@ -41,7 +41,7 @@ WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_departme
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'CERT' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount
+'CERT' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount,hr_processes.notes, DATE_FORMAT(hr_processes.time, '%H:%i:%s') AS `time`
 FROM
 	attendence_justifications
     INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications
@@ -56,7 +56,7 @@ WHERE hr_processes.date BETWEEN '$start' AND '$end' AND hr_processes.id_departme
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'VAC' AS `type_of_payment`, DATE_FORMAT(vacations.date, '%Y/%m/%d'), ' ', ' ', vacations.count
+'VAC' AS `type_of_payment`, DATE_FORMAT(vacations.date, '%Y/%m/%d'), ' ', ' ', vacations.count,hr_processes.notes, DATE_FORMAT(hr_processes.time, '%H:%i:%s') AS `time`
 FROM
 	vacations
     INNER JOIN hr_processes ON hr_processes.idhr_processes = vacations.id_process
@@ -71,7 +71,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'JANP' AS `type_of_payment`, DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' '
+'JANP' AS `type_of_payment`, DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' ',hr_processes.notes, DATE_FORMAT(hr_processes.time, '%H:%i:%s') AS `time`
 FROM
 	leaves
 	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
@@ -103,7 +103,7 @@ UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'LOA' AS `type_of_payment`, 
-DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' '
+DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' ',hr_processes.notes,DATE_FORMAT(hr_processes.time, '%H:%i:%s') AS `time`
 FROM
 	leaves
 	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
@@ -135,7 +135,7 @@ UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'JAP' AS `type_of_payment`, 
-DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' '
+DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' ',hr_processes.notes, DATE_FORMAT(hr_processes.time, '%H:%i:%s') AS `time`
 FROM
 	leaves
 	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
@@ -167,7 +167,7 @@ UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'JANP' AS `type_of_payment`, 
-DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' '
+DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' ',hr_processes.notes, DATE_FORMAT(hr_processes.time, '%H:%i:%s') AS `time`
 FROM
     suspensions
     INNER JOIN disciplinary_processes ON disciplinary_processes.iddisciplinary_processes = suspensions.id_disciplinary_process

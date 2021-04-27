@@ -888,6 +888,7 @@ export class HrprofilesComponent implements OnInit {
       case 'Advance':
           this.actualAdvance = new advances;
           this.actuallProc.status = 'PENDING';
+          console.log("here");
           break;
       case 'Rise':
         this.actualRise = new rises;

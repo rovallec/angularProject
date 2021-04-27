@@ -22,7 +22,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
-    WHERE ((hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETWEEN '$start' AND '$end')) AND (hr_processes.id_department != 28 AND attendence_justifications.reason = 'IGSS')
+    WHERE ((hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETWEEN '$start' AND '$end')) AND (hr_processes.id_department != 28 AND attendence_justifications.reason = 'IGSS') AND id_account IN ($accounts)
 
 UNION
 

@@ -1568,7 +1568,7 @@ export class formerEmployer {
     idformer_employes: string;
     id_employee: string;
     name: string;
-    idemnization: string;
+    indemnization: string;
     aguinaldo: string;
     bono14: string;
     igss: string;
@@ -1578,7 +1578,7 @@ export class formerEmployer {
         this.idformer_employes = null;
         this.id_employee = null;
         this.name = null;
-        this.idemnization = null;
+        this.indemnization = null;
         this.aguinaldo = null;
         this.bono14 = null;
         this.igss = null;

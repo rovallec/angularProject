@@ -20,8 +20,10 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-PHP_API_SERVER = "http://localhost"; // Desarrollo
-//PHP_API_SERVER = "http://200.94.251.67";  // produccion
+//PHP_API_SERVER = "http://localhost"; // Desarrollo
+PHP_API_SERVER = "http://200.94.251.67";  // produccion
+
+constructor(private httpClient:HttpClient) { }
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
@@ -848,8 +850,6 @@ getAccouning_Accouts() {
 getAccountingPolicies(any: any) {
   return this.httpClient.post<accountingPolicies[]>(`${this.PHP_API_SERVER}/phpscripts/getAccountingPolicies.php`, any);
 }
-
-  constructor(private httpClient:HttpClient) { }
 }
 
 
