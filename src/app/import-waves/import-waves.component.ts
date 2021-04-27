@@ -176,16 +176,14 @@ export class ImportWavesComponent implements OnInit {
                         if (str != '') {
                           error = true;
                         };
-                        //window.alert("All documents saved correctly.");
-                        if (error==false) {
-                          this.router.navigate(['/rehome']);
-                        }
                       })
                     })
                   }
                 })
               })
-              element.state = 'Saved';
+              if (error==false) {
+                element.state = 'Saved';
+              }
               i++;
               if ((i>=this.fullprofiles.length) && (error==false)) {
                 window.alert("Profiles successfuly created");
