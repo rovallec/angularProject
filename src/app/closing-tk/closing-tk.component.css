@@ -30,6 +30,14 @@ i{
     cursor:pointer;
 }
 
+#title {
+    border-right-style: solid;
+    border-width: 1px;
+    font-weight: bold;
+    border-right-color: rgb(233, 232, 232);
+    text-align: center;
+}
+
 
 .list-group-item.active{
   background-color:#003b71;
