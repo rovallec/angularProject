@@ -1,21 +1,13 @@
 <?php
 
 header('Access-Control-Allow-Origin: *');
-
 header('Access-Control-Allow-Headers: *');
-
 header('Content-Type: text/csv; charset=utf-8');
-
 header('Content-Disposition: attachment; filename="' . "reporteNomina.csv" . '"');
-
 require 'database.php';
 
- 
-
 echo "\xEF\xBB\xBF";
-
 $AID_Period = $_GET['AID_Period'];
-
 $i = 0;
 
 $sql =  "SELECT 
@@ -88,7 +80,7 @@ SELECT DISTINCT
   c.dpi, 
   c.iggs,
   CONCAT(h.start, ' - ', h.end) AS PERIODO,
-  IF(COALESCE(g.base_complete, 0.00) = 0.00, 0.00, g.base_complete / 2) AS Salario,
+  g.base AS Salario,
   ROUND(g.base_hours / 8, 0) AS 'DiasTrabajados',
   g.base_hours AS 'HorasOrdinarias',
   g.ot_hours AS 'HorasExtraordinarias',
@@ -99,9 +91,8 @@ SELECT DISTINCT
   0.00 AS 'SalarioSeptimos',
   g.holidays AS 'SalarioAsuetos',
   ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) AS 'SalarioTotal',
-  ROUND((COALESCE (g.base_hours, 0.00)-120)/(120 / COALESCE(g.base_complete / 2, 0.00)), 2) AS 'Ausencias',
-  ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) +
-  ROUND((COALESCE(g.base_hours, 0.00)-120)/(120/COALESCE(g.base_complete/2, 0.00)), 2)AS 'SalarioNeto',   
+  -1 * if(g.base_complete<>0.00, g.base_complete / 2, 0.00) - g.base AS 'Ausencias',
+  ROUND(COALESCE(g.base_complete / 2, 0.00)) - g.base AS 'SalarioNeto',   
   /* DEDUCCIONES */
   0.00 AS 'IGSS',
   0.00 AS 'Otras',  
@@ -120,8 +111,8 @@ SELECT DISTINCT
    /* SE SUMAN TODOS LOS CREDITOS Y DEBITOS */
   COALESCE(ROUND(
   IF(COALESCE(g.base_complete, 0.00) = 0.00, 0.00,
-  ROUND(COALESCE(g.base_complete / 2, 0.00), 2)) + IF(COALESCE(g.ot, 0.00) = 0.00, 0.00, COALESCE(g.ot, 0.00)) + 0.00 + IF(COALESCE(g.holidays, 0.00) = 0.00, 0.00, COALESCE(g.holidays, 0.00)) + /* Salario Base (SalarioTotal) */ 
-  ROUND(if(COALESCE(g.base_hours, 0.00) = 0.00, 0.00, (COALESCE(g.base_hours, 0.00)-120) / (120 / COALESCE(g.base_complete / 2, 0.00))), 2) +  /* Ausencias */
+  COALESCE(g.base_complete / 2, 0.00)) + IF(COALESCE(g.ot, 0.00) = 0.00, 0.00, COALESCE(g.ot, 0.00)) + 0.00 + IF(COALESCE(g.holidays, 0.00) = 0.00, 0.00, COALESCE(g.holidays, 0.00)) + /* Salario Base (SalarioTotal) */ 
+  -1 * if(COALESCE(g.base_hours, 0.00) = 0.00, 0.00, COALESCE(g.base_complete / 2, 0.00) - g.base) +  /* Ausencias */
   0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + /* DEDUCCIONES VARIAS */ 
   0.00 + /* BonificacionIncentivo */ 
   COALESCE(k.amount, 0.00), 2), 0.00) AS 'LiquidoARecibir', /* OtrasBonificacioneseincentivos */
@@ -153,7 +144,7 @@ INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits j on (g.idpayments = j.id_payment)
-INNER JOIN (SELECT c2.id_payment, SUM(ROUND(c2.amount, 2)) AS amount FROM credits c2 where (c2.TYPE NOT IN('Bonificacion Decreto', 'Anticipo Sobre Sueldo', 'Salario Base', 'Horas Extra Laboradas') AND c2.TYPE NOT LIKE'%Horas%Extra%Laboradas%') GROUP BY c2.id_payment) k on (g.idpayments = k.id_payment)  
+INNER JOIN (SELECT c2.id_payment, SUM(ROUND(c2.amount, 2)) AS amount FROM credits c2 where (c2.TYPE NOT IN('Bonificacion Decreto', 'Anticipo Sobre Sueldo', 'Salario Base') AND c2.TYPE NOT LIKE'%Horas%Extra%Laboradas%' AND c2.TYPE NOT LIKE'%Horas%De%Asueto%') GROUP BY c2.id_payment) k on (g.idpayments = k.id_payment)
 AND h.idperiods = $AID_Period
 UNION 
 /* DEBITOS */
@@ -353,10 +344,10 @@ SELECT DISTINCT
   0.00 AS 'Idemnizacion',
   0.00 AS 'VentajasEconomicas',
   0.00 AS 'AjusteSalarial',
-  ROUND(COALESCE(i.amount, 2), 0.00) AS 'BonificacionIncentivo',
+  COALESCE(i.amount, 0.00) AS 'BonificacionIncentivo',
   0.00 AS 'OtrasBonificacioneseincentivos',
   /* SE SUMAN TODOS LOS CREDITOS Y DEBITOS */
-  ROUND(COALESCE(i.amount, 2), 0.00) AS 'LiquidoARecibir', /* OtrasBonificacioneseincentivos */
+  COALESCE(i.amount, 0.00) AS 'LiquidoARecibir', /* OtrasBonificacioneseincentivos */
   'Planilla de Sueldo Ordinario' AS 'Observaciones',
    /*  Detalle de Descuentos */ 
   0.00 AS 'BoletoDeOrnato',
@@ -384,9 +375,10 @@ INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1)
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
-INNER JOIN credits i on (g.idpayments = i.id_payment and i.type='Bonificacion Decreto')
+INNER JOIN credits i on (g.idpayments = i.id_payment)
 AND h.idperiods = $AID_Period  
-) A1 
+and i.type='Bonificacion Decreto'
+) A1
 GROUP BY A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JORNADA,A1.SECCION,A1.bank,
 A1.`Transferencia/Cheque`,
 A1.dpi,A1.iggs,A1.PERIODO,
@@ -396,135 +388,70 @@ LIMIT 0, 10000;";
 
 
 $title = ['Empleado', 'Cliente', 'Nombre Del Trabajador', 'Jornada', 'Seccion', 'banco', 'Transferencia / Cheque', 'DPI', 'No. De IGSS', 'Periodo', 'Salario', 'Dias Trabajados', 'Horas Ordinarias', 'Horas Extraordinarias', 'Horas Asuetos', 'Salario Base', 'Salario Extraordinario', 'Salario Comisiones', 'Salario Septimos', 'Salario Asuetos', 'Salario Total', 'Ausencias', 'Salario Neto', 'IGSS', 'Otras', 'Descuentos', 'Anticipo Sobre Sueldo', 'Total Deducciones', 'Aguinaldo', 'Bono 14', 'Vacaciones', 'Idemnizacion', 'Ventajas Economicas', 'Ajuste Salarial', 'Bonificacion Incentivo', 'Otras Bonificaciones e Incentivos', 'Liquido A Recibir', 'Observaciones', 'Boleto De Ornato', 'Descuento De Seguro', 'Descuentos Judiciales', 'HeadSet', 'ISR Empleados', 'Parqueo Empleados', 'ParqueoMotos', 'Tarjeta De Parqueo', 'Transporte En Bus', 'Prestamo Personal', 'Ajustes Periodos', 'Bonos Diversos', 'Bono Por Asistencia', 'Treasure Hunt', 'Bonos Por Referidos', 'Bonos Por Reclutamiento'];
-
 $output = fopen("php://output", "w");
-
 fputcsv($output, $title);
-
 if($result = mysqli_query($con,$sql)){
-
     while($row = mysqli_fetch_assoc($result)){
-
         $exportRow[0] = $row['IdEmployees'];
-
         $exportRow[1] = $row['Client_ID'];
-
         $exportRow[2] = $row['NombreDelTrabajador'];
-
         $exportRow[3] = $row['Jornada'];
-
         $exportRow[4] = $row['Seccion'];
-
         $exportRow[5] = $row['bank'];
-
         $exportRow[6] = $row['Transferencia/Cheque'];
-
         $exportRow[7] = $row['DPI'];
-
         $exportRow[8] = $row['No.DeIGSS'];
-
         $exportRow[9] = $row['Periodo'];
-
         $exportRow[10] = $row['Salario'];
-
         $exportRow[11] = $row['DiasTrabajados'];
-
         $exportRow[12] = $row['HorasOrdinarias'];
-
         $exportRow[13] = $row['HorasExtraordinarias'];
-
         $exportRow[14] = $row['HorasAsuetos'];
-
         $exportRow[15] = $row['SalarioBase'];
-
         $exportRow[16] = $row['SalarioExtraordinario'];
-
         $exportRow[17] = $row['SalarioComisiones'];
-
         $exportRow[18] = $row['SalarioSeptimos'];
-
         $exportRow[19] = $row['SalarioAsuetos'];
-
         $exportRow[20] = $row['SalarioTotal'];
-
         $exportRow[21] = $row['Ausencias'];
-
         $exportRow[22] = $row['SalarioNeto'];
-
         $exportRow[23] = $row['IGSS'];
-
         $exportRow[24] = $row['Otras'];
-
         $exportRow[25] = $row['Descuentos'];
-
         $exportRow[26] = $row['AnticipoSobreSueldo'];
-
         $exportRow[27] = $row['TotalDeducciones'];
-
         $exportRow[28] = $row['Aguinaldo'];
-
         $exportRow[29] = $row['Bono14'];
-
         $exportRow[30] = $row['Vacaciones'];
-
         $exportRow[31] = $row['Idemnizacion'];
-
         $exportRow[32] = $row['VentajasEconomicas'];
-
         $exportRow[33] = $row['AjusteSalarial'];
-
         $exportRow[34] = $row['BonificacionIncentivo'];
-
         $exportRow[35] = $row['OtrasBonificacioneseIncentivos'];
-
         $exportRow[36] = $row['LiquidoARecibir'];
-
         $exportRow[37] = $row['Observaciones'];
-
         $exportRow[38] = $row['BoletoDeOrnato'];
-
         $exportRow[39] = $row['DescuentoSeguro'];
-
         $exportRow[40] = $row['DescuentosJudiciales'];
-
         $exportRow[41] = $row['HeadSet'];
-
         $exportRow[42] = $row['ISREmpleados'];
-
         $exportRow[43] = $row['ParqueoEmpleados'];
-
         $exportRow[44] = $row['ParqueoMotos'];
-
         $exportRow[45] = $row['TarjetaDeParqueo'];
-
         $exportRow[46] = $row['TransporteEnBus'];
-
         $exportRow[47] = $row['PrestamoPersonal'];
-
         $exportRow[48] = $row['AjustesPeriodos'];
-
         $exportRow[49] = $row['BonosDiversos'];
-
         $exportRow[50] = $row['BonoPorAsistencia'];
-
         $exportRow[51] = $row['TreasureHunt'];
-
         $exportRow[52] = $row['BonosPorReferidos'];
-
         $exportRow[53] = $row['BonosPorReclutamiento'];
-
         fputcsv($output, $exportRow,",");
-
         $i++;
 
     };
-
 }else{
-
     http_response_code(404);
-
 }
-
 fclose($output);
-
 ?>

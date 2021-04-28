@@ -45,19 +45,23 @@ FROM employees
                GROUP BY id_employee) AS `b_decreto` ON `b_decreto`.id_employee = employees.idemployees
 	LEFT JOIN (SELECT SUM(credits.amount) AS `amnt`, id_employee
 			    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
-				WHERE credits.type NOT IN('Salario Base', 'Bonificacion Productividad', 'Bonificacion Decreto') 
-					AND credits.type NOT LIKE '%Ajuste%' AND credits.type NOT LIKE '%Horas Extra Laboradas:%'  AND credits.type NOT LIKE '%Indemnizacion Periodo%'
-                    AND credits.type NOT LIKE '%Aguinaldo Periodo%' AND credits.type NOT LIKE '%Bono 14 Periodo%' AND credits.type NOT LIKE '%Vacaciones Periodo%'
-					AND credits.type NOT LIKE '%Horas De Asueto:%' GROUP BY id_employee) AS `crd` ON `crd`.id_employee = employees.idemployees
+				WHERE (credits.type NOT IN('Salario Base', 'Bonificacion Productividad', 'Bonificacion Decreto') 
+					AND credits.type NOT LIKE '%Horas Extra Laboradas:%'  AND credits.type NOT LIKE '%Indemnizacion Periodo%'
+                    AND credits.type NOT LIKE '%Bono 14%' AND credits.type NOT LIKE '%Vacaciones%'
+                    AND credits.type NOT LIKE '%Aguinaldo%'
+					AND credits.type NOT LIKE '%Horas De Asueto:%')
+                    OR credits.type LIKE 'Aguinaldo Productividad: Periodo%'
+                    OR credits.type LIKE 'Bono 14 Productividad: Periodo%' 
+                    OR credits.type LIKE 'Vacaciones Productividad: Periodo%' GROUP BY id_employee) AS `crd` ON `crd`.id_employee = employees.idemployees
 	LEFT JOIN (SELECT SUM(credits.amount) AS `b14_amnt`, id_employee
 			    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
-				WHERE credits.type LIKE '%Bono 14 Periodo%' GROUP BY id_employee) AS `b_14` ON `b_14`.id_employee = employees.idemployees
+				WHERE credits.type LIKE '%Bono 14 Base%' GROUP BY id_employee) AS `b_14` ON `b_14`.id_employee = employees.idemployees
     LEFT JOIN (SELECT SUM(credits.amount) AS `ag_amnt`, id_employee
 			    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
-				WHERE credits.type LIKE '%Aguinaldo Periodo%' GROUP BY id_employee) AS `ag` ON `ag`.id_employee = employees.idemployees
+				WHERE credits.type LIKE '%Aguinaldo Base%' GROUP BY id_employee) AS `ag` ON `ag`.id_employee = employees.idemployees
 	LEFT JOIN (SELECT SUM(credits.amount) AS `indemnization`, id_employee
 			    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
-				WHERE credits.type LIKE '%Indemnizacion: Periodo%'
+				WHERE credits.type LIKE '%Indemnizacion%'
 				GROUP BY id_employee) AS `indemn` ON `indemn`.id_employee = employees.idemployees
 	LEFT JOIN (SELECT SUM(debits.amount) AS `igss_deb`, id_employee
 			    FROM debits INNER JOIN payments on payments.idpayments = debits.id_payment 
@@ -81,9 +85,9 @@ if($result = mysqli_query($con,$sql)){
         $isr[5] = '0';
         $isr[6] = '0';
 //////////////////////////////////////////////////AGUINALDO////////////////////////////////////////////////////////////
-        $isr[7] = number_format($row['aguinaldo']);
+        $isr[7] = number_format($row['aguinaldo'],2);
 //////////////////////////////////////////////////BONO 14//////////////////////////////////////////////////////////////
-        $isr[8] = number_format($row['bono_14']);
+        $isr[8] = number_format($row['bono_14'],2);
         $isr[9] = '0';
         $isr[10] = '0';
         $isr[11] = '0';
@@ -95,8 +99,8 @@ if($result = mysqli_query($con,$sql)){
         $isr[17] = $row['indemn'];
         $isr[18] = '0';
         $isr[19] = '0';
-        $isr[20] = number_format($row['aguinaldo']);
-        $isr[21] = number_format($row['bono_14']);
+        $isr[20] = number_format($row['aguinaldo'],2);
+        $isr[21] = number_format($row['bono_14'],2);
         $isr[22] = number_format($row['igss_payed'],2);
         fputcsv($output, $isr, ",");
     };

@@ -8,21 +8,21 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $idpayment = validarDatos($request->idpayments);
-$credits = removeCommas(validarDatos($request->credits));
-$debits = removeCommas(validarDatos($request->debits));
+$credits = (validarDatos($request->credits));
+$debits = (validarDatos($request->debits));
 $date = validarDatos($request->date);
 $last_seventh = validarDatos($request->last_seventh);
 $ot = validarDatos($request->ot);
 $ot_hours = validarDatos($request->ot_hours);
 $base_hours = validarDatos($request->base_hours);
 $productivity_hours = validarDatos($request->productivity_hours);
-$base = removeCommas(validarDatos($request->base));
-$productivity = removeCommas(validarDatos($request->productivity));
+$base = (validarDatos($request->base));
+$productivity = (validarDatos($request->productivity));
 $sevenths = validarDatos($request->seventh);
 $holidays = validarDatos($request->holidays);
 $holidays_hours = validarDatos($request->holidays_hours);
-$base_complete = removeCommas(validarDatos($request->base_complete));
-$productivity_complete = removeCommas(validarDatos($request->productivity_complete));
+$base_complete = (validarDatos($request->base_complete));
+$productivity_complete = (validarDatos($request->productivity_complete));
 $id_account = validarDatos($request->id_account_py);
 
 if($date != "NULL"){
