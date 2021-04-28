@@ -163,6 +163,7 @@ export class attendences {
     status: string;
     id_wave: string;
     balance: string;
+    state: string;
     constructor() {
         this.idattendences = null;
         this.id_employee = null;
@@ -180,6 +181,7 @@ export class attendences {
         this.status = null;
         this.id_wave = null;
         this.balance = null;
+        this.state = null;
     }
 }
 
