@@ -39,6 +39,7 @@ export class PyprofilesComponent implements OnInit {
   absence_fixed:string = null;
   showRegs:boolean = false;
   termination:terminations = new terminations;
+  edit: boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -98,7 +99,6 @@ export class PyprofilesComponent implements OnInit {
     })
   }
 
-
   cancelView() {
     this.newProc = false;
     this.showRegs = false;
@@ -108,7 +108,6 @@ export class PyprofilesComponent implements OnInit {
   return() {
     this.newProc = false;
   }
-
 
   setPayTime(id_employee: string, id_profile: string) {
 
@@ -360,6 +359,32 @@ export class PyprofilesComponent implements OnInit {
 
       });
     }
+  }
+
+  editRoster(att: attendences){
+    this.cancelView();
+    this.edit = true;    
+    this.attendances.forEach(element => {
+      if ((element===att)) {
+        element.state = 'edit';
+      } else {
+        element.state = null;
+      }
+    });
+  }
+
+  SaveRoaster(att: attendences) {
+    this.edit = false;
+    // proceso para grabar los cambios.
+    this.apiService.updateAttendances(att).subscribe((_str: string) => {
+      this.attendances.forEach(element => {
+        if ((element===att)) {
+          element.state = null;
+        }
+      });
+      window.alert('Attendences updated.');
+    })
+    this.start();
   }
 
 }

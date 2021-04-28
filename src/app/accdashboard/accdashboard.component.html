@@ -119,6 +119,7 @@
                                         <th>STATUS</th>
                                         <th>BANK</th>
                                         <th>ACCOUNT</th>
+                                        <th>SOCIETY</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let hr of hires">
@@ -129,6 +130,12 @@
                                             <td>{{hr.status}}</td>
                                             <td><input type="text" class="form-control" [(ngModel)]="hr.bank" [disabled]="hr.bool"></td>
                                             <td><input type="text" class="form-control" [(ngModel)]="hr.account" [disabled]="hr.bool"></td>
+                                            <td>
+                                                <select class="form-control" [(ngModel)]="hr.society" [disabled]="recordPaymentMethod">
+                                                    <option>NEARSOL, S.A.</option>
+                                                    <option>PRG RECURSO HUMANO, S.A.</option>
+                                                </select>
+                                            </td>
                                         </tr>                                        
                                     </tbody>
                                 </table>                                
