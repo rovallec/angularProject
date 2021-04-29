@@ -12,9 +12,9 @@ $date = ($request->str);
 $waves = [];
 
 if(strpos($date, ">=") !== false){
-	$sql = "SELECT * FROM (SELECT `waves`.*, `accounts`.`name` AS `account_name` FROM `waves` LEFT JOIN `accounts` ON `waves`.`id_account` = `accounts`.`idaccounts`) AS `waves_view` WHERE `end_date`  $date";
+	$sql = "SELECT * FROM (SELECT `waves`.*, `accounts`.`name` AS `account_name` FROM `waves` LEFT JOIN `accounts` ON `waves`.`id_account` = `accounts`.`idaccounts`) AS `waves_view` WHERE `end_date` $date;";
 }else{
-	$sql = "SELECT * FROM (SELECT `waves`.*, `accounts`.`name` AS `account_name` FROM `waves` LEFT JOIN `accounts` ON `waves`.`id_account` = `accounts`.`idaccounts`) AS `waves_view` WHERE `end_date` >= $date";
+	$sql = "SELECT * FROM (SELECT `waves`.*, `accounts`.`name` AS `account_name` FROM `waves` LEFT JOIN `accounts` ON `waves`.`id_account` = `accounts`.`idaccounts`) AS `waves_view` WHERE `end_date` >= $date;";
 }
 
 

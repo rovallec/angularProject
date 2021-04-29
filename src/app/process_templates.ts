@@ -66,6 +66,7 @@ export class hires_template {
     payType: string;
     platform: string;
     bool: boolean;
+    society: string;
 }
 
 export class accounts {
