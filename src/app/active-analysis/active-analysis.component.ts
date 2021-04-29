@@ -43,6 +43,6 @@ export class ActiveAnalysisComponent implements OnInit {
     if(!this.isExportable){
       alert("Missing information to generate the report");
     }
-      window.open("http://200.94.251.67/phpscripts/exportAgentAnalysis.php", "_blank")
+      window.open("http://172.18.2.45/phpscripts/exportAgentAnalysis.php", "_blank")
     }
 }

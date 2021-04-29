@@ -21,7 +21,7 @@ prof:profiles[] = [];
 id_profile:number;
 
 //PHP_API_SERVER = "http://localhost"; // Desarrollo
-PHP_API_SERVER = "http://200.94.251.67";  // produccion
+PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 

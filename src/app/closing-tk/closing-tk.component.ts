@@ -747,7 +747,7 @@ export class ClosingTkComponent implements OnInit {
   exportPayroll_values() {
     this.printing = true;
     if (this.actualPeriod.status == '3') {
-      window.open("http://200.94.251.67/phpscripts/exportPayroll_values.php?id_period=" + this.actualPeriod.idperiods, "_blank");
+      window.open("http://172.18.2.45/phpscripts/exportPayroll_values.php?id_period=" + this.actualPeriod.idperiods, "_blank");
     } else {
       this.exportTableElmToExcel(this.userTable, 'user_data');
       window.alert("Data Successfully exported");
@@ -756,7 +756,7 @@ export class ClosingTkComponent implements OnInit {
   }
 
   exportPaidAttendances() {
-    window.open("http://200.94.251.67/phpscripts/exportPaid_attendances.php?id_period=" + this.actualPeriod.idperiods, "_blank");
+    window.open("http://172.18.2.45/phpscripts/exportPaid_attendances.php?id_period=" + this.actualPeriod.idperiods, "_blank");
   }
 
   searchNow() {
