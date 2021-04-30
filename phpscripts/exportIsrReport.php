@@ -5,6 +5,8 @@
     header('Content-Disposition: attachment; filename="' . "CargaProyeccionyActualizacion.csv" . '"');
     require 'database.php';
 
+    echo "\xEF\xBB\xBF";
+
     $start = date("Y") . "-01-01";
     $end = $_GET['end'];
 
@@ -22,8 +24,6 @@
     }else{
         $monthly_mult = 0.5;
     }
-
-    echo "\xEF\xBB\xBF";
 
     $sql = "SELECT employees.idemployees, profiles.nit, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, coalesce(`cmp_base`, 0) AS `base`, coalesce(`cmp_productivity`,0) AS `productivity`,
     coalesce(`crd`.`amnt`,0) AS `bonuses`,

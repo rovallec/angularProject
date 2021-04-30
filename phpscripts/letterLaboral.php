@@ -19,7 +19,7 @@ echo "
 <div style='margin-left:60px'>
 <table>
 <tr>
-<td colspan='4'><img src='http://200.94.251.67/assets/Nearsol.png' style='height:60px; width:250px'></td>
+<td colspan='4'><img src='http://172.18.2.45/assets/Nearsol.png' style='height:60px; width:250px'></td>
 </tr>
 <tr>
 <td colspan='4' style='height:40px'></td>
@@ -98,7 +98,7 @@ echo "
 <td colspan='4' style='text-alignt:center'>
 <table styel='width:100%'>
 <tr>
-<td><img style='width:200px;height:100px;margin-left:175px' src='http://200.94.251.67/uploads/" . $iduser . "_Signatures_.jpeg'></td>
+<td><img style='width:200px;height:100px;margin-left:175px' src='http://172.18.2.45/uploads/" . $iduser . "_Signatures_.jpeg'></td>
 </tr>
 </table>
 </td>

@@ -27,7 +27,7 @@ echo("
     <div style='margin-left:60px'>
         <table style='width:100%'>
             <tr>
-                <td><img src='http://200.94.251.67/assets/Nearsol.png' style='height:60px; width:250px'></td>
+                <td><img src='http://172.18.2.45/assets/Nearsol.png' style='height:60px; width:250px'></td>
                 <td style='width:70%'></td>
                 <td>$str_date</td>
             </tr>

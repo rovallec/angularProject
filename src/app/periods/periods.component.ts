@@ -285,7 +285,6 @@ export class PeriodsComponent implements OnInit {
                           py.base = (Number(base_salary) * Number(py.base_hours)).toFixed(2);
                           py.productivity = (Number(productivity_salary) * Number(py.productivity_hours)).toFixed(2);
 
-
                           if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                             py.ot = ((Number(base_salary) + Number(productivity_salary) + (250 / 240)) * Number(py.ot_hours) * 2).toFixed(2)
                           } else {
@@ -297,6 +296,7 @@ export class PeriodsComponent implements OnInit {
                           let decreot_credit: credits = new credits;
                           let ot_credit: credits = new credits;
                           let holiday_credit: credits = new credits;
+                          let adjustments:credits = new credits;
                           let isr: number = 0;
 
                           let igss_debit: debits = new debits;
@@ -327,11 +327,18 @@ export class PeriodsComponent implements OnInit {
                             this.global_credits.push(holiday_credit);
                           }
 
+                          if(Number(payroll_value.adjustments)>0){
+                            adjustments.amount = (Number(payroll_value.adjustments) * (Number(base_salary) + Number(productivity_salary))).toFixed(2);
+                            adjustments.type = "Ajustes periodos anteriores";
+                            adjustments.idpayments = py.idpayments;
+                          }
+
                           igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * 0.0483).toFixed(2);
                           igss_debit.idpayments = py.idpayments;
                           igss_debit.type = "Descuento IGSS";
 
                           this.global_credits.push(base_credit);
+                          this.global_credits.push(adjustments);
                           this.global_credits.push(productivity_credit);
                           this.global_debits.push(igss_debit);
                           this.global_credits.push(decreot_credit);
@@ -761,7 +768,7 @@ export class PeriodsComponent implements OnInit {
       patronal_number = "145998";
     }
     let t_period:string = this.period.idperiods;
-    window.open("http://200.94.251.67/phpscripts/igssTest.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
+    window.open("http://172.18.2.45/phpscripts/igssTest.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
 
   }
 }

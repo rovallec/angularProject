@@ -1263,7 +1263,8 @@ export class payroll_values_gt{
     agent_status:string = null;
     total_days:string = null;
     hrs:number = null;
-    next_seventh = null;
+    next_seventh:number = null;
+    adjustments:string = null;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;
@@ -1286,6 +1287,7 @@ export class payroll_values_gt{
         this.agent_status = null;
         this.hrs = null;
         this.next_seventh = null;
+        this.adjustments = null;
     }
 }
 
@@ -1668,4 +1670,21 @@ export class AccountingAccounts {
         this.clasif = null;
         this.clasif = null;
     }    
+}
+
+export class timekeeping_adjustments{
+    idtimekeeping_adjustments:string;
+    id_payment:string;
+    amount:string;
+    nearsol_id:string;
+    client_id:string;
+    name:string;
+    constructor(){
+        this.idtimekeeping_adjustments = null;
+        this.id_payment = null;
+        this.amount = null;
+        this.nearsol_id = null;
+        this.client_id = null;
+        this.name = null;
+    }
 }

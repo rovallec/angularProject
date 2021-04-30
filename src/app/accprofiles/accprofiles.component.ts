@@ -749,7 +749,7 @@ export class AccprofilesComponent implements OnInit {
             }
           })
 
-          window.open("http://200.94.251.67/phpscripts/finiquito_laboral.php?company=" + this.employee.society
+          window.open("http://172.18.2.45/phpscripts/finiquito_laboral.php?company=" + this.employee.society
             + "&hiring_date=" + this.employee.hiring_date + "&term_date=" + this.tvalid_Form + "&name=" + this.employee.name +
             "&dpi=" + this.employee.dpi + "&indemnizacion=" + indemnizacion.toFixed(2) +
             "&aguinaldo=" + aguinaldo.toFixed(2) + "&bono_14=" + bono_14.toFixed(2) +
