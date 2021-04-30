@@ -26,6 +26,7 @@ export class HrprofilesComponent implements OnInit {
 
 
   actualTerm: terminations = new terminations;
+  countTerm: number = 0;
 
   profile: profiles[] = [new profiles()];
   staffes: users[] = [];
@@ -887,6 +888,7 @@ export class HrprofilesComponent implements OnInit {
       case 'Advance':
           this.actualAdvance = new advances;
           this.actuallProc.status = 'PENDING';
+          console.log("here");
           break;
       case 'Rise':
         this.actualRise = new rises;
@@ -1158,9 +1160,15 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getProcessesrecorded() {
+    this.countTerm = 0;
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.apiService.getProcRecorded({ id: emp.idemployees }).subscribe((prc: process[]) => {
         this.processRecord = prc;
+        this.processRecord.forEach(pr => {
+          if (pr.name == 'Termination') {
+            this.countTerm++;
+          }
+        })
       })
     })
   }
@@ -1176,6 +1184,7 @@ export class HrprofilesComponent implements OnInit {
         break;
       case 'Termination':
         this.apiService.getTerm(this.actuallProc).subscribe((trm: terminations) => {
+          this.countTerm++;
           let proc: process = new process;
           proc.id_profile = this.profile[0].id_profile;
           proc.id_role = '1';

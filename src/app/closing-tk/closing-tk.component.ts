@@ -299,7 +299,10 @@ export class ClosingTkComponent implements OnInit {
                                           rs.vacations = (Number(rs.vacations) + Number(vacation.count)).toFixed(0);
                                           if (Number(vacation.count) < 1) {
                                             if (attendance.scheduled != "OFF") {
+                                              console.log((Number(attendance.worked_time) + "|" + (Number(attendance.scheduled) * Number(vacation.count)).toFixed(5)));
                                               attendance.worked_time = (Number(attendance.worked_time) + (Number(attendance.scheduled) * Number(vacation.count))).toFixed(5);
+                                              attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(3);
+                                              discounted_hours = discounted_hours + Number(attendance.worked_time) - Number(attendance.scheduled);
                                             }
                                           }
                                         }
@@ -409,10 +412,7 @@ export class ClosingTkComponent implements OnInit {
                                         }
                                         disc = true;
                                         discounted_days = discounted_days + 1
-                                      }
-
-                                      if (off_on_week == cnt_days) {
-                                        discounted_days = discounted_days + cnt_days;
+                                        
                                       }
 
                                       if ((janp_sequence + non_show_sequence) == 5 && !disc) {
@@ -441,13 +441,6 @@ export class ClosingTkComponent implements OnInit {
                                   }
 
                                 })
-                                if (valid_trm) {
-                                  if (ult_seventh) {
-                                    if (new Date(trm.valid_from).getDay() != 6) {
-                                      sevenths = sevenths - 1;
-                                    }
-                                  }
-                                }
 
                                 if (!isNullOrUndefined(trm.valid_from) && worked_days == 0 && discounted_days > 0) {
                                   if (new Date(trm.valid_from).getTime() > new Date(this.actualPeriod.start).getTime()) {

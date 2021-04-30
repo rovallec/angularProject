@@ -205,6 +205,7 @@ export class hrProcess{
     date:string;
     notes:string;
     status:string;
+    idhr_processes:string;
     constructor(){
         this.idhr_process = null;
         this.id_user = null;
@@ -217,6 +218,7 @@ export class hrProcess{
         this.date = null;
         this.notes = null;
         this.status = null;
+        this.idhr_processes = null;
     }
 }
 

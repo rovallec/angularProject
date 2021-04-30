@@ -81,6 +81,8 @@
       <li *ngIf="getAuth()" class="nav-item active">
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/classlist" style="color: white"
           [ngClass]="{'act':selectedOption=='CLASS'}" (click)="SetSel('CLASS')">CLASS LIST</a>
+        <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/accounting"
+          style="color: white" [ngClass]="{'act':selectedOption=='ACCOUNTING'}" (click)="SetSel('ACCOUNTING')">ACCOUNTING POLICIES</a>
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
           routerLink="/activeReport" style="color: white" [ngClass]="{'act':selectedOption=='ACTVR'}"
           (click)="SetSel('ACTVR')">ACTIVE AGENTS REPORT</a>

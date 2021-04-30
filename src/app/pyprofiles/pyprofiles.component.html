@@ -246,14 +246,31 @@
                                     <th>ROSTER</th>
                                     <th>ATTENDED</th>
                                     <th>BALANCE</th>
+                                    <th>ACTION</th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let att of attendances" class="selectable" (click)="showReg(att)"
+                                    <tr *ngFor="let att of attendances" class="selectable"
                                         [ngClass]="{'table-danger': att.status === 'overlap'}">
-                                        <td>{{att.date}}</td>
-                                        <td>{{att.scheduled}}</td>
-                                        <td>{{att.worked_time}}</td>
-                                        <td>{{att.balance}}</td>
+                                        <td (click)="showReg(att)">{{att.date}}</td>
+                                        <td *ngIf="att.state!='edit'" (click)="showReg(att)">{{att.scheduled}}</td>
+                                        <td *ngIf="att.state=='edit'">
+                                            <input type="text" [(ngModel)]="att.scheduled">
+                                        </td>
+                                        <td *ngIf="att.state!='edit'" (click)="showReg(att)">{{att.worked_time}}</td>
+                                        <td *ngIf="att.state=='edit'">
+                                            <input type="text" [(ngModel)]="att.worked_time">
+                                        </td>
+                                        <td (click)="showReg(att)">{{att.balance}}</td>
+                                        <td *ngIf="att.state!='edit'">
+                                            <button (click)="editRoster(att)" data-toggle="tooltip" data-placement="top" title="Edit Roster">
+                                                <i class="fas fa-exchange-alt"></i>
+                                            </button>
+                                        </td>
+                                        <td *ngIf="att.state=='edit'">
+                                            <button (click)="SaveRoaster(att)" data-toggle="tooltip" data-placement="top" title="Save Roster">
+                                                <i class="fas fa-save"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

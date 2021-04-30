@@ -7,8 +7,7 @@ $i = 0;
 $return = [];
 $date = date("Y-m-d");
 
-$dt = date('Y-m-d', strtotime($date . " - 10 month"));
-$sql = "SELECT * FROM `periods` WHERE `start` BETWEEN '$dt' AND '$date' and type_period = 0;";
+$sql = "SELECT * FROM `periods` WHERE type_period = 0 ORDER BY idperiods;";
 
 if($result = mysqli_query($con, $sql)){
   while($res = mysqli_fetch_assoc($result)){

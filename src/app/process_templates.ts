@@ -66,6 +66,7 @@ export class hires_template {
     payType: string;
     platform: string;
     bool: boolean;
+    society: string;
 }
 
 export class accounts {
@@ -163,6 +164,7 @@ export class attendences {
     status: string;
     id_wave: string;
     balance: string;
+    state: string;
     constructor() {
         this.idattendences = null;
         this.id_employee = null;
@@ -180,6 +182,7 @@ export class attendences {
         this.status = null;
         this.id_wave = null;
         this.balance = null;
+        this.state = null;
     }
 }
 
@@ -1457,6 +1460,7 @@ export class full_profiles {
     //services
     amount: string;
     state: string;
+    error_message: string;
     constructor() {
         this.No = '0';
         this.nearsol_id = '';
@@ -1559,6 +1563,7 @@ export class full_profiles {
         this.id_userpr = null;
         this.amount = null;
         this.state = null;
+        this.error_message = null;
     }
 }
 
@@ -1566,7 +1571,7 @@ export class formerEmployer {
     idformer_employes: string;
     id_employee: string;
     name: string;
-    idemnization: string;
+    indemnization: string;
     aguinaldo: string;
     bono14: string;
     igss: string;
@@ -1576,7 +1581,7 @@ export class formerEmployer {
         this.idformer_employes = null;
         this.id_employee = null;
         this.name = null;
-        this.idemnization = null;
+        this.indemnization = null;
         this.aguinaldo = null;
         this.bono14 = null;
         this.igss = null;
@@ -1627,4 +1632,40 @@ export class payroll_resume{
         this.insurance = '0';
         this.other_hrs = '0';
     }
+}
+
+export class accountingPolicies {
+    external_id: string;
+    name: string;
+    clasif: string;
+    department: string;
+    class: string;
+    site: string;
+    amount: string;
+    clientNetSuite: string;
+    constructor() {
+        this.external_id = null;
+        this.name = null;
+        this.clasif = null;
+        this.department = null;
+        this.class = null;
+        this.site = null;
+        this.amount = null;
+        this.clientNetSuite = null;
+    }
+}
+
+export class AccountingAccounts {
+    idaccounting_accounts: string;
+    external_id: string;
+    name: string;
+    clasif: string;
+    idperiod: string;
+    constructor() {
+        this.idaccounting_accounts = null;
+        this.external_id = null;
+        this.name = null;
+        this.clasif = null;
+        this.clasif = null;
+    }    
 }
