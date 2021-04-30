@@ -11,7 +11,7 @@ $period = ($request->id_period);
 $res = [];
 $i = 0;
 
-$sql = "SELECT id_payment, SUM(amount) FROM timekeeping_adjustments
+$sql = "SELECT id_payment, SUM(amount) AS `amt` FROM timekeeping_adjustments
         INNER JOIN payments ON payments.idpayments = timekeeping_adjustments.id_payment
         INNER JOIN employees ON employees.idemployees = payments.id_employee
         INNER JOIN hires ON hires.idhires = employees.id_hire
@@ -22,7 +22,7 @@ $sql = "SELECT id_payment, SUM(amount) FROM timekeeping_adjustments
 if($result = mysqli_query($con,$sql)){
   while($row = mysqli_fetch_assoc($result)){
     $res[$i]['id_payment'] = $row['idprocess_types'];
-    $res[$i]['amount'] = $row['amount'];
+    $res[$i]['amount'] = $row['amt'];
 };
 echo json_encode($res);
 } else {
