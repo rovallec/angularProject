@@ -854,6 +854,11 @@ getAccountingPolicies(any: any) {
 insertTkAdjustments(tk:timekeeping_adjustments){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertTkAdjustments.php`, tk);
 }
+
+getTkAdjustments(any:any){
+  return this.httpClient.post<timekeeping_adjustments>(`${this.PHP_API_SERVER}/phpscripts/getTkAdjustments.php`, any);
+}
+
 }
 
 

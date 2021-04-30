@@ -105,6 +105,7 @@
                                 <td>OT</td>
                                 <td>HOLIDAYS</td>
                                 <td>BONUS</td>
+                                <td>ADJUSTMENTS</td>
                                 <td>STATUS</td>
                             </tr>
                             <tbody>
@@ -146,13 +147,13 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade show active" id="nav-bonuses" role="tabpanel" aria-labelledby="nav-bonuses-tab">
+                    <div class="tab-pane fade show active" id="nav-bonuses" role="tabpanel" aria-labelledby="nav-bonuses-tab" *ngIf="working">
                         <table class="table table-striped">
                             <thead>
                                 <th>NEARSOL ID</th>
                                 <th>NAME</th>
                                 <th *ngIf="import_type == 'PERFORMANCE BONUS'">BONUS AMOUNT</th>
-                                <th *ngIf="import_type == AJUSTES A PERIODOS ANTERIORES">ADJUSTMENTS</th>
+                                <th *ngIf="import_type == 'AJUSTES A PERIODOS ANTERIORES'">ADJUSTMENTS</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let c  of credits">
@@ -328,7 +329,7 @@
                 <div class="row col-md-12">
                     <div class="form-group col-md-5">
                         <label>TYPE:</label>
-                        <select class="form-control">
+                        <select class="form-control" [(ngModel)]="import_type">
                             <option>PERFORMANCE BONUS</option>
                             <option>AJUSTES A PERIODOS ANTERIORES</option>
                         </select>

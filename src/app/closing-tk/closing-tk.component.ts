@@ -502,7 +502,9 @@ export class ClosingTkComponent implements OnInit {
                                 if (!isNullOrUndefined(rs)) {
                                   this.resumes.push(rs);
                                 }
-                                payroll_value.performance_bonus = "0.00"; 
+                                payroll_value.performance_bonus = "0.00";
+                                payroll_value.adjustments = "0.00";
+                                
                                 this.apiServices.getCredits({id:pay.id_employee, period:this.actualPeriod.idperiods}).subscribe((crd:credits[])=>{
                                   if(!isNullOrUndefined(crd)){
                                     crd.forEach(cred=>{
@@ -512,6 +514,13 @@ export class ClosingTkComponent implements OnInit {
                                     })
                                   }
                                 });
+
+                                this.apiServices.getTkAdjustments({id_payment:pay.idpayments, id_period:this.actualPeriod.idperiods}).subscribe((tk_adj:timekeeping_adjustments)=>{
+                                  if(!isNullOrUndefined(tk_adj)){
+                                    payroll_value.adjustments = tk_adj.amount;
+                                  }
+                                })
+                                
                                 payroll_value.client_id = pay.client_id;
                                 payroll_value.discounted_days = discounted_days.toString();
                                 payroll_value.discounted_hours = discounted_hours.toString();
@@ -1113,6 +1122,8 @@ export class ClosingTkComponent implements OnInit {
           cnt++;
           if(cnt >= this.credits.length - 1){
             this.saving = false;
+            this.working = false;
+            this.importEnd = false;
           }
         });
       })
