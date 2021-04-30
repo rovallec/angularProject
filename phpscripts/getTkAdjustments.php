@@ -23,7 +23,7 @@ if($result = mysqli_query($con,$sql)){
   while($row = mysqli_fetch_assoc($result)){
     $res['id_payment'] = $row['id_payment'];
     $res['amount'] = $row['amt'];
-};
+  };
 echo json_encode($res);
 } else {
   http_response_code(400);
