@@ -9,7 +9,7 @@ $request = json_decode($postdata);
 $id_payment = ($request->id_payment);
 $amount = ($request->amount);
 
-$sql = "INSERT INTO `timekeeping_adjustments` (idtimekeeping_adjustments, id_paymnet, amount) VALUES (null, $id_payment, $amount);";
+$sql = "INSERT INTO `timekeeping_adjustments` (idtimekeeping_adjustments, id_payment, amount) VALUES (null, $id_payment, $amount);";
 
 if(mysqli_query($con,$sql)){
   echo(mysqli_insert_id($con));
