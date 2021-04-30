@@ -517,6 +517,7 @@ export class ClosingTkComponent implements OnInit {
 
                                 this.apiServices.getTkAdjustments({id_payment:pay.idpayments, id_period:this.actualPeriod.idperiods}).subscribe((tk_adj:timekeeping_adjustments)=>{
                                   if(!isNullOrUndefined(tk_adj)){
+                                    console.log(tk_adj);
                                     payroll_value.adjustments = tk_adj.amount;
                                   }
                                 })

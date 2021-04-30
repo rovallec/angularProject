@@ -21,8 +21,8 @@ $sql = "SELECT id_payment, SUM(amount) AS `amt` FROM timekeeping_adjustments
 
 if($result = mysqli_query($con,$sql)){
   while($row = mysqli_fetch_assoc($result)){
-    $res[$i]['id_payment'] = $row['id_payment'];
-    $res[$i]['amount'] = $row['amt'];
+    $res['id_payment'] = $row['id_payment'];
+    $res['amount'] = $row['amt'];
 };
 echo json_encode($res);
 } else {
