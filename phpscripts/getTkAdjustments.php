@@ -22,7 +22,7 @@ $sql = "SELECT id_payment, SUM(amount) FROM timekeeping_adjustments
 if($result = mysqli_query($con,$sql)){
   while($row = mysqli_fetch_assoc($result)){
     $res[$i]['id_payment'] = $row['idprocess_types'];
-    $res[$i]['amount'] = $row['name'];
+    $res[$i]['amount'] = $row['amount'];
 };
 echo json_encode($res);
 } else {
