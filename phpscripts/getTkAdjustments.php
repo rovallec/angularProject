@@ -12,7 +12,7 @@ $res = [];
 $i = 0;
 
 $sql = "SELECT id_payment, SUM(amount) FROM `timekeeping_adjustments` 
-        INNER JOIN payments ON paymnets.idpayments = timekeeping_adjustments
+        INNER JOIN payments ON payments.idpayments = timekeeping_adjustments.id_payment;
         INNER JOIN employees ON employees.idemployees = payments.id_employee
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile

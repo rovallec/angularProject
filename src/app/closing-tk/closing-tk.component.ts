@@ -504,7 +504,7 @@ export class ClosingTkComponent implements OnInit {
                                 }
                                 payroll_value.performance_bonus = "0.00";
                                 payroll_value.adjustments = "0.00";
-                                
+
                                 this.apiServices.getCredits({id:pay.id_employee, period:this.actualPeriod.idperiods}).subscribe((crd:credits[])=>{
                                   if(!isNullOrUndefined(crd)){
                                     crd.forEach(cred=>{
@@ -1128,10 +1128,19 @@ export class ClosingTkComponent implements OnInit {
         });
       })
     }else if(this.import_type == "AJUSTES A PERIODOS ANTERIORES"){
+      cnt = 0;
       this.credits.forEach(adj=>{
         let adjustment:timekeeping_adjustments = new timekeeping_adjustments();
         adjustment.id_paymnet = adj.idpayments;
         adjustment.amount = adj.amount;
+        this.apiServices.insertTkAdjustments(adjustment).subscribe((str:string)=>{
+          cnt++;
+          if(cnt >= this.credits.length - 1){
+            this.saving = false;
+            this.working = false;
+            this.importEnd = false;
+          }
+        });
       })
     }
   }
