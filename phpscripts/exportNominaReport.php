@@ -92,7 +92,8 @@ SELECT DISTINCT
   g.holidays AS 'SalarioAsuetos',
   ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) AS 'SalarioTotal',
   -1 * if(g.base_complete<>0.00, g.base_complete / 2, 0.00) - g.base AS 'Ausencias',
-  ROUND(COALESCE(g.base_complete / 2, 0.00)) - g.base AS 'SalarioNeto',   
+  ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) +
+  ROUND((COALESCE(g.base_hours, 0.00)-120)/(120/COALESCE(g.base_complete/2, 0.00)), 2)AS 'SalarioNeto',   
   /* DEDUCCIONES */
   0.00 AS 'IGSS',
   0.00 AS 'Otras',  
