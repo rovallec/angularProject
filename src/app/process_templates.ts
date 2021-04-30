@@ -1673,14 +1673,14 @@ export class AccountingAccounts {
 
 export class timekeeping_adjustments{
     idtimekeeping_adjustments:string;
-    id_paymnet:string;
+    id_payment:string;
     amount:string;
     nearsol_id:string;
     client_id:string;
     name:string;
     constructor(){
         this.idtimekeeping_adjustments = null;
-        this.id_paymnet = null;
+        this.id_payment = null;
         this.amount = null;
         this.nearsol_id = null;
         this.client_id = null;

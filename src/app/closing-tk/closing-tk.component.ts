@@ -1131,7 +1131,7 @@ export class ClosingTkComponent implements OnInit {
       cnt = 0;
       this.credits.forEach(adj=>{
         let adjustment:timekeeping_adjustments = new timekeeping_adjustments();
-        adjustment.id_paymnet = adj.idpayments;
+        adjustment.id_payment = adj.idpayments;
         adjustment.amount = adj.amount;
         this.apiServices.insertTkAdjustments(adjustment).subscribe((str:string)=>{
           cnt++;
