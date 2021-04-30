@@ -17,6 +17,7 @@ $sql = "SELECT id_payment, SUM(amount) FROM `timekeeping_adjustments`
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
         WHERE id_payment = $id_payment AND id_period = $period GROUP BY id_payment;";
+        
 
 if($result = mysqli_query($con,$sql)){
   while($row = mysqli_fetch_assoc($result)){
