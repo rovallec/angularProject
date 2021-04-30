@@ -40,7 +40,7 @@ echo("
             <td style='border-bottom:solid 3px black;'>
                 <table style='width:100%'>
                     <tr>
-                        <td><img src='http://200.94.251.67/assets/irtra.png' style='height:50px; width:120px'>
+                        <td><img src='http://172.18.2.45/assets/irtra.png' style='height:50px; width:120px'>
                         </td>
                         <td>
                             <table style='width:100%'>

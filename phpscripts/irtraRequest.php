@@ -26,7 +26,7 @@ echo(
     <div style='margin-left:50px; width:900px'>
         <table style='width:100%'>
             <tr>
-                <td><img src='http://200.94.251.67/assets/Nearsol.png' style='width:225;height:75'></td>
+                <td><img src='http://172.18.2.45/assets/Nearsol.png' style='width:225;height:75'></td>
                 <td></td>
                 <td style='text-align:right'>Guatemala, $day de $month $year</td>
             </tr>

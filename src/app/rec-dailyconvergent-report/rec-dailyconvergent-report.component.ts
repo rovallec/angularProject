@@ -66,7 +66,7 @@ export class RecDailyconvergentReportComponent implements OnInit {
     if(isUndefined(this.selectedWave)){
       this.errorHandle = true;
     }else{
-      window.open("http://200.94.251.67/phpscripts/exportDailyConvergent.php?wave=" + this.selectedWave.idwaves);
+      window.open("http://172.18.2.45/phpscripts/exportDailyConvergent.php?wave=" + this.selectedWave.idwaves);
     }
   }
 }

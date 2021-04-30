@@ -109,9 +109,9 @@ export class HrdailyComponent implements OnInit {
         acId = acId + itm.idaccounts;
       })
       if (this.me.department == '28') {
-        window.open("http://200.94.251.67/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo, "_blank");
+        window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo, "_blank");
       } else {
-        window.open("http://200.94.251.67/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId, "_blank");
+        window.open("http://172.18.2.45/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId, "_blank");
       }
     }
   }

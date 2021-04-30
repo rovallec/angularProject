@@ -1,11 +1,11 @@
-import { isNull, TypeModifier } from '@angular/compiler/src/output/output_ast';
+import { importType, isNull, TypeModifier } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { isNullOrUndefined, isNumber } from 'util';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, vacations } from '../process_templates';
+import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, credits, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, timekeeping_adjustments, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { BADFLAGS, DESTRUCTION } from 'dns';
 import { exit } from 'process';
@@ -55,6 +55,13 @@ export class ClosingTkComponent implements OnInit {
   adjustments: attendences_adjustment[] = [];
   printing: boolean = false;
   isSearching:boolean = false;
+  credits:credits[] =[];
+  completed:boolean = false;
+  importEnd:boolean = false;
+  working:boolean = false;
+  p_val_update:payroll_values_gt[] = [];
+  import_type:string = "PERFORMANCE BONUS";
+  saving:boolean = false;
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
@@ -135,6 +142,10 @@ export class ClosingTkComponent implements OnInit {
   }
 
   setPayments() {
+    this.completed = false;
+    this.working = false;
+    this.importEnd = false;
+    this.saving = false;
     this.show_attendances = [];
     this.save_attendances = [];
     this.resumes = [];
@@ -491,6 +502,25 @@ export class ClosingTkComponent implements OnInit {
                                 if (!isNullOrUndefined(rs)) {
                                   this.resumes.push(rs);
                                 }
+                                payroll_value.performance_bonus = "0.00";
+                                payroll_value.adjustments = "0.00";
+
+                                this.apiServices.getCredits({id:pay.id_employee, period:this.actualPeriod.idperiods}).subscribe((crd:credits[])=>{
+                                  if(!isNullOrUndefined(crd)){
+                                    crd.forEach(cred=>{
+                                      if(cred.type == "PERFORMANCE BONUS"){
+                                        payroll_value.performance_bonus = cred.amount;   
+                                      }
+                                    })
+                                  }
+                                });
+
+                                this.apiServices.getTkAdjustments({id_payment:pay.idpayments, id_period:this.actualPeriod.idperiods}).subscribe((tk_adj:timekeeping_adjustments)=>{
+                                  if(!isNullOrUndefined(tk_adj)){
+                                    payroll_value.adjustments = tk_adj.amount;
+                                  }
+                                })
+                                
                                 payroll_value.client_id = pay.client_id;
                                 payroll_value.discounted_days = discounted_days.toString();
                                 payroll_value.discounted_hours = discounted_hours.toString();
@@ -747,7 +777,7 @@ export class ClosingTkComponent implements OnInit {
   exportPayroll_values() {
     this.printing = true;
     if (this.actualPeriod.status == '3') {
-      window.open("http://200.94.251.67/phpscripts/exportPayroll_values.php?id_period=" + this.actualPeriod.idperiods, "_blank");
+      window.open("http://172.18.2.45/phpscripts/exportPayroll_values.php?id_period=" + this.actualPeriod.idperiods, "_blank");
     } else {
       this.exportTableElmToExcel(this.userTable, 'user_data');
       window.alert("Data Successfully exported");
@@ -756,7 +786,7 @@ export class ClosingTkComponent implements OnInit {
   }
 
   exportPaidAttendances() {
-    window.open("http://200.94.251.67/phpscripts/exportPaid_attendances.php?id_period=" + this.actualPeriod.idperiods, "_blank");
+    window.open("http://172.18.2.45/phpscripts/exportPaid_attendances.php?id_period=" + this.actualPeriod.idperiods, "_blank");
   }
 
   searchNow() {
@@ -1011,4 +1041,107 @@ export class ClosingTkComponent implements OnInit {
 
   }
 
+
+  addfile_bonus(event) {
+    this.working = true;
+    this.credits = [];
+    this.p_val_update = [];
+    this.file = event.target.files[0];
+    let partial_credits: credits[] = [];
+    let fileReader = new FileReader();
+    let found: boolean = false;
+    let provitional_period: periods = new periods;
+    provitional_period.end = this.actualPeriod.end;
+    provitional_period.idperiods = this.actualPeriod.idperiods;
+    provitional_period.start = "from_close";
+    provitional_period.status = this.actualPeriod.status;
+    provitional_period.type_period = this.actualPeriod.type_period;
+
+    fileReader.readAsArrayBuffer(this.file);
+    fileReader.onload = (e) => {
+      if (!this.completed) {
+        this.arrayBuffer = fileReader.result;
+        var data = new Uint8Array(this.arrayBuffer);
+        var arr = new Array();
+        for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+        var bstr = arr.join("");
+        var workbook = XLSX.read(bstr, { type: "binary" });
+        workbook.SheetNames.forEach(sheets => {
+          let ws:number = 0;
+          var first_sheet_name = workbook.SheetNames[ws];
+          var worksheet = workbook.Sheets[first_sheet_name];
+          let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+          sheetToJson.forEach(element => {
+            let cred: credits = new credits;
+            cred.iddebits = element['Nearsol ID'];
+            cred.amount = element['Amount'];
+            partial_credits.push(cred);
+          })
+          ws++;
+        })
+        let count: number = 0;
+        this.apiServices.getPayments(provitional_period).subscribe((paymnts: payments[]) => {
+          partial_credits.forEach(ele => {
+            this.apiServices.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits }).subscribe((emp: employees[]) => {
+              if (!isNullOrUndefined(emp[0])) {
+                paymnts.forEach(py => {
+                  if (py.id_employee == emp[0].idemployees) {
+                    ele.idpayments = py.idpayments;
+                    this.payroll_values.forEach((p_val:payroll_values_gt)=>{
+                      if(p_val.id_payment == py.idpayments){
+                        p_val.performance_bonus = ele.amount;
+                        this.p_val_update.push(p_val);
+                      }
+                    })
+                  }
+                });
+                ele.notes = emp[0].name;
+              } else {
+                ele.notes = "ERROR";
+              }
+              count = count + 1;
+              ele.type = "PERFORMANCE BONUS";
+              this.credits.push(ele);
+              if (count >= (partial_credits.length - 1)) {
+                this.importEnd = true;
+                this.completed = true;
+              }              
+            })
+          })
+        })
+      }
+    }
+  }
+
+  saveImport(){
+    this.saving = true;
+    let cnt:number = 0;
+    if(this.import_type == "PERFORMANCE BONUS"){
+      this.credits.forEach((cred:credits)=>{
+        this.apiServices.insertCredits(cred).subscribe((str:string)=>{
+          cnt++;
+          if(cnt >= this.credits.length - 1){
+            this.saving = false;
+            this.working = false;
+            this.importEnd = false;
+          }
+        });
+      })
+    }else if(this.import_type == "AJUSTES A PERIODOS ANTERIORES"){
+      cnt = 0;
+      this.credits.forEach(adj=>{
+        let adjustment:timekeeping_adjustments = new timekeeping_adjustments();
+        adjustment.id_payment = adj.idpayments;
+        adjustment.amount = adj.amount;
+        this.apiServices.insertTkAdjustments(adjustment).subscribe((str:string)=>{
+          cnt++;
+          if(cnt >= this.credits.length - 1){
+            this.saving = false;
+            this.working = false;
+            this.importEnd = false;
+          }
+        });
+      })
+    }
+  }
 }

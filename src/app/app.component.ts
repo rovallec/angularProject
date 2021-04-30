@@ -56,7 +56,7 @@ export class AppComponent {
 
   getEmployeeData(){
     this.SetSel("EMPD");
-    window.open("http://200.94.251.67/phpscripts/exportEmployeesData.php", "_blank");
+    window.open("http://172.18.2.45/phpscripts/exportEmployeesData.php", "_blank");
   }
 
   
@@ -74,6 +74,6 @@ export class AppComponent {
       end = nwDate.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString().padStart(2,"0") + "-" + nwDate.getDate().toString();
     }
     this.SetSel("EXPEX");
-    window.open("http://200.94.251.67/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end , "_blank");
+    window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end , "_blank");
   }
 }
