@@ -197,6 +197,7 @@ export class attendences_adjustment {
     state: string;
     start:string;
     end:string;
+    dateTime:string;
     //justifications
     id_process: string;
     reason: string;
@@ -282,6 +283,7 @@ export class leaves {
     date: string;
     notes: string;
     status: string;
+    dateTime:string;
     //leaves
     motive: string;
     approved_by: string;

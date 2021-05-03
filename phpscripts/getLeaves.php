@@ -26,6 +26,7 @@
             $return[$i]['approved_by'] = $res['approved_by'];
             $return[$i]['start'] = $res['start'];
             $return[$i]['end'] = $res['end'];
+            $return[$i]['dateTime'] = $res['time'];
             $i++;
         }
         echo(json_encode($return));

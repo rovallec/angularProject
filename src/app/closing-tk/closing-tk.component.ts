@@ -297,7 +297,6 @@ export class ClosingTkComponent implements OnInit {
 
                                   if (!valid_trm && !valid_transfer) {
                                     dp.forEach(disciplinary_process => {
-                                      console.log(new Date(disciplinary_process.dateTime).getTime());
                                       if ((new Date(disciplinary_process.dateTime).getTime() <= refTime) && disciplinary_process.day_1 == attendance.date || disciplinary_process.day_2 == attendance.date || disciplinary_process.day_3 == attendance.date || disciplinary_process.day_4 == attendance.date) {
                                         activeSuspension = true;
                                         attendance.balance = 'JANP';
@@ -309,7 +308,6 @@ export class ClosingTkComponent implements OnInit {
 
                                     if (!activeSuspension) {
                                       vac.forEach(vacation => {
-                                        console.log(new Date(vacation.dateTime).getTime() + "|" + refTime);
                                         if (vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == attendance.date && vacation.action == "Take" && new Date(vacation.dateTime).getTime() <= refTime) {
                                           activeVacation = true;
                                           worked_days++;
@@ -331,7 +329,7 @@ export class ClosingTkComponent implements OnInit {
 
                                     if (!activeSuspension && !activeVacation) {
                                       leave.forEach(lv => {
-                                        if (lv.status != "COMPLETED" && lv.status != 'DISMISSED' && (new Date(lv.start).getTime()) <= (new Date(attendance.date).getTime()) && (new Date(lv.end).getTime()) >= (new Date(attendance.date).getTime())) {
+                                        if ((new Date(lv.dateTime).getTime() <= refTime) && lv.status != "COMPLETED" && lv.status != 'DISMISSED' && (new Date(lv.start).getTime()) <= (new Date(attendance.date).getTime()) && (new Date(lv.end).getTime()) >= (new Date(attendance.date).getTime())) {
                                           activeLeave = true;
                                           if (lv.motive == 'Leave of Absence Unpaid') {
                                             attendance.balance = 'LOA';
@@ -367,13 +365,22 @@ export class ClosingTkComponent implements OnInit {
                                     }
 
                                     if (!activeVacation && !activeSuspension && !activeLeave) {
+                                      just.forEach(justification => {
+                                        console.log(justification);
+                                        if(justification.id_attendence == attendance.idattendences){
+                                          if(new Date(justification.dateTime).getTime() >= refTime){
+                                            attendance.worked_time = (Number(attendance.worked_time) - Number(justification.amount)).toFixed(4);
+                                          }
+                                        }
+                                      });
+
                                       if (attendance.scheduled == "OFF") {
                                         attendance.balance = "OFF";
                                         days_off = days_off + 1;
                                         if (Number(attendance.worked_time) > 0) {
                                           attendance.balance = (Number(attendance.worked_time)).toFixed(3);
                                           discounted_hours = discounted_hours + Number(attendance.worked_time);
-                                        }
+                                        }  
                                       } else {
                                         if (attendance.date != (new Date().getFullYear() + "-01-01") && attendance.date != (new Date().getFullYear() + "-04-01") && attendance.date != (new Date().getFullYear() + "-04-02") && attendance.date != (new Date().getFullYear() + "-04-03")) {
                                           if (Number(attendance.scheduled) > 0) {
@@ -1174,6 +1181,14 @@ export class ClosingTkComponent implements OnInit {
 
   changeDeadlineTime(str:string){
     this.deadline_time = str;
+    this.disable_time = false;
+  }
+
+  enableDate(){
+    this.disable_date = false;
+  }
+
+  enableTime(){
     this.disable_time = false;
   }
 }
