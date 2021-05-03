@@ -703,7 +703,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   showDp(dp: disciplinary_processes) {
-    if (dp.status == 'DISPATCHED') {
+    if (dp.status == 'DISPATCHED' || dp.status == "COMPLETED") {
       this.editRequest = false;
     } else {
       if (dp.status == 'PENDING') {
