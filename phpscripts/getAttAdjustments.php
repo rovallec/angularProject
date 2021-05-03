@@ -71,7 +71,7 @@ if($result = mysqli_query($con,$sql)){
         $adjustes[$i]['name'] = $res['first_name'] . " " . $res['second_name'] . " " . $res['first_lastname'] . " " . $res['second_lastname'];
         $adjustes[$i]['nearsol_id'] = $res['nearsol_id'];
         $adjustes[$i]['error'] = "SUCCESS";
-        $adjustes{$i]['account'] = $res['acn'];
+        $adjustes[$i]['account'] = $res['acn'];
         $adjustes[$i]['dateTime'] = $res['time'];
         $i++;
     }
