@@ -79,7 +79,7 @@ try {
               "FROM payment_methods p " .
               "INNER JOIN employees e ON e.idemployees = p.id_employee " .
               "LEFT JOIN hr_processes hp ON e.idemployees = hp.id_employee " .
-              "LEFT JOIN terminations t on hp.idhr_processes = t.id_process AND (t.valid_from > (select end from periods p2 where p2.idperiods = 33)) " .
+              "LEFT JOIN terminations t on hp.idhr_processes = t.id_process AND (t.valid_from > (select end from periods p2 where p2.idperiods = $id_period)) " .
               "WHERE p.predeterm = 1 AND (e.active = 1 or t.valid_from IS NOT NULL); ";
               
     if ($transact->query($sql10) === true) {
