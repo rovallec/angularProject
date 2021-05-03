@@ -62,10 +62,13 @@ export class ClosingTkComponent implements OnInit {
   p_val_update:payroll_values_gt[] = [];
   import_type:string = "PERFORMANCE BONUS";
   saving:boolean = false;
+<<<<<<< HEAD
   deadline_date:string = new Date().toISOString().split('T')[0];
   deadline_time:string = new Date().getHours() + ":" + new Date().getMinutes();
   disable_date:boolean = false;
   disable_time:boolean = false;
+=======
+>>>>>>> b215ee06a24c1d6b27ae96d273ddd34e980816eb
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
@@ -147,9 +150,12 @@ export class ClosingTkComponent implements OnInit {
   }
 
   setPayments() {
+<<<<<<< HEAD
     this.disable_time = false;
     this.disable_date = false;
     let refTime:number = new Date(this.deadline_date + " " + this.deadline_time).getTime();
+=======
+>>>>>>> b215ee06a24c1d6b27ae96d273ddd34e980816eb
     this.completed = false;
     this.working = false;
     this.importEnd = false;
@@ -1158,6 +1164,7 @@ export class ClosingTkComponent implements OnInit {
       })
     }
   }
+<<<<<<< HEAD
   
   disableDate(){
     this.disable_date = true;
@@ -1176,4 +1183,6 @@ export class ClosingTkComponent implements OnInit {
     this.deadline_time = str;
     this.disable_time = false;
   }
+=======
+>>>>>>> b215ee06a24c1d6b27ae96d273ddd34e980816eb
 }
