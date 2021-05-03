@@ -309,7 +309,8 @@ export class ClosingTkComponent implements OnInit {
 
                                     if (!activeSuspension) {
                                       vac.forEach(vacation => {
-                                        if (vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == attendance.date && vacation.action == "Take") {
+                                        console.log(new Date(vacation.dateTime).getTime() + "|" + refTime);
+                                        if (vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == attendance.date && vacation.action == "Take" && new Date(vacation.dateTime).getTime() <= refTime) {
                                           activeVacation = true;
                                           worked_days++;
                                           if (attendance.scheduled == 'OFF') {
