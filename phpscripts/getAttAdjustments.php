@@ -13,7 +13,7 @@ if(explode(";", $id)[0] == 'id|p'){
     $temp = explode(";",$id)[1];
             $emp = explode("|",$temp)[0];
             $period = explode("|",$temp)[1];
-            $sql =  "SELECT *,  `attendences`.`date` AS `attdate`, accounts.idaccounts AS `acn` FROM attendence_adjustemnt 
+            $sql =  "SELECT *,  `attendences`.`date` AS `attdate`, accounts.idaccounts AS `acn`, hr_processes.time FROM attendence_adjustemnt 
             LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` 
             LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification 
             LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process 
@@ -26,7 +26,7 @@ if(explode(";", $id)[0] == 'id|p'){
 }else{
     if(explode(";", $id)[0] == 'id|p|t'){
         $period = explode(";",$id)[1];
-        $sql =  "SELECT *,  `attendences`.`date` AS `attdate`, accounts.idaccounts AS `acn` FROM attendence_adjustemnt 
+        $sql =  "SELECT *,  `attendences`.`date` AS `attdate`, accounts.idaccounts AS `acn`, hr_processes.time FROM attendence_adjustemnt 
         LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` 
         LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification 
         LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process 
@@ -36,7 +36,7 @@ if(explode(";", $id)[0] == 'id|p'){
         LEFT JOIN accounts ON accounts.idaccounts = employees.id_account
         LEFT JOIN users ON users.idUser = hr_processes.id_user WHERE attendence_justifications.reason = 'Closing Exception' AND attendences.date BETWEEN $period;";
     }else{
-        $sql = "SELECT *,  `attendences`.`date` AS `attdate`, accounts.idaccounts AS `acn` FROM attendence_adjustemnt 
+        $sql = "SELECT *,  `attendences`.`date` AS `attdate`, accounts.idaccounts AS `acn`, hr_processes.time FROM attendence_adjustemnt 
         LEFT JOIN `attendences` ON `attendences`.`idattendences` = `attendence_adjustemnt`.`id_attendence` 
         LEFT JOIN `attendence_justifications` ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification 
         LEFT JOIN `hr_processes` ON hr_processes.idhr_processes = attendence_justifications.id_process 
@@ -71,7 +71,8 @@ if($result = mysqli_query($con,$sql)){
         $adjustes[$i]['name'] = $res['first_name'] . " " . $res['second_name'] . " " . $res['first_lastname'] . " " . $res['second_lastname'];
         $adjustes[$i]['nearsol_id'] = $res['nearsol_id'];
         $adjustes[$i]['error'] = "SUCCESS";
-        $adjustes{$i}['account'] = $res['acn'];
+        $adjustes{$i]['account'] = $res['acn'];
+        $adjustes[$i]['dateTime'] = $res['time'];
         $i++;
     }
 }
