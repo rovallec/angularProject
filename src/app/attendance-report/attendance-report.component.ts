@@ -94,6 +94,6 @@ export class AttendanceReportComponent implements OnInit {
         acc = str.split(".")[0];
       }
     })
-    window.open("http://200.94.251.67/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank");
+    window.open("http://172.18.2.45/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank");
   }
 }

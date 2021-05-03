@@ -12,7 +12,7 @@ $date_2 = ($request->date_2);
 $return = [];
 $i = 0;
 
-$sql = "SELECT id_employee, day_1, day_2, day_3, day_4, imposition_date FROM suspensions 
+$sql = "SELECT id_employee, day_1, day_2, day_3, day_4, imposition_date, `hr_processes`.`time` FROM suspensions 
         LEFT JOIN disciplinary_processes on disciplinary_processes.iddisciplinary_processes = suspensions.id_disciplinary_process 
         LEFT JOIN disciplinary_requests on disciplinary_requests.iddisciplinary_requests = disciplinary_processes.id_request 
         LEFT JOIN hr_processes on hr_processes.idhr_processes = disciplinary_requests.id_process 
@@ -25,6 +25,7 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['day_2'] = $res['day_2'];
         $return[$i]['day_3'] = $res['day_3'];
         $return[$i]['day_4'] = $res['day_4'];
+        $return[$i]['dateTime'] = $res['time'];
         $i++;
     }
     echo(json_encode($return));

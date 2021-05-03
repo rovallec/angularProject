@@ -223,7 +223,6 @@ export class PeriodsComponent implements OnInit {
                           let base_salary: number = Number(emp[0].base_payment) / (240);
                           let productivity_salary: number = 0;
 
-                          console.log(rises.effective_date);
                           if (!isNullOrUndefined(rises.effective_date)) {
                             productivity_salary = ((Number(rises.old_salary) - Number(emp[0].base_payment) - 250) / 30) * (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24)));
                             productivity_salary = productivity_salary + ((Number(rises.new_salary) - Number(emp[0].base_payment) - 250) / 30) * (15 - (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24))));
@@ -265,7 +264,6 @@ export class PeriodsComponent implements OnInit {
                               py.days = '0';
                             }
                           }
-
                           py.id_employee = payroll_value.id_employee;
                           py.idpayments = payroll_value.id_payment;
                           py.id_period = payroll_value.id_period;
@@ -285,7 +283,6 @@ export class PeriodsComponent implements OnInit {
                           py.base = (Number(base_salary) * Number(py.base_hours)).toFixed(2);
                           py.productivity = (Number(productivity_salary) * Number(py.productivity_hours)).toFixed(2);
 
-
                           if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                             py.ot = ((Number(base_salary) + Number(productivity_salary) + (250 / 240)) * Number(py.ot_hours) * 2).toFixed(2)
                           } else {
@@ -297,6 +294,7 @@ export class PeriodsComponent implements OnInit {
                           let decreot_credit: credits = new credits;
                           let ot_credit: credits = new credits;
                           let holiday_credit: credits = new credits;
+                          let adjustments:credits = new credits;
                           let isr: number = 0;
 
                           let igss_debit: debits = new debits;
@@ -327,11 +325,18 @@ export class PeriodsComponent implements OnInit {
                             this.global_credits.push(holiday_credit);
                           }
 
+                          if(Number(payroll_value.adjustments)>0){
+                            adjustments.amount = (Number(payroll_value.adjustments) * (Number(base_salary) + Number(productivity_salary))).toFixed(2);
+                            adjustments.type = "Ajustes periodos anteriores";
+                            adjustments.idpayments = py.idpayments;
+                          }
+
                           igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * 0.0483).toFixed(2);
                           igss_debit.idpayments = py.idpayments;
                           igss_debit.type = "Descuento IGSS";
 
                           this.global_credits.push(base_credit);
+                          this.global_credits.push(adjustments);
                           this.global_credits.push(productivity_credit);
                           this.global_debits.push(igss_debit);
                           this.global_credits.push(decreot_credit);
@@ -385,20 +390,24 @@ export class PeriodsComponent implements OnInit {
                               service.status = '0';
                             }
                             this.global_services.push(service);
-                          })
-                          
+                          });
+
                           judicials.forEach(judicial => {
-                            if (Number(judicial.max) == 0 || Number(judicial.max) < (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100)))) {
-                              judicial.current = (Number(judicial.current) + (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))).toFixed(2);
-                              let judicial_discount: debits = new debits;
-                              judicial_discount.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100)).toFixed(2);
-                              judicial_discount.type = "Descuento Judicial";
-                              judicial_discount.idpayments = py.idpayments;
-                              this.global_debits.push(judicial_discount);
-                              this.global_judicials.push(judicial);
-                            } else if (Number(judicial.max) < (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))) {
-                              judicial.current = (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100))).toFixed(2);
-                              this.global_judicials.push(judicial);
+                            if(!isNullOrUndefined(judicial)){
+                              if (Number(judicial.max) == 0 || Number(judicial.max) > (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100)))) {
+                                let judicial_discount: debits;
+                                judicial_discount = new debits();
+                                judicial.current = (Number(judicial.current) + (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))).toFixed(2);
+                                judicial_discount.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100)).toFixed(2);
+                                judicial_discount.type = "Descuento Judicial";
+                                judicial_discount.idpayments = py.idpayments;
+                                this.global_debits.push(judicial_discount);
+                                this.global_judicials.push(judicial);
+                                py.debits = (Number(py.debits) + Number(judicial_discount.amount)).toFixed(2);
+                              } else if (Number(judicial.max) < (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))) {
+                                judicial.current = (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100))).toFixed(2);
+                                this.global_judicials.push(judicial);
+                              }
                             }
                           })
 
@@ -761,7 +770,7 @@ export class PeriodsComponent implements OnInit {
       patronal_number = "145998";
     }
     let t_period:string = this.period.idperiods;
-    window.open("http://200.94.251.67/phpscripts/igssTest.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
+    window.open("http://172.18.2.45/phpscripts/igssTest.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
 
   }
 }

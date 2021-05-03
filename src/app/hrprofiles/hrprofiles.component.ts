@@ -703,7 +703,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   showDp(dp: disciplinary_processes) {
-    if (dp.status == 'DISPATCHED') {
+    if (dp.status == 'DISPATCHED' || dp.status == "COMPLETED") {
       this.editRequest = false;
     } else {
       if (dp.status == 'PENDING') {
@@ -1393,7 +1393,7 @@ export class HrprofilesComponent implements OnInit {
       this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
         var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de; " + parseInt(emp.hiring_date.split("-")[0]);
         e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
-        url = "http://200.94.251.67/phpscripts/letterLaboral.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company + "&start=" + dt + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
+        url = "http://172.18.2.45/phpscripts/letterLaboral.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&puesto=" + emp.job + "&departamento=" + emp.id_account + "/" + this.actualLetters.company + "&start=" + dt + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
         window.open(url, "_blank");
       })
     }
@@ -1403,7 +1403,7 @@ export class HrprofilesComponent implements OnInit {
         var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de; " + parseInt(emp.hiring_date.split("-")[0]);
         var afiliacion = this.profile[0].iggs;
         var patrono = '145998';
-        url = "http://200.94.251.67/phpscripts/letterIntecap.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&id=" + this.profile[0].dpi + "&company=" + this.actualLetters.company + "&hiring=" + dt + "&afiliacion=" + afiliacion + "&patronal=" + patrono + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
+        url = "http://172.18.2.45/phpscripts/letterIntecap.php?date=" + e_date + "&name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&id=" + this.profile[0].dpi + "&company=" + this.actualLetters.company + "&hiring=" + dt + "&afiliacion=" + afiliacion + "&patronal=" + patrono + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
         window.open(url, "_blank");
       })
     }
@@ -1413,7 +1413,7 @@ export class HrprofilesComponent implements OnInit {
         e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
         var prod = parseFloat(emp.productivity_payment) - 250;
         var total = parseFloat(emp.base_payment) + parseFloat(emp.productivity_payment);
-        url = "http://200.94.251.67/phpscripts/letterIngresos.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + emp.job + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&base=" + emp.base_payment + "&productivity=" + prod + "&total=" + total + "&date=" + e_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
+        url = "http://172.18.2.45/phpscripts/letterIngresos.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + emp.job + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&base=" + emp.base_payment + "&productivity=" + prod + "&total=" + total + "&date=" + e_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&iduser=" + this.authUser.getAuthusr().iduser;
         window.open(url, "_blank");
       })
     }
@@ -1425,7 +1425,7 @@ export class HrprofilesComponent implements OnInit {
           trem = numbers[parseInt(str.split("-")[2]) - 1] + " de " + month[parseInt(str.split("-")[1]) - 1] + " de " + year[parseInt(str.split("-")[0]) - 2020];
           var dt = numbers[parseInt(emp.hiring_date.split("-")[2]) - 1] + " de " + month[parseInt(emp.hiring_date.split("-")[1]) - 1] + " de " + parseInt(emp.hiring_date.split("-")[0]);
           e_date = numbers[parseInt(this.actualLetters.emition_date.split("-")[2]) - 1] + " de " + month[parseInt(this.actualLetters.emition_date.split("-")[1]) - 1] + " de " + year[parseInt(this.actualLetters.emition_date.split("-")[0]) - 2020];
-          var url = "http://200.94.251.67/phpscripts/letterBaja.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + emp.job + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&date=" + e_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&id=" + emp.idemployees + "&term=" + trem + "&iduser=" + this.authUser.getAuthusr().iduser;
+          var url = "http://172.18.2.45/phpscripts/letterBaja.php?name=" + this.profile[0].first_name + ' ' + this.profile[0].second_name + ' ' + this.profile[0].first_lastname + ' ' + this.profile[0].second_lastname + "&position=" + emp.job + "&department=" + emp.id_account + "/" + this.actualLetters.company + "&hire=" + dt + "&date=" + e_date + "&user=" + this.authUser.getAuthusr().user_name + "&contact=" + this.authUser.getAuthusr().signature.split(";")[1] + "&job=" + this.authUser.getAuthusr().signature.split(";")[0] + "&id=" + emp.idemployees + "&term=" + trem + "&iduser=" + this.authUser.getAuthusr().iduser;
           window.open(url, "_blank");
         })
       })
@@ -1468,9 +1468,9 @@ export class HrprofilesComponent implements OnInit {
     }
 
     if (this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico") {
-      window.open('http://200.94.251.67/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' + this.profile[0].iggs + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] + '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' + '&conyuge_lastname= ' + '&department=' + this.profile[0].city + '&dpi=' + this.profile[0].dpi + '&extended= ' + '&f=' + f + '&first_lastname=' + this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' + this.profile[0].address.split(',')[2] + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' + '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[1] + "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname, "_blank");
+      window.open('http://172.18.2.45/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' + this.profile[0].iggs + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] + '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' + '&conyuge_lastname= ' + '&department=' + this.profile[0].city + '&dpi=' + this.profile[0].dpi + '&extended= ' + '&f=' + f + '&first_lastname=' + this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' + this.profile[0].address.split(',')[2] + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' + '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[1] + "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname, "_blank");
     } else {
-      window.open('http://200.94.251.67/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type, "_blank");
+      window.open('http://172.18.2.45/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type, "_blank");
     }
   }
 
@@ -1506,7 +1506,7 @@ export class HrprofilesComponent implements OnInit {
     ];
 
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
-      window.open("http://200.94.251.67/phpscripts/disciplinariProcess.php?avaya=" + emp.client_id + "&employee=" + nm + "&sup=" + emp.reporter + "&date=" + this.todayDate.split("-")[2] + " de " + months[parseInt(this.todayDate.split('-')[1]) - 1] + " de " + this.todayDate.split('-')[0] + "&pos=" + emp.job + "&acc=Operaciones&grade=" + this.activeRequest.dp_grade + "&type=" + this.activeRequest.type + "&description=" + this.activeRequest.description + "&legal=" + this.activeRequest.legal_foundament + "&mot=" + this.activeRequest.motive + "&consequences=" + this.activeRequest.consequences + "&observations=" + this.activeRequest.observations, "_blank");
+      window.open("http://172.18.2.45/phpscripts/disciplinariProcess.php?avaya=" + emp.client_id + "&employee=" + nm + "&sup=" + emp.reporter + "&date=" + this.todayDate.split("-")[2] + " de " + months[parseInt(this.todayDate.split('-')[1]) - 1] + " de " + this.todayDate.split('-')[0] + "&pos=" + emp.job + "&acc=Operaciones&grade=" + this.activeRequest.dp_grade + "&type=" + this.activeRequest.type + "&description=" + this.activeRequest.description + "&legal=" + this.activeRequest.legal_foundament + "&mot=" + this.activeRequest.motive + "&consequences=" + this.activeRequest.consequences + "&observations=" + this.activeRequest.observations, "_blank");
     })
   }
 

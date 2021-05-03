@@ -16,6 +16,7 @@ $sql = "SELECT payroll_values.id_account AS `acc`, employees.*, hires.*, profile
     INNER JOIN hires ON hires.idhires = employees.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN accounts ON accounts.idaccounts = payroll_values.id_account
+    LEFT JOIN (SELECT SUM(amount) AS `tk_adj`, id_payment FROM timekeeping_adjustments GROUP BY id_payment) AS `tk_adjs` ON `tk_adjs`.id_payment = payroll_values.id_payment
     WHERE id_period = $id";
 
 if($result = mysqli_query($con, $sql)){

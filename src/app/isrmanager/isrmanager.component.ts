@@ -80,11 +80,11 @@ export class IsrmanagerComponent implements OnInit {
   }
 
   getIsrReport() {
-    window.open("http://200.94.251.67/phpscripts/exportIsrReport.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
+    window.open("http://172.18.2.45/phpscripts/exportIsrReport.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
   }
 
   getTermReport(){
-    window.open("http://200.94.251.67/phpscripts/exportIsrReport_term.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
+    window.open("http://172.18.2.45/phpscripts/exportIsrReport_term.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
   }
 
   setIsrReport() {
