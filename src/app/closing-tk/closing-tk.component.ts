@@ -62,10 +62,15 @@ export class ClosingTkComponent implements OnInit {
   p_val_update:payroll_values_gt[] = [];
   import_type:string = "PERFORMANCE BONUS";
   saving:boolean = false;
+  deadline_date:string = new Date().toISOString().split('T')[0];
+  deadline_time:string = new Date().getHours() + ":" + new Date().getMinutes();
+  disable_date:boolean = false;
+  disable_time:boolean = false;
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
   ngOnInit() {
+    console.log(this.deadline_date + " " + this.deadline_time);
     this.start();
   }
 
@@ -142,6 +147,9 @@ export class ClosingTkComponent implements OnInit {
   }
 
   setPayments() {
+    this.disable_time = false;
+    this.disable_date = false;
+    let refTime:number = new Date(this.deadline_date + " " + this.deadline_time).getTime();
     this.completed = false;
     this.working = false;
     this.importEnd = false;
@@ -289,7 +297,8 @@ export class ClosingTkComponent implements OnInit {
 
                                   if (!valid_trm && !valid_transfer) {
                                     dp.forEach(disciplinary_process => {
-                                      if (disciplinary_process.day_1 == attendance.date || disciplinary_process.day_2 == attendance.date || disciplinary_process.day_3 == attendance.date || disciplinary_process.day_4 == attendance.date) {
+                                      console.log(new Date(disciplinary_process.dateTime).getTime());
+                                      if ((new Date(disciplinary_process.dateTime).getTime() <= refTime) && disciplinary_process.day_1 == attendance.date || disciplinary_process.day_2 == attendance.date || disciplinary_process.day_3 == attendance.date || disciplinary_process.day_4 == attendance.date) {
                                         activeSuspension = true;
                                         attendance.balance = 'JANP';
                                         discounted_days = discounted_days + 1;
@@ -310,7 +319,6 @@ export class ClosingTkComponent implements OnInit {
                                           rs.vacations = (Number(rs.vacations) + Number(vacation.count)).toFixed(0);
                                           if (Number(vacation.count) < 1) {
                                             if (attendance.scheduled != "OFF") {
-                                              console.log((Number(attendance.worked_time) + "|" + (Number(attendance.scheduled) * Number(vacation.count)).toFixed(5)));
                                               attendance.worked_time = (Number(attendance.worked_time) + (Number(attendance.scheduled) * Number(vacation.count))).toFixed(5);
                                               attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toFixed(3);
                                               discounted_hours = discounted_hours + Number(attendance.worked_time) - Number(attendance.scheduled);
@@ -407,6 +415,7 @@ export class ClosingTkComponent implements OnInit {
                                         }
                                       }
                                     }
+
                                     cnt_days = cnt_days + 1;
                                     if (new Date(attendance.date).getDay() == 6) {
                                       off_on_week = days_off - off_on_week;
@@ -481,6 +490,10 @@ export class ClosingTkComponent implements OnInit {
                                 if (ns_count + days_off >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24) || Number(rs.janp) + days_off - janp_on_off_2 >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24)) {
                                   discounted_days = 15;
                                   sevenths = 0;
+                                }
+
+                                if(att.length == 0){
+                                  discounted_days = 15;
                                 }
 
                                 just.forEach(justification => {
@@ -1143,5 +1156,23 @@ export class ClosingTkComponent implements OnInit {
         });
       })
     }
+  }
+  
+  disableDate(){
+    this.disable_date = true;
+  }
+
+  changeDeadlineDate(str:string){
+    this.deadline_date = str;
+    this.disable_date = false;
+  }
+
+  disableTime(){
+    this.disable_time = true;
+  }
+
+  changeDeadlineTime(str:string){
+    this.deadline_time = str;
+    this.disable_time = false;
   }
 }

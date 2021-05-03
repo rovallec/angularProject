@@ -58,22 +58,32 @@
                 [attr.aria-valuemax]="max_progress">{{step}}</div>
         </div>
         <div class="row col-md-12" *ngIf="!isLoading && finished">
-            <div class="col-md-2"></div>
+            <div class="col-md-1"></div>
             <div class="col-md-2">
                 <label>YEAR:</label>
                 <select class="form-control" (change)="setYear()" [(ngModel)]="selectedYear">
                     <option *ngFor="let year of years">{{year}}</option>
                 </select>
             </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
                 <label>PERIOD:</label>
                 <select class="form-control" [(ngModel)]="selectedPeriod" (change)="setPeriod($event.target.value)">
                     <option *ngFor="let period of periods" [value]="period.idperiods">{{period.start}} TO {{period.end}}
                     </option>
                 </select>
             </div>
-            <div class="col-md-2"></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4">
+                <label>DEADLINE</label>
+                <div class="d-flex justify-content-between">
+                    <input type="text" class="form-control" [(ngModel)]="deadline_date" (mouseenter)="disableDate()" *ngIf="!disable_date">
+                    <input type="date" class="form-control" (change)="changeDeadlineDate($event.target.value)" *ngIf="disable_date">
+                    <input type="text" class="form-control" [(ngModel)]="deadline_time" (mouseenter)="disableTime()" *ngIf="!disable_time">
+                    <input type="time" class="form-control" (change)="changeDeadlineTime($event.target.value)" *ngIf="disable_time">
+                    <button class="form-control btn btn-outline-success" (click)="setPayments()"><i class="fas fa-sync"></i></button>
+                </div>
+            </div>
         </div>
         <div class="row" style="margin-top:25px">
             <div class="col-md-12">

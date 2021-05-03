@@ -311,6 +311,7 @@ export class disciplinary_processes {
     date: string;
     notes: string;
     status: string;
+    dateTime:string;
     //Request
     idrequests: string;
     requested_by: string;
@@ -338,7 +339,6 @@ export class disciplinary_processes {
     day_2: string;
     day_3: string;
     day_4: string;
-
     constructor() {
         this.id_user = null;
         this.id_employee = null;
