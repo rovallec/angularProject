@@ -150,6 +150,7 @@ export class ClosingTkComponent implements OnInit {
     this.disable_time = false;
     this.disable_date = false;
     let refTime:number = new Date(this.deadline_date + " " + this.deadline_time).getTime();
+
     this.completed = false;
     this.working = false;
     this.importEnd = false;

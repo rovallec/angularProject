@@ -91,7 +91,7 @@ SELECT DISTINCT
   0.00 AS 'SalarioSeptimos',
   g.holidays AS 'SalarioAsuetos',
   ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) AS 'SalarioTotal',
-  -1 * if(g.base_complete<>0.00, g.base_complete / 2, 0.00) - g.base AS 'Ausencias',
+  -1 * (if(g.base_complete<>0.00, (g.base_complete / 2), 0.00) - g.base) AS 'Ausencias',
   ROUND(COALESCE(g.base_complete / 2, 0.00) + COALESCE(g.ot, 0.00) + 0.00 + COALESCE(g.holidays, 0.00), 2) +
   ROUND((COALESCE(g.base_hours, 0.00)-120)/(120/COALESCE(g.base_complete/2, 0.00)), 2)AS 'SalarioNeto',   
   /* DEDUCCIONES */
@@ -113,7 +113,7 @@ SELECT DISTINCT
   COALESCE(ROUND(
   IF(COALESCE(g.base_complete, 0.00) = 0.00, 0.00,
   COALESCE(g.base_complete / 2, 0.00)) + IF(COALESCE(g.ot, 0.00) = 0.00, 0.00, COALESCE(g.ot, 0.00)) + 0.00 + IF(COALESCE(g.holidays, 0.00) = 0.00, 0.00, COALESCE(g.holidays, 0.00)) + /* Salario Base (SalarioTotal) */ 
-  -1 * if(COALESCE(g.base_hours, 0.00) = 0.00, 0.00, COALESCE(g.base_complete / 2, 0.00) - g.base) +  /* Ausencias */
+  -1 * if(COALESCE(g.base_complete, 0.00) = 0.00, 0.00, COALESCE(g.base_complete / 2, 0.00) - g.base) +  /* Ausencias */
   0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + 0.00 + /* DEDUCCIONES VARIAS */ 
   0.00 + /* BonificacionIncentivo */ 
   COALESCE(k.amount, 0.00), 2), 0.00) AS 'LiquidoARecibir', /* OtrasBonificacioneseincentivos */
@@ -130,7 +130,7 @@ SELECT DISTINCT
   0.00 AS 'TransporteEnBus',
   0.00 AS 'PrestamoPersonal', 
    /* Detalle de Bonos / Ajustes */
-  IF(j.type='AJUSTES PERIODOS',         ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'AjustesPeriodos',
+  IF(j.type='Ajustes Periodos Anteriores',         ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'AjustesPeriodos',
   IF(j.type = 'Bonos Diversos',         ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonosDiversos',
   IF(j.type='BONOS POR ASISTENCIA',     ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonoPorAsistencia',
   IF(j.type='TREASURE HUNT',            ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'TreasureHunt',
@@ -146,7 +146,7 @@ INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod =
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits j on (g.idpayments = j.id_payment)
 INNER JOIN (SELECT c2.id_payment, SUM(ROUND(c2.amount, 2)) AS amount FROM credits c2 where (c2.TYPE NOT IN('Bonificacion Decreto', 'Anticipo Sobre Sueldo', 'Salario Base') AND c2.TYPE NOT LIKE'%Horas%Extra%Laboradas%' AND c2.TYPE NOT LIKE'%Horas%De%Asueto%') GROUP BY c2.id_payment) k on (g.idpayments = k.id_payment)
-AND h.idperiods = $AID_Period
+AND h.idperiods = @AID_Period
 UNION 
 /* DEBITOS */
 SELECT DISTINCT
@@ -176,8 +176,8 @@ CONCAT(h.start, ' - ', h.end) AS 'Periodo',
 0.00 AS 'SalarioNeto', 
 /* DEDUCCIONES */
 (-1*(COALESCE(IF(i.TYPE='Descuento IGSS',                        ROUND(i.amount, 2), 0.00), 0.00))) AS 'IGSS',
-(-1*(COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios','Anticipo Sobre Sueldo', 'Discount'),ROUND(i.amount, 2), 0.00), 0.00))) AS 'Otras',
-(-1*(COALESCE(IF(i.TYPE in('Descuentos Varios', 'Discount'),     ROUND(i.amount, 2), 0.00), 0.00))) AS 'Descuentos',
+(-1*(COALESCE(IF(i.TYPE in('Descuentos Varios', 'Discount'),     ROUND(i.amount, 2), 0.00), 0.00))) AS 'Otras',
+(-1*(COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios','Anticipo Sobre Sueldo', 'Discount'),ROUND(i.amount, 2), 0.00), 0.00))) AS 'Descuentos',
 (-1*(COALESCE(IF(i.type='Anticipo Sobre Sueldo',                 ROUND(i.amount, 2), 0.00), 0.00))) AS 'AnticipoSobreSueldo', 
 /* SE SUMAN TODAS LAS DEDUCCIONES */
 (-1*(COALESCE(IF(i.TYPE='Descuento IGSS',                        ROUND(i.amount, 2), 0.00), 0.00) + /* IGSS */ 
@@ -198,7 +198,7 @@ ROUND(
 0.00 + /* Ausencias */ 
 (-1* (COALESCE(IF(i.TYPE='Descuento IGSS',                       ROUND(i.amount, 2), 0.00), 0.00) +  /* IGSS */ 
   COALESCE(IF(i.type not in('Descuento IGSS', 'Descuentos Varios','Descuentos Varios','Anticipo Sobre Sueldo', 'Discount'),ROUND(i.amount, 2), 0.00), 0.00)  +  /* Otras */
-  COALESCE(IF(i.TYPE in('Descuentos Varios', 'Discount'),        ROUND(i.amount, 2), 0.00), 0.00) +  /* Descuentos */
+  COALESCE(IF(i.TYPE in('Descuentos Varios', 'Discount', 'ISR'),        ROUND(i.amount, 2), 0.00), 0.00) +  /* Descuentos */
   COALESCE(IF(i.type='Anticipo Sobre Sueldo',                    ROUND(i.amount, 2), 0.00), 0.00))) +  /* TotalDeducciones En Negativo */
 0.00 + 0.00 + 0.00 + 0.00 + 0.00 +                                                  /* Otros Descuentos */
 COALESCE(IF(i.type='Ajuste Salarial',                            ROUND(i.amount, 2), 0.00), 0.00) +  /* Ajuste Salarial */ 
@@ -232,7 +232,7 @@ INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN debits i ON (g.idpayments = i.id_payment) 
-AND h.idperiods = $AID_Period
+AND h.idperiods = @AID_Period
 UNION 
 /* TODOS LOS EMPLEADOS QUE NO POSEEN CRÉDITOS NI DEBITOS. */
 SELECT DISTINCT
@@ -304,7 +304,7 @@ INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1)
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
-AND h.idperiods = $AID_Period
+AND h.idperiods = @AID_Period
 UNION
 /* CREDITOS BONIFICACION DECRETO*/
 SELECT DISTINCT
@@ -379,7 +379,7 @@ INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits i on (g.idpayments = i.id_payment)
 AND h.idperiods = $AID_Period  
 and i.type='Bonificacion Decreto'
-) A1
+) A1 WHERE A1.idpayments = 17283
 GROUP BY A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JORNADA,A1.SECCION,A1.bank,
 A1.`Transferencia/Cheque`,
 A1.dpi,A1.iggs,A1.PERIODO,
