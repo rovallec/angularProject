@@ -66,7 +66,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (vacations.date BETWEEN '$start' AND '$end'))
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4) 
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4 AND hr_processes.status = 'PENDING')
 
 UNION
 
@@ -97,7 +97,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.end >= '$start')
       OR (leaves.start <= '$end'))
       AND (`dt`.`dates` BETWEEN '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND (leaves.motive = 'Others Unpaid' OR leaves.motive = 'IGSS Unpaid' OR leaves.motive = 'VTO Unpaid'))
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Unpaid' OR leaves.motive = 'IGSS Unpaid' OR leaves.motive = 'VTO Unpaid'))
 
 UNION
 
@@ -129,7 +129,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.end >= '$start')
       OR (leaves.start <= '$end'))
       AND (`dt`.`dates` between '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND leaves.motive = 'Leave of Absence Unpaid') 
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND leaves.motive = 'Leave of Absence Unpaid' AND hr_processes.status = 'PENDING') 
 
 UNION
 
@@ -161,7 +161,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.end >= '$start')
       OR (leaves.start <= '$end'))
       AND (`dt`.`dates` between '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity'))  
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity') AND hr_processes.status = 'PENDING')  
 
 UNION
 
@@ -189,7 +189,7 @@ FROM
 		) sequence
 		where date_add('$start', interval `row` day) <= '$end'
     ) AS `dt` ON `dt`.`dates` = suspensions.day_1 OR `dt`.`dates` = suspensions.day_2 OR `dt`.`dates` = suspensions.day_3 OR `dt`.`dates` = suspensions.day_4
-WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '$start' AND '$end');";
+WHERE hr_processes.status = 'PENDING' AND ((hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '$start' AND '$end'));";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH", "NOTES", "TIMESTAMP"));

@@ -10,7 +10,8 @@ $nd = ($request->end);
 $res = [];
 $i = 0;
 
-$sql = "SELECT hires.nearsol_id, accounts.name AS `acc`, profiles.idprofiles, employees.idemployees, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname ,employees.client_id,`tmp`.id_employee, count(`tmp`.idattendences) AS `cnt`, group_concat(`tmp`.date) AS `dates` FROM (SELECT attendences.* FROM attendences
+$sql = "SELECT hires.nearsol_id, accounts.name AS `acc`, profiles.idprofiles, employees.idemployees, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname ,employees.client_id,`tmp`.id_employee, count(`tmp`.idattendences) AS `cnt`, group_concat(`tmp`.date) AS `dates` FROM 
+(SELECT attendences.* FROM attendences
 LEFT JOIN hr_processes ON attendences.id_employee = hr_processes.id_employee
 INNER JOIN vacations ON vacations.id_process = hr_processes.idhr_processes AND attendences.date = vacations.date AND vacations.count > 0.5
 WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING'
@@ -18,7 +19,13 @@ UNION
 SELECT attendences.* FROM attendences
 LEFT JOIN hr_processes ON attendences.id_employee = hr_processes.id_employee
 INNER JOIN leaves ON attendences.date BETWEEN leaves.start AND leaves.end AND leaves.id_process = hr_processes.idhr_processes
-WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING') as `tmp`
+WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING'
+UNION
+SELECT attendences.* FROM attendences
+LEFT JOIN hr_processes ON hr_processes.id_employee = attendences.id_employee
+INNER JOIN disciplinary_requests ON hr_disciplinary_requests.id_process = hr_processes.idhr_processes
+INNER JOIN disciplinary_processes ON disciplinary_requests.iddisciplinary_requests = disciplinary_processes.id_request
+INNER JOIN suspensions ON suspensions.id_process = disciplinary_processes.iddisciplinary_process AND suspensions.date = attendances.date) as `tmp`
 INNER JOIN employees ON employees.idemployees = `tmp`.id_employee
 INNER JOIN hires ON hires.idhires = employees.id_hire
 INNER JOIN profiles ON profiles.idprofiles = hires.id_profile

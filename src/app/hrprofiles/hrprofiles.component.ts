@@ -131,6 +131,8 @@ export class HrprofilesComponent implements OnInit {
   maxDate:string = null;
   minDate:string = null;
 
+  currentPayVacations:boolean = false;
+
 
   reasons: string[] = [
     "Asistencia",
@@ -462,8 +464,13 @@ export class HrprofilesComponent implements OnInit {
     this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
     if (action == "Add") {
       this.activeVacation.status = "COMPLETED";
+      this.activeVacation.notes = "PAID VACATIONS";
     } else {
-      this.activeVacation.status = 'PENDING';
+      if(this.currentPayVacations){
+        this.activeVacation.status = "COMPLETED";
+      }else{
+        this.activeVacation.status = 'PENDING'; 
+      }
     }
     this.activeVacation.count = '1';
     this.activeVacation.action = action;
@@ -1055,7 +1062,9 @@ export class HrprofilesComponent implements OnInit {
           for (let i = 0; i < (parseFloat(this.actuallProc.idprocesses)); i++) {
             this.apiService.getPeriods().subscribe((periods: periods[]) => {
               this.apiService.getPayments(periods[periods.length - 1]).subscribe((payment: payments[]) => {
+                this.currentPayVacations = true;
                 this.addVacation("Take", "4");
+                this.currentPayVacations = false;
                 this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
                 this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
                 this.activeVacation.id_department = this.workingEmployee.account;
