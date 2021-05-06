@@ -21,8 +21,8 @@ $productivity = (validarDatos($request->productivity));
 $sevenths = validarDatos($request->seventh);
 $holidays = validarDatos($request->holidays);
 $holidays_hours = validarDatos($request->holidays_hours);
-$base_complete = (validarDatos($request->base_complete));
-$productivity_complete = (validarDatos($request->productivity_complete));
+$base_complete = removeCommas(validarDatos($request->base_complete));
+$productivity_complete = removeCommas(validarDatos($request->productivity_complete));
 $id_account = validarDatos($request->id_account_py);
 
 if($date != "NULL"){

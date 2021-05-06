@@ -91,7 +91,7 @@ export class PeriodsComponent implements OnInit {
   clients: clients[] = [];
   show_payments: payments[] = [];
   selectedClient: string = null;
-  base: boolean = false;;
+  base: boolean = false;
   emp_set: string = null;
   selected_patrono:string = 'PRG Recurso Humano, S.A.';
 
@@ -480,9 +480,12 @@ export class PeriodsComponent implements OnInit {
   }
 
   completePeriod() {
-    this.progress = 1;
     this.working = true;
-    this.max_progress = this.global_services.length;
+    this.completed = false;
+    this.importActive = true;
+    this.showPayments = false;
+    this.max_progress = this.global_services.length + this.global_judicials.length + this.payments.length;
+    this.progress = 1;
     try {
       this.pushDeductions('credits', this.global_credits);
       this.pushDeductions('debits', this.global_debits);
@@ -493,8 +496,6 @@ export class PeriodsComponent implements OnInit {
         }
         this.apiService.updateServices(service).subscribe((str: string) => { });
       });
-      this.max_progress = this.global_judicials.length;
-      this.progress = 1;
       this.global_judicials.forEach(judicial => {
         this.progress = this.progress +1;
         this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
@@ -503,8 +504,6 @@ export class PeriodsComponent implements OnInit {
           }
         })
       })
-      this.max_progress = this.payments.length;
-      this.progress = 1;
       this.payments.forEach(py => {
         this.progress = this.progress +1;
         this.apiService.setPayment(py).subscribe((str_3: string) => {
@@ -525,8 +524,12 @@ export class PeriodsComponent implements OnInit {
       let e:Error = error;
       window.alert("An error has occured:\n" + e.message);
     } finally {
-      this.working = false;
       this.progress = 0;
+      this.max_progress = 0;
+      this.working = false;
+      this.importActive = false;
+      this.showPayments = true;
+      this.completed = true;
     }
   }
 

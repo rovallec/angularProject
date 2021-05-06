@@ -384,7 +384,7 @@ GROUP BY A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JOR
 A1.`Transferencia/Cheque`,
 A1.dpi,A1.iggs,A1.PERIODO,
 A1.Observaciones 
-LIMIT 0, 10000;";
+LIMIT 0, 10000;"; 
 
 
 
