@@ -10,7 +10,7 @@ echo "\xEF\xBB\xBF";
 $AID_Period = $_GET['AID_Period'];
 $i = 0;
 
-$sql =  "SELECT 
+$sql =  "SELECT
 A1.idpayments,
 A1.idemployees AS 'IdEmployees',
 A1.client_id As 'Client_ID',
@@ -379,12 +379,12 @@ INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits i on (g.idpayments = i.id_payment)
 AND h.idperiods = $AID_Period  
 and i.type='Bonificacion Decreto'
-) A1 WHERE A1.idpayments = 17283
+) A1
 GROUP BY A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JORNADA,A1.SECCION,A1.bank,
 A1.`Transferencia/Cheque`,
 A1.dpi,A1.iggs,A1.PERIODO,
 A1.Observaciones 
-LIMIT 0, 10000;"; 
+LIMIT 0, 10000;";
 
 
 
