@@ -19,13 +19,7 @@ UNION
 SELECT attendences.* FROM attendences
 LEFT JOIN hr_processes ON attendences.id_employee = hr_processes.id_employee
 INNER JOIN leaves ON attendences.date BETWEEN leaves.start AND leaves.end AND leaves.id_process = hr_processes.idhr_processes
-WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING'
-UNION
-SELECT attendences.* FROM attendences
-LEFT JOIN hr_processes ON hr_processes.id_employee = attendences.id_employee
-INNER JOIN disciplinary_requests ON hr_disciplinary_requests.id_process = hr_processes.idhr_processes
-INNER JOIN disciplinary_processes ON disciplinary_requests.iddisciplinary_requests = disciplinary_processes.id_request
-INNER JOIN suspensions ON suspensions.id_process = disciplinary_processes.iddisciplinary_process AND suspensions.date = attendances.date) as `tmp`
+WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING') as `tmp`
 INNER JOIN employees ON employees.idemployees = `tmp`.id_employee
 INNER JOIN hires ON hires.idhires = employees.id_hire
 INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
