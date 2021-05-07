@@ -107,7 +107,7 @@
             $isr[19] = '0';
             $isr[20] = number_format(((($row['base']) * ($a_days/365)) + $row['ex_aguinaldo']),2);
             $isr[21] = number_format(((($row['base']) * ($b_days/365)) + $row['ex_bono14']),2);
-            $isr[22] = number_format(((($row['base'] * (12 - date("m",strtotime($end)))) + $row['print_base'] + $row['over_time'] + ($monthly_mult * $row['base']))*0.0483),2);
+            $isr[22] = number_format(((($row['base'] * (12 - date("m",strtotime($end)))) + $row['print_base'] + $row['over_time'] + $row['hol'] + ($monthly_mult * $row['base']))*0.0483),2);
             fputcsv($output, $isr, ",");
         };
     }else{
