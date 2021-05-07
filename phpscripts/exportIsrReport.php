@@ -83,7 +83,7 @@
             $isr[3] = number_format(((250 * (12 - date("m",strtotime($end)))) + ($row['decreto_acumulado']) + ($monthly_mult * 250)),2);
             $isr[4] =(($row['productivity']) . "*" . (12 - date("m",strtotime($end))) . "+" .
                      (($row['productivity']) * $monthly_mult) . "+" . $row['print_productivity'] . "+" . $row['bonuses'] . "+" .
-                     (($row['productivity'] + 250) * ($b_days/365)) . "+" . (($row['productivity'] + 250) * ($a_days/365)) . "+" . ($row['adjustments'])),2;
+                     (($row['productivity'] + 250) * ($b_days/365)) . "+" . (($row['productivity'] + 250) * ($a_days/365)) . "+" . ($row['adjustments']));
             $isr[5] = '0';
             $isr[6] = '0';
     //////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
