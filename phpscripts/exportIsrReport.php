@@ -52,7 +52,7 @@
                         GROUP BY id_employee) AS `adj` ON `adj`.id_employee = employees.idemployees
         LEFT JOIN (SELECT SUM(credits.amount) AS `amnt`, id_employee
                     FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
-                    WHERE credits.type LIKE '%Horas Asueto:%'
+                    WHERE credits.type LIKE '%Horas de Asueto:%'
                         GROUP BY id_employee) AS `hld` ON `hld`.id_employee = employees.idemployees
         LEFT JOIN formeremployer ON formeremployer.id_employee = employees.idemployees
     WHERE active = 1 GROUP BY idemployees;";
