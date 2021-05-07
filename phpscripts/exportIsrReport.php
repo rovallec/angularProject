@@ -28,7 +28,7 @@
     '250.00' AS `decreto`, coalesce(`ot`,0)  AS `over_time`, coalesce(`rise_amount`,0) AS `rises`, employees.hiring_date, coalesce(employees.indemnizations,0) AS `indemnization`, coalesce(employees.retentions,0) AS `retention`,
     coalesce(`real_base`,0) AS `print_base`, coalesce(`real_productivity`,0) AS `print_productivity`, SUM(coalesce(`b_decreto`.`b_amt`,0)) AS `decreto_acumulado`, SUM(coalesce(formeremployer.aguinaldo, 0)) AS `ex_aguinaldo`,
     SUM(coalesce(formeremployer.bono14,0)) AS `ex_bono14`, SUM(coalesce(formeremployer.igss,0)) AS `ex_igss`, SUM(coalesce(formeremployer.taxpendingpayment,0)) AS `ex_tax`, SUM(formeremployer.indemnization) AS `ex_indemnizations`,
-    SUM(coalesce(`adj`.`amnt`, 0))  AS `adjustments`, SUM(coalesce(`hld`.amount,0)) AS `hol`
+    SUM(coalesce(`adj`.`amnt`, 0))  AS `adjustments`, SUM(coalesce(`hld`.`amnt`,0)) AS `hol`
     FROM employees
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
