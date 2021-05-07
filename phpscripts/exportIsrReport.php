@@ -5,8 +5,6 @@
     header('Content-Disposition: attachment; filename="' . "CargaProyeccionyActualizacion.csv" . '"');
     require 'database.php';
 
-    echo "\xEF\xBB\xBF";
-
     $start = date("Y") . "-01-01";
     $end = $_GET['end'];
 
@@ -56,6 +54,7 @@
     WHERE active = 1 GROUP BY idemployees;";
 
     $output = fopen("php://output", "w");
+    echo "\xEF\xBB\xBF";
     fputcsv($output, array("NIT empleado", "Sueldos", "Horas Extras", "Bono Decreto 37-2001", "Otras Bonificaciones", "Comisiones", "Propinas", "Aguinaldo", "Bono Anual de trabajadores (14)", "Viáticos", "Gasto de representación", "Dietas", "Gratificaciones", "Remuneraciones", "Prestaciones IGSS", "Otros", "Indemnizaciones o pensiones por causa de muerte", "Indemnizaciónes por tiempo servido", "Remuneraciones de los diplomáticos", "Gastos de representación y viáticos comprobables", "Aguinaldo", "Bono Anual de trabajadores (14)", "Cuotas IGSS  y Otros planes de seguridad social"));
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
@@ -81,9 +80,7 @@
             $isr[1] = number_format($row['base'] * (12 - date("m",strtotime($end))) + $row['print_base'] + ($row['base'] * $monthly_mult));
             $isr[2] = $row['over_time'];
             $isr[3] = number_format(((250 * (12 - date("m",strtotime($end)))) + ($row['decreto_acumulado']) + ($monthly_mult * 250)),2);
-            $isr[4] =(($row['productivity']) . "*" . (12 - date("m",strtotime($end))) . "+" .
-                     (($row['productivity']) * $monthly_mult) . "+" . $row['print_productivity'] . "+" . $row['bonuses'] . "+" .
-                     (($row['productivity'] + 250) * ($b_days/365)) . "+" . (($row['productivity'] + 250) * ($a_days/365)) . "+" . ($row['adjustments']));
+            $isr[4] = number_format((($row['productivity']) * (12 - date("m",strtotime($end))) + (($row['productivity']) * $monthly_mult) + $row['print_productivity'] + $row['bonuses'] + (($row['productivity'] + 250) * ($b_days/365)) + (($row['productivity'] + 250) * ($a_days/365)) + ($row['adjustments'])),2);
             $isr[5] = '0';
             $isr[6] = '0';
     //////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
