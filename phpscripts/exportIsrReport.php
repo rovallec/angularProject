@@ -25,7 +25,7 @@
 
     $sql = "SELECT employees.idemployees, profiles.nit, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, coalesce(`cmp_base`, 0) AS `base`, coalesce(`cmp_productivity`,0) AS `productivity`,
     coalesce(`crd`.`amnt`,0) AS `bonuses`,
-    '250.00' AS `decreto`, coalesce(`ot`,0) AS `over_time`, coalesce(`rise_amount`,0) AS `rises`, employees.hiring_date, coalesce(employees.indemnizations,0) AS `indemnization`, coalesce(employees.retentions,0) AS `retention`,
+    '250.00' AS `decreto`, (coalesce(`ot`,0) + coalesce(`hld`.amount, 0))  AS `over_time`, coalesce(`rise_amount`,0) AS `rises`, employees.hiring_date, coalesce(employees.indemnizations,0) AS `indemnization`, coalesce(employees.retentions,0) AS `retention`,
     coalesce(`real_base`,0) AS `print_base`, coalesce(`real_productivity`,0) AS `print_productivity`, SUM(coalesce(`b_decreto`.`b_amt`,0)) AS `decreto_acumulado`, SUM(coalesce(formeremployer.aguinaldo, 0)) AS `ex_aguinaldo`,
     SUM(coalesce(formeremployer.bono14,0)) AS `ex_bono14`, SUM(coalesce(formeremployer.igss,0)) AS `ex_igss`, SUM(coalesce(formeremployer.taxpendingpayment,0)) AS `ex_tax`, SUM(formeremployer.indemnization) AS `ex_indemnizations`,
     SUM(coalesce(`adj`.`amnt`, 0))  AS `adjustments`
@@ -50,6 +50,10 @@
                     FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
                     WHERE credits.type LIKE '%Ajustes%'
                         GROUP BY id_employee) AS `adj` ON `adj`.id_employee = employees.idemployees
+        LEFT JOIN (SELECT SUM(credits.amount) AS `amnt`, id_employee
+                    FROM credits INNER JOIN payments on payments.idpayments = credits.id_payment 
+                    WHERE credits.type LIKE '%Horas Asueto:%'
+                        GROUP BY id_employee) AS `hld` ON `hld`.id_employee = employees.idemployees
         LEFT JOIN formeremployer ON formeremployer.id_employee = employees.idemployees
     WHERE active = 1 GROUP BY idemployees;";
 
