@@ -2,7 +2,7 @@
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
     header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename='' . 'ProyeccionISR.csv' . ''');
+    header('Content-Disposition: attachment; filename="' . 'ProyeccionISR.csv' . '"');
     require 'database.php';
     
     $title = ['NIT empleado',
