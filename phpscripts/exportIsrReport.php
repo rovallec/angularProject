@@ -5,9 +5,30 @@
     header('Content-Disposition: attachment; filename="' . "ProyeccionISR.csv" . '"');
     require 'database.php';
     
-    $tittle = ['NIT empleado', 'Sueldos', 'Horas Extras', 'Bono Decreto 37-2001', 'Otras Bonificaciones', 'Comisiones', 'Propinas', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Viáticos', 'Gasto de representación', 'Dietas', 'Gratificaciones', 'Remuneraciones', 'Prestaciones IGSS', 'Otros', 'Indemnizaciones o pensiones por causa de muerte', 'Indemnizaciónes por tiempo servido', 'Remuneraciones de los diplomáticos', 'Gastos de representación y viáticos comprobables', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Cuotas IGSS  y Otros planes de seguridad social'];
+    $title = ['NIT empleado',
+              'Sueldos',
+              'Horas Extras',
+              'Bono Decreto 37-2001',
+              'Otras Bonificaciones',
+              'Comisiones', 'Propinas',
+              'Aguinaldo',
+              'Bono Anual de trabajadores (14)',
+              'Viáticos',
+              'Gasto de representación',
+              'Dietas',
+              'Gratificaciones',
+              'Remuneraciones',
+              'Prestaciones IGSS',
+              'Otros',
+              'Indemnizaciones o pensiones por causa de muerte',
+              'Indemnizaciónes por tiempo servido',
+              'Remuneraciones de los diplomáticos',
+              'Gastos de representación y viáticos comprobables',
+              'Aguinaldo',
+              'Bono Anual de trabajadores (14)',
+              'Cuotas IGSS  y Otros planes de seguridad social'];
     $output = fopen("php://output", "w");
-    fputcsv($output, $tittle);
+    fputcsv($output, $title);
 
     $start = date("Y") . "-01-01";
     $end = $_GET['end'];
@@ -112,5 +133,6 @@
     }else{
         http_response_code(404);
     }
+    
     fclose($output);
     ?>
