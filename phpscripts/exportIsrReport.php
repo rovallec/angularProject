@@ -2,14 +2,12 @@
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
     header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename="' . "CargaProyeccionyActualizacion.csv" . '"');
+    header('Content-Disposition: attachment; filename="' . "ProyeccionISR.csv" . '"');
     require 'database.php';
     echo "\xEF\xBB\xBF";
 
     $start = date("Y") . "-01-01";
     $end = $_GET['end'];
-
-    $isr = [];
 
     $monthly_mult = 0;
 
