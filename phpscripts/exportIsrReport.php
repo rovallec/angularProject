@@ -5,6 +5,8 @@
     header('Content-Disposition: attachment; filename="' . "ProyeccionISR.csv" . '"');
     require 'database.php';
     echo "\xEF\xBB\xBF";
+    $tittle = ['NIT empleado', 'Sueldos', 'Horas Extras', 'Bono Decreto 37-2001', 'Otras Bonificaciones', 'Comisiones', 'Propinas', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Viáticos', 'Gasto de representación', 'Dietas', 'Gratificaciones', 'Remuneraciones', 'Prestaciones IGSS', 'Otros', 'Indemnizaciones o pensiones por causa de muerte', 'Indemnizaciónes por tiempo servido', 'Remuneraciones de los diplomáticos', 'Gastos de representación y viáticos comprobables', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Cuotas IGSS  y Otros planes de seguridad social'];
+    fputcsv($output, $tittle);
 
     $start = date("Y") . "-01-01";
     $end = $_GET['end'];
@@ -56,9 +58,6 @@
         LEFT JOIN formeremployer ON formeremployer.id_employee = employees.idemployees
     WHERE active = 1 GROUP BY idemployees;";
 
-    $title = ['Empleado', 'Cliente', 'Nombre Del Trabajador', 'Jornada', 'Seccion', 'banco', 'Transferencia / Cheque', 'DPI', 'No. De IGSS', 'Periodo', 'Salario', 'Dias Trabajados', 'Horas Ordinarias', 'Horas Extraordinarias', 'Horas Asuetos', 'Salario Base', 'Salario Extraordinario', 'Salario Comisiones', 'Salario Septimos', 'Salario Asuetos', 'Salario Total', 'Ausencias', 'Salario Neto', 'IGSS', 'Otras', 'Descuentos', 'Anticipo Sobre Sueldo', 'Total Deducciones', 'Aguinaldo', 'Bono 14', 'Vacaciones', 'Idemnizacion', 'Ventajas Economicas', 'Ajuste Salarial', 'Bonificacion Incentivo', 'Otras Bonificaciones e Incentivos', 'Liquido A Recibir', 'Observaciones', 'Boleto De Ornato', 'Descuento De Seguro', 'Descuentos Judiciales', 'HeadSet', 'ISR Empleados', 'Parqueo Empleados', 'ParqueoMotos', 'Tarjeta De Parqueo', 'Transporte En Bus', 'Prestamo Personal', 'Ajustes Periodos', 'Bonos Diversos', 'Bono Por Asistencia', 'Treasure Hunt', 'Bonos Por Referidos', 'Bonos Por Reclutamiento'];
-    $output = fopen("php://output", "w");
-    fputcsv($output, $title);
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
             if(date($row['hiring_date']) <= date((date("Y")-1) . "-12-01")){
