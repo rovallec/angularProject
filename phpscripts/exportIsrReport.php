@@ -4,6 +4,7 @@
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . "CargaProyeccionyActualizacion.csv" . '"');
     require 'database.php';
+    echo "\xEF\xBB\xBF";
 
     $start = date("Y") . "-01-01";
     $end = $_GET['end'];
@@ -58,7 +59,6 @@
     WHERE active = 1 GROUP BY idemployees;";
 
     $output = fopen("php://output", "w");
-    echo "\xEF\xBB\xBF";
     fputcsv($output, array("NIT empleado", "Sueldos", "Horas Extras", "Bono Decreto 37-2001", "Otras Bonificaciones", "Comisiones", "Propinas", "Aguinaldo", "Bono Anual de trabajadores (14)", "Viáticos", "Gasto de representación", "Dietas", "Gratificaciones", "Remuneraciones", "Prestaciones IGSS", "Otros", "Indemnizaciones o pensiones por causa de muerte", "Indemnizaciónes por tiempo servido", "Remuneraciones de los diplomáticos", "Gastos de representación y viáticos comprobables", "Aguinaldo", "Bono Anual de trabajadores (14)", "Cuotas IGSS  y Otros planes de seguridad social"));
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
