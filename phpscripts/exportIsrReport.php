@@ -1,8 +1,8 @@
-    <?php
+<?php
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
     header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename="' . "ProyeccionISR.csv" . '"');
+    header('Content-Disposition: attachment; filename='' . 'ProyeccionISR.csv' . ''');
     require 'database.php';
     
     $title = ['NIT empleado',
@@ -27,20 +27,20 @@
               'Aguinaldo',
               'Bono Anual de trabajadores (14)',
               'Cuotas IGSS  y Otros planes de seguridad social'];
-    $output = fopen("php://output", "w");
+    $output = fopen('php://output', 'w');
     fputcsv($output, $title);
 
-    $start = date("Y") . "-01-01";
+    $start = date('Y') . '-01-01';
     $end = $_GET['end'];
 
     $monthly_mult = 0;
 
-    $today_date = new DateTime(date("Y-m-d"));
+    $today_date = new DateTime(date('Y-m-d'));
 
-    $ag_date = new DateTime((date("Y")) . "-12-01");
-    $bn_date = new DateTime((date("Y")) . "-07-01");
+    $ag_date = new DateTime((date('Y')) . '-12-01');
+    $bn_date = new DateTime((date('Y')) . '-07-01');
 
-    if(date("d", strtotime($end)) <= 15){
+    if(date('d', strtotime($end)) <= 15){
         $monthly_mult = 1;
     }else{
         $monthly_mult = 0.5;
@@ -80,59 +80,59 @@
         LEFT JOIN formeremployer ON formeremployer.id_employee = employees.idemployees
     WHERE active = 1 GROUP BY idemployees;";
 
-    if($result = mysqli_query($con,$sql)){
-        while($row = mysqli_fetch_assoc($result)){
-            if(date($row['hiring_date']) <= date((date("Y")-1) . "-12-01")){
-                $a_date = new DateTime((date("Y")-1) . "-12-01");
-                $a_diff = $a_date->diff($ag_date);
-                $a_days = $a_diff->format("%a");
-            }else{
-                $a_date = new DateTime($row['hiring_date']);
-                $a_diff = $ag_date->diff($a_date);
-                $a_days = $a_diff->format("%a");
-            };
-            if(date($row['hiring_date']) <= date((date("Y")-1) . "-07-01")){
-                $b_date = new DateTime((date("Y")-1) . "-07-01");
-                $b_diff = $bn_date->diff($b_date);
-                $b_days = $b_diff->format("%a");
-            }else{
-                $b_date = new DateTime($row['hiring_date']);
-                $b_diff = $bn_date->diff($b_date);
-                $b_days = $b_diff->format("%a");
-            };
-            $isr[0] = str_replace("-", "",$row['nit']);
-            $isr[1] = number_format($row['base'] * (12 - date("m",strtotime($end))) + $row['print_base'] + ($row['base'] * $monthly_mult));
-            $isr[2] = $row['over_time'] + $row['hol'];
-            $isr[3] = number_format(((250 * (12 - date("m",strtotime($end)))) + ($row['decreto_acumulado']) + ($monthly_mult * 250)),2);
-            $isr[4] = number_format((($row['productivity']) * (12 - date("m",strtotime($end))) + (($row['productivity']) * $monthly_mult) + $row['print_productivity'] + $row['bonuses'] + (($row['productivity'] + 250) * ($b_days/365)) + (($row['productivity'] + 250) * ($a_days/365)) + ($row['adjustments'])),2);
-            /*$isr[4] = (($row['productivity']) . "*" . (12 - date("m",strtotime($end))) . "+" . (($row['productivity']) * $monthly_mult) 
-                      . '+' . $row['print_productivity'] . '+' . $row['bonuses'] . "+" . (($row['productivity'] + 250) * ($b_days/365)) . "+" . 
-                      (($row['productivity'] + 250) * ($a_days/365)) . "+" . ($row['adjustments']));*/
-            $isr[5] = '0';
-            $isr[6] = '0';
-    //////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
-            $isr[7] = number_format(((($row['base']) * ($a_days/365)) + $row['ex_aguinaldo']),2);
-    //////////////////////////////////////////////////BONO 14//////////////////////////////////////////////////////////////
-            $isr[8] = number_format(((($row['base']) * ($b_days/365)) + $row['ex_bono14']),2);
-            $isr[9] = '0';
-            $isr[10] = '0';
-            $isr[11] = '0';
-            $isr[12] = '0';
-            $isr[13] = '0';
-            $isr[14] = '0';
-            $isr[15] = $row['ex_indemnizations'];
-            $isr[16] = '0';
-            $isr[17] = $row['ex_indemnizations'];
-            $isr[18] = '0';
-            $isr[19] = '0';
-            $isr[20] = number_format(((($row['base']) * ($a_days/365)) + $row['ex_aguinaldo']),2);
-            $isr[21] = number_format(((($row['base']) * ($b_days/365)) + $row['ex_bono14']),2);
-            $isr[22] = number_format(((($row['base'] * (12 - date("m",strtotime($end)))) + $row['print_base'] + $row['over_time'] + $row['hol'] + ($monthly_mult * $row['base']))*0.0483),2);
-            fputcsv($output, $isr, ",");
+if($result = mysqli_query($con,$sql)){
+    while($row = mysqli_fetch_assoc($result)){
+        if(date($row['hiring_date']) <= date((date('Y')-1) . '-12-01')){
+            $a_date = new DateTime((date('Y')-1) . '-12-01');
+            $a_diff = $a_date->diff($ag_date);
+            $a_days = $a_diff->format('%a');
+        }else{
+            $a_date = new DateTime($row['hiring_date']);
+            $a_diff = $ag_date->diff($a_date);
+            $a_days = $a_diff->format('%a');
         };
-    }else{
-        http_response_code(404);
-    }
-    
-    fclose($output);
-    ?>
+        if(date($row['hiring_date']) <= date((date('Y')-1) . '-07-01')){
+            $b_date = new DateTime((date('Y')-1) . '-07-01');
+            $b_diff = $bn_date->diff($b_date);
+            $b_days = $b_diff->format('%a');
+        }else{
+            $b_date = new DateTime($row['hiring_date']);
+            $b_diff = $bn_date->diff($b_date);
+            $b_days = $b_diff->format('%a');
+        };
+        $isr[0] = str_replace('-', '',$row['nit']);
+        $isr[1] = number_format($row['base'] * (12 - date('m',strtotime($end))) + $row['print_base'] + ($row['base'] * $monthly_mult));
+        $isr[2] = $row['over_time'] + $row['hol'];
+        $isr[3] = number_format(((250 * (12 - date('m',strtotime($end)))) + ($row['decreto_acumulado']) + ($monthly_mult * 250)),2);
+        $isr[4] = number_format((($row['productivity']) * (12 - date('m',strtotime($end))) + (($row['productivity']) * $monthly_mult) + $row['print_productivity'] + $row['bonuses'] + (($row['productivity'] + 250) * ($b_days/365)) + (($row['productivity'] + 250) * ($a_days/365)) + ($row['adjustments'])),2);
+        /*$isr[4] = (($row['productivity']) . '*' . (12 - date('m',strtotime($end))) . '+' . (($row['productivity']) * $monthly_mult) 
+                  . '+' . $row['print_productivity'] . '+' . $row['bonuses'] . '+' . (($row['productivity'] + 250) * ($b_days/365)) . '+' . 
+                  (($row['productivity'] + 250) * ($a_days/365)) . '+' . ($row['adjustments']));*/
+        $isr[5] = '0';
+        $isr[6] = '0';
+//////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
+        $isr[7] = number_format(((($row['base']) * ($a_days/365)) + $row['ex_aguinaldo']),2);
+//////////////////////////////////////////////////BONO 14//////////////////////////////////////////////////////////////
+        $isr[8] = number_format(((($row['base']) * ($b_days/365)) + $row['ex_bono14']),2);
+        $isr[9] = '0';
+        $isr[10] = '0';
+        $isr[11] = '0';
+        $isr[12] = '0';
+        $isr[13] = '0';
+        $isr[14] = '0';
+        $isr[15] = $row['ex_indemnizations'];
+        $isr[16] = '0';
+        $isr[17] = $row['ex_indemnizations'];
+        $isr[18] = '0';
+        $isr[19] = '0';
+        $isr[20] = number_format(((($row['base']) * ($a_days/365)) + $row['ex_aguinaldo']),2);
+        $isr[21] = number_format(((($row['base']) * ($b_days/365)) + $row['ex_bono14']),2);
+        $isr[22] = number_format(((($row['base'] * (12 - date('m',strtotime($end)))) + $row['print_base'] + $row['over_time'] + $row['hol'] + ($monthly_mult * $row['base']))*0.0483),2);
+        fputcsv($output, $isr, ',');
+    };
+}else{
+    http_response_code(404);
+}
+
+fclose($output);
+?>
