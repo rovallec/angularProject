@@ -16,12 +16,12 @@ profiles.second_lastname ,employees.client_id,`tmp`.id_employee, count(`tmp`.ida
 (SELECT attendences.* FROM attendences
 LEFT JOIN hr_processes ON attendences.id_employee = hr_processes.id_employee
 INNER JOIN vacations ON vacations.id_process = hr_processes.idhr_processes AND attendences.date = vacations.date AND vacations.count > 0.5
-WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$start' AND '$end' AND hr_processes.status = 'PENDING'
+WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING'
 UNION
 SELECT attendences.* FROM attendences
 LEFT JOIN hr_processes ON attendences.id_employee = hr_processes.id_employee
 INNER JOIN leaves ON attendences.date BETWEEN leaves.start AND leaves.end AND leaves.id_process = hr_processes.idhr_processes
-WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$start' AND '$end' AND hr_processes.status = 'PENDING'
+WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING'
 UNION 
 SELECT idattendences, id_employee, date, scheduled, worked_time FROM (
 SELECT attendences.idattendences, attendences.id_employee, attendences.date, 
@@ -41,7 +41,7 @@ INNER JOIN suspensions ON suspensions.id_disciplinary_process = disciplinary_pro
 			AND (suspensions.day_1 = attendences.date OR suspensions.day_2 = attendences.date OR suspensions.day_3 = attendences.date OR suspensions.day_4 = attendences.date)
 WHERE hr_processes.status = 'DISPATCHED'
 GROUP BY idattendences) AS `susp` ON `susp`.idattendences = attendences.idattendences
-WHERE attendences.date BETWEEN '$start' AND '$end' AND (hr_processes.status = 'PENDING') GROUP BY attendences.idattendences) AS `leaves`
+WHERE attendences.date BETWEEN '$st' AND '$nd' AND (hr_processes.status = 'PENDING') GROUP BY attendences.idattendences) AS `leaves`
 WHERE `cnt` > 1 OR `vac_count` > 1 OR `suspensions_count` > 1 OR (`vac_count` > 0 AND `cnt` > 0) OR (`vac_count` > 0 AND `suspensions_count` > 0) OR (`suspensions_count` > 0 AND `cnt` > 0)
 ) as `tmp`
 INNER JOIN employees ON employees.idemployees = `tmp`.id_employee
