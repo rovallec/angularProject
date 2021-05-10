@@ -4,9 +4,10 @@
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . "ProyeccionISR.csv" . '"');
     require 'database.php';
-    echo "\xEF\xBB\xBF";
+    
     $tittle = ['NIT empleado', 'Sueldos', 'Horas Extras', 'Bono Decreto 37-2001', 'Otras Bonificaciones', 'Comisiones', 'Propinas', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Viáticos', 'Gasto de representación', 'Dietas', 'Gratificaciones', 'Remuneraciones', 'Prestaciones IGSS', 'Otros', 'Indemnizaciones o pensiones por causa de muerte', 'Indemnizaciónes por tiempo servido', 'Remuneraciones de los diplomáticos', 'Gastos de representación y viáticos comprobables', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Cuotas IGSS  y Otros planes de seguridad social'];
     $output = fopen("php://output", "w");
+    fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
     fputcsv($output, $tittle);
 
     $start = date("Y") . "-01-01";
