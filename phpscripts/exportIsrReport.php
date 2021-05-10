@@ -78,7 +78,7 @@
                     WHERE credits.type LIKE '%Horas de Asueto:%'
                         GROUP BY id_employee) AS `hld` ON `hld`.id_employee = employees.idemployees
         LEFT JOIN formeremployer ON formeremployer.id_employee = employees.idemployees
-    WHERE active = 1 AND profiles.nit != '' null AND `cmp_base` > 0 GROUP BY idemployees;";
+    WHERE active = 1 AND length(profiles.nit) > 0 null AND `cmp_base` > 0 GROUP BY idemployees;";
 
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
