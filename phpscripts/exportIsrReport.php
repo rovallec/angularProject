@@ -4,7 +4,7 @@
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . 'ProyeccionISR.csv' . '"');
     require 'database.php';
-    
+    echo "\xEF\xBB\xBF";
     $title = ['NIT empleado',
               'Sueldos',
               'Horas Extras',
