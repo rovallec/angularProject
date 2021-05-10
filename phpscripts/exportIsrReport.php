@@ -59,7 +59,7 @@
     WHERE active = 1 GROUP BY idemployees;";
 
     $output = fopen("php://output", "w");
-    $tittle = ['NIT empleado', 'Sueldos', 'Horas Extras', 'Bono Decreto 37-2001', 'Otras Bonificaciones', 'Comisiones', 'Propinas', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Viáticos', 'Gasto de representación', 'Dietas', 'Gratificaciones', 'Remuneraciones', 'Prestaciones IGSS', 'Otros', 'Indemnizaciones o pensiones por causa de muerte', 'Indemnizaciónes por tiempo servido', 'Remuneraciones de los diplomáticos', 'Gastos de representación y viáticos comprobables', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Cuotas IGSS  y Otros planes de seguridad social']
+    $tittle = ['NIT empleado', 'Sueldos', 'Horas Extras', 'Bono Decreto 37-2001', 'Otras Bonificaciones', 'Comisiones', 'Propinas', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Viáticos', 'Gasto de representación', 'Dietas', 'Gratificaciones', 'Remuneraciones', 'Prestaciones IGSS', 'Otros', 'Indemnizaciones o pensiones por causa de muerte', 'Indemnizaciónes por tiempo servido', 'Remuneraciones de los diplomáticos', 'Gastos de representación y viáticos comprobables', 'Aguinaldo', 'Bono Anual de trabajadores (14)', 'Cuotas IGSS  y Otros planes de seguridad social'];
     fputcsv($output, $tittle);
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
