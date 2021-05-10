@@ -104,8 +104,8 @@ if($result = mysqli_query($con,$sql)){
         $isr[1] = number_format($row['base'] * (12 - date('m',strtotime($end))) + $row['print_base'] + ($row['base'] * $monthly_mult));
         $isr[2] = $row['over_time'] + $row['hol'];
         $isr[3] = number_format(((250 * (12 - date('m',strtotime($end)))) + ($row['decreto_acumulado']) + ($monthly_mult * 250)),2);
-        $isr[4] = number_format((($row['productivity']) * (12 - date('m',strtotime($end))) + (($row['productivity']) * $monthly_mult) + $row['print_productivity'] + $row['bonuses'] + (($row['productivity'] + 250) * ($b_days/365)) + (($row['productivity'] + 250) * ($a_days/365)) + ($row['adjustments'])),2);
-        /*$isr[4] = (($row['productivity']) . '*' . (12 - date('m',strtotime($end))) . '+' . (($row['productivity']) * $monthly_mult) 
+        /*$isr[4] = number_format((($row['productivity']) * (12 - date('m',strtotime($end))) + (($row['productivity']) * $monthly_mult) + $row['print_productivity'] + $row['bonuses'] + (($row['productivity'] + 250) * ($b_days/365)) + (($row['productivity'] + 250) * ($a_days/365)) + ($row['adjustments'])),2);*/
+        $isr[4] = (($row['productivity']) . '*' . (12 - date('m',strtotime($end))) . '+' . (($row['productivity']) * $monthly_mult) 
                   . '+' . $row['print_productivity'] . '+' . $row['bonuses'] . '+' . (($row['productivity'] + 250) * ($b_days/365)) . '+' . 
                   (($row['productivity'] + 250) * ($a_days/365)) . '+' . ($row['adjustments']));*/
         $isr[5] = '0';
