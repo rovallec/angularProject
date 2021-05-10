@@ -4,7 +4,6 @@
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . "CargaProyeccionyActualizacion.csv" . '"');
     require 'database.php';
-    echo "\xEF\xBB\xBF";
 
     $start = date("Y") . "-01-01";
     $end = $_GET['end'];
