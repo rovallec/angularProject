@@ -1176,12 +1176,18 @@ export class ClosingTkComponent implements OnInit {
           }
         });
       })
-    }else if(this.import_type == "AJUSTES A PERIODOS ANTERIORES"){
+    }else{
       cnt = 0;
       this.credits.forEach(adj=>{
         let adjustment:timekeeping_adjustments = new timekeeping_adjustments();
         adjustment.id_payment = adj.idpayments;
-        adjustment.amount = adj.amount;
+        if(this.import_type == "AJUSTES A PERIODOS ANTERIORES HORAS"){
+          adjustment.amount_hrs = adj.amount;
+        }else  if(this.import_type == "AJUSTES A PERIODOS ANTERIORES OT"){
+          adjustment.amount_ot = adj.amount;
+        } else  if(this.import_type == "AJUSTES A PERIODOS ANTERIORES ASUETOS"){
+          adjustment.amount_holidays = adj.amount;
+        }
         this.apiServices.insertTkAdjustments(adjustment).subscribe((str:string)=>{
           cnt++;
           if(cnt >= this.credits.length - 1){
