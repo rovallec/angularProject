@@ -1183,10 +1183,16 @@ export class ClosingTkComponent implements OnInit {
         adjustment.id_payment = adj.idpayments;
         if(this.import_type == "AJUSTES A PERIODOS ANTERIORES HORAS"){
           adjustment.amount_hrs = adj.amount;
+          adjustment.amount_ot = "0";
+          adjustment.amount_holidays = "0";
         }else  if(this.import_type == "AJUSTES A PERIODOS ANTERIORES OT"){
           adjustment.amount_ot = adj.amount;
+          adjustment.amount_holidays = "0";
+          adjustment.amount_hrs = "0";
         } else  if(this.import_type == "AJUSTES A PERIODOS ANTERIORES ASUETOS"){
           adjustment.amount_holidays = adj.amount;
+          adjustment.amount_ot = "0";
+          adjustment.amount_hrs = "0";
         }
         this.apiServices.insertTkAdjustments(adjustment).subscribe((str:string)=>{
           cnt++;
