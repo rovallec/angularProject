@@ -813,6 +813,12 @@ export class payments {
     days: string;
     id_account_py:string;
     idpayroll_values:string;
+    nearsol_bonus:string;
+    client_bonus:string;
+    treasure_hunt:string;
+    adj_hours:string;
+    adj_ot:string;
+    adj_holidays:string;
     constructor() {
         this.idpayments = null;
         this.id_employee = null;
@@ -1268,6 +1274,10 @@ export class payroll_values_gt{
     hrs:number = null;
     next_seventh:number = null;
     adjustments:string = null;
+    adj_holidays:string = null;
+    adj_ot:string = null;
+    adj_hours:string = null;
+    nearsol_bonus:string = null;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;

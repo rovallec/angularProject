@@ -70,7 +70,6 @@ export class ClosingTkComponent implements OnInit {
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
   ngOnInit() {
-    console.log(this.deadline_date + " " + this.deadline_time);
     this.start();
   }
 
@@ -262,6 +261,7 @@ export class ClosingTkComponent implements OnInit {
                                 let trm_count: number = 0;
                                 let hld:number= 0;
                                 let hldT:number= 0;
+                                let week_work:number = 0;
 
                                 if (pay.last_seventh == '1') {
                                   non_show = true;
@@ -298,7 +298,7 @@ export class ClosingTkComponent implements OnInit {
 
                                   if (!valid_trm && !valid_transfer) {
                                     dp.forEach(disciplinary_process => {
-                                      if ((new Date(disciplinary_process.dateTime).getTime() <= refTime) && disciplinary_process.day_1 == attendance.date || disciplinary_process.day_2 == attendance.date || disciplinary_process.day_3 == attendance.date || disciplinary_process.day_4 == attendance.date) {
+                                      if (!activeSuspension && (new Date(disciplinary_process.dateTime).getTime() <= refTime) && disciplinary_process.day_1 == attendance.date || disciplinary_process.day_2 == attendance.date || disciplinary_process.day_3 == attendance.date || disciplinary_process.day_4 == attendance.date) {
                                         activeSuspension = true;
                                         attendance.balance = 'JANP';
                                         discounted_days = discounted_days + 1;
@@ -309,8 +309,9 @@ export class ClosingTkComponent implements OnInit {
 
                                     if (!activeSuspension) {
                                       vac.forEach(vacation => {
-                                        if (vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == attendance.date && vacation.action == "Take" && new Date(vacation.dateTime).getTime() <= refTime) {
+                                        if (!activeVacation && vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == attendance.date && vacation.action == "Take" && new Date(vacation.dateTime).getTime() <= refTime) {
                                           activeVacation = true;
+                                          week_work++;
                                           worked_days++;
                                           if (attendance.scheduled == 'OFF') {
                                             days_off = days_off + 1;
@@ -330,7 +331,7 @@ export class ClosingTkComponent implements OnInit {
 
                                     if (!activeSuspension && !activeVacation) {
                                       leave.forEach(lv => {
-                                        if ((new Date(lv.dateTime).getTime() <= refTime) && lv.status != "COMPLETED" && lv.status != 'DISMISSED' && (new Date(lv.start).getTime()) <= (new Date(attendance.date).getTime()) && (new Date(lv.end).getTime()) >= (new Date(attendance.date).getTime())) {
+                                        if (!activeLeave && (new Date(lv.dateTime).getTime() <= refTime) && lv.status != "COMPLETED" && lv.status != 'DISMISSED' && (new Date(lv.start).getTime()) <= (new Date(attendance.date).getTime()) && (new Date(lv.end).getTime()) >= (new Date(attendance.date).getTime())) {
                                           activeLeave = true;
                                           if (lv.motive == 'Leave of Absence Unpaid') {
                                             attendance.balance = 'LOA';
@@ -359,6 +360,7 @@ export class ClosingTkComponent implements OnInit {
                                           if (lv.motive == 'Maternity' || lv.motive == 'Others Paid') {
                                             attendance.balance = 'JAP';
                                             worked_days++;
+                                            week_work++;
                                             rs.jap = (Number(rs.jap) + 1).toFixed(0);
                                           }
                                         }
@@ -367,7 +369,6 @@ export class ClosingTkComponent implements OnInit {
 
                                     if (!activeVacation && !activeSuspension && !activeLeave) {
                                       just.forEach(justification => {
-                                        console.log(justification);
                                         if(justification.id_attendence == attendance.idattendences){
                                           if(new Date(justification.dateTime).getTime() >= refTime){
                                             attendance.worked_time = (Number(attendance.worked_time) - Number(justification.amount)).toFixed(4);
@@ -400,6 +401,7 @@ export class ClosingTkComponent implements OnInit {
                                               }
                                             } else {
                                               worked_days++;
+                                              week_work++;
                                               attendance.balance = (Number(attendance.worked_time) - Number(attendance.scheduled)).toString();
                                               discounted_hours = discounted_hours + (Number(attendance.worked_time) - Number(attendance.scheduled));
                                             }
@@ -455,6 +457,7 @@ export class ClosingTkComponent implements OnInit {
                                       ult_seventh = 0;
                                       janp_sequence = 0;
                                       hld = 0;
+                                      week_work = 0;
                                     }
                                   } else if (valid_trm) {
                                     attendance.balance = "TERM";
@@ -524,25 +527,12 @@ export class ClosingTkComponent implements OnInit {
                                 if (!isNullOrUndefined(rs)) {
                                   this.resumes.push(rs);
                                 }
-                                payroll_value.performance_bonus = "0.00";
-                                payroll_value.adjustments = "0.00";
-
-                                this.apiServices.getCredits({id:pay.id_employee, period:this.actualPeriod.idperiods}).subscribe((crd:credits[])=>{
-                                  if(!isNullOrUndefined(crd)){
-                                    crd.forEach(cred=>{
-                                      if(cred.type == "PERFORMANCE BONUS"){
-                                        payroll_value.performance_bonus = cred.amount;   
-                                      }
-                                    })
-                                  }
-                                });
-
-                                this.apiServices.getTkAdjustments({id_payment:pay.idpayments, id_period:this.actualPeriod.idperiods}).subscribe((tk_adj:timekeeping_adjustments)=>{
-                                  if(!isNullOrUndefined(tk_adj)){
-                                    payroll_value.adjustments = tk_adj.amount;
-                                  }
-                                })
-                                
+                                payroll_value.performance_bonus = pay.client_bonus;
+                                payroll_value.adj_holidays = pay.adj_holidays;
+                                payroll_value.adj_ot = pay.adj_ot;
+                                payroll_value.adj_hours = pay.adj_hours;
+                                payroll_value.nearsol_bonus = pay.nearsol_bonus;
+                                payroll_value.treasure_hunt = pay.treasure_hunt;
                                 payroll_value.client_id = pay.client_id;
                                 payroll_value.discounted_days = discounted_days.toString();
                                 payroll_value.discounted_hours = discounted_hours.toString();
@@ -1111,7 +1101,19 @@ export class ClosingTkComponent implements OnInit {
                     ele.idpayments = py.idpayments;
                     this.payroll_values.forEach((p_val:payroll_values_gt)=>{
                       if(p_val.id_payment == py.idpayments){
-                        p_val.performance_bonus = ele.amount;
+                        if(this.import_type == "NEARSOL BONUS"){
+                          p_val.nearsol_bonus = (Number(p_val.nearsol_bonus) + Number(ele.amount)).toFixed(2);
+                        }else if(this.import_type == "CLIENT BONUS"){
+                          p_val.performance_bonus = (Number(p_val.performance_bonus) + Number(ele.amount)).toFixed(2);
+                        }else if(this.import_type == "TREASURE HUNT"){
+                          p_val.treasure_hunt = (Number(p_val.treasure_hunt) + Number(ele.amount)).toFixed(2);
+                        }else if(this.import_type == "AJUSTES A PERIODOS ANTERIORES HORAS"){
+                          p_val.adj_hours = ele.amount;
+                        }else if(this.import_type == "AJUSTES A PERIODOS ANTERIORES OT"){
+                          p_val.adj_ot = ele.amount;
+                        }else if(this.import_type == "AJUSTES A PERIODOS ANTERIORES ASUETOS"){
+                          p_val.adj_holidays = ele.amount;
+                        }
                         this.p_val_update.push(p_val);
                       }
                     })
@@ -1122,7 +1124,7 @@ export class ClosingTkComponent implements OnInit {
                 ele.notes = "ERROR";
               }
               count = count + 1;
-              ele.type = "PERFORMANCE BONUS";
+              ele.type = this.import_type;
               this.credits.push(ele);
               if (count >= (partial_credits.length - 1)) {
                 this.importEnd = true;
@@ -1138,8 +1140,33 @@ export class ClosingTkComponent implements OnInit {
   saveImport(){
     this.saving = true;
     let cnt:number = 0;
-    if(this.import_type == "PERFORMANCE BONUS"){
+    if(this.import_type == "CLIENT BONUS"){
       this.credits.forEach((cred:credits)=>{
+        cred.type = "Bonos Diversos Cliente TK";
+        this.apiServices.insertCredits(cred).subscribe((str:string)=>{
+          cnt++;
+          if(cnt >= this.credits.length - 1){
+            this.saving = false;
+            this.working = false;
+            this.importEnd = false;
+          }
+        });
+      })
+    }else if(this.import_type == "NEARSOL BONUS"){
+      this.credits.forEach((cred:credits)=>{
+        cred.type = "Bonos Diversos Nearsol TK";
+        this.apiServices.insertCredits(cred).subscribe((str:string)=>{
+          cnt++;
+          if(cnt >= this.credits.length - 1){
+            this.saving = false;
+            this.working = false;
+            this.importEnd = false;
+          }
+        });
+      })
+    }else if(this.import_type == "TREASURE HUNT"){
+      this.credits.forEach((cred:credits)=>{
+        cred.type = "Treasure Hunt";
         this.apiServices.insertCredits(cred).subscribe((str:string)=>{
           cnt++;
           if(cnt >= this.credits.length - 1){
@@ -1165,6 +1192,7 @@ export class ClosingTkComponent implements OnInit {
         });
       })
     }
+    this.start();
   }
   
   disableDate(){

@@ -104,7 +104,6 @@
                         aria-labelledby="nav-payroll-tab" *ngIf="!working">
                         <table class="table table-striped" #userTable>
                             <tr class="title">
-                                <td>ID</td>
                                 <td>NEARSOL ID</td>
                                 <td>CLIENT ID</td>
                                 <td>NAME</td>
@@ -114,13 +113,16 @@
                                 <td>SEVENTH</td>
                                 <td>OT</td>
                                 <td>HOLIDAYS</td>
-                                <td>BONUS</td>
-                                <td>ADJUSTMENTS</td>
+                                <td>NEARSOL BONUS</td>
+                                <td>CLIENT BONUS</td>
+                                <td>TREASURE HUNT</td>
+                                <td>ADJUTED TIME</td>
+                                <td>ADJUTED OT</td>
+                                <td>ADJUTED HOLIDAY</td>
                                 <td>STATUS</td>
                             </tr>
                             <tbody>
                                 <tr *ngIf="printing">
-                                    <td>ID</td>
                                     <td>NEARSOL ID</td>
                                     <td>CLIENT ID</td>
                                     <td>NAME</td>
@@ -130,13 +132,16 @@
                                     <td>SEVENTH</td>
                                     <td>OT</td>
                                     <td>HOLIDAYS</td>
-                                    <td>BONUS</td>
-                                    <td>ADJUSTMENTS</td>
+                                    <td>NEARSOL BONUS</td>
+                                    <td>CLIENT BONUS</td>
+                                    <td>TREASURE HUNT</td>
+                                    <td>ADJUTED TIME</td>
+                                    <td>ADJUTED OT</td>
+                                    <td>ADJUTED HOLIDAY</td>
                                     <td>STATUS</td>
                                 </tr>
                                 <tr *ngFor="let pay of payroll_values" (click)="setAttendance(pay)" data-toggle="modal"
                                     data-target="#attendance_detail">
-                                    <td>{{pay.id_payment}}</td>
                                     <td>{{pay.nearsol_id}}</td>
                                     <td>{{pay.client_id}}</td>
                                     <td>{{pay.agent_name}}</td>
@@ -146,8 +151,12 @@
                                     <td>{{pay.seventh}}</td>
                                     <td>{{pay.ot_hours}}</td>
                                     <td>{{pay.holidays_hours}}</td>
-                                    <td>{{pay.performance_bonus}}</td>
-                                    <td>{{pay.adjustments}}</td>
+                                    <td>{{pay.nearsol_bonus}}</td>
+                                    <td>{{pay.client_bonus}}</td>
+                                    <td>{{pay.treasure_hunt}}</td>
+                                    <td>{{pay.adj_hours}}</td>
+                                    <td>{{pay.adj_ot}}</td>
+                                    <td>{{pay.adj_holidays}}</td>
                                     <td *ngIf="pay.agent_status == '1'">ACTIVE</td>
                                     <td *ngIf="pay.agent_status == '0'">INACTIVE</td>
                                 </tr>
@@ -162,8 +171,8 @@
                             <thead>
                                 <th>NEARSOL ID</th>
                                 <th>NAME</th>
-                                <th *ngIf="import_type == 'PERFORMANCE BONUS'">BONUS AMOUNT</th>
-                                <th *ngIf="import_type == 'AJUSTES A PERIODOS ANTERIORES'">ADJUSTMENTS</th>
+                                <th *ngIf="import_type == 'NEARSOL BONUS' || import_type == 'CLIENT BONUS' || import_type == 'TREASURE HUNT'">BONUS AMOUNT</th>
+                                <th *ngIf="import_type == 'AJUSTES A PERIODOS ANTERIORES HORAS' || import_type == 'AJUSTES A PERIODOS ANTERIORES ASUETOS'|| import_type == 'AJUSTES A PERIODOS ANTERIORES OT'">ADJUSTMENTS</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let c  of credits">
@@ -325,7 +334,7 @@
             </div>
         </div>
     </div>
-        <!----------------------------------------------------------------------------------------------ALERT MODAL---------------------------------------------------------------->
+        <!----------------------------------------------------------------------------------------------IMPORT ADJ/BONUSES MODAL---------------------------------------------------------------->
         <div class="modal fade" id="uploadBonuses" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -340,8 +349,12 @@
                     <div class="form-group col-md-5">
                         <label>TYPE:</label>
                         <select class="form-control" [(ngModel)]="import_type">
-                            <option>PERFORMANCE BONUS</option>
-                            <option>AJUSTES A PERIODOS ANTERIORES</option>
+                            <option>NEARSOL BONUS</option>
+                            <option>CLIENT BONUS</option>
+                            <option>TREASURE HUNT</option>
+                            <option>AJUSTES A PERIODOS ANTERIORES HORAS</option>
+                            <option>AJUSTES A PERIODOS ANTERIORES OT</option>
+                            <option>AJUSTES A PERIODOS ANTERIORES ASUETOS</option>
                         </select>
                     </div>
                     <div class="form-group col-md-2"></div>

@@ -166,24 +166,34 @@ export class AttendenceImportComponent implements OnInit {
     });
 
     this.apply.forEach(app => {
-      let adj: attendences_adjustment = new attendences_adjustment;
-      adj.date = (new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + (new Date().getDate().toString()));
-      adj.id_attendence = app.idattendences;
-      adj.id_department = '4';
-      adj.id_employee = app.id_employee;
-      adj.id_type = '2';
-      adj.id_user = this.authService.getAuthusr().iduser;
-      adj.notes = 'WFM Attendance correction';
-      adj.reason = 'WFM Correction';
-      adj.state = 'PENDING';
-      adj.status = "PENDING";
-      adj.time_after = app.worked_time;
-      adj.time_before = app.day_off2;
-      adj.amount = (parseFloat(app.worked_time) - parseFloat(app.day_off2)).toFixed(2);
-      this.apiService.insertAttJustification(adj).subscribe((str: string) => {
-        this.apiService.updateAttendances(app).subscribe((str: string) => { });
+      this.apiService.getAttAdjustments({ id: "id|p;" + app.id_employee + "|'" + app.date + "' AND '" + app.date + "'" }).subscribe((adjust:attendences_adjustment[])=>{
+        console.log(adjust);
+        if(!isNullOrUndefined(adjust)){
+          adjust.forEach(adjustment=>{
+            if(adjustment.id_department == '27' || adjustment.id_department == '5'){
+            app.worked_time = (Number(app.worked_time) + Number(adjustment.amount)).toFixed(3);
+            }
+          })
+        }
+        let adj: attendences_adjustment = new attendences_adjustment;
+        adj.date = (new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + (new Date().getDate().toString()));
+        adj.id_attendence = app.idattendences;
+        adj.id_department = '4';
+        adj.id_employee = app.id_employee;
+        adj.id_type = '2';
+        adj.id_user = this.authService.getAuthusr().iduser;
+        adj.notes = 'WFM Attendance correction';
+        adj.reason = 'WFM Correction';
+        adj.state = 'PENDING';
+        adj.status = "PENDING";
+        adj.time_after = app.worked_time;
+        adj.time_before = app.day_off2;
+        adj.amount = (parseFloat(app.worked_time) - parseFloat(app.day_off2)).toFixed(2);
+        this.apiService.insertAttJustification(adj).subscribe((str: string) => {
+          this.apiService.updateAttendances(app).subscribe((str: string) => { });
+        })
       })
-    });
+    })
 
     if(this.correct.length > 0){
       this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {
