@@ -23,7 +23,6 @@ if(explode(";", $id)[0] == 'id|p'){
             LEFT JOIN users ON users.idUser = hr_processes.id_user 
             LEFT JOIN accounts ON accounts.idaccounts = employees.id_account
             WHERE hr_processes.id_employee  = $emp AND attendences.date BETWEEN $period;";
-            echo($sql);
 }else{
     if(explode(";", $id)[0] == 'id|p|t'){
         $period = explode(";",$id)[1];
