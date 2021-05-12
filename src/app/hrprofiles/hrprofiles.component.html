@@ -672,7 +672,7 @@
                                         class="form-control"
                                         *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'CLOSED' &&  activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED'">
                                     <input type="text" class="form-control" [(ngModel)]="activeRequest.imposition_date"
-                                        *ngIf="activeRequest.status === 'DISPATCHED' || activeRequest.status !='ACCEPTED' || activeRequest.status === 'COMPLETED'"
+                                        *ngIf="activeRequest.status !='ACCEPTED'"
                                         [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-3">
