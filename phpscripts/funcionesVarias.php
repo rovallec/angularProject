@@ -1,4 +1,5 @@
 <?php
+require 'Classes/phpExcel.php';
 function validarDatos($adato) {
   if (empty($adato) || is_null($adato)) {
     $adato = "NULL";
