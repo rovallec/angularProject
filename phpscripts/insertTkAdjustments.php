@@ -12,7 +12,7 @@ $amount_hrs = ($request->amount_hrs);
 $amount_ot = ($request->amount_ot);
 $amount_holidays = ($request->amount_holidays);
 
-$sql = "INSERT INTO `timekeeping_adjustments` (idtimekeeping_adjustments, id_payment, amount) VALUES (null, $id_payment, $amount_hrs, $amount_ot, $amount_holidays);";
+$sql = "INSERT INTO `timekeeping_adjustments` (idtimekeeping_adjustments, id_payment, amount_hrs, amount_ot, amount_holidays) VALUES (null, $id_payment, $amount_hrs, $amount_ot, $amount_holidays);";
 
 if(mysqli_query($con,$sql)){
   echo(mysqli_insert_id($con));
