@@ -7,7 +7,6 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id_payment = ($request->id_payment);
-$amount = ($request->amount);
 $amount_hrs = ($request->amount_hrs);
 $amount_ot = ($request->amount_ot);
 $amount_holidays = ($request->amount_holidays);
