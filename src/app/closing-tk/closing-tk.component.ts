@@ -369,10 +369,12 @@ export class ClosingTkComponent implements OnInit {
 
                                     if (!activeVacation && !activeSuspension && !activeLeave) {
                                       just.forEach(justification => {
-                                        if(justification.id_attendence == attendance.idattendences){
-                                          if(new Date(justification.dateTime).getTime() >= refTime){
-                                            attendance.worked_time = (Number(attendance.worked_time) - Number(justification.amount)).toFixed(4);
-                                          }
+                                        if(justification.id_department != "5" && justification.id_department != "27"){
+                                          if(justification.id_attendence == attendance.idattendences){
+                                            if(new Date(justification.dateTime).getTime() >= refTime){
+                                              attendance.worked_time = (Number(attendance.worked_time) - Number(justification.amount)).toFixed(4);
+                                            }
+                                          } 
                                         }
                                       });
 

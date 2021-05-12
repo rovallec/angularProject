@@ -3,7 +3,7 @@ import { attendences, attendences_adjustment, supervisor_survey, sup_exception }
 import * as XLSX from 'xlsx';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
-import { isNull } from 'util';
+import { isNull, isNullOrUndefined } from 'util';
 import { AuthServiceService } from '../auth-service.service';
 
 @Component({
@@ -93,7 +93,7 @@ export class SupExceptionsComponent implements OnInit {
           supervisors.supervisor = element['SUPERVISOR'];
           supervisors.time = element['TIME'];
           this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:supervisors.avaya}).subscribe((emp:employees[])=>{
-            if(isNull(emp)){
+            if(isNullOrUndefined(emp[0])){
               supervisors.status = 'FALSE';
             }else{
               supervisors.status = 'TRUE';
@@ -101,7 +101,7 @@ export class SupExceptionsComponent implements OnInit {
             this.sups.push(supervisors);
           })
         } catch (error) {
-
+          
         }
       })
     }

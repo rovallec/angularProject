@@ -935,7 +935,7 @@ export class sup_exception {
         this.time = null;
         this.notes = null;
         this.supervisor = null;
-        this.status = null;
+        this.status = "FALSE";
     }
 }
 
