@@ -171,6 +171,8 @@ export class employees{
     status:string;
     society:string;
     dpi:string;
+    children: string;
+    gender: string;
     constructor(){
         this.id_profile = null;
         this.idemployees = null;
@@ -190,6 +192,8 @@ export class employees{
         this.status = null;
         this.society = null;
         this.dpi = null;
+        this.children = null;
+        this.gender = null;
     }
 }
 
