@@ -26,7 +26,8 @@
               'Gastos de representación y viáticos comprobables',
               'Aguinaldo',
               'Bono Anual de trabajadores (14)',
-              'Cuotas IGSS  y Otros planes de seguridad social'];
+              'Cuotas IGSS  y Otros planes de seguridad social',
+              'FORMULA'];
     $output = fopen('php://output', 'w');
     fputcsv($output, $title);
 
@@ -104,10 +105,7 @@ if($result = mysqli_query($con,$sql)){
         $isr[1] = number_format($row['base'] * (12 - date('m',strtotime($end))) + $row['print_base'] + ($row['base'] * $monthly_mult));
         $isr[2] = $row['over_time'] + $row['hol'];
         $isr[3] = number_format(((250 * (12 - date('m',strtotime($end)))) + ($row['decreto_acumulado']) + ($monthly_mult * 250)),2);
-        $isr[23] = number_format((($row['prod_pay'] - 250) * (12 - date('m',strtotime($end))) + (($row['prod_pay'] - 250) * $monthly_mult) + $row['print_productivity'] + $row['bonuses'] + (($row['prod_pay']) * ($b_days/365)) + (($row['prod_pay']) * ($a_days/365)) + ($row['adjustments'])),2);
-        $isr[4] = (($row['prod_pay']) . '*' . (12 - date('m',strtotime($end))) . '+' . (($row['prod_pay']) * $monthly_mult) 
-                  . '+' . $row['print_productivity'] . '+' . $row['bonuses'] . '+' . (($row['prod_pay']) * ($b_days/365)) . '+' . 
-                  (($row['prod_pay']) * ($a_days/365)) . '+' . ($row['adjustments']));
+        $isr[4] = number_format((($row['prod_pay'] - 250) * (12 - date('m',strtotime($end))) + (($row['prod_pay'] - 250) * $monthly_mult) + $row['print_productivity'] + $row['bonuses'] + (($row['prod_pay']) * ($b_days/365)) + (($row['prod_pay']) * ($a_days/365)) + ($row['adjustments'])),2);
         $isr[5] = '0';
         $isr[6] = '0';
 //////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
@@ -128,6 +126,9 @@ if($result = mysqli_query($con,$sql)){
         $isr[20] = number_format(((($row['base']) * ($a_days/365)) + $row['ex_aguinaldo']),2);
         $isr[21] = number_format(((($row['base']) * ($b_days/365)) + $row['ex_bono14']),2);
         $isr[22] = number_format(((($row['base'] * (12 - date('m',strtotime($end)))) + $row['print_base'] + $row['over_time'] + $row['hol'] + ($monthly_mult * $row['base']))*0.0483),2);
+        $isr[23] = (($row['prod_pay']-250) . '*' . (12 - date('m',strtotime($end))) . '+' . (($row['prod_pay']-250) * $monthly_mult) 
+                  . '+' . $row['print_productivity'] . '+' . $row['bonuses'] . '+' . (($row['prod_pay']) * ($b_days/365)) . '+' . 
+                  (($row['prod_pay']) * ($a_days/365)) . '+' . ($row['adjustments']));
         fputcsv($output, $isr, ',');
     };
 }else{
