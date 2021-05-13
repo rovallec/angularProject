@@ -97,6 +97,8 @@
           (click)="SetSel('DPM')">DP MAINTENANCE</a>
           <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
           [ngClass]="{'act':selectedOption=='EXPEX'}" routerLink="/hrdaily" (click)="SetSel('EXPATT')">EXCEPTIONS REPORT</a>
+          <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/closing"
+          style="color: white" [ngClass]="{'act':selectedOption=='ACCOUNTING'}" (click)="SetSel('ACCOUNTING')">CLOSING</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
