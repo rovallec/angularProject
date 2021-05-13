@@ -107,7 +107,7 @@ if($result = mysqli_query($con,$sql)){
         $isr[4] = number_format((($row['prod_pay'] - 250) * (12 - date('m',strtotime($end))) + (($row['prod_pay'] - 250) * $monthly_mult) + $row['print_productivity'] + $row['bonuses'] + (($row['prod_pay']) * ($b_days/365)) + (($row['prod_pay']) * ($a_days/365)) + ($row['adjustments'])),2);
         $isr[4] = (($row['productivity']) . '*' . (12 - date('m',strtotime($end))) . '+' . (($row['productivity']) * $monthly_mult) 
                   . '+' . $row['print_productivity'] . '+' . $row['bonuses'] . '+' . (($row['productivity'] + 250) * ($b_days/365)) . '+' . 
-                  (($row['productivity'] + 250) * ($a_days/365)) . '+' . ($row['adjustments']));*/
+                  (($row['productivity'] + 250) * ($a_days/365)) . '+' . ($row['adjustments']));
         $isr[5] = '0';
         $isr[6] = '0';
 //////////////////////////////////////////////////AGUINALDO//////////////////////////////////////////////////////////////
