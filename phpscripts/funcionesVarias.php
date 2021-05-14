@@ -18,6 +18,32 @@ function validateDataToZero($adato) {
   return $adato;
 }
 
+function validarDatosString($adato) {
+  if (empty($adato) || is_null($adato)) {
+    $adato = '';
+  } 
+  return $adato;
+}
+
+function formatDates($adate) {
+  $format = 'Y-m-d';
+  if (is_numeric($adate)) {
+    $adate = PHPExcel_Shared_Date::ExcelToPHP($adate);
+    $date = new DateTime("@$adate");
+    return $date->format($format);
+  } else if (is_string($adate)) {
+    $date = new DateTime($adate);
+    return $date->format($format);
+  } else {
+    return $adate;
+  }
+}
+
+function removeCommas($avalue) {
+  $avalue = str_replace(',','',$avalue);  
+  return $avalue;
+}
+
 function getMonth($amonth){
   switch ((int)$amonth) {
     case 1:
@@ -57,32 +83,6 @@ function getMonth($amonth){
       return 'Diciembre';
     break;
   }
-}
-
-function validarDatosString($adato) {
-  if (empty($adato) || is_null($adato)) {
-    $adato = '';
-  } 
-  return $adato;
-}
-
-function formatDates($adate) {
-  $format = 'Y-m-d';
-  if (is_numeric($adate)) {
-    $adate = PHPExcel_Shared_Date::ExcelToPHP($adate);
-    $date = new DateTime("@$adate");
-    return $date->format($format);
-  } else if (is_string($adate)) {
-    $date = new DateTime($adate);
-    return $date->format($format);
-  } else {
-    return $adate;
-  }
-}
-
-function removeCommas($avalue) {
-  $avalue = str_replace(',','',$avalue);  
-  return $avalue;
 }
 
 ?>

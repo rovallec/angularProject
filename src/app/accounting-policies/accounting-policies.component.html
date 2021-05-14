@@ -104,10 +104,10 @@
                 <td>{{acp.department}}</td>
                 <td>{{acp.class}}</td>
                 <td>{{acp.site}}</td>
-                <td *ngIf="acp.class=='D'">{{acp.amount}}</td>
-                <td *ngIf="acp.class!='D'">'0'</td>
-                <td *ngIf="acp.class=='H'">{{acp.amount}}</td>
-                <td *ngIf="acp.class!='D'">'0'</td>
+                <td *ngIf="acp.clasif == 'H'">0</td>
+                <td *ngIf="acp.clasif == 'D'">{{acp.amount}}</td>
+                <td *ngIf="acp.clasif == 'D'">0</td>
+                <td *ngIf="acp.clasif == 'H'">{{acp.amount}}</td>
                 <td>{{acp.clientNetSuite}}</td>
               </tr>
               <tr *ngIf="accountingPolicies.length>0">
