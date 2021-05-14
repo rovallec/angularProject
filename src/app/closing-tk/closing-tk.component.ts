@@ -262,6 +262,7 @@ export class ClosingTkComponent implements OnInit {
                                 let hld:number= 0;
                                 let hldT:number= 0;
                                 let week_work:number = 0;
+                                let mother_father_day:boolean = false
 
                                 if (pay.last_seventh == '1') {
                                   non_show = true;
@@ -386,7 +387,19 @@ export class ClosingTkComponent implements OnInit {
                                           discounted_hours = discounted_hours + Number(attendance.worked_time);
                                         }  
                                       } else {
-                                        if (attendance.date != (new Date().getFullYear() + "-01-01") && attendance.date != (new Date().getFullYear() + "-04-01") && attendance.date != (new Date().getFullYear() + "-04-02") && attendance.date != (new Date().getFullYear() + "-04-03") && attendance.date != (new Date().getFullYear() + "-05-01")) {
+                                        if(emp[0].nearsol_id == "3PC113"){
+                                          console.log(emp[0]);
+                                        }
+                                        if(!isNullOrUndefined(emp[0].children) && !isNullOrUndefined(emp[0].gender)){
+                                          if(Number(emp[0].children) > 0){
+                                            if(emp[0].gender == 'Femenino'){
+                                              if(attendance.date != (new Date().getFullYear() + "-05-10")){
+                                                mother_father_day = true;
+                                              }
+                                            }
+                                          }
+                                        }
+                                        if (attendance.date != (new Date().getFullYear() + "-01-01") && attendance.date != (new Date().getFullYear() + "-04-01") && attendance.date != (new Date().getFullYear() + "-04-02") && attendance.date != (new Date().getFullYear() + "-04-03") && attendance.date != (new Date().getFullYear() + "-05-01") && !mother_father_day) {
                                           if (Number(attendance.scheduled) > 0) {
                                             if (Number(attendance.worked_time) == 0) {
                                               attendance.balance = "NS";
