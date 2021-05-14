@@ -262,7 +262,7 @@ export class ClosingTkComponent implements OnInit {
                                 let hld:number= 0;
                                 let hldT:number= 0;
                                 let week_work:number = 0;
-                                let mother_father_day:boolean = false
+                                let mother_father_day:boolean = false;
 
                                 if (pay.last_seventh == '1') {
                                   non_show = true;
@@ -282,6 +282,7 @@ export class ClosingTkComponent implements OnInit {
                                   activeVacation = false;
                                   activeLeave = false;
                                   activeSuspension = false;
+                                  mother_father_day = false;
 
                                   if (!isNullOrUndefined(trm.valid_from)) {
                                     if (new Date(trm.valid_from).getTime() <= new Date(attendance.date).getTime()) {
@@ -387,13 +388,10 @@ export class ClosingTkComponent implements OnInit {
                                           discounted_hours = discounted_hours + Number(attendance.worked_time);
                                         }  
                                       } else {
-                                        if(emp[0].nearsol_id == "3PC113"){
-                                          console.log(emp[0]);
-                                        }
                                         if(!isNullOrUndefined(emp[0].children) && !isNullOrUndefined(emp[0].gender)){
                                           if(Number(emp[0].children) > 0){
                                             if(emp[0].gender == 'Femenino'){
-                                              if(attendance.date != (new Date().getFullYear() + "-05-10")){
+                                              if(attendance.date == (new Date().getFullYear() + "-05-10")){
                                                 mother_father_day = true;
                                               }
                                             }
@@ -434,6 +432,8 @@ export class ClosingTkComponent implements OnInit {
                                             }else{
                                               if (Number(attendance.worked_time) > 0) {
                                                 hld_hours = hld_hours + (Number(attendance.worked_time));
+                                                attendance.balance = 'HLD';
+                                              }else{
                                                 attendance.balance = 'HLD';
                                               }
                                             }
