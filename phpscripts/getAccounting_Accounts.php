@@ -9,14 +9,16 @@ require 'funcionesVarias.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
+$i = 0;
 
 $sql = "SELECT DISTINCT idaccounting_accounts, external_id, name, clasif FROM accounting_accounts;";
 if($result = mysqli_query($con,$sql)){
   while($row = mysqli_fetch_assoc($result)) {
-    $return['idaccounting_accounts'] = $row['idaccounting_accounts'];
-    $return['external_id'] = $row['external_id'];
-    $return['name'] = $row['name'];
-    $return['clasif'] = $row['clasif'];
+    $return[$i]['idaccounting_accounts'] = $row['idaccounting_accounts'];
+    $return[$i]['external_id'] = $row['external_id'];
+    $return[$i]['name'] = $row['name'];
+    $return[$i]['clasif'] = $row['clasif'];
+    $i++;
   }
     echo(json_encode($return));
 }else{

@@ -88,8 +88,8 @@ export class AccountingPoliciesComponent implements OnInit {
       p.forEach(pe => {
         if (pe.start.split("-")[0] == this.selectedYear) {
           this.periods.push(pe);
-          this.actualPeriod.idperiods = pe.idperiods;
           this.actualPeriod = pe;
+          this.actualPeriod.idperiods = pe.idperiods;
         }
       })
       this.isLoading = true;
@@ -98,23 +98,18 @@ export class AccountingPoliciesComponent implements OnInit {
   }
 
   getAccounting() {
+    let element: AccountingAccounts = new AccountingAccounts;
     this.accountingPolicies = [];
     this.isLoading = true;
     this.progress = 1;
     this.max_progress = 100;
     this.step = 'Obteniendo Pólizas.';    
     try {
-      this.apiServices.getAccouning_Accouts().subscribe((aa: AccountingAccounts[]) => {
-        this.arrAccountingAccounts = aa;
-        this.max_progress = this.arrAccountingAccounts.length;
-        for (let i = 0; i < this.arrAccountingAccounts.length; i++) {
-          let element: AccountingAccounts = this.arrAccountingAccounts[i];
-          element.idperiod = this.actualPeriod.idperiods;
-          this.apiServices.getAccountingPolicies(element).subscribe((acp: accountingPolicies[]) => {
-            this.accountingPolicies.push.apply(acp);
-            this.progress = this.progress + 1;
-          })
-        }
+      element.idperiod = this.actualPeriod.idperiods;
+      this.apiServices.getAccountingPolicies(element).subscribe((acp: accountingPolicies[]) => {
+        this.accountingPolicies = acp;
+        //this.accountingPolicies.push.apply(acp);
+        this.progress = this.progress + 1;
       })
     }
     finally {
