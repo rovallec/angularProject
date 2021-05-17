@@ -2,7 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
-
+require 'funcionesVarias.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
@@ -40,10 +40,10 @@ for ($i=0; $i < (count($request)); $i++) {
     $agent_status = $request[$i]->agent_status;
     $total_days = $request[$i]->total_days;
     $next_seventh = $request [$i]->next_seventh;
-    $adj_holidays = $request[$i]->adj_holidays;
-    $adj_ot = $request[$i]->adj_ot;
-    $adj_hours = $request[$i]->adj_hours;
-    $nearsol_bonus = $request[$i]->nearsol_bonus;
+    $adj_holidays = validarDatos($request[$i]->adj_holidays);
+    $adj_ot = validarDatos($request[$i]->adj_ot);
+    $adj_hours = validarDatos($request[$i]->adj_hours);
+    $nearsol_bonus = validarDatos($request[$i]->nearsol_bonus);
     $sql = $sql . 
            "(NULL,$id_employee, $id_reporter, $id_account, $id_period, $id_payment, '$client_id', '$nearsol_id', $discounted_days, $seventh, $discounted_hours, $ot_hours, $holidays_hours, $performance_bonus, $treasure_hunt, $next_seventh, $adj_holidays ,$adj_ot, $adj_hours, $nearsol_bonus)";
 }
