@@ -24,6 +24,7 @@ try {
     $day = $row1['day'];
     $month = $row1['month'];
     $year = $row1['year'];
+    $end_day = ['end_day'];
 
     if ($day < 16) {
       $day = 16;
@@ -39,7 +40,7 @@ try {
       }
     }    
     $v_start_day = $year . "-" . $month . "-" . $day;
-    $v_end_day = $end_day;    
+    $v_end_day = $end_day;
   } else {
     $error =  mysqli_error($transact);
     echo("<br>Error 1: " . $error . "<br>");
