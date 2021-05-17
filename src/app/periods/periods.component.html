@@ -69,7 +69,7 @@
 
             <!-------------------------------------IMPORT DEDUCTIONS--------------------------------------------------------->
             <i class="fas fa-arrow-circle-up" style="margin-left:5px" (click)="activeImport()"
-                *ngIf="!showPayments && period.status == '3'"></i>
+                *ngIf="!showPayments && (period.status == '3' || period.status == '1')"></i>
             <!-------------------------------------IMPORT DEDUCTIONS--------------------------------------------------------->
 
             <!-------------------------------------EXPORT REPORTS------------------------------------------------------------->
