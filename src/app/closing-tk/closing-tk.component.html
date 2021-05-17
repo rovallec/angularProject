@@ -16,18 +16,20 @@
                         tittle="Search"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="p-2">
-                    <button class="btn btn-outline-success"
-                        title="Downlaod Payroll Values" (click)="exportPayroll_values()"><i class="fas fa-file-export"></i></button>
+                    <button class="btn btn-outline-success" title="Downlaod Payroll Values"
+                        (click)="exportPayroll_values()"><i class="fas fa-file-export"></i></button>
                 </div>
                 <div class="p-2">
-                    <button class="btn btn-outline-secondary"
-                        title="Upload Bonus/Adjustments"  data-toggle="modal" data-target="#uploadBonuses" *ngIf="!working && !saving"><i class="fas fa-file-upload"></i></button>
-                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status == '3'"
-                        title="Save upload" (click)="saveImport()"  *ngIf="working && !saving"><i class="fas fa-check"></i></button>
-                    <button class="btn btn-outline-secondary" type="button" disabled *ngIf="!working && saving">
-                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                        <span class="sr-only">Loading...</span>
-                    </button>
+                    <button class="btn btn-outline-secondary" title="Upload Bonus/Adjustments" data-toggle="modal"
+                        data-target="#uploadBonuses" *ngIf="!working && !saving"><i
+                            class="fas fa-file-upload"></i></button>
+                    <button class="btn btn-outline-success" [disabled]="actualPeriod.status == '3'" title="Save upload"
+                        (click)="saveImport()" *ngIf="working && !saving"><i class="fas fa-check"></i></button>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-outline-secondary" title="Upload Bonus/Adjustments" data-toggle="modal"
+                        data-target="#uploadBonuses"><i
+                            class="fas fa-file-upload"></i></button>
                 </div>
             </div>
         </div>
@@ -77,11 +79,16 @@
             <div class="col-md-4">
                 <label>DEADLINE</label>
                 <div class="d-flex justify-content-between">
-                    <input type="text" class="form-control" [(ngModel)]="deadline_date" (mouseenter)="disableDate()" (mouseleave)="enableDate()" *ngIf="!disable_date">
-                    <input type="date" class="form-control" (change)="changeDeadlineDate($event.target.value)" *ngIf="disable_date">
-                    <input type="text" class="form-control" [(ngModel)]="deadline_time" (mouseenter)="disableTime()" (mouseleave)="enableTime()" *ngIf="!disable_time">
-                    <input type="time" class="form-control" (change)="changeDeadlineTime($event.target.value)" *ngIf="disable_time">
-                    <button class="form-control btn btn-outline-success" (click)="setPayments()"><i class="fas fa-sync"></i></button>
+                    <input type="text" class="form-control" [(ngModel)]="deadline_date" (mouseenter)="disableDate()"
+                        (mouseleave)="enableDate()" *ngIf="!disable_date">
+                    <input type="date" class="form-control" (change)="changeDeadlineDate($event.target.value)"
+                        *ngIf="disable_date">
+                    <input type="text" class="form-control" [(ngModel)]="deadline_time" (mouseenter)="disableTime()"
+                        (mouseleave)="enableTime()" *ngIf="!disable_time">
+                    <input type="time" class="form-control" (change)="changeDeadlineTime($event.target.value)"
+                        *ngIf="disable_time">
+                    <button class="form-control btn btn-outline-success" (click)="setPayments()"><i
+                            class="fas fa-sync"></i></button>
                 </div>
             </div>
         </div>
@@ -90,13 +97,15 @@
                 <nav width=100% style="border-top: 4px solid #e3f2fd;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
                         <a class="nav-item nav-link active" id="nav-payroll-tab" data-toggle="tab" href="#nav-payroll"
-                            role="tab" aria-controls="nav-payroll" aria-selected="true" *ngIf="!working">Payroll Values</a>
+                            role="tab" aria-controls="nav-payroll" aria-selected="true" *ngIf="!working">Payroll
+                            Values</a>
                         <a class="nav-item nav-link" id="nav-resume-tab" data-toggle="tab" href="#nav-resume" role="tab"
                             aria-controls="nav-resume" aria-selected="true" *ngIf="!working">Resume</a>
                         <a class="nav-item nav-link" id="nav-excep-tab" data-toggle="tab" href="#nav-excep" role="tab"
                             aria-controls="nav-excep" aria-selected="true" *ngIf="!working">Closing Exceptions</a>
-                        <a class="nav-item nav-link active" id="nav-bonuses-tab" data-toggle="tab" href="#nav-bonuses" role="tab"
-                            aria-controls="nav-bonuses" aria-selected="true" *ngIf="working">{{import_type}}</a>
+                        <a class="nav-item nav-link active" id="nav-bonuses-tab" data-toggle="tab" href="#nav-bonuses"
+                            role="tab" aria-controls="nav-bonuses" aria-selected="true"
+                            *ngIf="working">{{import_type}}</a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent" style="margin-top:10px">
@@ -152,7 +161,7 @@
                                     <td>{{pay.ot_hours}}</td>
                                     <td>{{pay.holidays_hours}}</td>
                                     <td>{{pay.nearsol_bonus}}</td>
-                                    <td>{{pay.client_bonus}}</td>
+                                    <td>{{pay.performance_bonus}}</td>
                                     <td>{{pay.treasure_hunt}}</td>
                                     <td>{{pay.adj_hours}}</td>
                                     <td>{{pay.adj_ot}}</td>
@@ -166,13 +175,18 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade show active" id="nav-bonuses" role="tabpanel" aria-labelledby="nav-bonuses-tab" *ngIf="working">
+                    <div class="tab-pane fade show active" id="nav-bonuses" role="tabpanel"
+                        aria-labelledby="nav-bonuses-tab" *ngIf="working">
                         <table class="table table-striped">
                             <thead>
                                 <th>NEARSOL ID</th>
                                 <th>NAME</th>
-                                <th *ngIf="import_type == 'NEARSOL BONUS' || import_type == 'CLIENT BONUS' || import_type == 'TREASURE HUNT'">BONUS AMOUNT</th>
-                                <th *ngIf="import_type == 'AJUSTES A PERIODOS ANTERIORES HORAS' || import_type == 'AJUSTES A PERIODOS ANTERIORES ASUETOS'|| import_type == 'AJUSTES A PERIODOS ANTERIORES OT'">ADJUSTMENTS</th>
+                                <th
+                                    *ngIf="import_type == 'NEARSOL BONUS' || import_type == 'CLIENT BONUS' || import_type == 'TREASURE HUNT'">
+                                    BONUS AMOUNT</th>
+                                <th
+                                    *ngIf="import_type == 'AJUSTES A PERIODOS ANTERIORES HORAS' || import_type == 'AJUSTES A PERIODOS ANTERIORES ASUETOS'|| import_type == 'AJUSTES A PERIODOS ANTERIORES OT'">
+                                    ADJUSTMENTS</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let c  of credits">
@@ -183,10 +197,12 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade " id="nav-adj" role="tabpanel" aria-labelledby="nav-adj-tab" *ngIf="!working">
-                        
+                    <div class="tab-pane fade " id="nav-adj" role="tabpanel" aria-labelledby="nav-adj-tab"
+                        *ngIf="!working">
+
                     </div>
-                    <div class="tab-pane fade " id="nav-resume" role="tabpanel" aria-labelledby="nav-resume-tab" *ngIf="!working">
+                    <div class="tab-pane fade " id="nav-resume" role="tabpanel" aria-labelledby="nav-resume-tab"
+                        *ngIf="!working">
                         <table class="table table-striped">
                             <thead>
                                 <th>NEARSOL ID</th>
@@ -216,7 +232,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="nav-excep" role="tabpanel" aria-labelledby="nav-excep-tab" *ngIf="!working">
+                    <div class="tab-pane fade" id="nav-excep" role="tabpanel" aria-labelledby="nav-excep-tab"
+                        *ngIf="!working">
                         <table class="table table-striped">
                             <thead>
                                 <th>NEARSOL ID</th>
@@ -266,8 +283,8 @@
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         Loading...
                     </button>
-                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
-                        *ngIf="!waitForfinish" #closeModalButton id="closeModalButton">Close</button>
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal" *ngIf="!waitForfinish"
+                        #closeModalButton id="closeModalButton">Close</button>
                 </div>
             </div>
         </div>
@@ -334,8 +351,8 @@
             </div>
         </div>
     </div>
-        <!----------------------------------------------------------------------------------------------IMPORT ADJ/BONUSES MODAL---------------------------------------------------------------->
-        <div class="modal fade" id="uploadBonuses" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
+    <!----------------------------------------------------------------------------------------------IMPORT ADJ/BONUSES MODAL---------------------------------------------------------------->
+    <div class="modal fade" id="uploadBonuses" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -364,11 +381,12 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center mt-2">
-                    <button type="button" class="btn btn-outline-secondary" *ngIf="!completed && !working" data-dismiss="modal">CLOSE</button>
+                    <button type="button" class="btn btn-outline-secondary" *ngIf="!completed && !working"
+                        data-dismiss="modal">CLOSE</button>
                     <button class="btn btn-outline-secondary" type="button" disabled *ngIf="!completed && working">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                         Loading...
-                      </button>
+                    </button>
                 </div>
             </div>
         </div>
