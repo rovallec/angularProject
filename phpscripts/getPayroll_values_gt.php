@@ -42,11 +42,6 @@ if($result = mysqli_query($con, $sql)){
         $res[$i]['adj_ot'] = $row['adj_ot'];
         $res[$i]['adj_hours'] = $row['adj_holidays'];
         $res[$i]['nearsol_bonus'] = $row['nearsol_bonus'];
-
-        adj_holidays:string = null;
-        adj_ot:string = null;
-        adj_hours:string = null;
-        nearsol_bonus:string = null;
         $i++;
     }
     echo(json_encode($res));
