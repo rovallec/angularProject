@@ -491,7 +491,7 @@ export class ClosingTkComponent implements OnInit {
 
                                 if (!isNullOrUndefined(trm.valid_from) && worked_days == 0 && discounted_days > 0) {
                                   if (new Date(trm.valid_from).getTime() > new Date(this.actualPeriod.start).getTime()) {
-                                    sevenths = (((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24)) - (ns_count + janp_sequence + hldT));
+                                    sevenths = (((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24)) - 1 - (ns_count + janp_sequence + hldT));
                                   }
                                 } else if(isNullOrUndefined(trm.valid_from)){
                                   if (discounted_days + sevenths > att.length) {
@@ -514,9 +514,10 @@ export class ClosingTkComponent implements OnInit {
                                   discounted_days = (15 - sevenths);
                                 }
 
-                                if (ns_count + days_off >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24) || Number(rs.janp) + days_off - janp_on_off_2 >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24)) {
+                                if ((ns_count + days_off >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24) || Number(rs.janp) + days_off - janp_on_off_2 >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24)) && ns_count > 0) {
                                   discounted_days = 15;
                                   sevenths = 0;
+                                  console.log("TEST " + emp[0].nearsol_id + " " + ns_count);
                                 }
 
                                 if(att.length == 0){
