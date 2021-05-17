@@ -10,7 +10,7 @@ $sql2 = "";
 $r = [];
 $i = 0;
 $sql = "INSERT INTO `minearsol`.`payroll_values` (`idpayroll_values`,`id_employee`, `id_reporter`, `id_account`, `id_period`, `id_payment`, `client_id`," .
-        " `nearsol_id`, `discounted_days`, `seventh`, `discounted_hours`, `ot_hours`, `holidays_hours`, `performance_bonus`, `treasure_hunt`,`next_seventh`, `adjustments`) VALUES";
+        " `nearsol_id`, `discounted_days`, `seventh`, `discounted_hours`, `ot_hours`, `holidays_hours`, `performance_bonus`, `treasure_hunt`,`next_seventh`, `nearsol_bonus`, `adj_hours`, `adj_ot`, `adj_holidays`) VALUES";
 
 for ($i=0; $i < (count($request)); $i++) { 
     if($i != 0){
@@ -34,15 +34,18 @@ for ($i=0; $i < (count($request)); $i++) {
     $ot_hours = $request[$i]->ot_hours;
     $holidays_hours = $request[$i]->holidays_hours;
     $performance_bonus = $request[$i]->performance_bonus;
-    $treasure_hunt = "0";
-    $adjustments = $request[$i]->adjustments;
+    $treasure_hunt = $request[$i]->treasure_hunt;
     $agent_name = $request[$i]->agent_name;
     $account_name = $request[$i]->account_name;
     $agent_status = $request[$i]->agent_status;
     $total_days = $request[$i]->total_days;
     $next_seventh = $request [$i]->next_seventh;
+    $adj_holidays = $request[$i]->adj_holidays;
+    $adj_ot = $request[$i]->adj_ot;
+    $adj_hours = $request[$i]->adj_hours;
+    $nearsol_bonus = $request[$i]->nearsol_bonus;
     $sql = $sql . 
-           "(NULL,$id_employee, $id_reporter, $id_account, $id_period, $id_payment, '$client_id', '$nearsol_id', $discounted_days, $seventh, $discounted_hours, $ot_hours, $holidays_hours, $performance_bonus, $treasure_hunt, $next_seventh, $adjustments)";
+           "(NULL,$id_employee, $id_reporter, $id_account, $id_period, $id_payment, '$client_id', '$nearsol_id', $discounted_days, $seventh, $discounted_hours, $ot_hours, $holidays_hours, $performance_bonus, $treasure_hunt, $next_seventh, $adj_holidays ,$adj_ot, $adj_hours, $nearsol_bonus)";
 }
 if(mysqli_query($con,$sql)){
     echo("1");
