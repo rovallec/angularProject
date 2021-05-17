@@ -189,7 +189,7 @@ FROM
 		) sequence
 		where date_add('$start', interval `row` day) <= '$end'
     ) AS `dt` ON `dt`.`dates` = suspensions.day_1 OR `dt`.`dates` = suspensions.day_2 OR `dt`.`dates` = suspensions.day_3 OR `dt`.`dates` = suspensions.day_4
-WHERE hr_processes.status = 'DISPATCHED' AND ((hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '$start' AND '$end'));";
+WHERE (hr_processes.status = 'DISPATCHED' OR hr_processes.status = 'COMPLETED')  AND ((hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '$start' AND '$end'));";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH", "NOTES", "TIMESTAMP"));
