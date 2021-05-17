@@ -12,12 +12,11 @@ $res = [];
 $i = 0;
 
 $sql = "SELECT payroll_values.id_account AS `acc`, employees.*, hires.*, profiles.*, accounts.*, payroll_values.* FROM payroll_values
-    INNER JOIN employees ON employees.idemployees = payroll_values.id_employee
-    INNER JOIN hires ON hires.idhires = employees.id_hire
-    INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
-    INNER JOIN accounts ON accounts.idaccounts = payroll_values.id_account
-    LEFT JOIN (SELECT SUM(amount) AS `tk_adj`, id_payment FROM timekeeping_adjustments GROUP BY id_payment) AS `tk_adjs` ON `tk_adjs`.id_payment = payroll_values.id_payment
-    WHERE id_period = $id";
+INNER JOIN employees ON employees.idemployees = payroll_values.id_employee
+INNER JOIN hires ON hires.idhires = employees.id_hire
+INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+INNER JOIN accounts ON accounts.idaccounts = payroll_values.id_account
+WHERE id_period = $id";
 
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
@@ -39,6 +38,15 @@ if($result = mysqli_query($con, $sql)){
         $res[$i]['agent_name'] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         $res[$i]['account_name'] = $row['name'];
         $res[$i]['agent_status'] = $row['active'];
+        $res[$i]['adj_holidays'] = $row['adj_hours'];
+        $res[$i]['adj_ot'] = $row['adj_ot'];
+        $res[$i]['adj_hours'] = $row['adj_holidays'];
+        $res[$i]['nearsol_bonus'] = $row['nearsol_bonus'];
+
+        adj_holidays:string = null;
+        adj_ot:string = null;
+        adj_hours:string = null;
+        nearsol_bonus:string = null;
         $i++;
     }
     echo(json_encode($res));

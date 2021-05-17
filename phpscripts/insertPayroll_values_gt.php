@@ -10,7 +10,7 @@ $sql2 = "";
 $r = [];
 $i = 0;
 $sql = "INSERT INTO `minearsol`.`payroll_values` (`idpayroll_values`,`id_employee`, `id_reporter`, `id_account`, `id_period`, `id_payment`, `client_id`," .
-        " `nearsol_id`, `discounted_days`, `seventh`, `discounted_hours`, `ot_hours`, `holidays_hours`, `performance_bonus`, `treasure_hunt`,`next_seventh`, `nearsol_bonus`, `adj_hours`, `adj_ot`, `adj_holidays`) VALUES";
+        " `nearsol_id`, `discounted_days`, `seventh`, `discounted_hours`, `ot_hours`, `holidays_hours`, `performance_bonus`, `treasure_hunt`,`next_seventh`, `adj_hours`, `adj_ot`, `adj_holidays`, `nearsol_bonus`) VALUES";
 
 for ($i=0; $i < (count($request)); $i++) { 
     if($i != 0){
@@ -45,7 +45,7 @@ for ($i=0; $i < (count($request)); $i++) {
     $adj_hours = validarDatos($request[$i]->adj_hours);
     $nearsol_bonus = validarDatos($request[$i]->nearsol_bonus);
     $sql = $sql . 
-           "(NULL,$id_employee, $id_reporter, $id_account, $id_period, $id_payment, '$client_id', '$nearsol_id', $discounted_days, $seventh, $discounted_hours, $ot_hours, $holidays_hours, $performance_bonus, $treasure_hunt, $next_seventh, $adj_holidays ,$adj_ot, $adj_hours, $nearsol_bonus)";
+           "(NULL,$id_employee, $id_reporter, $id_account, $id_period, $id_payment, '$client_id', '$nearsol_id', $discounted_days, $seventh, $discounted_hours, $ot_hours, $holidays_hours, $performance_bonus, $treasure_hunt, $next_seventh, $adj_ot, $adj_hours,  $adj_holidays , $nearsol_bonus)";
 }
 if(mysqli_query($con,$sql)){
     echo("1");
