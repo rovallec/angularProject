@@ -20,7 +20,7 @@
                         title="Downlaod Payroll Values" (click)="exportPayroll_values()"><i class="fas fa-file-export"></i></button>
                 </div>
                 <div class="p-2">
-                    <button class="btn btn-outline-secondary" [disabled]="actualPeriod.status == '3'"
+                    <button class="btn btn-outline-secondary"
                         title="Upload Bonus/Adjustments"  data-toggle="modal" data-target="#uploadBonuses" *ngIf="!working && !saving"><i class="fas fa-file-upload"></i></button>
                     <button class="btn btn-outline-success" [disabled]="actualPeriod.status == '3'"
                         title="Save upload" (click)="saveImport()"  *ngIf="working && !saving"><i class="fas fa-check"></i></button>
