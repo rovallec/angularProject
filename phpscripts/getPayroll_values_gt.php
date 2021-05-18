@@ -38,9 +38,9 @@ if($result = mysqli_query($con, $sql)){
         $res[$i]['agent_name'] = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
         $res[$i]['account_name'] = $row['name'];
         $res[$i]['agent_status'] = $row['active'];
-        $res[$i]['adj_holidays'] = $row['adj_hours'];
+        $res[$i]['adj_hours'] = $row['adj_hours'];
         $res[$i]['adj_ot'] = $row['adj_ot'];
-        $res[$i]['adj_hours'] = $row['adj_holidays'];
+        $res[$i]['adj_holidays'] = $row['adj_holidays'];
         $res[$i]['nearsol_bonus'] = $row['nearsol_bonus'];
         $i++;
     }

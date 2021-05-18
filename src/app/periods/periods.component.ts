@@ -326,7 +326,7 @@ export class PeriodsComponent implements OnInit {
                           }
 
                           if(Math.abs(Number(payroll_value.adj_hours))>0 ||Math.abs( Number(payroll_value.adj_holidays))>0 || Math.abs(Number(payroll_value.adj_ot))>0){
-                            adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary))).toFixed(2);
+                            adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250/240))).toFixed(2);
                             if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                               adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 2)).toFixed(2);
                             } else {
