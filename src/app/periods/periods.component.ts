@@ -325,8 +325,14 @@ export class PeriodsComponent implements OnInit {
                             this.global_credits.push(holiday_credit);
                           }
 
-                          if(Number(payroll_value.adjustments)>0){
-                            adjustments.amount = (Number(payroll_value.adjustments) * (Number(base_salary) + Number(productivity_salary))).toFixed(2);
+                          if(Math.abs(Number(payroll_value.adj_hours))>0 ||Math.abs( Number(payroll_value.adj_holidays))>0 || Math.abs(Number(payroll_value.adj_ot))>0){
+                            adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary))).toFixed(2);
+                            if (emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
+                              adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary)) * 2)).toFixed(2);
+                            } else {
+                              adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary)) * 1.5)).toFixed(2);
+                            }
+                            adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary)) * 1.5)).toFixed(2);
                             adjustments.type = "Ajustes periodos anteriores";
                             adjustments.idpayments = py.idpayments;
                           }
@@ -348,7 +354,7 @@ export class PeriodsComponent implements OnInit {
                               sum_cred = sum_cred + Number(credit.amount);
                             }
                           })
-                          py.credits = (sum_cred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount)).toFixed(2);
+                          py.credits = (sum_cred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
 
 
 
