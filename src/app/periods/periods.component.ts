@@ -350,7 +350,10 @@ export class PeriodsComponent implements OnInit {
 
                           let sum_cred: number = 0
                           cred.forEach(credit => {
-                            if (credit.status == "PENDING") {
+                            if(emp[0].nearsol_id == "COM00901"){
+                              console.log(py.idpayments + "|" + credit.idpayments);
+                            }
+                            if (credit.status == "PENDING" && credit.idpayments == py.idpayments) {
                               sum_cred = sum_cred + Number(credit.amount);
                             }
                           })
@@ -360,7 +363,10 @@ export class PeriodsComponent implements OnInit {
 
                           let sum_deb: number = 0
                           deb.forEach(debit => {
-                            if (debit.status == "PENDING") {
+                            if(emp[0].nearsol_id == "COM00901"){
+                              console.log(py.idpayments + "|" + debit.idpayments);
+                            }
+                            if (debit.status == "PENDING" && debit.idpayments == py.idpayments) {
                               sum_deb = sum_deb + Number(debit.amount);
                               if (debit.type = "ISR") {
                                 isr = Number(debit.amount);
