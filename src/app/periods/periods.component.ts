@@ -335,6 +335,7 @@ export class PeriodsComponent implements OnInit {
                             adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
                             adjustments.type = "Ajustes periodos anteriores";
                             adjustments.idpayments = py.idpayments;
+                            this.global_credits.push(adjustments);
                           }
 
                           igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * 0.0483).toFixed(2);
@@ -342,7 +343,6 @@ export class PeriodsComponent implements OnInit {
                           igss_debit.type = "Descuento IGSS";
 
                           this.global_credits.push(base_credit);
-                          this.global_credits.push(adjustments);
                           this.global_credits.push(productivity_credit);
                           this.global_debits.push(igss_debit);
                           this.global_credits.push(decreot_credit);
