@@ -20,8 +20,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = "http://localhost"; // Desarrollo
-PHP_API_SERVER = "http://172.18.2.45";  // produccion
+PHP_API_SERVER = "http://localhost"; // Desarrollo
+//PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -67,6 +67,10 @@ updateSchedules(sch:schedules){
 
 insertNewSchedule(sch:schedules){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertSchedule.php`, sch);
+}
+
+insertAccountingPolicies(any: any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertAccountingPolicies.php`, any);
 }
 
 insertNewWave(wv:waves_template){
@@ -189,6 +193,10 @@ getrealTime(rlt:realTimeTrack){
 
 downloadRealTimeReport(rlt:realTimeTrack){
   return this.httpClient.post<realTimeTrack[]>(`${this.PHP_API_SERVER}/phpscripts/exportRealTrack.php`, rlt);
+}
+
+exportVacationsReport(emp: employees[]) {
+  return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/exportVacationsReport.php`, emp);
 }
 
 //Recruitment Daily Report
