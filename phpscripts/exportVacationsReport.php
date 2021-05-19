@@ -52,7 +52,7 @@ for ($i=0; $i < count($request); $i++) {
         $req[$c][10] = $row['date'];
         $req[$c][11] = $row['mes'];
         $req[$c][12] = $row['complete'];
-        $i++;
+        $c++;
     };
     echo(json_encode($req));
   }else{
