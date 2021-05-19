@@ -233,7 +233,7 @@ export class PeriodsComponent implements OnInit {
                           }
 
                           if (new Date(emp[0].hiring_date).getTime() > new Date(this.period.start).getTime()) {
-                            py.days = (Number(py.days) - ((new Date(this.period.end).getTime() - new Date(emp[0].hiring_date).getTime()) / (1000*3600*24))).toFixed(2);
+                            py.days = (Number(py.days) - ((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))).toFixed(2);
                           }
 
 
