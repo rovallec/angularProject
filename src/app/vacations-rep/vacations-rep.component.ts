@@ -46,7 +46,9 @@ export class VacationsRepComponent implements OnInit {
   }
 
   exportVacationsReport() {
-    this.apiService.exportVacationsReport(this.employees).subscribe();
+    this.apiService.exportVacationsReport(this.employees).subscribe((emp:employees[])=>{
+      this.employees = emp;
+    });
   }
 
 }

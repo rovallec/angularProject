@@ -1,19 +1,13 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
-header('Content-Type: text/csv; charset=utf-8');
-header('Content-Disposition: attachment; filename="' . "ReporteDeVacaciones.csv" . '"');
 require 'database.php';
-
-echo "\xEF\xBB\xBF";
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$title = ['ID_Nearsol', 'Avaya', 'Puesto', 'Cuenta', 'Nombre', 'Fecha de ingreso', 'Vacaciones acumuladas', 'Vacaciones gozadas', 'Vacaciones disponibles', 'Tipo de ausencia', 'Fecha día gozado', 'Mes que corresponde', 'Dia completo/Medio día'];
-$output = fopen("php://output", "w");
-fputcsv($output, $title);
 $i = 0;
+$c = 0;
 
 for ($i=0; $i < count($request); $i++) {
   $id_employee = ($request[$i]->idemployees);
@@ -45,25 +39,24 @@ for ($i=0; $i < count($request); $i++) {
 
   if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
-        $req[0] =  $row['nearsol_id'];
-        $req[1] =  $row['client_id'];
-        $req[2] =  $row['job'];
-        $req[3] =  $row['cuenta'];
-        $req[4] =  $row['nombre'];
-        $req[5] =  $row['hiring_date'];
-        $req[6] =  $row['acumuladas'];
-        $req[7] =  $row['gozadas'];
-        $req[8] =  $row['disponibles'];
-        $req[9] =  $row['tipoAusencia'];
-        $req[10] = $row['date'];
-        $req[11] = $row['mes'];
-        $req[12] = $row['complete'];
-        
-        fputcsv($output, $req, ",");
+        $req[$c][0] =  $row['nearsol_id'];
+        $req[$c][1] =  $row['client_id'];
+        $req[$c][2] =  $row['job'];
+        $req[$c][3] =  $row['cuenta'];
+        $req[$c][4] =  $row['nombre'];
+        $req[$c][5] =  $row['hiring_date'];
+        $req[$c][6] =  $row['acumuladas'];
+        $req[$c][7] =  $row['gozadas'];
+        $req[$c][8] =  $row['disponibles'];
+        $req[$c][9] =  $row['tipoAusencia'];
+        $req[$c][10] = $row['date'];
+        $req[$c][11] = $row['mes'];
+        $req[$c][12] = $row['complete'];
+        $i++;
     };
+    echo(json_encode($req));
   }else{
       http_response_code(404);
   }
 }
-fclose($output);
 ?>
