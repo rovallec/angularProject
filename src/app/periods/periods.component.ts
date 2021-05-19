@@ -223,9 +223,7 @@ export class PeriodsComponent implements OnInit {
                           let base_salary: number = Number(emp[0].base_payment) / (240);
                           let productivity_salary: number = 0;
 
-                          console.log(rises);
-
-                          if (!isNullOrUndefined(rises.effective_date) && new Date(rises.effective_date).getTime() <= new Date(this.period.end).getTime()) {
+                          if (!isNullOrUndefined(rises.effective_date) || new Date(rises.effective_date).getTime() <= new Date(this.period.end).getTime()) {
                             productivity_salary = ((Number(rises.old_salary) - Number(emp[0].base_payment) - 250) / 30) * (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24)));
                             productivity_salary = productivity_salary + ((Number(rises.new_salary) - Number(emp[0].base_payment) - 250) / 30) * (15 - (((new Date(rises.effective_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24))));
                             productivity_salary = productivity_salary / 120;
