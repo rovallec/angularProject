@@ -1649,6 +1649,17 @@ export class payroll_resume{
     }
 }
 
+export class policies {
+    id_client: string;
+    idaccounts: string;
+    idperiod: string;
+    constructor() {
+        this.id_client = null;
+        this.idaccounts = null;
+        this.idperiod = null;
+    }
+}
+
 export class accountingPolicies {
     external_id: string;
     name: string;
@@ -1658,6 +1669,9 @@ export class accountingPolicies {
     site: string;
     amount: string;
     clientNetSuite: string;
+    id_client: string;
+    idaccounts: string;
+    idperiod: string;
     constructor() {
         this.external_id = null;
         this.name = null;
@@ -1667,6 +1681,9 @@ export class accountingPolicies {
         this.site = null;
         this.amount = null;
         this.clientNetSuite = null;
+        this.id_client = null;
+        this.idaccounts = null;
+        this.idperiod = null;
     }
 }
 

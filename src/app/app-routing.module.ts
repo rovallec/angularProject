@@ -36,6 +36,7 @@ import { BonusesComponent } from './bonuses/bonuses.component';
 import { ClosingTkComponent } from './closing-tk/closing-tk.component';
 import { ImportWavesComponent } from './import-waves/import-waves.component';
 import { AccountingPoliciesComponent } from './accounting-policies/accounting-policies.component';
+import { VacationsRepComponent } from "./vacations-rep/vacations-rep.component";
 
 const routes:Routes = [
   {
@@ -189,6 +190,11 @@ const routes:Routes = [
   {
     path:'closing',
     component:ClosingTkComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'vacationsrep',
+    component:VacationsRepComponent,
     canActivate:[AuthGuard]
   },
   {

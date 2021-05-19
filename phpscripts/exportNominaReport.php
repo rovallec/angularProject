@@ -10,7 +10,7 @@ echo "\xEF\xBB\xBF";
 $AID_Period = $_GET['AID_Period'];
 $i = 0;
 
-$sql =  "SELECT
+$sql = "SELECT
 A1.idpayments,
 A1.idemployees AS 'IdEmployees',
 A1.client_id As 'Client_ID',

@@ -9,7 +9,7 @@
         </div>
         <div class="p-2" *ngIf="actualPeriod.status != '3'">
           <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"
-            tittle="Save Policies"><i class="far fa-save"></i></button>
+            tittle="Save Policies" (click)="saveAccounting()"><i class="far fa-save"></i></button>
         </div>
         <div class="p-2">
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal" tittle="Search"><i
@@ -104,14 +104,14 @@
                 <td>{{acp.department}}</td>
                 <td>{{acp.class}}</td>
                 <td>{{acp.site}}</td>
-                <td *ngIf="acp.clasif == 'H'">0</td>
-                <td *ngIf="acp.clasif == 'D'">{{acp.amount}}</td>
-                <td *ngIf="acp.clasif == 'D'">0</td>
-                <td *ngIf="acp.clasif == 'H'">{{acp.amount}}</td>
+                <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
+                <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ zero | number: '1.2-3' }} </td>
+                <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ zero | number: '1.2-3' }}</td>
+                <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
                 <td>{{acp.clientNetSuite}}</td>
               </tr>
-              <tr *ngIf="accountingPolicies.length>0">
-                <td colspan="9">TOTAL ROWS: {{ accountingPolicies.length }}</td>
+              <tr>
+                <td colspan="9" style="align-content: center; text-align: center;">{{ finalRow }}</td>
               </tr>
             </tbody>
           </table>

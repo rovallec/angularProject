@@ -69,6 +69,10 @@ insertNewSchedule(sch:schedules){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertSchedule.php`, sch);
 }
 
+insertAccountingPolicies(any: any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertAccountingPolicies.php`, any);
+}
+
 insertNewWave(wv:waves_template){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertWave.php`, wv);
 }
@@ -189,6 +193,10 @@ getrealTime(rlt:realTimeTrack){
 
 downloadRealTimeReport(rlt:realTimeTrack){
   return this.httpClient.post<realTimeTrack[]>(`${this.PHP_API_SERVER}/phpscripts/exportRealTrack.php`, rlt);
+}
+
+exportVacationsReport(emp: employees[]) {
+  return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/exportVacationsReport.php`, emp);
 }
 
 //Recruitment Daily Report
