@@ -231,7 +231,7 @@ export class PeriodsComponent implements OnInit {
                           } else {
                             productivity_salary = ((Number(emp[0].productivity_payment) - 250) / 240);
                           }
-
+ 
                           if (new Date(emp[0].hiring_date).getTime() > new Date(this.period.start).getTime()) {
                             py.days = (Number(py.days) - ((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))).toFixed(2);
                           }
