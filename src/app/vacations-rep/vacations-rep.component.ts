@@ -23,7 +23,7 @@ export class VacationsRepComponent implements OnInit {
   }
 
   start(){
-    this.apiService.getallEmployees({department:'all'}).subscribe((emp:employees[])=>{
+    this.apiService.getallEmployees({department:'NoLimitAC'}).subscribe((emp:employees[])=>{
       this.employees = emp;
     })
   }
@@ -46,10 +46,18 @@ export class VacationsRepComponent implements OnInit {
   }
 
   exportVacationsReport() {
+    let idemployees: string = '';
+    let i: number = 0;
+    for (let index = 0; index < this.employees.length; index++) {      
+      idemployees = idemployees + this.employees[index].idemployees + ',';      
+    }
+    idemployees = idemployees + '0';    
+    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportVacationsReport.php?employees=" + idemployees, "_blank");
+    /*
     this.apiService.exportVacationsReport(this.employees).subscribe((emp:employees[])=>{
       console.log(emp);
       this.employees = emp;
-    });
+    });*/
   }
 
 }
