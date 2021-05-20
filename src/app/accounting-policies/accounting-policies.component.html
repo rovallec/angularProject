@@ -121,7 +121,10 @@
                 <td>{{acp.clientNetSuite}}</td>
               </tr>
               <tr>
-                <td colspan="9" style="align-content: center; text-align: center;">{{ finalRow }}</td>
+                <td colspan="6" style="align-content: center; text-align: center;">{{ finalRow }}</td>
+                <td>{{ totalDebe | number: '1.2-3' }}</td>
+                <td>{{ totalHaber | number: '1.2-3' }}</td>
+                <td></td>
               </tr>
             </tbody>
           </table>

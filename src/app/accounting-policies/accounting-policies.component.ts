@@ -43,6 +43,8 @@ export class AccountingPoliciesComponent implements OnInit {
   arrAccountingAccounts: AccountingAccounts[] = [];
   zero:number = 0.00;
   finalRow: string = null;
+  totalDebe: string = null;
+  totalHaber: string = null;
 
   ngOnInit() {
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
@@ -114,6 +116,12 @@ export class AccountingPoliciesComponent implements OnInit {
         this.accountingPolicies = acp;
         for (let index = 0; index < this.accountingPolicies.length; index++) {
           this.accountingPolicies[index].idperiod = this.actualPeriod.idperiods;
+          if (this.accountingPolicies[index].clasif == 'D') {
+            this.totalDebe = String(Number(this.totalDebe) + Number(this.accountingPolicies[index].amount));
+          } else {
+            this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
+          }
+
         }
         //this.accountingPolicies = acp.filter(ap => ap.id_client == this.selectedClient);
         if (this.accountingPolicies.length==0) {
