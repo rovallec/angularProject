@@ -23,6 +23,7 @@ export class HrdailyComponent implements OnInit {
   exportAccounts: accounts[] = [];
   isExportable: boolean = false;
   me: users = new users;
+  targetStatus:string;
 
   constructor(private apiService: ApiService, private authUsr: AuthServiceService) { }
 
@@ -109,10 +110,18 @@ export class HrdailyComponent implements OnInit {
         acId = acId + itm.idaccounts;
       })
       if (this.me.department == '28') {
-        window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo, "_blank");
+        window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo + "&state=" + this.targetStatus, "_blank");
       } else {
-        window.open("http://172.18.2.45/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId, "_blank");
+        window.open("http://172.18.2.45/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId + "&state=" + this.targetStatus, "_blank");
       }
+    }
+  }
+
+  changeVal(val){
+    if(val.target.checked == true){
+      this.targetStatus = "'PENDING', 'DISPATCHED', 'COMPLETED'";
+    }else{
+      this.targetStatus = "PENDING";
     }
   }
 }

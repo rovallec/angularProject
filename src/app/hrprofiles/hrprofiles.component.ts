@@ -126,7 +126,7 @@ export class HrprofilesComponent implements OnInit {
   original_account: string = null;
 
   approvals: users[] = [new users];
-  motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid'];
+  motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid', 'COVID Unpaid', 'COVID Paid', 'IGSS Paid'];
 
   maxDate:string = null;
   minDate:string = null;
@@ -377,12 +377,19 @@ export class HrprofilesComponent implements OnInit {
   getAttAdjustemt() {
     this.editAdj = false;
     this.apiService.getAttAdjustments({ id: this.activeEmp }).subscribe((adj: attendences_adjustment[]) => {
+      this.showAttAdjustments = [];
       if (adj.length >= 16) {
         for (let i = (adj.length - 1); i > (adj.length - 16); i = i - 1) {
-          this.showAttAdjustments.push(adj[i]);
+          if(adj[i].id_department == '5' || adj[i].id_department == '27'){
+            this.showAttAdjustments.push(adj[i]);
+          }
         }
       } else {
-        this.showAttAdjustments = adj;
+        adj.forEach(ev=>{
+          if(ev.id_department == '27' || ev.id_department == '5'){
+            this.showAttAdjustments.push(ev);
+          }
+        })
       }
     })
   }
