@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -22,6 +22,7 @@ import { exit } from 'process';
   templateUrl: './hrprofiles.component.html',
   styleUrls: ['./hrprofiles.component.css']
 })
+
 export class HrprofilesComponent implements OnInit {
 
 
@@ -51,6 +52,7 @@ export class HrprofilesComponent implements OnInit {
   riseIncrease: string = null;
   profiletoMarge: string[][] = [[]];
   profiletoMargeHeaders: string[] = [];
+  vac: vacyear[] = [];
 
   beneficiaryName: string;
   todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -304,6 +306,7 @@ export class HrprofilesComponent implements OnInit {
 
     this.vacationAdd = false;
     this.activeVacation.date = this.todayDate;
+    this.activeVacation.setYear();
     this.activeVacation.id_department = this.authUser.getAuthusr().department;
     this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
     this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
@@ -427,12 +430,14 @@ export class HrprofilesComponent implements OnInit {
 
   getVacations() {
     let found:boolean = false;
+    let vacYears: vacyear[] = [];
     this.earnVacations = this.vacationsEarned * 1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
       this.showVacations = res;
       res.forEach(vac => {
+        let vacYear: vacyear = new vacyear;
         if (this.complete_adjustment) {
           if (vac.date == this.activeVacation.date) {
             found = true;
@@ -445,6 +450,13 @@ export class HrprofilesComponent implements OnInit {
         }
         if (vac.action == "Take") {
           this.tookVacations = this.tookVacations + parseFloat(vac.count);
+        }
+
+        vacYears = this.vac.filter(v => String(v.year) == new Date(vac.took_date).getFullYear().toString());
+        if (vacYears.length == 0) {
+          vacYear.year = new Date(vac.took_date).getFullYear();
+          vacYear.selected = false;
+          this.vac.push(vacYear);
         }
       })
       if (this.complete_adjustment && !found) {

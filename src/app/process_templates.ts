@@ -260,6 +260,7 @@ export class vacations {
     action: string;
     count: string;
     took_date: string;
+    year: number;
     constructor() {
         this.id_user = null;
         this.id_employee = null;
@@ -271,8 +272,26 @@ export class vacations {
         this.action = null;
         this.count = null;
         this.took_date = null;
+        this.year = new Date(this.date).getFullYear();
+    }
+
+    setYear() {
+        this.year = new Date(this.date).getFullYear();
     }
 }
+
+export class vacyear {
+    year: number;
+    selected: boolean
+    constructor() {
+      this.year = null;
+      this.selected = false;
+    }
+  
+    vacSelected(sel: boolean) {
+      this.selected = sel;
+    }
+  }
 
 export class leaves {
     id_process;
