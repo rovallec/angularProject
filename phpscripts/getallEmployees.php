@@ -34,8 +34,18 @@ if($nm=='27'){
             LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
             LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
             LEFT JOIN (select count(families.relationship) as children, families.id_profile from families where families.relationship in('hijo', 'hija', 'son','daughter')  group by families.id_profile) a  ON (a.id_profile = hires.id_profile)
-            LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LIMIT 50;";  
-        } 
+            LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LIMIT 50;";
+        } else if ($nm == 'NoLimitAC') {
+            $sql = "SELECT `profiles`.`idprofiles`, `employees`.*, `hires`.`id_profile`, `hires`.`nearsol_id`, `users`.`user_name`, `accounts`.`name`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, coalesce(a.children, 0) AS children, profiles.gender 
+            FROM `employees`
+            LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter`
+            LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
+            LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
+            LEFT JOIN (select count(families.relationship) as children, families.id_profile from families where families.relationship in('hijo', 'hija', 'son','daughter')  group by families.id_profile) a  ON (a.id_profile = hires.id_profile)
+            LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile`
+            WHERE `employees`.`active` = 1;";
+        }
+
     }
 }
 if($request = mysqli_query($con,$sql)){

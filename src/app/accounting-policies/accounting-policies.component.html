@@ -3,26 +3,36 @@
     <div class="row" style="margin-top:25px">
       <div class="d-flex justify-content-between mb-3 w-100">
         <div class="p-2">
+          <!--
           <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'"
-            title="Import Closing Exceptions" data-toggle="modal" data-target="#import_modal"><i
-              class="fas fa-cloud-upload-alt"></i></button>
+            title="Import Closing Exceptions" data-toggle="modal" data-target="#import_modal">
+              <i class="fas fa-cloud-upload-alt"></i>
+          </button> -->
         </div>
         <div class="p-2" *ngIf="actualPeriod.status != '3'">
           <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"
-            tittle="Save Policies" (click)="saveAccounting()"><i class="far fa-save"></i></button>
+            tittle="Save Policies" (click)="saveAccounting()">
+            <i class="far fa-save"></i>
+          </button> 
         </div>
         <div class="p-2">
-          <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal" tittle="Search"><i
-              class="fas fa-search" (click)="getAccounting()"></i></button>
+          <!--
+          <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal" tittle="Search">
+            <i class="fas fa-search" (click)="getAccounting()"></i>
+          </button> -->
         </div>
         <div class="p-2">
-          <button class="btn btn-outline-success" title="Downlaod Policies Values"><i
-              class="fas fa-file-export"></i></button>
+          <!--
+          <button class="btn btn-outline-success" title="Downlaod Policies Values">
+            <i class="fas fa-file-export"></i>
+          </button> -->
         </div>
         <div class="p-2">
+          <!--
           <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"
-            title="Downlaod Paid Attendances"><i
-              class="fas fa-file-download"></i></button>
+            title="Downlaod Paid Attendances">
+            <i class="fas fa-file-download"></i>
+          </button> -->
         </div>
       </div>
     </div>
@@ -111,7 +121,10 @@
                 <td>{{acp.clientNetSuite}}</td>
               </tr>
               <tr>
-                <td colspan="9" style="align-content: center; text-align: center;">{{ finalRow }}</td>
+                <td colspan="6" style="align-content: center; text-align: center;">{{ finalRow }}</td>
+                <td>{{ totalDebe | number: '1.2-3' }}</td>
+                <td>{{ totalHaber | number: '1.2-3' }}</td>
+                <td></td>
               </tr>
             </tbody>
           </table>

@@ -86,7 +86,7 @@
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
           routerLink="/activeReport" style="color: white" [ngClass]="{'act':selectedOption=='ACTVR'}"
           (click)="SetSel('ACTVR')">ACTIVE AGENTS REPORT</a>
-          <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/exportatt" style="color: white"
+        <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/exportatt" style="color: white"
           [ngClass]="{'act':selectedOption=='EXPATT'}" (click)="SetSel('EXPATT')">ATTENDANCE REPORT</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
@@ -97,17 +97,19 @@
           (click)="SetSel('DPM')">DP MAINTENANCE</a>
           <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
           [ngClass]="{'act':selectedOption=='EXPEX'}" routerLink="/hrdaily" (click)="SetSel('EXPATT')">EXCEPTIONS REPORT</a>
-          <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/closing"
+        <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/closing"
           style="color: white" [ngClass]="{'act':selectedOption=='CLOSING'}" (click)="SetSel('CLOSING')">CLOSING</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
-        <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/vacationsrep"
-          style="color: white" [ngClass]="{'act':selectedOption=='VACATIONSREP'}" (click)="SetSel('VACATIONSREP')">VACATIONS REPORT</a>
         <a *ngIf="getSaved().department == '5' || getSaved().department == '27'" class="nav-link"
           style="color: white; cursor:pointer;" (click)="getEmployeeData()"
           [ngClass]="{'act':selectedOption=='EMPD'}">EMPLOYEE DATA</a>
-          <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
+        <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
           [ngClass]="{'act':selectedOption=='CLOSING'}" (click)="SetSel('CLOSING')" routerLink="/closing">CLOSING</a>
+      </li>
+      <li *ngIf="getAuth()" class="nav-item">
+        <a *ngIf="getSaved().department == '27'" class="nav-link" routerLink="/vacationsrep"
+          style="color: white" [ngClass]="{'act':selectedOption=='VACATIONSREP'}" (click)="SetSel('VACATIONSREP')">VACATIONS REPORT</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
