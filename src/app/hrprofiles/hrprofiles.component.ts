@@ -436,8 +436,14 @@ export class HrprofilesComponent implements OnInit {
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
       this.showVacations = res;
+
+      this.showVacations.forEach(sv => {
+        sv.year = new Date(sv.took_date).getFullYear();
+      })
+
       res.forEach(vac => {
         let vacYear: vacyear = new vacyear;
+        let VacFiltered: vacations[] = [];
         if (this.complete_adjustment) {
           if (vac.date == this.activeVacation.date) {
             found = true;
@@ -456,14 +462,18 @@ export class HrprofilesComponent implements OnInit {
         if (vacYears.length == 0) {
           vacYear.year = new Date(vac.took_date).getFullYear();
           vacYear.selected = false;
+          VacFiltered = this.showVacations.filter(svf => String(svf.year) == new Date(vac.took_date).getFullYear().toString());
+          vacYear.vacations.push.apply(vacYear.vacations, VacFiltered);
           this.vac.push(vacYear);
         }
       })
+
       if (this.complete_adjustment && !found) {
         window.alert("Vacation not applyed correctly please try again or contact your administrator");
       }
       this.availableVacations = this.earnVacations - this.tookVacations;
     })
+    console.log(this.vac);
   }
 
   addVacation(action: string, type: string) {

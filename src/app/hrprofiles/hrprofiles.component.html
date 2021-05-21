@@ -269,15 +269,6 @@
                             </div>
                             <div class="form-row col-md-12">
                                 <table style="width:98%; padding: 1%;" class="table table-striped table-hover">
-                                    <thead>
-                                        <tr *ngFor="let vacsel of vac">
-                                            <th>
-                                               <!-- <i class="far fa-plus-square" *ngIf="vacsel.selected==false" ([ngModel])="vacsel" (click)="vacsel.vacSelected(true)"></i>
-                                                <i class="far fa-minus-square" *ngIf="vacsel.selected==true" (click)="vacsel.vacSelected(false)"></i>
-                                                Year: {{ vacsel.year }}-->
-                                            </th>
-                                        </tr>
-                                    </thead>
                                     <tbody *ngFor="let v of vac">
                                         <tr>
                                             <td>
@@ -297,13 +288,13 @@
                                                         <th>STATUS</th>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let vacation of showVacations" (click)="getVacation(vacation)"
+                                                        <tr *ngFor="let vacation of v.vacations" (click)="getVacation(vacation)"
                                                             class="selectable">
                                                             <td>{{vacation.id_type}}</td>
                                                             <td>{{vacation.action}}</td>
                                                             <td>{{vacation.count}}</td>
-                                                            <td>{{vacation.took_date}}</td>
-                                                            <td>{{vacation.status}}</td>
+                                                            <td *ngIf="v.year==vacation.year">{{vacation.took_date}}</td>
+                                                            <td *ngIf="v.year==vacation.year">{{vacation.status}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

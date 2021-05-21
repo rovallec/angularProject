@@ -283,9 +283,11 @@ export class vacations {
 export class vacyear {
     year: number;
     selected: boolean
+    vacations: vacations[];
     constructor() {
       this.year = null;
       this.selected = false;
+      this.vacations = [];
     }
   
     vacSelected(sel: boolean) {
