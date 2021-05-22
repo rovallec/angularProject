@@ -12,7 +12,11 @@ $status = ($request->state);
 $society = ($request->society);
 
 if($platform != 'WAH' && $platform != 'ON SITE'){
-	$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `client_id` = '$platform', `state` = '$status', society = '$society' WHERE `id_profile` = '$id';";
+	if($platform != 'nearsol_id'){
+		$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `client_id` = '$platform', `state` = '$status', society = '$society' WHERE `id_profile` = '$id';";
+	}else{
+		$sql = "UPDATE `employees` INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `nearsol_id` = '$society' WHERE `idemployees` = $id;";
+	}
 }else{
 		$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `platform` = '$platform', society = '$society' WHERE `id_profile` = '$id';";
 }

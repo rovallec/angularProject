@@ -976,7 +976,7 @@ export class HrprofilesComponent implements OnInit {
           this.minDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-16";
           this.maxDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + new Date(Number(this.todayDate.split('-')[0]), (Number(this.todayDate.split('-')[1]) + 1), 0);
         }
-        this.original_account = this.accId;
+        this.original_account = this.workingEmployee.account;
         this.accChange = this.accId;
         this.newProcess = true;
         break;
@@ -1132,44 +1132,56 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Transfer':
-          this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
-            this.apiService.getPeriods().subscribe((p: periods[]) => {
-              this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
-                let py: payments = new payments;
-                let old_payment = new payments;
-                let period: periods = new periods;
-                py.id_employee = this.activeEmp;
-                if (!isNullOrUndefined(p_methods)) {
-                  py.id_period = p[p.length-1].idperiods;
-                  p_methods.forEach(payment_method => {
-                    if (payment_method.predeterm == '1') {
-                      py.id_paymentmethod = payment_method.idpayment_methods;
+          this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department }).subscribe((emp:employees[])=>{
+            if(isNullOrUndefined(emp)){
+              this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
+                this.apiService.getPeriods().subscribe((p: periods[]) => {
+                  this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
+                    let py: payments = new payments;
+                    let old_payment = new payments;
+                    let period: periods = new periods;
+                    py.id_employee = this.activeEmp;
+                    if (!isNullOrUndefined(p_methods)) {
+                      py.id_period = p[p.length-1].idperiods;
+                      p_methods.forEach(payment_method => {
+                        if (payment_method.predeterm == '1') {
+                          py.id_paymentmethod = payment_method.idpayment_methods;
+                        }
+                      })
+                      period.start = 'explicit_employee';
+                      period.idperiods = p[p.length - 1].idperiods;
+                      period.status = this.workingEmployee.idemployees;
+                      this.apiService.getPayments(period).subscribe((actual_payments: payments[]) => {
+                        old_payment = actual_payments[actual_payments.length - 1];
+                        old_payment.id_account_py = this.original_account;
+                        this.apiService.setPayment(old_payment).subscribe((str: string) => {
+                          this.apiService.insertPayments(py).subscribe((str: string) => {
+                            if (isNullOrUndefined(str.toString().split("|"))) {
+                              window.alert("An error has occurred please contact your administrator");
+                              this.cancelView();
+                            } else {
+                              let emp_toUpdate = new employees;
+                              emp_toUpdate.idemployees = this.workingEmployee.idemployees;
+                              emp_toUpdate.platform = "nearsol_id";
+                              emp_toUpdate.society = this.actuallProc.idprocesses;
+                              this.apiService.updateEmployee(emp_toUpdate).subscribe((str:string)=>{
+                                window.alert("Record successfuly inserted");
+                              })
+                              this.cancelView();
+                            }
+                            this.newProcess = false;
+                          })
+                        })
+                      })
+                    } else {
+                      window.alert("There is no payment method available to this employee please communicate with Accounting to clarify this");
                     }
                   })
-                  period.start = 'explicit_employee';
-                  period.idperiods = p[p.length - 1].idperiods;
-                  period.status = this.workingEmployee.idemployees;
-                  this.apiService.getPayments(period).subscribe((actual_payments: payments[]) => {
-                    old_payment = actual_payments[0];
-                    old_payment.id_account_py = this.original_account;
-                    this.apiService.setPayment(old_payment).subscribe((str: string) => {
-                      this.apiService.insertPayments(py).subscribe((str: string) => {
-                        if (isNullOrUndefined(str.toString().split("|"))) {
-                          window.alert("An error has occurred please contact your administrator");
-                          this.cancelView();
-                        } else {
-                          window.alert("Record successfuly inserted");
-                          this.cancelView();
-                        }
-                        this.newProcess = false;
-                      })
-                    })
-                  })
-                } else {
-                  window.alert("There is no payment method available to this employee please communicate with Accounting to clarify this");
-                }
+                })
               })
-            })
+            }else{
+              window.alert("This EmploeyeID is already took please try with other");
+            }
           })
           break;
         case 'Legal Discount':
