@@ -851,10 +851,6 @@ deleteFormerEmployer(any: any) {
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteFormerEmployer.php`, any);
 }
 
-getAccouning_Accouts() {
-  return this.httpClient.get<AccountingAccounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAccounting_Accounts.php`);
-}
-
 getAccountingPolicies(any: any) {
   return this.httpClient.post<accountingPolicies[]>(`${this.PHP_API_SERVER}/phpscripts/getAccountingPolicies.php`, any);
 }
