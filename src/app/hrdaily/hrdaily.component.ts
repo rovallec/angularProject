@@ -23,7 +23,7 @@ export class HrdailyComponent implements OnInit {
   exportAccounts: accounts[] = [];
   isExportable: boolean = false;
   me: users = new users;
-  targetStatus:string;
+  targetStatus:string = "PENDING";
 
   constructor(private apiService: ApiService, private authUsr: AuthServiceService) { }
 
