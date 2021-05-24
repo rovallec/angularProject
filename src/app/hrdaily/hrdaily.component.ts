@@ -23,7 +23,7 @@ export class HrdailyComponent implements OnInit {
   exportAccounts: accounts[] = [];
   isExportable: boolean = false;
   me: users = new users;
-  targetStatus:string = "PENDING";
+  targetStatus:string = "'PENDING'";
 
   constructor(private apiService: ApiService, private authUsr: AuthServiceService) { }
 
@@ -121,7 +121,7 @@ export class HrdailyComponent implements OnInit {
     if(val.target.checked == true){
       this.targetStatus = "'PENDING', 'DISPATCHED', 'COMPLETED'";
     }else{
-      this.targetStatus = "PENDING";
+      this.targetStatus = "'PENDING'";
     }
   }
 }
