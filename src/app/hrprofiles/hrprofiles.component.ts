@@ -135,6 +135,8 @@ export class HrprofilesComponent implements OnInit {
 
   currentPayVacations:boolean = false;
 
+  transfer_newCode:string = '';
+
 
   reasons: string[] = [
     "Asistencia",
@@ -292,6 +294,7 @@ export class HrprofilesComponent implements OnInit {
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
       this.accId = emp.account;
+      this.transfer_newCode = emp.nearsol_id;
       this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear()) * 12));
       this.getVacations();
       this.getAllaccounts();
@@ -1157,7 +1160,8 @@ export class HrprofilesComponent implements OnInit {
                               let emp_toUpdate = new employees;
                               emp_toUpdate.idemployees = this.workingEmployee.idemployees;
                               emp_toUpdate.platform = "nearsol_id";
-                              emp_toUpdate.society = this.actuallProc.idprocesses;
+                              emp_toUpdate.society = this.transfer_newCode;
+                              emp_toUpdate.id_profile = this.route.snapshot.paramMap.get('id'); 
                               this.apiService.updateEmployee(emp_toUpdate).subscribe((str:string)=>{
                                 window.alert("Record successfuly inserted");
                               })
