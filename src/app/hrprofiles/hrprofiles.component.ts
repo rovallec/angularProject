@@ -480,7 +480,6 @@ export class HrprofilesComponent implements OnInit {
       }
       this.availableVacations = this.earnVacations - this.tookVacations;
     })
-    console.log(this.vac);
   }
 
   addVacation(action: string, type: string) {
@@ -516,7 +515,6 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertVacation() {
-    console.log(this.activeVacation);
     this.apiService.insertVacations(this.activeVacation).subscribe((str: any) => {
       this.complete_adjustment = true;
       this.getVacations();
@@ -924,7 +922,6 @@ export class HrprofilesComponent implements OnInit {
       case 'Advance':
           this.actualAdvance = new advances;
           this.actuallProc.status = 'PENDING';
-          console.log("here");
           break;
       case 'Rise':
         this.actualRise = new rises;
@@ -1017,7 +1014,6 @@ export class HrprofilesComponent implements OnInit {
             }else{
               window.alert("An error has occured:\n" + str.split("|")[1]);
               proc.notes = this.actuallProc.descritpion + "|" + ("An error has occured:" + str.split("|")[1]);
-              console.log(proc);
               this.apiService.updatehr_process(proc).subscribe((str:string)=>{});
             }
           })
@@ -1036,7 +1032,6 @@ export class HrprofilesComponent implements OnInit {
               this.cancelView();           
             } else {
               window.alert("An error has occured:\n" + str.split("|")[1]);
-                console.log(str.split("|")[0]);
             }
           })
           break;
@@ -1065,7 +1060,6 @@ export class HrprofilesComponent implements OnInit {
                 this.cancelView();
               } else {
                 window.alert("An error has occured:\n" + str.split("|")[1]);
-                console.log(str.split("|")[0]);
               }
             })        
           }
@@ -2063,7 +2057,6 @@ export class HrprofilesComponent implements OnInit {
             });
           } else {
             window.alert("An error has occured:\n" + fams.split("|")[1]);
-              console.log(fams.split("|")[0]);
           }          
         });
       } else if (this.edition_status=='Edit') {
@@ -2076,7 +2069,6 @@ export class HrprofilesComponent implements OnInit {
             });
           } else {
             window.alert("An error has occured:\n" + fams.split("|")[1]);
-              console.log(fams.split("|")[0]);
           }          
         });
       }
@@ -2092,6 +2084,19 @@ export class HrprofilesComponent implements OnInit {
   updateVacation(){
     this.apiService.updateVacations(this.activeVacation).subscribe((str:string)=>{
       window.alert("Change successfuly recorded");
+      let revertVac:vacations = new vacations;
+      revertVac.date = this.activeVacation.date;
+      revertVac.took_date =  this.todayDate;
+      revertVac.id_department = this.authUser.getAuthusr().department;
+      revertVac.id_employee = this.route.snapshot.paramMap.get('id');
+      revertVac.id_type = '3';
+      revertVac.action = "Add";
+      revertVac.count = this.activeVacation.count;
+      revertVac.id_user = this.authUser.getAuthusr().iduser;
+      revertVac.notes = "Revert From Dismissed";
+      revertVac.status = 'COMPLETED';
+      this.activeVacation = revertVac;
+      this.insertVacation();
       this.cancelView();
     })
   }
