@@ -128,12 +128,14 @@ export class HrprofilesComponent implements OnInit {
   original_account: string = null;
 
   approvals: users[] = [new users];
-  motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid'];
+  motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid', 'COVID Unpaid', 'COVID Paid', 'IGSS Paid'];
 
   maxDate:string = null;
   minDate:string = null;
 
   currentPayVacations:boolean = false;
+
+  transfer_newCode:string = '';
 
 
   reasons: string[] = [
@@ -292,6 +294,7 @@ export class HrprofilesComponent implements OnInit {
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
       this.accId = emp.account;
+      this.transfer_newCode = emp.nearsol_id;
       this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear()) * 12));
       this.getVacations();
       this.getAllaccounts();
@@ -380,12 +383,19 @@ export class HrprofilesComponent implements OnInit {
   getAttAdjustemt() {
     this.editAdj = false;
     this.apiService.getAttAdjustments({ id: this.activeEmp }).subscribe((adj: attendences_adjustment[]) => {
+      this.showAttAdjustments = [];
       if (adj.length >= 16) {
         for (let i = (adj.length - 1); i > (adj.length - 16); i = i - 1) {
-          this.showAttAdjustments.push(adj[i]);
+          if(adj[i].id_department == '5' || adj[i].id_department == '27'){
+            this.showAttAdjustments.push(adj[i]);
+          }
         }
       } else {
-        this.showAttAdjustments = adj;
+        adj.forEach(ev=>{
+          if(ev.id_department == '27' || ev.id_department == '5'){
+            this.showAttAdjustments.push(ev);
+          }
+        })
       }
     })
   }
@@ -473,7 +483,6 @@ export class HrprofilesComponent implements OnInit {
       }
       this.availableVacations = this.earnVacations - this.tookVacations;
     })
-    console.log(this.vac);
   }
 
   addVacation(action: string, type: string) {
@@ -509,7 +518,6 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertVacation() {
-    console.log(this.activeVacation);
     this.apiService.insertVacations(this.activeVacation).subscribe((str: any) => {
       this.complete_adjustment = true;
       this.getVacations();
@@ -917,7 +925,6 @@ export class HrprofilesComponent implements OnInit {
       case 'Advance':
           this.actualAdvance = new advances;
           this.actuallProc.status = 'PENDING';
-          console.log("here");
           break;
       case 'Rise':
         this.actualRise = new rises;
@@ -969,7 +976,7 @@ export class HrprofilesComponent implements OnInit {
           this.minDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-16";
           this.maxDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + new Date(Number(this.todayDate.split('-')[0]), (Number(this.todayDate.split('-')[1]) + 1), 0);
         }
-        this.original_account = this.accId;
+        this.original_account = this.workingEmployee.account;
         this.accChange = this.accId;
         this.newProcess = true;
         break;
@@ -1010,7 +1017,6 @@ export class HrprofilesComponent implements OnInit {
             }else{
               window.alert("An error has occured:\n" + str.split("|")[1]);
               proc.notes = this.actuallProc.descritpion + "|" + ("An error has occured:" + str.split("|")[1]);
-              console.log(proc);
               this.apiService.updatehr_process(proc).subscribe((str:string)=>{});
             }
           })
@@ -1029,7 +1035,6 @@ export class HrprofilesComponent implements OnInit {
               this.cancelView();           
             } else {
               window.alert("An error has occured:\n" + str.split("|")[1]);
-                console.log(str.split("|")[0]);
             }
           })
           break;
@@ -1058,7 +1063,6 @@ export class HrprofilesComponent implements OnInit {
                 this.cancelView();
               } else {
                 window.alert("An error has occured:\n" + str.split("|")[1]);
-                console.log(str.split("|")[0]);
               }
             })        
           }
@@ -1125,44 +1129,57 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Transfer':
-          this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
-            this.apiService.getPeriods().subscribe((p: periods[]) => {
-              this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
-                let py: payments = new payments;
-                let old_payment = new payments;
-                let period: periods = new periods;
-                py.id_employee = this.activeEmp;
-                if (!isNullOrUndefined(p_methods)) {
-                  py.id_period = p[p.length-1].idperiods;
-                  p_methods.forEach(payment_method => {
-                    if (payment_method.predeterm == '1') {
-                      py.id_paymentmethod = payment_method.idpayment_methods;
+          this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department }).subscribe((emp:employees[])=>{
+            if(isNullOrUndefined(emp)){
+              this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
+                this.apiService.getPeriods().subscribe((p: periods[]) => {
+                  this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
+                    let py: payments = new payments;
+                    let old_payment = new payments;
+                    let period: periods = new periods;
+                    py.id_employee = this.activeEmp;
+                    if (!isNullOrUndefined(p_methods)) {
+                      py.id_period = p[p.length-1].idperiods;
+                      p_methods.forEach(payment_method => {
+                        if (payment_method.predeterm == '1') {
+                          py.id_paymentmethod = payment_method.idpayment_methods;
+                        }
+                      })
+                      period.start = 'explicit_employee';
+                      period.idperiods = p[p.length - 1].idperiods;
+                      period.status = this.workingEmployee.idemployees;
+                      this.apiService.getPayments(period).subscribe((actual_payments: payments[]) => {
+                        old_payment = actual_payments[actual_payments.length - 1];
+                        old_payment.id_account_py = this.original_account;
+                        this.apiService.setPayment(old_payment).subscribe((str: string) => {
+                          this.apiService.insertPayments(py).subscribe((str: string) => {
+                            if (isNullOrUndefined(str.toString().split("|"))) {
+                              window.alert("An error has occurred please contact your administrator");
+                              this.cancelView();
+                            } else {
+                              let emp_toUpdate = new employees;
+                              emp_toUpdate.idemployees = this.workingEmployee.idemployees;
+                              emp_toUpdate.platform = "nearsol_id";
+                              emp_toUpdate.society = this.transfer_newCode;
+                              emp_toUpdate.id_profile = this.route.snapshot.paramMap.get('id'); 
+                              this.apiService.updateEmployee(emp_toUpdate).subscribe((str:string)=>{
+                                window.alert("Record successfuly inserted");
+                              })
+                              this.cancelView();
+                            }
+                            this.newProcess = false;
+                          })
+                        })
+                      })
+                    } else {
+                      window.alert("There is no payment method available to this employee please communicate with Accounting to clarify this");
                     }
                   })
-                  period.start = 'explicit_employee';
-                  period.idperiods = p[p.length - 1].idperiods;
-                  period.status = this.workingEmployee.idemployees;
-                  this.apiService.getPayments(period).subscribe((actual_payments: payments[]) => {
-                    old_payment = actual_payments[0];
-                    old_payment.id_account_py = this.original_account;
-                    this.apiService.setPayment(old_payment).subscribe((str: string) => {
-                      this.apiService.insertPayments(py).subscribe((str: string) => {
-                        if (isNullOrUndefined(str.toString().split("|"))) {
-                          window.alert("An error has occurred please contact your administrator");
-                          this.cancelView();
-                        } else {
-                          window.alert("Record successfuly inserted");
-                          this.cancelView();
-                        }
-                        this.newProcess = false;
-                      })
-                    })
-                  })
-                } else {
-                  window.alert("There is no payment method available to this employee please communicate with Accounting to clarify this");
-                }
+                })
               })
-            })
+            }else{
+              window.alert("This EmploeyeID is already took please try with other");
+            }
           })
           break;
         case 'Legal Discount':
@@ -2044,7 +2061,6 @@ export class HrprofilesComponent implements OnInit {
             });
           } else {
             window.alert("An error has occured:\n" + fams.split("|")[1]);
-              console.log(fams.split("|")[0]);
           }          
         });
       } else if (this.edition_status=='Edit') {
@@ -2057,7 +2073,6 @@ export class HrprofilesComponent implements OnInit {
             });
           } else {
             window.alert("An error has occured:\n" + fams.split("|")[1]);
-              console.log(fams.split("|")[0]);
           }          
         });
       }
@@ -2073,6 +2088,19 @@ export class HrprofilesComponent implements OnInit {
   updateVacation(){
     this.apiService.updateVacations(this.activeVacation).subscribe((str:string)=>{
       window.alert("Change successfuly recorded");
+      let revertVac:vacations = new vacations;
+      revertVac.date = this.activeVacation.date;
+      revertVac.took_date =  this.todayDate;
+      revertVac.id_department = this.authUser.getAuthusr().department;
+      revertVac.id_employee = this.route.snapshot.paramMap.get('id');
+      revertVac.id_type = '3';
+      revertVac.action = "Add";
+      revertVac.count = this.activeVacation.count;
+      revertVac.id_user = this.authUser.getAuthusr().iduser;
+      revertVac.notes = "Revert From Dismissed";
+      revertVac.status = 'COMPLETED';
+      this.activeVacation = revertVac;
+      this.insertVacation();
       this.cancelView();
     })
   }

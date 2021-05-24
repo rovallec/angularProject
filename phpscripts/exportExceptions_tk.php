@@ -9,6 +9,7 @@ echo "\xEF\xBB\xBF";
 
 $start = $_GET['start'];
 $end = $_GET['end'];
+$state = $_GET['state'];
 $exportRow = [];
 $sql = "SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount, hr_processes.notes, DATE_FORMAT(hr_processes.time, '%Y/%M/%d %H:%i:%s') AS `time`
@@ -21,7 +22,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process
-WHERE ((hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETWEEN '$start' AND '$end')) AND (hr_processes.id_department != 28 AND attendence_justifications.reason = 'IGSS')
+WHERE ((hr_processes.date BETWEEN '$start' AND '$end') OR (attendences.date BETWEEN '$start' AND '$end')) AND (hr_processes.id_department != 28 AND attendence_justifications.reason NOT IN ('Private Doctor', 'Marriage Certifiate', 'Death Certificate', 'Brth Certificate'))
 
 UNION
 
@@ -66,7 +67,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (vacations.date BETWEEN '$start' AND '$end'))
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4 AND hr_processes.status = 'PENDING')
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4 AND hr_processes.status IN ($state))
 
 UNION
 
@@ -97,7 +98,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.end >= '$start')
       OR (leaves.start <= '$end'))
       AND (`dt`.`dates` BETWEEN '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status = 'PENDING' AND (leaves.motive = 'Others Unpaid' OR leaves.motive = 'IGSS Unpaid' OR leaves.motive = 'VTO Unpaid'))
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status IN ($state) AND (leaves.motive = 'Others Unpaid' OR leaves.motive = 'IGSS Unpaid' OR leaves.motive = 'VTO Unpaid' OR leaves.motive = 'COVID Unpaid'))
 
 UNION
 
@@ -129,7 +130,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.end >= '$start')
       OR (leaves.start <= '$end'))
       AND (`dt`.`dates` between '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND leaves.motive = 'Leave of Absence Unpaid' AND hr_processes.status = 'PENDING') 
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND leaves.motive = 'Leave of Absence Unpaid' AND hr_processes.status IN ($state)) 
 
 UNION
 
@@ -161,7 +162,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.end >= '$start')
       OR (leaves.start <= '$end'))
       AND (`dt`.`dates` between '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity') AND hr_processes.status = 'PENDING')  
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity' OR leaves.motive = 'COVID Paid') AND hr_processes.status IN ($state))  
 
 UNION
 

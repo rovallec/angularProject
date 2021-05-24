@@ -45,8 +45,12 @@
     <div class="form-row" *ngIf="!eval">
         <table class="table table-striped table-hover" style="width:96%; margin-left:2%">
             <thead>
-                <th>ID</th>
+                <th>NEARSOL ID</th>
+                <th>CLIENT ID</th>
                 <th>NAME</th>
+                <th>REASON</th>
+                <th>CATEGORY</th>
+                <th>MOTIVE</th>
                 <th>GRADE</th>
                 <th>TYPE</th>
                 <th>DATE</th>
@@ -54,7 +58,12 @@
             </thead>
             <tbody>
                 <tr *ngFor="let dp of dps">
+                    <td>{{dp.nearsol_id}}</td>
+                    <td>{{dp.client_id}}</td>
                     <td>{{dp.id_processes}}</td>
+                    <td>{{dp.reason}}</td>
+                    <td>{{dp.cathegory}}</td>
+                    <td>{{dp.motive}}</td>
                     <td>{{dp.id_employee}}</td>
                     <td>{{dp.dp_grade}}</td>
                     <td>{{dp.type}}</td>

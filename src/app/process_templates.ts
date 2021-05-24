@@ -364,6 +364,9 @@ export class disciplinary_processes {
     day_2: string;
     day_3: string;
     day_4: string;
+    //Extra
+    nearsol_id:string;
+    client_id:string;
     constructor() {
         this.id_user = null;
         this.id_employee = null;
@@ -395,6 +398,8 @@ export class disciplinary_processes {
         this.day_2 = null;
         this.day_3 = null;
         this.day_4 = null;
+        this.nearsol_id = null;
+        this.client_id = null;
     }
 }
 
