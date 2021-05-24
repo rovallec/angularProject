@@ -42,7 +42,7 @@
               <th scope="col">Hired Date</th>
               <th scope="col">Status</th>
             </thead>
-            <tbody>
+            <tbody *ngIf="">
               <tr *ngFor="let employee of employees" (click)="gotoProfile(employee)">
                 <td>{{employee.idemployees}}</td>
                 <td>{{employee.nearsol_id}}</td>

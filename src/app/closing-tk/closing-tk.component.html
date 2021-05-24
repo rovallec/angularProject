@@ -25,12 +25,7 @@
                             class="fas fa-file-upload"></i></button>
                     <button class="btn btn-outline-success" [disabled]="actualPeriod.status == '3'" title="Save upload"
                         (click)="saveImport()" *ngIf="working && !saving"><i class="fas fa-check"></i></button>
-                </div>
-                <div class="p-2">
-                    <button class="btn btn-outline-secondary" title="Upload Bonus/Adjustments" data-toggle="modal"
-                        data-target="#uploadBonuses"><i
-                            class="fas fa-file-upload"></i></button>
-                </div>
+                </div> 
             </div>
         </div>
         <div class="row p-2">
