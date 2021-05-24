@@ -52,6 +52,8 @@ if($result = mysqli_query($con, $sql)){
         $return[$i]['day_2'] = $res['day_2'];
         $return[$i]['day_3'] = $res['day_3'];
         $return[$i]['day_4'] = $res['day_4'];
+        $return[$i]['nearsol_id'] = $res['nearsol_id'];
+        $return[$i]['client_id'] = $res['client_id'];
         $i++;
     }
     echo(json_encode($return));
