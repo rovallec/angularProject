@@ -692,7 +692,7 @@ export class PeriodsComponent implements OnInit {
                 this.debits.push(deb);
               }
 
-              if (count == (partial_credits.length - 1)) {
+              if (count >= (partial_credits.length - 1)) {
                 this.importEnd = true;
                 this.completed = true;
               }
