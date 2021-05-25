@@ -476,6 +476,14 @@ export class HrprofilesComponent implements OnInit {
           vacYear.vacations.push.apply(vacYear.vacations, VacFiltered);
           this.vac.push(vacYear);
         }
+
+        this.vac.sort((a,b)=>a.year-b.year);
+
+        vacYears.forEach(vv=>{
+          if(vv.year.toString() == new Date().getFullYear().toString()){
+            vv.selected = true;
+          }
+        })
       })
 
       if (this.complete_adjustment && !found) {
