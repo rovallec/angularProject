@@ -2,7 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 header('Content-Type: text/csv; charset=utf-8');
-header('Content-Disposition: attachment; filename="' . "roster.csv" . '"');
+header('Content-Disposition: attachment; filename="' . "services.csv" . '"');
 require 'database.php';
 
 $roster = [];
