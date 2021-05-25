@@ -61,7 +61,7 @@
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/realtime"
           style="color: white; cursor:pointer" [ngClass]="{'act':selectedOption=='REAL'}" (click)="SetSel('REAL')">REAL
           TIME</a>
-        <a *ngIf="getSaved().department == '29'" class="nav-link" routerLink="/isrManager"
+        <a *ngIf="getSaved().department == '29'" class="nav-link"
           style="color: white" [ngClass]="{'act':selectedOption=='SERVICES'}" (click)="getServicesReport()">SERVICES REPORT</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/attImport" (click)="SetSel('IMP')">Attendance</a>
