@@ -17,7 +17,7 @@ $sql = "SELECT services.name AS sv_name, * FROM
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
         INNER JOIN internal_processes ON internal_processes.id_employee = employees.idemployees
         INNER JOIN services ON  internal_processes.idinternal_processes = services.id_process
-        WHERE services.status = 1 AND services.name in('Car Parking', 'Motorcycle Parking', 'Monthly Bus') OR services.name LIKE '%Daily Bus%'';
+        WHERE services.status = 1 AND services.name in('Car Parking', 'Motorcycle Parking', 'Monthly Bus') OR services.name LIKE '%Daily Bus%'";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("NEARSOL ID", "INGRESADO", "NOMBRE", "SERVICIO", "MONTO", "FRECUENCIA"));
