@@ -7,7 +7,7 @@ require 'database.php';
 
 $roster = [];
 
-$sql = "SELECT services.name AS sv_name, * FROM
+$sql = "SELECT services.name AS sv_name, employees.*, hires.*, profiles.*, internal_processes.*, services.* FROM
         employees
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
