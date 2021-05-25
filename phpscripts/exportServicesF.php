@@ -28,7 +28,7 @@ if($result = mysqli_query($con,$sql)){
         fputcsv($output, $roster, ",");
     };
 }else{
-    http_response_code(408);
+    echo($sql);
 }
 fclose($output);
 ?>
