@@ -5,19 +5,15 @@ header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="' . "roster.csv" . '"');
 require 'database.php';
 
-$account = $_GET['acc'];
-
 $roster = [];
-$i = 0;
-$date = date("Y.m.d");
 
-$sql = "SELECT services.name AS sv_name, * FROM 
+$sql = "SELECT services.name AS sv_name, * FROM
         employees
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
         INNER JOIN internal_processes ON internal_processes.id_employee = employees.idemployees
         INNER JOIN services ON  internal_processes.idinternal_processes = services.id_process
-        WHERE services.status = 1 AND services.name in('Car Parking', 'Motorcycle Parking', 'Monthly Bus') OR services.name LIKE '%Daily Bus%'";
+        WHERE services.status = 1 AND services.name IN('Car Parking', 'Motorcycle Parking', 'Monthly Bus') OR services.name LIKE '%Daily Bus%'";
 
 $output = fopen("php://output", "w");
 fputcsv($output, array("NEARSOL ID", "INGRESADO", "NOMBRE", "SERVICIO", "MONTO", "FRECUENCIA"));
