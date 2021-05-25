@@ -656,7 +656,7 @@ export class PeriodsComponent implements OnInit {
           sheetToJson.forEach(element => {
             let cred: credits = new credits;
             cred.iddebits = element['Nearsol ID'];
-            cred.amount = element['Amount'];
+            cred.amount = Number(element['Amount']).toFixed(2);
             partial_credits.push(cred);
           })
           ws++;
