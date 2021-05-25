@@ -441,12 +441,12 @@ export class HrprofilesComponent implements OnInit {
   getVacations() {
     let found:boolean = false;
     let vacYears: vacyear[] = [];
+    this.vac = [];
     this.earnVacations = this.vacationsEarned * 1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
       this.showVacations = res;
-
       this.showVacations.forEach(sv => {
         sv.year = new Date(sv.took_date).getFullYear();
       })
