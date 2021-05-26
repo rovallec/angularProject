@@ -92,42 +92,44 @@
         </nav>
       </div>
       <div class="tab-content" id="nav-tabContent" style="margin-top:10px">
-        <div class="tab-pane fade show active" id="nav-Policies" role="tabpanel" aria-labelledby="nav-Policies-tab">
-          <table class="table table-striped" #userTable>
-            <thead>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>CLASIFICATION</th>
-              <th>DEPARTMENT</th>
-              <th>CLASS</th>
-              <th>SITE</th>
-              <th>DEBIT</th>
-              <th>CREDIT</th>
-              <th>CLIENT</th>
-            </thead>
-            <tbody>
-              <tr *ngFor="let acp of accountingPolicies" data-toggle="modal"
-                data-target="#attendance_detail">
-                <td>{{acp.external_id}}</td>
-                <td>{{acp.name}}</td>
-                <td>{{acp.clasif}}</td>
-                <td>{{acp.department}}</td>
-                <td>{{acp.class}}</td>
-                <td>{{acp.site}}</td>
-                <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
-                <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ zero | number: '1.2-3' }} </td>
-                <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ zero | number: '1.2-3' }}</td>
-                <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
-                <td>{{acp.clientNetSuite}}</td>
-              </tr>
-              <tr>
-                <td colspan="6" style="align-content: center; text-align: center;">{{ finalRow }}</td>
-                <td>{{ totalDebe | number: '1.2-3' }}</td>
-                <td>{{ totalHaber | number: '1.2-3' }}</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="p-2 justify-content-center">
+          <div class="tab-pane fade show active" id="nav-Policies" role="tabpanel" aria-labelledby="nav-Policies-tab">
+            <table class="table table-striped" #userTable>
+              <thead>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>CLASIFICATION</th>
+                <th>DEPARTMENT</th>
+                <th>CLASS</th>
+                <th>SITE</th>
+                <th>DEBIT</th>
+                <th>CREDIT</th>
+                <th>CLIENT</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let acp of accountingPolicies" data-toggle="modal"
+                  data-target="#attendance_detail">
+                  <td>{{acp.external_id}}</td>
+                  <td>{{acp.name}}</td>
+                  <td>{{acp.clasif}}</td>
+                  <td>{{acp.department}}</td>
+                  <td>{{acp.class}}</td>
+                  <td>{{acp.site}}</td>
+                  <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
+                  <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ zero | number: '1.2-3' }} </td>
+                  <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ zero | number: '1.2-3' }}</td>
+                  <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
+                  <td>{{acp.clientNetSuite}}</td>
+                </tr>
+                <tr>
+                  <td colspan="6" style="align-content: center; text-align: center;">{{ finalRow }}</td>
+                  <td>{{ totalDebe | number: '1.2-3' }}</td>
+                  <td>{{ totalHaber | number: '1.2-3' }}</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
