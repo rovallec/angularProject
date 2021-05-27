@@ -431,14 +431,13 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               UNION 
               SELECT 
                 '21085' AS external_id,
-                ROUND(SUM(deb.amount), 2) AS amount,
+                ROUND(SUM(deb.amount),2) AS amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               LEFT JOIN debits deb ON (pay.idpayments = deb.id_payment)
-              LEFT JOIN credits cred ON (pay.idpayments = cred.id_payment)
-              WHERE pay.id_period = $ID_Period
+              WHERE pay.id_period = 34 and a2.clientNetSuite = 1
               AND deb.type='Descuento IGSS'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
