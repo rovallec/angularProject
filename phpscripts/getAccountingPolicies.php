@@ -82,6 +82,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               AND (cred.type != 'Salario Base' 
                   AND cred.type not like '%Horas Extra%' 
                   AND cred.type not like '%Horas de Asueto%'
+                  AND cred.type != 'Bonificacion Decreto'
                   AND amount > 0
                   AND cred.type not like '%RAF%'
                   and cred.type != 'Bonos Diversos Nearsol TK')
@@ -97,7 +98,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               INNER JOIN employees e ON (pay.id_employee = e.idemployees)
               WHERE pay.id_period = $ID_Period
-              and ((cred.type='Salario Base' and ((e.job_type != 1) or (e.job_type is null)))
+              AND ((cred.type='Salario Base' and ((e.job_type != 1) or (e.job_type is null)))
                   or cred.type like '%Horas Extra%' 
                   or cred.type like '%Horas de Asueto%')
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
@@ -110,8 +111,9 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+              INNER JOIN employees e ON (pay.id_employee = e.idemployees)
               WHERE pay.id_period = $ID_Period
-              AND cred.type LIKE'%RAF%'
+              AND ((cred.type LIKE'%RAF%' and ((e.job_type != 1) or (e.job_type is null)))
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '51010' AS external_id,
@@ -129,6 +131,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               group by pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51017' AS external_id,
@@ -145,6 +148,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51012' AS external_id,
@@ -161,6 +165,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51014' AS external_id,
@@ -177,6 +182,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51013' AS external_id,
@@ -193,6 +199,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51011' AS external_id,
@@ -209,6 +216,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51015' AS external_id,
@@ -225,8 +233,10 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
-              UNION SELECT '21082' AS external_id,
+              UNION 
+              SELECT '21082' AS external_id,
               ROUND(SUM((IF(e.hiring_date>p.start,
                 IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
                   IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
@@ -240,6 +250,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21074' AS external_id,
@@ -256,6 +267,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21077' AS external_id,
@@ -273,6 +285,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               group by pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21079' AS external_id,
@@ -289,6 +302,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21075' AS external_id,
@@ -305,6 +319,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21078' AS external_id,
@@ -321,6 +336,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21080' AS external_id,
@@ -337,6 +353,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
+              AND ((e.job_type != 1) or (e.job_type is null))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
@@ -347,8 +364,9 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+              INNER JOIN employees e ON (e.idemployees = pay.id_employee)
               WHERE pay.id_period = $ID_Period
-              and (cred.type='Salario Base' 
+              AND ((cred.type ='Salario Base' and ((e.job_type != 1) or (e.job_type is null)))
                   or cred.type like '%Horas Extra%' 
                   or cred.type like '%Horas de Asueto%')
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
@@ -360,7 +378,9 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               FROM payments pay
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)  
               INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment from credits group by id_payment) cred ON (pay.idpayments = cred.id_payment)
+              INNER JOIN employees e ON (e.idemployees = pay.id_employee)
               WHERE pay.id_period = $ID_Period
+              AND (cred.type NOT IN('Salario Base', 'Bonificacion Productividad', 'Bonificacion Decreto') and ((e.job_type != 1) or (e.job_type is null)))
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
@@ -370,7 +390,9 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               FROM payments pay
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment from debits group by id_payment) deb ON (pay.idpayments = deb.id_payment)  
+              INNER JOIN employees e ON (e.idemployees = pay.id_employee)
               WHERE pay.id_period = $ID_Period
+              AND ((cred.type like'%horas%extras%' or cred.type like '%horas%de%asueto%') and ((e.job_type != 1) or (e.job_type is null)))
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts  
               UNION 
               SELECT 
