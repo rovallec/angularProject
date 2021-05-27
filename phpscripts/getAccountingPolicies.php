@@ -377,7 +377,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)  
-              INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment from credits group by id_payment) cred ON (pay.idpayments = cred.id_payment)
+              INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment, type from credits group by id_payment, type) cred ON (pay.idpayments = cred.id_payment)
               INNER JOIN employees e ON (e.idemployees = pay.id_employee)
               WHERE pay.id_period = $ID_Period
               AND (cred.type NOT IN('Salario Base', 'Bonificacion Productividad', 'Bonificacion Decreto') and ((e.job_type != 1) or (e.job_type is null)))
@@ -389,7 +389,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
-              INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment from debits group by id_payment) deb ON (pay.idpayments = deb.id_payment)  
+              INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment, type from debits group by id_payment, type) deb ON (pay.idpayments = deb.id_payment)  
               INNER JOIN employees e ON (e.idemployees = pay.id_employee)
               WHERE pay.id_period = $ID_Period
               AND (deb.type not like'%IGSS%' and ((e.job_type != 1) or (e.job_type is null)))
