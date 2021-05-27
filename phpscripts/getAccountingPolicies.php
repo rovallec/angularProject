@@ -536,8 +536,8 @@ try {
       echo($sql5);
     }
   }
-
-  echo(json_encode($exportRow));
+  $resultF = json_encode($exportRow);
+  echo($resultF);
 }
 catch (\Throwable $th) {
   //throw $th;
