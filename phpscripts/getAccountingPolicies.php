@@ -486,7 +486,6 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
             WHERE ((A1.clientNetSuite = $clientNetSuite) OR ($clientNetSuite = -1))
             GROUP BY A1.external_id, A1.department, A1.class, A1.site, A1.clientNetSuite, aa.clasif, aa.name
             ORDER BY A1.clientNetSuite;";
-            echo($sql);
     if ($result4 = mysqli_query($con,$sql4)) {
       while($row4 = mysqli_fetch_assoc($result4)){
         $exportRow[$i]['external_id'] = $row4['external_id'];
