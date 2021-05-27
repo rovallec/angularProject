@@ -544,14 +544,14 @@ try {
 
               if ($result4 = mysqli_query($con,$sql4)) {
                 while($row4 = mysqli_fetch_assoc($result4)){
-                  $exportRow[$i]['external_id'] = $row4['external_id'];
-                  $exportRow[$i]['name'] = $row4['name'];
-                  $exportRow[$i]['clasif'] = $row4['clasif'];
-                  $exportRow[$i]['department'] = ($row4['department']);
-                  $exportRow[$i]['class'] = ($row4['class']);
-                  $exportRow[$i]['site'] = ($row4['site']);
-                  $exportRow[$i]['amount'] = ($row4['amount']);
-                  $exportRow[$i]['clientNetSuite'] = ($row4['clientNetSuite']);
+                  $exportRow[$i]['external_id'] = 1;
+                  $exportRow[$i]['name'] = 1;
+                  $exportRow[$i]['clasif'] = 1;
+                  $exportRow[$i]['department'] = 1;
+                  $exportRow[$i]['class'] = 1;
+                  $exportRow[$i]['site'] = 1;
+                  $exportRow[$i]['amount'] = 1;
+                  $exportRow[$i]['clientNetSuite'] = 1;
                   $i++;
                 }
               } else {
