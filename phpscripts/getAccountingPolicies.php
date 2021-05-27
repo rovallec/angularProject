@@ -17,7 +17,6 @@ $i = 0;
 $sql1 = "SELECT COUNT(*) AS account FROM policies WHERE id_period = $ID_Period;";
 $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
 
-try {
   if ($result1 = mysqli_query($con,$sql1)){
     $row1 = mysqli_fetch_assoc($result1);
     if ($result11 = mysqli_query($con,$sql11)) {
@@ -504,8 +503,5 @@ try {
     }
   $resultF = json_encode($exportRow);
   echo($resultF);
-}
-catch (\Throwable $th) {
-  //throw $th;
 }
 ?>
