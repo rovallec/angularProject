@@ -406,7 +406,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN employees e ON (e.idemployees = pay.id_employee)
               WHERE pay.id_period = $ID_Period
               AND ((cred.type like'%horas%extras%' or cred.type like '%horas%de%asueto%') and ((e.job_type != 1) or (e.job_type is null)))
-              group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, e.idemployees
+              group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
                 '46000' AS external_id,
