@@ -135,4 +135,20 @@ tr {
     cursor: pointer;
     font-weight: bold;
     border-color: black;
-  } 
+  }
+
+  .tr-hover:hover{
+    color: white;
+    background-color: #003b71;
+    cursor: pointer;
+    font-weight: bold;
+    border-color: black;
+  }
+
+.tr-hover{
+  border: 1px solid #e9e8e8;
+  }
+
+.tr-nohover{
+  border: 1px solid #e9e8e8;
+}

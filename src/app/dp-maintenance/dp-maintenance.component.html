@@ -58,12 +58,12 @@
             </thead>
             <tbody>
                 <tr *ngFor="let dp of dps">
-                    <td>{{dp.nearsol_id}}</td>
                     <td>{{dp.client_id}}</td>
                     <td>{{dp.id_processes}}</td>
                     <td>{{dp.reason}}</td>
                     <td>{{dp.cathegory}}</td>
-                    <td>{{dp.motive}}</td>
+                    <td *ngIf="!isNull(dp.motive)">{{dp.motive.split("*")[0]}}</td>
+                    <td *ngIf="isNull(dp.motive)">NULL</td>
                     <td>{{dp.id_employee}}</td>
                     <td>{{dp.dp_grade}}</td>
                     <td>{{dp.type}}</td>

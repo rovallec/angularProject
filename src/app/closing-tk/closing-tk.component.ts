@@ -1159,6 +1159,7 @@ export class ClosingTkComponent implements OnInit {
     if(this.import_type == "CLIENT BONUS"){
       this.credits.forEach((cred:credits)=>{
         cred.type = "Bonos Diversos Cliente TK";
+        cred.amount = Number(cred.amount).toFixed(2);
         this.apiServices.insertCredits(cred).subscribe((str:string)=>{
           cnt++;
           if(cnt >= this.credits.length - 1){

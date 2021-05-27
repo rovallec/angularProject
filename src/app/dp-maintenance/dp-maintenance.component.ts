@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { disciplinary_processes } from '../process_templates';
 
@@ -102,5 +103,9 @@ export class DpMaintenanceComponent implements OnInit {
 
   printReport(){
     window.open("http://172.18.2.45/phpscripts/mintrab.php", '_blank');
+  }
+
+  isNull(val):boolean{
+    return (isNullOrUndefined(val));
   }
 }

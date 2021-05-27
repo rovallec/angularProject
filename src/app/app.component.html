@@ -61,6 +61,8 @@
         <a *ngIf="getSaved().department == '2'" class="nav-link" routerLink="/realtime"
           style="color: white; cursor:pointer" [ngClass]="{'act':selectedOption=='REAL'}" (click)="SetSel('REAL')">REAL
           TIME</a>
+        <a *ngIf="getSaved().department == '29'" class="nav-link"
+          style="color: white" [ngClass]="{'act':selectedOption=='SERVICES'}" (click)="getServicesReport()">SERVICES REPORT</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/attImport" (click)="SetSel('IMP')">Attendance</a>
           <a class="dropdown-item" routerLink="/supExceptions" (click)="SetSel('IMP')">Sup. Exceptions</a>
@@ -96,7 +98,7 @@
           routerLink="/dpMaintenance" style="color: white" [ngClass]="{'act':selectedOption=='DPM'}"
           (click)="SetSel('DPM')">DP MAINTENANCE</a>
           <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
-          [ngClass]="{'act':selectedOption=='EXPEX'}" routerLink="/hrdaily" (click)="SetSel('EXPATT')">EXCEPTIONS REPORT</a>
+          [ngClass]="{'act':selectedOption=='EXPEX'}" routerLink="/hrdaily" (click)="SetSel('EXPEX')">EXCEPTIONS REPORT</a>
         <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/closing"
           style="color: white" [ngClass]="{'act':selectedOption=='CLOSING'}" (click)="SetSel('CLOSING')">CLOSING</a>
       </li>

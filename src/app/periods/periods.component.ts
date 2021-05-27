@@ -354,7 +354,7 @@ export class PeriodsComponent implements OnInit {
                               console.log(py.idpayments + "|" + credit.idpayments);
                             }
                             if (credit.status == "PENDING" && credit.idpayments == py.idpayments) {
-                              sum_cred = sum_cred + Number(credit.amount);
+                              sum_cred = Number(sum_cred + Number(credit.amount).toFixed(2));
                             }
                           })
                           py.credits = (sum_cred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
@@ -656,7 +656,7 @@ export class PeriodsComponent implements OnInit {
           sheetToJson.forEach(element => {
             let cred: credits = new credits;
             cred.iddebits = element['Nearsol ID'];
-            cred.amount = element['Amount'];
+            cred.amount = Number(element['Amount']).toFixed(2);
             partial_credits.push(cred);
           })
           ws++;
@@ -683,7 +683,7 @@ export class PeriodsComponent implements OnInit {
               } else if (this.importType == "Discount") {
                 let deb: debits = new debits;
                 deb.iddebits = ele.iddebits;
-                deb.amount = ele.amount;
+                deb.amount = Number(ele.amount).toFixed(2);
                 deb.date = ele.date;
                 deb.id_employee = ele.id_employee;
                 deb.idpayments = ele.idpayments;
@@ -692,7 +692,7 @@ export class PeriodsComponent implements OnInit {
                 this.debits.push(deb);
               }
 
-              if (count == (partial_credits.length - 1)) {
+              if (count >= (partial_credits.length - 1)) {
                 this.importEnd = true;
                 this.completed = true;
               }
@@ -706,11 +706,13 @@ export class PeriodsComponent implements OnInit {
   pushDeductions(str: string, credits?: credits[], debits?: debits[]) {
     if (str == 'debits') {
       credits.forEach(cred => {
+        cred.amount = Number(cred.amount).toFixed(2);
         this.apiService.insertDebits(cred).subscribe((str: string) => { });
       });
     } else {
       if (str == 'credits') {
         credits.forEach(cred => {
+          cred.amount = Number(cred.amount).toFixed(2);
           this.apiService.insertCredits(cred).subscribe((str: string) => { });
         })
       }
