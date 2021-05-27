@@ -501,41 +501,7 @@ try {
         $exportRow[$i]['clientNetSuite'] = ($row4['clientNetSuite']);
         $i++;
       }
-    } else {
-      http_response_code(404);
-      echo($con->error);
-      echo($sql4);
     }
-  } else {  
-    $sql5 = "SELECT
-              a.id_period,
-              d.name as account,
-              c.external_id,
-              c.name,
-              COALESCE(b.amount, 0.00) AS amount
-            FROM policies a
-            LEFT JOIN policy_details b ON (a.idpolicies = b.id_policy)
-            LEFT JOIN accounting_accounts c on (b.id_ccounting_account = c.idaccounting_accounts)
-            LEFT JOIN accounts d on (a.id_account = d.idaccounts)
-            WHERE a.id_period = $ID_Period;";
-
-    if($result5 = mysqli_query($con,$sql5)){
-      $i = 0;
-      while($row5 = mysqli_fetch_assoc($result5)){
-          $exportRow[$i][0] = $row5['id_period'];
-          $exportRow[$i][1] = $row5['account'];
-          $exportRow[$i][2] = $row5['external_id'];
-          $exportRow[$i][3] = $row5['name'];
-          $exportRow[$i][4] = $row5['amount'];
-          $i++;
-      }
-      echo(json_encode($exportRow));
-    }else{
-      http_response_code(405);
-      echo($con->error);
-      echo($sql5);
-    }
-  }
   $resultF = json_encode($exportRow);
   echo($resultF);
 }
