@@ -436,13 +436,8 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               FROM payments pay
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
-<<<<<<< HEAD
-              INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
-              WHERE pay.id_period = $ID_Period
-=======
               LEFT JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = 34 and a2.clientNetSuite = 1
->>>>>>> master
               AND deb.type='Descuento IGSS'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
