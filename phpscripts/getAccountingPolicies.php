@@ -83,7 +83,8 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                   AND cred.type not like '%Horas Extra%' 
                   AND cred.type not like '%Horas de Asueto%'
                   AND amount > 0
-                  AND cred.type not like '%RAF%')
+                  AND cred.type not like '%RAF%'
+                  and cred.type != 'Bonos Diversos Nearsol TK')
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
@@ -94,8 +95,9 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+              INNER JOIN employees e ON (pay.id_employee = e.idemployees)
               WHERE pay.id_period = $ID_Period
-              and (cred.type='Salario Base' 
+              and ((cred.type='Salario Base' and ((e.job_type != 1) or (e.job_type is null)))
                   or cred.type like '%Horas Extra%' 
                   or cred.type like '%Horas de Asueto%')
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
