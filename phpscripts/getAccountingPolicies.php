@@ -17,7 +17,6 @@ $i = 0;
 $sql1 = "SELECT COUNT(*) AS account FROM policies WHERE id_period = $ID_Period;";
 $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
 
-try {
   if ($result1 = mysqli_query($con,$sql1)){
     $row1 = mysqli_fetch_assoc($result1);
     if ($result11 = mysqli_query($con,$sql11)) {
@@ -46,7 +45,6 @@ try {
   }
   $account = $row1['account'];
 
-  if ($account == 0) {
     $sql2 = "SELECT idaccounts FROM accounts;";
     $today = date("Y/m/d");
     $sql4 = "SELECT 
@@ -433,13 +431,18 @@ try {
               UNION 
               SELECT 
                 '21085' AS external_id,
-                ROUND(SUM(deb.amount), 2) AS amount,
+                ROUND(SUM(deb.amount),2) AS amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+<<<<<<< HEAD
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
+=======
+              LEFT JOIN debits deb ON (pay.idpayments = deb.id_payment)
+              WHERE pay.id_period = 34 and a2.clientNetSuite = 1
+>>>>>>> master
               AND deb.type='Descuento IGSS'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
@@ -500,48 +503,7 @@ try {
         $exportRow[$i]['clientNetSuite'] = ($row4['clientNetSuite']);
         $i++;
       }
-    } else {
-      http_response_code(404);
-      echo($con->error);
-      echo($sql4);
+      $resultF = json_encode($exportRow);
+      echo($resultF);
     }
-  } else {  
-    $sql5 = "SELECT
-              a.id_period,
-              d.name as account,
-              c.external_id,
-              c.name,
-              COALESCE(b.amount, 0.00) AS amount
-            FROM policies a
-            LEFT JOIN policy_details b ON (a.idpolicies = b.id_policy)
-            LEFT JOIN accounting_accounts c on (b.id_ccounting_account = c.idaccounting_accounts)
-            LEFT JOIN accounts d on (a.id_account = d.idaccounts)
-            WHERE a.id_period = $ID_Period;";
-
-    if($result5 = mysqli_query($con,$sql5)){
-      $i = 0;
-      while($row5 = mysqli_fetch_assoc($result5)){
-          $exportRow[$i][0] = $row5['id_period'];
-          $exportRow[$i][1] = $row5['account'];
-          $exportRow[$i][2] = $row5['external_id'];
-          $exportRow[$i][3] = $row5['name'];
-          $exportRow[$i][4] = $row5['amount'];
-          $i++;
-      }
-      echo(json_encode($exportRow));
-    }else{
-      http_response_code(405);
-      echo($con->error);
-      echo($sql5);
-    }
-  }
-
-
-
-  $resultado = json_encode($exportRow);
-  echo($resultado);
-}
-catch (\Throwable $th) {
-  //throw $th;
-}
 ?>
