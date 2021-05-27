@@ -607,10 +607,7 @@ try {
     }
   }
 
-
-
-  $resultado = json_encode($exportRow);
-  echo($resultado);
+  echo(json_encode($exportRow));
 }
 catch (\Throwable $th) {
   //throw $th;
