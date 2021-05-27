@@ -113,7 +113,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               INNER JOIN employees e ON (pay.id_employee = e.idemployees)
               WHERE pay.id_period = $ID_Period
-              AND ((cred.type LIKE'%RAF%' and ((e.job_type != 1) or (e.job_type is null)))
+              AND cred.type LIKE'%RAF%'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '51010' AS external_id,
@@ -397,7 +397,6 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               UNION 
               SELECT 
                 '21072' AS external_id,
-                e.idemployees,
                 -1*ROUND(SUM(cred.amount)*0.0483,2) as amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
