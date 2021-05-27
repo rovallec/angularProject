@@ -115,7 +115,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               WHERE pay.id_period = $ID_Period
               AND cred.type LIKE'%RAF%'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
-              UNION  
+              UNION
               SELECT '51010' AS external_id,
                 ROUND(SUM((IF(e.hiring_date>p.start,
                   IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
@@ -380,7 +380,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment, type from credits group by id_payment, type) cred ON (pay.idpayments = cred.id_payment)
               INNER JOIN employees e ON (e.idemployees = pay.id_employee)
               WHERE pay.id_period = $ID_Period
-              AND (cred.type NOT IN('Salario Base', 'Bonificacion Productividad', 'Bonificacion Decreto') and ((e.job_type != 1) or (e.job_type is null)))
+              AND ((cred.type NOT IN ('Salario Base', 'Bonificacion Decrecto', 'Bonificacion Productividad') AND e.job_type = 1) OR e.job_type IS NULL)
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
