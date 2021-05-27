@@ -537,5 +537,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
       }
       $resultF = json_encode($exportRow);
       echo($resultF);
+    }else{
+      echo($sql4);
     }
 ?>
