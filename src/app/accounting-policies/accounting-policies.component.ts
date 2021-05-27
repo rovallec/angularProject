@@ -45,43 +45,38 @@ export class AccountingPoliciesComponent implements OnInit {
   finalRow: string = null;
   totalDebe: string = null;
   totalHaber: string = null;
+  selectedPeriod:string = null;
 
   ngOnInit() {
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       this.periods = per.filter(p => p.status =='0');      
         this.actualPeriod = this.periods[this.periods.length-1];
+        this.selectedPeriod = this.periods[this.periods.length-1].idperiods;
     });
 
-    this.apiServices.getClients().subscribe((cls: clients[]) => {
+    /*this.apiServices.getClients().subscribe((cls: clients[]) => {
       this.clients = cls;
       this.selectedClient = cls[0].idclients;
       this.setClient(this.selectedClient);
-    });
+    });*/
+    
   }
 
-  setActualPeriod() {
-    let per: periods[] = [];
-    per = this.periods.filter(p => p.idperiods == this.actualPeriod.idperiods);
-    if (per.length > 0) {
-      this.actualPeriod = per[0];
-    }
+  setActualPeriod(p) {
+    this.periods.forEach(element => {
+      if (element.idperiods == p) {
+        this.actualPeriod = element;
+      }
+    })
     this.getAccounting();
   }
 
   setAccount(acc: accounts) {
-    this.isSearching = false;
-    this.selectedAccount = acc;
-    this.apiServices.getPayroll_resume({ id_account: this.selectedAccount.idaccounts, id_period: this.actualPeriod.idperiods }).subscribe((p: payroll_resume[]) => {
-      this.resumes = p;
-    })
+
   }
 
   setClient(cl: string) {
-    this.accounts = [];
-    this.apiServices.getAccounts().subscribe((acc: accounts[]) => {
-      this.accounts = acc.filter(ac => ac.id_client == cl);
-      this.selectedAccount = this.accounts[0];      
-    })
+    this.selectedClient = cl;
   }
   
   setYear() {
@@ -95,13 +90,13 @@ export class AccountingPoliciesComponent implements OnInit {
         }
       })
       this.isLoading = true;
-      //this.setPayments();
     })
   }
 
   getAccounting() {
     let element: policies = new policies;
-    this.accountingPolicies = [];
+    this.totalDebe = '0';
+    this.totalHaber = '0';
     this.isLoading = true;
     this.finished = false;
     this.progress = 1;
@@ -109,8 +104,9 @@ export class AccountingPoliciesComponent implements OnInit {
     this.step = 'Obtaining data.';
     this.finalRow = 'Obtaining data...';
     try {
+      this.accountingPolicies = [new accountingPolicies];
       element.idperiod = this.actualPeriod.idperiods;
-      element.idaccounts = this.selectedAccount.idaccounts;
+      element.idaccounts = this.selectedClient;
       element.id_client = this.selectedClient;
       this.apiServices.getAccountingPolicies(element).subscribe((acp: accountingPolicies[]) => {
         this.accountingPolicies = acp;
@@ -123,7 +119,6 @@ export class AccountingPoliciesComponent implements OnInit {
           }
 
         }
-        //this.accountingPolicies = acp.filter(ap => ap.id_client == this.selectedClient);
         if (this.accountingPolicies.length==0) {
           this.finalRow = 'No data to display.';
         } else {
