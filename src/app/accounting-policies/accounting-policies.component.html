@@ -3,11 +3,6 @@
     <div class="row" style="margin-top:25px">
       <div class="d-flex justify-content-between mb-3 w-100">
         <div class="p-2">
-          <!--
-          <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'"
-            title="Import Closing Exceptions" data-toggle="modal" data-target="#import_modal">
-              <i class="fas fa-cloud-upload-alt"></i>
-          </button> -->
         </div>
         <div class="p-2" *ngIf="actualPeriod.status != '3'">
           <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"
@@ -16,37 +11,26 @@
           </button> 
         </div>
         <div class="p-2">
-          <!--
-          <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal" tittle="Search">
-            <i class="fas fa-search" (click)="getAccounting()"></i>
-          </button> -->
         </div>
         <div class="p-2">
-          <!--
-          <button class="btn btn-outline-success" title="Downlaod Policies Values">
-            <i class="fas fa-file-export"></i>
-          </button> -->
         </div>
         <div class="p-2">
-          <!--
-          <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"
-            title="Downlaod Paid Attendances">
-            <i class="fas fa-file-download"></i>
-          </button> -->
         </div>
       </div>
     </div>
     <div class="row p-2">
-      <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
-        <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
+      <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient($event.target.value)">
+        <option value="1">First Party</option>
+        <option value="2">Third Party</option>
+        <option value="3">QA</option>
+        <option value="4">Hr, Admin, Finance</option>
+        <option value="5">Zero Variance</option>
+        <option value="6">Arbonne</option>
+        <option value="-1" selected>All</option>
       </select>
     </div>
     <div class="row p-2">
-      <div class="list-group w-100" id="list-tab" role="tablist">
-        <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts" [tabindex]="acc.idaccounts"
-          [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}" style="cursor: pointer;"
-          (click)="setAccount(acc)">{{acc.name}}</a>
-      </div>
+
     </div>
   </div>
   <div class="col-md-10">
@@ -65,15 +49,17 @@
     <div class="row col-md-12" *ngIf="!isLoading && finished">
       <div class="col-md-2"></div>
       <div class="col-md-2">
-        <label>YEAR:</label>
-        <select class="form-control" (change)="setYear()" [(ngModel)]="selectedYear">
-          <option *ngFor="let year of years">{{year}}</option>
-        </select>
+        <!--
+          <label>YEAR:</label>
+          <select class="form-control" (change)="setYear()" [(ngModel)]="selectedYear">
+            <option *ngFor="let year of years">{{year}}</option>
+          </select>
+        -->
       </div>
       <div class="col-md-2"></div>
       <div class="col-md-4">
         <label>PERIOD:</label>
-        <select class="form-control" [(ngModel)]="actualPeriod.idperiods" (change)="setActualPeriod()">
+        <select class="form-control" [(ngModel)]="selectedPeriod" (change)="setActualPeriod($event.target.value)">
           <option *ngFor="let period of periods" [value]="period.idperiods">{{period.start}} TO {{period.end}}
           </option>
         </select>

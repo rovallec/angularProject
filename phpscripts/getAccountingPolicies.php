@@ -10,12 +10,7 @@ require 'funcionesVarias.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $ID_Period = ($request->idperiod);
-$v_account = validateDataToZero($request->idaccounts);
-$v_account = -1;
-/* Queda pendiente aplicar filtro por cliente y cuenta 
-
-$v_id_client = validateDataToZero($request->id_client);
-*/
+$clientNetSuite = $request->idaccounts;
 $exportRow = [];
 
 $i = 0;
@@ -54,26 +49,7 @@ try {
   if ($account == 0) {
     $sql2 = "SELECT idaccounts FROM accounts;";
     $today = date("Y/m/d");
-
-    /*if($result2 = mysqli_query($con,$sql2)){
-      while($row2 = mysqli_fetch_assoc($result2)){
-        $v_account = $row2['idaccounts'];      
-        $sql30 = "SET @V_DAYS_ON_MONTH = '$V_DAYS_ON_MONTH';";
-        if ($result30 = mysqli_query($con,$sql30)) {
-          $i = 0;
-          $sql32 = "SELECT DISTINCT idaccounting_accounts, external_id, name, clasif FROM accounting_accounts;";
-          if($result32 = mysqli_query($con,$sql32)){
-            while($row32 = mysqli_fetch_assoc($result32)) {
-              $V_ID_ACCOUNTING = $row32['idaccounting_accounts'];
-              $V_EXTERNAL_ID = $row32['external_id'];
-              $V_NAME_ACCOUNT = $row32['name'];
-              $V_CLASIF = $row32['clasif'];
-              */
-              /*$sql31 = "SET @V_EXTERNAL_ID = '$V_EXTERNAL_ID';";
-              if ($result31 = mysqli_query($con,$sql31)) {
-                //no hace nada, solo setea la variable.
-              }*/
-              $sql4 = "SELECT 
+    $sql4 = "SELECT 
               ROUND(SUM(DISTINCTROW A1.amount),2) AS amount,
               A1.external_id,
               A1.department, 
@@ -90,7 +66,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               and (cred.type='Salario Base' 
                   or cred.type like '%Horas%Extra%' 
                   or cred.type like '%Horas%de%Asueto%')
@@ -105,7 +80,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               AND (cred.type != 'Salario Base' 
                   AND cred.type not like '%Horas Extra%' 
                   AND cred.type not like '%Horas de Asueto%'
@@ -122,7 +96,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               and (cred.type='Salario Base' 
                   or cred.type like '%Horas Extra%' 
                   or cred.type like '%Horas de Asueto%')
@@ -137,7 +110,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               AND cred.type LIKE'%RAF%'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
@@ -156,7 +128,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               group by pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51017' AS external_id,
@@ -173,7 +144,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51012' AS external_id,
@@ -190,7 +160,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51014' AS external_id,
@@ -207,7 +176,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51013' AS external_id,
@@ -224,7 +192,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51011' AS external_id,
@@ -241,7 +208,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               SELECT '51015' AS external_id,
@@ -258,7 +224,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION SELECT '21082' AS external_id,
               ROUND(SUM((IF(e.hiring_date>p.start,
@@ -274,7 +239,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21074' AS external_id,
@@ -291,7 +255,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21077' AS external_id,
@@ -309,7 +272,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               group by pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21079' AS external_id,
@@ -326,7 +288,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21075' AS external_id,
@@ -343,7 +304,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21078' AS external_id,
@@ -360,7 +320,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT '21080' AS external_id,
@@ -377,7 +336,6 @@ try {
                           INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
                           WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
@@ -389,7 +347,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               and (cred.type='Salario Base' 
                   or cred.type like '%Horas Extra%' 
                   or cred.type like '%Horas de Asueto%')
@@ -403,7 +360,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)  
               INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment from credits group by id_payment) cred ON (pay.idpayments = cred.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
@@ -414,7 +370,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN (select sum(coalesce(amount, 0)) AS amount, id_payment from debits group by id_payment) deb ON (pay.idpayments = deb.id_payment)  
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts  
               UNION 
               SELECT 
@@ -425,7 +380,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               AND deb.type like'%bus%'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
@@ -437,7 +391,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               and deb.type='CAR PARKING'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
@@ -450,7 +403,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               AND deb.type='MOTORCYCLE PARKING'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
@@ -463,7 +415,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               and (deb.type IN('TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso')
               or deb.type like'%Headset%')
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
@@ -478,7 +429,6 @@ try {
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
               AND deb.type='ISR'
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
@@ -491,7 +441,6 @@ try {
               LEFT JOIN debits deb ON (pay.idpayments = deb.id_payment)
               LEFT JOIN credits cred ON (pay.idpayments = cred.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               AND deb.type='Descuento IGSS'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
@@ -504,7 +453,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               AND (type like'%personal%'
                   OR TYPE LIKE '%ajuste%'
                   OR TYPE LIKE '%prestamo%'
@@ -521,7 +469,6 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               AND deb.type='Boleto de Ornato'
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
@@ -534,48 +481,31 @@ try {
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               WHERE pay.id_period = $ID_Period
-              AND ((pay.id_account_py = $v_account) OR ($v_account = -1))
               and deb.type IN('Descuento Judicial')
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
             ) AS A1 
             INNER JOIN accounting_accounts aa on (A1.external_id = aa.external_id)
+            WHERE ((A1.clientNetSuite = $clientNetSuite) OR ($clientNetSuite = -1))
             GROUP BY A1.external_id, A1.department, A1.class, A1.site, A1.clientNetSuite, aa.clasif, aa.name
             ORDER BY A1.clientNetSuite;";
 
-              if ($result4 = mysqli_query($con,$sql4)) {
-                while($row4 = mysqli_fetch_assoc($result4)){
-                  $exportRow[$i]['external_id'] = 1;
-                  $exportRow[$i]['name'] = 1;
-                  $exportRow[$i]['clasif'] = 1;
-                  $exportRow[$i]['department'] = 1;
-                  $exportRow[$i]['class'] = 1;
-                  $exportRow[$i]['site'] = 1;
-                  $exportRow[$i]['amount'] = 1;
-                  $exportRow[$i]['clientNetSuite'] = 1;
-                  $i++;
-                }
-              } else {
-                http_response_code(404);
-                echo($con->error);
-                echo($sql4);
-              }
-            /*}
-          } else {
-            http_response_code(432);
-            echo($con->error);
-            echo($sql32);
-          }
-        } else {
-          http_response_code(430);
-          echo($con->error);
-          echo($sql30);
-        }
+    if ($result4 = mysqli_query($con,$sql4)) {
+      while($row4 = mysqli_fetch_assoc($result4)){
+        $exportRow[$i]['external_id'] = $row4['external_id'];
+        $exportRow[$i]['name'] = $row4['name'];
+        $exportRow[$i]['clasif'] = $row4['clasif'];
+        $exportRow[$i]['department'] = ($row4['department']);
+        $exportRow[$i]['class'] = ($row4['class']);
+        $exportRow[$i]['site'] = ($row4['site']);
+        $exportRow[$i]['amount'] = ($row4['amount']);
+        $exportRow[$i]['clientNetSuite'] = ($row4['clientNetSuite']);
+        $i++;
       }
     } else {
-      http_response_code(402);
+      http_response_code(404);
       echo($con->error);
-      echo($sql2);
-    }*/
+      echo($sql4);
+    }
   } else {  
     $sql5 = "SELECT
               a.id_period,
