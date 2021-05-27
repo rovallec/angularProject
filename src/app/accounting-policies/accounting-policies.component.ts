@@ -54,6 +54,8 @@ export class AccountingPoliciesComponent implements OnInit {
         this.selectedPeriod = this.periods[this.periods.length-1].idperiods;
     });
 
+    this.selectedClient = '-1';
+
     /*this.apiServices.getClients().subscribe((cls: clients[]) => {
       this.clients = cls;
       this.selectedClient = cls[0].idclients;
