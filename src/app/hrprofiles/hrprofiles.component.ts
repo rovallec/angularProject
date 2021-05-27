@@ -294,7 +294,6 @@ export class HrprofilesComponent implements OnInit {
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
       this.accId = emp.account;
-      this.transfer_newCode = emp.nearsol_id;
       this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear()) * 12));
       this.getVacations();
       this.getAllaccounts();
@@ -926,6 +925,7 @@ export class HrprofilesComponent implements OnInit {
     this.actuallProc.user_name = this.authUser.getAuthusr().user_name;
     this.actuallProc.id_user = this.authUser.getAuthusr().iduser;
     this.actuallProc.id_profile = this.activeEmp;
+    this.transfer_newCode = this.workingEmployee.nearsol_id;
     switch (this.actuallProc.name) {
       case 'Supervisor Survey':
         this.actuallProc.descritpion = null;
