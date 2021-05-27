@@ -45,7 +45,6 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
   }
   $account = $row1['account'];
 
-  if ($account == 0) {
     $sql2 = "SELECT idaccounts FROM accounts;";
     $today = date("Y/m/d");
     $sql4 = "SELECT 
@@ -500,8 +499,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
         $exportRow[$i]['clientNetSuite'] = ($row4['clientNetSuite']);
         $i++;
       }
+      $resultF = json_encode($exportRow);
+      echo($resultF);
     }
-  $resultF = json_encode($exportRow);
-  echo($resultF);
-}
 ?>
