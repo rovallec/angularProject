@@ -63,6 +63,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+              INNER JOIN employees e ON (pay.id_employee = e.idemployees)
               WHERE pay.id_period = $ID_Period
               and ((cred.type='Salario Base' and e.job_type <> 1)
                   or cred.type like '%Horas%Extra%' 
