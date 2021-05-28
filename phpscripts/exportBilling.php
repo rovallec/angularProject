@@ -53,8 +53,9 @@ ROUND(SUM(coalesce(`base_indemnizacion`,0)),2),
 ROUND(SUM(coalesce(`total_reserves`,0)),2),
 ROUND(SUM(coalesce(`employeer_igss`,0)),2),
 ROUND(SUM(coalesce(`health`,0)),2),
-SUM(coalesce(`PARKING`,0)),
-SUM(coalesce(`BUS`,0)),
+ROUND(SUM(coalesce(`PARKING`,0)),2),
+ROUND(SUM(coalesce(`BUS`,0)),2),
+ROUND(SUM(coalesce(total_reserves_and_fees,0),2),
 ROUND(SUM(coalesce(`total_cost`,0)),2)
 FROM
 (
@@ -118,6 +119,16 @@ ROUND(payments.holidays)) * 0.01267, 2) AS `employeer_igss`,
 198.24 AS `health`,
 0 AS `PARKING`,
 0 AS `BUS`,
+ROUND(ROUND((IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_productivity_vacaciones`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)),2) + ROUND((IF(employees.job_type = 1, 0, payments.base)+
+IF(employees.job_type = 1, 0, payments.productivity)+
+ROUND(payments.ot,2)+
+ROUND(payments.holidays)) * 0.01267, 2) + 198.24 ,0) AS `total_reserves_and_fees`,
 ROUND(IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
@@ -326,6 +337,16 @@ ROUND(payments.holidays)) * 0.01267, 2) AS `employeer_igss`,
 198.24 AS `health`,
 0 AS `PARKING`,
 0 AS `BUS`,
+ROUND(ROUND((IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_productivity_vacaciones`)+
+IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)),2) + ROUND((IF(employees.job_type = 1, 0, payments.base)+
+IF(employees.job_type = 1, 0, payments.productivity)+
+ROUND(payments.ot,2)+
+ROUND(payments.holidays)) * 0.01267, 2) + 198.24 ,0) AS `total_reserves_and_fees`,
 ROUND(IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
