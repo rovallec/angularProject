@@ -398,7 +398,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               /* DEBITOS OPERADORES */
               SELECT 
                 '21072' AS external_id,
-                ROUND(SUM(deb.amount), 2) AS amount,
+                -1*ROUND(SUM(deb.amount), 2) AS amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
@@ -428,7 +428,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               /* DEBITOS SUPERVISORES */
               SELECT 
                 '21072' AS external_id,
-                ROUND(SUM(deb.amount), 2) AS amount,
+                -1*ROUND(SUM(deb.amount), 2) AS amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
@@ -443,7 +443,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               /* IGSS */
               SELECT 
                 '21072' AS external_id,
-                ROUND(SUM(cred.amount) * 0.0483, 2) AS amount,
+                -1*ROUND(SUM(cred.amount) * 0.0483, 2) AS amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
