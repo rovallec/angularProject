@@ -255,9 +255,9 @@ INNER JOIN (
 			LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
 						INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
 						WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
-			WHERE pay.id_period $id_1
+			WHERE pay.id_period = $id_1
 			) AS `severances` ON `severances`.idpayments = payments.idpayments
-WHERE (payments.id_period $id_1) and clientNetSuite = $netsuitclient
+WHERE (payments.id_period = $id_1) and clientNetSuite = $netsuitclient
 UNION
 SELECT
 payments.idpayments,
@@ -456,9 +456,9 @@ INNER JOIN (
 			LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
 						INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
 						WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
-			WHERE pay.id_period $id_2
+			WHERE pay.id_period = $id_2
 			) AS `severances` ON `severances`.idpayments = payments.idpayments
-WHERE (payments.id_period $id_2) and clientNetSuite = $netsuitclient
+WHERE (payments.id_period = $id_2) and clientNetSuite = $netsuitclient
 ) AS `tmp`
 GROUP BY idpayments,clientNetSuite,
 name,
