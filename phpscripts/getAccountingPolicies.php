@@ -82,7 +82,6 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               AND (cred.type != 'Salario Base' 
                   AND cred.type not like '%Horas Extra%' 
                   AND cred.type not like '%Horas de Asueto%'
-                  AND cred.type != 'Bonificacion Decreto'
                   AND amount > 0
                   AND cred.type not like '%RAF%'
                   and cred.type != 'Bonos Diversos Nearsol TK')
