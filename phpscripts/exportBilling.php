@@ -256,7 +256,7 @@ INNER JOIN (
 						WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
 			WHERE pay.id_period = $id_1
 			) AS `severances` ON `severances`.idpayments = payments.idpayments
-WHERE (payments.id_period = $id_i) and clientNetSuite = $netsuitclient
+WHERE (payments.id_period = $id_1) and clientNetSuite = $netsuitclient
 UNION
 SELECT
 payments.idpayments,
