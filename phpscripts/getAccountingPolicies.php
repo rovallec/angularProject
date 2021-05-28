@@ -80,11 +80,16 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               INNER JOIN employees e ON (pay.id_employee = e.idemployees)
               WHERE pay.id_period = 34
+              /*supervirsor bono de productividad*/
+              /*agente bono de productividad*/
               AND (cred.type != 'Salario Base' 
                   AND cred.type not like '%Horas Extra%' 
                   AND cred.type not like '%Horas de Asueto%'
-                  AND cred.type not like '%RAF%')
-              AND ((cred.`type` != 'Bonificacion Productividad' AND (e.job_type = 1 OR e.job_type IS NOT NULL)))
+                  AND cred.type not like '%RAF%') /*verdadero*/
+                  /*falso AND verdadero*/
+              AND (((cred.`type` != 'Bonificacion Productividad' AND (e.job_type = 1 OR e.job_type IS NOT NULL)))
+                    OR ((cred.`type` = 'Bonificacion Productividad' AND (e.job_type != 1 OR e.job_type IS NULL))))/*Falso*/
+              /*falso*/
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
