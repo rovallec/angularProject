@@ -422,7 +422,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN employees e ON (pay.id_employee = e.idemployees)
               WHERE pay.id_period = 34
               AND a2.clientNetSuite = 1
-              AND (cred.`type` NOT IN('Bonificacion Productividad', 'Salario Base', 'Bonificacion Decreto') ADN (e.job_type = 1))
+              AND (cred.`type` NOT IN('Bonificacion Productividad', 'Salario Base', 'Bonificacion Decreto') AND (e.job_type = 1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION
               /* DEBITOS SUPERVISORES */
@@ -452,7 +452,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN employees e ON (pay.id_employee = e.idemployees)
               WHERE pay.id_period = 34
               AND a2.clientNetSuite = 1
-              AND ((cred.`type` LIKE'%Horas%extra%' OR cred.`type` LIKE'%horas%de%asueto%') ADN (e.job_type = 1))
+              AND ((cred.`type` LIKE'%Horas%extra%' OR cred.`type` LIKE'%horas%de%asueto%') AND (e.job_type = 1))
               GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
