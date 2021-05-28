@@ -83,8 +83,8 @@ ROUND(payments.holidays,2) AS `holidays`,
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
 coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
-`car_parking`.`car_amount`,
-`motorcycle_parking`.`motorcycle_amount`,
+`car_parking`.`car_amount` AS `car_amount`,
+`motorcycle_parking`.`motorcycle_amount` AS `motorcycle_amount`,
 `igss`.`igss_amount`,
 `isr`.`isr_amount`,
 `headset`.`headsets_amount`,
@@ -284,8 +284,8 @@ ROUND(payments.holidays,2) AS `holidays`,
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
 coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
-`car_parking`.`car_amount`,
-`motorcycle_parking`.`motorcycle_amount`,
+`car_parking`.`car_amount` AS `car_amount`,
+`motorcycle_parking`.`motorcycle_amount` AS `motorcycle_amount`,
 `igss`.`igss_amount`,
 `isr`.`isr_amount`,
 `headset`.`headsets_amount`,
