@@ -12,11 +12,7 @@ $period = $_GET['period'];
 $netsuitclient = $_GET['netsuit'];
 $rowExport = [];
 echo "\xEF\xBB\xBF";
-$sql2 = "SET @rownum = 0;";
-
-if(mysqli_query($con,$sql2)){
-    $sql = "SELECT
-@rownum,
+$sql = "SELECT
 clientNetSuite,
 accounts.name,
 hires.nearsol_id,
@@ -215,19 +211,16 @@ INNER JOIN (
 			WHERE pay.id_period IN($period)
 			) AS `severances` ON `severances`.idpayments = payments.idpayments
 WHERE payments.id_period = IN($period) and clientNetSuite = $netsuitclient;";
-    $output = fopen("php://output", "w");
-    fputcsv($output, array('#','Code','Avaya','Name','Account','Minimum Wage','Incentive','Days discounted','7th deduction','Discounted hours','Minimum Wage Deductions','Incentive Deductions','Minimum Wage with deductions','Incentive with deductions','Overtime (hours)','Overtime (Q)','Holiday (hours)','Holiday (Q)','Bonuses','Treasure Hunt','Adjustments','Total income','Bus','Parking (Car)','Parking Motorcycle / bicycle','IGSS','ISR','Equipment','Total Deductions','Total Payment','BONUS 13','BONUS 13 BONIF','BONUS 14 ','BONUS 14 BONIF','VACATION RESERVES','VACATION RESERVES BONIF','SEVERANCE RESERVES','EMPLOYER IGSS','HEALTH INSURANCE','PARKING','BUS','TOTAL RESERVES AND FEES','TOTAL COST',));
+
+$output = fopen("php://output", "w");
+fputcsv($output, array('Code','Avaya','Name','Account','Minimum Wage','Incentive','Days discounted','7th deduction','Discounted hours','Minimum Wage Deductions','Incentive Deductions','Minimum Wage with deductions','Incentive with deductions','Overtime (hours)','Overtime (Q)','Holiday (hours)','Holiday (Q)','Bonuses','Treasure Hunt','Adjustments','Total income','Bus','Parking (Car)','Parking Motorcycle / bicycle','IGSS','ISR','Equipment','Total Deductions','Total Payment','BONUS 13','BONUS 13 BONIF','BONUS 14 ','BONUS 14 BONIF','VACATION RESERVES','VACATION RESERVES BONIF','SEVERANCE RESERVES','EMPLOYER IGSS','HEALTH INSURANCE','PARKING','BUS','TOTAL RESERVES AND FEES','TOTAL COST',));
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
             fputcsv($output, $row, ",");
             $i++;
         };
     }else{
-        http_response_code(404);
+        echo($sql);
     }
-}else{
-    echo($sql2);
-    echo(mysqli_error($con));
-}
 fclose($output);
 ?>
