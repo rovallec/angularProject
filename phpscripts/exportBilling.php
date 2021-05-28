@@ -134,7 +134,7 @@ ROUND(payments.ot,2)+
 ROUND(payments.holidays)) * 0.01267, 2),2)+
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, paments.base),0), 2) 
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0), 2) 
  + 198.24,2) AS `total_cost`
 FROM payments
 INNER JOIN employees ON employees.idemployees = payments.id_employee
