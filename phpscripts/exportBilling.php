@@ -471,6 +471,7 @@ fputcsv($output, array('Avaya','Name','Account', 'Nearsol ID','Minimum Wage','In
         while($row = mysqli_fetch_assoc($result)){
             fputcsv($output, $row, ",");
             $i++;
+            echo($sql);
         };
     }else{
         echo($sql);
