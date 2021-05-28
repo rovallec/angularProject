@@ -77,7 +77,7 @@
                 title="Payroll Report" (click)="exportPayrollReport()" *ngIf="period.status == '0'"></i>
 
             <i class="fas fa-file-invoice-dollar" style="margin-left:5px" *ngIf="period.status == '0'"
-                data-toggle="modal" data-target="#setPatrono"></i>
+                data-toggle="modal" data-target="#setBilling"></i>
 
             <i class="fas fa-money-check-alt d-inline-block" style="margin-left:5px" data-toggle="tooltip"
                 data-placement="top" title="Bank Report" (click)="exportBankReport()" *ngIf="period.status == '0'"></i>
@@ -391,12 +391,15 @@
                 <div class="row col-md-12">
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
-                        <label>ACCOUNT:</label>
+                        <label>CLIENT:</label>
                         <select class="form-control" [ngModel]="selected_accounts"
                             (click)="setAccount($event.target.value)">
-                            <option>GET ALL</option>
-                            <option *ngFor="let account of accounts" [value]="account.idaccounts">
-                                {{account.name}}</option>
+                            <option value="1">FIRST PARTY</option>
+                            <option value="2">THIRD PARTY</option>
+                            <option value="3">HR, Admin, Finance</option>
+                            <option value="4">QA</option>
+                            <option value="5">Zero Variance</option>
+                            <option value="6">Arbonne</option>
                         </select>
                     </div>
                     <div class="col-md-2"></div>
