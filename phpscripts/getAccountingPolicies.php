@@ -525,7 +525,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
               INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-              WHERE pay.id_period = 34
+              WHERE pay.id_period = $ID_Period
               and deb.type like'%IGSS%'    
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               union
@@ -538,7 +538,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-              WHERE pay.id_period = 34
+              WHERE pay.id_period = $ID_Period
               and (cred.type='Salario Base' and ((e.job_type = 1)))    
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               ) AS `temp` GROUP BY id_account_py, department, class, site, clientNetSuite, id_client, idaccounts, external_id
