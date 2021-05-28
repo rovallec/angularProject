@@ -19,42 +19,42 @@ client_id,
 `employee name`,
 name,
 nearsol_id,
-ROUND(SUM(coalesce(`base_pay`),0),2),
-ROUND(SUM(coalesce(`productivity`),0),2),
-ROUND(SUM(coalesce(`discounted_days`),0),2),
-ROUND(SUM(coalesce(`discounted_senths`),0),2),
-ROUND(SUM(coalesce(`hours`),0),2),
-ROUND(SUM(coalesce(`wage_deductions`),0),2),
-ROUND(SUM(coalesce(`incentive_deductions`),0),2),
-ROUND(SUM(coalesce(`base`),0),2),
-ROUND(SUM(coalesce(`productivity`),0),2),
-ROUND(SUM(coalesce(`ot_hours`),0),2),
-ROUND(SUM(coalesce(`ot`),0),2),
-ROUND(SUM(coalesce(`holidays_hours`),0),2),
-ROUND(SUM(coalesce(`holidays`),0),2),
-ROUND(SUM(coalesce(`bonuses_amount`),0),2),
-ROUND(SUM(coalesce(`trasure_amount`),2),
-ROUND(SUM(coalesce(`adjustment`),2),
-ROUND(SUM(coalesce(`total_income`),0),2),
-ROUND(SUM(coalesce(`car_amount`),0),2),
-ROUND(SUM(coalesce(`motorcycle_amount`),0),2),
-ROUND(SUM(coalesce(`igss_amount`),0),2),
-ROUND(SUM(coalesce(`isr_amount`),0),2),
-ROUND(SUM(coalesce(`headsets_amount`),0),2),
-ROUND(SUM(coalesce(`total_deductions`),0),2),
-ROUND(SUM(coalesce(`total_payment`),0),2),
-ROUND(SUM(coalesce(`base_aguinaldo`),0),2),
-ROUND(SUM(coalesce(`base_bono14`),0),2),
-ROUND(SUM(coalesce(`base_vacaciones`),0),2),
-ROUND(SUM(coalesce(`productivity_aguinaldo`),0),2),
-ROUND(SUM(coalesce(`productivity_bono14`),0),2),
-ROUND(SUM(coalesce(`productivity_vacaciones`),0),2),
-ROUND(SUM(coalesce(`base_indemnizacion`),0),2),
-ROUND(SUM(coalesce(`employeer_igss`),0),2),
-ROUND(SUM(coalesce(`health`),0),2),
-SUM(coalesce(`PARKING`),0),
-SUM(coalesce(`BUS`),0),
-ROUND(SUM(coalesce(`total_cost`),0),2)
+ROUND(SUM(coalesce(`base_pay`,0)),2),
+ROUND(SUM(coalesce(`productivity`,0)),2),
+ROUND(SUM(coalesce(`discounted_days`,0)),2),
+ROUND(SUM(coalesce(`discounted_senths`,0)),2),
+ROUND(SUM(coalesce(`hours`,0)),2),
+ROUND(SUM(coalesce(`wage_deductions`,0)),2),
+ROUND(SUM(coalesce(`incentive_deductions`,0)),2),
+ROUND(SUM(coalesce(`base`,0)),2),
+ROUND(SUM(coalesce(`productivity`,0)),2),
+ROUND(SUM(coalesce(`ot_hours`,0)),2),
+ROUND(SUM(coalesce(`ot`,0)),2),
+ROUND(SUM(coalesce(`holidays_hours`,0)),2),
+ROUND(SUM(coalesce(`holidays`,0)),2),
+ROUND(SUM(coalesce(`bonuses_amount`,0)),2),
+ROUND(SUM(coalesce(`trasure_amount`,0)),2),
+ROUND(SUM(coalesce(`adjustment`,0)),2),
+ROUND(SUM(coalesce(`total_income`,0)),2),
+ROUND(SUM(coalesce(`car_amount`,0)),2),
+ROUND(SUM(coalesce(`motorcycle_amount`,0)),2),
+ROUND(SUM(coalesce(`igss_amount`,0)),2),
+ROUND(SUM(coalesce(`isr_amount`,0)),2),
+ROUND(SUM(coalesce(`headsets_amount`,0)),2),
+ROUND(SUM(coalesce(`total_deductions`,0)),2),
+ROUND(SUM(coalesce(`total_payment`,0)),2),
+ROUND(SUM(coalesce(`base_aguinaldo`,0)),2),
+ROUND(SUM(coalesce(`base_bono14`,0)),2),
+ROUND(SUM(coalesce(`base_vacaciones`,0)),2),
+ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2),
+ROUND(SUM(coalesce(`productivity_bono14`,0)),2),
+ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2),
+ROUND(SUM(coalesce(`base_indemnizacion`,0)),2),
+ROUND(SUM(coalesce(`employeer_igss`,0)),2),
+ROUND(SUM(coalesce(`health`,0)),2),
+SUM(coalesce(`PARKING`,0)),
+SUM(coalesce(`BUS`,0)),
+ROUND(SUM(coalesce(`total_cost`,0)),2)
 FROM
 (
 SELECT
@@ -82,7 +82,7 @@ ROUND(payments.holidays,2) AS `holidays`,
 `adjustments_positive`.`adjustment`,
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, employees.productivity_payment),0) + coalesce(IF(employees.job_type = 1, 0, employees.base_payment),0),2) AS `total_income`,
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
 `car_parking`.`car_amount`,
 `motorcycle_parking`.`motorcycle_amount`,
 `igss`.`igss_amount`,
@@ -92,7 +92,7 @@ ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`mo
 coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) AS `total_deductions`,
 ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, employees.productivity_payment),0) + coalesce(IF(employees.job_type = 1, 0, employees.base_payment),0),2)) -
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0),2)) -
 ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + 
 coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) 
 ) AS `total_payment`,
@@ -134,7 +134,7 @@ ROUND(payments.ot,2)+
 ROUND(payments.holidays)) * 0.01267, 2),2)+
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, employees.productivity_payment),0) + coalesce(IF(employees.job_type = 1, 0, employees.base_payment),0), 2) 
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, paments.base),0), 2) 
  + 198.24,2) AS `total_cost`
 FROM payments
 INNER JOIN employees ON employees.idemployees = payments.id_employee
@@ -256,7 +256,7 @@ INNER JOIN (
 						WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
 			WHERE pay.id_period = $id_1
 			) AS `severances` ON `severances`.idpayments = payments.idpayments
-WHERE (payments.id_period = $id_1) and clientNetSuite = $netsuitclient
+WHERE (payments.id_period = $id_i) and clientNetSuite = $netsuitclient
 UNION
 SELECT
 payments.idpayments,
@@ -283,7 +283,7 @@ ROUND(payments.holidays,2) AS `holidays`,
 `adjustments_positive`.`adjustment`,
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, employees.productivity_payment),0) + coalesce(IF(employees.job_type = 1, 0, employees.base_payment),0),2) AS `total_income`,
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
 `car_parking`.`car_amount`,
 `motorcycle_parking`.`motorcycle_amount`,
 `igss`.`igss_amount`,
@@ -293,7 +293,7 @@ ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`mo
 coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) AS `total_deductions`,
 ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, employees.productivity_payment),0) + coalesce(IF(employees.job_type = 1, 0, employees.base_payment),0),2)) -
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0),2)) -
 ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + 
 coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) 
 ) AS `total_payment`,
