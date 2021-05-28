@@ -27,7 +27,7 @@ ROUND(SUM(coalesce(`hours`,0)),2),
 ROUND(SUM(coalesce(`wage_deductions`,0)),2),
 ROUND(SUM(coalesce(`incentive_deductions`,0)),2),
 ROUND(SUM(coalesce(`base`,0)),2),
-ROUND(SUM(coalesce(`productivity`,0)),2),
+ROUND(SUM(coalesce(`productivity_pay`,0)),2),
 ROUND(SUM(coalesce(`ot_hours`,0)),2),
 ROUND(SUM(coalesce(`ot`,0)),2),
 ROUND(SUM(coalesce(`holidays_hours`,0)),2),
@@ -471,7 +471,6 @@ fputcsv($output, array('Avaya','Name','Account', 'Nearsol ID','Minimum Wage','In
         while($row = mysqli_fetch_assoc($result)){
             fputcsv($output, $row, ",");
             $i++;
-            echo($sql);
         };
     }else{
         echo($sql);
