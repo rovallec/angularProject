@@ -515,7 +515,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
-                '51085' AS external_id,
+                '21085' AS external_id,
                 ROUND(SUM(deb.amount),2) AS amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
@@ -528,7 +528,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               union
               SELECT 
-                '51085' AS external_id,
+                '21085' AS external_id,
                 -1*ROUND(SUM(cred.amount)*0.0483, 2) AS amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
