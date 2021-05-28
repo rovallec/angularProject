@@ -484,8 +484,9 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               INNER JOIN employees e ON (e.idemployees = pay.id_employee)
-              WHERE pay.id_period = 34
-              AND ((cred.type like'%Salario%Base%' or cred.type like '%horas%de%asueto%') and ((e.job_type != 1) or (e.job_type is null)))
+              WHERE pay.id_period = $ID_Period
+              AND (((cred.type like'%Salario%Base%' or cred.type like '%horas%de%asueto%' or cred.type like '%horas extra%') and ((e.job_type != 1) or (e.job_type is null)))
+              OR ((cred.type like '%horas%de%asueto%' or cred.type like '%horas extra%') AND (e.job_type = 1)))
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
