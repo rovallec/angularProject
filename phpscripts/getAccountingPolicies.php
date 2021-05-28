@@ -84,7 +84,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
                   AND cred.type not like '%Horas Extra%' 
                   AND cred.type not like '%Horas de Asueto%'
                   AND cred.type not like '%RAF%')
-              AND ((cred.`type` != 'Bonificacion Productividad' AND (e.job_type != 1 OR e.job_type IS NULL)))
+              AND ((cred.`type` != 'Bonificacion Productividad' AND (e.job_type = 1 OR e.job_type IS NULL)))
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
