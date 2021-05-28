@@ -53,9 +53,9 @@ ROUND(SUM(coalesce(`base_indemnizacion`,0)),2),
 ROUND(SUM(coalesce(`total_reserves`,0)),2),
 ROUND(SUM(coalesce(`employeer_igss`,0)),2),
 ROUND(SUM(coalesce(`health`,0)),2),
-ROUND(SUM(coalesce(`PARKING`,0)),2),
-ROUND(SUM(coalesce(`BUS`,0)),2),
-ROUND(SUM(coalesce(total_reserves_and_fees,0),2),
+SUM(coalesce(`PARKING`,0)),
+SUM(coalesce(`BUS`,0)),
+SUM(coalesce(`total_reserves_and_fees`,0)),
 ROUND(SUM(coalesce(`total_cost`,0)),2)
 FROM
 (
