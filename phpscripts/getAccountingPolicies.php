@@ -72,23 +72,29 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
               UNION 
               SELECT 
                 '51021' AS external_id,  
-                ROUND(sum(cred.amount), 2) AS amount,  
+                ROUND(sum(cred.amount), 2) AS amount,
                 pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               FROM payments pay
               INNER JOIN periods per ON (pay.id_period = per.idperiods)
               INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
               INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
               INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-              WHERE pay.id_period = 34
-              /*supervirsor bono de productividad*/
-              /*agente bono de productividad*/
-              AND (cred.type != 'Salario Base' 
+              WHERE pay.id_period = $ID_Period
+              AND ((cred.type != 'Salario Base' 
                   AND cred.type not like '%Horas Extra%' 
                   AND cred.type not like '%Horas de Asueto%'
-                  AND cred.type not like '%RAF%') /*verdadero*/
-                  /*falso AND verdadero*/
-              AND ((cred.`type` = 'Bonificacion Productividad' AND (e.job_type != 1 OR e.job_type IS NULL)))/*Falso*/
-              /*falso*/
+                  AND cred.type not like '%RAF%'
+                  AND (e.job_type != 1 OR e.job_type IS NULL))
+			        OR (e.job_type = 1 AND (
+                      cred.type != 'Salario Base'
+                      AND cred.type not like '%Horas Extra%' 
+                      AND cred.type not like '%Horas de Asueto%'
+                      AND cred.type not like '%RAF%'
+                      AND cred.type != 'Bonificacion Productividad'
+                      AND cred.type != 'Bonificacion Decreto'
+                    )
+                  )
+                )
               group BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts
               UNION 
               SELECT 
