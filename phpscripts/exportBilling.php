@@ -198,7 +198,7 @@ INNER JOIN (
             debits
             INNER JOIN payments ON payments.idpayments = debits.id_payment
             INNER JOIN employees ON employees.idemployees = payments.id_employee
-            WHERE debits.type = 'Descuento IGSS' AND (id_period $id_1)
+            WHERE debits.type = 'Descuento IGSS' AND (id_period = $id_1)
 		  ) AS `igss` ON `igss`.id_payment = payments.idpayments
 LEFT JOIN (
 			SELECT
@@ -399,7 +399,7 @@ INNER JOIN (
             debits
             INNER JOIN payments ON payments.idpayments = debits.id_payment
             INNER JOIN employees ON employees.idemployees = payments.id_employee
-            WHERE debits.type = 'Descuento IGSS' AND (id_period $id_2)
+            WHERE debits.type = 'Descuento IGSS' AND (id_period = $id_2)
 		  ) AS `igss` ON `igss`.id_payment = payments.idpayments
 LEFT JOIN (
 			SELECT
