@@ -36,6 +36,7 @@ ROUND(SUM(coalesce(`bonuses_amount`,0)),2),
 ROUND(SUM(coalesce(`trasure_amount`,0)),2),
 ROUND(SUM(coalesce(`adjustment`,0)),2), 
 ROUND(SUM(coalesce(`total_income`,0)),2),
+ROUND(SUM(coalesce(`bus_amount`,0)),2),
 ROUND(SUM(coalesce(`car_amount`,0)),2),
 ROUND(SUM(coalesce(`motorcycle_amount`,0)),2),
 ROUND(SUM(coalesce(`igss_amount`,0)),2),
@@ -44,13 +45,12 @@ ROUND(SUM(coalesce(`headsets_amount`,0)),2),
 ROUND(SUM(coalesce(`total_deductions`,0)),2),
 ROUND(SUM(coalesce(`total_payment`,0)),2),
 ROUND(SUM(coalesce(`base_aguinaldo`,0)),2),
-ROUND(SUM(coalesce(`base_bono14`,0)),2),
-ROUND(SUM(coalesce(`base_vacaciones`,0)),2),
 ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2),
+ROUND(SUM(coalesce(`base_bono14`,0)),2),
 ROUND(SUM(coalesce(`productivity_bono14`,0)),2),
+ROUND(SUM(coalesce(`base_vacaciones`,0)),2),
 ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2),
 ROUND(SUM(coalesce(`base_indemnizacion`,0)),2),
-ROUND(SUM(coalesce(`total_reserves`,0)),2),
 ROUND(SUM(coalesce(`employeer_igss`,0)),2),
 ROUND(SUM(coalesce(`health`,0)),2),
 SUM(coalesce(`PARKING`,0)),
@@ -67,14 +67,30 @@ hires.nearsol_id,
 employees.client_id,
 CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
 ROUND(IF(employees.job_type = 1, 0, employees.base_payment),2) AS `base_pay`,
-ROUND(IF(employees.job_type = 1, 0, employees.productivity_payment),2) AS `productivity_pay`,
+ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2)), employees.productivity_payment),2) AS `productivity_pay`,
 ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.discounted_days,2)),2) AS `discounted_days`,
 ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.seventh,2)),2) AS `discounted_senths`,
 ROUND(IF(employees.job_type = 1, 0, payroll_values. discounted_hours),2) AS `hours`,
 ROUND(IF(employees.job_type = 1, 0, ROUND(payments.base - ROUND((payments.base_complete/2),2), 2)),2) AS `wage_deductions`,
-ROUND(IF(employees.job_type = 1, 0, ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2)),2) AS `incentive_deductions`,
+ROUND(IF(employees.job_type = 1, 
+IF(employees.cost_type IS NULL, 0,
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)
+),
+ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2)),2) AS `incentive_deductions`,
 ROUND(IF(employees.job_type = 1, 0, payments.base),2) AS `base`,
-ROUND(IF(employees.job_type = 1, 0, payments.productivity),2) AS `productivity`,
+ROUND(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1,
+(ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0), payments.productivity),2) AS `productivity`,
 ROUND(payments.ot_hours,2) AS `ot_hours`,
 ROUND(payments.ot,2) AS `ot`,
 ROUND(payments.holidays_hours,2) AS `holidays_hours`,
@@ -84,7 +100,15 @@ ROUND(payments.holidays,2) AS `holidays`,
 `adjustments_positive`.`adjustment`,
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1,
+(ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
+`bus_service`.`bus_amount` AS `bus_amount`,
 `car_parking`.`car_amount` AS `car_amount`,
 `motorcycle_parking`.`motorcycle_amount` AS `motorcycle_amount`,
 `igss`.`igss_amount`,
@@ -94,24 +118,24 @@ ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`mo
 coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) AS `total_deductions`,
 ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0),2)) -
-ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + 
-coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) 
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1,
+(ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0),2)) -
+ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + coalesce(`bus_service`.`bus_amount`,0) +
+coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2)
 ) AS `total_payment`,
 IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`) AS `base_aguinaldo`,
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`) AS `productivity_aguinaldo`,
 IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`) AS `base_bono14`,
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_bono14`)), `severances`.`amount_productivity_bono14`) AS `productivity_bono14`,
 IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`) AS `base_vacaciones`,
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`) AS `productivity_aguinaldo`,
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`) AS `productivity_bono14`,
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_vacaciones`) AS `productivity_vacaciones`,
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`) AS `productivity_vacaciones`,
 IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`) AS `base_indemnizacion`,
-ROUND((IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_vacaciones`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)),2) AS `total_reserves`,
 ROUND((IF(employees.job_type = 1, 0, payments.base)+
 IF(employees.job_type = 1, 0, payments.productivity)+
 ROUND(payments.ot,2)+
@@ -122,9 +146,9 @@ ROUND(payments.holidays)) * 0.01267, 2) AS `employeer_igss`,
 ROUND(ROUND((IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_vacaciones`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_bono14`)), `severances`.`amount_productivity_bono14`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)),2) + ROUND((IF(employees.job_type = 1, 0, payments.base)+
 IF(employees.job_type = 1, 0, payments.productivity)+
 ROUND(payments.ot,2)+
@@ -132,9 +156,9 @@ ROUND(payments.holidays)) * 0.01267, 2) + 198.24 ,2) AS `total_reserves_and_fees
 ROUND(ROUND(IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_bono14`)), `severances`.`amount_productivity_bono14`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)+
 ROUND((IF(employees.job_type = 1, 0, payments.base)+
 IF(employees.job_type = 1, 0, payments.productivity)+
@@ -142,7 +166,14 @@ ROUND(payments.ot,2)+
 ROUND(payments.holidays)) * 0.01267, 2),2)+
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0), 2) 
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1,
+(ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0), payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0), 2) 
  + 198.24,2) AS `total_cost`
 FROM payments
 INNER JOIN employees ON employees.idemployees = payments.id_employee
@@ -153,16 +184,20 @@ INNER JOIN accounts ON accounts.idaccounts = payments.id_account_py
 LEFT JOIN (
 			SELECT 
             coalesce(ROUND(SUM(credits.amount),2),0) AS `bonuses_amount`,
-            credits.id_payment 
+            credits.id_payment
             FROM credits
+            INNER JOIN payments ON payments.idpayments = credits.id_payment
+            INNER JOIN employees ON employees.idemployees = payments.id_employee
             WHERE (
-					credits.type != 'Salario Base'
+					(credits.type != 'Salario Base'
                     AND credits.type != 'Bonificacion Productividad'
                     AND credits.type != 'Treasure Hunt'
                     AND credits.type NOT LIKE '%Nearsol TK%'
                     AND credits.type NOT LIKE '%Horas Extra%'
                     AND credits.type NOT LIKE '%Horas de Asueto%'
                     AND credits.type NOT LIKE '%Ajuste%'
+                    AND credits.type NOT LIKE '%Bonificacion Decreto%')
+                    OR (credits.type LIKE '%Bonificacion Decreto%' AND employees.job_type IS NULL)
 				   )
             GROUP BY id_payment
 		  ) AS `bonuses` ON `bonuses`.id_payment = payments.idpayments
@@ -181,6 +216,14 @@ LEFT JOIN (
                 WHERE credits.type LIKE '%Ajuste%' AND credits.amount > 0
                 GROUP BY id_payment
 			) AS `adjustments_positive` ON `adjustments_positive`.id_payment = payments.idpayments
+LEFT JOIN (
+			SELECT
+            coalesce(ROUND(SUM(debits.amount),2),0) AS `bus_amount`,
+            id_payment
+            FROM debits
+            WHERE debits.type LIKE '%bus%'
+            GROUP BY id_payment
+		   ) AS `bus_service` ON `bus_service`.id_payment = payments.idpayments
 LEFT JOIN (
 			SELECT
             coalesce(ROUND(SUM(debits.amount),2),0) AS `car_amount`,
@@ -245,15 +288,18 @@ INNER JOIN (
             ROUND((IF(e.hiring_date>p.start,
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
-			)) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.productivity_complete/2),2) AS `amount_productivity_aguinaldo`,
+			)) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(IF(e.job_type IS NULL, pay.productivity_complete/2, ((pay.productivity_complete - (e.max_cost - pay.base_complete - 250))/2)
+            )),2) AS `amount_productivity_aguinaldo`,
 			ROUND((IF(e.hiring_date>p.start,
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
-			)) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.productivity_complete/2),2) AS `amount_productivity_bono14`,
+			)) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(IF(e.job_type IS NULL, pay.productivity_complete/2, ((pay.productivity_complete - (e.max_cost - pay.base_complete - 250))/2)
+            )),2) AS `amount_productivity_bono14`,
             ROUND((IF(e.hiring_date>p.start,
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
-			)) / (DATEDIFF(p.end, p.`start`)+1) *0.041666666*(pay.productivity_complete/2),2) AS `amount_productivity_vacaciones`,
+			)) / (DATEDIFF(p.end, p.`start`)+1) *0.041666666*(IF(e.job_type IS NULL, pay.productivity_complete/2, ((pay.productivity_complete - (e.max_cost - pay.base_complete - 250))/2)
+            )),2) AS `amount_productivity_vacaciones`,
             pay.idpayments
 			FROM payments pay
 			INNER JOIN employees e ON (e.idemployees = pay.id_employee)
@@ -274,12 +320,21 @@ hires.nearsol_id,
 employees.client_id,
 CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
 ROUND(IF(employees.job_type = 1, 0, employees.base_payment),2) AS `base_pay`,
-ROUND(IF(employees.job_type = 1, 0, employees.productivity_payment),2) AS `productivity_pay`,
+ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2)), employees.productivity_payment),2) AS `productivity_pay`,
 ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.discounted_days,2)),2) AS `discounted_days`,
 ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.seventh,2)),2) AS `discounted_senths`,
 ROUND(IF(employees.job_type = 1, 0, payroll_values. discounted_hours),2) AS `hours`,
 ROUND(IF(employees.job_type = 1, 0, ROUND(payments.base - ROUND((payments.base_complete/2),2), 2)),2) AS `wage_deductions`,
-ROUND(IF(employees.job_type = 1, 0, ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2)),2) AS `incentive_deductions`,
+ROUND(IF(employees.job_type = 1, 
+IF(employees.cost_type IS NULL, 0,
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)
+),
+ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2)),2) AS `incentive_deductions`,
 ROUND(IF(employees.job_type = 1, 0, payments.base),2) AS `base`,
 ROUND(IF(employees.job_type = 1, 0, payments.productivity),2) AS `productivity`,
 ROUND(payments.ot_hours,2) AS `ot_hours`,
@@ -291,7 +346,15 @@ ROUND(payments.holidays,2) AS `holidays`,
 `adjustments_positive`.`adjustment`,
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1,
+(ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
+`bus_service`.`bus_amount` AS `bus_amount`,
 `car_parking`.`car_amount` AS `car_amount`,
 `motorcycle_parking`.`motorcycle_amount` AS `motorcycle_amount`,
 `igss`.`igss_amount`,
@@ -301,24 +364,24 @@ ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`mo
 coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) AS `total_deductions`,
 ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1, 0, payments.productivity),0),2)) -
-ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + 
-coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) 
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1,
+(ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0),2)) -
+ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + + coalesce(`bus_service`.`bus_amount`,0) +
+coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2)
 ) AS `total_payment`,
 IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`) AS `base_aguinaldo`,
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`) AS `productivity_aguinaldo`,
 IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`) AS `base_bono14`,
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_bono14`)), `severances`.`amount_productivity_bono14`) AS `productivity_bono14`,
 IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`) AS `base_vacaciones`,
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`) AS `productivity_aguinaldo`,
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`) AS `productivity_bono14`,
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_vacaciones`) AS `productivity_vacaciones`,
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`) AS `productivity_vacaciones`,
 IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`) AS `base_indemnizacion`,
-ROUND((IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_vacaciones`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)),2) AS `total_reserves`,
 ROUND((IF(employees.job_type = 1, 0, payments.base)+
 IF(employees.job_type = 1, 0, payments.productivity)+
 ROUND(payments.ot,2)+
@@ -329,9 +392,9 @@ ROUND(payments.holidays)) * 0.01267, 2) AS `employeer_igss`,
 ROUND(ROUND((IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_vacaciones`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_bono14`)), `severances`.`amount_productivity_bono14`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)),2) + ROUND((IF(employees.job_type = 1, 0, payments.base)+
 IF(employees.job_type = 1, 0, payments.productivity)+
 ROUND(payments.ot,2)+
@@ -339,9 +402,9 @@ ROUND(payments.holidays)) * 0.01267, 2) + 198.24 ,2) AS `total_reserves_and_fees
 ROUND(ROUND(IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_bono14`)+
-IF(employees.job_type = 1, 0, `severances`.`amount_productivity_aguinaldo`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_bono14`)), `severances`.`amount_productivity_bono14`)+
+IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`)+
 IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)+
 ROUND((IF(employees.job_type = 1, 0, payments.base)+
 IF(employees.job_type = 1, 0, payments.productivity)+
@@ -349,7 +412,14 @@ ROUND(payments.ot,2)+
 ROUND(payments.holidays)) * 0.01267, 2),2)+
 ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
 + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, employees.productivity_payment),0) + coalesce(IF(employees.job_type = 1, 0, employees.base_payment),0), 2) 
+coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1,
+(ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
+ROUND(((payments.productivity_complete/2) - payments.productivity)-(
+((
+((payments.productivity_complete/2) - payments.productivity)/
+((payments.productivity_complete/2)/120)
+)/120
+)*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0), payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0), 2) 
  + 198.24,2) AS `total_cost`
 FROM payments
 INNER JOIN employees ON employees.idemployees = payments.id_employee
@@ -358,18 +428,22 @@ INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
 INNER JOIN accounts ON accounts.idaccounts = payments.id_account_py
 LEFT JOIN (
-			SELECT 
+SELECT 
             coalesce(ROUND(SUM(credits.amount),2),0) AS `bonuses_amount`,
-            credits.id_payment 
+            credits.id_payment
             FROM credits
+            INNER JOIN payments ON payments.idpayments = credits.id_payment
+            INNER JOIN employees ON employees.idemployees = payments.id_employee
             WHERE (
-					credits.type != 'Salario Base'
+					(credits.type != 'Salario Base'
                     AND credits.type != 'Bonificacion Productividad'
                     AND credits.type != 'Treasure Hunt'
                     AND credits.type NOT LIKE '%Nearsol TK%'
                     AND credits.type NOT LIKE '%Horas Extra%'
                     AND credits.type NOT LIKE '%Horas de Asueto%'
                     AND credits.type NOT LIKE '%Ajuste%'
+                    AND credits.type NOT LIKE '%Bonificacion Decreto%')
+                    OR (credits.type LIKE '%Bonificacion Decreto%' AND employees.job_type IS NULL)
 				   )
             GROUP BY id_payment
 		  ) AS `bonuses` ON `bonuses`.id_payment = payments.idpayments
@@ -388,6 +462,14 @@ LEFT JOIN (
                 WHERE credits.type LIKE '%Ajuste%' AND credits.amount > 0
                 GROUP BY id_payment
 			) AS `adjustments_positive` ON `adjustments_positive`.id_payment = payments.idpayments
+LEFT JOIN (
+			SELECT
+            coalesce(ROUND(SUM(debits.amount),2),0) AS `bus_amount`,
+            id_payment
+            FROM debits
+            WHERE debits.type LIKE '%bus%'
+            GROUP BY id_payment
+		   ) AS `bus_service` ON `bus_service`.id_payment = payments.idpayments
 LEFT JOIN (
 			SELECT
             coalesce(ROUND(SUM(debits.amount),2),0) AS `car_amount`,
@@ -452,15 +534,18 @@ INNER JOIN (
             ROUND((IF(e.hiring_date>p.start,
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
-			)) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.productivity_complete/2),2) AS `amount_productivity_aguinaldo`,
+			)) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(IF(e.job_type IS NULL, pay.productivity_complete/2, ((pay.productivity_complete - (e.max_cost - pay.base_complete - 250))/2)
+            )),2) AS `amount_productivity_aguinaldo`,
 			ROUND((IF(e.hiring_date>p.start,
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
-			)) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.productivity_complete/2),2) AS `amount_productivity_bono14`,
+			)) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(IF(e.job_type IS NULL, pay.productivity_complete/2, ((pay.productivity_complete - (e.max_cost - pay.base_complete - 250))/2)
+            )),2) AS `amount_productivity_bono14`,
             ROUND((IF(e.hiring_date>p.start,
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
 			IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
-			)) / (DATEDIFF(p.end, p.`start`)+1) *0.041666666*(pay.productivity_complete/2),2) AS `amount_productivity_vacaciones`,
+			)) / (DATEDIFF(p.end, p.`start`)+1) *0.041666666*(IF(e.job_type IS NULL, pay.productivity_complete/2, ((pay.productivity_complete - (e.max_cost - pay.base_complete - 250))/2)
+            )),2) AS `amount_productivity_vacaciones`,
             pay.idpayments
 			FROM payments pay
 			INNER JOIN employees e ON (e.idemployees = pay.id_employee)
