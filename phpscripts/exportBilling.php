@@ -1116,7 +1116,7 @@ INNER JOIN (
 			WHERE pay.id_period = $id_2
 			) AS `severances` ON `severances`.idpayments = payments.idpayments
 WHERE (payments.id_period = $id_2) AND clientNetSuite = $netsuitclient
-) AS `tmp` WHERE job_type = 1,
+) AS `tmp` WHERE job_type = 1
 GROUP BY idpayments,clientNetSuite,
 name,
 nearsol_id,
