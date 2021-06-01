@@ -348,6 +348,7 @@ export class ClosingTkComponent implements OnInit {
                                           if (lv.motive == 'Others Unpaid' || lv.motive == "IGSS Unpaid" || lv.motive == "VTO Unpaid" || lv.motive == "COVID Unpaid") {
                                             attendance.balance = 'JANP';
                                             janp_sequence = janp_sequence + 1;
+                                            discounted_days = discounted_days + 1;
                                             if (lv.motive == "IGSS Unpaid") {
                                               rs.igss = (Number(rs.igss) + 1).toFixed(0);
                                             } else {
@@ -356,9 +357,6 @@ export class ClosingTkComponent implements OnInit {
                                             if (attendance.scheduled == 'OFF') {
                                               days_off = days_off + 1;
                                               janp_on_off = janp_on_off + 1;
-                                              console.log(attendance.id_employee);
-                                            }else{
-                                              discounted_days = discounted_days + 1;
                                             }
                                           }
                                           if (lv.motive == 'Maternity' || lv.motive == 'Others Paid' || lv.motive == "COVID Paid" || lv.motive == "IGSS PAID") {
@@ -452,6 +450,9 @@ export class ClosingTkComponent implements OnInit {
                                       if (janp_sequence >= 5) {
                                         disc = true;
                                         discounted_days = discounted_days + (off_on_week - janp_on_off);
+                                        if(attendance.id_employee == '4997'){
+                                          discounted_days = discounted_days - 1;
+                                        }
                                       }
 
                                       if (non_show_sequence == 5) {

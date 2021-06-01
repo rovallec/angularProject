@@ -1121,8 +1121,7 @@ GROUP BY idpayments,clientNetSuite,
 name,
 nearsol_id,
 client_id,
-`employee name`;
-"
+`employee name`;";
 }
 
 $output = fopen("php://output", "w");
