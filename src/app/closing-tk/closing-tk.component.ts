@@ -452,7 +452,6 @@ export class ClosingTkComponent implements OnInit {
                                       if (janp_sequence >= 5) {
                                         disc = true;
                                         discounted_days = discounted_days + (off_on_week - janp_on_off);
-                                        console.log(attendance.date + "|" + off_on_week + "|" + janp_on_off);
                                       }
 
                                       if (non_show_sequence == 5) {
