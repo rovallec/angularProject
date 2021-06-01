@@ -1724,7 +1724,7 @@ export class AccountingAccounts {
         this.external_id = null;
         this.name = null;
         this.clasif = null;
-        this.clasif = null;
+        this.idperiod = null;
     }    
 }
 

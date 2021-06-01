@@ -4,7 +4,7 @@ import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, hrProcess } from '../fullProcess';
-import { AccountingAccounts, accountingPolicies, accounts, attendences, attendences_adjustment, clients, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values_gt, periods, terminations, vacations, policies } from '../process_templates';
+import { AccountingAccounts, accountingPolicies, accounts, attendences, attendences_adjustment, clients, paid_attendances, payroll_resume, payroll_values_gt, periods, policies } from '../process_templates';
 
 @Component({
   selector: 'app-accounting-policies',
@@ -35,8 +35,6 @@ export class AccountingPoliciesComponent implements OnInit {
   isLoading: boolean = false;
   searchFilter: string = null;
   searchValue: string = null;
-  payroll_values: payroll_values_gt[] = [];
-  show_payroll_values: payroll_values_gt[] = [];
   close_period: boolean = true;
   adjustments: attendences_adjustment[] = [];
   accountingPolicies: accountingPolicies[] = [];
@@ -55,13 +53,6 @@ export class AccountingPoliciesComponent implements OnInit {
     });
 
     this.selectedClient = '-1';
-
-    /*this.apiServices.getClients().subscribe((cls: clients[]) => {
-      this.clients = cls;
-      this.selectedClient = cls[0].idclients;
-      this.setClient(this.selectedClient);
-    });*/
-    
   }
 
   setActualPeriod(p) {
@@ -96,7 +87,11 @@ export class AccountingPoliciesComponent implements OnInit {
   }
 
   getAccounting() {
-    let element: policies = new policies;
+    let policie: policies = new policies;
+    let locacp: accountingPolicies[] = [];
+    let accounting: accountingPolicies = new accountingPolicies;
+    let external_id: string = '';
+    let amount: number = 0;
     this.totalDebe = '0';
     this.totalHaber = '0';
     this.isLoading = true;
@@ -107,27 +102,55 @@ export class AccountingPoliciesComponent implements OnInit {
     this.finalRow = 'Obtaining data...';
     try {
       this.accountingPolicies = [new accountingPolicies];
-      element.idperiod = this.actualPeriod.idperiods;
-      element.idaccounts = this.selectedClient;
-      element.id_client = this.selectedClient;
-      this.apiServices.getAccountingPolicies(element).subscribe((acp: accountingPolicies[]) => {
-        this.accountingPolicies = acp;
-        for (let index = 0; index < this.accountingPolicies.length; index++) {
-          this.accountingPolicies[index].idperiod = this.actualPeriod.idperiods;
-          if (this.accountingPolicies[index].clasif == 'D') {
-            this.totalDebe = String(Number(this.totalDebe) + Number(this.accountingPolicies[index].amount));
-          } else {
-            this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
-          }
+      policie.idperiod = this.actualPeriod.idperiods;
+      policie.idaccounts = this.selectedClient;
+      policie.id_client = this.selectedClient;
+      this.accountingPolicies.pop();
+      this.apiServices.getAccounting_Accounts().subscribe((account: AccountingAccounts[]) =>{
+        this.apiServices.getAccountingPolicies(policie).subscribe((acp: accountingPolicies[]) => {
+          acp.sort((a, b) => Number(a.external_id) - Number(b.external_id));
+          account.sort((a, b) => Number(a.external_id) - Number(b.external_id));
+          account.forEach(acc => {
+            accounting = this.filterAccounts(acp, acc.external_id, accounting);
+            this.accountingPolicies.push(accounting);
+            
+            /*acp.forEach(lacp => {
+              locacp = acp.filter(loc => loc.external_id === acc.external_id);
+              if (locacp.external_id == acc.external_id) {
+                amount = amount + Number(accounting.amount);
+              } else {
+                accounting.amount = amount.toFixed();
+              
+              }
+              locacp.forEach(element => {
+                accounting = element;
+                amount = amount + Number(element.amount);
+              })
+              accounting.amount = amount.toFixed();
+              this.accountingPolicies.push(accounting);
+              */
+            })
+          //})
+        })
+          //this.accountingPolicies = acp;
 
-        }
-        if (this.accountingPolicies.length==0) {
-          this.finalRow = 'No data to display.';
-        } else {
-          this.finalRow = 'TOTAL ROWS: ' + String(this.accountingPolicies.length);
-        }
-        this.progress = this.progress + 1;
-      })
+          
+
+          for (let index = 0; index < this.accountingPolicies.length; index++) {
+            this.accountingPolicies[index].idperiod = this.actualPeriod.idperiods;
+            if (this.accountingPolicies[index].clasif == 'D') {
+              this.totalDebe = String(Number(this.totalDebe) + Number(this.accountingPolicies[index].amount));
+            } else {
+              this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
+            }
+          }
+          if (this.accountingPolicies.length==0) {
+            this.finalRow = 'No data to display.';
+          } else {
+            this.finalRow = 'TOTAL ROWS: ' + String(this.accountingPolicies.length);
+          }
+          this.progress = this.progress + 1;
+        })
     }
     finally {
       this.progress = 0;
@@ -138,22 +161,32 @@ export class AccountingPoliciesComponent implements OnInit {
     }
   }
 
+  filterAccounts(Aaccountingpolicies: accountingPolicies[], Aext_id: string, Aaccounting: accountingPolicies): accountingPolicies {
+    let aa: accountingPolicies[] = [];
+    let amount: number = 0;
+    aa = Aaccountingpolicies.filter(Aap => Aap.external_id == Aext_id)
+    Aaccounting = aa[0];
+    aa.forEach(Aap => {
+      amount = amount + Number(Aap.amount);
+    })
+
+    Aaccounting.amount = amount.toFixed();
+    return Aaccounting;
+  }
+
   saveAccounting() {
     let i: number = 0;
-    //this.accountingPolicies.forEach(element => {
-      this.apiServices.insertAccountingPolicies(this.accountingPolicies).subscribe((str: string) => {
-        if (i >= this.accountingPolicies.length) {
-          if (String(str).split("|")[0]=='0') {
-            window.alert("Accounting policies saved correctly.");
-          } else {
-            console.log(String(str).split("|")[1]);
-            window.alert("Error when recording accounting policies.");
-          }
+    this.apiServices.insertAccountingPolicies(this.accountingPolicies).subscribe((str: string) => {
+      if (i >= this.accountingPolicies.length) {
+        if (String(str).split("|")[0]=='0') {
+          window.alert("Accounting policies saved correctly.");
+        } else {
+          console.log(String(str).split("|")[1]);
+          window.alert("Error when recording accounting policies.");
         }
-      })
-      i++;
-    //})
-    
+      }
+    })
+    i++;
   }
 
 }
