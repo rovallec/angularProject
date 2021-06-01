@@ -1,5 +1,5 @@
 import { importType, isNull, TypeModifier } from '@angular/compiler/src/output/output_ast';
-import { Component, OnInit } from '@angular/core';
+import { Attribute, Component, OnInit } from '@angular/core';
 import { isNullOrUndefined, isNumber } from 'util';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
@@ -345,10 +345,10 @@ export class ClosingTkComponent implements OnInit {
                                               janp_on_off = janp_on_off + 1;
                                             }
                                           }
-                                          if (lv.motive == 'Others Unpaid' || lv.motive == "IGSS Unpaid" || lv.motive == "VTO Unpaid") {
+                                          if (lv.motive == 'Others Unpaid' || lv.motive == "IGSS Unpaid" || lv.motive == "VTO Unpaid" || lv.motive == "COVID Unpaid") {
                                             attendance.balance = 'JANP';
-                                            discounted_days = discounted_days + 1;
                                             janp_sequence = janp_sequence + 1;
+                                            discounted_days = discounted_days + 1;
                                             if (lv.motive == "IGSS Unpaid") {
                                               rs.igss = (Number(rs.igss) + 1).toFixed(0);
                                             } else {
@@ -359,7 +359,7 @@ export class ClosingTkComponent implements OnInit {
                                               janp_on_off = janp_on_off + 1;
                                             }
                                           }
-                                          if (lv.motive == 'Maternity' || lv.motive == 'Others Paid') {
+                                          if (lv.motive == 'Maternity' || lv.motive == 'Others Paid' || lv.motive == "COVID Paid" || lv.motive == "IGSS PAID") {
                                             attendance.balance = 'JAP';
                                             worked_days++;
                                             week_work++;
@@ -450,6 +450,9 @@ export class ClosingTkComponent implements OnInit {
                                       if (janp_sequence >= 5) {
                                         disc = true;
                                         discounted_days = discounted_days + (off_on_week - janp_on_off);
+                                        if(attendance.id_employee == '4997'){
+                                          discounted_days = discounted_days - 1;
+                                        }
                                       }
 
                                       if (non_show_sequence == 5) {

@@ -350,9 +350,6 @@ export class PeriodsComponent implements OnInit {
 
                           let sum_cred: number = 0
                           cred.forEach(credit => {
-                            if(emp[0].nearsol_id == "COM00901"){
-                              console.log(py.idpayments + "|" + credit.idpayments);
-                            }
                             if (credit.status == "PENDING" && credit.idpayments == py.idpayments) {
                               sum_cred = Number(sum_cred + Number(credit.amount).toFixed(2));
                             }
@@ -363,9 +360,6 @@ export class PeriodsComponent implements OnInit {
 
                           let sum_deb: number = 0
                           deb.forEach(debit => {
-                            if(emp[0].nearsol_id == "COM00901"){
-                              console.log(py.idpayments + "|" + debit.idpayments);
-                            }
                             if (debit.status == "PENDING" && debit.idpayments == py.idpayments) {
                               sum_deb = sum_deb + Number(debit.amount);
                               if (debit.type = "ISR") {
@@ -738,14 +732,23 @@ export class PeriodsComponent implements OnInit {
   }
 
   exportBilling() {
-    if (this.selected_accounts == "GET ALL") {
-      this.selected_accounts = this.accounts[0].idaccounts;
-      this.accounts.forEach((acc) => {
-        this.selected_accounts = this.selected_accounts + "," + acc.idaccounts;
+    let selectedPeriod:string = null;
+    let cnt:number = 0;
+      this.apiService.getPeriods().subscribe((pr:periods[])=>{
+        pr.forEach(p=>{
+          if(p.start.split("-")[1] == this.period.start.split("-")[1]){
+            cnt ++;
+            if(!isNullOrUndefined(selectedPeriod)){
+              selectedPeriod = selectedPeriod + "," + p.idperiods;
+            }else{
+              selectedPeriod = p.idperiods;
+            }
+            if(cnt == 2){
+              window.open("http://172.18.2.45/phpscripts/exportBilling.php?period=" + selectedPeriod + "&netsuit=" + this.selected_accounts, "_self")
+            }
+          }
+        })
       })
-    }
-    let end: Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]), 0);
-    window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])).toString().padStart(2, "0") + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + (end.getMonth() + 1).toString().padStart(2, "0") + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
   }
 
   setAccountingPolicy() {
