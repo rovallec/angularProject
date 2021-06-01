@@ -170,7 +170,7 @@ export class AccountingPoliciesComponent implements OnInit {
       amount = amount + Number(Aap.amount);
     })
 
-    Aaccounting.amount = amount.toFixed();
+    Aaccounting.amount = amount.toString();
     return Aaccounting;
   }
 
