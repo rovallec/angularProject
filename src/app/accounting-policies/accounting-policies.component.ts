@@ -88,10 +88,7 @@ export class AccountingPoliciesComponent implements OnInit {
 
   getAccounting() {
     let policie: policies = new policies;
-    let locacp: accountingPolicies[] = [];
     let accounting: accountingPolicies = new accountingPolicies;
-    let external_id: string = '';
-    let amount: number = 0;
     this.totalDebe = '0';
     this.totalHaber = '0';
     this.isLoading = true;
@@ -113,44 +110,24 @@ export class AccountingPoliciesComponent implements OnInit {
           account.forEach(acc => {
             accounting = this.filterAccounts(acp, acc.external_id, accounting);
             this.accountingPolicies.push(accounting);
-            
-            /*acp.forEach(lacp => {
-              locacp = acp.filter(loc => loc.external_id === acc.external_id);
-              if (locacp.external_id == acc.external_id) {
-                amount = amount + Number(accounting.amount);
-              } else {
-                accounting.amount = amount.toFixed();
-              
-              }
-              locacp.forEach(element => {
-                accounting = element;
-                amount = amount + Number(element.amount);
-              })
-              accounting.amount = amount.toFixed();
-              this.accountingPolicies.push(accounting);
-              */
             })
-          //})
-        })
-          //this.accountingPolicies = acp;
-
-          
-
-          for (let index = 0; index < this.accountingPolicies.length; index++) {
-            this.accountingPolicies[index].idperiod = this.actualPeriod.idperiods;
-            if (this.accountingPolicies[index].clasif == 'D') {
-              this.totalDebe = String(Number(this.totalDebe) + Number(this.accountingPolicies[index].amount));
+            if (this.accountingPolicies.length==0) {
+              this.finalRow = 'No data to display.';
             } else {
-              this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
-            }
-          }
-          if (this.accountingPolicies.length==0) {
-            this.finalRow = 'No data to display.';
-          } else {
-            this.finalRow = 'TOTAL ROWS: ' + String(this.accountingPolicies.length);
-          }
-          this.progress = this.progress + 1;
+              this.finalRow = 'TOTAL ROWS: ' + String(this.accountingPolicies.length);
+            }  
         })
+          
+        for (let index = 0; index < this.accountingPolicies.length; index++) {
+          this.accountingPolicies[index].idperiod = this.actualPeriod.idperiods;
+          if (this.accountingPolicies[index].clasif == 'D') {
+            this.totalDebe = String(Number(this.totalDebe) + Number(this.accountingPolicies[index].amount));
+          } else {
+            this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
+          }
+        }
+        this.progress = this.progress + 1;
+      })
     }
     finally {
       this.progress = 0;
@@ -170,7 +147,7 @@ export class AccountingPoliciesComponent implements OnInit {
       amount = amount + Number(Aap.amount);
     })
 
-    Aaccounting.amount = amount.toString();
+    Aaccounting.amount = amount.toFixed();
     return Aaccounting;
   }
 
