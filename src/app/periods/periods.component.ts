@@ -355,11 +355,10 @@ export class PeriodsComponent implements OnInit {
                           let sum_cred: number = 0
                           cred.forEach(credit => {
                             if (credit.status == "PENDING" && credit.idpayments == py.idpayments) {
-                              sum_cred = Number(sum_cred + Number(credit.amount).toFixed(2));
+                              sum_cred =Number(Number(sum_cred) + Number(credit.amount));
                             }
                           })
-                          py.credits = (sum_cred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
-
+                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
 
 
                           let sum_deb: number = 0
