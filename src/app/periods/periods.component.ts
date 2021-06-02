@@ -496,6 +496,14 @@ export class PeriodsComponent implements OnInit {
     this.max_progress = this.global_services.length + this.global_judicials.length + this.payments.length;
     this.progress = 1;
     try {
+      this.payments.forEach(py => {
+        this.progress = this.progress +1;
+        this.apiService.setPayment(py).subscribe((str_3: string) => {
+          if (String(str_3).split("|")[0] == "0") {
+            throw new Error('Error updating Payments');
+          }
+        })
+      })
       this.pushDeductions('credits', this.global_credits);
       this.pushDeductions('debits', this.global_debits);
       this.global_services.forEach(service => {
@@ -510,14 +518,6 @@ export class PeriodsComponent implements OnInit {
         this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
           if (str_r.split("|")[0] == '0') {
             throw new Error('Error updating Legal Deductions');
-          }
-        })
-      })
-      this.payments.forEach(py => {
-        this.progress = this.progress +1;
-        this.apiService.setPayment(py).subscribe((str_3: string) => {
-          if (String(str_3).split("|")[0] == "0") {
-            throw new Error('Error updating Payments');
           }
         })
       })
@@ -703,14 +703,18 @@ export class PeriodsComponent implements OnInit {
   pushDeductions(str: string, credits?: credits[], debits?: debits[]) {
     if (str == 'debits') {
       credits.forEach(cred => {
-        cred.amount = Number(cred.amount).toFixed(2);
-        this.apiService.insertDebits(cred).subscribe((str: string) => { });
+        if(cred.amount != 'NaN'){
+          cred.amount = Number(cred.amount).toFixed(2);
+          this.apiService.insertDebits(cred).subscribe((str: string) => { });
+        }
       });
     } else {
       if (str == 'credits') {
         credits.forEach(cred => {
-          cred.amount = Number(cred.amount).toFixed(2);
-          this.apiService.insertCredits(cred).subscribe((str: string) => { });
+          if(cred.amount != 'NaN'){
+            cred.amount = Number(cred.amount).toFixed(2);
+            this.apiService.insertCredits(cred).subscribe((str: string) => { });
+          }
         })
       }
     }
