@@ -234,9 +234,9 @@ export class PeriodsComponent implements OnInit {
  
                           if (new Date(emp[0].hiring_date).getTime() > new Date(this.period.start).getTime()) {
                             console.log(Number(py.days));
-                            py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
+                            py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours)/8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
                             if(((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24)) >= 14){
-                              py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
+                              py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours)/8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
                             }
                           }
 
