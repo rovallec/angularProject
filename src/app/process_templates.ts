@@ -1686,6 +1686,34 @@ export class policies {
     }
 }
 
+export class policyHeader {
+    idpolicie: string;
+    correlative: string;
+    date: string;
+    type: string;
+    description: string;
+    id_period: string;
+    detail: accountingPolicies[];
+    constructor() {
+        this.idpolicie = null;
+        this.correlative = null;
+        this.date = null;
+        this.type = null;
+        this.description = null;
+        this.id_period = null;
+        this.detail = [];
+    }
+}
+
+export class policyType {
+    id: number
+    description: string;
+    constructor() {
+        this.id = null;
+        this.description = null;
+    }
+}
+
 export class accountingPolicies {
     external_id: string;
     name: string;

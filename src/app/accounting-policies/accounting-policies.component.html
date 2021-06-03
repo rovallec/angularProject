@@ -77,6 +77,29 @@
           </div>
         </nav>
       </div>
+      <div class="form-group col-md-12" style="margin-top: 20px;">
+        <div class="form-row">
+          <div class="col-md-1">
+            <label>Correlative:</label>
+            <input type="text" class="form-control" [(ngModel)]="header.correlative">
+          </div>
+          <div class="col-md-3">
+            <label>Date:</label>
+            <input type="date" class="form-control" [(ngModel)]="header.poldate">
+          </div>
+          <div class="col-md-3">
+            <label>Type:</label>
+            <select class="form-control" [(ngModel)]="header.type" (change)="setHeaderType($event.target.value)">
+              <option *ngFor='let type of policeTypes' Value="type.id">{{ type.description }}</option>
+            </select>
+          </div>
+          <div class="col-md-5">
+            <label>Description:</label>
+            <input type="text" class="form-control" [(ngModel)]="header.description">
+          </div>
+        </div>
+      </div>
+    
       <div class="tab-content" id="nav-tabContent" style="margin-top:10px">
         <div class="p-2 justify-content-center">
           <div class="tab-pane fade show active" id="nav-Policies" role="tabpanel" aria-labelledby="nav-Policies-tab">

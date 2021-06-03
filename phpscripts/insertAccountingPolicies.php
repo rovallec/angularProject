@@ -5,18 +5,20 @@
 
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata);
-
-    $id_period = ($request[0]->idperiod);    
-    $close_date = date("YYYY-mm-dd");
-    $id_account = ($request[0]->idaccounts);
+    
+    $date = date("YYYY-mm-dd");
+    $type = ($request->type);
+    $description = ($request->description);
+    $id_period = ($request->id_period);
+    $detail = ($request->detail);
 
     $sql = "INSERT INTO policies (idpolicies, id_period, id_account, close_date) VALUES (null, '$id_period', '$id_account', '$close_date');";
 
     if(mysqli_query($con, $sql)){
         $id_policy = mysqli_insert_id($con);
-        for ($i=0; $i < count($request); $i++) { 
-            $id_account = ($request->idaccounts);
-            $amount = ($request->amount);
+        for ($i=0; $i < count($detail); $i++) { 
+            $id_account = ($detail->idaccounts);
+            $amount = ($detail->amount);
 
             $sql2 = "INSERT INTO policy_details (idpolicy_details, id_policy, id_ccounting_account, amount) VALUES (null, '$id_policy', $id_account, $amount);";
             if(mysqli_query($con, $sql2)){

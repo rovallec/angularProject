@@ -4,7 +4,7 @@ import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, hrProcess } from '../fullProcess';
-import { AccountingAccounts, accountingPolicies, accounts, attendences, attendences_adjustment, clients, paid_attendances, payroll_resume, payroll_values_gt, periods, policies } from '../process_templates';
+import { AccountingAccounts, accountingPolicies, accounts, attendences, attendences_adjustment, clients, Fecha, paid_attendances, payroll_resume, periods, policies, policyHeader, policyType } from '../process_templates';
 
 @Component({
   selector: 'app-accounting-policies',
@@ -44,8 +44,15 @@ export class AccountingPoliciesComponent implements OnInit {
   totalDebe: string = null;
   totalHaber: string = null;
   selectedPeriod:string = null;
+  header: policyHeader = new policyHeader;
+  policeType: policyType;
+  policeTypes: policyType[] = [];
+
+
 
   ngOnInit() {
+    let today: Fecha = new Fecha;
+    let pt: policyType = new policyType;
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       this.periods = per.filter(p => p.status =='0');      
         this.actualPeriod = this.periods[this.periods.length-1];
@@ -53,15 +60,34 @@ export class AccountingPoliciesComponent implements OnInit {
     });
 
     this.selectedClient = '-1';
+    this.header.date = today.today;
+    this.header.type = 'Cost Policies'; // Las pólizas tipo 1 serán consideradas de costos.
+    pt.id = 1;
+    pt.description = 'Cost Policy';
+    this.policeTypes.push(pt);
+    pt = new policyType;
+    pt.id = 2;
+    pt.description = 'Expence Policy';
+    this.policeTypes.push(pt);
   }
 
   setActualPeriod(p) {
     this.periods.forEach(element => {
       if (element.idperiods == p) {
         this.actualPeriod = element;
+        this.header.id_period = this.actualPeriod.idperiods;
       }
     })
     this.getAccounting();
+  }
+
+  setHeaderType(t) {
+    this.policeTypes.forEach(element => {
+      if (element.id == t.id) {
+        this.policeType = element;
+        this.policeType.id = t.id;
+      }
+    })
   }
 
   setAccount(acc: accounts) {
@@ -126,6 +152,15 @@ export class AccountingPoliciesComponent implements OnInit {
             this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
           }
         }
+
+        this.accountingPolicies.forEach(ac => {
+          let j: number = 0;
+          j = this.accountingPolicies.indexOf(null);
+          if (j!==-1) {
+            this.accountingPolicies.splice(j, 1);
+          }
+        })
+      
         this.progress = this.progress + 1;
       })
     }
@@ -142,7 +177,11 @@ export class AccountingPoliciesComponent implements OnInit {
     let aa: accountingPolicies[] = [];
     let amount: number = 0;
     aa = Aaccountingpolicies.filter(Aap => Aap.external_id == Aext_id)
-    Aaccounting = aa[0];
+    Aaccounting = new accountingPolicies;
+    if (!isNullOrUndefined(aa[0])) {
+      Aaccounting = aa[0];
+    }
+    
     aa.forEach(Aap => {
       amount = amount + Number(Aap.amount);
     })
@@ -153,7 +192,8 @@ export class AccountingPoliciesComponent implements OnInit {
 
   saveAccounting() {
     let i: number = 0;
-    this.apiServices.insertAccountingPolicies(this.accountingPolicies).subscribe((str: string) => {
+    this.header.detail = this.accountingPolicies;
+    this.apiServices.insertAccountingPolicies(this.header).subscribe((str: string) => {
       if (i >= this.accountingPolicies.length) {
         if (String(str).split("|")[0]=='0') {
           window.alert("Accounting policies saved correctly.");
