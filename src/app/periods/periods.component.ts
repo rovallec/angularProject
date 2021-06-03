@@ -233,7 +233,11 @@ export class PeriodsComponent implements OnInit {
                           }
  
                           if (new Date(emp[0].hiring_date).getTime() > new Date(this.period.start).getTime()) {
-                            py.days = (Number(py.days) - ((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))).toFixed(2);
+                            console.log(Number(py.days));
+                            py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours)/8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
+                            if(((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24)) >= 14){
+                              py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours)/8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
+                            }
                           }
 
 
@@ -351,11 +355,10 @@ export class PeriodsComponent implements OnInit {
                           let sum_cred: number = 0
                           cred.forEach(credit => {
                             if (credit.status == "PENDING" && credit.idpayments == py.idpayments) {
-                              sum_cred = Number(sum_cred + Number(credit.amount).toFixed(2));
+                              sum_cred =Number(Number(sum_cred) + Number(credit.amount));
                             }
                           })
-                          py.credits = (sum_cred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
-
+                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
 
 
                           let sum_deb: number = 0
@@ -493,6 +496,14 @@ export class PeriodsComponent implements OnInit {
     this.max_progress = this.global_services.length + this.global_judicials.length + this.payments.length;
     this.progress = 1;
     try {
+      this.payments.forEach(py => {
+        this.progress = this.progress +1;
+        this.apiService.setPayment(py).subscribe((str_3: string) => {
+          if (String(str_3).split("|")[0] == "0") {
+            throw new Error('Error updating Payments');
+          }
+        })
+      })
       this.pushDeductions('credits', this.global_credits);
       this.pushDeductions('debits', this.global_debits);
       this.global_services.forEach(service => {
@@ -507,14 +518,6 @@ export class PeriodsComponent implements OnInit {
         this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
           if (str_r.split("|")[0] == '0') {
             throw new Error('Error updating Legal Deductions');
-          }
-        })
-      })
-      this.payments.forEach(py => {
-        this.progress = this.progress +1;
-        this.apiService.setPayment(py).subscribe((str_3: string) => {
-          if (String(str_3).split("|")[0] == "0") {
-            throw new Error('Error updating Payments');
           }
         })
       })
@@ -700,14 +703,18 @@ export class PeriodsComponent implements OnInit {
   pushDeductions(str: string, credits?: credits[], debits?: debits[]) {
     if (str == 'debits') {
       credits.forEach(cred => {
-        cred.amount = Number(cred.amount).toFixed(2);
-        this.apiService.insertDebits(cred).subscribe((str: string) => { });
+        if(cred.amount != 'NaN'){
+          cred.amount = Number(cred.amount).toFixed(2);
+          this.apiService.insertDebits(cred).subscribe((str: string) => { });
+        }
       });
     } else {
       if (str == 'credits') {
         credits.forEach(cred => {
-          cred.amount = Number(cred.amount).toFixed(2);
-          this.apiService.insertCredits(cred).subscribe((str: string) => { });
+          if(cred.amount != 'NaN'){
+            cred.amount = Number(cred.amount).toFixed(2);
+            this.apiService.insertCredits(cred).subscribe((str: string) => { });
+          }
         })
       }
     }

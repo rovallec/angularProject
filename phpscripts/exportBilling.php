@@ -553,7 +553,7 @@ if($netsuitclient <= 6){
                 ) AS `severances` ON `severances`.idpayments = payments.idpayments
     WHERE (payments.id_period = $id_2) and clientNetSuite = $netsuitclient
     ) AS `tmp`
-    GROUP BY idpayments,clientNetSuite,
+    GROUP BY clientNetSuite,
     name,
     nearsol_id,
     client_id,

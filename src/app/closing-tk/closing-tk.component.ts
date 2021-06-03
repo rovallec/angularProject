@@ -359,7 +359,7 @@ export class ClosingTkComponent implements OnInit {
                                               janp_on_off = janp_on_off + 1;
                                             }
                                           }
-                                          if (lv.motive == 'Maternity' || lv.motive == 'Others Paid' || lv.motive == "COVID Paid" || lv.motive == "IGSS PAID") {
+                                          if (lv.motive == 'Maternity' || lv.motive == 'Others Paid' || lv.motive == "COVID Paid" || lv.motive == "IGSS Paid") {
                                             attendance.balance = 'JAP';
                                             worked_days++;
                                             week_work++;
