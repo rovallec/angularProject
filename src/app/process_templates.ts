@@ -1705,7 +1705,7 @@ export class policyHeader {
     }
 }
 
-export class policyType {
+export class selectedOption {
     id: number
     description: string;
     constructor() {

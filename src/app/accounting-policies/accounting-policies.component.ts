@@ -4,7 +4,7 @@ import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, hrProcess } from '../fullProcess';
-import { AccountingAccounts, accountingPolicies, accounts, attendences, attendences_adjustment, clients, Fecha, paid_attendances, payroll_resume, periods, policies, policyHeader, policyType } from '../process_templates';
+import { AccountingAccounts, accountingPolicies, accounts, attendences, attendences_adjustment, clients, Fecha, paid_attendances, payroll_resume, periods, policies, policyHeader, selectedOption } from '../process_templates';
 
 @Component({
   selector: 'app-accounting-policies',
@@ -45,14 +45,14 @@ export class AccountingPoliciesComponent implements OnInit {
   totalHaber: string = null;
   selectedPeriod:string = null;
   header: policyHeader = new policyHeader;
-  policeType: policyType;
-  policeTypes: policyType[] = [];
+  policeType: selectedOption;
+  policeTypes: selectedOption[] = [];
 
 
 
   ngOnInit() {
     let today: Fecha = new Fecha;
-    let pt: policyType = new policyType;
+    let pt: selectedOption = new selectedOption;
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       this.periods = per.filter(p => p.status =='0');      
         this.actualPeriod = this.periods[this.periods.length-1];
@@ -65,7 +65,7 @@ export class AccountingPoliciesComponent implements OnInit {
     pt.id = 1;
     pt.description = 'Cost Policy';
     this.policeTypes.push(pt);
-    pt = new policyType;
+    pt = new selectedOption;
     pt.id = 2;
     pt.description = 'Expence Policy';
     this.policeTypes.push(pt);
