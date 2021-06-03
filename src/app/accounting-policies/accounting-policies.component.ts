@@ -60,8 +60,8 @@ export class AccountingPoliciesComponent implements OnInit {
     });
 
     this.selectedClient = '-1';
-    this.header.date = today.today;
-    this.header.type = 'Cost Policies'; // Las pólizas tipo 1 serán consideradas de costos.
+    this.header.date = today.getToday();
+    this.header.type = '1'; // Las pólizas tipo 1 serán consideradas de costos.
     pt.id = 1;
     pt.description = 'Cost Policy';
     this.policeTypes.push(pt);
@@ -83,9 +83,9 @@ export class AccountingPoliciesComponent implements OnInit {
 
   setHeaderType(t) {
     this.policeTypes.forEach(element => {
-      if (element.id == t.id) {
+      if (element.id == t) {
         this.policeType = element;
-        this.policeType.id = t.id;
+        this.policeType.id = t;
       }
     })
   }
@@ -115,6 +115,7 @@ export class AccountingPoliciesComponent implements OnInit {
   getAccounting() {
     let policie: policies = new policies;
     let accounting: accountingPolicies = new accountingPolicies;
+    let filteredap: accountingPolicies[] = [];
     this.totalDebe = '0';
     this.totalHaber = '0';
     this.isLoading = true;
@@ -135,13 +136,16 @@ export class AccountingPoliciesComponent implements OnInit {
           account.sort((a, b) => Number(a.external_id) - Number(b.external_id));
           account.forEach(acc => {
             accounting = this.filterAccounts(acp, acc.external_id, accounting);
-            this.accountingPolicies.push(accounting);
-            })
-            if (this.accountingPolicies.length==0) {
-              this.finalRow = 'No data to display.';
-            } else {
-              this.finalRow = 'TOTAL ROWS: ' + String(this.accountingPolicies.length);
-            }  
+            filteredap = this.accountingPolicies.filter(count => count.external_id == accounting.external_id);
+            if (filteredap.length == 0) {
+              this.accountingPolicies.push(accounting);
+            }
+          })
+          if (this.accountingPolicies.length==0) {
+            this.finalRow = 'No data to display.';
+          } else {
+            this.finalRow = 'TOTAL ROWS: ' + String(this.accountingPolicies.length);
+          }  
         })
           
         for (let index = 0; index < this.accountingPolicies.length; index++) {
@@ -152,14 +156,6 @@ export class AccountingPoliciesComponent implements OnInit {
             this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
           }
         }
-
-        this.accountingPolicies.forEach(ac => {
-          let j: number = 0;
-          j = this.accountingPolicies.indexOf(null);
-          if (j!==-1) {
-            this.accountingPolicies.splice(j, 1);
-          }
-        })
       
         this.progress = this.progress + 1;
       })
@@ -175,35 +171,35 @@ export class AccountingPoliciesComponent implements OnInit {
 
   filterAccounts(Aaccountingpolicies: accountingPolicies[], Aext_id: string, Aaccounting: accountingPolicies): accountingPolicies {
     let aa: accountingPolicies[] = [];
+    let acP: accountingPolicies = Aaccounting;
     let amount: number = 0;
     aa = Aaccountingpolicies.filter(Aap => Aap.external_id == Aext_id)
-    Aaccounting = new accountingPolicies;
     if (!isNullOrUndefined(aa[0])) {
-      Aaccounting = aa[0];
+      acP = aa[0];
+    } else {
+      amount = 0;
     }
     
     aa.forEach(Aap => {
       amount = amount + Number(Aap.amount);
     })
 
-    Aaccounting.amount = amount.toFixed();
-    return Aaccounting;
+    acP.amount = amount.toFixed(2);
+    return acP;
   }
 
   saveAccounting() {
     let i: number = 0;
     this.header.detail = this.accountingPolicies;
     this.apiServices.insertAccountingPolicies(this.header).subscribe((str: string) => {
-      if (i >= this.accountingPolicies.length) {
-        if (String(str).split("|")[0]=='0') {
-          window.alert("Accounting policies saved correctly.");
-        } else {
-          console.log(String(str).split("|")[1]);
-          window.alert("Error when recording accounting policies.");
-        }
+      if (String(str).split("|")[0]=='0') {
+        this.header.correlative = String(str).split("|")[2];
+        console.log("Accounting policies saved correctly.");
+        window.alert("Accounting policies saved correctly.");
+      } else {
+        console.log(String(str).split("|")[1]);
+        window.alert("Error when recording accounting policies.");
       }
     })
-    i++;
   }
-
 }

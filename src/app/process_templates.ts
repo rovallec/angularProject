@@ -1715,6 +1715,7 @@ export class selectedOption {
 }
 
 export class accountingPolicies {
+    idaccounting_accounts: string;
     external_id: string;
     name: string;
     clasif: string;
@@ -1727,6 +1728,7 @@ export class accountingPolicies {
     idaccounts: string;
     idperiod: string;
     constructor() {
+        this.idaccounting_accounts = null;
         this.external_id = null;
         this.name = null;
         this.clasif = null;

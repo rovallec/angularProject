@@ -51,8 +51,10 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
             A1.department, 
             A1.class, 
             A1.site,
+            A1.idaccounts,
+            A1.id_client,
             A1.clientNetSuite,
-            aa.clasif, aa.name FROM (
+            aa.clasif, aa.name, aa.idaccounting_accounts FROM (
             SELECT 
               '51001' AS external_id,                
               ROUND(SUM(cred.amount), 2) AS amount,
@@ -577,6 +579,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
 
     if ($result4 = mysqli_query($con,$sql4)) {
       while($row4 = mysqli_fetch_assoc($result4)){
+        $exportRow[$i]['idaccounting_accounts'] = $row4['idaccounting_accounts'];
         $exportRow[$i]['external_id'] = $row4['external_id'];
         $exportRow[$i]['name'] = $row4['name'];
         $exportRow[$i]['clasif'] = $row4['clasif'];
@@ -585,6 +588,8 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
         $exportRow[$i]['site'] = ($row4['site']);
         $exportRow[$i]['amount'] = ($row4['amount']);
         $exportRow[$i]['clientNetSuite'] = ($row4['clientNetSuite']);
+        $exportRow[$i]['idaccounts'] = ($row4['idaccounts']);
+        $exportRow[$i]['id_client'] = ($row4['id_client']);
         $i++;
       }
       $resultF = json_encode($exportRow);

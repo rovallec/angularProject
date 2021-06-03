@@ -81,7 +81,7 @@
         <div class="form-row">
           <div class="col-md-1">
             <label>Correlative:</label>
-            <input type="text" class="form-control" [(ngModel)]="header.correlative">
+            <input type="text" class="form-control" [(ngModel)]="header.correlative" disabled="true">
           </div>
           <div class="col-md-3">
             <label>Date:</label>
@@ -90,7 +90,7 @@
           <div class="col-md-3">
             <label>Type:</label>
             <select class="form-control" [(ngModel)]="header.type" (change)="setHeaderType($event.target.value)">
-              <option *ngFor='let type of policeTypes' Value="type.id">{{ type.description }}</option>
+              <option *ngFor='let type of policeTypes' [value]="type.id">{{ type.description }}</option>
             </select>
           </div>
           <div class="col-md-5">
