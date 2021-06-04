@@ -20,8 +20,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = "http://localhost"; // Desarrollo
-PHP_API_SERVER = "http://172.18.2.45";  // produccion
+PHP_API_SERVER = "http://localhost"; // Desarrollo
+//PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -55,6 +55,10 @@ getWaves(){
 
 getAccounts(){
   return this.httpClient.get<accounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAccounts.php`);
+}
+
+getAccounting_Accounts() {
+  return this.httpClient.get<AccountingAccounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAccounting_Accounts.php`);
 }
 
 updateWave(wv:waves_template){

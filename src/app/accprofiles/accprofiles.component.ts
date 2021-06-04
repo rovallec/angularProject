@@ -622,7 +622,7 @@ export class AccprofilesComponent implements OnInit {
         }
       });
       cred.notes = adv.notes;
-      cred.type = "Adelanto " + adv.type;
+      cred.type = "Anticipo Sobre " + adv.type;
       this.apiService.getHr_Processes(adv.id_process).subscribe((proc: hrProcess) => {
         proc.status = adv.status;
         proc.idhr_process = proc.idhr_processes;

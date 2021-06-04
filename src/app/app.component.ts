@@ -76,4 +76,9 @@ export class AppComponent {
     this.SetSel("EXPEX");
     window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end , "_blank");
   }
+
+  getServicesReport(){
+    this.SetSel("SERVR");
+    window.open("http://172.18.2.45/phpscripts/exportServicesF.php", "_blank");
+  }
 }

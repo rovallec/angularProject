@@ -306,7 +306,7 @@ export class ImportWavesComponent implements OnInit {
           let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
           this.max_progress = sheetToJson.length;
           this.waves.max_recriut = this.max_progress.toString();
-          this.waves.hires = this.waves.max_recriut;
+          this.waves.hires = this.max_progress.toString();
           this.schedule.days_off = this.days_off;
           this.schedule.actual_count = this.waves.max_recriut;
           this.schedule.max_count = this.waves.max_recriut;

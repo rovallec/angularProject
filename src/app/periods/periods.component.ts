@@ -233,7 +233,11 @@ export class PeriodsComponent implements OnInit {
                           }
  
                           if (new Date(emp[0].hiring_date).getTime() > new Date(this.period.start).getTime()) {
-                            py.days = (Number(py.days) - ((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))).toFixed(2);
+                            console.log(Number(py.days));
+                            py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours)/8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
+                            if(((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24)) >= 14){
+                              py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours)/8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
+                            }
                           }
 
 
@@ -350,22 +354,15 @@ export class PeriodsComponent implements OnInit {
 
                           let sum_cred: number = 0
                           cred.forEach(credit => {
-                            if(emp[0].nearsol_id == "COM00901"){
-                              console.log(py.idpayments + "|" + credit.idpayments);
-                            }
                             if (credit.status == "PENDING" && credit.idpayments == py.idpayments) {
-                              sum_cred = sum_cred + Number(credit.amount);
+                              sum_cred =Number(Number(sum_cred) + Number(credit.amount));
                             }
                           })
-                          py.credits = (sum_cred + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
-
+                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
 
 
                           let sum_deb: number = 0
                           deb.forEach(debit => {
-                            if(emp[0].nearsol_id == "COM00901"){
-                              console.log(py.idpayments + "|" + debit.idpayments);
-                            }
                             if (debit.status == "PENDING" && debit.idpayments == py.idpayments) {
                               sum_deb = sum_deb + Number(debit.amount);
                               if (debit.type = "ISR") {
@@ -499,6 +496,14 @@ export class PeriodsComponent implements OnInit {
     this.max_progress = this.global_services.length + this.global_judicials.length + this.payments.length;
     this.progress = 1;
     try {
+      this.payments.forEach(py => {
+        this.progress = this.progress +1;
+        this.apiService.setPayment(py).subscribe((str_3: string) => {
+          if (String(str_3).split("|")[0] == "0") {
+            throw new Error('Error updating Payments');
+          }
+        })
+      })
       this.pushDeductions('credits', this.global_credits);
       this.pushDeductions('debits', this.global_debits);
       this.global_services.forEach(service => {
@@ -513,14 +518,6 @@ export class PeriodsComponent implements OnInit {
         this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
           if (str_r.split("|")[0] == '0') {
             throw new Error('Error updating Legal Deductions');
-          }
-        })
-      })
-      this.payments.forEach(py => {
-        this.progress = this.progress +1;
-        this.apiService.setPayment(py).subscribe((str_3: string) => {
-          if (String(str_3).split("|")[0] == "0") {
-            throw new Error('Error updating Payments');
           }
         })
       })
@@ -656,7 +653,7 @@ export class PeriodsComponent implements OnInit {
           sheetToJson.forEach(element => {
             let cred: credits = new credits;
             cred.iddebits = element['Nearsol ID'];
-            cred.amount = element['Amount'];
+            cred.amount = Number(element['Amount']).toFixed(2);
             partial_credits.push(cred);
           })
           ws++;
@@ -683,7 +680,7 @@ export class PeriodsComponent implements OnInit {
               } else if (this.importType == "Discount") {
                 let deb: debits = new debits;
                 deb.iddebits = ele.iddebits;
-                deb.amount = ele.amount;
+                deb.amount = Number(ele.amount).toFixed(2);
                 deb.date = ele.date;
                 deb.id_employee = ele.id_employee;
                 deb.idpayments = ele.idpayments;
@@ -692,7 +689,7 @@ export class PeriodsComponent implements OnInit {
                 this.debits.push(deb);
               }
 
-              if (count == (partial_credits.length - 1)) {
+              if (count >= (partial_credits.length - 1)) {
                 this.importEnd = true;
                 this.completed = true;
               }
@@ -706,12 +703,18 @@ export class PeriodsComponent implements OnInit {
   pushDeductions(str: string, credits?: credits[], debits?: debits[]) {
     if (str == 'debits') {
       credits.forEach(cred => {
-        this.apiService.insertDebits(cred).subscribe((str: string) => { });
+        if(cred.amount != 'NaN'){
+          cred.amount = Number(cred.amount).toFixed(2);
+          this.apiService.insertDebits(cred).subscribe((str: string) => { });
+        }
       });
     } else {
       if (str == 'credits') {
         credits.forEach(cred => {
-          this.apiService.insertCredits(cred).subscribe((str: string) => { });
+          if(cred.amount != 'NaN'){
+            cred.amount = Number(cred.amount).toFixed(2);
+            this.apiService.insertCredits(cred).subscribe((str: string) => { });
+          }
         })
       }
     }
@@ -736,14 +739,23 @@ export class PeriodsComponent implements OnInit {
   }
 
   exportBilling() {
-    if (this.selected_accounts == "GET ALL") {
-      this.selected_accounts = this.accounts[0].idaccounts;
-      this.accounts.forEach((acc) => {
-        this.selected_accounts = this.selected_accounts + "," + acc.idaccounts;
+    let selectedPeriod:string = null;
+    let cnt:number = 0;
+      this.apiService.getPeriods().subscribe((pr:periods[])=>{
+        pr.forEach(p=>{
+          if(p.start.split("-")[1] == this.period.start.split("-")[1]){
+            cnt ++;
+            if(!isNullOrUndefined(selectedPeriod)){
+              selectedPeriod = selectedPeriod + "," + p.idperiods;
+            }else{
+              selectedPeriod = p.idperiods;
+            }
+            if(cnt == 2){
+              window.open("http://172.18.2.45/phpscripts/exportBilling.php?period=" + selectedPeriod + "&netsuit=" + this.selected_accounts, "_self")
+            }
+          }
+        })
       })
-    }
-    let end: Date = new Date(Number(this.period.start.split("-")[0]), Number(this.period.start.split("-")[1]), 0);
-    window.open("./../phpscripts/exportBilling.php?start=" + (this.period.start.split("-")[0] + "-" + (Number(this.period.start.split("-")[1])).toString().padStart(2, "0") + "-" + "01") + "&end=" + (end.getFullYear().toString() + "-" + (end.getMonth() + 1).toString().padStart(2, "0") + "-" + end.getDate().toString()) + "&account=" + this.selected_accounts, "_self")
   }
 
   setAccountingPolicy() {

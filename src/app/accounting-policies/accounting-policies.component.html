@@ -3,11 +3,6 @@
     <div class="row" style="margin-top:25px">
       <div class="d-flex justify-content-between mb-3 w-100">
         <div class="p-2">
-          <!--
-          <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'"
-            title="Import Closing Exceptions" data-toggle="modal" data-target="#import_modal">
-              <i class="fas fa-cloud-upload-alt"></i>
-          </button> -->
         </div>
         <div class="p-2" *ngIf="actualPeriod.status != '3'">
           <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"
@@ -16,37 +11,26 @@
           </button> 
         </div>
         <div class="p-2">
-          <!--
-          <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal" tittle="Search">
-            <i class="fas fa-search" (click)="getAccounting()"></i>
-          </button> -->
         </div>
         <div class="p-2">
-          <!--
-          <button class="btn btn-outline-success" title="Downlaod Policies Values">
-            <i class="fas fa-file-export"></i>
-          </button> -->
         </div>
         <div class="p-2">
-          <!--
-          <button class="btn btn-outline-success" [disabled]="actualPeriod.status != '3'"
-            title="Downlaod Paid Attendances">
-            <i class="fas fa-file-download"></i>
-          </button> -->
         </div>
       </div>
     </div>
     <div class="row p-2">
-      <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
-        <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
+      <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient($event.target.value)">
+        <option value="1">First Party</option>
+        <option value="2">Third Party</option>
+        <option value="3">QA</option>
+        <option value="4">Hr, Admin, Finance</option>
+        <option value="5">Zero Variance</option>
+        <option value="6">Arbonne</option>
+        <option value="-1" selected>All</option>
       </select>
     </div>
     <div class="row p-2">
-      <div class="list-group w-100" id="list-tab" role="tablist">
-        <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts" [tabindex]="acc.idaccounts"
-          [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}" style="cursor: pointer;"
-          (click)="setAccount(acc)">{{acc.name}}</a>
-      </div>
+
     </div>
   </div>
   <div class="col-md-10">
@@ -65,15 +49,17 @@
     <div class="row col-md-12" *ngIf="!isLoading && finished">
       <div class="col-md-2"></div>
       <div class="col-md-2">
-        <label>YEAR:</label>
-        <select class="form-control" (change)="setYear()" [(ngModel)]="selectedYear">
-          <option *ngFor="let year of years">{{year}}</option>
-        </select>
+        <!--
+          <label>YEAR:</label>
+          <select class="form-control" (change)="setYear()" [(ngModel)]="selectedYear">
+            <option *ngFor="let year of years">{{year}}</option>
+          </select>
+        -->
       </div>
       <div class="col-md-2"></div>
       <div class="col-md-4">
         <label>PERIOD:</label>
-        <select class="form-control" [(ngModel)]="actualPeriod.idperiods" (change)="setActualPeriod()">
+        <select class="form-control" [(ngModel)]="selectedPeriod" (change)="setActualPeriod($event.target.value)">
           <option *ngFor="let period of periods" [value]="period.idperiods">{{period.start}} TO {{period.end}}
           </option>
         </select>
@@ -86,48 +72,73 @@
           <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
             <a class="nav-item nav-link active" id="nav-Policies-tab" data-toggle="tab" href="#nav-Policies" role="tab"
               aria-controls="nav-Policies" aria-selected="true">
-              Accounting Policies
+              Cost Policy
             </a>
           </div>
         </nav>
       </div>
+      <div class="form-group col-md-12" style="margin-top: 20px;">
+        <div class="form-row">
+          <div class="col-md-1">
+            <label>Correlative:</label>
+            <input type="text" class="form-control" [(ngModel)]="header.correlative" disabled="true">
+          </div>
+          <div class="col-md-3">
+            <label>Date:</label>
+            <input type="date" class="form-control" [(ngModel)]="header.poldate">
+          </div>
+          <div class="col-md-3">
+            <label>Type:</label>
+            <select class="form-control" [(ngModel)]="header.type" (change)="setHeaderType($event.target.value)">
+              <option *ngFor='let type of policeTypes' [value]="type.id">{{ type.description }}</option>
+            </select>
+          </div>
+          <div class="col-md-5">
+            <label>Description:</label>
+            <input type="text" class="form-control" [(ngModel)]="header.description">
+          </div>
+        </div>
+      </div>
+    
       <div class="tab-content" id="nav-tabContent" style="margin-top:10px">
-        <div class="tab-pane fade show active" id="nav-Policies" role="tabpanel" aria-labelledby="nav-Policies-tab">
-          <table class="table table-striped" #userTable>
-            <thead>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>CLASIFICATION</th>
-              <th>DEPARTMENT</th>
-              <th>CLASS</th>
-              <th>SITE</th>
-              <th>DEBIT</th>
-              <th>CREDIT</th>
-              <th>CLIENT</th>
-            </thead>
-            <tbody>
-              <tr *ngFor="let acp of accountingPolicies" data-toggle="modal"
-                data-target="#attendance_detail">
-                <td>{{acp.external_id}}</td>
-                <td>{{acp.name}}</td>
-                <td>{{acp.clasif}}</td>
-                <td>{{acp.department}}</td>
-                <td>{{acp.class}}</td>
-                <td>{{acp.site}}</td>
-                <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
-                <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ zero | number: '1.2-3' }} </td>
-                <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ zero | number: '1.2-3' }}</td>
-                <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
-                <td>{{acp.clientNetSuite}}</td>
-              </tr>
-              <tr>
-                <td colspan="6" style="align-content: center; text-align: center;">{{ finalRow }}</td>
-                <td>{{ totalDebe | number: '1.2-3' }}</td>
-                <td>{{ totalHaber | number: '1.2-3' }}</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="p-2 justify-content-center">
+          <div class="tab-pane fade show active" id="nav-Policies" role="tabpanel" aria-labelledby="nav-Policies-tab">
+            <table class="table table-striped" #userTable>
+              <thead>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>CLASIFICATION</th>
+                <th>DEPARTMENT</th>
+                <th>CLASS</th>
+                <th>SITE</th>
+                <th>DEBIT</th>
+                <th>CREDIT</th>
+                <th>CLIENT</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let acp of accountingPolicies" data-toggle="modal"
+                  data-target="#attendance_detail">
+                  <td>{{acp.external_id}}</td>
+                  <td>{{acp.name}}</td>
+                  <td>{{acp.clasif}}</td>
+                  <td>{{acp.department}}</td>
+                  <td>{{acp.class}}</td>
+                  <td>{{acp.site}}</td>
+                  <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
+                  <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ zero | number: '1.2-3' }} </td>
+                  <td *ngIf="acp.clasif == 'D'" style="text-align: right;">{{ zero | number: '1.2-3' }}</td>
+                  <td *ngIf="acp.clasif == 'H'" style="text-align: right;">{{ acp.amount | number: '1.2-3' }}</td>
+                  <td>{{acp.clientNetSuite}}</td>
+                </tr>
+                <tr>
+                  <td colspan="6" style="align-content: center; text-align: center;">{{ finalRow }}</td>
+                  <td>{{ totalDebe | number: '1.2-3' }}</td>
+                  <td>{{ totalHaber | number: '1.2-3' }}</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

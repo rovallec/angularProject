@@ -364,6 +364,9 @@ export class disciplinary_processes {
     day_2: string;
     day_3: string;
     day_4: string;
+    //Extra
+    nearsol_id:string;
+    client_id:string;
     constructor() {
         this.id_user = null;
         this.id_employee = null;
@@ -395,6 +398,8 @@ export class disciplinary_processes {
         this.day_2 = null;
         this.day_3 = null;
         this.day_4 = null;
+        this.nearsol_id = null;
+        this.client_id = null;
     }
 }
 
@@ -1681,7 +1686,36 @@ export class policies {
     }
 }
 
+export class policyHeader {
+    idpolicie: string;
+    correlative: string;
+    date: string;
+    type: string;
+    description: string;
+    id_period: string;
+    detail: accountingPolicies[];
+    constructor() {
+        this.idpolicie = null;
+        this.correlative = null;
+        this.date = null;
+        this.type = null;
+        this.description = null;
+        this.id_period = null;
+        this.detail = [];
+    }
+}
+
+export class selectedOption {
+    id: number
+    description: string;
+    constructor() {
+        this.id = null;
+        this.description = null;
+    }
+}
+
 export class accountingPolicies {
+    idaccounting_accounts: string;
     external_id: string;
     name: string;
     clasif: string;
@@ -1694,6 +1728,7 @@ export class accountingPolicies {
     idaccounts: string;
     idperiod: string;
     constructor() {
+        this.idaccounting_accounts = null;
         this.external_id = null;
         this.name = null;
         this.clasif = null;
@@ -1719,7 +1754,7 @@ export class AccountingAccounts {
         this.external_id = null;
         this.name = null;
         this.clasif = null;
-        this.clasif = null;
+        this.idperiod = null;
     }    
 }
 

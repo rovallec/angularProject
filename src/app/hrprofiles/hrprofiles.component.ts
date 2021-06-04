@@ -135,6 +135,8 @@ export class HrprofilesComponent implements OnInit {
 
   currentPayVacations:boolean = false;
 
+  transfer_newCode:string = '';
+
 
   reasons: string[] = [
     "Asistencia",
@@ -438,12 +440,12 @@ export class HrprofilesComponent implements OnInit {
   getVacations() {
     let found:boolean = false;
     let vacYears: vacyear[] = [];
+    this.vac = [];
     this.earnVacations = this.vacationsEarned * 1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
       this.showVacations = res;
-
       this.showVacations.forEach(sv => {
         sv.year = new Date(sv.took_date).getFullYear();
       })
@@ -473,6 +475,14 @@ export class HrprofilesComponent implements OnInit {
           vacYear.vacations.push.apply(vacYear.vacations, VacFiltered);
           this.vac.push(vacYear);
         }
+
+        this.vac.sort((a,b)=>a.year-b.year);
+
+        vacYears.forEach(vv=>{
+          if(vv.year.toString() == new Date().getFullYear().toString()){
+            vv.selected = true;
+          }
+        })
       })
 
       if (this.complete_adjustment && !found) {
@@ -480,7 +490,6 @@ export class HrprofilesComponent implements OnInit {
       }
       this.availableVacations = this.earnVacations - this.tookVacations;
     })
-    console.log(this.vac);
   }
 
   addVacation(action: string, type: string) {
@@ -516,7 +525,6 @@ export class HrprofilesComponent implements OnInit {
   }
 
   insertVacation() {
-    console.log(this.activeVacation);
     this.apiService.insertVacations(this.activeVacation).subscribe((str: any) => {
       this.complete_adjustment = true;
       this.getVacations();
@@ -917,6 +925,7 @@ export class HrprofilesComponent implements OnInit {
     this.actuallProc.user_name = this.authUser.getAuthusr().user_name;
     this.actuallProc.id_user = this.authUser.getAuthusr().iduser;
     this.actuallProc.id_profile = this.activeEmp;
+    this.transfer_newCode = this.workingEmployee.nearsol_id;
     switch (this.actuallProc.name) {
       case 'Supervisor Survey':
         this.actuallProc.descritpion = null;
@@ -924,7 +933,6 @@ export class HrprofilesComponent implements OnInit {
       case 'Advance':
           this.actualAdvance = new advances;
           this.actuallProc.status = 'PENDING';
-          console.log("here");
           break;
       case 'Rise':
         this.actualRise = new rises;
@@ -1017,7 +1025,6 @@ export class HrprofilesComponent implements OnInit {
             }else{
               window.alert("An error has occured:\n" + str.split("|")[1]);
               proc.notes = this.actuallProc.descritpion + "|" + ("An error has occured:" + str.split("|")[1]);
-              console.log(proc);
               this.apiService.updatehr_process(proc).subscribe((str:string)=>{});
             }
           })
@@ -1036,7 +1043,6 @@ export class HrprofilesComponent implements OnInit {
               this.cancelView();           
             } else {
               window.alert("An error has occured:\n" + str.split("|")[1]);
-                console.log(str.split("|")[0]);
             }
           })
           break;
@@ -1065,7 +1071,6 @@ export class HrprofilesComponent implements OnInit {
                 this.cancelView();
               } else {
                 window.alert("An error has occured:\n" + str.split("|")[1]);
-                console.log(str.split("|")[0]);
               }
             })        
           }
@@ -1163,7 +1168,8 @@ export class HrprofilesComponent implements OnInit {
                               let emp_toUpdate = new employees;
                               emp_toUpdate.idemployees = this.workingEmployee.idemployees;
                               emp_toUpdate.platform = "nearsol_id";
-                              emp_toUpdate.society = this.actuallProc.idprocesses;
+                              emp_toUpdate.society = this.transfer_newCode;
+                              emp_toUpdate.id_profile = this.route.snapshot.paramMap.get('id'); 
                               this.apiService.updateEmployee(emp_toUpdate).subscribe((str:string)=>{
                                 window.alert("Record successfuly inserted");
                               })
@@ -2063,7 +2069,6 @@ export class HrprofilesComponent implements OnInit {
             });
           } else {
             window.alert("An error has occured:\n" + fams.split("|")[1]);
-              console.log(fams.split("|")[0]);
           }          
         });
       } else if (this.edition_status=='Edit') {
@@ -2076,7 +2081,6 @@ export class HrprofilesComponent implements OnInit {
             });
           } else {
             window.alert("An error has occured:\n" + fams.split("|")[1]);
-              console.log(fams.split("|")[0]);
           }          
         });
       }
@@ -2092,6 +2096,19 @@ export class HrprofilesComponent implements OnInit {
   updateVacation(){
     this.apiService.updateVacations(this.activeVacation).subscribe((str:string)=>{
       window.alert("Change successfuly recorded");
+      let revertVac:vacations = new vacations;
+      revertVac.date = this.activeVacation.date;
+      revertVac.took_date =  this.todayDate;
+      revertVac.id_department = this.authUser.getAuthusr().department;
+      revertVac.id_employee = this.route.snapshot.paramMap.get('id');
+      revertVac.id_type = '3';
+      revertVac.action = "Add";
+      revertVac.count = this.activeVacation.count;
+      revertVac.id_user = this.authUser.getAuthusr().iduser;
+      revertVac.notes = "Revert From Dismissed";
+      revertVac.status = 'COMPLETED';
+      this.activeVacation = revertVac;
+      this.insertVacation();
       this.cancelView();
     })
   }

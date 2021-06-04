@@ -128,7 +128,7 @@ SELECT DISTINCT
   IF(j.type = 'Bonos Diversos',         ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonosDiversos',
   IF(j.type='BONOS POR ASISTENCIA',     ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonoPorAsistencia',
   IF(j.type='TREASURE HUNT',            ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'TreasureHunt',
-  IF(j.type='BONO POR REFERIDOS',       ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonosPorReferidos', 
+  IF(j.type like '%RAF%',                 ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonosPorReferidos', 
   IF(j.type='BONOS POR RECLUTAMIENTO',  ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonosPorReclutamiento'
 FROM employees a
 INNER JOIN hires b ON (a.id_hire = b.idhires) 

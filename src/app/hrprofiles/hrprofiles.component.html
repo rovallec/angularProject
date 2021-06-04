@@ -268,16 +268,16 @@
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
-                                <table style="width:98%; padding: 1%;" class="table table-light table-hover">
-                                    <tbody *ngFor="let v of vac" (click)="v.vacSelected(!v.selected)">
-                                        <tr style="height: 30px; font-weight: bold;">
+                                <table style="width:98%; padding: 1%;" class="table">
+                                    <tbody *ngFor="let v of vac">
+                                        <tr style="height: 30px; font-weight: bold;" class="tr-hover" (click)="v.vacSelected(!v.selected)">
                                             <td style="align-items: center; text-align: center;">
                                                 <i class="far fa-plus-square" *ngIf="v.selected==false" ([ngModel])="v"></i>
                                                 <i class="far fa-minus-square" *ngIf="v.selected==true" ([ngModel])="v"></i>
                                                 Year: {{ v.year }}
                                             </td>
                                         </tr>
-                                        <tr *ngIf="v.selected==true">
+                                        <tr *ngIf="v.selected==true" class="tr-nohover">
                                             <td>
                                                 <table style="width:98%; padding: 1%;" class="table table-striped table-hover">
                                                     <thead>
@@ -1570,7 +1570,7 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label>New Code:</label>
-                                <input type="text"[disabled]="viewRecProd" [(ngModel)]="actuallProc.idprocesses" class="form-control">
+                                <input type="text"[disabled]="viewRecProd" [(ngModel)]="transfer_newCode" class="form-control">
                             </div>
                             <div class="form-group col-md-3"></div>
                         </div>
@@ -1944,7 +1944,7 @@
                             <div class="form-group col-md-4">
                                 <label>Type:</label>
                                 <select class="form-control" [(ngModel)]="actualAdvance.type" [disabled]="viewRecProd">
-                                    <option>Salario</option>
+                                    <option>Sueldo</option>
                                     <option>Bono 14</option>
                                     <option>Aguinaldo</option>
                                 </select>

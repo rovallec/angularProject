@@ -9,19 +9,14 @@ require 'funcionesVarias.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-$AID_Period = ($request->idperiod);
-$v_account = validateDataToZero($request->idaccounts);
-/* Queda pendiente aplicar filtro por cliente y cuenta 
-
-$v_id_client = validateDataToZero($request->id_client);
-*/
+$ID_Period = ($request->idperiod);
+$clientNetSuite = $request->idaccounts;
 $exportRow = [];
 
 $i = 0;
-$sql1 = "SELECT COUNT(*) AS account FROM policies WHERE id_period = $AID_Period;";
-$sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $AID_Period;";
+$sql1 = "SELECT COUNT(*) AS account FROM policies WHERE id_period = $ID_Period;";
+$sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
 
-try {
   if ($result1 = mysqli_query($con,$sql1)){
     $row1 = mysqli_fetch_assoc($result1);
     if ($result11 = mysqli_query($con,$sql11)) {
@@ -48,148 +43,558 @@ try {
     echo($error);
     echo($sql1);
   }
-  $account = $row1['account'];
 
-  if ($account == 0) {
-    $sql2 = "SELECT idaccounts FROM accounts;";
-    $today = date("Y/m/d");
+  $sql4 = "SELECT 
+            A1.amount AS amount,
+            A1.idemployees,
+            A1.external_id,
+            A1.department, 
+            A1.class, 
+            A1.site,
+            A1.idaccounts,
+            A1.id_client,
+            A1.clientNetSuite,
+            aa.clasif, aa.name, aa.idaccounting_accounts FROM (
+            SELECT 
+              '51001' AS external_id,                
+              ROUND(SUM(cred.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            and ((cred.type='Salario Base' and ((e.job_type != 1) or (e.job_type is null)))
+                or cred.type like '%Horas%Extra%' 
+                or cred.type like '%Horas%de%Asueto%')
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '51021' AS external_id,  
+              ROUND(sum(cred.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            AND ((cred.type != 'Salario Base' 
+                AND cred.type not like '%Horas Extra%' 
+                AND cred.type not like '%Horas de Asueto%'
+                AND cred.type not like '%RAF%'
+                AND (e.job_type != 1 OR e.job_type IS NULL))
+            OR (e.job_type = 1 AND (
+                    cred.type != 'Salario Base'
+                    AND cred.type not like '%Horas Extra%' 
+                    AND cred.type not like '%Horas de Asueto%'
+                    AND cred.type not like '%RAF%'
+                    AND cred.type != 'Bonificacion Productividad'
+                    AND cred.type != 'Bonificacion Decreto'
+                  )
+                )
+              )
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '51004' AS external_id,
+              ROUND(SUM(cred.amount) * 0.1267, 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            AND ((cred.type='Salario Base' and ((e.job_type != 1) or (e.job_type is null)))
+                or cred.type like '%Horas Extra%' 
+                or cred.type like '%Horas de Asueto%')
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '65002' AS external_id,
+              ROUND(SUM(cred.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            AND cred.type LIKE'%RAF%'
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            SELECT '51010' AS external_id,
+              ROUND(SUM((IF(e.hiring_date>p.start,
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                  IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                  )) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.base_complete/2)),2)
+              AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            SELECT '51017' AS external_id,
+            ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.0972*(pay.base_complete/2)),2) AS amount,
+                pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            SELECT '51012' AS external_id,
+            ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.base_complete/2)),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            SELECT '51014' AS external_id,
+            ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.04166666666*(pay.base_complete/2)),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            SELECT '51013' AS external_id,
+              ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.productivity_complete/2)),2) AS amount,
+                pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            SELECT '51011' AS external_id,
+              ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.productivity_complete/2)),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            SELECT '51015' AS external_id,
+              ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.041666666*(pay.productivity_complete/2)),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT '21082' AS external_id,
+            ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.0972*(pay.base_complete/2)),2) AS amount,
+                pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT '21074' AS external_id,
+            ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.04166666666*(pay.base_complete/2)),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT '21079' AS external_id,
+            ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.base_complete/2)),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT '21075' AS external_id,
+              ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.041666666*(pay.productivity_complete/2)),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT '21078' AS external_id,
+              ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.productivity_complete/2)),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT '21080' AS external_id,
+              ROUND(SUM((IF(e.hiring_date>p.start,
+              IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, e.hiring_date),DATEDIFF(p.end, e.hiring_date)),
+                IF(term.valid_from IS NOT NULL,DATEDIFF(`term`.valid_from, p.start)+1,DATEDIFF(p.end, p.start)+1)
+                )) / (DATEDIFF(p.end, p.`start`)+1) *0.08333333333*(pay.productivity_complete/2)),2) AS amount,
+                pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            INNER JOIN periods p ON (p.idperiods = pay.id_period)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
+                        INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
+                        WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+            WHERE pay.id_period = $ID_Period
+            AND ((e.job_type != 1) or (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '21086' AS external_id,                ROUND(SUM(cred.amount) * 0.1267, 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (e.idemployees = pay.id_employee)
+            WHERE pay.id_period = $ID_Period
+            AND ((cred.type ='Salario Base' and ((e.job_type != 1) or (e.job_type is null)))
+                or cred.type like '%Horas Extra%' 
+                or cred.type like '%Horas de Asueto%')
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            /* CREDITOS OPERADORES */
+            SELECT 
+              '21072' AS external_id,
+              ROUND(SUM(cred.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = 34
+            AND a2.clientNetSuite = 1
+            AND ((e.job_type != 1 ) OR (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            /* DEBITOS OPERADORES */
+            SELECT 
+              '21072' AS external_id,
+              -1*ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = 34
+            AND a2.clientNetSuite = 1
+            AND ((e.job_type != 1 ) OR (e.job_type is null))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            /* CREDITOS SUPERVISORES */
+            SELECT 
+              '21072' AS external_id,
+              ROUND(SUM(cred.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = 34
+            AND a2.clientNetSuite = 1
+            AND (cred.`type` NOT IN('Bonificacion Productividad', 'Salario Base', 'Bonificacion Decreto') AND (e.job_type = 1))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            /* DEBITOS SUPERVISORES */
+            SELECT 
+              '21072' AS external_id,
+              -1*ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = 34
+            AND a2.clientNetSuite = 1
+            AND (deb.`type` NOT LIKE '%igss%' AND (e.job_type = 1))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            /* IGSS */
+            SELECT 
+              '21072' AS external_id,
+              -1*ROUND(SUM(cred.amount) * 0.0483, 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = 34
+            AND a2.clientNetSuite = 1
+            AND ((cred.`type` LIKE'%Horas%extra%' OR cred.`type` LIKE'%horas%de%asueto%') AND (e.job_type = 1))
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '46000' AS external_id,
+              ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            AND deb.type like'%bus%'
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '23010' AS external_id,
+              ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            and deb.type='CAR PARKING'
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees              
+            UNION 
+            SELECT 
+              '23010' AS external_id,
+              ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            AND deb.type='MOTORCYCLE PARKING'
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '61407' AS external_id,
+              ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            and (deb.type IN('TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso')
+            or deb.type like'%Headset%')
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT  
+              '22030' AS external_id,
+              ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            AND deb.type='ISR'
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION
+            SELECT external_id, ROUND(SUM(`temp`.amount),2), id_account_py, department, class, site, clientNetSuite, id_client, idaccounts, idemployees FROM
+            (
+            SELECT 
+              '21085' AS external_id,
+              ROUND(SUM(deb.amount),2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            and deb.type like'%IGSS%'    
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            union
+            SELECT 
+              '21085' AS external_id,
+              -1*ROUND(SUM(cred.amount)*0.0483, 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            and (cred.type='Salario Base' and ((e.job_type = 1)))    
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            ) AS `temp` GROUP BY external_id, id_account_py, department, class, site, clientNetSuite, id_client, idaccounts, idemployees
+            UNION 
+            SELECT 
+              '13020' AS external_id,
+              ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            AND (type like'%personal%'
+                OR TYPE LIKE '%ajuste%'
+                OR TYPE LIKE '%prestamo%'
+                OR TYPE LIKE '%anticipo%'
+                OR TYPE LIKE '%adelanto%')
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '22050' AS external_id,
+              ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            AND deb.type='Boleto de Ornato'
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            UNION 
+            SELECT 
+              '21083' AS external_id,
+              ROUND(SUM(deb.amount), 2) AS amount,
+              pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
+            FROM payments pay
+            INNER JOIN periods per ON (pay.id_period = per.idperiods)
+            INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
+            INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
+            INNER JOIN employees e ON (pay.id_employee = e.idemployees)
+            WHERE pay.id_period = $ID_Period
+            and deb.type IN('Descuento Judicial')
+            GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
 
-    if($result2 = mysqli_query($con,$sql2)){
-      while($row2 = mysqli_fetch_assoc($result2)){
-        $v_account = $row2['idaccounts'];      
-        $sql30 = "SET @V_DAYS_ON_MONTH = '$V_DAYS_ON_MONTH';";
-        if ($result30 = mysqli_query($con,$sql30)) {
-          $i = 0;
-          $sql32 = "SELECT DISTINCT idaccounting_accounts, external_id, name, clasif FROM accounting_accounts;";
-          if($result32 = mysqli_query($con,$sql32)){
-            while($row32 = mysqli_fetch_assoc($result32)) {
-              $V_ID_ACCOUNTING = $row32['idaccounting_accounts'];
-              $V_EXTERNAL_ID = $row32['external_id'];
-              $V_NAME_ACCOUNT = $row32['name'];
-              $V_CLASIF = $row32['clasif'];
-              $sql31 = "SET @V_EXTERNAL_ID = '$V_EXTERNAL_ID';";
-              if ($result31 = mysqli_query($con,$sql31)) {
-                //no hace nada, solo setea la variable.
-              }
-              $sql4 = "SELECT DISTINCT " .
-                    "COALESCE( " .
-                      "CASE " .
-                        "WHEN @V_EXTERNAL_ID IN('51001') THEN ROUND((SUM(pay.base_complete) / 2), 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51021') THEN ROUND(SUM(pay.productivity_complete) / 2, 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51004') THEN ROUND((SUM(pay.base_complete) * 0.1267) / 2, 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51010') THEN ROUND(SUM(IF(cred.type='aguinaldo',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51017') THEN ROUND(SUM(IF(cred.type='idemnizacion',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51012') THEN ROUND(SUM(IF(cred.type='bono14',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51014') THEN ROUND(SUM(IF(cred.type='HR Vacations Payed',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '65002' THEN ROUND(SUM(IF(cred.type='bonificacion RAF',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51011') THEN ROUND(SUM((pay.base_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.083333), 2) + ROUND(SUM((pay.productivity_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.083333), 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51013') THEN ROUND(SUM((pay.base_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.083333), 2) + ROUND(SUM((pay.productivity_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.083333), 2) " .
-                        "WHEN @V_EXTERNAL_ID IN('51015') THEN ROUND(SUM((pay.base_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.0417), 2) + ROUND(SUM((pay.productivity_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.0417), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21082' THEN ROUND(SUM(IF(cred.type='idemnizacion',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21074' THEN ROUND(SUM(IF(cred.type='HR Vacations Payed',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21077' THEN ROUND(SUM(IF(cred.type='aguinaldo',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21079' THEN ROUND(SUM(IF(cred.type='bono14',cred.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21075' THEN ROUND(SUM((pay.base_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.0417), 2) + ROUND(SUM((pay.productivity_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.0417), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21078' THEN ROUND(SUM((pay.base_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.083333), 2) + ROUND(SUM((pay.productivity_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.083333), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21080' THEN ROUND(SUM((pay.base_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.083333), 2) + ROUND(SUM((pay.productivity_complete / @V_DAYS_ON_MONTH * (ROUND(pay.base_hours / 8, 0)) ) * 0.083333), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21086' THEN ROUND(SUM(pay.base_complete) * 0.1267, 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21072' THEN ROUND((SUM(pay.base_complete) / 2), 2) + ROUND(SUM(pay.productivity_complete) / 2, 2) + ROUND(SUM(IF(cred.type='aguinaldo',cred.amount, 0)), 2) + " .
-                        "                        ROUND(SUM(IF(cred.type='bonificacion RAF',cred.amount, 0)), 2) + " .
-                        "            (-1  * (ROUND(SUM(IF(deb.type='BUS TRANSPORTATION',deb.amount, 0)), 2) + ROUND(SUM(IF(deb.type='CAR PARKING',deb.amount, 0)), 2) + ROUND(SUM(IF(deb.type='MOTORCYCLE PARKING',deb.amount, 0)), 2) + " .
-                        "            ROUND(SUM(IF(deb.type IN('HEADSET', 'Descuento Por Servicio de Active Parking', 'TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso'),deb.amount, 0)), 2) + ROUND(SUM(IF(deb.type='ISR',deb.amount, 0)), 2) + " .
-                        "            ROUND(SUM(IF(deb.type='Descuento IGSS',deb.amount, 0)), 2) + ROUND(SUM(IF(deb.type='PERSONAL LOAN',deb.amount, 0)), 2) + ROUND(SUM(IF(deb.type='Boleto de Ornato',deb.amount, 0)), 2) + " .
-                        "            ROUND(SUM(IF(deb.type IN('Descuento Judicial', 'Acuerdo Judicial'),deb.amount, 0)), 2) )) " .
-                        "WHEN @V_EXTERNAL_ID = '46000' THEN ROUND(SUM(IF(deb.type='BUS TRANSPORTATION',deb.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '46000' THEN ROUND(SUM(IF(deb.type='CAR PARKING',deb.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '46000' THEN ROUND(SUM(IF(deb.type='MOTORCYCLE PARKING',deb.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '46000' THEN ROUND(SUM(IF(deb.type IN('HEADSET', 'Descuento Por Servicio de Active Parking', 'TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso'),deb.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21081' THEN ROUND(SUM(IF(deb.type='ISR',deb.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21085' THEN ROUND(SUM(IF(deb.type='Descuento IGSS',deb.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '46000' THEN ROUND(SUM(IF(deb.type='PERSONAL LOAN',deb.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '22050' THEN ROUND(SUM(IF(deb.type='Boleto de Ornato',deb.amount, 0)), 2) " .
-                        "WHEN @V_EXTERNAL_ID = '21083' THEN ROUND(SUM(IF(deb.type IN('Descuento Judicial', 'Acuerdo Judicial'),deb.amount, 0)), 2) " .
-                      "ELSE 0.00 " .
-                    "END, 0.00) AS amount, pay.id_account_py, COALESCE(a2.department, '') AS department, COALESCE(a2.class, '') AS class, COALESCE(a2.site, '') AS site, COALESCE(a2.clientNetSuite, '') AS clientNetSuite, a2.id_client, a2.idaccounts " .
-                  "FROM payments pay " .
-                  "INNER JOIN periods per ON (pay.id_period = per.idperiods) " .
-                  "LEFT JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts) " .
-                  "LEFT JOIN debits deb ON (pay.idpayments = deb.id_payment) " .
-                  "LEFT JOIN credits cred ON (pay.idpayments = cred.id_payment) " .
-                  "WHERE pay.id_period = $AID_Period " .
-                  "AND pay.id_account_py = $v_account;";
-                  
-              if ($result4 = mysqli_query($con,$sql4)) {
-                while($row4 = mysqli_fetch_assoc($result4)){
-                  $exportRow[$i]['external_id'] = $V_EXTERNAL_ID;
-                  $exportRow[$i]['name'] = $V_NAME_ACCOUNT;
-                  $exportRow[$i]['clasif'] = $V_CLASIF;
-                  $exportRow[$i]['department'] = ($row4['department']);
-                  $exportRow[$i]['class'] = ($row4['class']);
-                  $exportRow[$i]['site'] = ($row4['site']);
-                  $exportRow[$i]['amount'] = ($row4['amount']);
-                  $exportRow[$i]['clientNetSuite'] = ($row4['clientNetSuite']);
-                  $exportRow[$i]['id_client'] = ($row4['id_client']);
-                  $exportRow[$i]['idaccounts'] = ($row4['idaccounts']);
-                  
-                  $i++;
-                }
-              } else {
-                http_response_code(404);
-                echo($con->error);
-                echo($sql4);
-              }
-            }
-          } else {
-            http_response_code(432);
-            echo($con->error);
-            echo($sql32);
-          }
-        } else {
-          http_response_code(430);
-          echo($con->error);
-          echo($sql30);
-        }
+          ) AS A1 
+          INNER JOIN accounting_accounts aa on (A1.external_id = aa.external_id)
+          WHERE ((A1.clientNetSuite = $clientNetSuite) OR ($clientNetSuite = -1))
+          ORDER BY A1.clientNetSuite;";
+
+    if ($result4 = mysqli_query($con,$sql4)) {
+      while($row4 = mysqli_fetch_assoc($result4)){
+        $exportRow[$i]['idaccounting_accounts'] = $row4['idaccounting_accounts'];
+        $exportRow[$i]['external_id'] = $row4['external_id'];
+        $exportRow[$i]['name'] = $row4['name'];
+        $exportRow[$i]['clasif'] = $row4['clasif'];
+        $exportRow[$i]['department'] = ($row4['department']);
+        $exportRow[$i]['class'] = ($row4['class']);
+        $exportRow[$i]['site'] = ($row4['site']);
+        $exportRow[$i]['amount'] = ($row4['amount']);
+        $exportRow[$i]['clientNetSuite'] = ($row4['clientNetSuite']);
+        $exportRow[$i]['idaccounts'] = ($row4['idaccounts']);
+        $exportRow[$i]['id_client'] = ($row4['id_client']);
+        $i++;
       }
-    } else {
-      http_response_code(402);
-      echo($con->error);
-      echo($sql2);
-    }
-  } else {  
-    $sql5 = "SELECT
-              a.id_period,
-              d.name as account,
-              c.external_id,
-              c.name,
-              COALESCE(b.amount, 0.00) AS amount
-            FROM policies a
-            LEFT JOIN policy_details b ON (a.idpolicies = b.id_policy)
-            LEFT JOIN accounting_accounts c on (b.id_ccounting_account = c.idaccounting_accounts)
-            LEFT JOIN accounts d on (a.id_account = d.idaccounts)
-            WHERE a.id_period = $AID_Period;";
-
-    if($result5 = mysqli_query($con,$sql5)){
-      $i = 0;
-      while($row5 = mysqli_fetch_assoc($result5)){
-          $exportRow[$i][0] = $row5['id_period'];
-          $exportRow[$i][1] = $row5['account'];
-          $exportRow[$i][2] = $row5['external_id'];
-          $exportRow[$i][3] = $row5['name'];
-          $exportRow[$i][4] = $row5['amount'];
-          $i++;
-      }
-      echo(json_encode($exportRow));
+      $resultF = json_encode($exportRow);
+      echo($resultF);
     }else{
-      http_response_code(405);
-      echo($con->error);
-      echo($sql5);
+      echo($sql4);
     }
-  }
-
-  $resultado = json_encode($exportRow);
-  echo($resultado);
-}
-catch (\Throwable $th) {
-  //throw $th;
-}
 ?>

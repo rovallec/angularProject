@@ -262,12 +262,12 @@
                                         </td>
                                         <td (click)="showReg(att)">{{att.balance}}</td>
                                         <td *ngIf="att.state!='edit'">
-                                            <button (click)="editRoster(att)" data-toggle="tooltip" data-placement="top" title="Edit Roster">
+                                            <button (click)="editRoster(att)" data-toggle="tooltip" data-placement="top" title="Edit Roster"  class="form-control btn btn-outline-secondary" style="padding:0px; width: 50px; height: 25px;">
                                                 <i class="fas fa-exchange-alt"></i>
                                             </button>
                                         </td>
                                         <td *ngIf="att.state=='edit'">
-                                            <button (click)="SaveRoaster(att)" data-toggle="tooltip" data-placement="top" title="Save Roster">
+                                            <button (click)="SaveRoaster(att)" data-toggle="tooltip" data-placement="top" title="Save Roster"  class="form-control btn btn-outline-secondary" style="padding:0px; width: 50px; height: 25px;">
                                                 <i class="fas fa-save"></i>
                                             </button>
                                         </td>
