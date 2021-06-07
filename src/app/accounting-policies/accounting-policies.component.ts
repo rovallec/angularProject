@@ -118,11 +118,6 @@ export class AccountingPoliciesComponent implements OnInit {
     let filteredap: accountingPolicies[] = [];
     this.totalDebe = '0';
     this.totalHaber = '0';
-    this.isLoading = true;
-    this.finished = false;
-    this.progress = 1;
-    this.max_progress = 100;
-    this.step = 'Obtaining data.';
     this.finalRow = 'Obtaining data...';
     try {
       this.accountingPolicies = [new accountingPolicies];
@@ -146,26 +141,19 @@ export class AccountingPoliciesComponent implements OnInit {
           } else {
             this.finalRow = 'TOTAL ROWS: ' + String(this.accountingPolicies.length);
           }  
-        })
-          
-        for (let index = 0; index < this.accountingPolicies.length; index++) {
-          this.accountingPolicies[index].idperiod = this.actualPeriod.idperiods;
-          if (this.accountingPolicies[index].clasif == 'D') {
-            this.totalDebe = String(Number(this.totalDebe) + Number(this.accountingPolicies[index].amount));
-          } else {
-            this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
+          for (let index = 0; index < this.accountingPolicies.length; index++) {
+            this.accountingPolicies[index].idperiod = this.actualPeriod.idperiods;
+            if (this.accountingPolicies[index].clasif == 'D') {
+              this.totalDebe = String(Number(this.totalDebe) + Number(this.accountingPolicies[index].amount));
+            } else {
+              this.totalHaber = String(Number(this.totalHaber) + Number(this.accountingPolicies[index].amount));
+            }
           }
-        }
-      
-        this.progress = this.progress + 1;
+        })
       })
     }
     finally {
-      this.progress = 0;
-      this.max_progress = 0;
-      this.step = 'Finalizado.';
-      this.finished = true;
-      this.isLoading = false;
+      // no hacer nada por el momento.
     }
   }
 

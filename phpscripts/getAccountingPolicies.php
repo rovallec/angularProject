@@ -371,7 +371,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
             INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
             INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
             INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-            WHERE pay.id_period = 34
+            WHERE pay.id_period = $ID_Period
             AND a2.clientNetSuite = 1
             AND ((e.job_type != 1 ) OR (e.job_type is null))
             GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
@@ -386,7 +386,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
             INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
             INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
             INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-            WHERE pay.id_period = 34
+            WHERE pay.id_period = $ID_Period
             AND a2.clientNetSuite = 1
             AND ((e.job_type != 1 ) OR (e.job_type is null))
             GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
@@ -401,7 +401,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
             INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
             INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
             INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-            WHERE pay.id_period = 34
+            WHERE pay.id_period = $ID_Period
             AND a2.clientNetSuite = 1
             AND (cred.`type` NOT IN('Bonificacion Productividad', 'Salario Base', 'Bonificacion Decreto') AND (e.job_type = 1))
             GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
@@ -416,9 +416,9 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
             INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
             INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
             INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-            WHERE pay.id_period = 34
+            WHERE pay.id_period = $ID_Period
             AND a2.clientNetSuite = 1
-            AND (deb.`type` NOT LIKE '%igss%' AND (e.job_type = 1))
+            AND ((deb.`type` NOT LIKE '%IGSS%') AND (e.job_type = 1))
             GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
             UNION
             /* IGSS */
@@ -431,9 +431,9 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
             INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
             INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
             INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-            WHERE pay.id_period = 34
+            WHERE pay.id_period = $ID_Period
             AND a2.clientNetSuite = 1
-            AND ((cred.`type` LIKE'%Horas%extra%' OR cred.`type` LIKE'%horas%de%asueto%') AND (e.job_type = 1))
+            AND (((cred.`type` LIKE'%Horas%extra%') OR (cred.`type` LIKE'%horas%de%asueto%')) AND (e.job_type = 1))
             GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
             UNION 
             SELECT 
@@ -474,7 +474,7 @@ $sql11 = "SELECT a.end FROM periods a WHERE a.idperiods = $ID_Period;";
             GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
             UNION 
             SELECT 
-              '61407' AS external_id,
+              '23010' AS external_id,
               ROUND(SUM(deb.amount), 2) AS amount,
               pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts,e.idemployees
             FROM payments pay
