@@ -42,20 +42,21 @@
         echo("1|1|$start_period_date_dmy|$end_period_date_dmy|O||\n");
         
         $sql_employees = "SELECT profiles.iggs, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname,
-                          `base_salary`.`base`, DATE_FORMAT(employees.hiring_date, '%d/%m/%Y') AS `hiring`, DATE_FORMAT(`term`.valid_from, '%d/%m/%Y') AS `term`, profiles.nit
-                          FROM employees
-                          INNER JOIN hires ON hires.idhires = employees.id_hire
-                          INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
-                          LEFT JOIN (SELECT * FROM terminations
-                                     INNER JOIN hr_processes ON terminations.id_process = hr_processes.idhr_processes AND hr_processes.id_type = 8)
+                            ROUND(`base_salary`.`base`,2), DATE_FORMAT(employees.hiring_date, '%d/%m/%Y') AS `hiring`, 
+                            IF(`term`.valid_from <= LAST_DAY('$date_start'), DATE_FORMAT(`term`.valid_from, '%d/%m/%Y'), NULL) AS `term`, profiles.nit
+                            FROM employees
+                            INNER JOIN hires ON hires.idhires = employees.id_hire
+                            INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+                            LEFT JOIN (SELECT * FROM terminations
+                                    INNER JOIN hr_processes ON terminations.id_process = hr_processes.idhr_processes AND hr_processes.id_type = 8)
                                     AS `term` ON `term`.id_employee = employees.idemployees
-                          LEFT JOIN (SELECT SUM(credits.amount) AS `base`, id_employee FROM credits
-                                     INNER JOIN payments ON payments.idpayments = credits.id_payment
-                                     INNER JOIN periods ON periods.idperiods = payments.id_period
+                            LEFT JOIN (SELECT ROUND(SUM(credits.amount),2) AS `base`, id_employee FROM credits
+                                    INNER JOIN payments ON payments.idpayments = credits.id_payment
+                                    INNER JOIN periods ON periods.idperiods = payments.id_period
                                                 AND (credits.type = 'Salario Base' OR credits.type LIKE '%Horas Extra Laboradas%:' OR credits.type LIKE '%Horas De Asueto:%')
-                                     WHERE periods.start = '$date_start' OR periods.end = '$date_end' GROUP BY id_employee)
+                                    WHERE periods.start = '$date_start' OR periods.end = LAST_DAY('$date_start') GROUP BY id_employee)
                                     AS `base_salary` ON `base_salary`.id_employee = employees.idemployees
-                          WHERE (active = 1 OR `term`.valid_from >= '$date_start') AND employees.society LIKE '%$patrono%'";
+                            WHERE (active = 1 OR `term`.valid_from >= '$date_start') AND employees.society LIKE '%$patrono%'";
         if($res2 = mysqli_query($con, $sql_employees)){
             echo("[empleados]\n");
             while($row2 = mysqli_fetch_assoc($res2)){
@@ -75,13 +76,14 @@
         }
 
         $sql_suspension = "SELECT profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, profiles.iggs, leaves.start, leaves.end
-                FROM leaves
-                INNER JOIN hr_processes ON leaves.id_process = hr_processes.idhr_processes
-                INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
-                INNER JOIN hires ON hires.idhires = employees.id_hire
-                INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
-                WHERE (`motive` = 'IGSS Suspension Unpaid' OR `notes` LIKE '%IGSS%') AND (leaves.start >= '$date_start' OR leaves.end >= '$date_end') 
-                AND hr_processes.status != 'DISMISSED' AND employees.society LIKE '%$patrono%';";
+                        FROM leaves
+                        INNER JOIN hr_processes ON leaves.id_process = hr_processes.idhr_processes
+                        INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
+                        INNER JOIN hires ON hires.idhires = employees.id_hire
+                        INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+                        WHERE (`motive` = 'IGSS Unpaid' OR `notes` LIKE '%IGSS%') AND (leaves.start >= '$date_start' AND leaves.end <= LAST_DAY('$date_start'))
+                        OR (leaves.start <= '$date_start' AND leaves.end BETWEEN '2021-05-01' AND LAST_DAY('$date_start'))
+                        AND hr_processes.status != 'DISMISSED' AND employees.society LIKE '%$patrono%';";
 
         echo("[suspendidos]\n");
 
@@ -99,14 +101,15 @@
         }
 
         $sql_lic = "SELECT profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname, profiles.iggs, leaves.start, leaves.end
-                FROM leaves
-                INNER JOIN hr_processes ON leaves.id_process = hr_processes.idhr_processes
-                INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
-                INNER JOIN hires ON hires.idhires = employees.id_hire
-                INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
-                WHERE (`motive` = 'Leave Of Absence Unpaid' OR `motive` = 'VTO Unpaid' OR `notes` LIKE '%VTO%')
-                AND (leaves.start >= '$date_start' OR leaves.end >= '$date_end') 
-                AND hr_processes.status != 'DISMISSED' AND employees.society LIKE '%$patrono%';";
+                    FROM leaves
+                    INNER JOIN hr_processes ON leaves.id_process = hr_processes.idhr_processes
+                    INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
+                    INNER JOIN hires ON hires.idhires = employees.id_hire
+                    INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+                    WHERE (`motive` = 'Leave Of Absence Unpaid' OR `motive` = 'VTO Unpaid' OR `notes` LIKE '%VTO%' OR `notes` LIKE '%LOA%')
+                    AND ((leaves.start >= '$date_start' AND leaves.end <= LAST_DAY('$date_start'))
+                    OR (leaves.start <= '$date_start' AND leaves.end BETWEEN '$date_start' AND LAST_DAY('$date_start')))
+                    AND hr_processes.status != 'DISMISSED' AND employees.society LIKE '%$patrono%';";
 
         echo("[licencias]\n");
 
