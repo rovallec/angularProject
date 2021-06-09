@@ -52,7 +52,6 @@ if($netsuitclient <= 6){
     ROUND(SUM(coalesce(`igss_amount`,0)),2),
     ROUND(SUM(coalesce(`isr_amount`,0)),2),
     ROUND(SUM(coalesce(`headsets_amount`,0)),2),
-    
 	ROUND(
 		coalesce(ROUND(SUM(coalesce(`bus_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`car_amount`,0)),2),0)+
@@ -61,7 +60,6 @@ if($netsuitclient <= 6){
 		coalesce(ROUND(SUM(coalesce(`isr_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`headsets_amount`,0)),2),0),
     2),
-    
 	ROUND(coalesce(
         coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
         coalesce(ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),0) +
@@ -77,8 +75,7 @@ if($netsuitclient <= 6){
 		coalesce(ROUND(SUM(coalesce(`igss_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`isr_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`headsets_amount`,0)),2),0),
-    2),
-    
+    2) AS `total_payment`,
     ROUND(SUM(coalesce(`base_aguinaldo`,0)),2),
     ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2),
     ROUND(SUM(coalesce(`base_bono14`,0)),2),
@@ -99,8 +96,7 @@ if($netsuitclient <= 6){
 		ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2)+
 		ROUND(SUM(coalesce(`base_indemnizacion`,0)),2)+
 		ROUND(SUM(coalesce(`employeer_igss`,0)),2)
-    ,2),
-    
+    ,2) AS `total_fees`,
     ROUND(
     	ROUND(coalesce(
         coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
@@ -1212,7 +1208,7 @@ nearsol_id,
 client_id,
 `employee name`;";
 }
-
+echo($sql);
 $output = fopen("php://output", "w");
 fputcsv($output, array('Avaya','Name','Account', 'Nearsol ID','Minimum Wage','Incentive','Days discounted','7th deduction','Discounted hours','Minimum Wage Deductions','Incentive Deductions','Minimum Wage with deductions','Incentive with deductions','Overtime (hours)','Overtime (Q)','Holiday (hours)','Holiday (Q)','Bonuses','Treasure Hunt','Adjustments','Total income','Bus','Parking (Car)','Parking Motorcycle / bicycle','IGSS','ISR','Equipment','Total Deductions','Total Payment','BONUS 13','BONUS 13 BONIF','BONUS 14 ','BONUS 14 BONIF','VACATION RESERVES','VACATION RESERVES BONIF','SEVERANCE RESERVES','EMPLOYER IGSS','HEALTH INSURANCE','PARKING','BUS','TOTAL RESERVES AND FEES','TOTAL COST',));
     if($result = mysqli_query($con,$sql)){
