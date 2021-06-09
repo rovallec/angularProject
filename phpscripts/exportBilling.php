@@ -76,17 +76,17 @@ if($netsuitclient <= 6){
 		coalesce(ROUND(SUM(coalesce(`isr_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`headsets_amount`,0)),2),0),
     2) AS `29`,
-    ROUND(SUM(coalesce(`base_aguinaldo`,0)),2),
-    ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2),
-    ROUND(SUM(coalesce(`base_bono14`,0)),2),
-    ROUND(SUM(coalesce(`productivity_bono14`,0)),2),
-    ROUND(SUM(coalesce(`base_vacaciones`,0)),2),
-    ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2),
-    ROUND(SUM(coalesce(`base_indemnizacion`,0)),2),
-    ROUND(SUM(coalesce(`employeer_igss`,0)),2),
-    ROUND(SUM(coalesce(`health`,0)),2),
-    SUM(coalesce(`PARKING`,0)),
-    SUM(coalesce(`BUS`,0)),
+    ROUND(SUM(coalesce(`base_aguinaldo`,0)),2) AS `30`,
+    ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2) AS `31`,
+    ROUND(SUM(coalesce(`base_bono14`,0)),2) AS `32`,
+    ROUND(SUM(coalesce(`productivity_bono14`,0)),2) AS `33`,
+    ROUND(SUM(coalesce(`base_vacaciones`,0)),2) AS `34`,
+    ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2) AS `35`,
+    ROUND(SUM(coalesce(`base_indemnizacion`,0)),2) AS `36`,
+    ROUND(SUM(coalesce(`employeer_igss`,0)),2) AS `37`,
+    ROUND(SUM(coalesce(`health`,0)),2) AS `38`,
+    SUM(coalesce(`PARKING`,0)) AS `39`,
+    SUM(coalesce(`BUS`,0)) AS `40`,
     ROUND(
         ROUND(SUM(coalesce(`base_aguinaldo`,0)),2)+
 		ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2)+
@@ -96,7 +96,7 @@ if($netsuitclient <= 6){
 		ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2)+
 		ROUND(SUM(coalesce(`base_indemnizacion`,0)),2)+
 		ROUND(SUM(coalesce(`employeer_igss`,0)),2)
-    ,2) AS `30`,
+    ,2) AS `41`,
     ROUND(
     	ROUND(coalesce(
         coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
@@ -116,7 +116,7 @@ if($netsuitclient <= 6){
 		ROUND(SUM(coalesce(`base_indemnizacion`,0)),2)+
 		ROUND(SUM(coalesce(`employeer_igss`,0)),2)
     ,2)
-    ,2)  AS `31`
+    ,2)  AS `42`
     FROM
     (
     SELECT
@@ -1243,6 +1243,17 @@ fputcsv($output, array('Avaya','Name','Account', 'Nearsol ID','Minimum Wage','In
             $rowExport[28] = $row[29];
             $rowExport[29] = $row[30];
             $rowExport[30] = $row[31];
+            $rowExport[31] = $row[32];
+            $rowExport[32] = $row[33];
+            $rowExport[33] = $row[34];
+            $rowExport[34] = $row[35];
+            $rowExport[35] = $row[36];
+            $rowExport[36] = $row[37];
+            $rowExport[37] = $row[38];
+            $rowExport[38] = $row[39];
+            $rowExport[39] = $row[40];
+            $rowExport[40] = $row[41];
+            $rowExport[41] = $row[42];
             fputcsv($output, $rowExport, ",");
             $i++;
         };
