@@ -646,6 +646,7 @@ if($netsuitclient <= 6){
     nearsol_id,
     client_id,
     `employee name`;";
+
 }else{
 $netsuitclient = $netsuitclient - 6;
 $sql = "SELECT
