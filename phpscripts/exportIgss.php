@@ -43,7 +43,8 @@
         
         $sql_employees = "SELECT profiles.iggs, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname,
                             ROUND(`base_salary`.`base`,2) AS `base_int`, DATE_FORMAT(employees.hiring_date, '%d/%m/%Y') AS `hiring`, 
-                            IF(`term`.valid_from <= LAST_DAY('$date_start'), DATE_FORMAT(`term`.valid_from, '%d/%m/%Y'), NULL) AS `term`, profiles.nit
+                            IF(`term`.valid_from <= LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH)),
+                            DATE_FORMAT(`term`.valid_from, '%d/%m/%Y'), NULL) AS `term`, profiles.nit
                             FROM employees
                             INNER JOIN hires ON hires.idhires = employees.id_hire
                             INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
@@ -54,9 +55,11 @@
                                     INNER JOIN payments ON payments.idpayments = credits.id_payment
                                     INNER JOIN periods ON periods.idperiods = payments.id_period
                                                 AND (credits.type = 'Salario Base' OR credits.type LIKE '%Horas Extra Laboradas%:' OR credits.type LIKE '%Horas De Asueto:%')
-                                    WHERE periods.start = '$date_start' OR periods.end = LAST_DAY('$date_start') GROUP BY id_employee)
+                                    WHERE periods.start = DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH) 
+                                    OR periods.end = LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH)) GROUP BY id_employee)
                                     AS `base_salary` ON `base_salary`.id_employee = employees.idemployees
-                            WHERE (active = 1 OR `term`.valid_from >= '$date_start') AND employees.society LIKE '%$patrono%'";
+                            WHERE (active = 1 OR `term`.valid_from >= DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH))
+                            AND employees.society LIKE '%$patrono%'";
         if($res2 = mysqli_query($con, $sql_employees)){
             echo("[empleados]\n");
             while($row2 = mysqli_fetch_assoc($res2)){
@@ -83,8 +86,11 @@
                         INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
                         INNER JOIN hires ON hires.idhires = employees.id_hire
                         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
-                        WHERE (`motive` = 'IGSS Unpaid' OR `notes` LIKE '%IGSS%') AND (leaves.start >= '$date_start' AND leaves.end <= LAST_DAY('$date_start'))
-                        OR (leaves.start <= '$date_start' AND leaves.end BETWEEN '2021-05-01' AND LAST_DAY('$date_start'))
+                        WHERE (`motive` = 'IGSS Unpaid' OR `notes` LIKE '%IGSS%') AND 
+                        (leaves.start >= DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH) 
+                        AND leaves.end <= LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH)))
+                        OR (leaves.start <= DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH) 
+                        AND leaves.end BETWEEN '2021-05-01' AND LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH)))
                         AND hr_processes.status != 'DISMISSED' AND employees.society LIKE '%$patrono%';";
 
         echo("[suspendidos]\n");
@@ -111,8 +117,11 @@
                     INNER JOIN hires ON hires.idhires = employees.id_hire
                     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
                     WHERE (`motive` = 'Leave Of Absence Unpaid' OR `motive` = 'VTO Unpaid' OR `notes` LIKE '%VTO%' OR `notes` LIKE '%LOA%')
-                    AND ((leaves.start >= '$date_start' AND leaves.end <= LAST_DAY('$date_start'))
-                    OR (leaves.start <= '$date_start' AND leaves.end BETWEEN '$date_start' AND LAST_DAY('$date_start')))
+                    AND ((leaves.start >= DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH) 
+                    AND leaves.end <= LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH)))
+                    OR (leaves.start <= DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH) 
+                    AND leaves.end BETWEEN DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH) 
+                    AND LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH))))
                     AND hr_processes.status != 'DISMISSED' AND employees.society LIKE '%$patrono%';";
 
         echo("[licencias]\n");
