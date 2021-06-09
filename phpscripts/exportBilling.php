@@ -20,31 +20,65 @@ if($netsuitclient <= 6){
     `employee name`,
     name,
     nearsol_id,
-    ROUND(SUM(coalesce(`base_pay`/COUNT(`base_pay`),0)),2),
-    ROUND(SUM(coalesce(`productivity_pay`/COUNT(`base_pay`),0)),2),
+    ROUND(SUM(coalesce(`base_pay`,0)),2)/coalesce(COUNT(`base_pay`),1),
+    ROUND(SUM(coalesce(`productivity_pay`,0)),2)/coalesce(COUNT(`base_pay`),1),
     ROUND(SUM(coalesce(`discounted_days`,0)),2),
     ROUND(SUM(coalesce(`discounted_senths`,0)),2),
     ROUND(SUM(coalesce(`hours`,0)),2),
     ROUND(SUM(coalesce(`wage_deductions`,0)),2),
-    ROUND(SUM(coalesce(`incentive_deductions`,0)),2) - (250 - ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2)),
+    ROUND(SUM(coalesce(`incentive_deductions`,0)),2) - IF(SUM(coalesce(`job_type`,0)) = 0, (250 - ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2)), 0),
     ROUND(SUM(coalesce(`base`,0)),2),
     ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),
     ROUND(SUM(coalesce(`ot_hours`,0)),2),
     ROUND(SUM(coalesce(`ot`,0)),2),
     ROUND(SUM(coalesce(`holidays_hours`,0)),2),
     ROUND(SUM(coalesce(`holidays`,0)),2),
-    ROUND(SUM(coalesce(`bonuses_amount`,0)),2) - ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),
+    ROUND(SUM(coalesce(`bonuses_amount`,0)),2),
     ROUND(SUM(coalesce(`trasure_amount`,0)),2),
-    ROUND(SUM(coalesce(`adjustment`,0)),2), 
-    ROUND(SUM(coalesce(`total_income`,0)),2),
+    ROUND(SUM(coalesce(`adjustment`,0)),2),
+	ROUND(coalesce(
+        coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`ot`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`holidays`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`bonuses_amount`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`trasure_amount`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`adjustment`,0)),2),0),0)
+    ,2),
+    
     ROUND(SUM(coalesce(`bus_amount`,0)),2),
     ROUND(SUM(coalesce(`car_amount`,0)),2),
     ROUND(SUM(coalesce(`motorcycle_amount`,0)),2),
     ROUND(SUM(coalesce(`igss_amount`,0)),2),
-    IF(SUM(coalesce(`active`,0)) >= 2, ROUND(SUM(coalesce(`isr_amount`,0)),2), 0),
+    ROUND(SUM(coalesce(`isr_amount`,0)),2),
     ROUND(SUM(coalesce(`headsets_amount`,0)),2),
-    IF(SUM(coalesce(`active`,0)) >= 2, ROUND(SUM(coalesce(`total_deductions`,0)),2), ROUND(SUM(coalesce(`total_deductions`,0)),2) - ROUND(SUM(coalesce(`isr_amount`,0)),2)),
-    IF(SUM(coalesce(`active`,0)) >= 2, ROUND(SUM(coalesce(`total_payment`,0)),2), ROUND(SUM(coalesce(`total_payment`,0)),2) + ROUND(SUM(coalesce(`isr_amount`,0)),2)),
+    
+	ROUND(
+		coalesce(ROUND(SUM(coalesce(`bus_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`car_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`motorcycle_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`igss_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`isr_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`headsets_amount`,0)),2),0),
+    2),
+    
+	ROUND(coalesce(
+        coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`ot`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`holidays`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`bonuses_amount`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`trasure_amount`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`adjustment`,0)),2),0),0)
+    ,2) - 	ROUND(
+		coalesce(ROUND(SUM(coalesce(`bus_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`car_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`motorcycle_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`igss_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`isr_amount`,0)),2),0)+
+		coalesce(ROUND(SUM(coalesce(`headsets_amount`,0)),2),0),
+    2),
+    
     ROUND(SUM(coalesce(`base_aguinaldo`,0)),2),
     ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2),
     ROUND(SUM(coalesce(`base_bono14`,0)),2),
@@ -56,8 +90,37 @@ if($netsuitclient <= 6){
     ROUND(SUM(coalesce(`health`,0)),2),
     SUM(coalesce(`PARKING`,0)),
     SUM(coalesce(`BUS`,0)),
-    ROUND(SUM(coalesce(`total_reserves_and_fees`,0)),2),
-    ROUND(SUM(coalesce(`total_cost`,0)),2)
+    ROUND(
+        ROUND(SUM(coalesce(`base_aguinaldo`,0)),2)+
+		ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2)+
+		ROUND(SUM(coalesce(`base_bono14`,0)),2)+
+		ROUND(SUM(coalesce(`productivity_bono14`,0)),2)+
+		ROUND(SUM(coalesce(`base_vacaciones`,0)),2)+
+		ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2)+
+		ROUND(SUM(coalesce(`base_indemnizacion`,0)),2)+
+		ROUND(SUM(coalesce(`employeer_igss`,0)),2)
+    ,2),
+    
+    ROUND(
+    	ROUND(coalesce(
+        coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`ot`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`holidays`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`bonuses_amount`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`trasure_amount`,0)),2),0) +
+        coalesce(ROUND(SUM(coalesce(`adjustment`,0)),2),0),0)
+    ,2) +     ROUND(
+        ROUND(SUM(coalesce(`base_aguinaldo`,0)),2)+
+		ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2)+
+		ROUND(SUM(coalesce(`base_bono14`,0)),2)+
+		ROUND(SUM(coalesce(`productivity_bono14`,0)),2)+
+		ROUND(SUM(coalesce(`base_vacaciones`,0)),2)+
+		ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2)+
+		ROUND(SUM(coalesce(`base_indemnizacion`,0)),2)+
+		ROUND(SUM(coalesce(`employeer_igss`,0)),2)
+    ,2)
+    ,2)
     FROM
     (
     SELECT
@@ -68,6 +131,7 @@ if($netsuitclient <= 6){
     hires.nearsol_id,
     employees.client_id,
     `decreto`.`decreto_amount`,
+    employees.job_type AS `job_type`,
     CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
     ROUND(IF(employees.job_type = 1, 0, employees.base_payment),2) AS `base_pay`,
     ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))), employees.productivity_payment),2) AS `productivity_pay`,
@@ -100,25 +164,17 @@ if($netsuitclient <= 6){
     ROUND(payments.holidays,2) AS `holidays`,
     `bonuses`.`bonuses_amount`,
     `treasure_hunt`.`trasure_amount`,
-    `adjustments_positive`.`adjustment`,
-    ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
-    + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-    coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1,
-    (ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
-    ROUND(((payments.productivity_complete/2) - payments.productivity)-(
-    ((
-    ((payments.productivity_complete/2) - payments.productivity)/
-    ((payments.productivity_complete/2)/120)
-    )/120
-    )*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
-    `bus_service`.`bus_amount` AS `bus_amount`,
-    `car_parking`.`car_amount` AS `car_amount`,
-    `motorcycle_parking`.`motorcycle_amount` AS `motorcycle_amount`,
+    `adjustments_positive`.`adjustment`,    
+    IF(employees.job_type IS NULL, `bus_service`.`bus_amount`,0) AS `bus_amount`,
+    IF(employees.job_type IS NULL, `car_parking`.`car_amount`,0) AS `car_amount`,
+    IF(employees.job_type IS NULL, `motorcycle_parking`.`motorcycle_amount`,0) AS `motorcycle_amount`,
     `igss`.`igss_amount`,
     `isr`.`isr_amount`,
-    `headset`.`headsets_amount`,
+    0 AS `headsets_amount`,
+    
     ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + 
     coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) AS `total_deductions`,
+    
     ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
     + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
     coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1,
@@ -202,6 +258,7 @@ if($netsuitclient <= 6){
                         (credits.type != 'Salario Base'
                         AND credits.type != 'Bonificacion Productividad'
                         AND credits.type != 'Treasure Hunt'
+                        AND credits.type != 'Bonificacion Decreto'
                         AND credits.type NOT LIKE '%RAF%'
                         AND credits.type NOT LIKE '%Nearsol TK%'
                         AND credits.type NOT LIKE '%Horas Extra%'
@@ -272,7 +329,9 @@ if($netsuitclient <= 6){
                 coalesce(ROUND(SUM(debits.amount),2),0) AS `isr_amount`,
                 id_payment
                 FROM debits
-                WHERE debits.type LIKE '%isr%'
+                INNER JOIN payments ON payments.idpayments = debits.id_payment
+                INNER JOIN employees ON employees.idemployees = payments.id_employee
+                WHERE debits.type LIKE '%isr%' AND employees.job_type IS NULL AND employees.active = 1
                 GROUP BY id_payment
                ) AS `isr` ON `isr`.id_payment = payments.idpayments
     INNER JOIN (
@@ -322,7 +381,7 @@ if($netsuitclient <= 6){
                             WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
                 WHERE pay.id_period = $id_1
                 ) AS `severances` ON `severances`.idpayments = payments.idpayments
-    WHERE (payments.id_period = $id_1) and clientNetSuite = $netsuitclient
+    WHERE (payments.id_period = $id_1) and $netsuitclient
     UNION
     SELECT
     payments.idpayments,
@@ -332,6 +391,7 @@ if($netsuitclient <= 6){
     hires.nearsol_id,
     employees.client_id,
     `decreto`.`decreto_amount`,
+    employees.job_type AS `job_type`,
     CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
     ROUND(IF(employees.job_type = 1, 0, employees.base_payment),2) AS `base_pay`,
     ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))), employees.productivity_payment),2) AS `productivity_pay`,
@@ -350,30 +410,27 @@ if($netsuitclient <= 6){
     ),
     ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2)),2) AS `incentive_deductions`,
     ROUND(IF(employees.job_type = 1, 0, payments.base),2) AS `base`,
-    ROUND(IF(employees.job_type = 1, 0, payments.productivity),2) AS `productivity`,
-    ROUND(payments.ot_hours,2) AS `ot_hours`,
-    ROUND(payments.ot,2) AS `ot`,
-    ROUND(payments.holidays_hours,2) AS `holidays_hours`,
-    ROUND(payments.holidays,2) AS `holidays`,
-    `bonuses`.`bonuses_amount`,
-    `treasure_hunt`.`trasure_amount`,
-    `adjustments_positive`.`adjustment`,
-    ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
-    + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-    coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1,
+    ROUND(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1,
     (ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
     ROUND(((payments.productivity_complete/2) - payments.productivity)-(
     ((
     ((payments.productivity_complete/2) - payments.productivity)/
     ((payments.productivity_complete/2)/120)
     )/120
-    )*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0),2) AS `total_income`,
-    `bus_service`.`bus_amount` AS `bus_amount`,
-    `car_parking`.`car_amount` AS `car_amount`,
-    `motorcycle_parking`.`motorcycle_amount` AS `motorcycle_amount`,
+    )*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0), payments.productivity),2) AS `productivity`,
+    ROUND(payments.ot_hours,2) AS `ot_hours`,
+    ROUND(payments.ot,2) AS `ot`,
+    ROUND(payments.holidays_hours,2) AS `holidays_hours`,
+    ROUND(payments.holidays,2) AS `holidays`,
+    `bonuses`.`bonuses_amount`,
+    `treasure_hunt`.`trasure_amount`,
+    `adjustments_positive`.`adjustment`,    
+    IF(employees.job_type IS NULL, `bus_service`.`bus_amount`,0) AS `bus_amount`,
+    IF(employees.job_type IS NULL, `car_parking`.`car_amount`,0) AS `car_amount`,
+    IF(employees.job_type IS NULL, `motorcycle_parking`.`motorcycle_amount`,0) AS `motorcycle_amount`,
     `igss`.`igss_amount`,
     `isr`.`isr_amount`,
-    `headset`.`headsets_amount`,
+    0 AS `headsets_amount`,
     ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + 
     coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) AS `total_deductions`,
     ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
@@ -459,6 +516,7 @@ if($netsuitclient <= 6){
                         (credits.type != 'Salario Base'
                         AND credits.type != 'Bonificacion Productividad'
                         AND credits.type != 'Treasure Hunt'
+                        AND credits.type != 'Bonificacion Decreto'
                         AND credits.type NOT LIKE '%RAF%'
                         AND credits.type NOT LIKE '%Nearsol TK%'
                         AND credits.type NOT LIKE '%Horas Extra%'
@@ -529,7 +587,9 @@ if($netsuitclient <= 6){
                 coalesce(ROUND(SUM(debits.amount),2),0) AS `isr_amount`,
                 id_payment
                 FROM debits
-                WHERE debits.type LIKE '%isr%'
+                INNER JOIN payments ON payments.idpayments = debits.id_payment
+                INNER JOIN employees ON employees.idemployees = payments.id_employee
+                WHERE debits.type LIKE '%isr%' AND employees.job_type IS NULL AND employees.active = 1
                 GROUP BY id_payment
                ) AS `isr` ON `isr`.id_payment = payments.idpayments
     INNER JOIN (
@@ -579,7 +639,7 @@ if($netsuitclient <= 6){
                             WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
                 WHERE pay.id_period = $id_2
                 ) AS `severances` ON `severances`.idpayments = payments.idpayments
-    WHERE (payments.id_period = $id_2) and clientNetSuite = $netsuitclient
+    WHERE (payments.id_period = $id_2) and $netsuitclient
     ) AS `tmp`
     GROUP BY clientNetSuite,
     name,
