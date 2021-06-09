@@ -42,7 +42,7 @@
         echo("1|1|$start_period_date_dmy|$end_period_date_dmy|O||\n");
         
         $sql_employees = "SELECT profiles.iggs, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname,
-                            ROUND(`base_salary`.`base`,2) AS `base`, DATE_FORMAT(employees.hiring_date, '%d/%m/%Y') AS `hiring`, 
+                            ROUND(`base_salary`.`base`,2) AS `base_int`, DATE_FORMAT(employees.hiring_date, '%d/%m/%Y') AS `hiring`, 
                             IF(`term`.valid_from <= LAST_DAY('$date_start'), DATE_FORMAT(`term`.valid_from, '%d/%m/%Y'), NULL) AS `term`, profiles.nit
                             FROM employees
                             INNER JOIN hires ON hires.idhires = employees.id_hire
@@ -65,7 +65,7 @@
                 $second_name = strtoupper($row2['second_name']);
                 $first_lastname = strtoupper($row2['first_lastname']);
                 $second_lastname = strtoupper($row2['second_lastname']);
-                $base = number_format($row2['base'],2,".",",");
+                $base = number_format($row2['base_int'],2,".",",");
                 $hiring = $row2['hiring'];
                 $term = $row2['term'];
                 $nit = $row2['nit'];
