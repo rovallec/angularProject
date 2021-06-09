@@ -16,26 +16,26 @@ $rowExport = [];
 echo "\xEF\xBB\xBF";
 if($netsuitclient <= 6){
     $sql = "SELECT
-    client_id,
-    `employee name`,
-    name,
-    nearsol_id,
-    ROUND(SUM(coalesce(`base_pay`,0)),2)/coalesce(COUNT(`base_pay`),1),
-    ROUND(SUM(coalesce(`productivity_pay`,0)),2)/coalesce(COUNT(`base_pay`),1),
-    ROUND(SUM(coalesce(`discounted_days`,0)),2),
-    ROUND(SUM(coalesce(`discounted_senths`,0)),2),
-    ROUND(SUM(coalesce(`hours`,0)),2),
-    ROUND(SUM(coalesce(`wage_deductions`,0)),2),
-    ROUND(SUM(coalesce(`incentive_deductions`,0)),2) - IF(SUM(coalesce(`job_type`,0)) = 0, (250 - ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2)), 0),
-    ROUND(SUM(coalesce(`base`,0)),2),
-    ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),
-    ROUND(SUM(coalesce(`ot_hours`,0)),2),
-    ROUND(SUM(coalesce(`ot`,0)),2),
-    ROUND(SUM(coalesce(`holidays_hours`,0)),2),
-    ROUND(SUM(coalesce(`holidays`,0)),2),
-    ROUND(SUM(coalesce(`bonuses_amount`,0)),2),
-    ROUND(SUM(coalesce(`trasure_amount`,0)),2),
-    ROUND(SUM(coalesce(`adjustment`,0)),2),
+    client_id AS `1`,
+    `employee name` AS `2`,
+    name AS `3`,
+    nearsol_id AS `4`,
+    ROUND(SUM(coalesce(`base_pay`,0)),2)/coalesce(COUNT(`base_pay`),1) AS `5`,
+    ROUND(SUM(coalesce(`productivity_pay`,0)),2)/coalesce(COUNT(`base_pay`),1)  AS `6`,
+    ROUND(SUM(coalesce(`discounted_days`,0)),2)  AS `7`,
+    ROUND(SUM(coalesce(`discounted_senths`,0)),2)  AS `8`,
+    ROUND(SUM(coalesce(`hours`,0)),2)  AS `9`,
+    ROUND(SUM(coalesce(`wage_deductions`,0)),2)  AS `10`,
+    ROUND(SUM(coalesce(`incentive_deductions`,0)),2) - IF(SUM(coalesce(`job_type`,0)) = 0, (250 - ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2)), 0)  AS `11`,
+    ROUND(SUM(coalesce(`base`,0)),2)  AS `12`,
+    ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2)  AS `13`,
+    ROUND(SUM(coalesce(`ot_hours`,0)),2)  AS `14`,
+    ROUND(SUM(coalesce(`ot`,0)),2)  AS `15`,
+    ROUND(SUM(coalesce(`holidays_hours`,0)),2)  AS `16`,
+    ROUND(SUM(coalesce(`holidays`,0)),2)  AS `17`,
+    ROUND(SUM(coalesce(`bonuses_amount`,0)),2)  AS `18`,
+    ROUND(SUM(coalesce(`trasure_amount`,0)),2)  AS `19`,
+    ROUND(SUM(coalesce(`adjustment`,0)),2)  AS `20`,
 	ROUND(coalesce(
         coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
         coalesce(ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),0) +
@@ -44,14 +44,14 @@ if($netsuitclient <= 6){
         coalesce(ROUND(SUM(coalesce(`bonuses_amount`,0)),2),0) +
         coalesce(ROUND(SUM(coalesce(`trasure_amount`,0)),2),0) +
         coalesce(ROUND(SUM(coalesce(`adjustment`,0)),2),0),0)
-    ,2),
+    ,2)  AS `21`,
     
-    ROUND(SUM(coalesce(`bus_amount`,0)),2),
-    ROUND(SUM(coalesce(`car_amount`,0)),2),
-    ROUND(SUM(coalesce(`motorcycle_amount`,0)),2),
-    ROUND(SUM(coalesce(`igss_amount`,0)),2),
-    ROUND(SUM(coalesce(`isr_amount`,0)),2),
-    ROUND(SUM(coalesce(`headsets_amount`,0)),2),
+    ROUND(SUM(coalesce(`bus_amount`,0)),2)  AS `22`,
+    ROUND(SUM(coalesce(`car_amount`,0)),2)  AS `23`,
+    ROUND(SUM(coalesce(`motorcycle_amount`,0)),2)  AS `24`,
+    ROUND(SUM(coalesce(`igss_amount`,0)),2)  AS `25`,
+    ROUND(SUM(coalesce(`isr_amount`,0)),2)  AS `26`,
+    ROUND(SUM(coalesce(`headsets_amount`,0)),2)  AS `27`,
 	ROUND(
 		coalesce(ROUND(SUM(coalesce(`bus_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`car_amount`,0)),2),0)+
@@ -59,7 +59,7 @@ if($netsuitclient <= 6){
 		coalesce(ROUND(SUM(coalesce(`igss_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`isr_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`headsets_amount`,0)),2),0),
-    2),
+    2)  AS `28`,
 	ROUND(coalesce(
         coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
         coalesce(ROUND(SUM(coalesce(`productivity`,0)),2) + ROUND(SUM(coalesce(coalesce(`decreto_amount`,0),0)),2),0) +
@@ -75,7 +75,7 @@ if($netsuitclient <= 6){
 		coalesce(ROUND(SUM(coalesce(`igss_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`isr_amount`,0)),2),0)+
 		coalesce(ROUND(SUM(coalesce(`headsets_amount`,0)),2),0),
-    2) AS `total_payment`,
+    2) AS `29`,
     ROUND(SUM(coalesce(`base_aguinaldo`,0)),2),
     ROUND(SUM(coalesce(`productivity_aguinaldo`,0)),2),
     ROUND(SUM(coalesce(`base_bono14`,0)),2),
@@ -96,7 +96,7 @@ if($netsuitclient <= 6){
 		ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2)+
 		ROUND(SUM(coalesce(`base_indemnizacion`,0)),2)+
 		ROUND(SUM(coalesce(`employeer_igss`,0)),2)
-    ,2) AS `total_fees`,
+    ,2) AS `30`,
     ROUND(
     	ROUND(coalesce(
         coalesce(ROUND(SUM(coalesce(`base`,0)),2),0) +
@@ -116,7 +116,7 @@ if($netsuitclient <= 6){
 		ROUND(SUM(coalesce(`base_indemnizacion`,0)),2)+
 		ROUND(SUM(coalesce(`employeer_igss`,0)),2)
     ,2)
-    ,2)
+    ,2)  AS `31`
     FROM
     (
     SELECT
@@ -1208,12 +1208,42 @@ nearsol_id,
 client_id,
 `employee name`;";
 }
-echo($sql);
 $output = fopen("php://output", "w");
 fputcsv($output, array('Avaya','Name','Account', 'Nearsol ID','Minimum Wage','Incentive','Days discounted','7th deduction','Discounted hours','Minimum Wage Deductions','Incentive Deductions','Minimum Wage with deductions','Incentive with deductions','Overtime (hours)','Overtime (Q)','Holiday (hours)','Holiday (Q)','Bonuses','Treasure Hunt','Adjustments','Total income','Bus','Parking (Car)','Parking Motorcycle / bicycle','IGSS','ISR','Equipment','Total Deductions','Total Payment','BONUS 13','BONUS 13 BONIF','BONUS 14 ','BONUS 14 BONIF','VACATION RESERVES','VACATION RESERVES BONIF','SEVERANCE RESERVES','EMPLOYER IGSS','HEALTH INSURANCE','PARKING','BUS','TOTAL RESERVES AND FEES','TOTAL COST',));
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
-            fputcsv($output, $row, ",");
+            $rowExport[0] = $row[1];
+            $rowExport[1] = $row[2];
+            $rowExport[2] = $row[3];
+            $rowExport[3] = $row[4];
+            $rowExport[4] = $row[5];
+            $rowExport[5] = $row[6];
+            $rowExport[6] = $row[7];
+            $rowExport[7] = $row[8];
+            $rowExport[8] = $row[9];
+            $rowExport[9] = $row[10];
+            $rowExport[10] = $row[11];
+            $rowExport[11] = $row[12];
+            $rowExport[12] = $row[13];
+            $rowExport[13] = $row[14];
+            $rowExport[14] = $row[15];
+            $rowExport[15] = $row[16];
+            $rowExport[16] = $row[17];
+            $rowExport[17] = $row[18];
+            $rowExport[18] = $row[19];
+            $rowExport[19] = $row[20];
+            $rowExport[20] = $row[21];
+            $rowExport[21] = $row[22];
+            $rowExport[22] = $row[23];
+            $rowExport[23] = $row[24];
+            $rowExport[24] = $row[25];
+            $rowExport[25] = $row[26];
+            $rowExport[26] = $row[27];
+            $rowExport[27] = $row[28];
+            $rowExport[28] = $row[29];
+            $rowExport[29] = $row[30];
+            $rowExport[30] = $row[31];
+            fputcsv($output, $rowExport, ",");
             $i++;
         };
     }else{
