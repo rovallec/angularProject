@@ -42,11 +42,11 @@ LEFT JOIN (SELECT vacations.*, hr_processes.id_employee, hr_processes.status FRO
             WHERE action = 'TAKE' AND hr_processes.status = 'PENDING') AS `vac` ON `vac`.id_employee = attendences.id_employee AND `vac`.date = attendences.date
 LEFT JOIN (SELECT leaves.*, hr_processes.id_employee, hr_processes.status from leaves
 		   INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
-           WHERE hr_processes.status = 'PENDING' AND (leaves.motive = 'Leave of Absence Unpaid' OR leaves.motive = 'Others Unpaid')) AS `JANP`
+           WHERE hr_processes.status = 'PENDING' AND (leaves.motive = 'Leave of Absence Unpaid' OR leaves.motive = 'Others Unpaid' OR leaves.motive = 'VTO Unpaid' OR leaves.motive = 'COVID Unpaid' OR leaves.motive = 'IGSS Unpaid')) AS `JANP`
            ON `JANP`.id_employee = attendences.id_employee AND attendences.date BETWEEN `JANP`.start AND `JANP`.end
 LEFT JOIN (SELECT leaves.*, hr_processes.id_employee, hr_processes.status from leaves
 		   INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
-           WHERE hr_processes.status = 'PENDING' AND (leaves.motive = 'Maternity' OR leaves.motive = 'Others Paid')) AS `JAP`
+           WHERE hr_processes.status = 'PENDING' AND (leaves.motive = 'Maternity' OR leaves.motive = 'Others Paid' OR leaves.motive = 'IGSS Paid' OR leaves.motive = 'COVID Piad')) AS `JAP`
            ON `JAP`.id_employee = attendences.id_employee AND attendences.date BETWEEN `JAP`.start AND `JAP`.end
 WHERE attendences.date BETWEEN '$from' AND '$to' AND id_account in($account)
 GROUP BY idattendences;";
