@@ -47,24 +47,41 @@
         [attr.aria-valuemax]="max_progress">{{step}}</div>
     </div>
     <div class="row col-md-12" *ngIf="!isLoading && finished">
-      <div class="col-md-2"></div>
       <div class="col-md-2">
         <!--
           <label>YEAR:</label>
           <select class="form-control" (change)="setYear()" [(ngModel)]="selectedYear">
-            <option *ngFor="let year of years">{{year}}</option>
+            <option *ngFor="let year of years">{{ year }}</option>
           </select>
         -->
       </div>
-      <div class="col-md-2"></div>
-      <div class="col-md-4">
+      <div class="col-md-2" style="margin-top: 40px;">
+        <input type="checkbox" value="{{ type }}" class="form-check-input"
+          (change)="setType($event.target.value)" [checked]="type==true">
+          <label class="form-check-label" *ngIf="type==false">
+            Period
+          </label>
+          <label class="form-check-label" *ngIf="type==true">
+            Month
+          </label>
+      </div>
+      <div class="col-md-2">
+        <label>MONTH:</label>
+          <select class="form-control" (change)="setMonth($event.target.value)" [(ngModel)]="selectedMonth" [disabled]="Type==true">
+            <option *ngFor="let month of months" [value]="month.id">{{ month.description }}</option>
+          </select>
+      </div>
+      <div class="col-md-3">
         <label>PERIOD:</label>
-        <select class="form-control" [(ngModel)]="selectedPeriod" (change)="setActualPeriod($event.target.value)">
+        <select class="form-control" [(ngModel)]="selectedPeriod" (change)="setActualPeriod($event.target.value)" [disabled]="Type==true">
           <option *ngFor="let period of periods" [value]="period.idperiods">{{period.start}} TO {{period.end}}
           </option>
         </select>
       </div>
-      <div class="col-md-2"></div>
+      <div class="col-md-2">
+        <button type="button" title="Aprovee or Dismiss" class="btn-outline-secondary" 
+          style="margin-top: 35px;" (click)="setActualPeriod($event.target.value)" >Generate</button>
+      </div>
     </div>
     <div class="row" style="margin-top:25px">
       <div class="col-md-12">
@@ -85,7 +102,7 @@
           </div>
           <div class="col-md-3">
             <label>Date:</label>
-            <input type="date" class="form-control" [(ngModel)]="header.poldate">
+            <input type="date" class="form-control" [(ngModel)]="header.date">
           </div>
           <div class="col-md-3">
             <label>Type:</label>
@@ -111,8 +128,8 @@
                 <th>DEPARTMENT</th>
                 <th>CLASS</th>
                 <th>SITE</th>
-                <th>DEBIT</th>
                 <th>CREDIT</th>
+                <th>DEBIT</th>
                 <th>CLIENT</th>
               </thead>
               <tbody>

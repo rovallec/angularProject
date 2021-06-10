@@ -14,16 +14,7 @@ $clientNetSuite = $request->idaccounts;
 $exportRow = [];
 $month = ($request->month);
 $type = ($request->type);
-$where = '';
-//echo("type: " .$type . " month: " . $month);
 
-if ($type) {
-  $where = "WHERE pay.id_period = $ID_Period ";
-} else {
-  $where = "WHERE month(per.start) = $month ";
-}
-
-//echo("<br>" . $where);
 $i = 0;
 $sql1 = "SELECT DISTINCT
           '51001' AS external_id,                 
@@ -34,9 +25,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('51001' = aa.external_id) " .
-          $where .
-          "AND ((cred.type='Salario Base' AND ((e.job_type != 1) OR (e.job_type is null)))
+          INNER JOIN accounting_accounts aa on ('51001' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND ((cred.type='Salario Base' AND ((e.job_type != 1) OR (e.job_type is null)))
             OR cred.type like '%Horas%Extra%' 
             OR cred.type like '%Horas%de%Asueto%')
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
@@ -51,9 +42,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('51021' = aa.external_id) " .
-          $where .
-          "AND ((cred.type != 'Salario Base' 
+          INNER JOIN accounting_accounts aa on ('51021' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND ((cred.type != 'Salario Base' 
             AND cred.type not like '%Horas Extra%' 
             AND cred.type not like '%Horas de Asueto%'
             AND cred.type not like '%RAF%'
@@ -79,9 +70,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('51004' = aa.external_id) " .
-          $where .
-          "AND ((cred.type='Salario Base' AND ((e.job_type != 1) or (e.job_type is null)))
+          INNER JOIN accounting_accounts aa on ('51004' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND ((cred.type='Salario Base' AND ((e.job_type != 1) or (e.job_type is null)))
             or cred.type like '%Horas Extra%' 
             or cred.type like '%Horas de Asueto%')
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
@@ -95,9 +86,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('65002' = aa.external_id) " .
-          $where .
-          "AND cred.type LIKE'%RAF%'
+          INNER JOIN accounting_accounts aa on ('65002' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND cred.type LIKE'%RAF%'
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION
           SELECT '51010' AS external_id,
@@ -114,9 +105,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('51010' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION
           SELECT '51017' AS external_id,
@@ -132,9 +123,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('51017' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end 
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION
           SELECT '51012' AS external_id,
@@ -150,9 +141,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('51012' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end 
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION
           SELECT '51014' AS external_id,
@@ -168,9 +159,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('51014' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end 
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION
           SELECT '51013' AS external_id,
@@ -186,9 +177,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('51013' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION
           SELECT '51011' AS external_id,
@@ -204,9 +195,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('51011' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end 
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION
           SELECT '51015' AS external_id,
@@ -222,9 +213,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('51015' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT '21082' AS external_id,
@@ -240,9 +231,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('21082' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT '21074' AS external_id,
@@ -258,9 +249,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('21074' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end 
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT '21079' AS external_id,
@@ -276,9 +267,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('21079' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end 
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT '21075' AS external_id,
@@ -294,9 +285,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('21075' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT '21078' AS external_id,
@@ -312,9 +303,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('21078' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end 
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT '21080' AS external_id,
@@ -330,22 +321,23 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounting_accounts aa on ('21080' = aa.external_id)
           LEFT JOIN ( SELECT hp2.id_employee, t2.valid_from FROM hr_processes hp2
                     INNER JOIN terminations t2 ON t2.id_process = hp2.idhr_processes
-                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end " .
-          $where .
-          "AND ((e.job_type != 1) or (e.job_type is null))
+                    WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end 
+          WHERE month(p.start) = $month
+          AND ((e.job_type != 1) or (e.job_type is null))
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT 
-          '21086' AS external_id,                ROUND(SUM(cred.amount) * 0.1267, 2) AS amount,
+          '21086' AS external_id,                
+          ROUND(SUM(cred.amount) * 0.1267, 2) AS amount,
           pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           FROM payments pay
           INNER JOIN periods per ON (pay.id_period = per.idperiods)
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (e.idemployees = pay.id_employee)
-          INNER JOIN accounting_accounts aa on ('21086' = aa.external_id) " .
-          $where .
-          " AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite))
+          INNER JOIN accounting_accounts aa on ('21086' = aa.external_id)
+          WHERE month(per.start) = $month
+          AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite))
             AND ((cred.type ='Salario Base' AND ((e.job_type != 1) or (e.job_type is null)))
             or cred.type LIKE '%Horas Extra%' 
             or cred.type LIKE '%Horas de Asueto%')
@@ -361,9 +353,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('21072' = aa.external_id) " .
-          $where .
-          "AND ((e.job_type != 1 ) OR (e.job_type is null))
+          INNER JOIN accounting_accounts aa on ('21072' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND ((e.job_type != 1 ) OR (e.job_type is null))
           AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite))
           /*GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts */
           UNION
@@ -377,11 +369,11 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('21072' = aa.external_id) " .
-          $where .
-          "AND ((e.job_type != 1 ) OR (e.job_type is null))
+          INNER JOIN accounting_accounts aa on ('21072' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND ((e.job_type != 1 ) OR (e.job_type is null))
           AND ((a2.clientNetSuite = $clientNetSuite) OR (-1 = $clientNetSuite))
-          GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
+          /*GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts */
           UNION
           /* CREDITOS SUPERVISORES */
           SELECT
@@ -393,9 +385,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts) 
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa ON ('21072' = aa.external_id) " .
-          $where .
-          "AND (cred.`type` NOT IN('Bonificacion Productividad', 'Salario Base', 'Bonificacion Decreto') AND (e.job_type = 1))
+          INNER JOIN accounting_accounts aa ON ('21072' = aa.external_id)
+          WHERE month(per.start) = $month
+          AND (cred.`type` NOT IN('Bonificacion Productividad', 'Salario Base', 'Bonificacion Decreto') AND (e.job_type = 1))
           AND ((a2.clientNetSuite = $clientNetSuite) OR (-1 = $clientNetSuite))
           /* GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts */
           UNION
@@ -409,9 +401,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('21072' = aa.external_id) " .
-          $where .
-          "AND ((deb.`type` NOT LIKE '%IGSS%') AND (e.job_type = 1))
+          INNER JOIN accounting_accounts aa on ('21072' = aa.external_id)
+          WHERE month(per.start) = $month
+          AND ((deb.`type` NOT LIKE '%IGSS%') AND (e.job_type = 1))
           AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite))
           /*GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts */
           UNION
@@ -425,9 +417,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('21072' = aa.external_id) " .
-          $where .
-          "AND (((cred.`type` LIKE'%Horas%extra%') OR (cred.`type` LIKE'%horas%de%asueto%')) AND (e.job_type = 1))
+          INNER JOIN accounting_accounts aa on ('21072' = aa.external_id)
+          WHERE month(per.start) = $month
+          AND (((cred.`type` LIKE'%Horas%extra%') OR (cred.`type` LIKE'%horas%de%asueto%')) AND (e.job_type = 1))
           AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite))
           /*GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts*/
           UNION 
@@ -436,12 +428,14 @@ $sql1 = "SELECT DISTINCT
           ROUND(SUM(deb.amount), 2) AS amount,
           pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           FROM payments pay
-          INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
+          INNER JOIN periods per ON (pay.id_period = per.idperiods)
+          INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts)
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('46000' = aa.external_id) " .
-          $where .
-          "AND deb.type like'%bus%'
+          INNER JOIN accounting_accounts aa on ('46000' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite))
+          AND deb.type like'%bus%'
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT 
@@ -449,12 +443,13 @@ $sql1 = "SELECT DISTINCT
           ROUND(SUM(deb.amount), 2) AS amount,
           pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           FROM payments pay
+          INNER JOIN periods per ON (pay.id_period = per.idperiods)
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('23010' = aa.external_id) " .
-          $where .
-          "AND deb.type='CAR PARKING'
+          INNER JOIN accounting_accounts aa on ('23010' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND deb.type='CAR PARKING'
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts              
           UNION 
           SELECT 
@@ -466,9 +461,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('23010' = aa.external_id) " .
-          $where .
-          "AND deb.type='MOTORCYCLE PARKING'
+          INNER JOIN accounting_accounts aa on ('23010' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND deb.type='MOTORCYCLE PARKING'
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT 
@@ -480,9 +475,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('23010' = aa.external_id) " .
-          $where .
-          "AND (deb.type IN('TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso')
+          INNER JOIN accounting_accounts aa on ('23010' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND (deb.type IN('TARJETA DE ACCESO/PARQUEO', 'Tarjeta De Acceso')
           OR deb.type LIKE'%Headset%')
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
@@ -495,9 +490,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)        
-          INNER JOIN accounting_accounts aa on ('22030' = aa.external_id) " .
-          $where .
-          "AND deb.type='ISR'
+          INNER JOIN accounting_accounts aa on ('22030' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND deb.type='ISR'
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION
           SELECT external_id, ROUND(SUM(`temp`.amount),2), id_account_py, department, class, site, clientNetSuite, id_client, idaccounts, clasif, name, idaccounting_accounts FROM
@@ -511,9 +506,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('21085' = aa.external_id) " .
-          $where .
-          "AND deb.type LIKE'%IGSS%'    
+          INNER JOIN accounting_accounts aa on ('21085' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND deb.type LIKE'%IGSS%'    
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           union
           SELECT 
@@ -525,9 +520,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN credits cred ON (pay.idpayments = cred.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('21085' = aa.external_id) " .
-          $where .
-          "AND (cred.type='Salario Base' AND ((e.job_type = 1)))    
+          INNER JOIN accounting_accounts aa on ('21085' = aa.external_id)
+          WHERE month(per.start) = $month
+          AND (cred.type='Salario Base' AND ((e.job_type = 1)))    
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           ) AS `temp` GROUP BY external_id, id_account_py, department, class, site, clientNetSuite, id_client, idaccounts, clasif, name, idaccounting_accounts
           UNION 
@@ -540,9 +535,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('13020' = aa.external_id) " .
-          $where .
-          "AND (type like'%personal%'
+          INNER JOIN accounting_accounts aa on ('13020' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND (type like'%personal%'
             OR TYPE LIKE '%ajuste%'
             OR TYPE LIKE '%prestamo%'
             OR TYPE LIKE '%anticipo%'
@@ -558,9 +553,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('22050' = aa.external_id) " .
-          $where .
-          "AND deb.type='Boleto de Ornato'
+          INNER JOIN accounting_accounts aa on ('22050' = aa.external_id) 
+          WHERE month(per.start) = $month
+          AND deb.type='Boleto de Ornato'
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts
           UNION 
           SELECT 
@@ -572,9 +567,9 @@ $sql1 = "SELECT DISTINCT
           INNER JOIN accounts a2 ON (pay.id_account_py = a2.idaccounts AND ((a2.clientNetSuite = $clientNetSuite) or (-1 = $clientNetSuite)))
           INNER JOIN debits deb ON (pay.idpayments = deb.id_payment)
           INNER JOIN employees e ON (pay.id_employee = e.idemployees)
-          INNER JOIN accounting_accounts aa on ('21083' = aa.external_id) " .
-          $where .
-          "AND deb.type IN('Descuento Judicial')
+          INNER JOIN accounting_accounts aa on ('21083' = aa.external_id)
+          WHERE month(per.start) = $month
+          AND deb.type IN('Descuento Judicial')
           GROUP BY pay.id_account_py, a2.department, a2.class, a2.site, a2.clientNetSuite, a2.id_client, a2.idaccounts, aa.clasif, aa.name, aa.idaccounting_accounts;";
 
     if ($result1 = mysqli_query($con,$sql1)) {
@@ -596,6 +591,7 @@ $sql1 = "SELECT DISTINCT
       $resultF = json_encode($exportRow);
       echo($resultF);
     }else{
-      echo($sql1);
+      $error = "Sucedió el siguiente error: " . mysqli_error($con) . ".<br>";
+      echo($error . $sql1);
     }
 ?>

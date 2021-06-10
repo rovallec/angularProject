@@ -31,7 +31,9 @@ export class AccountingPoliciesComponent implements OnInit {
   step: string = null;
   isSearching:boolean = false;
   years: string[] = [new Date().getFullYear().toString()];
+  months: selectedOption[] = [];
   selectedYear: string = new Date().getFullYear().toString();
+  selectedMonth: string = new Date().getMonth().toString();
   isLoading: boolean = false;
   searchFilter: string = null;
   searchValue: string = null;
@@ -47,12 +49,11 @@ export class AccountingPoliciesComponent implements OnInit {
   header: policyHeader = new policyHeader;
   policeType: selectedOption;
   policeTypes: selectedOption[] = [];
-
-
+  type: boolean = false; // False = Por Periodo; True = Por Mes.
 
   ngOnInit() {
     let today: Fecha = new Fecha;
-    let pt: selectedOption = new selectedOption;
+    
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       this.periods = per.filter(p => p.status =='0');      
         this.actualPeriod = this.periods[this.periods.length-1];
@@ -61,14 +62,46 @@ export class AccountingPoliciesComponent implements OnInit {
 
     this.selectedClient = '-1';
     this.header.date = today.getToday();
-    this.header.type = '1'; // Las pólizas tipo 1 serán consideradas de costos.
-    pt.id = 1;
-    pt.description = 'Cost Policy';
+    this.header.type = '1'; // Las pólizas tipo 1 serán consideradas de costos.    
+    this.setPolicesTypes();
+    this.setMonths();  
+  }
+
+  setPolicesTypes() {
+    let pt: selectedOption = new selectedOption(1, 'Cost Policy');
     this.policeTypes.push(pt);
-    pt = new selectedOption;
-    pt.id = 2;
-    pt.description = 'Expence Policy';
+    pt = new selectedOption(2, 'Expence Policy');
     this.policeTypes.push(pt);
+  }
+
+  setMonths() {
+    let today: Fecha = new Fecha;
+
+    let month: selectedOption = new selectedOption(1, 'Enero');
+    this.months.push(month);
+    month = new selectedOption(2, 'Febrero');
+    this.months.push(month);
+    month = new selectedOption(3, 'Marzo');
+    this.months.push(month);
+    month = new selectedOption(4, 'Abril');
+    this.months.push(month);
+    month = new selectedOption(5, 'Mayo');
+    this.months.push(month);
+    month = new selectedOption(6, 'Junio');
+    this.months.push(month);
+    month = new selectedOption(7, 'Julio');
+    this.months.push(month);
+    month = new selectedOption(8, 'Agosto');
+    this.months.push(month);
+    month = new selectedOption(9, 'Septiembre');
+    this.months.push(month);
+    month = new selectedOption(10, 'Octubre');
+    this.months.push(month);
+    month = new selectedOption(11, 'Noviembre');
+    this.months.push(month);
+    month = new selectedOption(12, 'Diciembre');
+    this.months.push(month);
+    this.selectedMonth = String(Number(today.month) - 1);
   }
 
   setActualPeriod(p) {
@@ -112,6 +145,10 @@ export class AccountingPoliciesComponent implements OnInit {
     })
   }
 
+  setMonth(mon: string) {
+    this.selectedMonth = mon;
+  }
+
   getAccounting() {
     let policie: policies = new policies;
     let accounting: accountingPolicies = new accountingPolicies;
@@ -124,10 +161,13 @@ export class AccountingPoliciesComponent implements OnInit {
       policie.idperiod = this.actualPeriod.idperiods;
       policie.idaccounts = this.selectedClient;
       policie.id_client = this.selectedClient;
+      policie.month = this.selectedMonth;
+      policie.type = this.type.toString();
       this.accountingPolicies.pop();
       this.apiServices.getAccounting_Accounts().subscribe((account: AccountingAccounts[]) =>{
         this.apiServices.getAccountingPolicies(policie).subscribe((acp: accountingPolicies[]) => {
           acp.sort((a, b) => Number(a.external_id) - Number(b.external_id));
+          console.log(acp);
           account.sort((a, b) => Number(a.external_id) - Number(b.external_id));
           account.forEach(acc => {
             accounting = this.filterAccounts(acp, acc.external_id, accounting);
@@ -142,7 +182,7 @@ export class AccountingPoliciesComponent implements OnInit {
             this.finalRow = 'TOTAL ROWS: ' + String(this.accountingPolicies.length);
           }  
           for (let index = 0; index < this.accountingPolicies.length; index++) {
-            this.accountingPolicies[index].idperiod = this.actualPeriod.idperiods;
+            
             if (this.accountingPolicies[index].clasif == 'D') {
               this.totalDebe = String(Number(this.totalDebe) + Number(this.accountingPolicies[index].amount));
             } else {
@@ -174,6 +214,10 @@ export class AccountingPoliciesComponent implements OnInit {
 
     acP.amount = amount.toFixed(2);
     return acP;
+  }
+
+  setType(_t) {
+    this.type = !this.type;
   }
 
   saveAccounting() {

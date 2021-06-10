@@ -11,7 +11,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $i = 0;
 
-$sql = "SELECT DISTINCT idaccounting_accounts, external_id, name, clasif FROM accounting_accounts;";
+$sql = "SELECT DISTINCT idaccounting_accounts, external_id, name, clasif FROM accounting_accounts ORDER BY clasif, external_id DESC;";
 if($result = mysqli_query($con,$sql)){
   while($row = mysqli_fetch_assoc($result)) {
     $return[$i]['idaccounting_accounts'] = $row['idaccounting_accounts'];
