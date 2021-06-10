@@ -49,7 +49,7 @@ export class AccountingPoliciesComponent implements OnInit {
   header: policyHeader = new policyHeader;
   policeType: selectedOption;
   policeTypes: selectedOption[] = [];
-  type: boolean = false; // False = Por Periodo; True = Por Mes.
+  type: boolean = true; // False = Por Periodo; True = Por Mes.
 
   ngOnInit() {
     let today: Fecha = new Fecha;
