@@ -120,8 +120,7 @@ if($netsuitclient <= 6){
     FROM
     (
     SELECT
-    payments.idpayments,
-    employees.active,
+    IF(`term_v`.valid_from IS NOT NULL, '0', '1') AS `active`,
     clientNetSuite,
     accounts.name,
     hires.nearsol_id,
@@ -191,9 +190,9 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`) AS `base_vacaciones`,
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`) AS `productivity_vacaciones`,
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`) AS `base_indemnizacion`,
-    ROUND((IF(employees.job_type = 1, 0, payments.base)+
-    ROUND(payments.ot,2)+
-    ROUND(payments.holidays,2)) * 0.1267, 2) AS `employeer_igss`,
+    ROUND((IF(employees.job_type = 1, 0, COALESCE(payments.base,0))+
+    ROUND(COALESCE(payments.ot,0),2)+
+    ROUND(COALESCE(payments.holidays,0),2)) * 0.1267, 2) AS `employeer_igss`,
     198.24 AS `health`,
     0 AS `PARKING`,
     0 AS `BUS`,
@@ -234,6 +233,16 @@ if($netsuitclient <= 6){
     INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
     INNER JOIN accounts ON accounts.idaccounts = payments.id_account_py
     LEFT JOIN (
+        SELECT
+        valid_from, id_employee FROM
+        terminations
+        INNER JOIN hr_processes ON terminations.id_process = hr_processes.idhr_processes
+        INNER JOIN periods ON LAST_DAY(periods.start) >= terminations.valid_from
+            AND DATE_ADD(DATE_ADD(LAST_DAY(periods.start),INTERVAL 1 DAY),INTERVAL -1 MONTH) <= terminations.valid_from
+            AND periods.idperiods = $id_1
+        WHERE id_type = 8
+    ) AS `term_v` ON `term_v`.id_employee = payments.id_employee
+     LEFT JOIN (
                 SELECT
                 coalesce(ROUND(SUM(credits.amount),2),0) AS `decreto_amount`,
                 credits.id_payment
@@ -327,9 +336,9 @@ if($netsuitclient <= 6){
                 FROM debits
                 INNER JOIN payments ON payments.idpayments = debits.id_payment
                 INNER JOIN employees ON employees.idemployees = payments.id_employee
-                WHERE debits.type LIKE '%isr%' AND employees.job_type IS NULL AND employees.active = 1
+                WHERE debits.type LIKE '%isr%'
                 GROUP BY id_payment
-               ) AS `isr` ON `isr`.id_payment = payments.idpayments
+               ) AS `isr` ON `isr`.id_payment = payments.idpayments AND employees.job_type IS NULL AND `term_v`.valid_from IS NULL
     INNER JOIN (
                 SELECT
                 ROUND((IF(e.hiring_date>p.start,
@@ -379,10 +388,9 @@ if($netsuitclient <= 6){
                 ) AS `severances` ON `severances`.idpayments = payments.idpayments
     WHERE (payments.id_period = $id_1) and clientNetSuite = $netsuitclient
     UNION
-    SELECT
-    payments.idpayments,
+    SELECT    
     clientNetSuite,
-    employees.active,
+    IF(`term_v`.valid_from IS NOT NULL, '0', '1') AS `active`,
     accounts.name,
     hires.nearsol_id,
     employees.client_id,
@@ -449,9 +457,9 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`) AS `base_vacaciones`,
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`) AS `productivity_vacaciones`,
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`) AS `base_indemnizacion`,
-    ROUND((IF(employees.job_type = 1, 0, payments.base)+
-    ROUND(payments.ot,2)+
-    ROUND(payments.holidays,2)) * 0.1267, 2) AS `employeer_igss`,
+    ROUND((IF(employees.job_type = 1, 0, COALESCE(payments.base,0))+
+    ROUND(COALESCE(payments.ot,0),2)+
+    ROUND(COALESCE(payments.holidays,0),2)) * 0.1267, 2) AS `employeer_igss`,
     198.24 AS `health`,
     0 AS `PARKING`,
     0 AS `BUS`,
@@ -491,6 +499,16 @@ if($netsuitclient <= 6){
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
     INNER JOIN accounts ON accounts.idaccounts = payments.id_account_py
+    LEFT JOIN (
+        SELECT
+        valid_from, id_employee FROM
+        terminations
+        INNER JOIN hr_processes ON terminations.id_process = hr_processes.idhr_processes
+        INNER JOIN periods ON LAST_DAY(periods.start) >= terminations.valid_from
+            AND DATE_ADD(DATE_ADD(LAST_DAY(periods.start),INTERVAL 1 DAY),INTERVAL -1 MONTH) <= terminations.valid_from
+            AND periods.idperiods = $id_1
+        WHERE id_type = 8
+    ) AS `term_v` ON `term_v`.id_employee = payments.id_employee
     LEFT JOIN (
                 SELECT
                 coalesce(ROUND(SUM(credits.amount),2),0) AS `decreto_amount`,
@@ -585,9 +603,9 @@ if($netsuitclient <= 6){
                 FROM debits
                 INNER JOIN payments ON payments.idpayments = debits.id_payment
                 INNER JOIN employees ON employees.idemployees = payments.id_employee
-                WHERE debits.type LIKE '%isr%' AND employees.job_type IS NULL AND employees.active = 1
+                WHERE debits.type LIKE '%isr%' AND employees.job_type IS NULL
                 GROUP BY id_payment
-               ) AS `isr` ON `isr`.id_payment = payments.idpayments
+               ) AS `isr` ON `isr`.id_payment = payments.idpayments AND `term_v`.valid_from IS NULL
     INNER JOIN (
                 SELECT
                 ROUND((IF(e.hiring_date>p.start,
@@ -637,11 +655,11 @@ if($netsuitclient <= 6){
                 ) AS `severances` ON `severances`.idpayments = payments.idpayments
     WHERE (payments.id_period = $id_2) and clientNetSuite = $netsuitclient
     ) AS `tmp`
-    GROUP BY clientNetSuite,
-    name,
-    nearsol_id,
+    GROUP BY
     client_id,
-    `employee name`;";
+    `employee name`,
+    name,
+    nearsol_id";
 
 }else{
 $netsuitclient = $netsuitclient - 6;
@@ -1202,7 +1220,8 @@ INNER JOIN (
 			) AS `severances` ON `severances`.idpayments = payments.idpayments
 WHERE (payments.id_period = $id_2) AND clientNetSuite = $netsuitclient
 ) AS `tmp` WHERE job_type = 1
-GROUP BY idpayments,clientNetSuite,
+GROUP BY
+clientNetSuite,
 name,
 nearsol_id,
 client_id,
