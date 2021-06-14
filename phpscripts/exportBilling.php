@@ -517,6 +517,15 @@ if($netsuitclient <= 6){
     INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
     INNER JOIN accounts ON accounts.idaccounts = payments.id_account_py
     LEFT JOIN (
+    SELECT rises.effective_date, hr_processes.id_employee, rises.old_payment, rises.new_payment
+    FROM
+    rises
+    INNER JOIN hr_processes ON hr_processes.idhr_processes = rises.id_process
+    INNER JOIN periods ON LAST_DAY(periods.start) >= rises.effective_date
+            AND DATE_ADD(DATE_ADD(LAST_DAY(periods.start),INTERVAL 1 DAY),INTERVAL -1 MONTH) <= rises.effective_date
+            AND periods.idperiods = $id_1
+    ) AS `rises` ON `rises`.id_employee = payments.id_employee
+    LEFT JOIN (
         SELECT
         valid_from, id_employee FROM
         terminations
