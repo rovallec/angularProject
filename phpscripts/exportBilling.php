@@ -129,7 +129,11 @@ if($netsuitclient <= 6){
     employees.job_type AS `job_type`,
     CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
     ROUND(IF(employees.job_type = 1, 0, employees.base_payment),2) AS `base_pay`,
-    ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))), employees.productivity_payment),2) AS `productivity_pay`,
+    ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, 
+        IF(`rises`.effective_date IS NULL, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))),
+            (`riese`.new_salary - 2825.10)),
+        IF(`rises`.effective_date IS NULL, employees.productivity_payment,
+            (`riese`.new_salary - 2825.10))),2) AS `productivity_pay`,
     ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.discounted_days,2)),2) AS `discounted_days`,
     ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.seventh,2)),2) AS `discounted_senths`,
     ROUND(IF(employees.job_type = 1, 0, payroll_values. discounted_hours),2) AS `hours`,
@@ -232,6 +236,15 @@ if($netsuitclient <= 6){
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
     INNER JOIN accounts ON accounts.idaccounts = payments.id_account_py
+    LEFT JOIN (
+    SELECT rises.effective_date, hr_processes.id_employee, rises.old_payment, rises.new_payment
+    FROM
+    rises
+    INNER JOIN hr_processes ON hr_processes.idhr_processes = rises.id_process
+    INNER JOIN periods ON LAST_DAY(periods.start) >= rises.effective_date
+            AND DATE_ADD(DATE_ADD(LAST_DAY(periods.start),INTERVAL 1 DAY),INTERVAL -1 MONTH) <= rises.effective_date
+            AND periods.idperiods = $id_1
+    ) AS `rises` ON `rises`.id_employee = payments.id_employee
     LEFT JOIN (
         SELECT
         valid_from, id_employee FROM
@@ -398,7 +411,11 @@ if($netsuitclient <= 6){
     employees.job_type AS `job_type`,
     CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
     ROUND(IF(employees.job_type = 1, 0, employees.base_payment),2) AS `base_pay`,
-    ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))), employees.productivity_payment),2) AS `productivity_pay`,
+    ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, 
+        IF(`rises`.effective_date IS NULL, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))),
+            (`riese`.new_salary - 2825.10)),
+        IF(`rises`.effective_date IS NULL, employees.productivity_payment,
+            (`riese`.new_salary - 2825.10))),2) AS `productivity_pay`,
     ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.discounted_days,2)),2) AS `discounted_days`,
     ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.seventh,2)),2) AS `discounted_senths`,
     ROUND(IF(employees.job_type = 1, 0, payroll_values. discounted_hours),2) AS `hours`,
