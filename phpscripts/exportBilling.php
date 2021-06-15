@@ -131,7 +131,7 @@ if($netsuitclient <= 6){
 	ROUND(IF(employees.job_type = 1, IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0, 0,  IF(`rises`.idperiods IS NULL, 0, employees.base_payment)), employees.base_payment),2) AS `base_pay`,
     ROUND(IF(employees.job_type = 1,
         IF(employees.cost_type IS NULL,
-            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0, 0, (`rises`.old_salary - 2825.10)*2),
+            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0, 0, (`rises`.old_salary - 2825.10)),
             ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))
         )
         ,employees.productivity_payment
@@ -199,10 +199,10 @@ if($netsuitclient <= 6){
     
     ROUND(IF(employees.job_type = 1,
     IF(employees.cost_type IS NULL,
-        IF( `rises`.idperiods IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
             0,
-            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
-                payments.base, 0)
+            IF(`rises`.idperiods <= $id_1,
+                0, payments.base)
             ),
 			0
         ),
@@ -239,12 +239,12 @@ if($netsuitclient <= 6){
     ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
     + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
     coalesce(payments.ot,0) + coalesce(
-    ROUND(IF(employees.job_type = 1,
+	ROUND(IF(employees.job_type = 1,
     IF(employees.cost_type IS NULL,
-        IF( `rises`.idperiods IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
             0,
-            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
-                payments.base, 0)
+            IF(`rises`.idperiods <= $id_1,
+                0, payments.base)
             ),
 			0
         ),
@@ -268,10 +268,10 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`) AS `base_indemnizacion`,
     ROUND(ROUND((ROUND(IF(employees.job_type = 1,
     IF(employees.cost_type IS NULL,
-        IF( `rises`.idperiods IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
             0,
-            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
-                payments.base, 0)
+            IF(`rises`.idperiods <= $id_1,
+                0, payments.base)
             ),
 			0
         ),
@@ -299,10 +299,10 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)+
     ROUND((ROUND(IF(employees.job_type = 1,
     IF(employees.cost_type IS NULL,
-        IF( `rises`.idperiods IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
             0,
-            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
-                payments.base, 0)
+            IF(`rises`.idperiods <= $id_1,
+                0, payments.base)
             ),
 			0
         ),
@@ -469,7 +469,7 @@ if($netsuitclient <= 6){
                             WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
                 WHERE pay.id_period = $id_1
                 ) AS `severances` ON `severances`.idpayments = payments.idpayments
-    WHERE (payments.id_period = $id_1) and clientNetSuite = 1
+    WHERE (payments.id_period = $id_1) and clientNetSuite = $netsuitclient
     UNION
     SELECT
     clientNetSuite,
@@ -480,10 +480,10 @@ if($netsuitclient <= 6){
     `decreto`.`decreto_amount`,
     employees.job_type AS `job_type`,
     CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
-	ROUND(IF(employees.job_type = 1, IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0, 0,  IF(`rises`.idperiods IS NULL, 0, employees.base_payment)), employees.base_payment),2) AS `base_pay`,
+	ROUND(IF(employees.job_type = 1, IF(`rises`.idperiods <= $id_2 AND `rises`.old_job_type = 0, 0,  IF(`rises`.idperiods IS NULL, 0, employees.base_payment)), employees.base_payment),2) AS `base_pay`,
     ROUND(IF(employees.job_type = 1,
         IF(employees.cost_type IS NULL,
-            IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0, 0, (`rises`.old_salary - 2825.10)*2),
+            IF(`rises`.idperiods <= $id_2 AND `rises`.old_job_type = 0, 0, (`rises`.old_salary - 2825.10)),
             ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))
         )
         ,employees.productivity_payment
@@ -550,10 +550,10 @@ if($netsuitclient <= 6){
     
     ROUND(IF(employees.job_type = 1,
     IF(employees.cost_type IS NULL,
-        IF( `rises`.idperiods IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
             0,
-            IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0,
-                payments.base, 0)
+            IF(`rises`.idperiods <= $id_2,
+                0, payments.base)
             ),
 			0
         ),
@@ -590,10 +590,10 @@ if($netsuitclient <= 6){
     coalesce(payments.ot,0) + coalesce(
     ROUND(IF(employees.job_type = 1,
     IF(employees.cost_type IS NULL,
-        IF( `rises`.idperiods IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
             0,
-            IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0,
-                payments.base, 0)
+            IF(`rises`.idperiods <= $id_2,
+                0, payments.base)
             ),
 			0
         ),
@@ -617,10 +617,10 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`) AS `base_indemnizacion`,
     ROUND(ROUND((ROUND(IF(employees.job_type = 1,
     IF(employees.cost_type IS NULL,
-        IF( `rises`.idperiods IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
             0,
-            IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0,
-                payments.base, 0)
+            IF(`rises`.idperiods <= $id_2,
+                0, payments.base)
             ),
 			0
         ),
@@ -648,10 +648,10 @@ ROUND(ROUND(IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)+
     ROUND((ROUND(IF(employees.job_type = 1,
     IF(employees.cost_type IS NULL,
-        IF( `rises`.idperiods IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
             0,
-            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
-                payments.base, 0)
+            IF(`rises`.idperiods <= $id_2,
+                0, payments.base)
             ),
 			0
         ),
@@ -818,7 +818,7 @@ ROUND(ROUND(IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
                             WHERE hp2.id_type = 8 AND t2.valid_from IS NOT NULL) AS `term` ON `term`.id_employee = pay.id_employee AND term.valid_from BETWEEN p.start AND p.end
                 WHERE pay.id_period = $id_2
                 ) AS `severances` ON `severances`.idpayments = payments.idpayments
-    WHERE (payments.id_period = $id_2) and clientNetSuite = 1
+    WHERE (payments.id_period = $id_2) and clientNetSuite = $netsuitclient
     ) AS `tmp`
     GROUP BY
     client_id,
