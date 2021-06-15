@@ -803,6 +803,10 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
+  setPatrono(str:string){
+    this.selected_patrono = str;
+  }
+
   exportIgss(){
     let user:string = this.authService.getAuthusr().signature;
     let patrono:string = this.selected_patrono;
