@@ -178,7 +178,7 @@ export class AttendenceImportComponent implements OnInit {
         let adj: attendences_adjustment = new attendences_adjustment;
         adj.date = (new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString() + "-" + (new Date().getDate().toString()));
         adj.id_attendence = app.idattendences;
-        adj.id_department = '4';
+        adj.id_department = '28';
         adj.id_employee = app.id_employee;
         adj.id_type = '2';
         adj.id_user = this.authService.getAuthusr().iduser;
