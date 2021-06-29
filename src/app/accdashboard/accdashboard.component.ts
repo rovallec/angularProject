@@ -112,9 +112,9 @@ export class AccdashboardComponent implements OnInit {
           let paymentMethod: payment_methods = new payment_methods;
           this.apiService.getSearchEmployees({ filter: 'idprofiles', value: hire.id_profile, dp: 'all' }).subscribe((emp: employees[]) => {
             emp[0].society = hire.society;
+            emp[0].platform = "WAH";
             emp[0].state = "society";
             this.apiService.updateEmployee(emp[0]).subscribe((str:string)=>{
-              console.log(str);
             });
             if(!hire.bool){
               let date: Fecha = new Fecha;
@@ -201,6 +201,7 @@ export class AccdashboardComponent implements OnInit {
       this.waveFormerEmployer = [];
       hires.forEach(hire => {
         this.apiService.getSearchEmployees({dp:'4', filter:'idprofiles', value:hire.id_profile}).subscribe((emp:employees[])=>{
+          hire.society = emp[0].society;
           this.apiService.getPaymentMethods(emp[0]).subscribe((pym:payment_methods[])=>{
             if(isNull(pym) || pym.length == 0){
               hire.bool = false;
