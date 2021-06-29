@@ -136,6 +136,9 @@ export class AccdashboardComponent implements OnInit {
                 pay.id_account_py = emp[0].id_account;
                 this.apiService.insertPayments(pay).subscribe((str: string) => {
                   if (str=="1"){
+                    emp[0].society = hire.society;
+                    emp[0].platform = "society";
+                    this.apiService.updateEmployee(emp[0]).subscribe((str:string)=>{});
                     this.ngOnInit();
                   } else {
                     window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
