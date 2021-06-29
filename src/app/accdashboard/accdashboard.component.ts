@@ -36,6 +36,7 @@ export class AccdashboardComponent implements OnInit {
   constructor(private apiService: ApiService, public router: Router, private authSrv: AuthServiceService) { }
 
   ngOnInit() {
+    this.waves = [];
     this.getFormerEmployer();
     this.getWavesAll();
     this.getPeriods();
@@ -104,7 +105,7 @@ export class AccdashboardComponent implements OnInit {
   }
 
   completeWave() {
-    let pay: payments = new payments;    
+    let pay: payments = new payments;
     this.hires.forEach(hire => {
       if (hire.status == 'EMPLOYEE') {
         if (parseFloat(hire.account) > 0) {
@@ -196,9 +197,9 @@ export class AccdashboardComponent implements OnInit {
     this.apiService.getFilteredHires(wv).subscribe((hires: hires_template[]) => {
       this.waveFormerEmployer = [];
       hires.forEach(hire => {
-        this.apiService.getSearchEmployees({dp:'all', filter:'id_profile', value:hire.id_profile}).subscribe((emp:employees[])=>{
+        this.apiService.getSearchEmployees({dp:'4', filter:'idprofiles', value:hire.id_profile}).subscribe((emp:employees[])=>{
           this.apiService.getPaymentMethods(emp[0]).subscribe((pym:payment_methods[])=>{
-            if(isNull(pym)){
+            if(isNull(pym) || pym.length == 0){
               hire.bool = false;
             }else{
               if(pym.length>0){

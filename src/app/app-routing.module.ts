@@ -37,6 +37,8 @@ import { ClosingTkComponent } from './closing-tk/closing-tk.component';
 import { ImportWavesComponent } from './import-waves/import-waves.component';
 import { AccountingPoliciesComponent } from './accounting-policies/accounting-policies.component';
 import { VacationsRepComponent } from "./vacations-rep/vacations-rep.component";
+import { ItdashboardComponent } from './itdashboard/itdashboard.component';
+import { ItprofilesComponent } from './itprofiles/itprofiles.component';
 
 const routes:Routes = [
   {
@@ -200,6 +202,16 @@ const routes:Routes = [
   {
     path:'import-waves',
     component:ImportWavesComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'ithome',
+    component:ItdashboardComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'itprofiles/:id',
+    component:ItprofilesComponent,
     canActivate:[AuthGuard]
   },
   {

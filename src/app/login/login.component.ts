@@ -68,6 +68,10 @@ export class LoginComponent implements OnInit {
                   }else{
                     if( this.resUsr[0].department == "37"){
                       this._router.navigate(['/acphhome']);
+                    }else{
+                      if(this.resUsr[0].department == "33"){
+                        this._router.navigate(["/ithome"]);
+                      }
                     }
                   }
                 }
