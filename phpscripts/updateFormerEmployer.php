@@ -24,7 +24,7 @@ $sql = "UPDATE formeremployer SET
         WHERE id_employee = $id_employee";
 
 if(mysqli_query($con,$sql)){
-  echo(mysqli_insert_id($con));
+  echo("1");
 } else {
   echo($sql);
 }

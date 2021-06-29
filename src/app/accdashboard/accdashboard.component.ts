@@ -108,11 +108,10 @@ export class AccdashboardComponent implements OnInit {
     let pay: payments = new payments;
     this.hires.forEach(hire => {
       if (hire.status == 'EMPLOYEE') {
-        if (parseFloat(hire.account) > 0) {
+        if (parseFloat(hire.account) > 0 && !hire.bool) {
           let paymentMethod: payment_methods = new payment_methods;
-          this.apiService.getSearchEmployees({ filter: 'id_profile', value: hire.id_profile, dp: 'all' }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ filter: 'idprofiles', value: hire.id_profile, dp: 'all' }).subscribe((emp: employees[]) => {
             let date: Fecha = new Fecha;
-
             paymentMethod.type = "BANK ACCOUNT";
             paymentMethod.bank = hire.bank;
             paymentMethod.number = hire.account;
@@ -150,11 +149,8 @@ export class AccdashboardComponent implements OnInit {
         }
       }
     })
-    this.hideSchedules();    
-    this.getWavesAll();
-    this.getPeriods();
-    this.getAllEmployees();
     this.cancelEdit();
+    this.hideSchedules();
   }
 
   getWavesAll() {
@@ -252,7 +248,6 @@ export class AccdashboardComponent implements OnInit {
   saveFormerEmployer(){
     this.waveFormerEmployer.forEach(emp => {
       this.actualFormerEmployer = emp;
-      console.log(emp);
       if (emp.idformer_employes == null) {
         if (!(((this.actualFormerEmployer.indemnization == '') && (this.actualFormerEmployer.aguinaldo == '') && 
         (this.actualFormerEmployer.bono14 == '') && (this.actualFormerEmployer.igss == '') 
