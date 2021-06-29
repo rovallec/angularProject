@@ -41,7 +41,7 @@ if($t == 1){
         $id_paymentMethod = mysqli_insert_id($con);
         $sql3 = "INSERT INTO `minearsol`.`modify_payment_methods` (`idmodify_payment_methods`, `id_payment_method`, `id_user`, `date`, `notes`) VALUES (NULL, $id_paymentMethod, $id_user, '$date', '$notes');";
         if(mysqli_query($con,$sql3)){
-          echo("|" . $id_paymentMethod);
+          echo(json_encode("|" . $id_paymentMethod));
         }else{
             $error = "0|" . $sql3 . "|" . mysqli_error($con);
             echo(json_encode($error));
