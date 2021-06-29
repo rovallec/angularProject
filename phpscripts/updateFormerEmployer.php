@@ -16,7 +16,7 @@ $id_employee = ($request->id_employee);
 
 
 $sql = "UPDATE formeremployer SET 
-        indemnization = '$idemnization',
+        indemnization = '$indemnization',
         aguinaldo = '$aguinaldo',
         bono14 = '$bono14',
         igss = '$igss',
