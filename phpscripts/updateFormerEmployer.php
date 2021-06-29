@@ -7,7 +7,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id_employee = ($request->id_employee);
-$idemnization = ($request->idemnization);
+$idemnization = ($request->indemnization);
 $aguinaldo = ($request->aguinaldo);
 $bono14 = ($request->bono14);
 $igss = ($request->igss);
