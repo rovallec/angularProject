@@ -1252,12 +1252,16 @@ export class advances_acc{
 
 export class Fecha{
     today: string;
+    year: string;
+    month: string;
 
     getToday(): string {
         let fecha: Date = new Date();
         let dd: string = String(fecha.getDate()).padStart(2,'0');
         let MM: string = String(fecha.getMonth() + 1).padStart(2, '0');
         let yyyy: string = fecha.getFullYear().toString();
+        this.year = yyyy;
+        this.month = MM;
         return (yyyy + '-' + MM + '-' + dd);
     }
 
@@ -1679,10 +1683,14 @@ export class policies {
     id_client: string;
     idaccounts: string;
     idperiod: string;
+    month: string;
+    type: string;
     constructor() {
         this.id_client = null;
         this.idaccounts = null;
         this.idperiod = null;
+        this.month = null;
+        this.type = null;
     }
 }
 
@@ -1708,38 +1716,38 @@ export class policyHeader {
 export class selectedOption {
     id: number
     description: string;
-    constructor() {
-        this.id = null;
-        this.description = null;
+    constructor(Aid: number, Adesc: string) {
+        this.id = Aid;
+        this.description = Adesc;
     }
 }
 
 export class accountingPolicies {
-    idaccounting_accounts: string;
     external_id: string;
-    name: string;
-    clasif: string;
+    amount: string;
+    id_account_py: string;
     department: string;
     class: string;
     site: string;
-    amount: string;
     clientNetSuite: string;
     id_client: string;
     idaccounts: string;
-    idperiod: string;
+    clasif: string;
+    name: string;
+    idaccounting_accounts: string;
     constructor() {
-        this.idaccounting_accounts = null;
         this.external_id = null;
-        this.name = null;
-        this.clasif = null;
+        this.amount = null;
+        this.id_account_py = null;
         this.department = null;
         this.class = null;
         this.site = null;
-        this.amount = null;
         this.clientNetSuite = null;
         this.id_client = null;
         this.idaccounts = null;
-        this.idperiod = null;
+        this.clasif = null;
+        this.name = null;
+        this.idaccounting_accounts = null;
     }
 }
 
