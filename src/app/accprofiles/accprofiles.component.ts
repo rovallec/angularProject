@@ -101,7 +101,7 @@ export class AccprofilesComponent implements OnInit {
       } else {
         a_date = this.employee.hiring_date;
       }
-      this.acumulated_ag = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number(((new Date(this.term_valid_from).getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
+      this.acumulated_ag = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number(((new Date().getTime() - (new Date(a_date).getTime())))) / (1000 * 3600 * 24))).toFixed(2);
       if (isChrome) {
         this.acumulated_ag = (Number(this.acumulated_ag) - ((21600000 / 1000 / 3600 / 24) * ((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365))).toFixed(2);
       }
@@ -111,7 +111,7 @@ export class AccprofilesComponent implements OnInit {
       } else {
         b_date = this.employee.hiring_date;
       }
-      this.acumulated_b14 = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number((new Date(this.term_valid_from).getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
+      this.acumulated_b14 = (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment)) / 365) * (Number((new Date().getTime() - new Date(b_date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
       if (isChrome) {
         this.acumulated_b14 = (Number(this.acumulated_b14) - ((21600000 / 1000 / 3600 / 24) * (((Number(emp[0].base_payment) + Number(emp[0].productivity_payment))) / 365))).toFixed(2);
       }

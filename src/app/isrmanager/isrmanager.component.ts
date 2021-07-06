@@ -36,8 +36,8 @@ export class IsrmanagerComponent implements OnInit {
     this.apiServices.getPeriods().subscribe((per: periods[]) => {
       per.forEach(period => {
         toPush = true;
-        this.years.forEach(yr=>{
-          if(yr == period.start.split("-")[0]){
+        this.years.forEach(yr => {
+          if (yr == period.start.split("-")[0]) {
             toPush = false;
           }
         })
@@ -83,7 +83,7 @@ export class IsrmanagerComponent implements OnInit {
     window.open("http://172.18.2.45/phpscripts/exportIsrReport.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
   }
 
-  getTermReport(){
+  getTermReport() {
     window.open("http://172.18.2.45/phpscripts/exportIsrReport_term.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
   }
 
@@ -145,15 +145,23 @@ export class IsrmanagerComponent implements OnInit {
       p.start = "explicit";
       this.apiServices.getPayments(p).subscribe((pay: payments[]) => {
         if (!isNullOrUndefined(pay)) {
-          deb.id_employee = single_isr.idemployees;
-          deb.idpayments = pay[0].idpayments;
-          deb.amount = single_isr.amount;
-          deb.type = "ISR";
-          this.apiServices.insertDebits(deb).subscribe((str: string) => {
+          pay.forEach(p => {
+            if (p.id_period == this.selectedPeriod.idperiods) {
+              console.log(p);
+              console.log(this.selectedPeriod);
+              deb.id_employee = single_isr.idemployees;
+              deb.idpayments = p.idpayments;
+              deb.amount = single_isr.amount;
+              deb.type = "ISR";
+              this.apiServices.insertDebits(deb).subscribe((str: string) => {
+              })
+            }
           })
         }
       })
       p.start = cnt;
     })
+    window.alert("Import Finished");
+    this.ngOnInit();
   }
 }
