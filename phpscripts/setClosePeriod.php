@@ -145,13 +145,14 @@ try {
   }
 
   if ($count = 0) {
-    $sql10 =  "INSERT INTO payments (idpayments, id_employee, id_paymentmethod, id_period, credits, debits, date)
-              SELECT distinct NULL, idemployees, idpayment_methods, @Id_Period AS ID_PERIOD, '0.00', '0.00', null AS 'Date' 
-              FROM payment_methods p
-              INNER JOIN employees e ON e.idemployees = p.id_employee
-              LEFT JOIN hr_processes hp ON e.idemployees = hp.id_employee 
-              LEFT JOIN terminations t on hp.idhr_processes = t.id_process AND (t.valid_from > (select end from periods p2 where p2.idperiods = @Id_Period))
-              WHERE p.predeterm = 1 AND (e.active = 1 or t.valid_from IS NOT NULL);";
+    $sql10 =  " INSERT INTO payments (idpayments, id_employee, id_paymentmethod, id_period, credits, debits, date)
+                SELECT DISTINCT NULL, idemployees, idpayment_methods, @Id_Period AS ID_PERIOD, '0.00', '0.00', null AS 'Date' 
+                FROM payment_methods p
+                INNER JOIN employees e ON e.idemployees = p.id_employee
+                LEFT JOIN hr_processes hp ON e.idemployees = hp.id_employee 
+                LEFT JOIN terminations t on hp.idhr_processes = t.id_process 
+                                          AND (t.valid_from >= (select DATE_ADD(p2.`end`, INTERVAL 1 DAY) AS end FROM periods p2 WHERE p2.idperiods = @Id_Period))
+                WHERE p.predeterm = 1 AND (e.active = 1 or t.valid_from IS NOT NULL);";
     if ($transact->query($sql10) === true) {
       // Proceso ejecutado correctamente, no es necesario hacer nada.
     } else {

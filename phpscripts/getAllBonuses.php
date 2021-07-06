@@ -32,7 +32,7 @@ if($nm=='bonuses'){
     e.name,
     c.name AS account,
     a.hiring_date,
-    DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)) + 1 AS days_to_pay,
+    COALESCE(DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)), 0) + 1 AS days_to_pay,
     0 AS base_payment,
     0 AS complement,
     0 AS base_calc,
@@ -57,7 +57,7 @@ if($nm=='bonuses'){
     e.name,
     c.name AS account,
     a.hiring_date,
-    DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)) + 1 AS days_to_pay,
+    COALESCE(DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)), 0) + 1 AS days_to_pay,
     0 AS base_payment,
     0 AS complement,
     0 AS base_calc,
@@ -82,7 +82,7 @@ if($nm=='bonuses'){
     e.name,
     c.name AS account,
     a.hiring_date,
-    DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)) + 1 AS days_to_pay,
+    COALESCE(DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)), 0) + 1 AS days_to_pay,
     0 AS base_payment,
     0 AS complement,
     0 AS base_calc,
@@ -96,7 +96,7 @@ if($nm=='bonuses'){
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
   LEFT JOIN hr_processes hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
-  LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
+  LEFT JOIN (SELECT * FROM periods WHERE status = 1 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
   WHERE e.name LIKE '%$value%'
   LIMIT 50;";  
@@ -107,7 +107,7 @@ if($nm=='bonuses'){
     e.name,
     c.name AS account,
     a.hiring_date,
-    DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)) + 1 AS days_to_pay,
+    COALESCE(DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)), 0) + 1 AS days_to_pay,
     0 AS base_payment,
     0 AS complement,
     0 AS base_calc,
@@ -121,7 +121,7 @@ if($nm=='bonuses'){
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
   LEFT JOIN hr_processes hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
-  LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
+  LEFT JOIN (SELECT * FROM periods WHERE status = 1 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
   WHERE e.dpi LIKE '%$value%'
   LIMIT 50;";  
@@ -132,7 +132,7 @@ if($nm=='bonuses'){
     e.name,
     c.name AS account,
     a.hiring_date,
-    DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)) + 1 AS days_to_pay,
+    COALESCE(DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)), 0) + 1 AS days_to_pay,
     0 AS base_payment,
     0 AS complement,
     0 AS base_calc,
@@ -146,7 +146,7 @@ if($nm=='bonuses'){
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
   LEFT JOIN hr_processes hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
-  LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
+  LEFT JOIN (SELECT * FROM periods WHERE status = 1 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
   WHERE c.id_client LIKE '%$value%'
   LIMIT 50;";  
@@ -157,7 +157,7 @@ if($nm=='bonuses'){
     e.name,
     c.name AS account,
     a.hiring_date,
-    DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)) + 1 AS days_to_pay,
+    COALESCE(DATEDIFF(per.end, IF(a.hiring_date>per.start, a.hiring_date, per.start)), 0) + 1 AS days_to_pay,
     0 AS base_payment,
     0 AS complement,
     0 AS base_calc,
@@ -171,7 +171,7 @@ if($nm=='bonuses'){
   INNER JOIN (SELECT CONCAT(TRIM(p.first_name), ' ', TRIM(p.second_name), ' ', TRIM(p.first_lastname), ' ', TRIM(p.second_lastname)) AS name, p.dpi, p.idprofiles from profiles p) e ON (e.idprofiles = d.id_profile)  
   LEFT JOIN hr ON (a.idemployees = hr.id_employee)
   LEFT JOIN terminations t ON (hr.idhr_processes = t.id_process)
-  LEFT JOIN (SELECT * FROM periods WHERE status = 0 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
+  LEFT JOIN (SELECT * FROM periods WHERE status = 1 AND type_period = " . $filterBonuses . " ORDER BY end DESC LIMIT 0,1) per on (CURDATE() BETWEEN per.start AND per.end)
   LEFT JOIN (SELECT SUM(ad.amount) AS amount, ad.id_process from advances ad group by ad.id_process) adv on (hr.idhr_processes = adv.id_process)
   WHERE d.nearsol_id LIKE '%$value%'
   LIMIT 50;";  

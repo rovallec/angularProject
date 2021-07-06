@@ -13,10 +13,10 @@ $dp = ($request->dp);
 
 if($dp != '4' && $dp != '28'){
     if($dp == '27'){
-        $add_sql = "`employees`.`id_account` = '13' OR `employees`.`id_account` = '25' OR `employees`.`id_account` = '23' OR `employees`.`id_account` = '26' OR `employees`.`id_account` = '12' OR `employees`.`id_account` = '27' OR `employees`.`id_account` = '33'";
+        $add_sql = "`employees`.`id_account` = '13' OR `employees`.`id_account` = '25' OR `employees`.`id_account` = '23' OR `employees`.`id_account` = '26' OR `employees`.`id_account` = '12' OR `employees`.`id_account` = '27' OR `employees`.`id_account` = '33' OR `employees`.`id_account` = '44'";
     }else{
         if($dp == '5' || $dp == '29'){
-            $add_sql = "`employees`.`id_account` = '1' OR `employees`.`id_account` = '3' OR `employees`.`id_account` = '6' OR `employees`.`id_account` = '7' OR `employees`.`id_account` = '8' OR `employees`.`id_account` = '9' OR `employees`.`id_account` = '10' OR `employees`.`id_account` = '14' OR `employees`.`id_account` = '15' OR `employees`.`id_account` = '16' OR `employees`.`id_account` = '17' OR `employees`.`id_account` = '18' OR `employees`.`id_account` = '19' OR `employees`.`id_account` = '20' OR `employees`.`id_account` = '21' OR `employees`.`id_account` = '22' OR `employees`.`id_account` = '24' OR `employees`.`id_account` = '30' OR `employees`.`id_account` = '31' OR `employees`.`id_account` = '38' OR `employees`.`id_account` = '39'";
+            $add_sql = "`employees`.`id_account` = '1' OR `employees`.`id_account` = '3' OR `employees`.`id_account` = '6' OR `employees`.`id_account` = '7' OR `employees`.`id_account` = '8' OR `employees`.`id_account` = '9' OR `employees`.`id_account` = '10' OR `employees`.`id_account` = '14' OR `employees`.`id_account` = '15' OR `employees`.`id_account` = '16' OR `employees`.`id_account` = '17' OR `employees`.`id_account` = '18' OR `employees`.`id_account` = '19' OR `employees`.`id_account` = '20' OR `employees`.`id_account` = '21' OR `employees`.`id_account` = '22' OR `employees`.`id_account` = '24' OR `employees`.`id_account` = '30' OR `employees`.`id_account` = '31' OR `employees`.`id_account` = '38' OR `employees`.`id_account` = '39' OR `employees`.`id_account` = '44'";
         }else{
             if($dp == 'all'){
                 $add_sql = "1";

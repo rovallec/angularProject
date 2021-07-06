@@ -26,7 +26,7 @@ if($filter == 'explicit'){
     LEFT JOIN (SELECT vacations.*, hr_processes.id_employee FROM 
                hr_processes
                LEFT JOIN vacations ON vacations.id_process = hr_processes.idhr_processes WHERE id_type = 4) AS `vac` ON `vac`.id_employee = employees.idemployees
-    WHERE `$filter` = '$value';"
+    WHERE `$filter` = '$value';";
 }else{
     $sql = "SELECT nearsol_id, client_id, job, accounts.name, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `full_name`,
         employees.hiring_date, COALESCE((DATEDIFF(NOW(), employees.hiring_date)/365)*15,0) AS `acumulated`, COALESCE(`vac`.`cnt`,0) AS `enjoyed`,

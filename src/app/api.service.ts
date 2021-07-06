@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -20,8 +20,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = "http://localhost"; // Desarrollo
-PHP_API_SERVER = "http://172.18.2.45";  // produccion
+PHP_API_SERVER = "http://localhost"; // Desarrollo
+//PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -55,6 +55,10 @@ getWaves(){
 
 getAccounts(){
   return this.httpClient.get<accounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAccounts.php`);
+}
+
+getAccounting_Accounts() {
+  return this.httpClient.get<AccountingAccounts[]>(`${this.PHP_API_SERVER}/phpscripts/getAccounting_Accounts.php`);
 }
 
 updateWave(wv:waves_template){
@@ -851,8 +855,12 @@ deleteFormerEmployer(any: any) {
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteFormerEmployer.php`, any);
 }
 
-getAccountingPolicies(any: any) {
-  return this.httpClient.post<accountingPolicies[]>(`${this.PHP_API_SERVER}/phpscripts/getAccountingPolicies.php`, any);
+getAccountingPolicies(pol: policies) {
+  if (pol.type=='false') {
+    return this.httpClient.post<accountingPolicies[]>(`${this.PHP_API_SERVER}/phpscripts/getAccountingPolicies.php`, pol);
+  } else {
+    return this.httpClient.post<accountingPolicies[]>(`${this.PHP_API_SERVER}/phpscripts/getAccountingPoliciesMonthly.php`, pol);
+  }
 }
 
 insertTkAdjustments(tk:timekeeping_adjustments){
