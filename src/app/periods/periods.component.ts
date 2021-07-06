@@ -330,16 +330,33 @@ export class PeriodsComponent implements OnInit {
                           }
 
                           if(Math.abs(Number(payroll_value.adj_hours))>0 ||Math.abs( Number(payroll_value.adj_holidays))>0 || Math.abs(Number(payroll_value.adj_ot))>0){
+
+                            let adjustment_base:credits = new credits;
+                            let adjustment_ot:credits = new credits;
+                            let adjustment_hld:credits = new credits;
                             adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250/240))).toFixed(2);
+                            adjustment_base.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250/240))).toFixed(2);
+                            adjustment_base.type = "Ajuste Horas Nominales";
+
                             if (emp[0].job != 'Supervisor De Operaciones' && emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                               adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 2)).toFixed(2);
+                              adjustment_ot.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 2)).toFixed(2);
+                              adjustment_ot.type = "Ajuste OT";
                             } else {
                               adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
+                              adjustment_ot.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
+                              adjustment_ot.type = "Ajuste OT";
                             }
+
                             adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
+                            adjustment_hld.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
+                            adjustment_hld.type = "Ajuste HLD";
+
                             adjustments.type = "Ajustes periodos anteriores";
                             adjustments.idpayments = py.idpayments;
-                            this.global_credits.push(adjustments);
+                            this.global_credits.push(adjustment_base);
+                            this.global_credits.push(adjustment_ot);
+                            this.global_credits.push(adjustment_hld);
                           }
 
                           igss_debit.amount = ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * 0.0483).toFixed(2);
@@ -784,6 +801,10 @@ export class PeriodsComponent implements OnInit {
       this.show_payments.push(p);
       //}
     })
+  }
+
+  setPatrono(str:string){
+    this.selected_patrono = str;
   }
 
   exportIgss(){

@@ -396,14 +396,14 @@
                             (click)="setAccount($event.target.value)">
                             <option value="1">FIRST PARTY EXPENSE</option>
                             <option value="2">THIRD PARTY EXPENSE</option>
-                            <option value="3">HR, Admin, Finance EXPENSE</option>
-                            <option value="4">QA EXPENSE</option>
+                            <option value="3">QA EXPENSE</option>
+                            <option value="4">HR, Admin, Finance EXPENSE</option>
                             <option value="5">ZERO VARIANCE EXPENSE</option>
                             <option value="6">ARBONNE EXPENSE</option>
                             <option value="7">FIRST PARTY COST</option>
                             <option value="8">THIRD PARTY COST</option>
-                            <option value="9">HR, Admin, Finance COST</option>
-                            <option value="10">QA COST</option>
+                            <option value="9">QA COST</option>
+                            <option value="10">HR, Admin, Finance COST</option>
                             <option value="11">ZERO VARIANCE COST</option>
                             <option value="12">ARBONNE COST</option>
                         </select>
@@ -437,7 +437,7 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
                         <label>Patrono:</label>
-                        <select class="form-control" [ngModel]="selected_patrono">
+                        <select class="form-control" [ngModel]="selected_patrono" (change)="setPatrono($event.target.value)">
                             <option>PRG Recurso Humano, S.A.</option>
                             <option>Nearsol, S.A.</option>
                         </select>

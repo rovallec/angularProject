@@ -7,7 +7,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id_employee = ($request->id_employee);
-$idemnization = ($request->idemnization);
+$idemnization = ($request->indemnization);
 $aguinaldo = ($request->aguinaldo);
 $bono14 = ($request->bono14);
 $igss = ($request->igss);
@@ -16,7 +16,7 @@ $id_employee = ($request->id_employee);
 
 
 $sql = "UPDATE formeremployer SET 
-        idemnization = '$idemnization',
+        indemnization = '$idemnization',
         aguinaldo = '$aguinaldo',
         bono14 = '$bono14',
         igss = '$igss',
@@ -24,7 +24,7 @@ $sql = "UPDATE formeremployer SET
         WHERE id_employee = $id_employee";
 
 if(mysqli_query($con,$sql)){
-  echo(mysqli_insert_id($con));
+  echo("1");
 } else {
   echo($sql);
 }

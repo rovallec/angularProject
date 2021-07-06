@@ -43,7 +43,9 @@ import { ClosingTkComponent } from './closing-tk/closing-tk.component';
 import { ImportWavesComponent } from './import-waves/import-waves.component';
 import { AccountingPoliciesComponent } from './accounting-policies/accounting-policies.component';
 import { VacationsRepComponent } from './vacations-rep/vacations-rep.component';
-import { OpsViewComponent } from './ops-view/ops-view.component'
+import { OpsViewComponent } from './ops-view/ops-view.component';
+import { ItdashboardComponent } from './itdashboard/itdashboard.component';
+import { ItprofilesComponent } from './itprofiles/itprofiles.component'
 
 @NgModule({
   declarations: [
@@ -82,7 +84,9 @@ import { OpsViewComponent } from './ops-view/ops-view.component'
     ImportWavesComponent,
     AccountingPoliciesComponent,
     VacationsRepComponent,
-    OpsViewComponent
+    OpsViewComponent,
+    ItdashboardComponent,
+    ItprofilesComponent
   ],
   imports: [
     BrowserModule,

@@ -397,7 +397,7 @@ export class ClosingTkComponent implements OnInit {
                                             }
                                           }
                                         }
-                                        if (attendance.date != (new Date().getFullYear() + "-01-01") && attendance.date != (new Date().getFullYear() + "-04-01") && attendance.date != (new Date().getFullYear() + "-04-02") && attendance.date != (new Date().getFullYear() + "-04-03") && attendance.date != (new Date().getFullYear() + "-05-01") && !mother_father_day) {
+                                        if (attendance.date != (new Date().getFullYear() + "-01-01") && attendance.date != (new Date().getFullYear() + "-06-28") && attendance.date != (new Date().getFullYear() + "-04-01") && attendance.date != (new Date().getFullYear() + "-04-02") && attendance.date != (new Date().getFullYear() + "-04-03") && attendance.date != (new Date().getFullYear() + "-05-01") && !mother_father_day) {
                                           if (Number(attendance.scheduled) > 0) {
                                             if (Number(attendance.worked_time) == 0) {
                                               attendance.balance = "NS";
@@ -494,7 +494,7 @@ export class ClosingTkComponent implements OnInit {
 
                                 if (!isNullOrUndefined(trm.valid_from) && worked_days == 0 && discounted_days > 0) {
                                   if (new Date(trm.valid_from).getTime() > new Date(this.actualPeriod.start).getTime()) {
-                                    sevenths = (((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24)) - 1 - (ns_count + janp_sequence + hldT));
+                                    sevenths = (((new Date(trm.valid_from).getTime() - new Date(this.actualPeriod.start).getTime()) / (1000 * 3600 * 24)) + sevenths - 1 - (ns_count + janp_sequence + hldT));
                                   }
                                 } else if(isNullOrUndefined(trm.valid_from)){
                                   if (discounted_days + sevenths > att.length) {
