@@ -1684,7 +1684,7 @@ export class policies {
     idaccounts: string;
     idperiod: string;
     month: string;
-    type: string;
+    type: string; // si es mensual o por período.
     constructor() {
         this.id_client = null;
         this.idaccounts = null;
@@ -1784,5 +1784,105 @@ export class timekeeping_adjustments{
         this.nearsol_id = null;
         this.client_id = null;
         this.name = null;
+    }
+}
+
+export class billing {
+    month: string;
+    account: string;
+    detail: billing_detail[];
+    constructor() {
+        this.month = null;
+        this.account = null;
+        this.detail = [];
+    }
+}
+
+export class billing_detail {
+    avaya:string;
+    name:string;
+    account:string;
+    nearsol_id:string;
+    minimum_wage:string;
+    incentive:string;
+    days_discounted:string;
+    deduction_7th:string;
+    discounted_hours:string;
+    minimum_wage_deductions:string;
+    incentive_deductions:string;
+    minimum_wage_with_deductions:string;
+    incentive_with_deductions:string;
+    overtime_hours:string;
+    overtime:string;
+    holiday_hours:string;
+    holiday:string;
+    bonuses:string;
+    treasure_hunt:string;
+    adjustments:string;
+    total_income:string;
+    bus:string;
+    parking_car:string;
+    parking_motorcycle_bicycle:string;
+    igss:string;
+    isr:string;
+    equipment:string;
+    total_deductions:string;
+    total_payment:string;
+    bonus_13:string;
+    bonus_13_bonif:string;
+    bonus_14:string;
+    bonus_14_bonif:string;
+    vacation_reserves:string;
+    vacation_reserves_bonif:string;
+    severance_reserves:string;
+    employer_igss:string;
+    health_insurance:string;
+    parking:string;
+    bus_client:string;
+    total_reserves_and_fees:string;
+    total_cost:string;
+    constructor() {
+        this.avaya = null;
+        this.name = null;
+        this.account = null;
+        this.nearsol_id = null;
+        this.minimum_wage = null;
+        this.incentive = null;
+        this.days_discounted = null;
+        this.deduction_7th = null;
+        this.discounted_hours = null;
+        this.minimum_wage_deductions = null;
+        this.incentive_deductions = null;
+        this.minimum_wage_with_deductions = null;
+        this.incentive_with_deductions = null;
+        this.overtime_hours = null;
+        this.overtime = null;
+        this.holiday_hours = null;
+        this.holiday = null;
+        this.bonuses = null;
+        this.treasure_hunt = null;
+        this.adjustments = null;
+        this.total_income = null;
+        this.bus = null;
+        this.parking_car = null;
+        this.parking_motorcycle_bicycle = null;
+        this.igss = null;
+        this.isr = null;
+        this.equipment = null;
+        this.total_deductions = null;
+        this.total_payment = null;
+        this.bonus_13 = null;
+        this.bonus_13_bonif = null;
+        this.bonus_14 = null;
+        this.bonus_14_bonif = null;
+        this.vacation_reserves = null;
+        this.vacation_reserves_bonif = null;
+        this.severance_reserves = null;
+        this.employer_igss = null;
+        this.health_insurance = null;
+        this.parking = null;
+        this.bus_client = null;
+        this.total_reserves_and_fees = null;
+        this.total_cost = null;
     }
 }

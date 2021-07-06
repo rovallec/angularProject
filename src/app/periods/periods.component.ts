@@ -10,7 +10,7 @@ import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { schedule_visit } from '../addTemplate';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients } from '../process_templates';
+import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients, billing_detail } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
@@ -753,6 +753,20 @@ export class PeriodsComponent implements OnInit {
 
   setAccount(str: string) {
     this.selected_accounts = str;
+  }
+
+  saveBilling() {
+    let any: any = {"month": this.period.start.split("-")[1], "account": this.selected_accounts};
+    let month: string = new Date(this.period.start).getMonth.toString();
+    this.apiService.getBilling(month).subscribe((Billing: billing_detail)=>{
+      if (isNullOrUndefined(Billing)) {
+        this.apiService.saveBilling(any).subscribe((str: string)=>{
+          // por el momento no hacer nada.
+        })
+      } else {
+        this.exportBilling();
+      }
+    })
   }
 
   exportBilling() {

@@ -198,18 +198,22 @@ export class AccountingPoliciesComponent implements OnInit {
   }
 
   filterAccounts(Aaccountingpolicies: accountingPolicies[], Aext_id: string, Aaccounting: accountingPolicies): accountingPolicies {
-    let aa: accountingPolicies[] = [];
+    let aa: accountingPolicies[] = Aaccountingpolicies;
     let acP: accountingPolicies = Aaccounting;
     let amount: number = 0;
-    aa = Aaccountingpolicies.filter(Aap => Aap.external_id == Aext_id)
+    
+    /*aa = Aaccountingpolicies.filter(Aap => Aap.external_id == Aext_id)
     if (!isNullOrUndefined(aa[0])) {
       acP = aa[0];
     } else {
       amount = 0;
-    }
+    }*/
     
     aa.forEach(Aap => {
-      amount = amount + Number(Aap.amount);
+      if (Aap.external_id == Aext_id) {
+        acP = Aap;
+        amount = amount + Number(Aap.amount);
+      }
     })
 
     acP.amount = amount.toFixed(2);

@@ -39,6 +39,14 @@ function formatDates($adate) {
   }
 }
 
+function ifExist($adato) {
+  if (!isset($adato) || empty($adato) || is_null($adato) || is_nan($adato)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 function removeCommas($avalue) {
   $avalue = str_replace(',','',$avalue);  
   return $avalue;
