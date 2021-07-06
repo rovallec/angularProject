@@ -162,7 +162,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.end >= '$start')
       OR (leaves.start <= '$end'))
       AND (`dt`.`dates` between '$start' AND '$end')
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity' OR leaves.motive = 'COVID Paid') AND hr_processes.status IN ($state))  
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND (leaves.motive = 'Others Paid' OR leaves.motive ='Maternity' OR leaves.motive = 'COVID Paid' OR leaves.motive = 'IGSS Paid') AND hr_processes.status IN ($state))  
 
 UNION
 

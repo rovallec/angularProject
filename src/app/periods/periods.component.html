@@ -83,7 +83,7 @@
                 data-placement="top" title="Bank Report" (click)="exportBankReport()" *ngIf="period.status == '0'"></i>
 
             <i class="fas fa-file-contract" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
-                title="Save accounting policy" (click)="setAccountingPolicy()" *ngIf="period.status == '0'"></i>
+                title="Get IGSS" data-toggle="modal" data-target="#setPatrono"></i>
             <!-------------------------------------EXPORT REPORTS------------------------------------------------------------->
 
         </div>
@@ -450,7 +450,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
                 <div class="d-flex justify-content-right">
-                    <button type="button" class="btn btn-primary" (click)="exportBilling()">Generate</button>
+                    <button type="button" class="btn btn-primary" (click)="exportIgss()">Generate</button>
                 </div>
             </div>
         </div>
