@@ -42,7 +42,8 @@
         echo("1|1|$start_period_date_dmy|$end_period_date_dmy|O||\n");
         
         $sql_employees = "SELECT profiles.iggs, profiles.first_name, profiles.second_name, profiles.first_lastname, profiles.second_lastname,
-                            ROUND(`base_salary`.`base`,2) AS `base_int`, DATE_FORMAT(employees.hiring_date, '%d/%m/%Y') AS `hiring`, 
+                            ROUND(`base_salary`.`base`,2) AS `base_int`, IF(employees.hiring_date >= LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH))
+                            AND employees.hiring_date <= LAST_DAY('$date_start'), DATE_FORMAT(employees.hiring_date, '%d/%m/%Y'), '') AS `hiring`, 
                             IF(`term`.valid_from <= LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH)),
                             DATE_FORMAT(`term`.valid_from, '%d/%m/%Y'), NULL) AS `term`, profiles.nit
                             FROM employees
@@ -54,7 +55,7 @@
                             LEFT JOIN (SELECT ROUND(SUM(credits.amount),2) AS `base`, id_employee FROM credits
                                     INNER JOIN payments ON payments.idpayments = credits.id_payment
                                     INNER JOIN periods ON periods.idperiods = payments.id_period
-                                                AND (credits.type = 'Salario Base' OR credits.type LIKE '%Horas Extra Laboradas%:' OR credits.type LIKE '%Horas De Asueto:%')
+                                                AND (credits.type = 'Salario Base' OR credits.type LIKE '%Horas Extra Laboradas%' OR credits.type LIKE '%Horas De Asueto%')
                                     WHERE periods.start = DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH) 
                                     OR periods.end = LAST_DAY(DATE_ADD(DATE_ADD(LAST_DAY('$date_start'),INTERVAL 1 DAY),INTERVAL -1 MONTH)) GROUP BY id_employee)
                                     AS `base_salary` ON `base_salary`.id_employee = employees.idemployees

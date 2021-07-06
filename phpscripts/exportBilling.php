@@ -82,8 +82,8 @@ if($netsuitclient <= 6){
     ROUND(SUM(coalesce(`productivity_bono14`,0)),2) AS `33`,
     ROUND(SUM(coalesce(`base_vacaciones`,0)),2) AS `34`,
     ROUND(SUM(coalesce(`productivity_vacaciones`,0)),2) AS `35`,
-    ROUND(SUM(coalesce(`base_indemnizacion`,0)),2) AS `36`,
-    ROUND(SUM(coalesce(`employeer_igss`,0)),2) AS `37`,
+    ROUND(SUM(coalesce(`base_indemnizacion`,0)),2) AS `$id_1`,
+    ROUND(SUM(coalesce(`employeer_igss`,0)),2) AS `$id_2`,
     ROUND(SUM(coalesce(`health`,0)),2) AS `38`,
     SUM(coalesce(`PARKING`,0)) AS `39`,
     SUM(coalesce(`BUS`,0)) AS `40`,
@@ -120,8 +120,7 @@ if($netsuitclient <= 6){
     FROM
     (
     SELECT
-    payments.idpayments,
-    employees.active,
+    IF(employees.termination_date IS NOT NULL, '0', '1') AS `active`,
     clientNetSuite,
     accounts.name,
     hires.nearsol_id,
@@ -129,14 +128,65 @@ if($netsuitclient <= 6){
     `decreto`.`decreto_amount`,
     employees.job_type AS `job_type`,
     CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
-    ROUND(IF(employees.job_type = 1, 0, employees.base_payment),2) AS `base_pay`,
-    ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))), employees.productivity_payment),2) AS `productivity_pay`,
-    ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.discounted_days,2)),2) AS `discounted_days`,
-    ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.seventh,2)),2) AS `discounted_senths`,
-    ROUND(IF(employees.job_type = 1, 0, payroll_values. discounted_hours),2) AS `hours`,
-    ROUND(IF(employees.job_type = 1, 0, ROUND(payments.base - ROUND((payments.base_complete/2),2), 2)),2) AS `wage_deductions`,
+	ROUND(IF(employees.job_type = 1, IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0, 0,  IF(`rises`.idperiods IS NULL, 0, employees.base_payment)), employees.base_payment),2) AS `base_pay`,
+    ROUND(IF(employees.job_type = 1,
+        IF(employees.cost_type IS NULL,
+            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0, 0, (`rises`.old_salary - 2825.10)),
+            ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))
+        )
+        ,employees.productivity_payment
+    ),2) AS `productivity_pay`,
+
+    ROUND(IF(employees.job_type = 1,
+        IF( `rises`.idperiods IS NULL,
+            0,
+            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
+                ROUND(0-payroll_values.discounted_days,2),
+                0
+            )
+        ),
+        ROUND(0-payroll_values.discounted_days,2)),2
+    ) AS `discounted_days`,
+    ROUND(IF(employees.job_type = 1,
+            IF( `rises`.idperiods IS NULL,
+                0,
+                IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
+                    ROUND(0-payroll_values.seventh,2), 
+                    0
+                )
+            ),
+        ROUND(0-payroll_values.seventh,2)),2
+    ) AS `discounted_senths`,
+
+    ROUND(IF(employees.job_type = 1,
+            IF( `rises`.idperiods IS NULL,
+                0,
+                IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
+                    ROUND(payroll_values.discounted_hours,2), 
+                    0
+                )
+            ),
+        ROUND(payroll_values.discounted_hours,2)),2
+    ) AS `hours`,
+	ROUND(IF(employees.job_type = 1,
+            IF( `rises`.idperiods IS NULL,
+                0,
+                IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
+                    ROUND(payments.base - ROUND((payments.base_complete/2),2), 2), 
+                    0
+                )
+            ),
+        ROUND(payments.base - ROUND((payments.base_complete/2),2), 2)),2) AS `wage_deductions`,
+        
     ROUND(IF(employees.job_type = 1, 
-    IF(employees.cost_type IS NULL, 0,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL,
+            0,
+            IF(`rises`.idperiods <= $id_1 AND `rises`.old_job_type = 0,
+            ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2), 
+                0
+            )
+        ),
     ROUND(((payments.productivity_complete/2) - payments.productivity)-(
     ((
     ((payments.productivity_complete/2) - payments.productivity)/
@@ -145,15 +195,30 @@ if($netsuitclient <= 6){
     )*((employees.max_cost - payments.base_complete - 250)/2)),2)
     ),
     ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2)),2) AS `incentive_deductions`,
-    ROUND(IF(employees.job_type = 1, 0, payments.base),2) AS `base`,
-    ROUND(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1,
+    
+    
+    ROUND(IF(employees.job_type = 1,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
+            0,
+            IF(`rises`.idperiods <= $id_1,
+                0, payments.base)
+            ),
+			0
+        ),
+    payments.base),2) AS `base`,
+    
+
+   ROUND(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1, IF(`rises`.idperiods IS NULL,
     (ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
     ROUND(((payments.productivity_complete/2) - payments.productivity)-(
     ((
     ((payments.productivity_complete/2) - payments.productivity)/
     ((payments.productivity_complete/2)/120)
     )/120
-    )*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0), payments.productivity),2) AS `productivity`,
+    )*((employees.max_cost - payments.base_complete - 250)/2)),2)), IF(`rises`.idperiods > $id_1 AND `rises`.old_job_type = 0, payments.productivity, 0))
+    , payments.productivity),0), payments.productivity),2) AS `productivity`,
+    
     ROUND(payments.ot_hours,2) AS `ot_hours`,
     ROUND(payments.ot,2) AS `ot`,
     ROUND(payments.holidays_hours,2) AS `holidays_hours`,
@@ -169,11 +234,21 @@ if($netsuitclient <= 6){
     0 AS `headsets_amount`,
     
     ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + 
-    coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) AS `total_deductions`,
+    coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0), 2) AS `total_deductions`,
     
     ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
     + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-    coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1,
+    coalesce(payments.ot,0) + coalesce(
+	ROUND(IF(employees.job_type = 1,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
+            0,
+            IF(`rises`.idperiods <= $id_1,
+                0, payments.base)
+            ),
+			0
+        ),
+    payments.base),2),0) + coalesce(IF(employees.job_type = 1,
     (ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
     ROUND(((payments.productivity_complete/2) - payments.productivity)-(
     ((
@@ -182,7 +257,7 @@ if($netsuitclient <= 6){
     )/120
     )*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0),2)) -
     ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + coalesce(`bus_service`.`bus_amount`,0) +
-    coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2),2
+    coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0), 2),2
     ) AS `total_payment`,
     IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`) AS `base_aguinaldo`,
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`) AS `productivity_aguinaldo`,
@@ -191,9 +266,18 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`) AS `base_vacaciones`,
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`) AS `productivity_vacaciones`,
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`) AS `base_indemnizacion`,
-    ROUND((IF(employees.job_type = 1, 0, payments.base)+
-    ROUND(payments.ot,2)+
-    ROUND(payments.holidays,2)) * 0.1267, 2) AS `employeer_igss`,
+    ROUND(ROUND((ROUND(IF(employees.job_type = 1,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
+            0,
+            IF(`rises`.idperiods <= $id_1,
+                0, payments.base)
+            ),
+			0
+        ),
+    payments.base),2))+
+    ROUND(COALESCE(payments.ot,0),2)+
+    ROUND(COALESCE(payments.holidays,0),2)) * 0.1267, 2) AS `employeer_igss`,
     198.24 AS `health`,
     0 AS `PARKING`,
     0 AS `BUS`,
@@ -213,7 +297,16 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_bono14`)), `severances`.`amount_productivity_bono14`)+
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`)+
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)+
-    ROUND((IF(employees.job_type = 1, 0, payments.base)+
+    ROUND((ROUND(IF(employees.job_type = 1,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
+            0,
+            IF(`rises`.idperiods <= $id_1,
+                0, payments.base)
+            ),
+			0
+        ),
+    payments.base),2)+
     ROUND(payments.ot,2)+
     ROUND(payments.holidays, 2)) * 0.1267, 2),2)+
     ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
@@ -234,6 +327,13 @@ if($netsuitclient <= 6){
     INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
     INNER JOIN accounts ON accounts.idaccounts = payments.id_account_py
     LEFT JOIN (
+    SELECT rises.effective_date, hr_processes.id_employee, rises.old_salary, rises.new_salary, periods.idperiods, rises.old_job_type
+    FROM
+    rises
+    INNER JOIN hr_processes ON hr_processes.idhr_processes = rises.id_process
+    INNER JOIN periods ON (rises.effective_date >= periods.start AND  periods.end >= rises.effective_date) AND type_period = 0
+    ) AS `rises` ON `rises`.id_employee = payments.id_employee
+     LEFT JOIN (
                 SELECT
                 coalesce(ROUND(SUM(credits.amount),2),0) AS `decreto_amount`,
                 credits.id_payment
@@ -314,22 +414,14 @@ if($netsuitclient <= 6){
               ) AS `igss` ON `igss`.id_payment = payments.idpayments
     LEFT JOIN (
                 SELECT
-                coalesce(ROUND(SUM(debits.amount),2),0) AS `headsets_amount`,
-                id_payment
-                FROM debits
-                WHERE debits.type LIKE '%headset%'
-                GROUP BY id_payment
-               ) AS `headset` ON `headset`.id_payment = payments.idpayments
-    LEFT JOIN (
-                SELECT
                 coalesce(ROUND(SUM(debits.amount),2),0) AS `isr_amount`,
                 id_payment
                 FROM debits
                 INNER JOIN payments ON payments.idpayments = debits.id_payment
                 INNER JOIN employees ON employees.idemployees = payments.id_employee
-                WHERE debits.type LIKE '%isr%' AND employees.job_type IS NULL AND employees.active = 1
+                WHERE debits.type LIKE '%isr%'
                 GROUP BY id_payment
-               ) AS `isr` ON `isr`.id_payment = payments.idpayments
+               ) AS `isr` ON `isr`.id_payment = payments.idpayments AND employees.job_type IS NULL AND employees.termination_date IS NULL
     INNER JOIN (
                 SELECT
                 ROUND((IF(e.hiring_date>p.start,
@@ -380,23 +472,72 @@ if($netsuitclient <= 6){
     WHERE (payments.id_period = $id_1) and clientNetSuite = $netsuitclient
     UNION
     SELECT
-    payments.idpayments,
     clientNetSuite,
-    employees.active,
+    IF(employees.termination_date IS NOT NULL, '0', '1') AS `active`,
     accounts.name,
     hires.nearsol_id,
     employees.client_id,
     `decreto`.`decreto_amount`,
     employees.job_type AS `job_type`,
     CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee name`,
-    ROUND(IF(employees.job_type = 1, 0, employees.base_payment),2) AS `base_pay`,
-    ROUND(IF(employees.job_type = 1,IF(employees.cost_type IS NULL, 0, ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))), employees.productivity_payment),2) AS `productivity_pay`,
-    ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.discounted_days,2)),2) AS `discounted_days`,
-    ROUND(IF(employees.job_type = 1, 0, ROUND(0-payroll_values.seventh,2)),2) AS `discounted_senths`,
-    ROUND(IF(employees.job_type = 1, 0, payroll_values. discounted_hours),2) AS `hours`,
-    ROUND(IF(employees.job_type = 1, 0, ROUND(payments.base - ROUND((payments.base_complete/2),2), 2)),2) AS `wage_deductions`,
+	ROUND(IF(employees.job_type = 1, IF(`rises`.idperiods <= $id_2 AND `rises`.old_job_type = 0, 0,  IF(`rises`.idperiods IS NULL, 0, employees.base_payment)), employees.base_payment),2) AS `base_pay`,
+    ROUND(IF(employees.job_type = 1,
+        IF(employees.cost_type IS NULL,
+            IF(`rises`.idperiods <= $id_2 AND `rises`.old_job_type = 0, 0, (`rises`.old_salary - 2825.10)),
+            ((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250)))
+        )
+        ,employees.productivity_payment
+    ),2) AS `productivity_pay`,
+    ROUND(IF(employees.job_type = 1,
+        IF( `rises`.idperiods IS NULL,
+            0,
+            IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0,
+                ROUND(0-payroll_values.discounted_days,2),
+                0
+            )
+        ),
+	ROUND(0-payroll_values.discounted_days,2)),2
+    ) AS `discounted_days`,
+    ROUND(IF(employees.job_type = 1,
+            IF( `rises`.idperiods IS NULL,
+                0,
+                IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0,
+                    ROUND(0-payroll_values.seventh,2), 
+                    0
+                )
+            ),
+        ROUND(0-payroll_values.seventh,2)),2
+    ) AS `discounted_senths`,
+
+    ROUND(IF(employees.job_type = 1,
+            IF( `rises`.idperiods IS NULL,
+                0,
+                IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0,
+                    ROUND(payroll_values.discounted_hours,2), 
+                    0
+                )
+            ),
+        ROUND(payroll_values.discounted_hours,2)),2
+    ) AS `hours`,
+	ROUND(IF(employees.job_type = 1,
+            IF( `rises`.idperiods IS NULL,
+                0,
+                IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0,
+                    ROUND(payments.base - ROUND((payments.base_complete/2),2), 2), 
+                    0
+                )
+            ),
+        ROUND(payments.base - ROUND((payments.base_complete/2),2), 2)),2) AS `wage_deductions`,
+        
     ROUND(IF(employees.job_type = 1, 
-    IF(employees.cost_type IS NULL, 0,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL,
+            0,
+            IF(`rises`.idperiods < $id_2 AND `rises`.old_job_type = 0,
+            ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2), 
+                0
+            )
+        ),
     ROUND(((payments.productivity_complete/2) - payments.productivity)-(
     ((
     ((payments.productivity_complete/2) - payments.productivity)/
@@ -405,15 +546,30 @@ if($netsuitclient <= 6){
     )*((employees.max_cost - payments.base_complete - 250)/2)),2)
     ),
     ROUND(payments.productivity - ROUND(payments.productivity_complete/2,2), 2)),2) AS `incentive_deductions`,
-    ROUND(IF(employees.job_type = 1, 0, payments.base),2) AS `base`,
-    ROUND(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1,
+    
+    
+    ROUND(IF(employees.job_type = 1,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
+            0,
+            IF(`rises`.idperiods <= $id_2,
+                0, payments.base)
+            ),
+			0
+        ),
+    payments.base),2) AS `base`,
+    
+
+   ROUND(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1, IF(`rises`.idperiods IS NULL,
     (ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
     ROUND(((payments.productivity_complete/2) - payments.productivity)-(
     ((
     ((payments.productivity_complete/2) - payments.productivity)/
     ((payments.productivity_complete/2)/120)
     )/120
-    )*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0), payments.productivity),2) AS `productivity`,
+    )*((employees.max_cost - payments.base_complete - 250)/2)),2)), IF(`rises`.idperiods > $id_2 AND `rises`.old_job_type = 0, payments.productivity, 0))
+    , payments.productivity),0), payments.productivity),2) AS `productivity`,
+    
     ROUND(payments.ot_hours,2) AS `ot_hours`,
     ROUND(payments.ot,2) AS `ot`,
     ROUND(payments.holidays_hours,2) AS `holidays_hours`,
@@ -428,10 +584,20 @@ if($netsuitclient <= 6){
     `isr`.`isr_amount`,
     0 AS `headsets_amount`,
     ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + 
-    coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2) AS `total_deductions`,
+    coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0), 2) AS `total_deductions`,
     ROUND((ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
     + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
-    coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, 0, payments.base),0) + coalesce(IF(employees.job_type = 1,
+    coalesce(payments.ot,0) + coalesce(
+    ROUND(IF(employees.job_type = 1,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
+            0,
+            IF(`rises`.idperiods <= $id_2,
+                0, payments.base)
+            ),
+			0
+        ),
+    payments.base),2),0) + coalesce(IF(employees.job_type = 1,
     (ROUND(((payments.productivity_complete - (employees.max_cost - payments.base_complete - 250))/2),2) -
     ROUND(((payments.productivity_complete/2) - payments.productivity)-(
     ((
@@ -439,8 +605,8 @@ if($netsuitclient <= 6){
     ((payments.productivity_complete/2)/120)
     )/120
     )*((employees.max_cost - payments.base_complete - 250)/2)),2)), payments.productivity),0),2)) -
-    ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + + coalesce(`bus_service`.`bus_amount`,0) +
-    coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0) + coalesce(`headset`.`headsets_amount`,0), 2), 2
+    ROUND(coalesce(`car_parking`.`car_amount`,0) + coalesce(`motorcycle_parking`.`motorcycle_amount`,0) + coalesce(`bus_service`.`bus_amount`,0) +
+    coalesce(`igss`.`igss_amount`,0) + coalesce(`isr`.`isr_amount`,0), 2),2
     ) AS `total_payment`,
     IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`) AS `base_aguinaldo`,
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`) AS `productivity_aguinaldo`,
@@ -449,9 +615,18 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`) AS `base_vacaciones`,
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`) AS `productivity_vacaciones`,
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`) AS `base_indemnizacion`,
-    ROUND((IF(employees.job_type = 1, 0, payments.base)+
-    ROUND(payments.ot,2)+
-    ROUND(payments.holidays,2)) * 0.1267, 2) AS `employeer_igss`,
+    ROUND(ROUND((ROUND(IF(employees.job_type = 1,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
+            0,
+            IF(`rises`.idperiods <= $id_2,
+                0, payments.base)
+            ),
+			0
+        ),
+    payments.base),2))+
+    ROUND(COALESCE(payments.ot,0),2)+
+    ROUND(COALESCE(payments.holidays,0),2)) * 0.1267, 2) AS `employeer_igss`,
     198.24 AS `health`,
     0 AS `PARKING`,
     0 AS `BUS`,
@@ -464,16 +639,25 @@ if($netsuitclient <= 6){
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)),2) + ROUND((IF(employees.job_type = 1, 0, payments.base)+
     ROUND(payments.ot,2)+
     ROUND(payments.holidays,2)) * 0.1267, 2) + 198.24 ,2) AS `total_reserves_and_fees`,
-    ROUND(ROUND(IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
+ROUND(ROUND(IF(employees.job_type = 1, 0, `severances`.`amount_base_aguinaldo`)+
     IF(employees.job_type = 1, 0, `severances`.`amount_base_bono14`)+
     IF(employees.job_type = 1, 0, `severances`.`amount_base_vacaciones`)+
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_aguinaldo`)), `severances`.`amount_productivity_aguinaldo`)+
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_bono14`)), `severances`.`amount_productivity_bono14`)+
     IF(employees.job_type = 1, (IF(employees.cost_type IS NULL, 0, `severances`.`amount_productivity_vacaciones`)), `severances`.`amount_productivity_vacaciones`)+
     IF(employees.job_type = 1, 0, `severances`.`amount_base_indemnizacion`)+
-    ROUND((IF(employees.job_type = 1, 0, payments.base)+
+    ROUND((ROUND(IF(employees.job_type = 1,
+    IF(employees.cost_type IS NULL,
+        IF( `rises`.idperiods IS NULL OR `rises`.old_job_type = 1,
+            0,
+            IF(`rises`.idperiods <= $id_2,
+                0, payments.base)
+            ),
+			0
+        ),
+    payments.base),2)+
     ROUND(payments.ot,2)+
-    ROUND(payments.holidays,2)) * 0.1267, 2),2)+
+    ROUND(payments.holidays, 2)) * 0.1267, 2),2)+
     ROUND(coalesce(`adjustments_positive`.`adjustment`,0) + coalesce(`treasure_hunt`.`trasure_amount`,0) 
     + coalesce(`bonuses`.`bonuses_amount`,0) + coalesce(payments.holidays,0) + 
     coalesce(payments.ot,0) + coalesce(IF(employees.job_type = 1, coalesce(IF(employees.job_type = 1,
@@ -491,6 +675,13 @@ if($netsuitclient <= 6){
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
     INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
     INNER JOIN accounts ON accounts.idaccounts = payments.id_account_py
+    LEFT JOIN (
+    SELECT rises.effective_date, hr_processes.id_employee, rises.old_salary, rises.new_salary, periods.idperiods, rises.old_job_type
+    FROM
+    rises
+    INNER JOIN hr_processes ON hr_processes.idhr_processes = rises.id_process
+    INNER JOIN periods ON (rises.effective_date >= periods.start AND  periods.end >= rises.effective_date) AND type_period = 0
+    ) AS `rises` ON `rises`.id_employee = payments.id_employee
     LEFT JOIN (
                 SELECT
                 coalesce(ROUND(SUM(credits.amount),2),0) AS `decreto_amount`,
@@ -572,22 +763,14 @@ if($netsuitclient <= 6){
               ) AS `igss` ON `igss`.id_payment = payments.idpayments
     LEFT JOIN (
                 SELECT
-                coalesce(ROUND(SUM(debits.amount),2),0) AS `headsets_amount`,
-                id_payment
-                FROM debits
-                WHERE debits.type LIKE '%headset%'
-                GROUP BY id_payment
-               ) AS `headset` ON `headset`.id_payment = payments.idpayments
-    LEFT JOIN (
-                SELECT
                 coalesce(ROUND(SUM(debits.amount),2),0) AS `isr_amount`,
                 id_payment
                 FROM debits
                 INNER JOIN payments ON payments.idpayments = debits.id_payment
                 INNER JOIN employees ON employees.idemployees = payments.id_employee
-                WHERE debits.type LIKE '%isr%' AND employees.job_type IS NULL AND employees.active = 1
+                WHERE debits.type LIKE '%isr%' AND employees.job_type IS NULL
                 GROUP BY id_payment
-               ) AS `isr` ON `isr`.id_payment = payments.idpayments
+               ) AS `isr` ON `isr`.id_payment = payments.idpayments AND employees.termination_date IS NULL
     INNER JOIN (
                 SELECT
                 ROUND((IF(e.hiring_date>p.start,
@@ -637,11 +820,11 @@ if($netsuitclient <= 6){
                 ) AS `severances` ON `severances`.idpayments = payments.idpayments
     WHERE (payments.id_period = $id_2) and clientNetSuite = $netsuitclient
     ) AS `tmp`
-    GROUP BY clientNetSuite,
-    name,
-    nearsol_id,
+    GROUP BY
     client_id,
-    `employee name`;";
+    `employee name`,
+    name,
+    nearsol_id";
 
 }else{
 $netsuitclient = $netsuitclient - 6;
@@ -1202,13 +1385,13 @@ INNER JOIN (
 			) AS `severances` ON `severances`.idpayments = payments.idpayments
 WHERE (payments.id_period = $id_2) AND clientNetSuite = $netsuitclient
 ) AS `tmp` WHERE job_type = 1
-GROUP BY idpayments,clientNetSuite,
+GROUP BY
+clientNetSuite,
 name,
 nearsol_id,
 client_id,
 `employee name`;";
 }
-echo($sql);
 $output = fopen("php://output", "w");
 fputcsv($output, array('Avaya','Name','Account', 'Nearsol ID','Minimum Wage','Incentive','Days discounted','7th deduction','Discounted hours','Minimum Wage Deductions','Incentive Deductions','Minimum Wage with deductions','Incentive with deductions','Overtime (hours)','Overtime (Q)','Holiday (hours)','Holiday (Q)','Bonuses','Treasure Hunt','Adjustments','Total income','Bus','Parking (Car)','Parking Motorcycle / bicycle','IGSS','ISR','Equipment','Total Deductions','Total Payment','BONUS 13','BONUS 13 BONIF','BONUS 14 ','BONUS 14 BONIF','VACATION RESERVES','VACATION RESERVES BONIF','SEVERANCE RESERVES','EMPLOYER IGSS','HEALTH INSURANCE','PARKING','BUS','TOTAL RESERVES AND FEES','TOTAL COST',));
     if($result = mysqli_query($con,$sql)){
