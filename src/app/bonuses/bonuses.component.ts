@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { Router } from '@angular/router';
-import { advances, advances_acc, credits, employees_Bonuses, payments, periods } from "../process_templates";
+import { advances, advances_acc, credits, debits, employees_Bonuses, payments, periods } from "../process_templates";
 import { employees, hrProcess, payment_methods } from '../fullProcess';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { isNullOrUndefined } from 'util';
@@ -84,7 +84,7 @@ export class BonusesComponent implements OnInit {
           emp_bonuses.forEach(emp => {
             this.progress = this.progress + 1;
             py.id_employee = emp.idemployees;
-            this.apiService.getEmployeeId({ id: emp.idemployees }).subscribe((employee: employees) => {
+            this.apiService.getIdEmployee({ id: emp.idemployees }).subscribe((employee: employees) => {
               empl = employee;
               if ((isNullOrUndefined(empl)==false) && (isNullOrUndefined(empl.idemployees)==false)) {
                 this.apiService.getPaymentMethods(empl).subscribe((pay_me: payment_methods[]) => {
@@ -115,18 +115,27 @@ export class BonusesComponent implements OnInit {
                     py.credits = cre.amount;
                     if (adva.length > 0) {
                       adva.forEach(a => {
+                        let deb: debits = new debits;
                         a.status = 'PAID';
                         hrp.idhr_process = a.idhr_processes;
                         hrp.status = a.status;
                         hrp.notes = a.notes;
                         cre.amount = (Number(cre.amount) - Number(a.amount)).toString();
                         py.credits = cre.amount;
+                        deb.idpayments = a.idhr_processes;
+                        deb.id_employee = a.id_employee;
+                        deb.type = a.type;
+                        deb.amount = a.amount;
+                        deb.status = 'PENDING';
                         this.apiService.insertPayments(py).subscribe((str: string) => {
                           py.idpayments = str;
                           cre.idpayments = py.idpayments;
                           this.apiService.insertCredits(cre).subscribe((_str: string) => {
                             // Pagos ingresados.
                             this.apiService.updatehr_process(hrp).subscribe((_str: string) => {
+                              this.apiService.insertDebits(deb).subscribe((str: String) => {
+                                // Debito creado.
+                              })
                               // proceso actualizado.
                             })
                           })
