@@ -103,7 +103,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'JANP' AS `type_of_payment`, DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' ', hr_processes.notes
+'IGSS' AS `type_of_payment`, DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' ', hr_processes.notes
 FROM
 	leaves
 	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
