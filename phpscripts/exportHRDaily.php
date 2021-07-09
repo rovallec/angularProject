@@ -99,6 +99,38 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.start <= '$end'))
       AND (`dt`.`dates` BETWEEN '$start' AND '$end')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status IN ($state) AND (leves.motive = 'IGSS Unpaid' OR leaves.motive = 'Others Unpaid' OR leaves.motive = 'VTO Unpaid' OR leaves.motive = 'COVID Unpaid')) AND employees.id_account IN ($accounts)
+
+UNION
+
+SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+leaves.motive AS `type_of_payment`, DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' ', hr_processes.notes
+FROM
+	leaves
+	INNER JOIN hr_processes ON hr_processes.idhr_processes = leaves.id_process
+    INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
+    INNER JOIN hires ON hires.idhires = employees.id_hire
+    INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+	INNER JOIN accounts ON accounts.idaccounts = employees.id_account
+    INNER JOIN (
+		select date_add('$start', interval `row` day) AS `dates` from
+		( 
+			SELECT @rowa := @rowa + 1 as `row` FROM 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t3, 
+			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t4, 
+			(SELECT @rowa:=-1) r
+		) sequence
+		where date_add('$start', interval `row` day) <= '$end'
+    ) AS `dt` ON `dt`.`dates` BETWEEN leaves.start AND leaves.end
+WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
+          OR (leaves.start BETWEEN '$start' AND '$end')
+      OR (leaves.end BETWEEN '$start' AND '$end')
+      OR (leaves.end >= '$start')
+      OR (leaves.start <= '$end'))
+      AND (`dt`.`dates` BETWEEN '$start' AND '$end')
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status IN ($state) AND leaves.motive = 'IGSS Paid') AND employees.id_account IN ($accounts)
+
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
