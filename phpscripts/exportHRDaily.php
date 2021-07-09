@@ -166,7 +166,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 UNION
 
 SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
-'JAP' AS `type_of_payment`, 
+leaves.motive AS `type_of_payment`, 
 DATE_FORMAT(`dt`.`dates`, '%Y/%m/%d'), ' ', ' ', ' ', hr_processes.notes
 FROM
 	leaves
