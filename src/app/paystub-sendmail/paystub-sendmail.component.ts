@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-paystub-sendmail',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PaystubSendmailComponent implements OnInit {
 
-  constructor() { }
+  constructor(public apiService:ApiService) { }
 
   ngOnInit() {
+  }
+
+  sendMail(){
+    this.apiService.sendMail({test:"Test"}).subscribe((str:string)=>{
+      if(str === '1'){
+        window.alert("SUCCESS");
+      }else{
+        window.alert("ERROR");
+      }
+    })
   }
 
 }
