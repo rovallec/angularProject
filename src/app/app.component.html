@@ -112,6 +112,8 @@
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/vacationsrep"
           style="color: white" [ngClass]="{'act':selectedOption=='VACATIONSREP'}" (click)="SetSel('VACATIONSREP')">VACATIONS REPORT</a>
+          <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/paystubs"
+          style="color: white" [ngClass]="{'act':selectedOption=='PYST'}" (click)="SetSel('PYST')">PAYSTUBS</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">

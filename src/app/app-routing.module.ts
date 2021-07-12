@@ -39,6 +39,7 @@ import { AccountingPoliciesComponent } from './accounting-policies/accounting-po
 import { VacationsRepComponent } from "./vacations-rep/vacations-rep.component";
 import { ItdashboardComponent } from './itdashboard/itdashboard.component';
 import { ItprofilesComponent } from './itprofiles/itprofiles.component';
+import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component';
 
 const routes:Routes = [
   {
@@ -212,6 +213,11 @@ const routes:Routes = [
   {
     path:'itprofiles/:id',
     component:ItprofilesComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'paystubs',
+    component:PaystubSendmailComponent,
     canActivate:[AuthGuard]
   },
   {
