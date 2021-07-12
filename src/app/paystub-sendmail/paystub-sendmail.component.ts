@@ -14,12 +14,8 @@ export class PaystubSendmailComponent implements OnInit {
   }
 
   sendMail(){
-    this.apiService.sendMail({test:"Test"}).subscribe((str:string)=>{
-      if(str === '1'){
-        window.alert("SUCCESS");
-      }else{
-        window.alert("ERROR");
-      }
+    this.apiService.sendMail({test:"Test"}).subscribe((str:any)=>{
+      window.alert(str);
     })
   }
 
