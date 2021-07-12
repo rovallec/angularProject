@@ -119,7 +119,11 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let att of showAttendences" style="cursor:pointer"
-                                            (click)="addJustification(att)" class="selectable">
+                                            (click)="addJustification(att)" class="selectable"
+                                            [ngClass]="{'table-danger': (att.balance === 'NS' || att.balance === 'JANP' || att.balance === 'SUSPENSION'),
+                                            'table-warning':att.balance < 0, 'table-success': att.balance > 0,
+                                            'table-info':att.balance === 'OFF' || att.balance === 'VAC',
+                                            'table-light':att.balance === 'HLD' || att.balance === 0}">
                                             <td>{{att.date}}</td>
                                             <td>{{att.scheduled}}</td>
                                             <td>{{att.worked_time}}</td>

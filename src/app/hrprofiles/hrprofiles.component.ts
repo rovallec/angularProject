@@ -84,7 +84,7 @@ export class HrprofilesComponent implements OnInit {
   municipio: string = null;
   zone: string = null;
   first_line: string = null;
-  
+
   edition_status: string = 'Browse';
   editInview: boolean = false;
   viewRecProd: boolean = false;
@@ -130,12 +130,12 @@ export class HrprofilesComponent implements OnInit {
   approvals: users[] = [new users];
   motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid', 'COVID Unpaid', 'COVID Paid', 'IGSS Paid'];
 
-  maxDate:string = null;
-  minDate:string = null;
+  maxDate: string = null;
+  minDate: string = null;
 
-  currentPayVacations:boolean = false;
+  currentPayVacations: boolean = false;
 
-  transfer_newCode:string = '';
+  transfer_newCode: string = '';
 
 
   reasons: string[] = [
@@ -282,7 +282,7 @@ export class HrprofilesComponent implements OnInit {
     });
 
     this.apiService.getPeriods().subscribe((p: periods[]) => {
-      this.actualPeriod = p[p.length -1];
+      this.actualPeriod = p[p.length - 1];
     });
 
     this.apiService.getApprovers().subscribe((usrs: users[]) => {
@@ -358,22 +358,129 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getAttendences(dt: string) {
-    this.apiService.getAttendences({ id: this.route.snapshot.paramMap.get('id'), date: "<= '" + dt + "'" }).subscribe((att: attendences[]) => {
-      this.showAttendences = att;
-      this.showAttendences.forEach(att => {
-        if (this.complete_adjustment == true) {
-          if (this.attAdjudjment.id_attendence == att.idattendences) {
-            this.complete_adjustment = false;
-            if (this.attAdjudjment.time_after == att.worked_time) {
-              window.alert("Adjustment successfuly recorded");
-            } else {
-              window.alert("Adjustment not applyed correctly please try again or contact your administrator");
-            }
-          }
+    let actualPeriod: periods;
+    this.apiService.getPeriods().subscribe((pr: periods[]) => {
+      pr.forEach(per => {
+        if (new Date(per.start).getTime() <= new Date(dt).getTime() && new Date(per.end).getTime() >= new Date(dt).getTime()) {
+          actualPeriod = per;
         }
-        att.balance = (Number.parseFloat(att.worked_time) - Number.parseFloat(att.scheduled)).toString();
       })
-      this.getAttAdjustemt();
+      this.apiService.getAttendences({ id: this.route.snapshot.paramMap.get('id'), date: "<= '" + dt + "'" }).subscribe((att: attendences[]) => {
+        this.apiService.getVacations({ id: this.workingEmployee.id_profile }).subscribe((vac: vacations[]) => {
+          this.apiService.getLeaves({ id: this.workingEmployee.id_profile }).subscribe((leave: leaves[]) => {
+            this.apiService.getDPAtt({ id: this.workingEmployee.idemployees, date_1: actualPeriod.start, date_2: actualPeriod.end }).subscribe((dp: disciplinary_processes[]) => {
+              this.apiService.getTermdt(this.workingEmployee).subscribe((trm: terminations) => {
+                this.showAttendences = att;
+
+                this.showAttendences.forEach(atte => {
+                  let valid_trm:boolean = false;
+                  let activeSuspension:boolean = false;
+                  let activeVacation:boolean = false;
+                  let activeLeave:boolean = false;
+                  let mother_father_day:boolean = false;
+
+                  if (!isNullOrUndefined(trm.valid_from)) {
+                    if (new Date(trm.valid_from).getTime() <= new Date(atte.date).getTime()) {
+                      valid_trm = true;
+                      atte.balance = 'TERM';
+                    }
+                  }
+
+                  if (!valid_trm) {
+                    dp.forEach(disciplinary_process => {
+                      if (!activeSuspension && disciplinary_process.day_1 == atte.date || disciplinary_process.day_2 == atte.date || disciplinary_process.day_3 == atte.date || disciplinary_process.day_4 == atte.date) {
+                        activeSuspension = true;
+                        atte.balance = 'SUSPENSION';
+                      }
+                    })
+                  }
+
+                  if (!activeSuspension) {
+                    vac.forEach(vacation => {
+                      if (!activeVacation && vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == atte.date && vacation.action == "Take"){
+                        activeVacation = true;
+                        atte.balance = 'VAC';
+                        if (Number(vacation.count) < 1) {
+                          if (atte.scheduled != "OFF") {
+                            atte.worked_time = (Number(atte.worked_time) + (Number(atte.scheduled) * Number(vacation.count))).toFixed(5);
+                            atte.balance = (Number(atte.worked_time) - Number(atte.scheduled)).toFixed(3);
+                          }
+                        }
+                      }
+                    })
+                  }
+
+                  if (!activeSuspension && !activeVacation) {
+                    leave.forEach(lv => {
+                      if (!activeLeave && lv.status != "COMPLETED" && lv.status != 'DISMISSED' && (new Date(lv.start).getTime()) <= (new Date(atte.date).getTime()) && (new Date(lv.end).getTime()) >= (new Date(atte.date).getTime())) {
+                        activeLeave = true;
+                        if (lv.motive == 'Leave of Absence Unpaid') {
+                          atte.balance = 'LOA';
+                        }
+                        if (lv.motive == 'Others Unpaid' || lv.motive == "IGSS Unpaid" || lv.motive == "VTO Unpaid" || lv.motive == "COVID Unpaid") {
+                          atte.balance = 'JANP';
+                        }
+                        if (lv.motive == 'Maternity' || lv.motive == 'Others Paid' || lv.motive == "COVID Paid" || lv.motive == "IGSS Paid") {
+                          atte.balance = 'JAP';
+                        }
+                      }
+                    })
+                  }
+                  if (!activeVacation && !activeSuspension && !activeLeave) {
+                  if (atte.scheduled == "OFF") {
+                    atte.balance = "OFF";
+                  }else{
+                    if(!isNullOrUndefined(this.workingEmployee.children) && !isNullOrUndefined(this.workingEmployee.gender)){
+                      if(Number(this.workingEmployee.children) > 0){
+                        if(this.workingEmployee.gender == 'Femenino'){
+                          if(atte.date == (new Date().getFullYear() + "-05-10")){
+                            mother_father_day = true;
+                            atte.balance = "HLD";
+                          }
+                        }
+                      }
+                    }
+                    if (atte.date != (new Date().getFullYear() + "-01-01") && atte.date != (new Date().getFullYear() + "-06-28") && atte.date != (new Date().getFullYear() + "-04-01") && atte.date != (new Date().getFullYear() + "-04-02") && atte.date != (new Date().getFullYear() + "-04-03") && atte.date != (new Date().getFullYear() + "-05-01") && !mother_father_day) {
+                      if (Number(atte.scheduled) > 0) {
+                        if (Number(atte.worked_time) == 0) {
+                          atte.balance = "NS";
+                        } else {
+                          atte.balance = (Number(atte.worked_time) - Number(atte.scheduled)).toString();
+                        }
+                      }
+                    } else {
+                      if(atte.scheduled != "OFF"){
+                        if(Number(atte.worked_time) > Number(atte.scheduled)){
+                          atte.balance = (Number(atte.worked_time) - Number(atte.scheduled)).toFixed(2);
+                        }else{
+                          if (Number(atte.worked_time) > 0) {
+                            atte.balance = 'HLD';
+                          }else{
+                            atte.balance = 'HLD';
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+
+                  if (this.complete_adjustment == true) {
+                    if (this.attAdjudjment.id_attendence == atte.idattendences) {
+                      this.complete_adjustment = false;
+                      if (this.attAdjudjment.time_after == atte.worked_time) {
+                        window.alert("Adjustment successfuly recorded");
+                      } else {
+                        window.alert("Adjustment not applyed correctly please try again or contact your administrator");
+                      }
+                    }
+                  }
+                })
+                this.getAttAdjustemt();
+              })
+            })
+          })
+        })
+      })
     });
     this.addJ = false;
     this.editAdj = false;
@@ -385,13 +492,13 @@ export class HrprofilesComponent implements OnInit {
       this.showAttAdjustments = [];
       if (adj.length >= 16) {
         for (let i = (adj.length - 1); i > (adj.length - 16); i = i - 1) {
-          if(adj[i].id_department == '5' || adj[i].id_department == '27'){
+          if (adj[i].id_department == '5' || adj[i].id_department == '27') {
             this.showAttAdjustments.push(adj[i]);
           }
         }
       } else {
-        adj.forEach(ev=>{
-          if(ev.id_department == '27' || ev.id_department == '5'){
+        adj.forEach(ev => {
+          if (ev.id_department == '27' || ev.id_department == '5') {
             this.showAttAdjustments.push(ev);
           }
         })
@@ -438,7 +545,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getVacations() {
-    let found:boolean = false;
+    let found: boolean = false;
     let vacYears: vacyear[] = [];
     this.vac = [];
     this.earnVacations = this.vacationsEarned * 1.25;
@@ -476,10 +583,10 @@ export class HrprofilesComponent implements OnInit {
           this.vac.push(vacYear);
         }
 
-        this.vac.sort((a,b)=>a.year-b.year);
+        this.vac.sort((a, b) => a.year - b.year);
 
-        vacYears.forEach(vv=>{
-          if(vv.year.toString() == new Date().getFullYear().toString()){
+        vacYears.forEach(vv => {
+          if (vv.year.toString() == new Date().getFullYear().toString()) {
             vv.selected = true;
           }
         })
@@ -504,10 +611,10 @@ export class HrprofilesComponent implements OnInit {
       this.activeVacation.status = "COMPLETED";
       this.activeVacation.notes = "PAID VACATIONS";
     } else {
-      if(this.currentPayVacations){
+      if (this.currentPayVacations) {
         this.activeVacation.status = "COMPLETED";
-      }else{
-        this.activeVacation.status = 'PENDING'; 
+      } else {
+        this.activeVacation.status = 'PENDING';
       }
     }
     this.activeVacation.count = '1';
@@ -540,18 +647,18 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getLeaves() {
-    let found:boolean = false;
+    let found: boolean = false;
     this.apiService.getLeaves({ id: this.route.snapshot.paramMap.get('id') }).subscribe((leaves: leaves[]) => {
-      if(this.complete_adjustment){
-        leaves.forEach(lv=>{
-          if(lv.start == this.activeLeave.start && lv.end == this.activeLeave.end){
+      if (this.complete_adjustment) {
+        leaves.forEach(lv => {
+          if (lv.start == this.activeLeave.start && lv.end == this.activeLeave.end) {
             this.complete_adjustment = false;
             found = true;
             window.alert("Leave successfuly recorded");
           }
         })
       }
-      if(this.complete_adjustment && !found){
+      if (this.complete_adjustment && !found) {
         window.alert("Leave not correctly applayed please try again latter or contact your administrator");
       }
       this.leaves = leaves;
@@ -586,8 +693,8 @@ export class HrprofilesComponent implements OnInit {
     this.actualRise = new rises;
     this.actualAdvance = new advances;
     this.apiService.getPeriods().subscribe((p: periods[]) => {
-      this.actualPeriod = p[p.length -1];
-    })    
+      this.actualPeriod = p[p.length - 1];
+    })
   }
 
   setLeave() {
@@ -931,9 +1038,9 @@ export class HrprofilesComponent implements OnInit {
         this.actuallProc.descritpion = null;
         break;
       case 'Advance':
-          this.actualAdvance = new advances;
-          this.actuallProc.status = 'PENDING';
-          break;
+        this.actualAdvance = new advances;
+        this.actuallProc.status = 'PENDING';
+        break;
       case 'Rise':
         this.actualRise = new rises;
         this.actualRise.new_position = this.workingEmployee.job;
@@ -977,10 +1084,10 @@ export class HrprofilesComponent implements OnInit {
         })
         break;
       case 'Transfer':
-        if(Number(this.todayDate.split("-")[2]) <= 15){
+        if (Number(this.todayDate.split("-")[2]) <= 15) {
           this.minDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-01";
           this.maxDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-15";
-        }else{
+        } else {
           this.minDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-16";
           this.maxDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + new Date(Number(this.todayDate.split('-')[0]), (Number(this.todayDate.split('-')[1]) + 1), 0);
         }
@@ -1003,7 +1110,7 @@ export class HrprofilesComponent implements OnInit {
 
   setToDate(str: string) {
     this.checkDate2 = str;
-  
+
   }
 
   setValidFrom(str: string) {
@@ -1012,20 +1119,20 @@ export class HrprofilesComponent implements OnInit {
 
   insertProc() {
     let Abort: AbortController = new AbortController;
-    
+
     this.apiService.insertProc(this.actuallProc).subscribe((str: string) => {
       switch (this.actuallProc.name) {
         case 'Termination':
-          let proc:hrProcess = new hrProcess;
+          let proc: hrProcess = new hrProcess;
           proc.idhr_process = str;
           this.actualTerm.id_process = str;
           this.apiService.insertTerm(this.actualTerm).subscribe((str: string) => {
-            if(str == "1"){
-            this.cancelView();
-            }else{
+            if (str == "1") {
+              this.cancelView();
+            } else {
               window.alert("An error has occured:\n" + str.split("|")[1]);
               proc.notes = this.actuallProc.descritpion + "|" + ("An error has occured:" + str.split("|")[1]);
-              this.apiService.updatehr_process(proc).subscribe((str:string)=>{});
+              this.apiService.updatehr_process(proc).subscribe((str: string) => { });
             }
           })
           break;
@@ -1036,18 +1143,18 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Advance':
-          this.actualAdvance.id_process = str;          
+          this.actualAdvance.id_process = str;
           this.apiService.insertAdvances(this.actualAdvance).subscribe((str: string) => {
-            if (str.split("|")[0]=="1"){   
-              window.alert("Action successfuly recorded.");                         
-              this.cancelView();           
+            if (str.split("|")[0] == "1") {
+              window.alert("Action successfuly recorded.");
+              this.cancelView();
             } else {
               window.alert("An error has occured:\n" + str.split("|")[1]);
             }
           })
           break;
         case 'Rise':
-          let end:boolean = false;
+          let end: boolean = false;
           this.actualRise.id_process = str;
           this.actualRise.id_employee = this.actuallProc.id_profile;
           this.actualRise.old_salary = (Number(this.workingEmployee.productivity_payment) + Number(this.workingEmployee.base_payment)).toFixed(2);
@@ -1064,15 +1171,15 @@ export class HrprofilesComponent implements OnInit {
             end = true;
           }
 
-          if(!end) {
+          if (!end) {
             this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
-              if (str.split("|")[0]=="1"){
+              if (str.split("|")[0] == "1") {
                 window.alert("Action successfuly recorded.");
                 this.cancelView();
               } else {
                 window.alert("An error has occured:\n" + str.split("|")[1]);
               }
-            })        
+            })
           }
           break;
         case 'Call Tracker':
@@ -1137,8 +1244,8 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Transfer':
-          this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department }).subscribe((emp:employees[])=>{
-            if(isNullOrUndefined(emp)){
+          this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department }).subscribe((emp: employees[]) => {
+            if (isNullOrUndefined(emp)) {
               this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
                 this.apiService.getPeriods().subscribe((p: periods[]) => {
                   this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
@@ -1147,7 +1254,7 @@ export class HrprofilesComponent implements OnInit {
                     let period: periods = new periods;
                     py.id_employee = this.activeEmp;
                     if (!isNullOrUndefined(p_methods)) {
-                      py.id_period = p[p.length-1].idperiods;
+                      py.id_period = p[p.length - 1].idperiods;
                       p_methods.forEach(payment_method => {
                         if (payment_method.predeterm == '1') {
                           py.id_paymentmethod = payment_method.idpayment_methods;
@@ -1169,8 +1276,8 @@ export class HrprofilesComponent implements OnInit {
                               emp_toUpdate.idemployees = this.workingEmployee.idemployees;
                               emp_toUpdate.platform = "nearsol_id";
                               emp_toUpdate.society = this.transfer_newCode;
-                              emp_toUpdate.id_profile = this.route.snapshot.paramMap.get('id'); 
-                              this.apiService.updateEmployee(emp_toUpdate).subscribe((str:string)=>{
+                              emp_toUpdate.id_profile = this.route.snapshot.paramMap.get('id');
+                              this.apiService.updateEmployee(emp_toUpdate).subscribe((str: string) => {
                                 window.alert("Record successfuly inserted");
                               })
                               this.cancelView();
@@ -1185,7 +1292,7 @@ export class HrprofilesComponent implements OnInit {
                   })
                 })
               })
-            }else{
+            } else {
               window.alert("This EmploeyeID is already took please try with other");
             }
           })
@@ -2048,9 +2155,9 @@ export class HrprofilesComponent implements OnInit {
   }
 
   empty_family() {
-    if (isNullOrUndefined(this.selected_family.affinity_first_name) || (this.selected_family.affinity_first_name=='') || 
-        isNullOrUndefined(this.selected_family.affinity_first_last_name) || (this.selected_family.affinity_first_last_name=='') || 
-        (this.selected_family.affinity_id_profile==0)) {
+    if (isNullOrUndefined(this.selected_family.affinity_first_name) || (this.selected_family.affinity_first_name == '') ||
+      isNullOrUndefined(this.selected_family.affinity_first_last_name) || (this.selected_family.affinity_first_last_name == '') ||
+      (this.selected_family.affinity_id_profile == 0)) {
       return true;
     } else {
       return false;
@@ -2058,10 +2165,10 @@ export class HrprofilesComponent implements OnInit {
   }
 
   saveFamily() {
-    if (!this.empty_family()) {      
-      if (this.edition_status=='Insert') {
+    if (!this.empty_family()) {
+      if (this.edition_status == 'Insert') {
         this.apiService.createFamily(this.selected_family).subscribe((fams: string) => {
-          if (fams.split("|")[0]=="1"){   
+          if (fams.split("|")[0] == "1") {
             window.alert("Action successfuly recorded.");
             this.cancelView();
             this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
@@ -2069,11 +2176,11 @@ export class HrprofilesComponent implements OnInit {
             });
           } else {
             window.alert("An error has occured:\n" + fams.split("|")[1]);
-          }          
+          }
         });
-      } else if (this.edition_status=='Edit') {
+      } else if (this.edition_status == 'Edit') {
         this.apiService.updateFamily(this.selected_family).subscribe((fams: string) => {
-          if (fams.split("|")[0]=="1"){   
+          if (fams.split("|")[0] == "1") {
             window.alert("Action successfuly recorded.");
             this.cancelView();
             this.apiService.getFamilies(this.profile[0]).subscribe((fam: profiles_family[]) => {
@@ -2081,7 +2188,7 @@ export class HrprofilesComponent implements OnInit {
             });
           } else {
             window.alert("An error has occured:\n" + fams.split("|")[1]);
-          }          
+          }
         });
       }
     }
@@ -2093,12 +2200,12 @@ export class HrprofilesComponent implements OnInit {
     this.setEdit('Browse');
   }
 
-  updateVacation(){
-    this.apiService.updateVacations(this.activeVacation).subscribe((str:string)=>{
+  updateVacation() {
+    this.apiService.updateVacations(this.activeVacation).subscribe((str: string) => {
       window.alert("Change successfuly recorded");
-      let revertVac:vacations = new vacations;
+      let revertVac: vacations = new vacations;
       revertVac.date = this.activeVacation.date;
-      revertVac.took_date =  this.todayDate;
+      revertVac.took_date = this.todayDate;
       revertVac.id_department = this.authUser.getAuthusr().department;
       revertVac.id_employee = this.route.snapshot.paramMap.get('id');
       revertVac.id_type = '3';
@@ -2113,8 +2220,8 @@ export class HrprofilesComponent implements OnInit {
     })
   }
 
-  updateLeave(){
-    this.apiService.updateLeaves(this.activeLeave).subscribe((str:string)=>{
+  updateLeave() {
+    this.apiService.updateLeaves(this.activeLeave).subscribe((str: string) => {
       window.alert("Change successfuly recorded");
       this.cancelView();
     })
