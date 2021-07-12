@@ -14,7 +14,7 @@ $mail = new PHPMailer();
 $mail->IsSMTP();
 $mail->Mailer = "smtp";
 
-$mail->SMTPDebug  = 1;  
+$mail->SMTPDebug  = 0;
 $mail->SMTPAuth   = TRUE;
 $mail->SMTPSecure = "tls";
 $mail->Port       = 587;
@@ -30,9 +30,9 @@ $content = "<b>This is a Test Email sent via Gmail SMTP Server using PHP mailer 
 
 $mail->MsgHTML($content); 
 if(!$mail->Send()) {
-  echo "0";
+  echo "0|". $mail->ErrorInfo;
   var_dump($mail);
 } else {
-  echo "1";
+  echo "1|Success";
 }
 ?>;
