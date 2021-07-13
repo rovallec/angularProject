@@ -149,7 +149,7 @@ if($result = mysqli_query($con, $sql))
 
 	if(mysqli_query($con, $sql2)){
 		$id = mysqli_insert_id($con);
-		$sql3 = "SELECT * FROM paystub_details WHERE idpaystub_details = $id";
+		$sql3 = "SELECT * FROM paystub_details WHERE idpaystub_deatils = $id";
 		if($result2 = mysqli_query($con, $sql3)){
 			while($row2 = mysqli_fetch_assoc($result2)){
 				$return['idpaystub_deatils'] = $row2['idpaystub_deatils'];
