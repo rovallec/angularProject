@@ -1886,3 +1886,10 @@ export class billing_detail {
         this.total_cost = null;
     }
 }
+
+export class sendmailRes{
+    retunr_text:string;
+    constructor(){
+        this.retunr_text = null;
+    }
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
+import { sendmailRes } from '../process_templates';
 
 @Component({
   selector: 'app-paystub-sendmail',
@@ -14,8 +15,8 @@ export class PaystubSendmailComponent implements OnInit {
   }
 
   sendMail(){
-    this.apiService.sendMail({test:"Test"}).subscribe((str:any)=>{
-      window.alert(str);
+    this.apiService.sendMail({test:"Test"}).subscribe((str:sendmailRes)=>{
+      window.alert(str.retunr_text);
     })
   }
 
