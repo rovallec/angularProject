@@ -15,8 +15,8 @@ export class PaystubSendmailComponent implements OnInit {
   }
 
   sendMail(){
-    this.apiService.sendMail({test:"Test"}).subscribe((str:sendmailRes)=>{
-      window.alert(str.retunr_text);
+    this.apiService.sendMail({test:"Test"}).subscribe((str:string)=>{
+      window.alert(str);
     })
   }
 
