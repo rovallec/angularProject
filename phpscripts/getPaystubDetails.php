@@ -18,7 +18,7 @@ $sql = "SELECT *, coalesce(paystub_details.recipent, contact_details.email) AS `
         INNER JOIN accounts ON accounts.idaccounts = COALESCE(payments.id_account_py, employees.id_account)
         INNER JOIN contact_details ON contact_details.id_profile = profiles.idprofiles
         LEFT JOIN paystub_details ON paystub_details.id_payment = payments.idpayments
-        WHERE idperiods = $id_period AND employees.active = 1 OR employees.termination_date >= periods.end;";
+        WHERE idperiods = $id_period AND (employees.active = 1 OR employees.termination_date >= periods.end);";
 
 if($result = mysqli_query($con, $sql)){
     $i = 0;
