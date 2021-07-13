@@ -4,6 +4,7 @@ use PHPMailer\PHPMailer\Exception;
 require 'PHPMailer-master/src/Exception.php';
 require 'PHPMailer-master/src/PHPMailer.php';
 require 'PHPMailer-master/src/SMTP.php';
+require 'database.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
