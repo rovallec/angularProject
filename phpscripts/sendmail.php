@@ -12,6 +12,41 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $return = [];
+$email '';
+$society '';
+$account '';
+$employeer_nit '';
+$idpayments '';
+$start '';
+$end '';
+$nit '';
+$type '';
+$number '';
+$iggs '';
+$user_name '';
+$bank '';
+$days_of_period '';
+$discounted_days = '';
+$ot_hours = '';
+$discounted_hours = '';
+$holidays_hours = '';
+$base = '';
+$ot = '';
+$holidays = '';
+$decreto = '';
+$bonificaciones = '';
+$eficiencia = '';
+$ajustes = '';
+$igss = '';
+$otras_deducciones = '';
+$anticipos = '';
+$isr = '';
+$employee_name '';
+$nearsol_id '';
+$parqueo = '';
+$total_cred = '';
+$total_deb = '';
+$liquido = '';
 
 $id_employee = $request->id_employee;
 
@@ -83,6 +118,7 @@ if($result = mysqli_query($con, $sql))
 		$total_cred = number_format($row['credits'],2);
 		$total_deb = number_format($row['debits'],2);
 		$liquido = number_format(($total_cred - $total_deb), 2);
+	}
 
 		$mail = new PHPMailer();
 		$mail->IsSMTP();
@@ -331,7 +367,6 @@ if($result = mysqli_query($con, $sql))
 				}
 			}
 		}
-	}
 }
 echo(json_encode($return));
 ?>;
