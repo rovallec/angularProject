@@ -8,6 +8,8 @@ require 'PHPMailer-master/src/SMTP.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
+$res = [];
+
 $test = $request->test;
 
 $mail = new PHPMailer();
@@ -30,6 +32,7 @@ $content = "<b>This is a Test Email sent via Gmail SMTP Server using PHP mailer 
 
 $mail->MsgHTML($content); 
 if(!$mail->Send()) {
+  $res['']
   echo json_encode("0|". $mail->ErrorInfo);
   var_dump($mail);
 } else {
