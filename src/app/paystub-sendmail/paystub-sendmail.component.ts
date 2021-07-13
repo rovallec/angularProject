@@ -30,7 +30,6 @@ export class PaystubSendmailComponent implements OnInit {
     this.periods = [];
     this.years = [new Date().getFullYear().toString()];
     this.apiService.getPeriods().subscribe((per: periods[]) => {
-      console.log(per);
       per.forEach(period => {
         toPush = true;
         this.years.forEach(yr => {
@@ -77,9 +76,6 @@ export class PaystubSendmailComponent implements OnInit {
         }else{
           pst.select = false;
         }
-        if(pst.nearsol_id == 'QA21'){
-          console.log(pst);
-        }        
       })
       this.paystubs = pst_view;
     })
@@ -91,7 +87,8 @@ export class PaystubSendmailComponent implements OnInit {
   }
 
   setStatus(pst_view:paystubview){
-    this.paystubs[this.paystubs.indexOf(pst_view)].select = !this.paystubs[this.paystubs.indexOf(pst_view)].select
+    this.paystubs[this.paystubs.indexOf(pst_view)].select = !this.paystubs[this.paystubs.indexOf(pst_view)].select;
+    console.log(this.paystubs[this.paystubs.indexOf(pst_view)]);
   }
 
   sendMails(){
