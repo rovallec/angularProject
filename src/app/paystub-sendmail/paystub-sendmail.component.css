@@ -4,11 +4,6 @@
     font-weight: bold;
 }
 
-tr {
-    height: 10px;
-    text-align: center;
-}
-
 tr .selectable{
     cursor: pointer;
     text-align: center;
@@ -45,3 +40,8 @@ tbody tr{
     font-size:12px;
     text-align: center;
 }
+
+.selectable{
+    cursor:pointer;
+}
+

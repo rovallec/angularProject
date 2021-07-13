@@ -44,17 +44,238 @@
                         <th>SELECT</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let pst_view of paystubs">
-                            <td>{{pst_view.nearsol_id}}</td>
-                            <td>{{pst_view.client_id}}</td>
-                            <td>{{pst_view.name}}</td>
-                            <td>{{pst_view.account_name}}</td>
-                            <td>{{pst_view.recipent}}</td>
-                            <td style="text-align: center;"><input type="checkbox" value="{{pst_view.select}}"></td>
-                        </tr>
+                        <tr *ngFor="let pst_view of paystubs" class='selectable'>
+                            <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
+                            data-target="#attendance_detail" >{{pst_view.nearsol_id}}</td>
+                            <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
+                            data-target="#attendance_detail" >{{pst_view.client_id}}</td>
+                            <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
+                            data-target="#attendance_detail" >{{pst_view.name}}</td>
+                            <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
+                            data-target="#attendance_detail" >{{pst_view.account_name}}</td>
+                            <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
+                            data-target="#attendance_detail" >{{pst_view.recipent}}</td>
+                            <td style="text-align: center;"><input type="checkbox" [checked]="pst_view.select" (change)="setStatus(pst_view)">
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
+<!----------------------------------------------------------- MODAL PAYSTUB ------------------------------------------------------------->
+<div class="modal fade" id="attendance_detail" tabindex="-1" role="dialog" aria-labelledby="eattendance_detailLabel">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{selectedPaystub.name}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <body *ngIf="!selectedPaystub.select">
+                <table style='margin-top:25px;width:90%;margin-left:5%;border-collapse: unset; text-align:left'>
+                        <tr>
+                            <td>NEARSOL, S.A.</td>
+                            <td style='text-align:right'>NIT: 10305064-7</td>
+                        </tr>
+                        <tr style='margin-left:2.5%;width:95%'>
+                            <td>Jornada: IT</td>
+                            <td style='text-align:right'>Nomina No.: 1059815</td>
+                        </tr>
+                        <tr style='margin-left:2.5%;width:95%'>
+                            <td>Recibo de Pago de Sueldos y Salarios</td>
+                            <td></td>
+                        </tr>
+                        <tr style='border:solid black 2px; width:100%'>
+                            <td colspan='2'>
+                                <table style='width:100%;margin-top:2px;border:solid black 2px;border-collapse: unset; text-align:left'>
+                                        <tr>
+                                            <td>Por el Periodo del 16/06/2021</td>
+                                            <td>Al 30/06/2021</td>
+                                            <td>FORMA DE PAGO</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Codigo de Empleado 0000STF174</td>
+                                            <td>NIT del empleado 9146556-7</td>
+                                            <td>Transferencia 902559947</td>
+                                        </tr>
+                                        <tr>
+                                            <td>No. Afiliacion IGSS 3001561460101</td>
+                                            <td>Supervisor: Administracion</td>
+                                            <td>BAC</td>
+                                        </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <table style='width:100%;margin-top:0px;border:solid black 2px;border-collapse: unset; text-align:left'>
+                                    <tr>
+                                        <td>Dias del Periodo:</td>
+                                        <td>15</td>
+                                        <td>Dias Descontados:</td>
+                                        <td>0</td>
+                                        <td>Horas Extraordinarias:</td>
+                                        <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Horas Descontadas:</td>
+                                        <td>0.00</td>
+                                        <td>Horas Asueto:</td>
+                                        <td>0.00</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table style='width:100%;margin-top:0px;border:solid black 2px;border-collapse: unset; text-align:left'>
+                                    <tr>
+                                        <td>Sueldo Ordinario:</td>
+                                        <td>1,412.55</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sueldo ExtraOrdinario:</td>
+                                        <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sueldo extraOrdinario Dias De Asueto:</td>
+                                        <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bonificación Incentivo (Decretos 78-89,7-2000 y 37-2001):</td>
+                                        <td>125.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bonificación por Productividad (Decretos 78-89,7-2000 y 37-2001):</td>
+                                        <td>1,962.45</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bonificación por Eficiencia (Decretos 78-89,7-2000 y 37-2001) Bonos:</td>
+                                        <td>500.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bonificación por Eficiencia (Decretos 78-89,7-2000 y 37-2001) Ajustes:</td>
+                                        <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td style='color:white'>.</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
+                                    <tr>
+                                        <td>IGSS Laboral:</td>
+                                        <td>(68.23)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Descuentso (Bus/Parqueo):</td>
+                                        <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Otras Deducciones:</td>
+                                        <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ANticipo Sobre Sueldos:</td>
+                                        <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ISR:</td>
+                                        <td>(100.22)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style='color:white'>.</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td style='color:white'>.</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td style='color:white'>.</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <div style='position:relative;width:100%'>
+                                    <div style='width:33%;float:left'>
+                                        <table style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
+                                                <tr>
+                                                    <td>Total Devengado:</td>
+                                                    <td>4,000.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style='border-bottom:solid black 3px'>Total Descuentos:</td>
+                                                    <td style='border-bottom:solid black 3px'>(168.45)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sueldo Liquido:</td>
+                                                    <td>3,832.55</td>
+                                                </tr>
+                                        </table>
+                                    </div>
+                                    <div style='width:66.6%;float:left;margin-left:0.4%'>
+                                        <table style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
+                                                <tr>
+                                                    <td style='color:white'>f</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style='text-align:right;border-bottom:solid white 1px'>f:</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td colspan='2' style='border-top:solid black 2px;text-align:center;border-collapse: unset; text-align:left'>RAUL ALEJANDRO OVALLE CASTILLO</td>
+                                                    <td></td>
+                                                </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'>
+                                <div style='position:relative;'>
+                                    <table style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
+                                            <tr>
+                                                <td>Observaciones:</td>
+                                                <td colspan='4'></td>
+                                            </tr>
+                                            <tr>
+                                                <td style='color:white'>.</td>
+                                                <td colspan='4'></td>
+                                            </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                </table>
+            </body>
+            <body *ngIf="selectedPaystub.select" id='template' [innerHTML]="html">
+            </body>
+            <div class="row col-md-12 d-flex justify-content-center" *ngIf="selectedPaystub.select" style="margin-top:15px;">
+                <p>{{selectedPaystub.result}}</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

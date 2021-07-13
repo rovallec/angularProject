@@ -1908,7 +1908,7 @@ export class paystubview{
     subject:string;
     content:string;
     result:string;
-    select:string;
+    select:boolean;
     constructor(){
         this.idpayments = null
         this.account_name = null
@@ -1923,6 +1923,6 @@ export class paystubview{
         this.subject = null
         this.content = null
         this.result = null
-        this.select = '0';
+        this.select = false;
     }
 }

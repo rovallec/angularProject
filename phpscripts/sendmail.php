@@ -8,9 +8,79 @@ require 'PHPMailer-master/src/SMTP.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$res = [];
+$return = [];
 
-$test = $request->test;
+$id_employee = $request->id_employee;
+
+$sql = "SELECT contact_details.email AS `email`, employees.society, accounts.name AS `account`, if(employees.society='NEARSOL, S.A.', '10305064-7', '0000000-0') AS `employeer_nit`, payments.idpayments, periods.start, periods.end, hires.nearsol_id, profiles.nit,
+payment_methods.type, payment_methods.number, profiles.iggs, users.user_name, payment_methods.bank, 15 AS `days_of_period`, payroll_values.discounted_days, payments.ot_hours, payroll_values.discounted_hours,
+payments.holidays_hours, payments.base, payments.ot, payments.holidays, `decreto`.amount AS `decreto`, (payments.credits - payments.base - coalesce(payments.ot,0) - coalesce(payments.holidays,0) -
+coalesce(`decreto`.amount,0) - coalesce(`eficiencia`.amount,0) - coalesce(`ajustes`.amount,0)) AS `bonificaciones`, `eficiencia`.amount AS `eficiencia`, `ajustes`.amount AS `ajustes`, `igss`.amount AS `igss`, 
+`parqueo`.amount AS `parqueo`, (payments.debits - coalesce(`igss`.amount,0) - coalesce(`parqueo`.amount,0) - coalesce(`anticipos`.amount,0) - `isr`.amount) AS `otras_deducciones`,
+(coalesce(`anticipos`.amount,0) + (-1*coalesce(`anticipos_cred`.amount,0))) AS `anticipos`, `isr`.amount AS `isr`,
+CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee_name`, payments.credits, payments.debits
+FROM payments
+INNER JOIN employees ON employees.idemployees = payments.id_employee
+INNER JOIN hires ON hires.idhires = employees.id_hire
+INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+INNER JOIN payment_methods ON payment_methods.idpayment_methods = payments.id_paymentmethod
+INNER JOIN accounts ON accounts.idaccounts = employees.id_account
+INNER JOIN periods ON periods.idperiods = payments.id_period
+INNER JOIN users ON users.idUser = employees.reporter
+INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
+INNER JOIN contact_details ON contact_details.id_profile = profiles.idprofiles
+LEFT JOIN (SELECT * FROM credits WHERE type LIKE '%Bonos Diversos Nearsol%') AS `eficiencia` ON `eficiencia`.id_payment = payments.idpayments
+LEFT JOIN (SELECT * FROM credits WHERE type LIKE '%Bonificacion Decreto%') AS `decreto` ON `decreto`.id_payment = payments.idpayments
+LEFT JOIN (SELECT * FROM credits WHERE type LIKE '%Ajuste%' AND amount > 0) AS `ajustes` ON `ajustes`.id_payment = payments.idpayments
+LEFT JOIN (SELECT * FROM debits WHERE type LIKE '%IGSS%') AS `igss` ON `igss`.id_payment = payments.idpayments
+LEFT JOIN (SELECT * FROM debits WHERE type LIKE '%Parqueo%' OR type LIKE '%Bus%') AS `parqueo` ON `parqueo`.id_payment = payments.idpayments
+LEFT JOIN (SELECT * FROM debits WHERE type LIKE '%Anticipo%') AS `anticipos` ON `anticipos`.id_payment = payments.idpayments
+LEFT JOIN (SELECT * FROM credits WHERE type LIKE '%Ajuste%' AND amount < 0) AS `anticipos_cred` ON `anticipos_cred`.id_payment = payments.idpayments
+LEFT JOIN (SELECT * FROM debits WHERE type LIKE '%ISR%') AS `isr` ON `isr`.id_payment = payments.idpayments
+where idpayments = $id_employee";
+
+if($result = mysqli_query($con, $sql))
+{
+	$i = 0;
+	while($row = mysqli_fetch_assoc($result))
+	{
+		$email = $row['email'];
+		$society = $row['society'];
+		$account = $row['account'];
+		$employeer_nit = $row['employeer_nit'];
+		$idpayments = $row['idpayments'];
+		$start = $row['start'];
+		$end = $row['end'];
+		$nit = $row['nit'];
+		$type = $row['type'];
+		$number = $row['number'];
+		$iggs = $row['iggs'];
+		$user_name = $row['user_name'];
+		$bank = $row['bank'];
+		$days_of_period = $row['days_of_period'];
+		$discounted_days = number_format($row['discounted_days'],2);
+		$ot_hours = number_format($row['ot_hours'],2);
+		$discounted_hours = number_format($row['discounted_hours'],2);
+		$holidays_hours = number_format($row['holidays_hours'],2);
+		$base = number_format($row['base'],2);
+		$ot = number_format($row['ot'],2);
+		$holidays = number_format($row['holidays'],2);
+		$decreto = number_format($row['decreto'],2);
+		$bonificaciones = number_format($row['bonificaciones'],2);
+		$eficiencia = number_format($row['eficiencia'],2);
+		$ajustes = number_format($row['ajustes'],2);
+		$igss = number_format($row['igss'],2);
+		$otras_deducciones = number_format($row['otras_deducciones'],2);
+		$anticipos = number_format($row['anticipos'],2);
+		$isr = number_format($row['isr'],2);
+		$employee_name = $row['employee_name'];
+		$nearsol_id = $row['nearsol_id'];
+		$parqueo = number_format($row['parqueo'],2);
+		$total_cred = number_format($row['credits'],2);
+		$total_deb = number_format($row['debits'],2);
+		$liquido = number_format(($total_cred - $total_deb), 2);
+	}
+}
 
 $mail = new PHPMailer();
 $mail->IsSMTP();
@@ -22,23 +92,23 @@ $mail->SMTPSecure = "tls";
 $mail->Port       = 587;
 $mail->Host       = "smtp.gmail.com";
 $mail->Username   = "tickets@nearsol.us";
-$mail->Password   = "Nearsol.2020!";
+$mail->Password   = "2021!N.ti@lf@-Rp0713";
 
 $mail->IsHTML(true);
-$mail->AddAddress("raul.ovalle@nearsol.gt", "Raul Ovalle");
+$mail->AddAddress($email, $employee_name);
 $mail->SetFrom("tickets@nearsol.us", "MiNearsol Paystub");
-$mail->Subject = "Recibo de Sueldos";
+$mail->Subject = "Recibo de Sueldos Del " . $start . " Al " . $end;
 $content = "
 <body>
 	<table style='margin-top:25px;width:90%;margin-left:5%'>
 		<tbody>
 			<tr>
-				<td>NEARSOL, S.A.</td>
-				<td style='text-align:right'>NIT: 10305064-7</td>
+				<td>$society</td>
+				<td style='text-align:right'>NIT: $employeer_nit</td>
 			</tr>
 			<tr style='margin-left:2.5%;width:95%'>
-				<td>Jornada: IT</td>
-				<td style='text-align:right'>Nomina No.: 1059815</td>
+				<td>Jornada: $account</td>
+				<td style='text-align:right'>Nomina No.: $idpayments</td>
 			</tr>
 			<tr style='margin-left:2.5%;width:95%'>
 				<td>Recibo de Pago de Sueldos y Salarios</td>
@@ -49,19 +119,19 @@ $content = "
 					<table style='width:100%;margin-top:2px;border:solid black 2px'>
 						<tbody>
 							<tr>
-								<td>Por el Periodo del 16/06/2021</td>
-								<td>Al 30/06/2021</td>
+								<td>Por el Periodo del $start</td>
+								<td>Al $end</td>
 								<td>FORMA DE PAGO</td>
 							</tr>
 							<tr>
-								<td>Codigo de Empleado 0000STF174</td>
-								<td>NIT del empleado 9146556-7</td>
-								<td>Transferencia 902559947</td>
+								<td>Codigo de Empleado $nearsol_id</td>
+								<td>NIT del empleado $nit</td>
+								<td>$type $number</td>
 							</tr>
 							<tr>
-								<td>No. Afiliacion IGSS 3001561460101</td>
-								<td>Supervisor: Administracion</td>
-								<td>BAC</td>
+								<td>No. Afiliacion IGSS $igss</td>
+								<td>Supervisor: $user_name</td>
+								<td>$bank</td>
 							</tr>
 						</tbody>
 					</table>
@@ -74,17 +144,17 @@ $content = "
 							<td>Dias del Periodo:</td>
 							<td>15</td>
 							<td>Dias Descontados:</td>
-							<td>0</td>
+							<td>$discounted_days</td>
 							<td>Horas Extraordinarias:</td>
-							<td>0.00</td>
+							<td>$ot_hours</td>
 						</tr>
 						<tr>
 							<td></td>
 							<td></td>
 							<td>Horas Descontadas:</td>
-							<td>0.00</td>
+							<td>$discounted_hours</td>
 							<td>Horas Asueto:</td>
-							<td>0.00</td>
+							<td>$holidays_hours</td>
 						</tr>
 					</table>
 				</td>
@@ -94,31 +164,31 @@ $content = "
 					<table style='width:100%;margin-top:0px;border:solid black 2px'>
 						<tr>
 							<td>Sueldo Ordinario:</td>
-							<td>1,412.55</td>
+							<td>$base</td>
 						</tr>
 						<tr>
 							<td>Sueldo ExtraOrdinario:</td>
-							<td>0.00</td>
+							<td>$ot</td>
 						</tr>
 						<tr>
 							<td>Sueldo extraOrdinario Dias De Asueto:</td>
-							<td>0.00</td>
+							<td>$holidays</td>
 						</tr>
 						<tr>
 							<td>Bonificación Incentivo (Decretos 78-89,7-2000 y 37-2001):</td>
-							<td>125.00</td>
+							<td>$decreto</td>
 						</tr>
 						<tr>
 							<td>Bonificación por Productividad (Decretos 78-89,7-2000 y 37-2001):</td>
-							<td>1,962.45</td>
+							<td>$bonificaciones</td>
 						</tr>
 						<tr>
 							<td>Bonificación por Eficiencia (Decretos 78-89,7-2000 y 37-2001) Bonos:</td>
-							<td>500.00</td>
+							<td>$eficiencia</td>
 						</tr>
 						<tr>
 							<td>Bonificación por Eficiencia (Decretos 78-89,7-2000 y 37-2001) Ajustes:</td>
-							<td>0.00</td>
+							<td>$ajustes</td>
 						</tr>
 						<tr>
 							<td style='color:white'>.</td>
@@ -130,23 +200,23 @@ $content = "
 					<table style='width:100%;margin-top:0px;border:solid black 2px;height:100%'>
 						<tr>
 							<td>IGSS Laboral:</td>
-							<td>(68.23)</td>
+							<td>($igss)</td>
 						</tr>
 						<tr>
 							<td>Descuentso (Bus/Parqueo):</td>
-							<td>0.00</td>
+							<td>($parqueo)</td>
 						</tr>
 						<tr>
 							<td>Otras Deducciones:</td>
-							<td>0.00</td>
+							<td>($otras_deducciones)</td>
 						</tr>
 						<tr>
-							<td>ANticipo Sobre Sueldos:</td>
-							<td>0.00</td>
+							<td>Anticipo Sobre Sueldos:</td>
+							<td>($anticipos)</td>
 						</tr>
 						<tr>
 							<td>ISR:</td>
-							<td>(100.22)</td>
+							<td>($isr)</td>
 						</tr>
 						<tr>
 							<td style='color:white'>.</td>
@@ -171,15 +241,15 @@ $content = "
 								<tbody>
 									<tr>
 										<td>Total Devengado:</td>
-										<td>4,000.00</td>
+										<td>$total_cred</td>
 									</tr>
 									<tr>
 										<td style='border-bottom:solid black 3px'>Total Descuentos:</td>
-										<td style='border-bottom:solid black 3px'>(168.45)</td>
+										<td style='border-bottom:solid black 3px'>($total_deb)</td>
 									</tr>
 									<tr>
 										<td>Sueldo Liquido:</td>
-										<td>3,832.55</td>
+										<td>$liquido</td>
 									</tr>
 								</tbody>
 							</table>
@@ -201,7 +271,7 @@ $content = "
                                     </tr>
                                     <tr>
                                         <td></td>
-                                        <td colspan='2' style='border-top:solid black 2px;text-align:center'>RAUL ALEJANDRO OVALLE CASTILLO</td>
+                                        <td colspan='2' style='border-top:solid black 2px;text-align:center'>$employee_name</td>
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -235,10 +305,29 @@ $content = "
 
 $mail->MsgHTML($content); 
 if(!$mail->Send()) {
-  $res = "0";
+  $res = $mail->ErrorInfo;
   var_dump($mail);
 } else {
-  $res = "1";
+  $res = "Successfuly Sent " . date("Y-m-d H:i:s");
 }
-echo(json_encode("finish"));
+
+$sql2 = "INSERT INTO paystub_details (`idpaystub_deatils`, `id_payment`, `recipent`, `sender`, `subject`, `content`, `result`)
+		VALUES (NULL, $idpayments, $email, 'tickets@nearsol.us', 'Recibo de Sueldos Del  $start Al  $end', '$content', '$res')";
+
+if(mysqli_query($con, $sql2)){
+	$id = mysqli_insert_id($con);
+	$sql3 = "SELECT * FROM paystub_details WHERE idpaystub_details = $id";
+	if($result2 = mysqli_query($con, $sql3)){
+		while($row2 = mysqli_fetch_assoc($result2)){
+			$return['idpaystub_deatils'] = $row2['idpaystub_deatils'];
+			$return['id_payment'] = $row2['id_payment'];
+			$return['recipent'] = $row2['recipent'];
+			$return['sender'] = $row2['sender'];
+			$return['subject'] = $row2['subject'];
+			$return['content'] = $row2['content'];
+			$return['result'] = $row2['result'];
+		}
+	}
+}
+echo(json_encode($return));
 ?>;

@@ -1,21 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { payments, paystubview, periods, sendmailRes } from '../process_templates';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-paystub-sendmail',
   templateUrl: './paystub-sendmail.component.html',
-  styleUrls: ['./paystub-sendmail.component.css']
+  styleUrls: ['./paystub-sendmail.component.css'],
 })
 export class PaystubSendmailComponent implements OnInit {
 
-  constructor(public apiService: ApiService) { }
+  constructor(public apiService: ApiService, public _sanitizer:DomSanitizer) { }
 
+  html:SafeHtml;
   years: string[] = [new Date().getFullYear().toString()];
   periods: periods[] = [];
   selectedYear: string = new Date().getFullYear().toString();
   selectedPeriod: periods = new periods;
   paystubs: paystubview[] = [];
+  selectedPaystub:paystubview = new paystubview;
 
   ngOnInit() {
     this.setPeriods()
@@ -67,6 +71,16 @@ export class PaystubSendmailComponent implements OnInit {
 
   getPayments() {
     this.apiService.getPaystubDetails(this.selectedPeriod).subscribe((pst_view: paystubview[]) => {
+      pst_view.forEach(pst=>{
+        if(!isNullOrUndefined(pst.idpaystub_deatils)){
+          pst.select = true;
+        }else{
+          pst.select = false;
+        }
+        if(pst.nearsol_id == 'QA21'){
+          console.log(pst);
+        }        
+      })
       this.paystubs = pst_view;
     })
   }
@@ -77,4 +91,12 @@ export class PaystubSendmailComponent implements OnInit {
     })
   }
 
+  setpaystubSelected(pst_view:paystubview){
+    this.selectedPaystub = pst_view;
+    this.html = this._sanitizer.bypassSecurityTrustHtml(this.selectedPaystub.content);
+  }
+
+  setStatus(pst_view:paystubview){
+    this.paystubs[this.paystubs.indexOf(pst_view)].select = !this.paystubs[this.paystubs.indexOf(pst_view)].select
+  }
 }
