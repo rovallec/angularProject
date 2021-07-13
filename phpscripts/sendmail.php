@@ -35,7 +35,7 @@ if(!$mail->Send()) {
   $res['str'] = $mail->ErrorInfo;
   var_dump($mail);
 } else {
-  echo['str'] = "Success";
+  $res['str'] = "Success";
 }
 echo  json_encode($res);
 ?>;
