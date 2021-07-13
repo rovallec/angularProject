@@ -884,7 +884,7 @@ saveBilling(any:any){
 }
 
 sendMail(any:any){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/sendmail.php`, any);
+  return this.httpClient.post<any>(`${this.PHP_API_SERVER}/phpscripts/sendmail.php`, any);
 }
 }
 
