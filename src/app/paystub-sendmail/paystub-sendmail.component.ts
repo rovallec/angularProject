@@ -48,6 +48,23 @@ export class PaystubSendmailComponent implements OnInit {
     });
   }
 
+  setPSelection() {
+    this.periods = [];
+    this.apiService.getPeriods().subscribe((per: periods[]) => {
+      per.forEach(period => {
+        if (this.selectedYear == period.start.split("-")[0]) {
+          this.periods.push(period);
+        }
+      })
+      this.setSelection(this.periods[0]);
+    })
+  }
+
+  setSelection(period: periods) {
+    this.selectedPeriod = period;
+    this.getPayments();
+  }
+
   getPayments() {
     this.apiService.getPaystubDetails(this.selectedPeriod).subscribe((pst_view: paystubview[]) => {
       this.paystubs = pst_view;

@@ -5,6 +5,11 @@ require 'database.php';
 
 $res = [];
 
+$postdata = file_get_contents("php://input");
+$request = json_decode($postdata);
+
+$id_period = ($request->idperiods);
+
 $sql = "SELECT *, coalesce(paystub_details.recipent, contact_details.email) AS `email`, accounts.name AS `account_name` FROM periods 
         INNER JOIN payments ON payments.id_period = periods.idperiods
         INNER JOIN employees ON employees.idemployees = payments.id_employee
@@ -13,7 +18,7 @@ $sql = "SELECT *, coalesce(paystub_details.recipent, contact_details.email) AS `
         INNER JOIN accounts ON accounts.idaccounts = COALESCE(payments.id_account_py, employees.id_account)
         INNER JOIN contact_details ON contact_details.id_profile = profiles.idprofiles
         LEFT JOIN paystub_details ON paystub_details.id_payment = payments.idpayments
-        WHERE idperiods = 33 AND employees.active = 1 OR employees.termination_date >= periods.end;";
+        WHERE idperiods = $id_period AND employees.active = 1 OR employees.termination_date >= periods.end;";
 
 if($result = mysqli_query($con, $sql)){
     $i = 0;

@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="row col-md-12" style="margin-top: 10px;">
+        <div class="row col-md-12" style="margin-top: 10px; padding-right:0%">
             <div class="col-md-2">
                 <div class="list-group w-100" id="list-tab" role="tablist">
                     <a class="list-group-item list-group-item-action w-100" *ngFor="let period of periods"
@@ -33,15 +33,14 @@
                 </div>
             </div>
             <div class="col-md-1"></div>
-            <div class="col-md-9">
-                <table class="table-striped" style="width: 100%;">
+            <div class="col-md-9 p-0">
+                <table class="table table-stripped table-hover">
                     <thead>
                         <th>NEARSOL ID</th>
                         <th>CLIENT ID</th>
                         <th>NAME</th>
                         <th>ACCOUNT</th>
                         <th>EMAIL</th>
-                        <th>MAIL</th>
                         <th>SELECT</th>
                     </thead>
                     <tbody>
@@ -51,8 +50,7 @@
                             <td>{{pst_view.name}}</td>
                             <td>{{pst_view.account_name}}</td>
                             <td>{{pst_view.recipent}}</td>
-                            <td>{{pst_view.content}}</td>
-                            <td>{{pst_view.select}}</td>
+                            <td style="text-align: center;"><input type="checkbox" value="{{pst_view.select}}"></td>
                         </tr>
                     </tbody>
                 </table>
