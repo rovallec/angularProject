@@ -122,7 +122,7 @@ if($result = mysqli_query($con, $sql))
 		$mail->IsSMTP();
 		$mail->Mailer = "smtp";
 
-		$mail->SMTPDebug  = 0;
+		$mail->SMTPDebug  = 1;
 		$mail->SMTPAuth   = TRUE;
 		$mail->SMTPSecure = "tls";
 		$mail->Port       = 587;
