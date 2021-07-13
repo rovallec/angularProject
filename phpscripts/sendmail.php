@@ -48,7 +48,7 @@ $total_cred = '';
 $total_deb = '';
 $liquido = '';
 
-$id_employee = $request->id_employee;
+$id_employee = $request->id_payment;
 
 $sql = "SELECT contact_details.email AS `email`, employees.society, accounts.name AS `account`, if(employees.society='NEARSOL, S.A.', '10305064-7', '0000000-0') AS `employeer_nit`, payments.idpayments, periods.start, periods.end, hires.nearsol_id, profiles.nit,
 payment_methods.type, payment_methods.number, profiles.iggs, users.user_name, payment_methods.bank, 15 AS `days_of_period`, payroll_values.discounted_days, payments.ot_hours, payroll_values.discounted_hours,
@@ -67,14 +67,14 @@ INNER JOIN periods ON periods.idperiods = payments.id_period
 INNER JOIN users ON users.idUser = employees.reporter
 INNER JOIN payroll_values ON payroll_values.id_payment = payments.idpayments
 INNER JOIN contact_details ON contact_details.id_profile = profiles.idprofiles
-LEFT JOIN (SELECT * FROM credits WHERE type LIKE '%Bonos Diversos Nearsol%') AS `eficiencia` ON `eficiencia`.id_payment = payments.idpayments
-LEFT JOIN (SELECT * FROM credits WHERE type LIKE '%Bonificacion Decreto%') AS `decreto` ON `decreto`.id_payment = payments.idpayments
-LEFT JOIN (SELECT * FROM credits WHERE type LIKE '%Ajuste%' AND amount > 0) AS `ajustes` ON `ajustes`.id_payment = payments.idpayments
-LEFT JOIN (SELECT * FROM debits WHERE type LIKE '%IGSS%') AS `igss` ON `igss`.id_payment = payments.idpayments
-LEFT JOIN (SELECT * FROM debits WHERE type LIKE '%Parqueo%' OR type LIKE '%Bus%') AS `parqueo` ON `parqueo`.id_payment = payments.idpayments
-LEFT JOIN (SELECT * FROM debits WHERE type LIKE '%Anticipo%') AS `anticipos` ON `anticipos`.id_payment = payments.idpayments
-LEFT JOIN (SELECT * FROM credits WHERE type LIKE '%Ajuste%' AND amount < 0) AS `anticipos_cred` ON `anticipos_cred`.id_payment = payments.idpayments
-LEFT JOIN (SELECT * FROM debits WHERE type LIKE '%ISR%') AS `isr` ON `isr`.id_payment = payments.idpayments
+LEFT JOIN (SELECT SUM(amount) AS `amount`, id_payment FROM credits WHERE type LIKE '%Bonos Diversos Nearsol%' GROUP BY id_payment) AS `eficiencia` ON `eficiencia`.id_payment = payments.idpayments
+LEFT JOIN (SELECT SUM(amount) AS `amount`, id_payment FROM credits WHERE type LIKE '%Bonificacion Decreto%' GROUP BY id_payment) AS `decreto` ON `decreto`.id_payment = payments.idpayments
+LEFT JOIN (SELECT SUM(amount) AS `amount`, id_payment FROM credits WHERE type LIKE '%Ajuste%' AND amount > 0 GROUP BY id_payment) AS `ajustes` ON `ajustes`.id_payment = payments.idpayments
+LEFT JOIN (SELECT SUM(amount) AS `amount`, id_payment FROM debits WHERE type LIKE '%IGSS%' GROUP BY id_payment) AS `igss` ON `igss`.id_payment = payments.idpayments
+LEFT JOIN (SELECT SUM(amount) AS `amount`, id_payment FROM debits WHERE type LIKE '%Parqueo%' OR type LIKE '%Bus%' GROUP BY id_payment) AS `parqueo` ON `parqueo`.id_payment = payments.idpayments
+LEFT JOIN (SELECT SUM(amount) AS `amount`, id_payment FROM debits WHERE type LIKE '%Anticipo%' GROUP BY id_payment) AS `anticipos` ON `anticipos`.id_payment = payments.idpayments
+LEFT JOIN (SELECT SUM(amount) AS `amount`, id_payment FROM credits WHERE type LIKE '%Ajuste%' AND amount < 0 GROUP BY id_payment) AS `anticipos_cred` ON `anticipos_cred`.id_payment = payments.idpayments
+LEFT JOIN (SELECT SUM(amount) AS `amount`, id_payment FROM debits WHERE type LIKE '%ISR%' GROUP BY id_payment) AS `isr` ON `isr`.id_payment = payments.idpayments
 where idpayments = $id_employee";
 
 if($result = mysqli_query($con, $sql))

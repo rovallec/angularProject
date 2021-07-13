@@ -98,7 +98,7 @@ export class PaystubSendmailComponent implements OnInit {
     let count = 0;
     this.paystubs.forEach(py=>{
       if(py.select){
-        this.apiService.sendMail({id_employee:py.idpayments}).subscribe((pstv:paystubview)=>{
+        this.apiService.sendMail({id_payment:py.idpayments}).subscribe((pstv:paystubview)=>{
           count++;
           console.log(pstv);
           console.log(count);
