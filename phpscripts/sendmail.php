@@ -145,8 +145,7 @@ if($result = mysqli_query($con, $sql))
 	$res = "Successfuly Sent " . date("Y-m-d H:i:s");
 	}
 
-	$sql2 = "INSERT INTO paystub_details (`idpaystub_deatils`, `id_payment`, `recipent`, `sender`, `subject`, `content`, `result`)
-			VALUES (NULL, $idpayments, $email, 'tickets@nearsol.us', 'Recibo de Sueldos Del  $start Al  $end', " . '"' . $content . '"' . ", '$res')";
+	$sql2 = "INSERT INTO paystub_details (`idpaystub_deatils`, `id_payment`, `recipent`, `sender`, `subject`, `content`, `result`)VALUES (NULL, $idpayments, '$email', 'tickets@nearsol.us', 'Recibo de Sueldos Del  $start Al  $end', " . '"' . $content . '"' . ", '$res')";
 
 	if(mysqli_query($con, $sql2)){
 		$id = mysqli_insert_id($con);
