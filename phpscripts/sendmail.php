@@ -160,10 +160,12 @@ if($result = mysqli_query($con, $sql))
 				$return['content'] = $row2['content'];
 				$return['result'] = $row2['result'];
 			}
+			echo(json_encode($return));
+		}else{
+			echo($sql3);
 		}
 	}else{
 		echo($sql2);
 	}
 }
-echo(json_encode($return));
 ?>;
