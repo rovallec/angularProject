@@ -26,8 +26,8 @@ $mail->Password   = "Nearsol.2020!";
 
 $mail->IsHTML(true);
 $mail->AddAddress("raul.ovalle@nearsol.gt", "Raul Ovalle");
-$mail->SetFrom("tickets@nearsol.us", "MiNearsol");
-$mail->Subject = "Test is Test Email sent via Gmail SMTP Server using PHP Mailer";
+$mail->SetFrom("tickets@nearsol.us", "MiNearsol Paystub");
+$mail->Subject = "Recibo de Sueldos";
 $content = "
 <body>
 	<table style='margin-top:25px;width:90%;margin-left:5%'>
