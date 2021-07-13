@@ -85,12 +85,6 @@ export class PaystubSendmailComponent implements OnInit {
     })
   }
 
-  sendMail() {
-    this.apiService.sendMail({ test: "Test" }).subscribe((str: string) => {
-      window.alert(str);
-    })
-  }
-
   setpaystubSelected(pst_view:paystubview){
     this.selectedPaystub = pst_view;
     this.html = this._sanitizer.bypassSecurityTrustHtml(this.selectedPaystub.content);
@@ -98,5 +92,18 @@ export class PaystubSendmailComponent implements OnInit {
 
   setStatus(pst_view:paystubview){
     this.paystubs[this.paystubs.indexOf(pst_view)].select = !this.paystubs[this.paystubs.indexOf(pst_view)].select
+  }
+
+  sendMails(){
+    let count = 0;
+    this.paystubs.forEach(py=>{
+      if(py.select){
+        this.apiService.sendMail({id_employee:py.idemployees}).subscribe((pstv:paystubview)=>{
+          count++;
+          console.log(pstv);
+          console.log(count);
+        });
+      }
+    })
   }
 }
