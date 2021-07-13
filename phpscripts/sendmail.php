@@ -184,29 +184,29 @@ $content = "
 								</tbody>
 							</table>
 						</div>
-						<div style='width:66.7%;position:absolute;left:33.3%'>
-							<table style='width:100%;margin-top:0px;border:solid black 2px;height:100%'>
-								<tbody>
-									<tr>
-										<td style='color:white'>f</td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td style='text-align:right;border-bottom:solid white 1px'>f:</td>
-										<td></td>
-										<td></td>
-										<td></td>
-									</tr>
-									<tr>
-										<td></td>
-										<td colspan='2' style='border-top:solid black 2px;text-align:center'>RAUL ALEJANDRO OVALLE CASTILLO</td>
-										<td></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+                        <div style='width:66.6%;float:left;margin-left:0.4%'>
+                            <table style='width:100%;margin-top:0px;border:solid black 2px;height:100%'>
+                                <tbody>
+                                    <tr>
+                                        <td style='color:white'>f</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td style='text-align:right;border-bottom:solid white 1px'>f:</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan='2' style='border-top:solid black 2px;text-align:center'>RAUL ALEJANDRO OVALLE CASTILLO</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 					</div>
 				</td>
 			</tr>
