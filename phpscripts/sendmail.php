@@ -32,7 +32,7 @@ $content = "<b>This is a Test Email sent via Gmail SMTP Server using PHP mailer 
 
 $mail->MsgHTML($content); 
 if(!$mail->Send()) {
-  $res = "0"
+  $res = "0";
   var_dump($mail);
 } else {
   $res = "1";
