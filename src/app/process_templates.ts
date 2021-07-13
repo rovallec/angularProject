@@ -1893,3 +1893,36 @@ export class sendmailRes{
         this.retunr_text = null;
     }
 }
+
+export class paystubview{
+    idpayments:string;
+    account_name:string;
+    idemployees:string;
+    client_id:string;
+    nearsol_id:string;
+    name:string;
+    idpaystub_deatils:string;
+    id_payment:string;
+    recipent:string;
+    sender:string;
+    subject:string;
+    content:string;
+    result:string;
+    select:string;
+    constructor(){
+        this.idpayments = null
+        this.account_name = null
+        this.idemployees = null
+        this.client_id = null
+        this.nearsol_id = null
+        this.name = null
+        this.idpaystub_deatils = null
+        this.id_payment = null
+        this.recipent = null
+        this.sender = null
+        this.subject = null
+        this.content = null
+        this.result = null
+        this.select = '0';
+    }
+}

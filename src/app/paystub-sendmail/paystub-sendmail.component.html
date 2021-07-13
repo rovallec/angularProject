@@ -1,1 +1,62 @@
-<button class="form-ctonrol" (click)="sendMail()">ENVIAR!</button>
+<div class="row col-md-12" style="margin-top: 25px;">
+    <div class="row col-md-12">
+        <div class="col-md-2">
+            <select class="form-control" (change)="setPSelection()" [(ngModel)]="selectedYear"
+                style="text-align: center;">
+                <option *ngFor="let year of years">{{year}}</option>
+            </select>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-9 d-flex flex-row-reverse">
+            <div>
+                <button class="form-control btn btn-outline-success" (click)="getTermReport()" title="Send"><i
+                        class="fas fa-share-square"></i></button>
+            </div>
+            <div style="margin-right:10px">
+                <button class="form-control btn btn-outline-info" (click)='setSelection()' title="Select All"><i
+                        class="fas fa-check-double"></i></button>
+            </div>
+            <div style="margin-right:10px">
+                <button class="form-control btn btn-outline-danger" (click)="setIsr()" title="Clear Selection"><i
+                        class="fas fa-ban"></i></button>
+            </div>
+        </div>
+
+        <div class="row col-md-12" style="margin-top: 10px;">
+            <div class="col-md-2">
+                <div class="list-group w-100" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action w-100" *ngFor="let period of periods"
+                        [tabindex]="period.idperiods" (click)="setSelection(period)"
+                        [ngClass]="{'active': selectedPeriod.idperiods == period.idperiods}"
+                        style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO
+                        {{period.end}}</a>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-9">
+                <table class="table-striped" style="width: 100%;">
+                    <thead>
+                        <th>NEARSOL ID</th>
+                        <th>CLIENT ID</th>
+                        <th>NAME</th>
+                        <th>ACCOUNT</th>
+                        <th>EMAIL</th>
+                        <th>MAIL</th>
+                        <th>SELECT</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pst_view of paystubs">
+                            <td>{{pst_view.nearsol_id}}</td>
+                            <td>{{pst_view.client_id}}</td>
+                            <td>{{pst_view.name}}</td>
+                            <td>{{pst_view.account_name}}</td>
+                            <td>{{pst_view.recipent}}</td>
+                            <td>{{pst_view.content}}</td>
+                            <td>{{pst_view.select}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

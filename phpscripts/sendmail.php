@@ -240,5 +240,5 @@ if(!$mail->Send()) {
 } else {
   $res = "1";
 }
-echo("finish");
+echo(json_encode("finish"));
 ?>;
