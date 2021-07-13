@@ -53,10 +53,10 @@ $id_employee = $request->id_payment;
 $sql = "SELECT contact_details.email AS `email`, employees.society, accounts.name AS `account`, if(employees.society='NEARSOL, S.A.', '10305064-7', '0000000-0') AS `employeer_nit`, payments.idpayments, periods.start, periods.end, hires.nearsol_id, profiles.nit,
 payment_methods.type, payment_methods.number, profiles.iggs, users.user_name, payment_methods.bank, 15 AS `days_of_period`, payroll_values.discounted_days, payments.ot_hours, payroll_values.discounted_hours,
 payments.holidays_hours, payments.base, payments.ot, payments.holidays, `decreto`.amount AS `decreto`, (payments.credits - payments.base - coalesce(payments.ot,0) - coalesce(payments.holidays,0) -
-coalesce(`decreto`.amount,0) - coalesce(`eficiencia`.amount,0) - coalesce(`ajustes`.amount,0)) AS `bonificaciones`, `eficiencia`.amount AS `eficiencia`, `ajustes`.amount AS `ajustes`, `igss`.amount AS `igss`, 
+coalesce(`decreto`.amount,0) - coalesce(`eficiencia`.amount,0) - coalesce(`ajustes`.amount,0)) AS `bonificaciones`, `eficiencia`.amount AS `eficiencia`, `ajustes`.amount AS `ajustes`, `igss`.amount AS `igss_amount`, 
 `parqueo`.amount AS `parqueo`, (payments.debits - coalesce(`igss`.amount,0) - coalesce(`parqueo`.amount,0) - coalesce(`anticipos`.amount,0) - `isr`.amount) AS `otras_deducciones`,
 (coalesce(`anticipos`.amount,0) + (-1*coalesce(`anticipos_cred`.amount,0))) AS `anticipos`, `isr`.amount AS `isr`,
-CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee_name`, payments.credits, payments.debits
+CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `employee_name`, payments.credits, payments.debits, (-1*`anticipos_cred`.amount) AS `anticipos_cred_amount`
 FROM payments
 INNER JOIN employees ON employees.idemployees = payments.id_employee
 INNER JOIN hires ON hires.idhires = employees.id_hire
@@ -80,7 +80,6 @@ where idpayments = $id_employee";
 if($result = mysqli_query($con, $sql))
 {
 	$i = 0;
-	echo($sql);
 	while($row = mysqli_fetch_assoc($result))
 	{
 		$email = $row['email'];
@@ -108,23 +107,23 @@ if($result = mysqli_query($con, $sql))
 		$bonificaciones = number_format($row['bonificaciones'],2);
 		$eficiencia = number_format($row['eficiencia'],2);
 		$ajustes = number_format($row['ajustes'],2);
-		$igss = number_format($row['igss'],2);
+		$igss_amount = number_format($row['igss_amount'],2);
 		$otras_deducciones = number_format($row['otras_deducciones'],2);
 		$anticipos = number_format($row['anticipos'],2);
 		$isr = number_format($row['isr'],2);
 		$employee_name = $row['employee_name'];
 		$nearsol_id = $row['nearsol_id'];
 		$parqueo = number_format($row['parqueo'],2);
-		$total_cred = number_format($row['credits'],2);
+		$total_cred = number_format($row['credits'] + $row['anticipos_cred_amount'],2);
 		$total_deb = number_format($row['debits'],2);
-		$liquido = number_format(($total_cred - $total_deb), 2);
+		$liquido = ($row['credits'] - $row['debits']);
 	}
 
 		$mail = new PHPMailer();
 		$mail->IsSMTP();
 		$mail->Mailer = "smtp";
 
-		$mail->SMTPDebug  = 1;
+		$mail->SMTPDebug  = 0;
 		$mail->SMTPAuth   = TRUE;
 		$mail->SMTPSecure = "tls";
 		$mail->Port       = 587;
@@ -167,7 +166,7 @@ if($result = mysqli_query($con, $sql))
 										<td>$type $number</td>
 									</tr>
 									<tr>
-										<td>No. Afiliacion IGSS $igss</td>
+										<td>No. Afiliacion IGSS $iggs</td>
 										<td>Supervisor: $user_name</td>
 										<td>$bank</td>
 									</tr>
