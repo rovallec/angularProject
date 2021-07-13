@@ -37,5 +37,5 @@ if(!$mail->Send()) {
 } else {
   $res = 'Success';
 }
-echo ($res);
+echo(json_encode($res));
 ?>;
