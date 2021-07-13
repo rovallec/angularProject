@@ -32,10 +32,10 @@ $content = "<b>This is a Test Email sent via Gmail SMTP Server using PHP mailer 
 
 $mail->MsgHTML($content); 
 if(!$mail->Send()) {
-  $res[0] = $mail->ErrorInfo;
+  $res['retunr_text'] = $mail->ErrorInfo;
   var_dump($mail);
 } else {
-  $res[0] = 'Success';
+  $res['retunr_text'] = 'Success';
 }
 echo json_encode($res);
 ?>;
