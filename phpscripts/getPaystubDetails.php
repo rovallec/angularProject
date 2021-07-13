@@ -33,7 +33,7 @@ if($result = mysqli_query($con, $sql)){
         $res[$i]['result'] = $row['result'];
         $i++;
     };
-    echo json_encode($user);
+    echo json_encode($res);
 }else{
     http_response_code(404);
     echo json_encode($sql);
