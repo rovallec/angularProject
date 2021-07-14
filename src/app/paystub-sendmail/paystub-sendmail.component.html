@@ -50,11 +50,11 @@
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
                             data-target="#attendance_detail" >{{pst_view.client_id}}</td>
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
-                            data-target="#attendance_detail" >{{pst_view.name}}</td>
+                            data-target="#attendance_detail" >{{pst_view.employee_name}}</td>
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
-                            data-target="#attendance_detail" >{{pst_view.account_name}}</td>
+                            data-target="#attendance_detail" >{{pst_view.account}}</td>
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
-                            data-target="#attendance_detail" >{{pst_view.recipent}}</td>
+                            data-target="#attendance_detail" >{{pst_view.email}}</td>
                             <td style="text-align: center;"><input type="checkbox" [checked]="pst_view.select" (change)="setStatus(pst_view)">
                     </tbody>
                 </table>

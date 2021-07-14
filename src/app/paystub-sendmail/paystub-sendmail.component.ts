@@ -73,8 +73,10 @@ export class PaystubSendmailComponent implements OnInit {
       pst_view.forEach(pst=>{
         if(!isNullOrUndefined(pst.idpaystub_deatils)){
           pst.select = true;
+          pst.ignore = true;
         }else{
           pst.select = false;
+          pst.ignore = false;
         }
       })
       this.paystubs = pst_view;
@@ -94,7 +96,7 @@ export class PaystubSendmailComponent implements OnInit {
   sendMails(){
     let count = 0;
     this.paystubs.forEach(py=>{
-      if(py.select){
+      if(py.select && !py.ignore){
         this.apiService.sendMail({id_payment:py.idpayments}).subscribe((pstv:paystubview)=>{
           count++;
           console.log(pstv);

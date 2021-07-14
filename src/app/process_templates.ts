@@ -1895,34 +1895,84 @@ export class sendmailRes{
 }
 
 export class paystubview{
-    idpayments:string;
-    account_name:string;
-    idemployees:string;
-    client_id:string;
-    nearsol_id:string;
-    name:string;
-    idpaystub_deatils:string;
-    id_payment:string;
-    recipent:string;
-    sender:string;
-    subject:string;
     content:string;
-    result:string;
+    idpaystub_deatils:string;
+    email:string;
+    society:string;
+    account:string;
+    employeer_nit:string;
+    idpayments:string;
+    start:string;
+    end:string;
+    nit:string;
+    type:string;
+    number:string;
+    iggs:string;
+    user_name:string;
+    bank:string;
+    days_of_period:string;
+    discounted_days:string;
+    ot_hours:string;
+    discounted_hours:string;
+    holidays_hours:string;
+    base:string;
+    ot:string;
+    holidays:string;
+    decreto:string;
+    bonificaciones:string;
+    eficiencia:string;
+    ajustes:string;
+    igss_amount:string;
+    otras_deducciones:string;
+    anticipos:string;
+    isr:string;
+    employee_name:string;
+    nearsol_id:string;
+    parqueo:string;
+    total_cred:string;
+    total_deb:string;
+    liquido:string;
     select:boolean;
+    ignore:boolean;
     constructor(){
-        this.idpayments = null
-        this.account_name = null
-        this.idemployees = null
-        this.client_id = null
-        this.nearsol_id = null
-        this.name = null
-        this.idpaystub_deatils = null
-        this.id_payment = null
-        this.recipent = null
-        this.sender = null
-        this.subject = null
-        this.content = null
-        this.result = null
+        this.content = null;
+        this.idpaystub_deatils = null;
+        this.email = null;
+        this.society = null;
+        this.account = null;
+        this.employeer_nit = null;
+        this.idpayments = null;
+        this.start = null;
+        this.end = null;
+        this.nit = null;
+        this.type = null;
+        this.number = null;
+        this.iggs = null;
+        this.user_name = null;
+        this.bank = null;
+        this.days_of_period = null;
+        this.discounted_days = null;
+        this.ot_hours = null;
+        this.discounted_hours = null;
+        this.holidays_hours = null;
+        this.base = null;
+        this.ot = null;
+        this.holidays = null;
+        this.decreto = null;
+        this.bonificaciones = null;
+        this.eficiencia = null;
+        this.ajustes = null;
+        this.igss_amount = null;
+        this.otras_deducciones = null;
+        this.anticipos = null;
+        this.isr = null;
+        this.employee_name = null;
+        this.nearsol_id = null;
+        this.parqueo = null;
+        this.total_cred = null;
+        this.total_deb = null;
+        this.liquido = null;
         this.select = false;
+        this.ignore = false;
     }
 }
