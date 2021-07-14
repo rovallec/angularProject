@@ -45,7 +45,7 @@
                         <th>SELECT</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let pst_view of paystubs" class='selectable' [ngClass]="{'table-'}">
+                        <tr *ngFor="let pst_view of paystubs" class='selectable' [ngClass]="{'table-secondary':pst_view.ignore}">
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
                             data-target="#attendance_detail" >{{pst_view.nearsol_id}}</td>
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
