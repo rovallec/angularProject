@@ -84,7 +84,7 @@ export class PyprofilesComponent implements OnInit {
   }
 
   start() {
-    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.route.snapshot.paramMap.get('id'), rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
       this.employee = emp[0];
       this.setPayTime(this.employee.idemployees, this.employee.id_profile);
       let prof: profiles = new profiles;
@@ -155,7 +155,7 @@ export class PyprofilesComponent implements OnInit {
       periods = pr;
     })
 
-    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: id_employee }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: id_employee, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
       this.apiService.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
         this.apiService.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
           this.apiService.getDPAtt({ id: emp[0].idemployees, date_1: strt, date_2: nd }).subscribe((dp: disciplinary_processes[]) => {

@@ -31,7 +31,7 @@ export class VacationsRepComponent implements OnInit {
   searchEmployee(){
     this.searching = true;
     this.value = String(this.value).trim();
-    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: this.authService.getAuthusr().department }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: this.authService.getAuthusr().department, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
       this.employees = emp;
     });
   }

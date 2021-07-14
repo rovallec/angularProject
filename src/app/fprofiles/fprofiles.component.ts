@@ -99,7 +99,7 @@ export class FprofilesComponent implements OnInit {
   start(){
     this.bus = false;
     this.parking = false;
-    this.apiService.getSearchEmployees({dp:this.authUser.getAuthusr().department, filter:'idemployees', value:this.route.snapshot.paramMap.get('id')}).subscribe((emp:employees[])=>{
+    this.apiService.getSearchEmployees({dp:this.authUser.getAuthusr().department, filter:'idemployees', value:this.route.snapshot.paramMap.get('id'), rol:this.authUser.getAuthusr().id_role}).subscribe((emp:employees[])=>{
       this.employee = emp[0]
       let prof:profiles = new profiles;
       prof.idprofiles = emp[0].id_profile;

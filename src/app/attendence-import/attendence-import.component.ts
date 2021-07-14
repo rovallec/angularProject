@@ -87,7 +87,7 @@ export class AttendenceImportComponent implements OnInit {
 
         this.attendences.forEach(elem => {
           elem.day_off1 = "NO MATCH";
-          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp: 'exact' }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp: 'exact', rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
             if (!isNullOrUndefined(emp[0])) {
               this.apiService.getAttendences({ date: elem.date + ";" + emp[0].idemployees, id: 'NULL' }).subscribe((att: attendences[]) => {
                 if (att.length > 0) {
@@ -120,7 +120,7 @@ export class AttendenceImportComponent implements OnInit {
               supervisors.reason = element['REASON'];
               supervisors.supervisor = element['SUPERVISOR'];
               supervisors.time = element['TIME'];
-              this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: supervisors.avaya }).subscribe((emp: employees[]) => {
+              this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: supervisors.avaya, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
                 if (isNull(emp)) {
                   supervisors.status = 'FALSE';
                 } else {
@@ -204,7 +204,7 @@ export class AttendenceImportComponent implements OnInit {
         this.sups.forEach(sup => {
           i = i + 1;
           if (sup.status == 'TRUE') {
-            this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya }).subscribe((emp: employees[]) => {
+            this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: emp[0].idemployees }).subscribe((attendance: attendences[]) => {
                 let adjustment: attendences_adjustment = new attendences_adjustment;
                 adjustment.id_employee = emp[0].idemployees;

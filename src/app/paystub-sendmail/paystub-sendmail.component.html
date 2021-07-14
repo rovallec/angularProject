@@ -57,7 +57,7 @@
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
                             data-target="#attendance_detail" >{{pst_view.email}}</td>
                             <td>{{pst_view.result}}</td>
-                            <td style="text-align: center;"><input type="checkbox" [checked]="pst_view.select" (change)="setStatus(pst_view)" disabled="pst_view.ignore">
+                            <td style="text-align: center;"><input type="checkbox" [checked]="pst_view.select" (change)="setStatus(pst_view)">
                     </tbody>
                 </table>
             </div>
@@ -70,7 +70,7 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">{{selectedPaystub.name}}</h5>
+          <h5 class="modal-title">{{selectedPaystub.employee_name}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

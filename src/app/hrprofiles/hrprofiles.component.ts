@@ -1244,7 +1244,7 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Transfer':
-          this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
             if (isNullOrUndefined(emp)) {
               this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
                 this.apiService.getPeriods().subscribe((p: periods[]) => {

@@ -73,7 +73,7 @@ export class ImportOtComponent implements OnInit {
       let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
       sheetToJson.forEach(element => {
         let ot:ot_manage = new ot_manage;
-        this.apiService.getSearchEmployees({filter:'nearsol_id', value:element['NEARSOL ID'], dp:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
+        this.apiService.getSearchEmployees({filter:'nearsol_id', value:element['NEARSOL ID'], dp:this.authService.getAuthusr().department, rol:this.authService.getAuthusr().id_role}).subscribe((emp:employees[])=>{
           ot.id_employee = emp[0].idemployees;
           ot.amount = element['AMOUNT'];
           ot.id_period = this.period.idperiods;

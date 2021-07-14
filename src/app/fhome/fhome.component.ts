@@ -35,7 +35,7 @@ export class FhomeComponent implements OnInit {
   }
 
   searchEmployee(){
-    this.apiService.getSearchEmployees({filter:this.filter, value:this.value, dp:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
+    this.apiService.getSearchEmployees({filter:this.filter, value:this.value, dp:this.authService.getAuthusr().department, rol:this.authService.getAuthusr().id_role}).subscribe((emp:employees[])=>{
       this.allEmployees = emp;
     });
     this.searching = true;

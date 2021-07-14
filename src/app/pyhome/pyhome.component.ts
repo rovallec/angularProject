@@ -103,7 +103,7 @@ export class PyhomeComponent implements OnInit {
   }
 
   searchEmployee() {
-    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: this.authService.getAuthusr().department }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: this.authService.getAuthusr().department, rol:this.authService.getAuthusr().id_role}).subscribe((emp: employees[]) => {
       this.employees = emp;
     });
     this.searching = true;
@@ -116,7 +116,7 @@ export class PyhomeComponent implements OnInit {
   saveEmployees() {
     this.hires.forEach(hire => {
       if (hire.client_id.length > 0) {
-        this.apiService.getSearchEmployees({ dp: 'all', filter: 'nearsol_id', value: hire.nearsol_id }).subscribe((emp: employees[]) => {
+        this.apiService.getSearchEmployees({ dp: 'all', filter: 'nearsol_id', value: hire.nearsol_id, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
           if ((emp[0].client_id != hire.client_id) || (emp[0].society != hire.society)) {
             emp[0].platform = hire.client_id;
             emp[0].society = hire.society;
@@ -184,7 +184,7 @@ export class PyhomeComponent implements OnInit {
       })
 
       this.transfers.forEach(trans => {
-        this.apiService.getSearchEmployees({ filter: 'idemployees', value: trans.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
+        this.apiService.getSearchEmployees({ filter: 'idemployees', value: trans.id_profile, dp: '4', rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
           emp[0].platform = trans.prc_date;
           this.profilesTransfer.push(emp[0]);
         })
@@ -211,7 +211,7 @@ export class PyhomeComponent implements OnInit {
       proc.forEach(proc => {
         if (proc.name == "Termination" && new Date(proc.prc_date) < new Date(end) && new Date(proc.prc_date) > new Date(start)) {
           this.apiService.getTerm(proc).subscribe((termed: terminations) => {
-            this.apiService.getSearchEmployees({ filter: 'idemployees', value: proc.id_profile, dp: '4' }).subscribe((emp: employees[]) => {
+            this.apiService.getSearchEmployees({ filter: 'idemployees', value: proc.id_profile, dp: '4', rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               emp[0].platform = "NO DATE SET";
               if (!isNullOrUndefined(termed.valid_from)) {
                 emp[0].platform = termed.valid_from;

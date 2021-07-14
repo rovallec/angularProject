@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { isNullOrUndefined } from 'util';
 import * as XLSX from 'xlsx';
 import { ApiService } from '../api.service';
+import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { debits, isr, payments, periods } from '../process_templates';
 
@@ -23,7 +24,7 @@ export class IsrmanagerComponent implements OnInit {
   filelist: any;
   completed: boolean = false;
 
-  constructor(public apiServices: ApiService) { }
+  constructor(public apiServices: ApiService, public authSrv:AuthServiceService) { }
 
   ngOnInit() {
     this.setPeriods();
@@ -112,7 +113,7 @@ export class IsrmanagerComponent implements OnInit {
         let temp_nit: string = null;
         temp_nit = element['NIT Empleado'].toString();
         temp_nit = temp_nit.substr(1, temp_nit.length - 2) + "%" + temp_nit.charAt(temp_nit.length - 1) + "%";
-        this.apiServices.getSearchEmployees({ filter: 'nit', value: temp_nit, dp: '4' }).subscribe((employees: employees[]) => {
+        this.apiServices.getSearchEmployees({ filter: 'nit', value: temp_nit, dp: '4', rol:this.authSrv.getAuthusr().id_role }).subscribe((employees: employees[]) => {
           if (!isNullOrUndefined(employees)) {
             new_isr.nearsol_id = employees[0].nearsol_id;
             new_isr.idemployees = employees[0].idemployees;

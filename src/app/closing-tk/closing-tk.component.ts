@@ -211,7 +211,7 @@ export class ClosingTkComponent implements OnInit {
             let rs: payroll_resume = new payroll_resume;
             this.step = "Calculating discounts";
             this.payroll_values = [];
-            this.apiServices.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee }).subscribe((emp: employees[]) => {
+            this.apiServices.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               this.apiServices.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
                 this.apiServices.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
                   this.apiServices.getDPAtt({ id: emp[0].idemployees, date_1: this.actualPeriod.start, date_2: this.actualPeriod.end }).subscribe((dp: disciplinary_processes[]) => {
@@ -851,7 +851,7 @@ export class ClosingTkComponent implements OnInit {
       var worksheet = workbook.Sheets[first_sheet_name];
       let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
       sheetToJson.forEach(element => {
-        this.apiServices.getSearchEmployees({ dp: '28', filter: 'nearsol_id', value: element['Nearsol ID'] }).subscribe((emp: employees[]) => {
+        this.apiServices.getSearchEmployees({ dp: '28', filter: 'nearsol_id', value: element['Nearsol ID'], rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
           if (emp[0].id_account != this.selectedAccount.idaccounts) {
             if (f) {
               f = false;
@@ -1113,7 +1113,7 @@ export class ClosingTkComponent implements OnInit {
         let count: number = 0;
         this.apiServices.getPayments(provitional_period).subscribe((paymnts: payments[]) => {
           partial_credits.forEach(ele => {
-            this.apiServices.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits }).subscribe((emp: employees[]) => {
+            this.apiServices.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               if (!isNullOrUndefined(emp[0])) {
                 paymnts.forEach(py => {
                   if (py.id_employee == emp[0].idemployees) {

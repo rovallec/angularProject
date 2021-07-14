@@ -67,7 +67,7 @@ export class AccdashboardComponent implements OnInit {
 
   searchEmployee() {
     this.searching = true;
-    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: 'all' }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: 'all', rol:this.authSrv.getAuthusr().id_role }).subscribe((emp: employees[]) => {
       this.employees = emp;
     })
   }
@@ -110,7 +110,7 @@ export class AccdashboardComponent implements OnInit {
       if (hire.status == 'EMPLOYEE') {
         if (parseFloat(hire.account) > 0) {
           let paymentMethod: payment_methods = new payment_methods;
-          this.apiService.getSearchEmployees({ filter: 'idprofiles', value: hire.id_profile, dp: 'all' }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ filter: 'idprofiles', value: hire.id_profile, dp: 'all', rol:this.authSrv.getAuthusr().id_role}).subscribe((emp: employees[]) => {
             emp[0].society = hire.society;
             emp[0].platform = "WAH";
             emp[0].state = "society";
@@ -200,7 +200,7 @@ export class AccdashboardComponent implements OnInit {
     this.apiService.getFilteredHires(wv).subscribe((hires: hires_template[]) => {
       this.waveFormerEmployer = [];
       hires.forEach(hire => {
-        this.apiService.getSearchEmployees({dp:'4', filter:'idprofiles', value:hire.id_profile}).subscribe((emp:employees[])=>{
+        this.apiService.getSearchEmployees({dp:'4', filter:'idprofiles', value:hire.id_profile, rol:this.authSrv.getAuthusr().id_role}).subscribe((emp:employees[])=>{
           hire.society = emp[0].society;
           this.apiService.getPaymentMethods(emp[0]).subscribe((pym:payment_methods[])=>{
             if(isNull(pym) || pym.length == 0){

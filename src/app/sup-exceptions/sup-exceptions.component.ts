@@ -37,7 +37,7 @@ export class SupExceptionsComponent implements OnInit {
     this.sups.forEach(sup=>{
       i = i + 1;
       if(sup.status == 'TRUE'){
-        this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:sup.avaya}).subscribe((emp:employees[])=>{
+        this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:sup.avaya, rol:this.authService.getAuthusr().id_role}).subscribe((emp:employees[])=>{
           this.apiService.getAttendences({date:"= '" + sup.date + "'", id:emp[0].idemployees}).subscribe((attendance:attendences[])=>{
             let adjustment:attendences_adjustment = new attendences_adjustment;
             adjustment.id_employee = emp[0].idemployees;
@@ -92,7 +92,7 @@ export class SupExceptionsComponent implements OnInit {
           supervisors.reason = element['REASON'];
           supervisors.supervisor = element['SUPERVISOR'];
           supervisors.time = element['TIME'];
-          this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:supervisors.avaya}).subscribe((emp:employees[])=>{
+          this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:supervisors.avaya, rol:this.authService.getAuthusr().id_role}).subscribe((emp:employees[])=>{
             if(isNullOrUndefined(emp[0])){
               supervisors.status = 'FALSE';
             }else{

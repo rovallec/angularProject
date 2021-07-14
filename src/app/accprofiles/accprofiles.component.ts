@@ -94,7 +94,7 @@ export class AccprofilesComponent implements OnInit {
 
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
-    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
 
       if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-12-01").getTime()) <= 0)) {
         a_date = (new Date(todayDate).getFullYear() - 1) + '-12-01';

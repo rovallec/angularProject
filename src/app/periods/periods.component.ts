@@ -158,7 +158,7 @@ export class PeriodsComponent implements OnInit {
         this.deductions = db;
       })
     } else {
-      this.apiService.getSearchEmployees({ dp: 'all', filter: this.filter, value: this.value }).subscribe((emp: employees[]) => {
+      this.apiService.getSearchEmployees({ dp: 'all', filter: this.filter, value: this.value, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
         this.employees = emp;
       })
     }
@@ -201,7 +201,7 @@ export class PeriodsComponent implements OnInit {
         pv.forEach(payroll_value => {
           let is_trm: boolean = false;
           let py: payments = new payments;
-          this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_value.id_employee }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_value.id_employee, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
             this.apiService.getTermdt(emp[0]).subscribe((trm: terminations) => {
               this.apiService.getClosingRise({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((rises: rises) => {
                 this.apiService.getTransfers({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((trns: hrProcess) => {
@@ -678,7 +678,7 @@ export class PeriodsComponent implements OnInit {
         let count: number = 0;
         this.apiService.getPayments(provitional_period).subscribe((paymnts: payments[]) => {
           partial_credits.forEach(ele => {
-            this.apiService.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits }).subscribe((emp: employees[]) => {
+            this.apiService.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               ele.type = this.importType;
               if (!isNullOrUndefined(emp[0])) {
                 paymnts.forEach(py => {

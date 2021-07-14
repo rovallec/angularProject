@@ -59,7 +59,7 @@ export class OttrackerComponent implements OnInit {
     }
 
     this.selectedAccount = acc;
-    this.apiServices.getSearchEmployees({ filter: "id_account", value: this.selectedAccount.idaccounts, dp: 'exact' }).subscribe((emp: employees[]) => {
+    this.apiServices.getSearchEmployees({ filter: "id_account", value: this.selectedAccount.idaccounts, dp: 'exact', rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
       emp.forEach(employee => {
         this.apiServices.getAttPeriod({ id: employee.idemployees, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
           this.apiServices.getVacations({ id: employee.id_profile }).subscribe((vac: vacations[]) => {
