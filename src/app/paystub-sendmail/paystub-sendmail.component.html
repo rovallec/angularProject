@@ -45,7 +45,7 @@
                         <th>SELECT</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let pst_view of paystubs" class='selectable'>
+                        <tr *ngFor="let pst_view of paystubs" class='selectable' [ngClass]="{'table-'}">
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
                             data-target="#attendance_detail" >{{pst_view.nearsol_id}}</td>
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
@@ -57,7 +57,7 @@
                             <td (click)="setpaystubSelected(pst_view)" data-toggle="modal"
                             data-target="#attendance_detail" >{{pst_view.email}}</td>
                             <td>{{pst_view.result}}</td>
-                            <td style="text-align: center;"><input type="checkbox" [checked]="pst_view.select" (change)="setStatus(pst_view)">
+                            <td style="text-align: center;"><input type="checkbox" [checked]="pst_view.select" (change)="setStatus(pst_view)" disabled="pst_view.ignore">
                     </tbody>
                 </table>
             </div>
@@ -79,12 +79,12 @@
             <body *ngIf="!selectedPaystub.select">
                 <table style='margin-top:25px;width:90%;margin-left:5%;border-collapse: unset; text-align:left'>
                         <tr>
-                            <td>NEARSOL, S.A.</td>
-                            <td style='text-align:right'>NIT: 10305064-7</td>
+                            <td>{{selectedPaystub.society}}</td>
+                            <td style='text-align:right'>NIT: {{selectedPaystub.employeer_nit}}</td>
                         </tr>
                         <tr style='margin-left:2.5%;width:95%'>
-                            <td>Jornada: IT</td>
-                            <td style='text-align:right'>Nomina No.: 1059815</td>
+                            <td>Jornada: {{selectedPaystub.account}}</td>
+                            <td style='text-align:right'>Nomina No.: {{selectedPaystub.idpayments}}</td>
                         </tr>
                         <tr style='margin-left:2.5%;width:95%'>
                             <td>Recibo de Pago de Sueldos y Salarios</td>
@@ -94,19 +94,19 @@
                             <td colspan='2'>
                                 <table style='width:100%;margin-top:2px;border:solid black 2px;border-collapse: unset; text-align:left'>
                                         <tr>
-                                            <td>Por el Periodo del 16/06/2021</td>
-                                            <td>Al 30/06/2021</td>
+                                            <td>Por el Periodo del {{selectedPaystub.start}}</td>
+                                            <td>Al {{selectedPeriod.end}}</td>
                                             <td>FORMA DE PAGO</td>
                                         </tr>
                                         <tr>
-                                            <td>Codigo de Empleado 0000STF174</td>
-                                            <td>NIT del empleado 9146556-7</td>
-                                            <td>Transferencia 902559947</td>
+                                            <td>Codigo de Empleado {{selectedPaystub.nearsol_id}}</td>
+                                            <td>NIT del empleado {{selectedPaystub.nit}}</td>
+                                            <td>{{selectedPaystub.type}} {{selectedPaystub.number}}</td>
                                         </tr>
                                         <tr>
-                                            <td>No. Afiliacion IGSS 3001561460101</td>
-                                            <td>Supervisor: Administracion</td>
-                                            <td>BAC</td>
+                                            <td>No. Afiliacion IGSS {{selectedPaystub.iggs}}</td>
+                                            <td>Supervisor: {{selectedPaystub.user_name}}</td>
+                                            <td>{{selectedPaystub.bank}}</td>
                                         </tr>
                                 </table>
                             </td>
@@ -118,17 +118,17 @@
                                         <td>Dias del Periodo:</td>
                                         <td>15</td>
                                         <td>Dias Descontados:</td>
-                                        <td>0</td>
+                                        <td>{{selectedPaystub.discounted_days}}</td>
                                         <td>Horas Extraordinarias:</td>
-                                        <td>0.00</td>
+                                        <td>{{selectedPaystub.ot_hours}}</td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td></td>
                                         <td>Horas Descontadas:</td>
-                                        <td>0.00</td>
+                                        <td>{{selectedPaystub.discounted_hours}}</td>
                                         <td>Horas Asueto:</td>
-                                        <td>0.00</td>
+                                        <td>{{selectedPaystub.holiday_hours}}</td>
                                     </tr>
                                 </table>
                             </td>
@@ -138,31 +138,31 @@
                                 <table style='width:100%;margin-top:0px;border:solid black 2px;border-collapse: unset; text-align:left'>
                                     <tr>
                                         <td>Sueldo Ordinario:</td>
-                                        <td>1,412.55</td>
+                                        <td>{{selectedPaystub.base}}</td>
                                     </tr>
                                     <tr>
                                         <td>Sueldo ExtraOrdinario:</td>
-                                        <td>0.00</td>
+                                        <td>{{selectedPaystub.ot}}</td>
                                     </tr>
                                     <tr>
-                                        <td>Sueldo extraOrdinario Dias De Asueto:</td>
-                                        <td>0.00</td>
+                                        <td>Sueldo ExtraOrdinario Dias De Asueto:</td>
+                                        <td>{{selectedPaystub.holidays}}</td>
                                     </tr>
                                     <tr>
                                         <td>Bonificación Incentivo (Decretos 78-89,7-2000 y 37-2001):</td>
-                                        <td>125.00</td>
+                                        <td>{{selectedPaystub.decreto}}</td>
                                     </tr>
                                     <tr>
                                         <td>Bonificación por Productividad (Decretos 78-89,7-2000 y 37-2001):</td>
-                                        <td>1,962.45</td>
+                                        <td>{{selectedPaystub.bonificaciones}}</td>
                                     </tr>
                                     <tr>
                                         <td>Bonificación por Eficiencia (Decretos 78-89,7-2000 y 37-2001) Bonos:</td>
-                                        <td>500.00</td>
+                                        <td>{{selectedPaystub.eficiencia}}</td>
                                     </tr>
                                     <tr>
                                         <td>Bonificación por Eficiencia (Decretos 78-89,7-2000 y 37-2001) Ajustes:</td>
-                                        <td>0.00</td>
+                                        <td>{{selectedPaystub.ajustes}}</td>
                                     </tr>
                                     <tr>
                                         <td style='color:white'>.</td>
@@ -174,23 +174,23 @@
                                 <table style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
                                     <tr>
                                         <td>IGSS Laboral:</td>
-                                        <td>(68.23)</td>
+                                        <td>({{selectedPaystub.igss_amount}})</td>
                                     </tr>
                                     <tr>
                                         <td>Descuentso (Bus/Parqueo):</td>
-                                        <td>0.00</td>
+                                        <td>({{selectedPaystub.parqueo}})</td>
                                     </tr>
                                     <tr>
                                         <td>Otras Deducciones:</td>
-                                        <td>0.00</td>
+                                        <td>({{selectedPaystub.otras_deducciones}})</td>
                                     </tr>
                                     <tr>
                                         <td>ANticipo Sobre Sueldos:</td>
-                                        <td>0.00</td>
+                                        <td>({{selectedPaystub.anticipos}})</td>
                                     </tr>
                                     <tr>
                                         <td>ISR:</td>
-                                        <td>(100.22)</td>
+                                        <td>({{selectedPaystub.isr}})</td>
                                     </tr>
                                     <tr>
                                         <td style='color:white'>.</td>
@@ -214,15 +214,15 @@
                                         <table style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
                                                 <tr>
                                                     <td>Total Devengado:</td>
-                                                    <td>4,000.00</td>
+                                                    <td>{{selectedPaystub.total_cred}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style='border-bottom:solid black 3px'>Total Descuentos:</td>
-                                                    <td style='border-bottom:solid black 3px'>(168.45)</td>
+                                                    <td style='border-bottom:solid black 3px'>({{selectedPaystub.total_deb}})</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Sueldo Liquido:</td>
-                                                    <td>3,832.55</td>
+                                                    <td>{{selectedPaystub.liquido}}</td>
                                                 </tr>
                                         </table>
                                     </div>
@@ -242,7 +242,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td></td>
-                                                    <td colspan='2' style='border-top:solid black 2px;text-align:center;border-collapse: unset; text-align:left'>RAUL ALEJANDRO OVALLE CASTILLO</td>
+                                                    <td colspan='2' style='border-top:solid black 2px;text-align:center;border-collapse: unset; text-align:center'>{{selectedPaystub.employee_name}}</td>
                                                     <td></td>
                                                 </tr>
                                         </table>
