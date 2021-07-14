@@ -10,7 +10,7 @@ $request = json_decode($postdata);
 
 $id_period = ($request->idperiods);
 
-$sql = "SELECT paystub_details.idpaystub_deatils, paystub_details.content, contact_details.email AS `email`, employees.society, accounts.name AS `account`, if(employees.society='NEARSOL, S.A.', '10305064-7', '0000000-0') AS `employeer_nit`, payments.idpayments, periods.start, periods.end, hires.nearsol_id, profiles.nit,
+$sql = "SELECT paystub_details.result, employees.cilent_id, paystub_details.idpaystub_deatils, paystub_details.content, contact_details.email AS `email`, employees.society, accounts.name AS `account`, if(employees.society='NEARSOL, S.A.', '10305064-7', '0000000-0') AS `employeer_nit`, payments.idpayments, periods.start, periods.end, hires.nearsol_id, profiles.nit,
         payment_methods.type, payment_methods.number, profiles.iggs, users.user_name, payment_methods.bank, 15 AS `days_of_period`, payroll_values.discounted_days, payments.ot_hours, payroll_values.discounted_hours,
         payments.holidays_hours, payments.base, payments.ot, payments.holidays, `decreto`.amount AS `decreto`, (payments.credits - payments.base - coalesce(payments.ot,0) - coalesce(payments.holidays,0) -
         coalesce(`decreto`.amount,0) - coalesce(`eficiencia`.amount,0) - coalesce(`ajustes`.amount,0)) AS `bonificaciones`, `eficiencia`.amount AS `eficiencia`, `ajustes`.amount AS `ajustes`, `igss`.amount AS `igss_amount`, 
@@ -41,6 +41,8 @@ $sql = "SELECT paystub_details.idpaystub_deatils, paystub_details.content, conta
 if($result = mysqli_query($con, $sql)){
     $i = 0;
     while($row = mysqli_fetch_assoc($result)){
+        $res[$i]['result'] = $row['result'];
+        $res[$i]['client_id'] = $row['client_id'];
         $res[$i]['content'] = $row['content'];
         $res[$i]['idpaystub_deatils'] = $row['idpaystub_deatils'];
         $res[$i]['email'] = $row['email'];

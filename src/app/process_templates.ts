@@ -1895,6 +1895,8 @@ export class sendmailRes{
 }
 
 export class paystubview{
+    result:string;
+    client_id:string;
     content:string;
     idpaystub_deatils:string;
     email:string;
@@ -1935,6 +1937,8 @@ export class paystubview{
     select:boolean;
     ignore:boolean;
     constructor(){
+        this.result = null;
+        this.client_id = null;
         this.content = null;
         this.idpaystub_deatils = null;
         this.email = null;
