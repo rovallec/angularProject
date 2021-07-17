@@ -20,7 +20,7 @@ $authUser['idusers'] = 'NULL';
 
 try {
 	function connect(){
-		$connect = mysqli_connect(db_host,db_user,db_password,db_name) or die(echo json_encode($authUser););
+		$connect = mysqli_connect(db_host,db_user,db_password,db_name) or die(json_encode($authUser));
 		return $connect;
 	};
 	
