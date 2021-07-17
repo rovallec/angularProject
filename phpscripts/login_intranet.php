@@ -26,27 +26,31 @@ try {
 	
 	$mysqlc = new mysqli(db_host,db_user,db_password,db_name);
 
-	if($mysqlc){
-		$sql = "SELECT * FROM `users` where username = '{$usr}';";
-		if($result = $mysqlc->query($sql)){
-			while($row = mysqli_fetch_assoc($result)){
-				$authUser['idusers'] = $row['idusers'];
-				$authUser['username'] = $row['username'];
-				$authUser['department'] = $row['department'];
-				$authUser['user_name'] = $row['user_name'];
-				$authUser['active'] = $row['active'];
-				$authUser['id_role'] = $row['id_role'];
-				$authUser['signature'] = $row['signature'];
+	if ($mysqlc -> connect_errno) {
+		$authUser['idusers'] = 'NULL';
+	}else{
+		if($mysqlc){
+			$sql = "SELECT * FROM `users` where username = '{$usr}';";
+			if($result = $mysqlc->query($sql)){
+				while($row = mysqli_fetch_assoc($result)){
+					$authUser['idusers'] = $row['idusers'];
+					$authUser['username'] = $row['username'];
+					$authUser['department'] = $row['department'];
+					$authUser['user_name'] = $row['user_name'];
+					$authUser['active'] = $row['active'];
+					$authUser['id_role'] = $row['id_role'];
+					$authUser['signature'] = $row['signature'];
+				};
+			}else{
+				$authUser['idusers'] = 'NULL';
 			};
 		}else{
 			$authUser['idusers'] = 'NULL';
-		};
-	}else{
-		$authUser['idusers'] = 'NULL';
+		}
 	}
 } catch (\Throwable $th) {
-	http_response_code(400);
-	$authUser['idusers'] = 'NULL';
+		http_response_code(400);
+		$authUser['idusers'] = 'NULL';
 }
 
 echo json_encode($authUser);
