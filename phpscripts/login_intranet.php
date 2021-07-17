@@ -24,9 +24,9 @@ try {
 		return $connect;
 	};
 	
-	$mysqlc = new mysqli(db_host,db_user,db_password,db_name);
+	$mysqlc = mysqli_connect(db_host,db_user,db_password,db_name);
 
-	if ($mysqlc -> connect_errno) {
+	if (mysqli_connect_errno()) {
 		$authUser['idusers'] = 'NULL';
 	}else{
 		if($mysqlc){
