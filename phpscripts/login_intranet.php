@@ -14,10 +14,14 @@ define('db_user', $usr);
 define('db_password', $pss);
 define('db_name','intranet');
 
-function connect(){
-	$connect = mysqli_connect(db_host,db_user,db_password,db_name);
-	return $connect;
-};
+try {
+	function connect(){
+		$connect = mysqli_connect(db_host,db_user,db_password,db_name);
+		return $connect;
+	};
+} catch (\Throwable $th) {
+	$authUser['idusers'] = 'NULL';
+}
 
 $mysqlc = new mysqli(db_host,db_user,db_password,db_name);
 
