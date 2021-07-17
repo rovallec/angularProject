@@ -1,5 +1,7 @@
 <?php
-
+error_reporting(E_ERROR | E_PARSE);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 
