@@ -45,6 +45,7 @@ try {
 		$authUser['idusers'] = 'NULL';
 	}
 } catch (\Throwable $th) {
+	http_response_code(400);
 	$authUser['idusers'] = 'NULL';
 }
 
