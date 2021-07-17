@@ -19,29 +19,30 @@ try {
 		$connect = mysqli_connect(db_host,db_user,db_password,db_name);
 		return $connect;
 	};
+	
+	$mysqlc = new mysqli(db_host,db_user,db_password,db_name);
+
+	if($mysqlc){
+		$sql = "SELECT * FROM `users` where username = '{$usr}';";
+		if($result = $mysqlc->query($sql)){
+			while($row = mysqli_fetch_assoc($result)){
+				$authUser['idusers'] = $row['idusers'];
+				$authUser['username'] = $row['username'];
+				$authUser['department'] = $row['department'];
+				$authUser['user_name'] = $row['user_name'];
+				$authUser['active'] = $row['active'];
+				$authUser['id_role'] = $row['id_role'];
+				$authUser['signature'] = $row['signature'];
+			};
+		}else{
+			$authUser['idusers'] = 'NULL';
+		};
+	}else{
+		$authUser['idusers'] = 'NULL';
+	}
 } catch (\Throwable $th) {
 	$authUser['idusers'] = 'NULL';
 }
 
-$mysqlc = new mysqli(db_host,db_user,db_password,db_name);
-
-if($mysqlc){
-	$sql = "SELECT * FROM `users` where username = '{$usr}';";
-	if($result = $mysqlc->query($sql)){
-		while($row = mysqli_fetch_assoc($result)){
-			$authUser['idusers'] = $row['idusers'];
-			$authUser['username'] = $row['username'];
-			$authUser['department'] = $row['department'];
-			$authUser['user_name'] = $row['user_name'];
-			$authUser['active'] = $row['active'];
-			$authUser['id_role'] = $row['id_role'];
-			$authUser['signature'] = $row['signature'];
-		};
-	}else{
-		$authUser['idusers'] = 'NULL';
-	};
-}else{
-	$authUser['idusers'] = 'NULL';
-}
 echo json_encode($authUser);
 ?>
