@@ -14,9 +14,13 @@ define('db_user', $usr);
 define('db_password', $pss);
 define('db_name','intranet');
 
+$authUser = [];
+
+$authUser['idusers'] = 'NULL';
+
 try {
 	function connect(){
-		$connect = mysqli_connect(db_host,db_user,db_password,db_name);
+		$connect = mysqli_connect(db_host,db_user,db_password,db_name) or die(echo json_encode($authUser););
 		return $connect;
 	};
 	
