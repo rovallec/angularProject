@@ -11,7 +11,7 @@ header('Access-Control-Allow-Headers: *');
 		$password = ($request->password);
 		
 		//$sql = "ALTER USER '$user'@’localhost’ IDENTIFIED BY ‘$password’;";
-		$sql1 = 'USE mysql;'
+		$sql1 = 'USE mysql;';
         $sql = "UPDATE user SET authentication_string = PASSWORD('N$@dmin.2002!') WHERE user = 'rovalle' AND host='%'";
         //$sql = "UPDATE mysql.user SET Password=PASSWORD('$password') WHERE USER='$user' AND Host=”localhost”;";
 
