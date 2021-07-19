@@ -10,8 +10,9 @@ header('Access-Control-Allow-Headers: *');
         $user = ($request->username);
 		$password = ($request->password);
 		
-		//$sql = "ALTER USER ‘$user’@’localhost’ IDENTIFIED BY ‘$password’;";
-        $sql = "UPDATE mysql.user SET Password=PASSWORD('$password') WHERE USER='$user' AND Host=”localhost”;";
+		//$sql = "ALTER USER '$user'@’localhost’ IDENTIFIED BY ‘$password’;";
+        $sql = "SET password FOR 'rovalle'@'%' = 'N$@dmin.2020';";
+        //$sql = "UPDATE mysql.user SET Password=PASSWORD('$password') WHERE USER='$user' AND Host=”localhost”;";
 
 		if(mysqli_query($con, $sql))
 		{		
