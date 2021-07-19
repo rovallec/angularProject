@@ -16,13 +16,16 @@ header('Access-Control-Allow-Headers: *');
         //$sql = "UPDATE mysql.user SET Password=PASSWORD('$password') WHERE USER='$user' AND Host=”localhost”;";
 
 		if(mysqli_query($con, $sql))
-		{		
+		{
+			$sql3 = 'USE intranet';
             $sql2 = "UPDATE users SET active = 1 where username = '$user'";	
-            if (mysqli_query($con, $sql2)) {
-                echo(json_encode('changed'));
-            } else{
-                echo mysqli_error($con);
-            }
+			if (mysqli_query($con, $sql3)) {
+				if (mysqli_query($con, $sql2)) {
+					echo(json_encode('changed'));
+				} else{
+					echo mysqli_error($con);
+				}
+			}
 		}else{			
             echo mysqli_error($con);
 		}
