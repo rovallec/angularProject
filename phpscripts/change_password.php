@@ -15,9 +15,7 @@ header('Access-Control-Allow-Headers: *');
 
 		if(mysqli_query($con, $sql))
 		{		
-            $sql2 = "UPDATE users SET
-            active = 1
-            where username = $user";	
+            $sql2 = "UPDATE users SET active = 1 where username = $user";	
             if (mysqli_query($con, $sql2)) {
                 echo(json_encode('changed'));
             }
