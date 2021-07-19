@@ -12,7 +12,7 @@ header('Access-Control-Allow-Headers: *');
 		
 		//$sql = "ALTER USER '$user'@’localhost’ IDENTIFIED BY ‘$password’;";
 		$sql1 = 'USE mysql';
-        $sql = "ALTER user 'rovalle'@'%' IDENTIFIED by 'N$@dmin.2020!';";
+        $sql = "ALTER user '$user'@'%' IDENTIFIED by '$password';";
         //$sql = "UPDATE mysql.user SET Password=PASSWORD('$password') WHERE USER='$user' AND Host=”localhost”;";
 
 		if(mysqli_query($con, $sql))
