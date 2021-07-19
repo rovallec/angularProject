@@ -22,13 +22,13 @@ header('Access-Control-Allow-Headers: *');
             } else{
                 http_response_code(423);
                 echo mysqli_error($con);
-                echo("<br>")
+                echo("<br>");
                 echo $sql;
             }
 		}else{
 			http_response_code(422);
             echo mysqli_error($con);
-            echo("<br>")
+            echo("<br>");
             echo $sql;
             
 		}
