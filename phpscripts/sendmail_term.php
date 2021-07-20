@@ -15,7 +15,7 @@ $return = [];
 
 $id_employee = $request->idemployees;
 
-$sql = "SELECT * FROM glboal_variables WHERE idglobal_variables = 1;";
+$sql = "SELECT * FROM global_variables WHERE idglobal_variables = 1;";
 
 if($result = mysqli_query($con, $sql))
 {
