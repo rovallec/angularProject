@@ -26,7 +26,7 @@ if($result = mysqli_query($con, $sql))
 	$i = 0;
 	while($row = mysqli_fetch_assoc($result))
 	{
-		$mail->Password   = $row['value'];
+		$mail->Password = $row['value'];
 	}
 
 	$sql2 = "SELECT employees.idemployees, UPPER(profiles.first_name) AS `first_name`, UPPER(profiles.second_name) AS `second_name`, UPPER(profiles.first_lastname) AS `first_lastname`,
@@ -95,7 +95,11 @@ if($result = mysqli_query($con, $sql))
 		} else {
 			$res = "Successfuly Sent " . date("Y-m-d H:i:s");
 		}	
+	}else{
+		echo($sql2);
 	}
 	echo($res);
+}else{
+	echo($sql);
 }
-?>;
+?>
