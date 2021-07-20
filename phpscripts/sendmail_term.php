@@ -33,7 +33,7 @@ if($result = mysqli_query($con, $sql))
 			UPPER(profiles.second_lastname) AS `second_lastname`, hires.nearsol_id, employees.job, accounts.name AS `account_name`, UPPER(employees.society) AS `society`,
 			employees.hiring_date, terminations.valid_from, UPPER(terminations.motive) AS `motive`, UPPER(terminations.reason) AS `reason`, UPPER(terminations.access_card) AS `access_card`,
 			UPPER(terminations.headsets) AS `headsets`, terminations.bank_check, COALESCE(`vac`.`count`,0) AS `vacations`, COALESCE(`insurance`.`insurance`, 'No Cuenta Con Beneficio') AS `insurance`,
-			employees.client_id, UPPER(users.user_name) AS `user_name`, terminations.period_to_pay, UPPER(`first_interview`.user_name) AS `recriuter`, UPPER(terminations.rehireable) AS `rehireable`
+			employees.client_id, UPPER(users.user_name) AS `user_name`, terminations.period_to_pay, UPPER(`first_interview`.user_name) AS `recriuter`, UPPER(terminations.rehireable) AS `rehireable`,
 			UPPER(terminations.kind) AS `kind` FROM terminations
 			INNER JOIN hr_processes ON hr_processes.idhr_processes = terminations.id_process
 			INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
