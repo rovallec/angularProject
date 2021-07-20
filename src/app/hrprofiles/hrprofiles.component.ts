@@ -2226,4 +2226,9 @@ export class HrprofilesComponent implements OnInit {
       this.cancelView();
     })
   }
+
+  sendMail(){
+    this.apiService.sendMailTerm({idemployees:this.workingEmployee.idemployees}).subscribe((str:string)=>{
+    })
+  }
 }

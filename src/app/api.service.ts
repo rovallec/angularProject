@@ -890,6 +890,11 @@ sendMail(any:any){
 getPaystubDetails(periods:periods){
   return this.httpClient.post<paystubview[]>(`${this.PHP_API_SERVER}/phpscripts/getPaystubDetails.php`, periods);
 }
+
+sendMailTerm(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/sendmail_term.php`, any);
+}
+
 }
 
 
