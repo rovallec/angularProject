@@ -87,7 +87,7 @@ header('Access-Control-Allow-Headers: *');
 							LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` 
 							WHERE
 							`profiles`.`idprofiles` = {$id_profile};";
-							
+
 							if($result2 = mysqli_query($con, $sql6)){
 								while($row = mysqli_fetch_assoc($result2)){
 									$profiles['idprofiles'] = $row['idprofiles'];
@@ -150,7 +150,7 @@ header('Access-Control-Allow-Headers: *');
 									$profiles['doc_type'] = 'N/A';
 									$profiles['doc_path'] = 'N/A';
 								}
-								echo(json_encode($profiles))
+								echo(json_encode($profiles));
 							}else{
 								echo($sql6);
 								http_response_code(400);
