@@ -9,7 +9,7 @@
     $id = ($request->id);
     $result = [];
 
-    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name`, profiles.gender FROM `employees
+    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name`, profiles.gender FROM `employees`
     LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
     LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
     LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile
