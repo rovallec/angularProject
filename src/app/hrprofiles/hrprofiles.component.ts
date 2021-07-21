@@ -1653,7 +1653,7 @@ export class HrprofilesComponent implements OnInit {
     let f: string;
     let married: string;
 
-    if (this.profile[0].gender == 'M') {
+    if (this.workingEmployee.gender == 'M' || this.workingEmployee.gender == 'Masculino') {
       f = ' ';
       m = "x";
     } else {
@@ -1667,7 +1667,7 @@ export class HrprofilesComponent implements OnInit {
         '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' +
         '&conyuge_lastname= ' + '&department=' + this.profile[0].city + '&dpi=' + this.profile[0].dpi + '&extended= ' + '&f=' + f + '&first_lastname=' +
         this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' +
-        this.profile[0].address.split(',')[2] + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' +
+        this.profile[0].address.split(',')[2].replace('de ', '') + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' +
         '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[2] +
         "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname, "_blank");
     } else {
