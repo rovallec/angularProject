@@ -9,7 +9,11 @@
     $id = ($request->id);
     $result = [];
 
-    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name` FROM `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account` LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `id_profile` = $id;";
+    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name`, profiles.gender AS `acc_name` FROM `employees
+    LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
+    LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
+    LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile
+    LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `id_profile` = $id;";
 
     if($res = mysqli_query($con, $sql)){
         while($r = mysqli_fetch_assoc($res)){
@@ -25,6 +29,8 @@
             $result['base_payment'] = $r['base_payment'];
             $result['productivity_payment'] = $r['productivity_payment'];
             $result['state'] = $r['state'];
+            $result['gender'] = $r['gender'];
+            $result['narsol_id'] = $r['nearsol_id'];
         }
         echo(json_encode($result));
     }
