@@ -122,6 +122,8 @@ export class HrprofilesComponent implements OnInit {
   earnVacations: number = 0;
   tookVacations: number = 0;
   availableVacations: number = 0;
+  returnedVacations:number = 0;
+  dismissedVacations:number = 0;
   actualPeriod: periods = new periods;
   complete_adjustment: boolean = false;
 
@@ -137,6 +139,7 @@ export class HrprofilesComponent implements OnInit {
 
   transfer_newCode: string = '';
 
+  termNotification:boolean = true;
 
   reasons: string[] = [
     "Asistencia",
@@ -551,6 +554,8 @@ export class HrprofilesComponent implements OnInit {
     this.earnVacations = this.vacationsEarned * 1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
+    this.returnedVacations = 0;
+    this.dismissedVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
       this.showVacations = res;
       this.showVacations.forEach(sv => {
@@ -568,10 +573,12 @@ export class HrprofilesComponent implements OnInit {
           }
         }
         if (vac.action == "Add") {
-          this.earnVacations = this.earnVacations + parseFloat(vac.count);
+          this.returnedVacations = this.returnedVacations + Number(vac.count);
         }
-        if (vac.action == "Take") {
-          this.tookVacations = this.tookVacations + parseFloat(vac.count);
+        if (vac.action == "Take" && vac.status != "DISMISSED") {
+          this.tookVacations = this.tookVacations + Number(vac.count);
+        }else if(vac.status == 'DISMISSED'){
+          this.dismissedVacations = this.dismissedVacations + Number(vac.count);
         }
 
         vacYears = this.vac.filter(v => String(v.year) == new Date(vac.took_date).getFullYear().toString());
@@ -1128,6 +1135,9 @@ export class HrprofilesComponent implements OnInit {
           this.actualTerm.id_process = str;
           this.apiService.insertTerm(this.actualTerm).subscribe((str: string) => {
             if (str == "1") {
+              if(this.termNotification){
+                this.sendMail();
+              }
               this.cancelView();
             } else {
               window.alert("An error has occured:\n" + str.split("|")[1]);
@@ -1305,6 +1315,9 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'IRTRA Request':
           this.actualIrtrarequests.idprocess = str;
+          if(this.profile[0].address.split(",").length != 3){
+            window.alert("No correct address associated to this employee, please confir it meet the next syntaxis\n'casa/calle/avenida/colonia,(COMA)ZONA: #,(COMA)Municipio,(COMMA)Departamento' \n Or create the address in 'Contact' Tab")
+          }
           this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str: string) => {
             this.getIrtra();
             this.cancelView();
@@ -1631,7 +1644,14 @@ export class HrprofilesComponent implements OnInit {
     }
 
     if (this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico") {
-      window.open('http://172.18.2.45/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' + this.profile[0].iggs + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] + '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' + '&conyuge_lastname= ' + '&department=' + this.profile[0].city + '&dpi=' + this.profile[0].dpi + '&extended= ' + '&f=' + f + '&first_lastname=' + this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' + this.profile[0].address.split(',')[2] + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' + '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[1] + "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname, "_blank");
+      window.open('http://172.18.2.45/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' + 
+      this.profile[0].iggs + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] + 
+      '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' + 
+      '&conyuge_lastname= ' + '&department=' + this.profile[0].city + '&dpi=' + this.profile[0].dpi + '&extended= ' + '&f=' + f + '&first_lastname=' + 
+      this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' + 
+      this.profile[0].address.split(',')[2] + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' + 
+      '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[1] + 
+      "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname, "_blank");
     } else {
       window.open('http://172.18.2.45/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type, "_blank");
     }
@@ -1701,7 +1721,7 @@ export class HrprofilesComponent implements OnInit {
 
   closeEditNames() {
     if (this.editingAddress) {
-      this.profile[0].address = this.first_line + ", Zona " + this.zone + ", de" + this.municipio + ", " + this.departamento;
+      this.profile[0].address = this.first_line + ", Zona: " + this.zone + ", de" + this.municipio + ", " + this.departamento;
     }
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
       this.editingNames = false;
@@ -2230,5 +2250,9 @@ export class HrprofilesComponent implements OnInit {
   sendMail(){
     this.apiService.sendMailTerm({idemployees:this.workingEmployee.idemployees}).subscribe((str:string)=>{
     })
+  }
+
+  changeNotification(){
+    this.termNotification = !this.termNotification;
   }
 }
