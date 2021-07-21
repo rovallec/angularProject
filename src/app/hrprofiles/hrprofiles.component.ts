@@ -139,8 +139,6 @@ export class HrprofilesComponent implements OnInit {
 
   transfer_newCode: string = '';
 
-  currentEmployee:employees;
-
   termNotification: string = 'YES';
   editingEmail: boolean = false;
 
@@ -277,9 +275,6 @@ export class HrprofilesComponent implements OnInit {
   constructor(private apiService: ApiService, private route: ActivatedRoute, public authUser: AuthServiceService) { }
 
   ngOnInit() {
-    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idprofiles', value: this.route.snapshot.paramMap.get('id'), rol:this.authUser.getAuthusr().id_role }).subscribe((emp2:employees[])=>{
-      this.currentEmployee = emp2[0];
-    });
     this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
     this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
     this.getValidatingData();
@@ -300,6 +295,7 @@ export class HrprofilesComponent implements OnInit {
 
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.workingEmployee = emp;
+      console.log(this.workingEmployee);
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
       this.accId = emp.account;
