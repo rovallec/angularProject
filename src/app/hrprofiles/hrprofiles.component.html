@@ -45,24 +45,34 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="txt_name">DPI:</label><i class="fas fa-edit" style="margin-left:2px"
                             (click)=editDPI() *ngIf="!editingDPI"></i><i class="fas fa-edit" style="margin-left:2px"
                             (click)="closeEditNames()" *ngIf="editingDPI"></i>
                         <input type="text" class="form-control" [disabled]="!editingDPI" [(ngModel)]="profile[0].dpi">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="txt_birth">Birthday:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].day_of_birth">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label>Joining Date:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].date_joining">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="txt_nationality">Avaya ID:</label>
-                        <input type="text" class="form-control" [disabled]="true"
+                        <input type="text" class="form-control" A[disabled]="true"
                             [(ngModel)]="workingEmployee.client_id">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txt_nationality">Nearsol ID:</label>
+                        <input type="text" class="form-control" [disabled]="true"
+                            [(ngModel)]="currentEmployee.nearsol_id">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txt_nationality">Gender:</label>
+                        <input type="text" class="form-control" [disabled]="true"
+                            [(ngModel)]="currentEmployee.gender">
                     </div>
                 </div>
             </div>
@@ -271,11 +281,13 @@
                                 </div>
                                 <div class="form-grop col-md-3">
                                     <label>Dismissed:</label>
-                                    <input type="text" class="form-control" [disabled]="true" [(ngModel)]="dismissedVacations">
+                                    <input type="text" class="form-control" [disabled]="true"
+                                        [(ngModel)]="dismissedVacations">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Returned:</label>
-                                    <input type="text" class="form-control" [disabled]="true" [(ngModel)]="returnedVacations">
+                                    <input type="text" class="form-control" [disabled]="true"
+                                        [(ngModel)]="returnedVacations">
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
@@ -1118,10 +1130,10 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="txt_email">Email Address:</label><i
-                                        class="fas fa-edit" style="margin-left:2px" (click)=editPhone()
-                                        *ngIf="!editEmail"></i><i class="fas fa-edit" style="margin-left:2px"
-                                        (click)="closeEditNames()" *ngIf="editEmail"></i>
+                                        <label for="txt_email">Email Address:</label><i class="fas fa-edit"
+                                            style="margin-left:2px" (click)=editPhone() *ngIf="!editEmail"></i><i
+                                            class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                            *ngIf="editEmail"></i>
                                         <input type="text" class="form-control" [(ngModel)]="profile[0].email"
                                             [disabled]="true">
                                     </div>
@@ -2296,8 +2308,14 @@
                                             [(ngModel)]="second_interview.english_test">
                                     </div>
                                 </div>
-                                <div class="row col-md-12">
-                                    <input type="checkbox form-control" checked (change)="changeNotification()"><label>Send Notification</label>
+                                <div class="form-row col-md-12">
+                                    <div class="form-group col-md-12">
+                                        <label>Send Notification</label>
+                                        <select class="form-control" [(ngModel)]="termNotification">
+                                            <option>YES</option>
+                                            <option>NO</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2315,7 +2333,7 @@
                             <div class="form-group col-md-10"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control btn btn-outline-success" data-toggle="modal"
-                                data-target="#previewNotification"><i class="far fa-eye"></i></button>
+                                    data-target="#previewNotification"><i class="far fa-eye"></i></button>
                             </div>
                         </div>
                     </div>
@@ -2398,101 +2416,122 @@
                 <h5 class="modal-title" id="uploadBonusesLabel">NOTIFICATION'S PREVIEW</h5>
             </div>
             <div class="modal-body">
-                <table style="margin-left:10px;border-collapse: collapse; border: black 2px solid; width: 100%;text-align: center;">
+                <table
+                    style="margin-left:10px;border-collapse: collapse; border: black 2px solid; width: 100%;text-align: center;">
                     <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
                         <td colspan="2"><u>NOTIFICACION DE BAJA DE PERSONAL</u></td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">NOMBRE / NAME</td>
-                        <td style="border: solid black 1px">{{profile[0].first_name}} {{profile[0].second_name}} {{profile[0].first_lastname}} {{profile[0].second_lastname}}</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">NOMBRE
+                            / NAME</td>
+                        <td style="border: solid black 1px">{{profile[0].first_name}} {{profile[0].second_name}}
+                            {{profile[0].first_lastname}} {{profile[0].second_lastname}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">COD. DE EMPLEADO</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">COD.
+                            DE EMPLEADO</td>
                         <td style="border: solid black 1px">{{workingEmployee.nearsol_id}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">PUESTO / JOB</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">PUESTO
+                            / JOB</td>
                         <td style="border: solid black 1px">{{workingEmployee.job}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">CUENTA / ACCOUNT</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">CUENTA
+                            / ACCOUNT</td>
                         <td style="border: solid black 1px">{{workingEmployee.id_account}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">EMPRESA</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                            EMPRESA</td>
                         <td style="border: solid black 1px">{{workingEmployee.society}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">FECHA DE INGRESO</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">FECHA
+                            DE INGRESO</td>
                         <td style="border: solid black 1px">{{profile[0].date_joining}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">FECHA DE BAJA</td>
-                        <td style="border: solid black 1px; background: #ffc000; font-weight: bolder;">{{actualTerm.valid_from}}</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">FECHA
+                            DE BAJA</td>
+                        <td style="border: solid black 1px; background: #ffc000; font-weight: bolder;">
+                            {{actualTerm.valid_from}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">MOTIVO / REASON</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">MOTIVO
+                            / REASON</td>
                         <td style="border: solid black 1px">{{actualTerm.reason}}</td>
                     </tr>
                     <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
                         <td colspan="2"><u>FACILITIES</u></td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Control De Acceso</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Control De Acceso</td>
                         <td style="border: solid black 1px">Eliminar Accesos</td>
                     </tr>
                     <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
                         <td colspan="2"><u>CONTABILIDAD Y PAYROLL</u></td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Razon</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Razon
+                        </td>
                         <td style="border: solid black 1px">{{actualTerm.kind}} {{actualTerm.motive}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">TARJETA DE ACCESSO</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                            TARJETA DE ACCESSO</td>
                         <td style="border: solid black 1px">{{actualTerm.access_card}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">HEADSET</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                            HEADSET</td>
                         <td style="border: solid black 1px">{{actualTerm.headsets}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Fecha entrega cheque</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Fecha
+                            entrega cheque</td>
                         <td style="border: solid black 1px">{{actualTerm.bank_check}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Vacaciones Gozadas</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Vacaciones Gozadas</td>
                         <td style="border: solid black 1px">{{tookVacations}} dias</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Notificacion al seguro</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Notificacion al seguro</td>
                         <td style="border: solid black 1px" *ngIf="!insuranceNull">No Cuenta Con Beneficio</td>
                         <td style="border: solid black 1px" *ngIf="insuranceNull">Si</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Supervisor</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Supervisor</td>
                         <td style="border: solid black 1px">{{workingEmployee.reporter}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Periodo A Pagar</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Periodo A Pagar</td>
                         <td style="border: solid black 1px">{{actualTerm.period_to_pay}}</td>
                     </tr>
                     <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
                         <td colspan="2"><u>RECLUTAMIENTO</u></td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Reclutador/Operaciones</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Reclutador/Operaciones</td>
                         <td style="border: solid black 1px">{{first_interview.username}}</td>
                     </tr>
                     <tr style="border: solid black 1px">
-                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Recontratable</td>
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Recontratable</td>
                         <td style="border: solid black 1px">{{actualTerm.rehireable}}</td>
                     </tr>
                 </table>
             </div>
             <div class="modal-footer d-flex justify-content-between mt-2">
-                <button type="button" class="btn btn-outline-secondary"
-                    data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
                 <button class="btn btn-outline-primary" type="button" data-dismiss="modal" (click)="sendMail()">
                     SEND
                 </button>
