@@ -86,7 +86,8 @@ header('Access-Control-Allow-Headers: *');
 							LEFT JOIN `medical_details` ON `medical_details`.`id_profile` = `profiles`.`idprofiles` 
 							LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` 
 							WHERE
-							`profiles`.`idprofiles` = {$id_profile};"
+							`profiles`.`idprofiles` = {$id_profile};";
+							
 							if($result2 = mysqli_query($con, $sql6)){
 								while($row = mysqli_fetch_assoc($result2)){
 									$profiles['idprofiles'] = $row['idprofiles'];

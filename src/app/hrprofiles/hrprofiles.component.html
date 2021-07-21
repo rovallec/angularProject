@@ -1118,7 +1118,10 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="txt_email">Email Address:</label>
+                                        <label for="txt_email">Email Address:</label><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)=editPhone()
+                                        *ngIf="!editEmail"></i><i class="fas fa-edit" style="margin-left:2px"
+                                        (click)="closeEditNames()" *ngIf="editEmail"></i>
                                         <input type="text" class="form-control" [(ngModel)]="profile[0].email"
                                             [disabled]="true">
                                     </div>

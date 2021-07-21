@@ -140,6 +140,7 @@ export class HrprofilesComponent implements OnInit {
   transfer_newCode: string = '';
 
   termNotification:boolean = true;
+  editingEmail:boolean = false;
 
   reasons: string[] = [
     "Asistencia",
@@ -1723,6 +1724,10 @@ export class HrprofilesComponent implements OnInit {
     this.editingPhones = true;
   }
 
+  editEmail(){
+    this.editingEmail = true;
+  }
+
   editAddress() {
     this.editingAddress = true;
   }
@@ -1738,6 +1743,7 @@ export class HrprofilesComponent implements OnInit {
       this.editingDPI = false;
       this.editingPhones = false;
       this.editingAddress = false;
+      this.editingEmail = false;
     })
   }
 
