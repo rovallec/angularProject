@@ -25,8 +25,6 @@
             $result['base_payment'] = $r['base_payment'];
             $result['productivity_payment'] = $r['productivity_payment'];
             $result['state'] = $r['state'];
-            $result['gender'] = $r['gender'];
-            $result['narsol_id'] = $r['nearsol_id'];
         }
         echo(json_encode($result));
     }
