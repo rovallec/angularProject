@@ -1729,8 +1729,10 @@ export class HrprofilesComponent implements OnInit {
 
   closeEditNames() {
     if (this.editingAddress) {
-      this.profile[0].address = this.first_line + ", Zona: " + this.zone + ", de" + this.municipio + ", " + this.departamento;
+      this.profile[0].address = this.first_line + ", Zona: " + this.zone + ", de " + this.municipio + ", " + this.departamento;
+      this.profile[0].city = this.departamento;
     }
+    console.log(this.profile[0].address);
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
       this.editingNames = false;
       this.editingDPI = false;
