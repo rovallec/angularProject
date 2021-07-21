@@ -42,7 +42,7 @@ header('Access-Control-Allow-Headers: *');
 				if(mysqli_num_rows($result) > 0){
 					$sql2 = "UPDATE `contact_details` set `primary_phone` = '{$primary_phone}', `secondary_phone` = '{$secondary_phone}', `address` = '{$address}', `city` = '{$city}', `email` = '{$email}' WHERE `id_profile` = '{$idprofiles}';";
 				}else{
-					$sql2 = "INSERT INTO `contact_details` (`idcontact_details`, `id_profile`, `primary_phone`, `secondary_phone`, `address`, `city`, `email`) VALUES (NULL, $id_profile, '$primary_phone', '$secondary_phone', '$address', '$city', '$email');";
+					$sql2 = "INSERT INTO `contact_details` (`idcontact_details`, `id_profile`, `primary_phone`, `secondary_phone`, `address`, `city`, `email`) VALUES (NULL, $idprofiles, '$primary_phone', '$secondary_phone', '$address', '$city', '$email');";
 				}
 			}
 			
@@ -86,7 +86,7 @@ header('Access-Control-Allow-Headers: *');
 							LEFT JOIN `medical_details` ON `medical_details`.`id_profile` = `profiles`.`idprofiles` 
 							LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` 
 							WHERE
-							`profiles`.`idprofiles` = {$id_profile};";
+							`profiles`.`idprofiles` = {$idprofiles};";
 
 							if($result2 = mysqli_query($con, $sql6)){
 								while($row = mysqli_fetch_assoc($result2)){
