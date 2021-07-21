@@ -77,20 +77,25 @@ header('Access-Control-Allow-Headers: *');
 						if(mysqli_query($con,$sql5)){
 								http_response_code(200);
 						}else{
+							echo($sql5);
 							http_response_code(400);
 						}
 
 					}else{
+						echo($sql4);
 						http_response_code(400);
 					}
 				}else{
+					echo($sql3);
 					http_response_code(422);
 				}
 			}else{
+				echo($sql2);
 				http_response_code(422);
 			}
 			
 		}else{
+			echo($sql);
 			http_response_code(422);
 		}
 	}

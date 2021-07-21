@@ -1315,13 +1315,21 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'IRTRA Request':
           this.actualIrtrarequests.idprocess = str;
-          if(this.profile[0].address.split(",").length != 3){
-            window.alert("No correct address associated to this employee, please confir it meet the next syntaxis\n'casa/calle/avenida/colonia,(COMA)ZONA: #,(COMA)Municipio,(COMMA)Departamento' \n Or create the address in 'Contact' Tab")
-          }
-          this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str: string) => {
-            this.getIrtra();
+          console.log(isNullOrUndefined(this.profile[0].address));
+          if(isNullOrUndefined(this.profile[0].address)){
+            window.alert("No correct address associated to this employee, please confir it meet the next syntax\n'casa/calle/avenida/colonia,(COMA)ZONA: #,(COMA)Municipio,(COMMA)Departamento' \n Or create the address in 'Contact' Tab");
             this.cancelView();
-          })
+          }else{
+            if((this.profile[0].address.split(',').length != 3)){
+              window.alert("No correct address associated to this employee, please confir it meet the next syntax\n'casa/calle/avenida/colonia,(COMA)ZONA: #,(COMA)Municipio,(COMMA)Departamento' \n Or create the address in 'Contact' Tab")
+              this.cancelView();
+            }else{
+              this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str: string) => {
+                this.getIrtra();
+                this.cancelView();
+              })
+            }
+          }
           break;
         case 'Messaging':
           this.actualMessagings.idprocess = str;
