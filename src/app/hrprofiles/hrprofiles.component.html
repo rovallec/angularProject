@@ -75,8 +75,11 @@
                         <label for="txt_nationality">Gender:</label><i class="fas fa-edit" style="margin-left:2px"
                         (click)="editGender()" *ngIf="!editingGender"></i><i class="fas fa-edit" style="margin-left:2px"
                         (click)="closeEditNames()" *ngIf="editingGender"></i>
-                        <input type="text" class="form-control" [disabled]="!editingGender"
+                        <select class="form-control" [disabled]="!editingGender"
                             [(ngModel)]="workingEmployee.gender">
+                            <option>Masculino</option>
+                            <option>Femenino</option>
+                        </select>
                     </div>
 
                 </div>
@@ -1463,7 +1466,7 @@
                     <!--------------------------------------------------------------IRTRA REQUEST-------------------------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'IRTRA Request'">
                         <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">IRTRA
-                            REQUEST<i class="far fa-eye" *ngIf="actualIrtrarequests.type != 'Nuevo Carnet'"
+                            REQUEST<i class="far fa-eye"
                                 (click)="getIrtra()"></i></label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">

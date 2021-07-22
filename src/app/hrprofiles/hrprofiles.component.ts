@@ -297,7 +297,6 @@ export class HrprofilesComponent implements OnInit {
 
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.workingEmployee = emp;
-      console.log(this.workingEmployee);
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
       this.accId = emp.account;
@@ -1319,7 +1318,6 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'IRTRA Request':
           this.actualIrtrarequests.idprocess = str;
-          console.log(isNullOrUndefined(this.profile[0].address));
           if (isNullOrUndefined(this.profile[0].address)) {
             window.alert("No correct address associated to this employee, please confir it meet the next syntax\n'casa/calle/avenida/colonia,(COMA)ZONA: #,(COMA)Municipio,(COMMA)Departamento' \n Or create the address in 'Contact' Tab");
             this.cancelView();
@@ -1446,6 +1444,7 @@ export class HrprofilesComponent implements OnInit {
       case 'IRTRA Request':
         this.apiService.getIrtra_request(this.actuallProc).subscribe((irt: irtra_requests) => {
           this.actualIrtrarequests = irt;
+          console.log(irt);
         })
         break;
       default:
