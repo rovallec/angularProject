@@ -52,8 +52,10 @@
                         <input type="text" class="form-control" [disabled]="!editingDPI" [(ngModel)]="profile[0].dpi">
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="txt_birth">Birthday:</label>
-                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].day_of_birth">
+                        <label for="txt_birth">Birthday:</label><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="editBirthday()" *ngIf="!editingBirthday"></i><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="closeEditNames()" *ngIf="editingBirthday"></i>
+                        <input type="text" class="form-control" [disabled]="!editingBirthday" [(ngModel)]="profile[0].day_of_birth">
                     </div>
                     <div class="form-group col-md-2">
                         <label>Joining Date:</label>
@@ -70,11 +72,13 @@
                             [(ngModel)]="workingEmployee.nearsol_id">
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="txt_nationality">Gender:</label>
-                        <input type="text" class="form-control" [disabled]="true"
+                        <label for="txt_nationality">Gender:</label><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="editGender()" *ngIf="!editingGender"></i><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="closeEditNames()" *ngIf="editingGender"></i>
+                        <input type="text" class="form-control" [disabled]="!editingGender"
                             [(ngModel)]="workingEmployee.gender">
                     </div>
-                    
+
                 </div>
             </div>
         </td>

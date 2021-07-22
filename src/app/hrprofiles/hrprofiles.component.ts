@@ -141,6 +141,8 @@ export class HrprofilesComponent implements OnInit {
 
   termNotification: string = 'YES';
   editingEmail: boolean = false;
+  editingGender:boolean = false;  
+  editingBirthday:boolean = false;
 
   reasons: string[] = [
     "Asistencia",
@@ -1740,19 +1742,29 @@ export class HrprofilesComponent implements OnInit {
   editAddress() {
     this.editingAddress = true;
   }
+  
+  editBirthday(){
+    this.editingBirthday = true;
+  }
+
+  editGender(){
+    this.editingGender = true;
+  }
 
   closeEditNames() {
     if (this.editingAddress) {
       this.profile[0].address = this.first_line + ", Zona: " + this.zone + ", de " + this.municipio + ", " + this.departamento;
       this.profile[0].city = this.departamento;
     }
-    console.log(this.profile[0].address);
+    this.profile[0].gender = this.workingEmployee.gender;
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
       this.editingNames = false;
       this.editingDPI = false;
       this.editingPhones = false;
       this.editingAddress = false;
       this.editingEmail = false;
+      this.editingBirthday = false;
+      this.editingGender = false;
     })
   }
 
