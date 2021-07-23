@@ -178,7 +178,7 @@
     $res['day'] = $day;
     $res['mn'] = $mn;
     $res['yr'] = $yr;
-    echo("test")
+    echo("test");
     echo(json_encode($res));
 }
 ?>
