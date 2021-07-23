@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, contractCheck } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -143,6 +143,8 @@ export class HrprofilesComponent implements OnInit {
   editingEmail: boolean = false;
   editingGender:boolean = false;  
   editingBirthday:boolean = false;
+
+  actualContractReview:contractCheck = new contractCheck;
 
   reasons: string[] = [
     "Asistencia",
@@ -1444,7 +1446,6 @@ export class HrprofilesComponent implements OnInit {
       case 'IRTRA Request':
         this.apiService.getIrtra_request(this.actuallProc).subscribe((irt: irtra_requests) => {
           this.actualIrtrarequests = irt;
-          console.log(irt);
         })
         break;
       default:
@@ -1662,7 +1663,8 @@ export class HrprofilesComponent implements OnInit {
       f = "x";
     }
 
-    if (this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico") {
+    console.log(this.viewRecProd);
+    if ((this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico") && !this.viewRecProd) {
       window.open('http://172.18.2.45/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' +
         this.profile[0].iggs + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] +
         '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' +
@@ -2285,6 +2287,12 @@ export class HrprofilesComponent implements OnInit {
 
   sendMail() {
     this.apiService.sendMailTerm({ idemployees: this.workingEmployee.idemployees }).subscribe((str: string) => {
+    })
+  }
+
+  checkContract(id_employee:string){
+    this.apiService.checkContract({id:id_employee}).subscribe((chk:contractCheck)=>{
+      this.actualContractReview = chk;
     })
   }
 }

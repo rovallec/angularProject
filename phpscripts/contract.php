@@ -83,7 +83,6 @@
             $total_n_cent_l = $f->format($total_n_init[1]);
 
             $dt = explode("/", $hiring_date);
-            $prs =
             $date_letters = $f->format($dt[0]) . " de " . $mnth[intval($dt[1])-1] . " de " . $f->format($dt[2]);
 
             $today_date = date("Y-m-d");
