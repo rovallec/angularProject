@@ -70,15 +70,15 @@
                 $t = $t . " " . $f->format($dpi_4);
             }
 
-            $base_n_init = str_pad(explode(".", $base_n_n),2,"0");
+            $base_n_init = str_pad(explode(".", $base_n_n),2,"0", STR_PAD_END);
             $base_n_int_l = $f->format($base_n_init[0]);
             $base_n_cent_l = $f->format(number_format($base_n_init[1],2));
 
-            $incentivo_n_init = str_pad(explode(".", $incentivo_n),2,"0");
+            $incentivo_n_init = str_pad(explode(".", $incentivo_n),2,"0"), STR_PAD_END;
             $incentivo_n_int_l = $f->format($incentivo_n_init[0]);
             $incentivo_n_cent_l = $f->format($incentivo_n_init[1]);
             
-            $total_n_init = str_pad(explode(".", $total_n),2,"0");
+            $total_n_init = str_pad(explode(".", $total_n),2,"0", STR_PAD_END);
             $total_n_int_l = $f->format($total_n_init[0]);
             $total_n_cent_l = $f->format($total_n_init[1]);
             if($total_n_cent_l == 'cero'){
