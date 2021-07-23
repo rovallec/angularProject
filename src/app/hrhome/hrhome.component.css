@@ -29,3 +29,6 @@ tbody tr{
 i{
     cursor:pointer;
 }
+.table-light tr td{
+    text-transform: uppercase;
+}
