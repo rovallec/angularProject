@@ -47,11 +47,11 @@
             $base_n_n = $row['base_payment'];
             $incentivo_n_n = $row['productivity_payment'];
             $total_n_n = $base_n_n + $incentivo_n_n;
-            $base_n = ((float)$base_n_n);
+            $base_n = number_format(((float)$base_n_n),2);
             $incentivo_n = (float)$incentivo_n_n - 250;
             $incentivo_exp = explode(".", $incentivo_n);
-            $incentivo_n = ((float)$incentivo_n);
-            $total_n = ((float)$total_n_n);
+            $incentivo_n = number_format(((float)$incentivo_n),2);
+            $total_n = number_format(((float)$total_n_n),2);
 
             if(count(explode(".",$total_n)) < 2){
                 $total_n = $total_n . ".00";
