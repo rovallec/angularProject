@@ -138,7 +138,7 @@
             $res['yr'] = $yr;
         }
     }
-    echo(json_encode($res));
+    echo($sql);
 }
 ?>
 
