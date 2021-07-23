@@ -139,12 +139,12 @@
                                         <th *ngIf="makeEmployee">GENERATE</th>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let emp of hiresToShow" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">
-                                            <td style="padding:0px; vertical-align: middle;">{{emp.id_profile}}</td>
-                                            <td style="padding:0px; vertical-align: middle;">{{emp.nearsol_id}}</td>
-                                            <td style="padding:0px; vertical-align: middle;">{{emp.first_name}} {{emp.second_name}} {{emp.first_lastname}}
+                                        <tr *ngFor="let emp of hiresToShow">
+                                            <td style="padding:0px; vertical-align: middle;" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">{{emp.id_profile}}</td>
+                                            <td style="padding:0px; vertical-align: middle;" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">{{emp.nearsol_id}}</td>
+                                            <td style="padding:0px; vertical-align: middle;" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">{{emp.first_name}} {{emp.second_name}} {{emp.first_lastname}}
                                                 {{emp.second_lastname}}</td>
-                                            <td style="padding:0px; vertical-align: middle;"><select [disabled]="!makeEmployee || emp.status === 'EMPLOYEE'"
+                                            <td style="padding:0px; vertical-align: middle;" ><select [disabled]="!makeEmployee || emp.status === 'EMPLOYEE'"
                                                     [(ngModel)]="emp.status"
                                                     style="height:20px; width:100px;     border: 1px solid #3e3e3e;
                                                 border-radius: 5px 5px 5px 5px;
