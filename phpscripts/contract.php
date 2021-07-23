@@ -78,8 +78,8 @@
             $incentivo_n_int_l = $f->format($incentivo_n_init[0]);
             $incentivo_n_cent_l = $f->format($incentivo_n_init[1]);
 
-            $total_n_init = explode(".", $total_n);
-            $total_n_int_l = $f->format(number_format($total_n_init[0],0."",""));
+            $total_n_init = explode(".", number_format($total_n_n,2));
+            $total_n_int_l = $f->format($total_n_init[0]);
             $total_n_cent_l = $f->format($total_n_init[1]);
 
             if($total_n_cent_l == 'cero'){
