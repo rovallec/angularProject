@@ -137,16 +137,16 @@
         }
         $res['name'] = strtoupper(strval($name));
         $res['birthday'] = strtoupper(strval($birthday));
-        $res['year'] = strtoupper(strval($year));
-        $res['today'] = strtoupper(strval($today));
-        $res['now'] = strtoupper(strval($now));
+        $res['year'] = $year;
+        $res['today'] = $today;
+        $res['now'] = $now;
         $res['age'] = strtoupper(strval($age));
         $res['platform'] = strtoupper(strval($platform));
         $res['gender'] = strtoupper(strval($gender));
         $res['address'] = strtoupper(strval($address));
         $res['municipio'] = strtoupper(strval($municipio));
         $res['dpi_n'] = strtoupper(strval($dpi_n));
-        $res['hiring_date'] = strtoupper(strval($hiring_date));
+        $res['hiring_date'] = $hiring_date;
         $res['job'] = strtoupper(strval($job));
         $res['base_n_n'] = strtoupper(strval($base_n_n));
         $res['incentivo_n_n'] = strtoupper(strval($incentivo_n_n));
@@ -159,7 +159,7 @@
         $res['dpi_2'] = strtoupper(strval($dpi_2));
         $res['dpi_3'] = strtoupper(strval($dpi_3));
         $res['dpi_4'] = strtoupper(strval($dpi_4));
-        $res['t'] = strtoupper(strval($t));
+        $res['t'] = $t;
         $res['base_n_init'] = strtoupper(strval($base_n_init));
         $res['base_n_int_l'] = strtoupper(strval($base_n_int_l));
         $res['base_n_cent_l'] = strtoupper(strval($base_n_cent_l));
@@ -169,13 +169,13 @@
         $res['total_n_init'] = strtoupper(strval($total_n_init));
         $res['total_n_int_l'] = strtoupper(strval($total_n_int_l));
         $res['total_n_cent_l'] = strtoupper(strval($total_n_cent_l));
-        $res['dt'] = strtoupper(strval($dt));
+        $res['dt'] = $dt;
         $res['date_letters'] = strtoupper(strval($date_letters));
-        $res['today_date'] = strtoupper(strval($today_date));
-        $res['dt_end'] = strtoupper(strval($dt_end));
-        $res['day'] = strtoupper(strval($day));
-        $res['mn'] = strtoupper(strval($mn));
-        $res['yr'] = strtoupper(strval($yr));
+        $res['today_date'] = $today_date;
+        $res['dt_end'] = $dt_end;
+        $res['day'] = $day;
+        $res['mn'] = $mn;
+        $res['yr'] = $yr;
         echo(json_encode($res));
 }
 ?>
