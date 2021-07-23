@@ -144,8 +144,6 @@ export class HrprofilesComponent implements OnInit {
   editingGender:boolean = false;  
   editingBirthday:boolean = false;
 
-  actualContractReview:contractCheck = new contractCheck;
-
   reasons: string[] = [
     "Asistencia",
     "Calidad",
@@ -2287,12 +2285,6 @@ export class HrprofilesComponent implements OnInit {
 
   sendMail() {
     this.apiService.sendMailTerm({ idemployees: this.workingEmployee.idemployees }).subscribe((str: string) => {
-    })
-  }
-
-  checkContract(id_employee:string){
-    this.apiService.checkContract({id:id_employee}).subscribe((chk:contractCheck)=>{
-      this.actualContractReview = chk;
     })
   }
 }

@@ -139,7 +139,7 @@
                                         <th *ngIf="makeEmployee">GENERATE</th>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let emp of hiresToShow">
+                                        <tr *ngFor="let emp of hiresToShow" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">
                                             <td style="padding:0px; vertical-align: middle;">{{emp.id_profile}}</td>
                                             <td style="padding:0px; vertical-align: middle;">{{emp.nearsol_id}}</td>
                                             <td style="padding:0px; vertical-align: middle;">{{emp.first_name}} {{emp.second_name}} {{emp.first_lastname}}
@@ -315,5 +315,96 @@
                 </table>
             </tr>
         </table>
+    </div>
+</div>
+<!----------------------------------------------------------------- MODAL CONTRACT CHECK ----------------------------------------------------------------------->
+<div class="modal fade" id="contractCheck" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="uploadBonusesLabel">CONTRACT REVIEW</h5>
+            </div>
+            <div class="modal-body">
+                <table class="table-light">
+                    <thead>
+                        <th>Property</th>
+                        <th>value</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{actualContractReview.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Birthday</td>
+                            <td>{{actualContractReview.birthday}}</td>
+                        </tr>
+                        <tr>
+                            <td>Print Date</td>
+                            <td>{{actualContractReview.today}}</td>
+                        </tr>
+                        <tr>
+                            <td>Age</td>
+                            <td>{{actualContractReview.age}}</td>
+                        </tr>
+                        <tr>
+                            <td>Platform</td>
+                            <td>{{actualContractReview.platform}}</td>
+                        </tr>
+                        <tr>
+                            <td>Gender</td>
+                            <td>{{actualContractReview.gender}}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>{{actualContractReview.address}}</td>
+                        </tr>
+                        <tr>
+                            <td>Municipio</td>
+                            <td>{{actualContractReview.municipio}}</td>
+                        </tr>
+                        <tr>
+                            <td>DPI Number</td>
+                            <td>{{actualContractReview.dpi_n}}</td>
+                        </tr>
+                        <tr>
+                            <td>Hiring Date</td>
+                            <td>{{actualContractReview.hiring_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Job</td>
+                            <td>{{actualContractReview.job}}</td>
+                        </tr>
+                        <tr>
+                            <td>Base Number</td>
+                            <td>{{actualContractReview.base_n_n}}</td>
+                        </tr>
+                        <tr>
+                            <td>Incentivo Number</td>
+                            <td>{{actualContractReview.incentivo_n}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total  Number</td>
+                            <td>{{actualContractReview.total_n}}</td>
+                        </tr>
+                        <tr>
+                            <td>DPI Number</td>
+                            <td>{{actualContractReview.t}}</td>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>{{actualContractReview.date_letters}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer d-flex justify-content-between mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                <button class="btn btn-outline-primary" type="button" data-dismiss="modal" (click)="sendMail()">
+                    SEND
+                </button>
+            </div>
+        </div>
     </div>
 </div>

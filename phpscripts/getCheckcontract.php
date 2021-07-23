@@ -24,7 +24,7 @@
     $request = json_decode($postdata);
     $id = ($request->id);
 
-    $sql = "SELECT `hires`.*, `employees`.*, `waves`.`ops_start`, `waves`.`base_payment` AS `base`, `waves`.`productivity_payment` AS `prod`, `profiles`.*, `education_details`.*, `contact_details`.* FROM `hires` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN `waves` ON `waves`.`idwaves` = `hires`.`id_wave` LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `contact_details` ON `contact_details`.`id_profile` = `profiles`.`idprofiles` WHERE `idemployees` = '$id_employee';";
+    $sql = "SELECT `hires`.*, `employees`.*, `waves`.`ops_start`, `waves`.`base_payment` AS `base`, `waves`.`productivity_payment` AS `prod`, `profiles`.*, `education_details`.*, `contact_details`.* FROM `hires` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN `waves` ON `waves`.`idwaves` = `hires`.`id_wave` LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LEFT JOIN `education_details` ON `education_details`.`id_profile` = `profiles`.`idprofiles` LEFT JOIN `contact_details` ON `contact_details`.`id_profile` = `profiles`.`idprofiles` WHERE `idemployees` = '$id';";
     if($result = mysqli_query($con, $sql)){
         while($row = mysqli_fetch_assoc($result)){
             $name = $row['first_name'] . " " . $row['second_name'] . " " . $row['first_lastname'] . " " . $row['second_lastname'];
