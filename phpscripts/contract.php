@@ -47,11 +47,11 @@
             $base_n_n = $row['base_payment'];
             $incentivo_n_n = $row['productivity_payment'];
             $total_n_n = $base_n_n + $incentivo_n_n;
-            $base_n = str_pad(((float)$base_n_n),2,"0");
+            $base_n = number_format(((float)$base_n_n),2);
             $incentivo_n = (float)$incentivo_n_n - 250;
             $incentivo_exp = explode(".", $incentivo_n);
-            $incentivo_n = str_pad((float)$incentivo_n , 2, "0");
-            $total_n = str_pad(((float)$total_n_n),2,"0");
+            $incentivo_n = padstart(((float)$incentivo_n),2);
+            $total_n = number_format(((float)$total_n_n),2);
 
             if(count(explode(".",$total_n)) < 2){
                 $total_n = $total_n . ".00";
@@ -70,15 +70,15 @@
                 $t = $t . " " . $f->format($dpi_4);
             }
 
-            $base_n_init = explode(".", $base_n_n);
+            $base_n_init = str_pad(explode(".", $base_n_n),2,"0");
             $base_n_int_l = $f->format($base_n_init[0]);
             $base_n_cent_l = $f->format(number_format($base_n_init[1],2));
 
-            $incentivo_n_init = explode(".", $incentivo_n);
+            $incentivo_n_init = str_pad(explode(".", $incentivo_n),2,"0");
             $incentivo_n_int_l = $f->format($incentivo_n_init[0]);
             $incentivo_n_cent_l = $f->format($incentivo_n_init[1]);
             
-            $total_n_init = explode(".", $total_n);
+            $total_n_init = str_pad(explode(".", $total_n),2,"0");
             $total_n_int_l = $f->format($total_n_init[0]);
             $total_n_cent_l = $f->format($total_n_init[1]);
             if($total_n_cent_l == 'cero'){
