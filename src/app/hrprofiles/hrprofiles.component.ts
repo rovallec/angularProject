@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -132,6 +132,8 @@ export class HrprofilesComponent implements OnInit {
 
   maxDate: string = null;
   minDate: string = null;
+
+  leaveDates: leavesAction[] = [];
 
   currentPayVacations: boolean = false;
 
@@ -272,7 +274,7 @@ export class HrprofilesComponent implements OnInit {
 
   ngOnInit() {
     this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
-    this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id')
+    this.profile[0].idprofiles = this.route.snapshot.paramMap.get('id');
     this.getValidatingData();
     this.apiService.getProfile(this.profile[0]).subscribe((prof: profiles[]) => {
       this.profile = prof;
@@ -709,6 +711,113 @@ export class HrprofilesComponent implements OnInit {
     this.showLeave = false;
   }
 
+  editLeaves() {
+    
+  }
+
+  printValue() {
+    
+  }
+
+  onChange(ld: leavesAction, event) {
+    this.leaveDates[this.leaveDates.indexOf(ld)].action = event.target.value;
+  }
+
+  fillLeave() {
+    let leave = new leaves;
+    leave.id_user = this.activeLeave.id_user;
+    leave.id_employee = this.workingEmployee.idemployees;
+    leave.id_type = '5';
+    leave.id_department = this.activeLeave.id_department;
+    leave.date = this.activeLeave.date;
+    leave.notes = this.activeLeave.notes;
+    leave.status = 'PENDING';
+    leave.motive = this.activeLeave.motive;
+    leave.approved_by = this.activeLeave.approved_by;
+    return leave;
+  }
+
+  saveActionLeaves() {
+    let leave: leaves = this.activeLeave;
+    let leavesNew: leaves[] = [];
+    let start: string = '';
+    let end: string = '';
+    let f: Date = new Date(this.leaveDates[0].dates);
+    f = this.addDays(f, 1);
+ 
+    this.activeLeave.id_type = '5';
+    this.activeLeave.id_employee = this.workingEmployee.idemployees;
+
+    this.apiService.updateLeaves(leave).subscribe((str: string) => {
+      start = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+      leave.start = start;
+      leave = this.fillLeave();
+      for (let i = 0; i < this.leaveDates.length; i++) {
+        let ld: leavesAction = this.leaveDates[i];
+        if (ld.action=='PENDING') {
+          start = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+          
+          if ((leave.start == null) || (leave.start.trim() == '')) {
+            leave.start = start;
+          }
+
+          leave.status = 'PENDING';
+          
+          console.log('Estado pendiente: ');
+          console.log(leave);
+          console.log("<br>");
+        } else {
+          f = this.addDays(f, -1);
+          end = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+          leave.end = end;
+
+          leavesNew.push(leave);
+          console.log(leave);
+          leave = this.fillLeave();
+          f = this.addDays(f, 1);
+        }
+        f = this.addDays(f, 1);
+        if ((i==this.leaveDates.length-1) && (ld.action=='PENDING')) {
+          leavesNew.push(leave);
+          console.log('Todos los Leaves: ');
+          console.log(leavesNew);
+        }
+      }
+
+/*      let leave: leaves = new leaves;
+      leave = this.fillLeave();
+      leave.start = this.leaveDates[0].dates;
+      leave.end = this.leaveDates[0].dates;
+
+      this.leaveDates.forEach(element => {
+        
+        leave.id_type = '5';
+        leave.id_employee = this.workingEmployee.idemployees;
+        leave.status = 'PENDING';
+
+        if(element.action == 'PENDING'){
+          leave.end = element.dates;          
+        }else{
+          leavesNew.push(leave);
+          console.log(leave);
+          leave = this.fillLeave();
+          leave.start = element.dates;
+          leave.end = element.dates;         
+        }
+      })
+*/
+      leavesNew.forEach(ln => {        
+        /*
+        this.apiService.insertLeaves(ln).subscribe((_str: string) => {
+          this.complete_adjustment = true;
+          this.getLeaves();
+        })*/
+      })
+      window.alert("Change successfuly recorded");
+      this.cancelView();
+    })
+  }
+
   insertLeave() {
     this.apiService.insertLeaves(this.activeLeave).subscribe((str: string) => {
       this.complete_adjustment = true;
@@ -718,9 +827,31 @@ export class HrprofilesComponent implements OnInit {
   }
 
   selectLeave(leave: leaves) {
+    let start: number = 0;
+    let end: number = 0;
+    let f: Date = new Date(leave.start);
+    
+    start = new Date(leave.start).getDate();
+    end = new Date(leave.end).getDate();
+
     this.activeLeave = leave;
     this.editLeave = true;
     this.showLeave = true;
+    this.leaveDates = [];
+
+    for (let i = start; i <= end; i++) {
+      let ld: leavesAction = new leavesAction;
+      f = this.addDays(f, 1);
+      ld.dates = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+      ld.action = 'PENDING';
+      this.leaveDates.push(ld);
+    }
+    
+  }
+
+  addDays(fecha: Date, days: number): Date {
+    fecha.setDate(fecha.getDate() + days);
+    return fecha;
   }
 
   setRequest() {
