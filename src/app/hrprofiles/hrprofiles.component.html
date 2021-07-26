@@ -1158,6 +1158,118 @@
                                             [disabled]="!editableIgss">
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label>Profession:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="editProfesion()" *ngIf="!editingProfesion"></i><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                        *ngIf="editingProfesion"></i>
+                                        <input type="text" class="form-control" [(ngModel)] = "profile[0].profesion" [disabled]="!editingProfesion">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Job Descrition:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="editJob()" *ngIf="!editingJob"></i><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                        *ngIf="editingJob"></i>
+                                        <select class="form-control" [(ngModel)] = "profile[0].profesion" [disabled]="!editingJob">
+                                            <option>Representante de Servicio Al Cliente</option>
+                                            <option>Supervisor De Operaciones</option>
+                                            <option>Entrenador</option>
+                                            <option>Analista de Calidad</option>
+                                            <option>Analista de Tiempo Real</option>
+                                            <option>Especialista de Auditoria Interna</option>
+                                            <option>Gerente</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Estao Civil:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="editCivil()" *ngIf="!editingCivil"></i><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                        *ngIf="editingCivil"></i>
+                                        <select class="form-control" [(ngModel)] = "profile[0].marital_status" [disabled]="!editingCivil">
+                                            <option>Soltero</option>
+                                            <option>Casado</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Nacionality:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="editNat()" *ngIf="!editingNat"></i><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                        *ngIf="editingNat"></i>
+                                        <select class="form-control" [(ngModel)] = "profile[0].nationality" [disabled]="!editingNat">
+                                            <option>Afgana</option>
+                                            <option>Alemana</option>
+                                            <option>Árabe</option>
+                                            <option>Argentina</option>
+                                            <option>Australiana</option>
+                                            <option>Belga</option>
+                                            <option>Boliviana</option>
+                                            <option>Brasileña</option>
+                                            <option>Camboyana</option>
+                                            <option>Canadiense</option>
+                                            <option>Chilena</option>
+                                            <option>China</option>
+                                            <option>Colombiana</option>
+                                            <option>Coreana</option>
+                                            <option>Costarricense</option>
+                                            <option>Cubana</option>
+                                            <option>Danesa</option>
+                                            <option>Ecuatoriana</option>
+                                            <option>Egipcia</option>
+                                            <option>Salvadoreña</option>
+                                            <option>Escocesa</option>
+                                            <option>Española</option>
+                                            <option>Estadounidense</option>
+                                            <option>Estonia</option>
+                                            <option>Etiope</option>
+                                            <option>Filipina</option>
+                                            <option>Finlandesa</option>
+                                            <option>Francesa</option>
+                                            <option>Galesa</option>
+                                            <option>Griega</option>
+                                            <option>Guatemalteca</option>
+                                            <option>Haitiana</option>
+                                            <option>Holandesa</option>
+                                            <option>Hondureña</option>
+                                            <option>Indonesa</option>
+                                            <option>Inglesa</option>
+                                            <option>Iraquí</option>
+                                            <option>Iraní</option>
+                                            <option>Irlandesa</option>
+                                            <option>Israelí</option>
+                                            <option>Italiana</option>
+                                            <option>Japonesa</option>
+                                            <option>Jordana</option>
+                                            <option>Laosiana</option>
+                                            <option>Letona</option>
+                                            <option>Letonesa</option>
+                                            <option>Malaya</option>
+                                            <option>Marroquí</option>
+                                            <option>Mexicana</option>
+                                            <option>Nicaragüense</option>
+                                            <option>Noruega</option>
+                                            <option>Neozelandesa</option>
+                                            <option>Panameña</option>
+                                            <option>Paraguaya</option>
+                                            <option>Peruana</option>
+                                            <option>Polaca</option>
+                                            <option>Portuguesa</option>
+                                            <option>Puertorriqueño</option>
+                                            <option>Dominicana</option>
+                                            <option>Rumana</option>
+                                            <option>Rusa</option>
+                                            <option>Sueca</option>
+                                            <option>Suiza</option>
+                                            <option>Tailandesa</option>
+                                            <option>Taiwanesa</option>
+                                            <option>Turca</option>
+                                            <option>Ucraniana</option>
+                                            <option>Uruguaya</option>
+                                            <option>Venezolana</option>
+                                            <option>Vietnamita</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -86,6 +86,7 @@ header('Access-Control-Allow-Headers: *');
 				$profiles[$i]['iddocuments'] = 'N/A';
 				$profiles[$i]['doc_type'] = 'N/A';
 				$profiles[$i]['doc_path'] = 'N/A';
+				$profiles[$i]['profesion'] = $row['profesion'];
 				$i++;
 				}
 

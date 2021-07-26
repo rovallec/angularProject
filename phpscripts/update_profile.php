@@ -22,6 +22,7 @@ header('Access-Control-Allow-Headers: *');
 		$irtra = ($request->irtra);
 		$status = ($request->status);
 		$gender = ($request->gender);
+		$profesion = ($request->profesion);
 
 		$profiles = [];
 

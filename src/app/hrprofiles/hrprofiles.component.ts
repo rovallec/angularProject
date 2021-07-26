@@ -143,6 +143,10 @@ export class HrprofilesComponent implements OnInit {
   editingEmail: boolean = false;
   editingGender:boolean = false;  
   editingBirthday:boolean = false;
+  editingProfesion:boolean = false;
+  editingJob:boolean = false;
+  editingCivil:boolean;
+  editingNat:boolean;
 
   reasons: string[] = [
     "Asistencia",
@@ -1749,6 +1753,22 @@ export class HrprofilesComponent implements OnInit {
 
   editGender(){
     this.editingGender = true;
+  }
+  
+  editProfesion(){
+    this.editingProfesion = true;
+  }
+
+  editJob(){
+    this.editingJob = true;
+  }
+
+  editCivil(){
+    this.editingCivil = true;
+  }
+
+  editNat(){
+    this.editingNat = true;
   }
   
 

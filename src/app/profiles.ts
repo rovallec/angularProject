@@ -65,7 +65,7 @@ export class profiles {
     iddocuments: string;
     doc_type: string;
     doc_path: string;
-
+    profesion:string;
     constructor() {
         this.idprofiles = null;
         this.tittle = null;
