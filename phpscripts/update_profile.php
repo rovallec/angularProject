@@ -37,10 +37,10 @@ header('Access-Control-Allow-Headers: *');
 			$city = ($request->city);
 			$email = ($request->email);
 
-			$sql_1 = "SELECT * FROM `contact_details` WHERE id_profile = $id_profile LIMIT 1";
+			$sql_1 = "SELECT * FROM `contact_details` WHERE id_profile = $idprofiles LIMIT 1";
 
 			if($result = mysqli_query($con, $sql_1)){
-				if(mysqli_num_rows($result) > 0){
+				if(($result) > 0){
 					$sql2 = "UPDATE `contact_details` set `primary_phone` = '{$primary_phone}', `secondary_phone` = '{$secondary_phone}', `address` = '{$address}', `city` = '{$city}', `email` = '{$email}' WHERE `id_profile` = '{$idprofiles}';";
 				}else{
 					$sql2 = "INSERT INTO `contact_details` (`idcontact_details`, `id_profile`, `primary_phone`, `secondary_phone`, `address`, `city`, `email`) VALUES (NULL, $idprofiles, '$primary_phone', '$secondary_phone', '$address', '$city', '$email');";
