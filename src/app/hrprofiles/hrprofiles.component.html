@@ -134,6 +134,8 @@
                                         <th>ROSTER</th>
                                         <th>ATTENDED</th>
                                         <th>BALANCE</th>
+                                        <th>IGSS</th>
+                                        <th>EXCEPTIONS</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let att of showAttendences" style="cursor:pointer"
@@ -145,6 +147,8 @@
                                             <td>{{att.scheduled}}</td>
                                             <td>{{att.worked_time}}</td>
                                             <td>{{att.balance}}</td>
+                                            <td>{{att.igss}}</td>
+                                            <td>{{att.tk_exp}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

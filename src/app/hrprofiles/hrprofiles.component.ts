@@ -513,6 +513,23 @@ export class HrprofilesComponent implements OnInit {
           }
         })
       }
+      this.showAttendences.forEach(chng=>{
+        if(isNullOrUndefined(chng.igss)){
+          chng.igss = '0';
+        }
+        if(isNullOrUndefined(chng.tk_exp)){
+          chng.tk_exp = '0';
+        }
+      })
+      this.showAttAdjustments.forEach(at_adj=>{
+        this.showAttendences.forEach(att_show=>{
+          if(att_show.date == at_adj.attendance_date && (at_adj.id_department == '5' || at_adj.id_department == '27')){
+            att_show.igss = (Number(att_show.igss) + Number(at_adj.amount)).toFixed(2);
+          }else if(att_show.date == at_adj.attendance_date && at_adj.id_department == '28'){
+            att_show.tk_exp = (Number(att_show.tk_exp) + Number(at_adj.amount)).toFixed(2);
+          }
+        })
+      })
     })
   }
 
@@ -1664,8 +1681,6 @@ export class HrprofilesComponent implements OnInit {
       m = ' ';
       f = "x";
     }
-
-    console.log(this.viewRecProd);
     if ((this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico") && !this.viewRecProd) {
       window.open('http://172.18.2.45/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' +
         this.profile[0].iggs + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] +
@@ -1739,7 +1754,6 @@ export class HrprofilesComponent implements OnInit {
   }
 
   editEmail() {
-    console.log(this.editingEmail);
     this.editingEmail = true;
   }
 
