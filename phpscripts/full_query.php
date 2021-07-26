@@ -35,7 +35,7 @@ header('Access-Control-Allow-Headers: *');
 				$profiles[$i]['second_lastname'] = $row['second_lastname'];
 				$profiles[$i]['day_of_birth'] = $row['day_of_birth'];
 				$profiles[$i]['nationality'] = $row['nationality'];
-				$profiles[$i]['marital_status'] = $row['marital_status'];
+				$profiles[$i]['marital_status'] = strtoupper($row['marital_status']);
 				$profiles[$i]['dpi'] = $row['dpi'];
 				$profiles[$i]['nit'] = $row['nit'];
 				$profiles[$i]['iggs'] = $row['iggs'];
