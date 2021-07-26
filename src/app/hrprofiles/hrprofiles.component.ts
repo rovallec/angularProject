@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -122,6 +122,8 @@ export class HrprofilesComponent implements OnInit {
   earnVacations: number = 0;
   tookVacations: number = 0;
   availableVacations: number = 0;
+  returnedVacations: number = 0;
+  dismissedVacations: number = 0;
   actualPeriod: periods = new periods;
   complete_adjustment: boolean = false;
 
@@ -139,6 +141,14 @@ export class HrprofilesComponent implements OnInit {
 
   transfer_newCode: string = '';
 
+  termNotification: string = 'YES';
+  editingEmail: boolean = false;
+  editingGender:boolean = false;  
+  editingBirthday:boolean = false;
+  editingProfesion:boolean = false;
+  editingJob:boolean = false;
+  editingCivil:boolean;
+  editingNat:boolean;
 
   reasons: string[] = [
     "Asistencia",
@@ -375,11 +385,11 @@ export class HrprofilesComponent implements OnInit {
                 this.showAttendences = att;
 
                 this.showAttendences.forEach(atte => {
-                  let valid_trm:boolean = false;
-                  let activeSuspension:boolean = false;
-                  let activeVacation:boolean = false;
-                  let activeLeave:boolean = false;
-                  let mother_father_day:boolean = false;
+                  let valid_trm: boolean = false;
+                  let activeSuspension: boolean = false;
+                  let activeVacation: boolean = false;
+                  let activeLeave: boolean = false;
+                  let mother_father_day: boolean = false;
 
                   if (!isNullOrUndefined(trm.valid_from)) {
                     if (new Date(trm.valid_from).getTime() <= new Date(atte.date).getTime()) {
@@ -399,7 +409,7 @@ export class HrprofilesComponent implements OnInit {
 
                   if (!activeSuspension) {
                     vac.forEach(vacation => {
-                      if (!activeVacation && vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == atte.date && vacation.action == "Take"){
+                      if (!activeVacation && vacation.status != "COMPLETED" && vacation.status != 'DISMISSED' && vacation.took_date == atte.date && vacation.action == "Take") {
                         activeVacation = true;
                         atte.balance = 'VAC';
                         if (Number(vacation.count) < 1) {
@@ -429,42 +439,42 @@ export class HrprofilesComponent implements OnInit {
                     })
                   }
                   if (!activeVacation && !activeSuspension && !activeLeave) {
-                  if (atte.scheduled == "OFF") {
-                    atte.balance = "OFF";
-                  }else{
-                    if(!isNullOrUndefined(this.workingEmployee.children) && !isNullOrUndefined(this.workingEmployee.gender)){
-                      if(Number(this.workingEmployee.children) > 0){
-                        if(this.workingEmployee.gender == 'Femenino'){
-                          if(atte.date == (new Date().getFullYear() + "-05-10")){
-                            mother_father_day = true;
-                            atte.balance = "HLD";
+                    if (atte.scheduled == "OFF") {
+                      atte.balance = "OFF";
+                    } else {
+                      if (!isNullOrUndefined(this.workingEmployee.children) && !isNullOrUndefined(this.workingEmployee.gender)) {
+                        if (Number(this.workingEmployee.children) > 0) {
+                          if (this.workingEmployee.gender == 'Femenino') {
+                            if (atte.date == (new Date().getFullYear() + "-05-10")) {
+                              mother_father_day = true;
+                              atte.balance = "HLD";
+                            }
                           }
                         }
                       }
-                    }
-                    if (atte.date != (new Date().getFullYear() + "-01-01") && atte.date != (new Date().getFullYear() + "-06-28") && atte.date != (new Date().getFullYear() + "-04-01") && atte.date != (new Date().getFullYear() + "-04-02") && atte.date != (new Date().getFullYear() + "-04-03") && atte.date != (new Date().getFullYear() + "-05-01") && !mother_father_day) {
-                      if (Number(atte.scheduled) > 0) {
-                        if (Number(atte.worked_time) == 0) {
-                          atte.balance = "NS";
-                        } else {
-                          atte.balance = (Number(atte.worked_time) - Number(atte.scheduled)).toString();
+                      if (atte.date != (new Date().getFullYear() + "-01-01") && atte.date != (new Date().getFullYear() + "-06-28") && atte.date != (new Date().getFullYear() + "-04-01") && atte.date != (new Date().getFullYear() + "-04-02") && atte.date != (new Date().getFullYear() + "-04-03") && atte.date != (new Date().getFullYear() + "-05-01") && !mother_father_day) {
+                        if (Number(atte.scheduled) > 0) {
+                          if (Number(atte.worked_time) == 0) {
+                            atte.balance = "NS";
+                          } else {
+                            atte.balance = (Number(atte.worked_time) - Number(atte.scheduled)).toString();
+                          }
                         }
-                      }
-                    } else {
-                      if(atte.scheduled != "OFF"){
-                        if(Number(atte.worked_time) > Number(atte.scheduled)){
-                          atte.balance = (Number(atte.worked_time) - Number(atte.scheduled)).toFixed(2);
-                        }else{
-                          if (Number(atte.worked_time) > 0) {
-                            atte.balance = 'HLD';
-                          }else{
-                            atte.balance = 'HLD';
+                      } else {
+                        if (atte.scheduled != "OFF") {
+                          if (Number(atte.worked_time) > Number(atte.scheduled)) {
+                            atte.balance = (Number(atte.worked_time) - Number(atte.scheduled)).toFixed(2);
+                          } else {
+                            if (Number(atte.worked_time) > 0) {
+                              atte.balance = 'HLD';
+                            } else {
+                              atte.balance = 'HLD';
+                            }
                           }
                         }
                       }
                     }
                   }
-                }
 
                   if (this.complete_adjustment == true) {
                     if (this.attAdjudjment.id_attendence == atte.idattendences) {
@@ -553,6 +563,8 @@ export class HrprofilesComponent implements OnInit {
     this.earnVacations = this.vacationsEarned * 1.25;
     this.tookVacations = 0;
     this.availableVacations = 0;
+    this.returnedVacations = 0;
+    this.dismissedVacations = 0;
     this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((res: vacations[]) => {
       this.showVacations = res;
       this.showVacations.forEach(sv => {
@@ -570,10 +582,12 @@ export class HrprofilesComponent implements OnInit {
           }
         }
         if (vac.action == "Add") {
-          this.earnVacations = this.earnVacations + parseFloat(vac.count);
+          this.returnedVacations = this.returnedVacations + Number(vac.count);
         }
-        if (vac.action == "Take") {
-          this.tookVacations = this.tookVacations + parseFloat(vac.count);
+        if (vac.action == "Take" && vac.status != "DISMISSED") {
+          this.tookVacations = this.tookVacations + Number(vac.count);
+        } else if (vac.status == 'DISMISSED') {
+          this.dismissedVacations = this.dismissedVacations + Number(vac.count);
         }
 
         vacYears = this.vac.filter(v => String(v.year) == new Date(vac.took_date).getFullYear().toString());
@@ -1259,6 +1273,9 @@ export class HrprofilesComponent implements OnInit {
           this.actualTerm.id_process = str;
           this.apiService.insertTerm(this.actualTerm).subscribe((str: string) => {
             if (str == "1") {
+              if (this.termNotification == 'YES') {
+                this.sendMail();
+              }
               this.cancelView();
             } else {
               window.alert("An error has occured:\n" + str.split("|")[1]);
@@ -1375,7 +1392,7 @@ export class HrprofilesComponent implements OnInit {
           })
           break;
         case 'Transfer':
-          this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department, rol: this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
             if (isNullOrUndefined(emp)) {
               this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
                 this.apiService.getPeriods().subscribe((p: periods[]) => {
@@ -1436,10 +1453,28 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'IRTRA Request':
           this.actualIrtrarequests.idprocess = str;
-          this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str: string) => {
-            this.getIrtra();
+          if (isNullOrUndefined(this.profile[0].address)) {
+            window.alert("No correct address associated to this employee, please confir it meet the next syntax\n'casa/calle/avenida/colonia,(COMA)ZONA: #,(COMA)Municipio,(COMMA)Departamento' \n Or create the address in 'Contact' Tab");
             this.cancelView();
-          })
+          } else {
+            if ((this.profile[0].address.split(',').length != 4)) {
+              window.alert("No correct address associated to this employee, please confir it meet the next syntax\n'casa/calle/avenida/colonia,(COMA)ZONA: #,(COMA)Municipio,(COMMA)Departamento' \n Or create the address in 'Contact' Tab")
+              this.cancelView();
+            } else {
+
+              if (isNullOrUndefined(this.actualIrtrarequests.spouse_name)) {
+                this.actualIrtrarequests.spouse_name = "-";
+              }
+
+              if (isNullOrUndefined(this.actualIrtrarequests.spouse_lastname)) {
+                this.actualIrtrarequests.spouse_lastname = "-";
+              }
+              this.apiService.insertIrtra_request(this.actualIrtrarequests).subscribe((str: string) => {
+                this.getIrtra();
+                this.cancelView();
+              })
+            }
+          }
           break;
         case 'Messaging':
           this.actualMessagings.idprocess = str;
@@ -1753,7 +1788,7 @@ export class HrprofilesComponent implements OnInit {
     let f: string;
     let married: string;
 
-    if (this.profile[0].gender == 'M') {
+    if (this.workingEmployee.gender == 'M' || this.workingEmployee.gender == 'Masculino') {
       f = ' ';
       m = "x";
     } else {
@@ -1761,8 +1796,16 @@ export class HrprofilesComponent implements OnInit {
       f = "x";
     }
 
-    if (this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico") {
-      window.open('http://172.18.2.45/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' + this.profile[0].iggs + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] + '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' + '&conyuge_lastname= ' + '&department=' + this.profile[0].city + '&dpi=' + this.profile[0].dpi + '&extended= ' + '&f=' + f + '&first_lastname=' + this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' + this.profile[0].address.split(',')[2] + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' + '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[1] + "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname, "_blank");
+    console.log(this.viewRecProd);
+    if ((this.actualIrtrarequests.type == "Nuevo Carnet" || this.actualIrtrarequests.type == "Reposición" || this.actualIrtrarequests.type == "Cambio de plástico") && !this.viewRecProd) {
+      window.open('http://172.18.2.45/phpscripts/irtraNewcarnet.php?address=' + this.profile[0].address.split(',')[0] + '&afiliacion=' +
+        this.profile[0].iggs + '&birthday_day=' + this.profile[0].day_of_birth.split('-')[2] + '&birthday_month=' + this.profile[0].day_of_birth.split('-')[1] +
+        '&birthday_year=' + this.profile[0].day_of_birth.split('-')[0] + '&book= ' + '&cedula= ' + '&company=' + this.useCompany + '&conyuge_firstname= ' +
+        '&conyuge_lastname= ' + '&department=' + this.profile[0].city + '&dpi=' + this.profile[0].dpi + '&extended= ' + '&f=' + f + '&first_lastname=' +
+        this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' +
+        this.profile[0].address.split(',')[2].replace('de ', '') + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' +
+        '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[2] +
+        "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname, "_blank");
     } else {
       window.open('http://172.18.2.45/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type, "_blank");
     }
@@ -1826,19 +1869,54 @@ export class HrprofilesComponent implements OnInit {
     this.editingPhones = true;
   }
 
+  editEmail() {
+    console.log(this.editingEmail);
+    this.editingEmail = true;
+  }
+
   editAddress() {
     this.editingAddress = true;
   }
+  
+  editBirthday(){
+    this.editingBirthday = true;
+  }
+
+  editGender(){
+    this.editingGender = true;
+  }
+  
+  editProfesion(){
+    this.editingProfesion = true;
+  }
+
+  editJob(){
+    this.editingJob = true;
+  }
+
+  editCivil(){
+    this.editingCivil = true;
+  }
+
+  editNat(){
+    this.editingNat = true;
+  }
+  
 
   closeEditNames() {
     if (this.editingAddress) {
-      this.profile[0].address = this.first_line + ", Zona " + this.zone + ", de" + this.municipio + ", " + this.departamento;
+      this.profile[0].address = this.first_line + ", Zona: " + this.zone + ", de " + this.municipio + ", " + this.departamento;
+      this.profile[0].city = this.departamento;
     }
+    this.profile[0].gender = this.workingEmployee.gender;
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
       this.editingNames = false;
       this.editingDPI = false;
       this.editingPhones = false;
       this.editingAddress = false;
+      this.editingEmail = false;
+      this.editingBirthday = false;
+      this.editingGender = false;
     })
   }
 
@@ -2355,6 +2433,11 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.updateLeaves(this.activeLeave).subscribe((str: string) => {
       window.alert("Change successfuly recorded");
       this.cancelView();
+    })
+  }
+
+  sendMail() {
+    this.apiService.sendMailTerm({ idemployees: this.workingEmployee.idemployees }).subscribe((str: string) => {
     })
   }
 }

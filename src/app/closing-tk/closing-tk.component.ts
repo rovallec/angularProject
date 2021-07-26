@@ -263,6 +263,7 @@ export class ClosingTkComponent implements OnInit {
                                 let hldT:number= 0;
                                 let week_work:number = 0;
                                 let mother_father_day:boolean = false;
+                                let disc_on_week:number = 0;
 
                                 if (pay.last_seventh == '1') {
                                   non_show = true;
@@ -305,6 +306,7 @@ export class ClosingTkComponent implements OnInit {
                                         attendance.balance = 'JANP';
                                         discounted_days = discounted_days + 1;
                                         janp_sequence = janp_sequence + 1;
+                                        disc_on_week = disc_on_week + 1;
                                         rs.janp = (Number(rs.janp) + 1).toFixed(0);
                                       }
                                     })
@@ -338,6 +340,7 @@ export class ClosingTkComponent implements OnInit {
                                           if (lv.motive == 'Leave of Absence Unpaid') {
                                             attendance.balance = 'LOA';
                                             discounted_days = discounted_days + 1;
+                                            disc_on_week = disc_on_week + 1
                                             rs.janp = (Number(rs.janp) + 1).toFixed(0);
                                             janp_sequence = janp_sequence + 1;
                                             if (attendance.scheduled == 'OFF') {
@@ -349,6 +352,7 @@ export class ClosingTkComponent implements OnInit {
                                             attendance.balance = 'JANP';
                                             janp_sequence = janp_sequence + 1;
                                             discounted_days = discounted_days + 1;
+                                            disc_on_week = disc_on_week + 1
                                             if (lv.motive == "IGSS Unpaid") {
                                               rs.igss = (Number(rs.igss) + 1).toFixed(0);
                                             } else {
@@ -408,8 +412,10 @@ export class ClosingTkComponent implements OnInit {
                                                 sevenths = sevenths + 1;
                                                 non_show_sequence = non_show_sequence + 1;
                                                 ult_seventh = 1;
+                                                disc_on_week = disc_on_week + 2;
                                               } else {
                                                 discounted_days = discounted_days + 1;
+                                                disc_on_week = disc_on_week + 1;
                                                 non_show_sequence = non_show_sequence + 1;
                                               }
                                             } else {
@@ -450,24 +456,32 @@ export class ClosingTkComponent implements OnInit {
                                       if (janp_sequence >= 5) {
                                         disc = true;
                                         discounted_days = discounted_days + (off_on_week - janp_on_off);
-                                        if(attendance.id_employee == '4997'){
-                                          discounted_days = discounted_days - 1;
-                                        }
+                                        disc_on_week = disc_on_week + (off_on_week - janp_on_off);
                                       }
 
                                       if (non_show_sequence == 5) {
                                         if (carry_seventh) {
                                           discounted_days = discounted_days + 1;
+                                          disc_on_week = disc_on_week + 1;
                                         }
                                         disc = true;
                                         discounted_days = discounted_days + 1
+                                        disc_on_week = disc_on_week + 1;
                                         
                                       }
 
                                       if ((janp_sequence + non_show_sequence) == 5 && !disc) {
                                         discounted_days = discounted_days + 1;
+                                        disc_on_week = disc_on_week + 1;
                                       }
 
+                                      if(disc_on_week >= 7){
+                                        discounted_days = discounted_days - disc_on_week;
+                                        discounted_days = discounted_days + 7;
+                                        disc_on_week = 7;
+                                      }
+
+                                      disc_on_week = 0;
                                       janp_on_off_2 = janp_on_off_2 + janp_on_off;
                                       janp_on_off = 0;
                                       non_show_sequence = 0;
@@ -520,7 +534,6 @@ export class ClosingTkComponent implements OnInit {
                                 if ((ns_count + days_off >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24) || Number(rs.janp) + days_off - janp_on_off_2 >= ((new Date(this.actualPeriod.end).getTime()) - (new Date(this.actualPeriod.start).getTime())) / (1000 * 3600 * 24)) && ns_count > 0) {
                                   discounted_days = 15;
                                   sevenths = 0;
-                                  console.log("TEST " + emp[0].nearsol_id + " " + ns_count);
                                 }
 
                                 if(att.length == 0){

@@ -140,11 +140,11 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let emp of hiresToShow">
-                                            <td style="padding:0px; vertical-align: middle;">{{emp.id_profile}}</td>
-                                            <td style="padding:0px; vertical-align: middle;">{{emp.nearsol_id}}</td>
-                                            <td style="padding:0px; vertical-align: middle;">{{emp.first_name}} {{emp.second_name}} {{emp.first_lastname}}
+                                            <td style="padding:0px; vertical-align: middle;" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">{{emp.id_profile}}</td>
+                                            <td style="padding:0px; vertical-align: middle;" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">{{emp.nearsol_id}}</td>
+                                            <td style="padding:0px; vertical-align: middle;" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">{{emp.first_name}} {{emp.second_name}} {{emp.first_lastname}}
                                                 {{emp.second_lastname}}</td>
-                                            <td style="padding:0px; vertical-align: middle;"><select [disabled]="!makeEmployee || emp.status === 'EMPLOYEE'"
+                                            <td style="padding:0px; vertical-align: middle;" ><select [disabled]="!makeEmployee || emp.status === 'EMPLOYEE'"
                                                     [(ngModel)]="emp.status"
                                                     style="height:20px; width:100px;     border: 1px solid #3e3e3e;
                                                 border-radius: 5px 5px 5px 5px;
@@ -315,5 +315,93 @@
                 </table>
             </tr>
         </table>
+    </div>
+</div>
+<!----------------------------------------------------------------- MODAL CONTRACT CHECK ----------------------------------------------------------------------->
+<div class="modal fade" id="contractCheck" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="uploadBonusesLabel">CONTRACT REVIEW</h5>
+            </div>
+            <div class="modal-body d-flex justify-content-center">
+                <table class="table-light">
+                    <thead>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{actualContractReview.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Birthday</td>
+                            <td>{{actualContractReview.birthday}}</td>
+                        </tr>
+                        <tr>
+                            <td>Print Date</td>
+                            <td>{{actualContractReview.today}}</td>
+                        </tr>
+                        <tr>
+                            <td>Age</td>
+                            <td>{{actualContractReview.age}}</td>
+                        </tr>
+                        <tr>
+                            <td>Platform</td>
+                            <td>{{actualContractReview.platform}}</td>
+                        </tr>
+                        <tr>
+                            <td>Gender</td>
+                            <td>{{actualContractReview.gender}}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>{{actualContractReview.address}}</td>
+                        </tr>
+                        <tr>
+                            <td>Municipio</td>
+                            <td>{{actualContractReview.municipio}}</td>
+                        </tr>
+                        <tr>
+                            <td>DPI Number</td>
+                            <td>{{actualContractReview.dpi_n}}</td>
+                        </tr>
+                        <tr>
+                            <td>Hiring Date</td>
+                            <td>{{actualContractReview.hiring_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>Job</td>
+                            <td>{{actualContractReview.job}}</td>
+                        </tr>
+                        <tr>
+                            <td>Base Salary</td>
+                            <td>{{actualContractReview.base_n_n}}</td>
+                        </tr>
+                        <tr>
+                            <td>Incentivo Salary</td>
+                            <td>{{actualContractReview.incentivo_n}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total  Salary</td>
+                            <td>{{actualContractReview.total_n}}</td>
+                        </tr>
+                        <tr>
+                            <td>DPI</td>
+                            <td>{{actualContractReview.t}}</td>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>{{actualContractReview.date_letters}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer d-flex justify-content-center mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
     </div>
 </div>
