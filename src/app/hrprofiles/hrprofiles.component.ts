@@ -1735,6 +1735,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   editEmail() {
+    console.log(this.editingEmail);
     this.editingEmail = true;
   }
 
@@ -1749,6 +1750,7 @@ export class HrprofilesComponent implements OnInit {
   editGender(){
     this.editingGender = true;
   }
+  
 
   closeEditNames() {
     if (this.editingAddress) {
