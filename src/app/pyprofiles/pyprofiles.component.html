@@ -250,7 +250,7 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let att of attendances" class="selectable"
-                                        [ngClass]="{'table-danger': att.status === 'overlap'}">
+                                        [ngClass]="{'table-danger': att.status === 'overlap', 'table-secondary': !isPeriod(att.date)}">
                                         <td (click)="showReg(att)">{{att.date}}</td>
                                         <td *ngIf="att.state!='edit'" (click)="showReg(att)">{{att.scheduled}}</td>
                                         <td *ngIf="att.state=='edit'">
@@ -292,11 +292,11 @@
                             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="attended">
                         </div>
                         <div class="form-group col-md-2">
-                            <label>DIFF</label>
+                            <label>DISCOUNTED HOURS</label>
                             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="diff">
                         </div>
                         <div class="form-group col-md-2">
-                            <label>DISCOUNTED</label>
+                            <label>DISCOUNTED DAYS</label>
                             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="absence_fixed">
                         </div>
                         <div class="form-group col-md-2">

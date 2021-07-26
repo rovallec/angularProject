@@ -29,3 +29,33 @@ tbody tr{
 i{
     cursor:pointer;
 }
+
+.table-light{
+    text-align: center;
+    border-collapse: collapse;
+    border: solid 2px #e9e8e8;
+    text-transform: uppercase;
+    line-height: inherit;
+}
+
+.table-light tr td{
+    text-align: center;
+    text-transform: uppercase;
+    line-height: inherit;
+    border: solid 2px #e9e8e8;
+    padding:0px;
+}
+.table-light tr td{
+    text-align: center;
+    text-transform: uppercase;
+    line-height: inherit;
+    border: solid 2px #e9e8e8;
+    padding:0px;
+}
+.table-light tr{
+    text-align: center;
+    text-transform: uppercase;
+    line-height: inherit;
+    border: solid 2px #e9e8e8;
+    padding:0px;
+}

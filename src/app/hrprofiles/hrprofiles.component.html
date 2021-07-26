@@ -45,25 +45,43 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="txt_name">DPI:</label><i class="fas fa-edit" style="margin-left:2px"
                             (click)=editDPI() *ngIf="!editingDPI"></i><i class="fas fa-edit" style="margin-left:2px"
                             (click)="closeEditNames()" *ngIf="editingDPI"></i>
                         <input type="text" class="form-control" [disabled]="!editingDPI" [(ngModel)]="profile[0].dpi">
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="txt_birth">Birthday:</label>
-                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].day_of_birth">
+                    <div class="form-group col-md-2">
+                        <label for="txt_birth">Birthday:</label><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="editBirthday()" *ngIf="!editingBirthday"></i><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="closeEditNames()" *ngIf="editingBirthday"></i>
+                        <input type="text" class="form-control" [disabled]="!editingBirthday" [(ngModel)]="profile[0].day_of_birth">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label>Joining Date:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].date_joining">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="txt_nationality">Avaya ID:</label>
                         <input type="text" class="form-control" [disabled]="true"
                             [(ngModel)]="workingEmployee.client_id">
                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="txt_nationality">Nearsol ID:</label>
+                        <input type="text" class="form-control" [disabled]="true"
+                            [(ngModel)]="workingEmployee.nearsol_id">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txt_nationality">Gender:</label><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="editGender()" *ngIf="!editingGender"></i><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="closeEditNames()" *ngIf="editingGender"></i>
+                        <select class="form-control" [disabled]="!editingGender"
+                            [(ngModel)]="workingEmployee.gender">
+                            <option>Masculino</option>
+                            <option>Femenino</option>
+                        </select>
+                    </div>
+
                 </div>
             </div>
         </td>
@@ -119,8 +137,7 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let att of showAttendences" style="cursor:pointer"
-                                            (click)="addJustification(att)" class="selectable"
-                                            [ngClass]="{'table-danger': (att.balance === 'NS' || att.balance === 'JANP' || att.balance === 'SUSPENSION'),
+                                            (click)="addJustification(att)" class="selectable" [ngClass]="{'table-danger': (att.balance === 'NS' || att.balance === 'JANP' || att.balance === 'SUSPENSION'),
                                             'table-warning':att.balance < 0, 'table-success': att.balance > 0,
                                             'table-info':att.balance === 'OFF' || att.balance === 'VAC',
                                             'table-light':att.balance === 'HLD' || att.balance === 0}">
@@ -255,35 +272,49 @@
                             <label
                                 style="font-size: 16px; font-weight: bold; margin-left:40%;margin-top: 10px;">Vacations</label>
                             <div class="form-row col-md-12">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label>Earned:</label>
                                     <input type="text" class="form-control" [disabled]="true"
                                         [(ngModel)]="earnVacations">
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label>Took:</label>
                                     <input type="text" class="form-control" [disabled]="true"
                                         [(ngModel)]="tookVacations">
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label>Available:</label>
                                     <input type="text" class="form-control" [disabled]="true"
                                         [(ngModel)]="availableVacations">
+                                </div>
+                                <div class="form-grop col-md-3">
+                                    <label>Dismissed:</label>
+                                    <input type="text" class="form-control" [disabled]="true"
+                                        [(ngModel)]="dismissedVacations">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Returned:</label>
+                                    <input type="text" class="form-control" [disabled]="true"
+                                        [(ngModel)]="returnedVacations">
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
                                 <table style="width:98%; padding: 1%;" class="table">
                                     <tbody *ngFor="let v of vac">
-                                        <tr style="height: 30px; font-weight: bold;" class="tr-hover" (click)="v.vacSelected(!v.selected)">
+                                        <tr style="height: 30px; font-weight: bold;" class="tr-hover"
+                                            (click)="v.vacSelected(!v.selected)">
                                             <td style="align-items: center; text-align: center;">
-                                                <i class="far fa-plus-square" *ngIf="v.selected==false" ([ngModel])="v"></i>
-                                                <i class="far fa-minus-square" *ngIf="v.selected==true" ([ngModel])="v"></i>
+                                                <i class="far fa-plus-square" *ngIf="v.selected==false"
+                                                    ([ngModel])="v"></i>
+                                                <i class="far fa-minus-square" *ngIf="v.selected==true"
+                                                    ([ngModel])="v"></i>
                                                 Year: {{ v.year }}
                                             </td>
                                         </tr>
                                         <tr *ngIf="v.selected==true" class="tr-nohover">
                                             <td>
-                                                <table style="width:98%; padding: 1%;" class="table table-striped table-hover">
+                                                <table style="width:98%; padding: 1%;"
+                                                    class="table table-striped table-hover">
                                                     <thead>
                                                         <th>PROCESS</th>
                                                         <th>ACTION</th>
@@ -292,12 +323,13 @@
                                                         <th>STATUS</th>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let vacation of v.vacations" (click)="getVacation(vacation)"
-                                                            class="selectable">
+                                                        <tr *ngFor="let vacation of v.vacations"
+                                                            (click)="getVacation(vacation)" class="selectable">
                                                             <td>{{vacation.id_type}}</td>
                                                             <td>{{vacation.action}}</td>
                                                             <td>{{vacation.count}}</td>
-                                                            <td *ngIf="v.year==vacation.year">{{vacation.took_date}}</td>
+                                                            <td *ngIf="v.year==vacation.year">{{vacation.took_date}}
+                                                            </td>
                                                             <td *ngIf="v.year==vacation.year">{{vacation.status}}</td>
                                                         </tr>
                                                     </tbody>
@@ -424,9 +456,11 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Status:</label>
-                                    <input type="text" class="form-control" *ngIf="!showLeave || activeLeave.status != 'PENDING'"
+                                    <input type="text" class="form-control"
+                                        *ngIf="!showLeave || activeLeave.status != 'PENDING'"
                                         [(ngModel)]="activeLeave.status" [disabled]="true">
-                                    <select [(ngModel)]="activeVacation.status" class="form-control" *ngIf="showLeave && activeLeave.status == 'PENDING'" (change)="updateLeave()">
+                                    <select [(ngModel)]="activeVacation.status" class="form-control"
+                                        *ngIf="showLeave && activeLeave.status == 'PENDING'" (change)="updateLeave()">
                                         <option *ngIf="activeLeave.status === 'PENDING'">PENDING</option>
                                         <option>DISMISSED</option>
                                     </select>
@@ -475,16 +509,20 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Days:</label>
-                                    <select class="form-control" [(ngModel)]="activeVacation.count" [disabled]="!editVac">
+                                    <select class="form-control" [(ngModel)]="activeVacation.count"
+                                        [disabled]="!editVac">
                                         <option>1</option>
                                         <option>0.5</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Status:</label>
-                                    <input type="text" class="form-control" *ngIf="editVac || activeVacation.status != 'PENDING'"
+                                    <input type="text" class="form-control"
+                                        *ngIf="editVac || activeVacation.status != 'PENDING'"
                                         [(ngModel)]="activeVacation.status" [disabled]="true">
-                                    <select [(ngModel)]="activeVacation.status" class="form-control" *ngIf="!editVac && activeVacation.status == 'PENDING'" (change)="updateVacation()">
+                                    <select [(ngModel)]="activeVacation.status" class="form-control"
+                                        *ngIf="!editVac && activeVacation.status == 'PENDING'"
+                                        (change)="updateVacation()">
                                         <option *ngIf="activeVacation.status == 'PENDING'">PENDING</option>
                                         <option>DISMISSED</option>
                                     </select>
@@ -658,9 +696,10 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Motive:</label>
-                                    <select *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'COMPLETED'" class="form-control"
-                                        [(ngModel)]="activeRequest.motive" [disabled]="!reasonRequiered"
-                                        (change)="motiveChange()">
+                                    <select
+                                        *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'COMPLETED'"
+                                        class="form-control" [(ngModel)]="activeRequest.motive"
+                                        [disabled]="!reasonRequiered" (change)="motiveChange()">
                                         <option *ngFor="let moti of motive_select">{{moti}}</option>
                                     </select>
                                     <input type="text" [disabled]="true" class="form-control"
@@ -690,8 +729,7 @@
                                         class="form-control"
                                         *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'CLOSED' &&  activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED'">
                                     <input type="text" class="form-control" [(ngModel)]="activeRequest.imposition_date"
-                                        *ngIf="activeRequest.status !='ACCEPTED'"
-                                        [disabled]="true">
+                                        *ngIf="activeRequest.status !='ACCEPTED'" [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Type:</label>
@@ -1051,7 +1089,7 @@
                                 </div>
                                 <div class="form-row" *ngIf="editingAddress">
                                     <label for="txt_address">Address:</label><i class="fas fa-edit"
-                                        style="margin-left:2px" (click)="closeEditNames"></i>
+                                        style="margin-left:2px" (click)="closeEditNames()"></i>
                                     <div class="form-row col-md-12">
                                         <div class="form-group col-md-5">
                                             <label>First Line:</label>
@@ -1100,9 +1138,12 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="txt_email">Email Address:</label>
+                                        <label for="txt_email">Email Address:</label><i class="fas fa-edit"
+                                            style="margin-left:2px" (click)="editEmail()" *ngIf="!editingEmail"></i><i
+                                            class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                            *ngIf="editingEmail"></i>
                                         <input type="text" class="form-control" [(ngModel)]="profile[0].email"
-                                            [disabled]="true">
+                                            [disabled]="!editingEmail">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>IRTRA:<i class="far fa-edit" (click)="editIrtra()"
@@ -1115,6 +1156,118 @@
                                                 style="margin-left:5px;"></i></label>
                                         <input type="text" class="form-control" [(ngModel)]="profile[0].iggs"
                                             [disabled]="!editableIgss">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label>Profession:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="editProfesion()" *ngIf="!editingProfesion"></i><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                        *ngIf="editingProfesion"></i>
+                                        <input type="text" class="form-control" [(ngModel)] = "profile[0].profesion" [disabled]="!editingProfesion">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Job Descrition:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="editJob()" *ngIf="!editingJob"></i><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                        *ngIf="editingJob"></i>
+                                        <select class="form-control" [(ngModel)] = "profile[0].profesion" [disabled]="!editingJob">
+                                            <option>Representante de Servicio Al Cliente</option>
+                                            <option>Supervisor De Operaciones</option>
+                                            <option>Entrenador</option>
+                                            <option>Analista de Calidad</option>
+                                            <option>Analista de Tiempo Real</option>
+                                            <option>Especialista de Auditoria Interna</option>
+                                            <option>Gerente</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Estao Civil:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="editCivil()" *ngIf="!editingCivil"></i><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                        *ngIf="editingCivil"></i>
+                                        <select class="form-control" [(ngModel)] = "profile[0].marital_status" [disabled]="!editingCivil">
+                                            <option>Soltero</option>
+                                            <option>Casado</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Nacionality:</label><i class="fas fa-edit"
+                                        style="margin-left:2px" (click)="editNat()" *ngIf="!editingNat"></i><i
+                                        class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
+                                        *ngIf="editingNat"></i>
+                                        <select class="form-control" [(ngModel)] = "profile[0].nationality" [disabled]="!editingNat">
+                                            <option>Afgana</option>
+                                            <option>Alemana</option>
+                                            <option>Árabe</option>
+                                            <option>Argentina</option>
+                                            <option>Australiana</option>
+                                            <option>Belga</option>
+                                            <option>Boliviana</option>
+                                            <option>Brasileña</option>
+                                            <option>Camboyana</option>
+                                            <option>Canadiense</option>
+                                            <option>Chilena</option>
+                                            <option>China</option>
+                                            <option>Colombiana</option>
+                                            <option>Coreana</option>
+                                            <option>Costarricense</option>
+                                            <option>Cubana</option>
+                                            <option>Danesa</option>
+                                            <option>Ecuatoriana</option>
+                                            <option>Egipcia</option>
+                                            <option>Salvadoreña</option>
+                                            <option>Escocesa</option>
+                                            <option>Española</option>
+                                            <option>Estadounidense</option>
+                                            <option>Estonia</option>
+                                            <option>Etiope</option>
+                                            <option>Filipina</option>
+                                            <option>Finlandesa</option>
+                                            <option>Francesa</option>
+                                            <option>Galesa</option>
+                                            <option>Griega</option>
+                                            <option>Guatemalteca</option>
+                                            <option>Haitiana</option>
+                                            <option>Holandesa</option>
+                                            <option>Hondureña</option>
+                                            <option>Indonesa</option>
+                                            <option>Inglesa</option>
+                                            <option>Iraquí</option>
+                                            <option>Iraní</option>
+                                            <option>Irlandesa</option>
+                                            <option>Israelí</option>
+                                            <option>Italiana</option>
+                                            <option>Japonesa</option>
+                                            <option>Jordana</option>
+                                            <option>Laosiana</option>
+                                            <option>Letona</option>
+                                            <option>Letonesa</option>
+                                            <option>Malaya</option>
+                                            <option>Marroquí</option>
+                                            <option>Mexicana</option>
+                                            <option>Nicaragüense</option>
+                                            <option>Noruega</option>
+                                            <option>Neozelandesa</option>
+                                            <option>Panameña</option>
+                                            <option>Paraguaya</option>
+                                            <option>Peruana</option>
+                                            <option>Polaca</option>
+                                            <option>Portuguesa</option>
+                                            <option>Puertorriqueño</option>
+                                            <option>Dominicana</option>
+                                            <option>Rumana</option>
+                                            <option>Rusa</option>
+                                            <option>Sueca</option>
+                                            <option>Suiza</option>
+                                            <option>Tailandesa</option>
+                                            <option>Taiwanesa</option>
+                                            <option>Turca</option>
+                                            <option>Ucraniana</option>
+                                            <option>Uruguaya</option>
+                                            <option>Venezolana</option>
+                                            <option>Vietnamita</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1425,7 +1578,7 @@
                     <!--------------------------------------------------------------IRTRA REQUEST-------------------------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'IRTRA Request'">
                         <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">IRTRA
-                            REQUEST<i class="far fa-eye" *ngIf="actualIrtrarequests.type != 'Nuevo Carnet'"
+                            REQUEST<i class="far fa-eye"
                                 (click)="getIrtra()"></i></label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
@@ -1574,7 +1727,8 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label>New Code:</label>
-                                <input type="text"[disabled]="viewRecProd" [(ngModel)]="transfer_newCode" class="form-control">
+                                <input type="text" [disabled]="viewRecProd" [(ngModel)]="transfer_newCode"
+                                    class="form-control">
                             </div>
                             <div class="form-group col-md-3"></div>
                         </div>
@@ -1858,9 +2012,9 @@
                                     [disabled]="viewRecProd">
                             </div>
                             <div class="form-group col-md-2">
-                              <label>Old Position</label>
-                              <input type="text" class="form-control" [(ngModel)]="actualRise.old_position"
-                                [disabled]="true">
+                                <label>Old Position</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualRise.old_position"
+                                    [disabled]="true">
                             </div>
                             <div class="form-group col-md-2">
                                 <label>New Payment:</label>
@@ -1954,9 +2108,9 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
-                              <label>Monto:</label>
-                              <input type="text" class="form-control" [(ngModel)]="actualAdvance.amount"
-                                [disabled]="viewRecProd">
+                                <label>Monto:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualAdvance.amount"
+                                    [disabled]="viewRecProd">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Classification:</label>
@@ -2274,6 +2428,15 @@
                                             [(ngModel)]="second_interview.english_test">
                                     </div>
                                 </div>
+                                <div class="form-row col-md-12">
+                                    <div class="form-group col-md-12">
+                                        <label>Send Notification</label>
+                                        <select class="form-control" [(ngModel)]="termNotification">
+                                            <option>YES</option>
+                                            <option>NO</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
@@ -2282,7 +2445,15 @@
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2" *ngIf="countTerm==0">
-                                <button class="form-control" (click)="insertProc()" *ngIf="actualTerm.valid_from!=null && actualTerm.valid_from!=''">Accept</button>
+                                <button class="form-control" (click)="insertProc()"
+                                    *ngIf="actualTerm.valid_from!=null && actualTerm.valid_from!=''">Accept</button>
+                            </div>
+                        </div>
+                        <div class="form-row col-md-12" *ngIf="viewRecProd">
+                            <div class="form-group col-md-10"></div>
+                            <div class="form-group col-md-2">
+                                <button class="form-control btn btn-outline-success" data-toggle="modal"
+                                    data-target="#previewNotification"><i class="far fa-eye"></i></button>
                             </div>
                         </div>
                     </div>
@@ -2356,3 +2527,135 @@
         </td>
     </tr>
 </table>
+<!---------------------------------------------------------------------------------- TERM NOTIFICATION MODAL ------------------------------------------------>
+<div class="modal fade" id="previewNotification" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="uploadBonusesLabel">NOTIFICATION'S PREVIEW</h5>
+            </div>
+            <div class="modal-body">
+                <table
+                    style="margin-left:10px;border-collapse: collapse; border: black 2px solid; width: 100%;text-align: center;">
+                    <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                        <td colspan="2"><u>NOTIFICACION DE BAJA DE PERSONAL</u></td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">NOMBRE
+                            / NAME</td>
+                        <td style="border: solid black 1px">{{profile[0].first_name}} {{profile[0].second_name}}
+                            {{profile[0].first_lastname}} {{profile[0].second_lastname}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">COD.
+                            DE EMPLEADO</td>
+                        <td style="border: solid black 1px">{{workingEmployee.nearsol_id}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">PUESTO
+                            / JOB</td>
+                        <td style="border: solid black 1px">{{workingEmployee.job}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">CUENTA
+                            / ACCOUNT</td>
+                        <td style="border: solid black 1px">{{workingEmployee.id_account}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                            EMPRESA</td>
+                        <td style="border: solid black 1px">{{workingEmployee.society}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">FECHA
+                            DE INGRESO</td>
+                        <td style="border: solid black 1px">{{profile[0].date_joining}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">FECHA
+                            DE BAJA</td>
+                        <td style="border: solid black 1px; background: #ffc000; font-weight: bolder;">
+                            {{actualTerm.valid_from}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">MOTIVO
+                            / REASON</td>
+                        <td style="border: solid black 1px">{{actualTerm.reason}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                        <td colspan="2"><u>FACILITIES</u></td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Control De Acceso</td>
+                        <td style="border: solid black 1px">Eliminar Accesos</td>
+                    </tr>
+                    <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                        <td colspan="2"><u>CONTABILIDAD Y PAYROLL</u></td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Razon
+                        </td>
+                        <td style="border: solid black 1px">{{actualTerm.kind}} {{actualTerm.motive}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                            TARJETA DE ACCESSO</td>
+                        <td style="border: solid black 1px">{{actualTerm.access_card}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                            HEADSET</td>
+                        <td style="border: solid black 1px">{{actualTerm.headsets}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">Fecha
+                            entrega cheque</td>
+                        <td style="border: solid black 1px">{{actualTerm.bank_check}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Vacaciones Gozadas</td>
+                        <td style="border: solid black 1px">{{tookVacations}} dias</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Notificacion al seguro</td>
+                        <td style="border: solid black 1px" *ngIf="!insuranceNull">No Cuenta Con Beneficio</td>
+                        <td style="border: solid black 1px" *ngIf="insuranceNull">Si</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Supervisor</td>
+                        <td style="border: solid black 1px">{{workingEmployee.reporter}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Periodo A Pagar</td>
+                        <td style="border: solid black 1px">{{actualTerm.period_to_pay}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                        <td colspan="2"><u>RECLUTAMIENTO</u></td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Reclutador/Operaciones</td>
+                        <td style="border: solid black 1px">{{first_interview.username}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder; color:white">
+                            Recontratable</td>
+                        <td style="border: solid black 1px">{{actualTerm.rehireable}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer d-flex justify-content-between mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                <button class="btn btn-outline-primary" type="button" data-dismiss="modal" (click)="sendMail()">
+                    SEND
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

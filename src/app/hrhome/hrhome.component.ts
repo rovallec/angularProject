@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { waves_template, hires_template, attendences, disciplinary_processes, process_templates } from '../process_templates';
+import { waves_template, hires_template, attendences, disciplinary_processes, process_templates, contractCheck } from '../process_templates';
 import { employees, hrProcess, vew_hire_process } from '../fullProcess';
 import { isUndefined, isNull } from 'util';
 import { AuthServiceService } from '../auth-service.service'
@@ -28,6 +28,7 @@ export class HrhomeComponent implements OnInit {
 
   allEmployees: employees[] = [new employees];
   allProcesses: hrProcess[] = [new hrProcess];
+  actualContractReview:contractCheck = new contractCheck;
 
   weekdays: string[] = [
     "Sunday",
@@ -288,4 +289,9 @@ export class HrhomeComponent implements OnInit {
   }
 
 
+  setContractCheck(id_employee:string){
+    this.apiService.checkContract({id:id_employee}).subscribe((chk:contractCheck)=>{
+      this.actualContractReview = chk;
+    })
+  }
 }
