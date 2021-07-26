@@ -165,7 +165,11 @@ export class attendences {
     id_wave: string;
     balance: string;
     state: string;
+    igss:string;
+    tk_exp:string;
     constructor() {
+        this.igss = '0';
+        this.tk_exp = '0';
         this.idattendences = null;
         this.id_employee = null;
         this.date = null;
@@ -323,6 +327,15 @@ export class leaves {
         this.approved_by = null;
         this.start = null;
         this.end = null;
+    }
+}
+
+export class leavesAction {
+    dates: string;
+    action: string;
+    constructor(){
+        this.dates = null;
+        this.action = null;
     }
 }
 

@@ -25,8 +25,17 @@
         $sql2 = "INSERT INTO `leaves` (`idleaves`, `id_process`, `motive`, `approved_by`, `start`, `end`) VALUES (null, '$idprocesses', '$motive', '$approved_by', '$start', '$end');";
         if(mysqli_query($con, $sql2)){
             echo(mysqli_insert_id($con));
-        }else{
-            http_response_code(404);
+            echo($sql . " <br>" . $sql2);
+        } else {
+            http_response_code(404);  
+            echo(mysqli_error($con));
+            echo($sql);
         }
+    } else {
+        http_response_code(405);  
+        echo(mysqli_error($con));
+        echo($sql);
     }
+
+
 ?>

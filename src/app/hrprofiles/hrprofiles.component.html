@@ -134,6 +134,8 @@
                                         <th>ROSTER</th>
                                         <th>ATTENDED</th>
                                         <th>BALANCE</th>
+                                        <th>IGSS</th>
+                                        <th>EXCEPTIONS</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let att of showAttendences" style="cursor:pointer"
@@ -145,6 +147,8 @@
                                             <td>{{att.scheduled}}</td>
                                             <td>{{att.worked_time}}</td>
                                             <td>{{att.balance}}</td>
+                                            <td>{{att.igss}}</td>
+                                            <td>{{att.tk_exp}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -395,11 +399,14 @@
                                 <div class="form-group col-md-2"></div>
                             </div>
                             <div class="form-row col-md-12" *ngIf="!vacationAdd || !editLeave">
-                                <div class="form-group col-md-5"></div>
+                                <div class="form-group col-md-4"></div>
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="setLeave()">Set</button>
                                 </div>
-                                <div class="form-group col-md-5"></div>
+                                <div class="form-group col-md-2">
+                                    <button class="form-control" (click)="editLeaves()">Edit</button>
+                                </div>
+                                <div class="form-group col-md-4"></div>
                             </div>
                         </div>
                         <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;"
@@ -466,14 +473,57 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-row col-md-12" *ngIf="leaveDates.length>0">
+                                <div class="form-group col-md-4 d-flex flex-column">
+                                    <div class="form-row mb-auto align-top">
+                                        <button class="form-control" (click)="saveActionLeaves()">
+                                            Save
+                                        </button>
+                                    </div>
+                                    <div class="form-row align-buttom">
+                                        <button class="form-control" (click)="cancelView()"
+                                            *ngIf="showLeave">
+                                            Return
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <table>
+                                        <tr>
+                                            <td style="padding: 0 50px;">
+                                                <b>  
+                                                    Date
+                                                </b>
+                                            </td>
+                                            <td style="padding: 0 50px 0 50px;">
+                                                <b>
+                                                    Action
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        <tr *ngFor="let ld of leaveDates">
+                                            <td style="padding: 0 50px;">
+                                                {{ ld.dates }}
+                                            </td>
+                                            <td>
+                                                <select [(ngModel)]="ld.action" class="form-control">
+                                                    <option value="PENDING" >APPLY</option>
+                                                    <option>DISMISSED</option>
+                                                </select>
+                                                <!--<input type="checkbox" class="form-control" style="height: calc(0.5em + .75rem + 2px);" 
+                                                  (change)="onChange(ld, $event)" value="{{ ld.action }}">-->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="cancelView()"
                                         *ngIf="editLeave && !showLeave">Cancel</button>
                                 </div>
                                 <div class="form-group col-md-8">
-                                    <button class="form-control" (click)="cancelView()"
-                                        *ngIf="showLeave">Return</button>
+                                   
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="insertLeave()"
@@ -1171,7 +1221,7 @@
                                         style="margin-left:2px" (click)="editJob()" *ngIf="!editingJob"></i><i
                                         class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
                                         *ngIf="editingJob"></i>
-                                        <select class="form-control" [(ngModel)] = "profile[0].profesion" [disabled]="!editingJob">
+                                        <select class="form-control" [(ngModel)] = "workingEmployee.job" [disabled]="!editingJob">
                                             <option>Representante de Servicio Al Cliente</option>
                                             <option>Supervisor De Operaciones</option>
                                             <option>Entrenador</option>
@@ -1187,8 +1237,8 @@
                                         class="fas fa-edit" style="margin-left:2px" (click)="closeEditNames()"
                                         *ngIf="editingCivil"></i>
                                         <select class="form-control" [(ngModel)] = "profile[0].marital_status" [disabled]="!editingCivil">
-                                            <option>Soltero</option>
-                                            <option>Casado</option>
+                                            <option>SOLTERO</option>
+                                            <option>CASADO</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-3">
