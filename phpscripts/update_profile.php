@@ -46,7 +46,7 @@ header('Access-Control-Allow-Headers: *');
 					$sql2 = "INSERT INTO `contact_details` (`idcontact_details`, `id_profile`, `primary_phone`, `secondary_phone`, `address`, `city`, `email`) VALUES (NULL, $idprofiles, '$primary_phone', '$secondary_phone', '$address', '$city', '$email');";
 				}
 			}
-			echo($sql2);
+			echo(mysqli_num_rows($result));
 			
 			if(mysqli_query($con, $sql2)){
 				$idprofile_details = ($request->idprofile_details);
