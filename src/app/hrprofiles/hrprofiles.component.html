@@ -39,9 +39,14 @@
                             [(ngModel)]='workingEmployee.id_account'>
                     </div>
                     <div class="form-group col-md-2">
-                        <label>Supervisor:</label>
-                        <input type="text" class="form-control" [disabled]='true'
+                        <label>Supervisor:</label><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="editReporter()" *ngIf="!editingReporter"></i><i class="fas fa-edit" style="margin-left:2px"
+                        (click)="closeEditNames()" *ngIf="editingReporter"></i>
+                        <select class="form-control" [disabled]='true'
                             [(ngModel)]="workingEmployee.reporter">
+                            <option *ngFor="let app of approvals">{{app.user_name}}
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-row">
@@ -1713,28 +1718,34 @@
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
                                 <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="!newProcess" [min]="minDate" [max]="maxDate">
+                                    [disabled]="!newProcess">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
-                            <div class="form-group col-md-3"></div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
+                                <label>Notification:</label>
+                                <select class="form-control" [(ngModel)]='termNotification' *ngIf='!viewRecProd'>
+                                    <option>YES</option>
+                                    <option>NO</option>
+                                </select>
+                                <button class="form-control btn-outline-success" *ngIf="viewRecProd" data-target="#transferModal" data-toggle="modal"><i class="far fa-eye"></i></button>
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label>Transfer To:</label>
                                 <select class="form-control" [(ngModel)]="accId" *ngIf="!viewRecProd"
                                     (change)="addDescription()">
                                     <option *ngFor="let ac of allAccounts" [value]="ac.idaccounts">{{ac.name}}</option>
                                 </select>
-                                <select class="form-control" [(ngModel)]="actuallProc.descritpion" *ngIf="viewRecProd"
+                                <select class="form-control" [(ngModel)]="actuallProc.descritpion.split('|')[0]" *ngIf="viewRecProd"
                                     [disabled]="true">
                                     <option *ngFor="let ac of allAccounts" [value]="ac.idaccounts">{{ac.name}}</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <label>New Code:</label>
                                 <input type="text" [disabled]="viewRecProd" [(ngModel)]="transfer_newCode"
                                     class="form-control">
-                            </div>
-                            <div class="form-group col-md-3"></div>
+                            </div>                            
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
                             <div class="form-group col-md-2">
@@ -2657,6 +2668,74 @@
             <div class="modal-footer d-flex justify-content-between mt-2">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
                 <button class="btn btn-outline-primary" type="button" data-dismiss="modal" (click)="sendMail()">
+                    SEND
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!---------------------------------------------------------------------------------- TERM NOTIFICATION MODAL ------------------------------------------------>
+<div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="uploadBonusesLabel">NOTIFICATION'S PREVIEW</h5>
+            </div>
+            <div class="modal-body">
+                <table
+                    style="margin-left:10px;border-collapse: collapse; border: black 2px solid; width: 100%;text-align: center;">
+                    <tr style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">
+                        <td colspan="2"><u>NOTIFICACION DE TRANSFERENCIA DE PERSONAL</u></td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">NOMBRE</td>
+                        <td style="border: solid black 1px">{{profile[0].first_name}} {{profile[0].second_name}}
+                            {{profile[0].first_lastname}} {{profile[0].second_lastname}}</td>
+                    </tr>
+                    <tr style="border: solid rgb(206, 205, 205) 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">COD.
+                            DE EMPLEADO</td>
+                        <td style="border: solid black 1px">{{workingEmployee.nearsol_id}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">PUESTO</td>
+                        <td style="border: solid black 1px">{{workingEmployee.job}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">CUENTA RECURRENTE</td>
+                        <td *ngIf="!viewRecProd" style="border: solid black 1px">{{workingEmployee.id_account}}</td>
+                        <td style="border: solid black 1px">{{getAccountName(accId)}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">CUENTA A TRANSFERIRSE</td>
+                        <td *ngIf="!viewRecProd" style="border: solid black 1px">{{getAccountName(accId)}}</td>
+                        <td style="border: solid black 1px">{{workingEmployee.id_account}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">FECHA EFECTIVA DE TRANSFERENCIA</td>
+                        <td style="border: solid black 1px; background:#9bc2e6">{{actuallProc.prc_date}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">NUEVO PUESTO</td>
+                        <td style="border: solid black 1px; background: #9bc2e6;">
+                            {{workingEmployee.job}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">NUEVO SUPERVISOR</td>
+                        <td style="border: solid black 1px; background:#9bc2e6">{{workingEmployee.reporter}}</td>
+                    </tr>
+                    <tr style="border: solid black 1px">
+                        <td style="border: solid black 1px; background: #0070c0; font-weight: bolder;color:white">MOTIVO DE TRANSFERENCIA:</td>
+                        <td style="border: solid black 1px">SOLICITUD DEL CLIENTE</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer d-flex justify-content-between mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                <button class="btn btn-outline-primary" type="button" data-dismiss="modal" (click)="sendMailTransfer()">
                     SEND
                 </button>
             </div>

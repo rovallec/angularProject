@@ -222,7 +222,8 @@ export class MiprofilesComponent implements OnInit {
     iddocuments: 'N/A',
     doc_type: 'N/A',
     doc_path: 'N/A',
-    birth_place: 'N/A'
+    birth_place: 'N/A',
+    profesion:  null
   };
 
   prof_getted: profiles[] = [{
@@ -291,7 +292,8 @@ export class MiprofilesComponent implements OnInit {
     doc_path: 'N/A',
     gender: null,
     etnia: null,
-    birth_place: 'N/A'
+    birth_place: 'N/A',
+    profesion: null
   }];
 
   documents_view: string[][];

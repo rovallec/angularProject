@@ -895,6 +895,10 @@ sendMailTerm(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/sendmail_term.php`, any);
 }
 
+sendMailTransfer(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/sendmail_transfer.php`, any);
+}
+
 checkContract(any:any){
   return this.httpClient.post<contractCheck>(`${this.PHP_API_SERVER}/phpscripts/getCheckcontract.php`, any);
 }

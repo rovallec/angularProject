@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵCodegenComponentFactoryResolver } from '@angular/core';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
@@ -145,8 +145,11 @@ export class HrprofilesComponent implements OnInit {
   editingBirthday:boolean = false;
   editingProfesion:boolean = false;
   editingJob:boolean = false;
-  editingCivil:boolean;
-  editingNat:boolean;
+  editingCivil:boolean = false;
+  editingNat:boolean = false;
+  editingReporter:boolean = false;
+
+  selectedReporter:string = null;
 
   reasons: string[] = [
     "Asistencia",
@@ -499,6 +502,7 @@ export class HrprofilesComponent implements OnInit {
   getAttAdjustemt() {
     this.editAdj = false;
     this.apiService.getAttAdjustments({ id: this.activeEmp }).subscribe((adj: attendences_adjustment[]) => {
+      
       this.showAttAdjustments = [];
       if (adj.length >= 16) {
         for (let i = (adj.length - 1); i > (adj.length - 16); i = i - 1) {
@@ -526,6 +530,7 @@ export class HrprofilesComponent implements OnInit {
           if(att_show.date == at_adj.attendance_date && (at_adj.id_department == '5' || at_adj.id_department == '27')){
             att_show.igss = (Number(att_show.igss) + Number(at_adj.amount)).toFixed(2);
           }else if(att_show.date == at_adj.attendance_date && at_adj.id_department == '28'){
+            console.log(at_adj);
             att_show.tk_exp = (Number(att_show.tk_exp) + Number(at_adj.amount)).toFixed(2);
           }
         })
@@ -1087,6 +1092,7 @@ export class HrprofilesComponent implements OnInit {
         this.actuallProc.descritpion = null;
         break;
       case 'Termination':
+        this.termNotification = 'YES';
         this.actualTerm.access_card = "YES";
         this.actualTerm.headsets = "YES";
         this.actualTerm.nearsol_experience = '0';
@@ -1115,6 +1121,7 @@ export class HrprofilesComponent implements OnInit {
         })
         break;
       case 'Transfer':
+        this.termNotification = 'YES';
         if (Number(this.todayDate.split("-")[2]) <= 15) {
           this.minDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-01";
           this.maxDate = this.todayDate.split("-")[0] + "-" + this.todayDate.split("-")[1] + "-15";
@@ -1150,6 +1157,10 @@ export class HrprofilesComponent implements OnInit {
 
   insertProc() {
     let Abort: AbortController = new AbortController;
+
+    if(this.actuallProc.name == 'Transfer'){
+      this.actuallProc.descritpion = this.actuallProc.descritpion + "|" + this.workingEmployee.id_account;
+    }
 
     this.apiService.insertProc(this.actuallProc).subscribe((str: string) => {
       switch (this.actuallProc.name) {
@@ -1312,6 +1323,9 @@ export class HrprofilesComponent implements OnInit {
                               emp_toUpdate.society = this.transfer_newCode;
                               emp_toUpdate.id_profile = this.route.snapshot.paramMap.get('id');
                               this.apiService.updateEmployee(emp_toUpdate).subscribe((str: string) => {
+                                if(this.termNotification == 'YES'){
+                                  this.sendMailTransfer();
+                                }
                                 window.alert("Record successfuly inserted");
                               })
                               this.cancelView();
@@ -1392,6 +1406,8 @@ export class HrprofilesComponent implements OnInit {
     this.viewRecProd = true;
     this.actuallProc = pr;
     switch (this.actuallProc.name) {
+      case 'Transfer':
+        this.accId = this.actuallProc.descritpion.split("|")[1];
       case 'Messaging':
         this.apiService.getMessagings(this.actuallProc).subscribe((msg: messagings) => {
           this.actualMessagings = msg;
@@ -1784,6 +1800,10 @@ export class HrprofilesComponent implements OnInit {
   editNat(){
     this.editingNat = true;
   }
+
+  editReporter(){
+    this.editingReporter = true;
+  }
   
 
   closeEditNames() {
@@ -1793,14 +1813,25 @@ export class HrprofilesComponent implements OnInit {
     }
     this.profile[0].gender = this.workingEmployee.gender;
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
-      this.editingNames = false;
-      this.editingDPI = false;
-      this.editingPhones = false;
-      this.editingAddress = false;
-      this.editingEmail = false;
-      this.editingBirthday = false;
-      this.editingGender = false;
+      this.workingEmployee.platform = 'explicit_change';
+      this.workingEmployee.state = 'reporter';
+      this.approvals.forEach(element=>{
+        if(element.user_name == this.workingEmployee.reporter){
+          this.workingEmployee.society = element.iduser;
+        }
+      })
+      this.apiService.updateEmployee(this.workingEmployee).subscribe((str:string)=>{
+        window.alert("Changes successfuly recorded please re enter on this profile to retrive the new information");
+      })
     })
+    this.editingNames = false;
+    this.editingDPI = false;
+    this.editingPhones = false;
+    this.editingAddress = false;
+    this.editingEmail = false;
+    this.editingBirthday = false;
+    this.editingGender = false;
+    this.editingReporter = false;
   }
 
   changeDistrit() {
@@ -2322,5 +2353,19 @@ export class HrprofilesComponent implements OnInit {
   sendMail() {
     this.apiService.sendMailTerm({ idemployees: this.workingEmployee.idemployees }).subscribe((str: string) => {
     })
+  }
+
+  sendMailTransfer(){
+    this.apiService.sendMailTransfer({id_employee:this.workingEmployee.idemployees}).subscribe((str:string)=>{})
+  }
+
+  getAccountName(str:string):string{
+    let rtn:string = 'N/A';
+    this.allAccounts.forEach(acc=>{
+      if(acc.idaccounts == str){
+        rtn = acc.name;
+      }
+    })
+    return rtn;
   }
 }
