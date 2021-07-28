@@ -1322,6 +1322,7 @@ export class HrprofilesComponent implements OnInit {
                               emp_toUpdate.platform = "nearsol_id";
                               emp_toUpdate.society = this.transfer_newCode;
                               emp_toUpdate.id_profile = this.route.snapshot.paramMap.get('id');
+                              emp_toUpdate.state = 'EMPLOYEE';
                               this.apiService.updateEmployee(emp_toUpdate).subscribe((str: string) => {
                                 if(this.termNotification == 'YES'){
                                   this.sendMailTransfer();

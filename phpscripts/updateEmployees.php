@@ -18,7 +18,7 @@ if($platform != 'WAH' && $platform != 'ON SITE'){
 		if($platform == 'explicit_change'){
 			$sql = "UPDATE `employees` INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `$status` = '$society' WHERE `id_profile` = $id;";
 		}else{
-			if($state == 'society'){
+			if($status == 'society'){
 				$sql = "UPDATE `employees` INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `society` = '$society' WHERE `id_profile` = $id;";
 			}else{
 				$sql = "UPDATE `employees` INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `nearsol_id` = '$society' WHERE `id_profile` = $id;";
