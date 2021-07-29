@@ -1159,7 +1159,7 @@ export class HrprofilesComponent implements OnInit {
     let Abort: AbortController = new AbortController;
 
     if(this.actuallProc.name == 'Transfer'){
-      this.actuallProc.descritpion = this.actuallProc.descritpion + "|" + this.workingEmployee.account;
+      this.actuallProc.descritpion = this.actuallProc.descritpion + "|" + this.workingEmployee.account + "|" + this.workingEmployee.nearsol_id;
     }
 
     this.apiService.insertProc(this.actuallProc).subscribe((str: string) => {
@@ -2372,7 +2372,7 @@ export class HrprofilesComponent implements OnInit {
 
   cancelTransfer(){
     this.apiService.revertTransfer({id:this.workingEmployee.idemployees}).subscribe((str=>{
-      
+
     }))
   }
 }
