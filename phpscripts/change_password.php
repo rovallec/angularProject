@@ -10,24 +10,24 @@ header('Access-Control-Allow-Headers: *');
         $user = ($request->username);
 		$password = ($request->password);
 		
-		//$sql = "ALTER USER '$user'@’localhost’ IDENTIFIED BY ‘$password’;";
 		$sql1 = 'USE mysql';
         $sql = "ALTER user '$user'@'%' IDENTIFIED by '$password';";
-        //$sql = "UPDATE mysql.user SET Password=PASSWORD('$password') WHERE USER='$user' AND Host=”localhost”;";
 
-		if(mysqli_query($con, $sql))
-		{
-			$sql3 = 'USE intranet';
-            $sql2 = "UPDATE users SET active = 1 where username = '$user'";	
-			if (mysqli_query($con, $sql3)) {
-				if (mysqli_query($con, $sql2)) {
-					echo(json_encode('changed'));
-				} else{
-					echo mysqli_error($con);
+		if (mysqli_query($con, $sql1)) {
+			if(mysqli_query($con, $sql))
+			{
+				$sql3 = 'USE intranet';
+							$sql2 = "UPDATE users SET active = 1 where username = '$user'";	
+				if (mysqli_query($con, $sql3)) {
+					if (mysqli_query($con, $sql2)) {
+						echo(json_encode('changed'));
+					} else{
+						echo mysqli_error($con);
+					}
 				}
+			}else{			
+				echo mysqli_error($con);
 			}
-		}else{			
-            echo mysqli_error($con);
 		}
 	}
 ?>

@@ -330,6 +330,15 @@ export class leaves {
     }
 }
 
+export class leavesAction {
+    dates: string;
+    action: string;
+    constructor(){
+        this.dates = null;
+        this.action = null;
+    }
+}
+
 export class disciplinary_processes {
     //Process
     id_processes: string;

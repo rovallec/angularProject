@@ -404,11 +404,11 @@
                                 <div class="form-group col-md-2"></div>
                             </div>
                             <div class="form-row col-md-12" *ngIf="!vacationAdd || !editLeave">
-                                <div class="form-group col-md-5"></div>
+                                <div class="form-group col-md-4"></div>
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="setLeave()">Set</button>
                                 </div>
-                                <div class="form-group col-md-5"></div>
+                                <div class="form-group col-md-6"></div>
                             </div>
                         </div>
                         <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;"
@@ -475,14 +475,55 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-row col-md-12" *ngIf="leaveDates.length>0 && activeLeave.status=='PENDING'">
+                                <div class="form-group col-md-4 d-flex flex-column">
+                                    <div class="form-row mb-auto align-top">
+                                        <button class="form-control" (click)="saveActionLeaves()">
+                                            Save
+                                        </button>
+                                    </div>
+                                    <div class="form-row align-buttom">
+                                        <button class="form-control" (click)="cancelView()"
+                                            *ngIf="showLeave">
+                                            Return
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <table>
+                                        <tr>
+                                            <td style="padding: 0 50px;">
+                                                <b>  
+                                                    Date
+                                                </b>
+                                            </td>
+                                            <td style="padding: 0 50px 0 50px;">
+                                                <b>
+                                                    Action
+                                                </b>
+                                            </td>
+                                        </tr>
+                                        <tr *ngFor="let ld of leaveDates">
+                                            <td style="padding: 0 50px;">
+                                                {{ ld.dates }}
+                                            </td>
+                                            <td>
+                                                <select [(ngModel)]="ld.action" class="form-control">
+                                                    <option value="PENDING" >APPLY</option>
+                                                    <option>DISMISSED</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="cancelView()"
                                         *ngIf="editLeave && !showLeave">Cancel</button>
                                 </div>
                                 <div class="form-group col-md-8">
-                                    <button class="form-control" (click)="cancelView()"
-                                        *ngIf="showLeave">Return</button>
+                                   
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="insertLeave()"
