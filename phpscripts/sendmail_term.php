@@ -98,7 +98,7 @@ if($result = mysqli_query($con, $sql))
 	}else{
 		echo($sql2);
 	}
-	echo($res);
+	http_response_code(200);
 }else{
 	echo($sql);
 }

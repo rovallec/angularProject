@@ -1932,7 +1932,12 @@ export class HrprofilesComponent implements OnInit {
         }
       })
       this.apiService.updateEmployee(this.workingEmployee).subscribe((str:string)=>{
-        window.alert("Changes successfuly recorded please re enter on this profile to retrive the new information");
+        this.workingEmployee.platform = 'explicit_change';
+        this.workingEmployee.state = 'job';
+        this.workingEmployee.society = this.workingEmployee.job;
+        this.apiService.updateEmployee(this.workingEmployee).subscribe((str:string)=>{
+          window.alert("Changes successfuly recorded please re enter on this profile to retrive the new information");
+        })
       })
     })
     this.editingNames = false;
@@ -1943,6 +1948,9 @@ export class HrprofilesComponent implements OnInit {
     this.editingBirthday = false;
     this.editingGender = false;
     this.editingReporter = false;
+    this.editingProfesion = false;
+    this.editingCivil = false;
+    this.editingNat = false;
   }
 
   changeDistrit() {
@@ -2483,7 +2491,13 @@ export class HrprofilesComponent implements OnInit {
 
   cancelTransfer(){
     this.apiService.revertTransfer({id:this.workingEmployee.idemployees}).subscribe((str=>{
-
+      this.cancelView();
     }))
+  }
+
+  revertTerm(){
+    this.apiService.revertTermination({idhr_processes:this.actualTerm.id_process}).subscribe((str:string)=>{
+      this.cancelView();
+    })
   }
 }

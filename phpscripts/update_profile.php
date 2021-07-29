@@ -26,7 +26,7 @@ header('Access-Control-Allow-Headers: *');
 
 		$profiles = [];
 
-		$sql = "UPDATE `profiles` set `tittle` = '{$tittle}', `first_name` = '{$first_name}', `second_name` = '{$second_name}', `first_lastname` = '{$first_lastname}', `second_lastname` = '{$second_lastname}', `day_of_birth` = '{$day_of_birthday}', `nationality` = '{$nationality}', `marital_status` = '{$marital_status}', `dpi` = '{$dpi}', `nit` = '{$nit}', `iggs` = '{$iggs}', `irtra` = '{$irtra}', `status` = '{$status}', `gender` = '{$gender}' WHERE `idprofiles` = '$idprofiles';";
+		$sql = "UPDATE `profiles` set `tittle` = '{$tittle}', `first_name` = '{$first_name}', `second_name` = '{$second_name}', `first_lastname` = '{$first_lastname}', `second_lastname` = '{$second_lastname}', `day_of_birth` = '{$day_of_birthday}', `nationality` = '{$nationality}', `marital_status` = '{$marital_status}', `dpi` = '{$dpi}', `nit` = '{$nit}', `iggs` = '{$iggs}', `irtra` = '{$irtra}', `status` = '{$status}', `gender` = '{$gender}', `profesion` = '{$profesion}' WHERE `idprofiles` = '$idprofiles';";
 
 		if(mysqli_query($con,$sql)){
 			$id_profile = mysqli_insert_id($con);
