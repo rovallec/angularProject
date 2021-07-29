@@ -73,10 +73,14 @@ export class accounts {
     idaccounts: string;
     name: string;
     id_client: string;
+    correlative: string;
+    prefix: string;
     constructor() {
         this.idaccounts = null;
         this.name = null;
         this.id_client = null;
+        this.correlative = null;
+        this.prefix = null;
     }
 }
 

@@ -9,13 +9,14 @@ import { users } from '../users';
 import { isNullOrUndefined, isUndefined, isNull } from 'util';
 import { process } from '../process';
 import { Time, TranslationWidth } from '@angular/common';
-import { isEmptyExpression, ThrowStmt } from '@angular/compiler';
+import { AotCompiler, isEmptyExpression, ThrowStmt } from '@angular/compiler';
 import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { time } from 'console';
 import { parse } from 'querystring';
 import { Z_STREAM_END } from 'zlib';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { exit } from 'process';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -1403,7 +1404,7 @@ export class HrprofilesComponent implements OnInit {
         case 'Transfer':
           this.apiService.getSearchEmployees({ filter: 'neasol_id', value: this.actuallProc.idprocesses, dp: this.authUser.getAuthusr().department, rol: this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
             if (isNullOrUndefined(emp)) {
-              this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId }).subscribe((str: string) => {
+              this.apiService.insertTransfer({ employee: this.activeEmp, account: this.accId, client_id: this.transfer_newCode }).subscribe((str: string) => {
                 this.apiService.getPeriods().subscribe((p: periods[]) => {
                   this.apiService.getPaymentMethods(this.workingEmployee).subscribe((p_methods: payment_methods[]) => {
                     let py: payments = new payments;
@@ -1794,7 +1795,38 @@ export class HrprofilesComponent implements OnInit {
   }
 
   addDescription() {
+    let transfer: accounts = new accounts;
     this.actuallProc.descritpion = this.accId;
+    this.allAccounts.forEach(element => {
+      if (element.idaccounts == this.accId) {
+        transfer = element;
+      }
+    })
+
+    this.transfer_newCode = this.getNewCode(transfer);
+  }
+
+  getNewCode(transfer: accounts): string {
+    const code = 8;
+    let corrlength: number = 0;
+    try {
+       corrlength = code - transfer.prefix.length;  
+    } catch (error) {
+      corrlength = code;
+    }
+    
+    let mask: string = '';
+    try {
+      mask = transfer.correlative;
+    } catch (error) {
+      mask = '';
+    }
+    while (mask.length < corrlength) {
+      mask = '0' + mask;
+    }
+
+    mask = transfer.prefix + mask;
+    return mask;
   }
 
   getIrtra() {

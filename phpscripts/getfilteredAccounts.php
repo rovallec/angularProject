@@ -22,6 +22,8 @@ if($result2 = mysqli_query($con, $sql1)){
         while($row = mysqli_fetch_assoc($request)){
             $res[$i]['idaccounts'] = $row['idaccounts'];
             $res[$i]['name'] = $row['name'];
+            $res[$i]['correlative'] = $row['correlative'];
+            $res[$i]['prefix'] = $row['prefix'];
             $i++;
         }
         echo(json_encode($res));
