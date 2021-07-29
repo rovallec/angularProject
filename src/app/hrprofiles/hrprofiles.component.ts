@@ -1951,6 +1951,7 @@ export class HrprofilesComponent implements OnInit {
     this.editingProfesion = false;
     this.editingCivil = false;
     this.editingNat = false;
+    this.editingJob = false;
   }
 
   changeDistrit() {

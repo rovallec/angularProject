@@ -15,10 +15,17 @@ $sql = "UPDATE hr_processes
 			employees.termination_date = NULL
 		WHERE idhr_processes = $idhr_process;";
 
+$sql2 = "DELETE FROM terminations WHERE id_process = $idhr_process";
+
 if(mysqli_query($con,$sql)){
-	http_response_code(200);
+	if(mysqli_query($con,$sql2)){
+		http_response_code(200);
+	}else{
+		http_response_code(400);
+		echo($sql2);		
+	}
 }else{
-  http_response_code(400);
+  	http_response_code(400);
 	echo($sql);
 }
 ?>
