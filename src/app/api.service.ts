@@ -902,6 +902,10 @@ sendMailTransfer(any:any){
 checkContract(any:any){
   return this.httpClient.post<contractCheck>(`${this.PHP_API_SERVER}/phpscripts/getCheckcontract.php`, any);
 }
+
+revertTransfer(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertCancelTransfer.php`, any);
+}
 }
 
 

@@ -2369,4 +2369,10 @@ export class HrprofilesComponent implements OnInit {
     })
     return rtn;
   }
+
+  cancelTransfer(){
+    this.apiService.revertTransfer({id:this.workingEmployee.idemployees}).subscribe((str=>{
+      
+    }))
+  }
 }

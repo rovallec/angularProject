@@ -1747,6 +1747,13 @@
                                     class="form-control">
                             </div>                            
                         </div>
+                        <div class="form-row col-md-12" *ngIf="viewRecProd">
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-4">
+                                <button class="form-control" (click)="cancelTransfer()">Revert</button>
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                        </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cance</button>

@@ -33,7 +33,7 @@ if($result = mysqli_query($con, $sql))
 			UPPER(employees.job) AS `job`, UPPER(accounts.name) AS `from`, UPPER(acc.name) AS `to`, hr_processes.date, UPPER(users.user_name) AS `user_name` FROM hr_processes
 				INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
 				INNER JOIN accounts ON accounts.idaccounts = SUBSTRING_INDEX(hr_processes.notes, '|', 1)
-				INNER JOIN accounts AS acc ON acc.idaccounts = SUBSTRING(hr_processes.notes,LENGTH(SUBSTRING_INDEX(hr_processes.notes,'|',1)) - LENGTH(SUBSTRING_INDEX(hr_processes.notes,'|',2)) + 1)
+				INNER JOIN accounts AS acc ON acc.idaccounts = SUBSTRING_INDEX(SUBSTRING(hr_processes.notes,LENGTH(SUBSTRING_INDEX(hr_processes.notes,'|',1)) - LENGTH(SUBSTRING_INDEX(hr_processes.notes,'|',3)) + 1),'|',1)
 				INNER JOIN hires ON hires.idhires = employees.id_hire
 				INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
                 INNER JOIN users ON users.idUser = employees.reporter
