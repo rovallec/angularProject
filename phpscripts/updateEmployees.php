@@ -28,7 +28,7 @@ if($platform != 'WAH' && $platform != 'ON SITE'){
 }else{
 		$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `platform` = '$platform', society = '$society' WHERE `id_profile` = '$id';";
 }
-
+echo($sql);
 if($result = mysqli_query($con, $sql))
 {
 	http_response_code(200);
