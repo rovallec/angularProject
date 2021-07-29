@@ -731,6 +731,8 @@ export class HrprofilesComponent implements OnInit {
   }
 
   setLeave() {
+    this.activeLeave = new leaves;
+    this.leaveDates = [];
     this.activeLeave.date = this.todayDate;
     this.activeLeave.id_department = '5';
     this.activeLeave.id_employee = this.activeEmp;
@@ -742,26 +744,19 @@ export class HrprofilesComponent implements OnInit {
     this.showLeave = false;
   }
 
-  editLeaves() {
-    
-  }
-
-  printValue() {
-    
-  }
-
   onChange(ld: leavesAction, event) {
     this.leaveDates[this.leaveDates.indexOf(ld)].action = event.target.value;
   }
 
-  fillLeave() {
+  fillLeave(): leaves {
     let leave = new leaves;
     leave.id_user = this.activeLeave.id_user;
     leave.id_employee = this.workingEmployee.idemployees;
     leave.id_type = '5';
     leave.id_department = this.activeLeave.id_department;
     leave.date = this.activeLeave.date;
-    leave.notes = this.activeLeave.notes;
+    leave.notes = this.activeLeave.notes + '|| Created by split start: ' + 
+                  this.activeLeave.start + ' end: ' + this.activeLeave.end + '.';
     leave.status = 'PENDING';
     leave.motive = this.activeLeave.motive;
     leave.approved_by = this.activeLeave.approved_by;
@@ -769,6 +764,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   saveActionLeaves() {
+    let note: string = '';
     let leave: leaves = this.activeLeave;
     let leavesNew: leaves[] = [];
     let start: string = '';
@@ -778,10 +774,12 @@ export class HrprofilesComponent implements OnInit {
  
     this.activeLeave.id_type = '5';
     this.activeLeave.id_employee = this.workingEmployee.idemployees;
-
+    note = leave.notes;
+    leave.notes = note + ' | Dismissed by split.';
     this.apiService.updateLeaves(leave).subscribe((str: string) => {
       start = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
       leave.start = start;
+      leave.notes = note;
       leave = this.fillLeave();
       for (let i = 0; i < this.leaveDates.length; i++) {
         let ld: leavesAction = this.leaveDates[i];
@@ -800,49 +798,29 @@ export class HrprofilesComponent implements OnInit {
         } else {
           f = this.addDays(f, -1);
           end = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
-          leave.end = end;
-
-          leavesNew.push(leave);
+          if (!isNullOrUndefined(leave.start)) {
+            leave.end = end;
+            leavesNew.push(leave);
+          } 
           console.log(leave);
           leave = this.fillLeave();
           f = this.addDays(f, 1);
         }
+        end = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
         f = this.addDays(f, 1);
         if ((i==this.leaveDates.length-1) && (ld.action=='PENDING')) {
+          leave.end = end;
           leavesNew.push(leave);
           console.log('Todos los Leaves: ');
           console.log(leavesNew);
         }
       }
 
-/*      let leave: leaves = new leaves;
-      leave = this.fillLeave();
-      leave.start = this.leaveDates[0].dates;
-      leave.end = this.leaveDates[0].dates;
-
-      this.leaveDates.forEach(element => {
-        
-        leave.id_type = '5';
-        leave.id_employee = this.workingEmployee.idemployees;
-        leave.status = 'PENDING';
-
-        if(element.action == 'PENDING'){
-          leave.end = element.dates;          
-        }else{
-          leavesNew.push(leave);
-          console.log(leave);
-          leave = this.fillLeave();
-          leave.start = element.dates;
-          leave.end = element.dates;         
-        }
-      })
-*/
       leavesNew.forEach(ln => {        
-        /*
         this.apiService.insertLeaves(ln).subscribe((_str: string) => {
           this.complete_adjustment = true;
           this.getLeaves();
-        })*/
+        })
       })
       window.alert("Change successfuly recorded");
       this.cancelView();
@@ -861,6 +839,9 @@ export class HrprofilesComponent implements OnInit {
     let start: number = 0;
     let end: number = 0;
     let f: Date = new Date(leave.start);
+
+    let days: number = new Date(leave.end).getTime() - new Date(leave.start).getTime();
+    days = days / (1000*3600*24);
     
     start = new Date(leave.start).getDate();
     end = new Date(leave.end).getDate();
@@ -870,9 +851,10 @@ export class HrprofilesComponent implements OnInit {
     this.showLeave = true;
     this.leaveDates = [];
 
-    for (let i = start; i <= end; i++) {
+    for (let i = 0; i <= days; i++) {
       let ld: leavesAction = new leavesAction;
-      f = this.addDays(f, 1);
+      f = this.addDays(f, 1); 
+
       ld.dates = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
       ld.action = 'PENDING';
       this.leaveDates.push(ld);
@@ -1272,7 +1254,6 @@ export class HrprofilesComponent implements OnInit {
 
   setToDate(str: string) {
     this.checkDate2 = str;
-
   }
 
   setValidFrom(str: string) {
@@ -1621,7 +1602,6 @@ export class HrprofilesComponent implements OnInit {
 
   setLetterDate(str: string) {
     this.actualLetters.emition_date = str;
-
   }
 
   getLetter() {
@@ -1863,7 +1843,6 @@ export class HrprofilesComponent implements OnInit {
   }
 
   change_time(any: any) {
-
     let str_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.start.split(":")[0]), parseFloat(this.attAdjudjment.start.split(":")[1].split(" ")[0]));
     let end_split: Date = new Date(2020, 1, 1, parseFloat(this.attAdjudjment.end.split(":")[0]), parseFloat(this.attAdjudjment.end.split(":")[1].split(" ")[0]));
 
@@ -2444,6 +2423,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   updateLeave() {
+    this.activeLeave.notes = this.activeLeave.notes + ' | DISMISSED By attendance overlap';
     this.apiService.updateLeaves(this.activeLeave).subscribe((str: string) => {
       window.alert("Change successfuly recorded");
       this.cancelView();

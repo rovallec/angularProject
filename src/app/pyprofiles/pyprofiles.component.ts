@@ -512,6 +512,7 @@ export class PyprofilesComponent implements OnInit {
 
   setState_leave(leave: leaves) {
     if (leave.status == 'DISMISSED') {
+      leave.notes = leave.notes + ' | DISMISSED By attendance overlap';
       this.apiService.updateLeaves(leave).subscribe((str: string) => {
 
       });
