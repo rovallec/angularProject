@@ -42,7 +42,7 @@
                         <label>Supervisor:</label><i class="fas fa-edit" style="margin-left:2px"
                         (click)="editReporter()" *ngIf="!editingReporter"></i><i class="fas fa-edit" style="margin-left:2px"
                         (click)="closeEditNames()" *ngIf="editingReporter"></i>
-                        <select class="form-control" [disabled]='true'
+                        <select class="form-control" [disabled]='!editingReporter'
                             [(ngModel)]="workingEmployee.reporter">
                             <option *ngFor="let app of approvals">{{app.user_name}}
                             </option>

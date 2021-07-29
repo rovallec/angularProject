@@ -1159,7 +1159,7 @@ export class HrprofilesComponent implements OnInit {
     let Abort: AbortController = new AbortController;
 
     if(this.actuallProc.name == 'Transfer'){
-      this.actuallProc.descritpion = this.actuallProc.descritpion + "|" + this.workingEmployee.id_account;
+      this.actuallProc.descritpion = this.actuallProc.descritpion + "|" + this.workingEmployee.account;
     }
 
     this.apiService.insertProc(this.actuallProc).subscribe((str: string) => {
@@ -1813,14 +1813,17 @@ export class HrprofilesComponent implements OnInit {
       this.profile[0].city = this.departamento;
     }
     this.profile[0].gender = this.workingEmployee.gender;
+    this.workingEmployee.platform = 'explicit_change';
+    this.workingEmployee.state = 'reporter';
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
-      this.workingEmployee.platform = 'explicit_change';
-      this.workingEmployee.state = 'reporter';
       this.approvals.forEach(element=>{
         if(element.user_name == this.workingEmployee.reporter){
           this.workingEmployee.society = element.iduser;
         }
       })
+      console.log(
+        this.workingEmployee.platform + "|" + this.workingEmployee.id_profile + "|" + this.workingEmployee.state + "|" + this.workingEmployee.society
+      )
       this.apiService.updateEmployee(this.workingEmployee).subscribe((str:string)=>{
         window.alert("Changes successfuly recorded please re enter on this profile to retrive the new information");
       })

@@ -13,23 +13,21 @@ $society = ($request->society);
 
 if($platform != 'WAH' && $platform != 'ON SITE'){
 	if($platform != 'nearsol_id'){
-		$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `client_id` = '$platform', `state` = '$status', society = '$society' WHERE `id_profile` = '$id';";
-	}else{
 		if($platform == 'explicit_change'){
 			$sql = "UPDATE `employees` INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `$status` = '$society' WHERE `id_profile` = $id;";
 		}else{
-			if($status == 'society'){
+		$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `client_id` = '$platform', `state` = '$status', society = '$society' WHERE `id_profile` = '$id';";
+		}
+	}else{
+	if($status == 'society'){
 				$sql = "UPDATE `employees` INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `society` = '$society' WHERE `id_profile` = $id;";
 			}else{
 				$sql = "UPDATE `employees` INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `nearsol_id` = '$society' WHERE `id_profile` = $id;";
-			}
 		}		
 	}
 }else{
 		$sql = "UPDATE `employees` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` SET `platform` = '$platform', society = '$society' WHERE `id_profile` = '$id';";
 }
-
-
 
 if($result = mysqli_query($con, $sql))
 {
