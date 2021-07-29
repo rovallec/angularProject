@@ -8,7 +8,7 @@ $request = json_decode($postdata);
 
 $notes = ($request->notes);
 $date = date('Y-m-d');
-$sql = "UPDATE hr_processes SET `notes` = CONCAT(notes, ' | REVERTED BY $notes AT ', now());"
+$sql = "UPDATE hr_processes SET `notes` = CONCAT(notes, ' | REVERTED BY $notes AT ', now());";
 
 if(mysqli_query($con,$sql)){
 	http_response_code(200);
