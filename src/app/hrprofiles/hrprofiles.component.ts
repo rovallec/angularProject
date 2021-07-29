@@ -2504,8 +2504,13 @@ export class HrprofilesComponent implements OnInit {
 
   revertAdjustment(){
     this.attAdjudjment.notes = this.authUser.getAuthusr().user_name;
+    this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
+    this.attAdjudjment.start = '12:00';
+    this.attAdjudjment.end = '12:00';
+    this.attAdjudjment.amount = (Number(this.attAdjudjment.amount) * - 1).toFixed(2);
+    this.attAdjudjment.time_before = this.attAdjudjment.time_after;
+    this.attAdjudjment.time_after = (Number(this.attAdjudjment.time_after) + Number(this.attAdjudjment.amount)).toFixed(2);
     this.apiService.revertJustification(this.attAdjudjment).subscribe((str:string)=>{
-      this.attAdjudjment.amount = (Number(this.attAdjudjment.amount) * - 1).toFixed(2);
       this.attAdjudjment.notes = 'Reverted from ' + this.attAdjudjment.id_process + ' created at ' + this.attAdjudjment.date;
       this.insertAdjustment();
     })
