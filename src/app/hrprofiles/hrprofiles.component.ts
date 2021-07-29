@@ -1821,9 +1821,6 @@ export class HrprofilesComponent implements OnInit {
           this.workingEmployee.society = element.iduser;
         }
       })
-      console.log(
-        this.workingEmployee.platform + "|" + this.workingEmployee.id_profile + "|" + this.workingEmployee.state + "|" + this.workingEmployee.society
-      )
       this.apiService.updateEmployee(this.workingEmployee).subscribe((str:string)=>{
         window.alert("Changes successfuly recorded please re enter on this profile to retrive the new information");
       })
