@@ -912,6 +912,10 @@ revertTermination(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertCancelTerm.php`, any);
 }
 
+revertJustification(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertCancelAdjustment.php`, any);
+}
+
 }
 
 

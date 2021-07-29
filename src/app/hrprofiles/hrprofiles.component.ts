@@ -2501,4 +2501,13 @@ export class HrprofilesComponent implements OnInit {
       this.cancelView();
     })
   }
+
+  revertAdjustment(){
+    this.attAdjudjment.notes = this.authUser.getAuthusr().user_name;
+    this.apiService.revertJustification(this.attAdjudjment).subscribe((str:string)=>{
+      this.attAdjudjment.amount = (Number(this.attAdjudjment.amount) * - 1).toFixed(2);
+      this.attAdjudjment.notes = 'Reverted from ' + this.attAdjudjment.id_process + ' created at ' + this.attAdjudjment.date;
+      this.insertAdjustment();
+    })
+  }
 }
