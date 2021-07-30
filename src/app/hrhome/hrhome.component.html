@@ -163,7 +163,14 @@
                                                         <option>WAH</option>
                                                     </select>
                                                 </td>
-                                                <td *ngIf="makeEmployee"><i class="fas fa-file-contract" (click)="makeContracts(emp)"></i></td>
+                                                <td *ngIf="makeEmployee">
+                                                    <div class="d-flex justify-content-center">
+                                                        <div class="d-flex justify-content-between" style="width:35px;">
+                                                            <i class="fas fa-file-contract" (click)="makeContracts(emp)"></i>
+                                                            <i class="fas fa-file-download" (click)="downloadContract(emp)"></i>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                         </tr>
                                     </tbody>
                                 </table>
