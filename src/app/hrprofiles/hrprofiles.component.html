@@ -2325,9 +2325,11 @@
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
-                                        <label>Access Card</label>
+                                        <label>Access Card</label><i class="fas fa-edit" style="margin-left:2px"
+                                        (click)="editAccessCard()" *ngIf="!editingAccessCard"></i><i class="fas fa-edit" style="margin-left:2px"
+                                        (click)="updateTermination()" *ngIf="editingAccessCard"></i>
                                         <select class="form-control" [(ngModel)]="actualTerm.access_card"
-                                            [disabled]="viewRecProd">
+                                            [disabled]="viewRecProd || editingAccessCard">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
@@ -2343,9 +2345,11 @@
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
-                                        <label>Headsets</label>
+                                        <label>Headsets</label><i class="fas fa-edit" style="margin-left:2px"
+                                        (click)="editHeadsets()" *ngIf="!editingHeadsets"></i><i class="fas fa-edit" style="margin-left:2px"
+                                        (click)="updateTermination()" *ngIf="editingHeadsets"></i>
                                         <select class="form-control" [(ngModel)]="actualTerm.headsets"
-                                            [disabled]="viewRecProd">
+                                            [disabled]="viewRecProd || editingHeadsets">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>

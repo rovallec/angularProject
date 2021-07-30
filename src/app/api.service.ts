@@ -920,6 +920,9 @@ updateSuspensionsDays(dp:disciplinary_processes){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateSuspension.php`, dp);
 }
 
+updateTermination(term:terminations){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateTerminations.php`, term);
+}
 }
 
 
