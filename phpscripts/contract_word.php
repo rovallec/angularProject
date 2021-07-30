@@ -2,6 +2,7 @@
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: *');
     require 'database.php';
+    require 'htm_to_doc.php';
     include_once 'HtmlToDoc.class.php';
     $htd = new HTML_TO_DOC();
 
