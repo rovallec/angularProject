@@ -2571,6 +2571,8 @@ export class HrprofilesComponent implements OnInit {
 
   updateTermination(){
     this.apiService.updateTermination(this.actualTerm).subscribe((str:string)=>{
+      this.editingHeadsets = false;
+      this.editingAccessCard = false;
       window.alert("Record Successfully Updated");
     })
   }

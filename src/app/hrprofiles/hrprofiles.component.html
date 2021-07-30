@@ -2329,7 +2329,7 @@
                                         (click)="editAccessCard()" *ngIf="!editingAccessCard"></i><i class="fas fa-edit" style="margin-left:2px"
                                         (click)="updateTermination()" *ngIf="editingAccessCard"></i>
                                         <select class="form-control" [(ngModel)]="actualTerm.access_card"
-                                            [disabled]="viewRecProd || editingAccessCard">
+                                            [disabled]="viewRecProd && !editingAccessCard">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
@@ -2349,7 +2349,7 @@
                                         (click)="editHeadsets()" *ngIf="!editingHeadsets"></i><i class="fas fa-edit" style="margin-left:2px"
                                         (click)="updateTermination()" *ngIf="editingHeadsets"></i>
                                         <select class="form-control" [(ngModel)]="actualTerm.headsets"
-                                            [disabled]="viewRecProd || editingHeadsets">
+                                            [disabled]="viewRecProd && !editingHeadsets">
                                             <option>YES</option>
                                             <option>NO</option>
                                         </select>
