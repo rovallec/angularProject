@@ -1795,6 +1795,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   addDescription() {
+    const length = 8;
     let transfer: accounts = new accounts;
     this.actuallProc.descritpion = this.accId;
     this.allAccounts.forEach(element => {
@@ -1803,32 +1804,9 @@ export class HrprofilesComponent implements OnInit {
       }
     })
 
-    this.transfer_newCode = this.getNewCode(transfer);
+    this.transfer_newCode = this.apiService.getCode(transfer.prefix, transfer.correlative, length);
   }
-
-  getNewCode(transfer: accounts): string {
-    const code = 8;
-    let corrlength: number = 0;
-    try {
-       corrlength = code - transfer.prefix.length;  
-    } catch (error) {
-      corrlength = code;
-    }
-    
-    let mask: string = '';
-    try {
-      mask = transfer.correlative;
-    } catch (error) {
-      mask = '';
-    }
-    while (mask.length < corrlength) {
-      mask = '0' + mask;
-    }
-
-    mask = transfer.prefix + mask;
-    return mask;
-  }
-
+  
   getIrtra() {
     let m: string;
     let f: string;

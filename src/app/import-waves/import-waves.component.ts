@@ -44,6 +44,7 @@ export class ImportWavesComponent implements OnInit {
   importEnd: boolean = false;
   fullprofiles: full_profiles[] = [];
   any: any = null;
+  code: string = ''; // nuevo código que se le asignará a los agentes.
 
   constructor(public apiServices: ApiService, public router: Router) { }
 
@@ -210,7 +211,12 @@ export class ImportWavesComponent implements OnInit {
   }
 
   setAccount(acc) {
+    let corr: string = '';
     this.selectedAccount = acc;
+    corr = this.selectedAccount.correlative.slice(0, this.selectedAccount.correlative.length-2);
+    corr = (Number(corr) + 1).toString();
+    this.code = this.apiServices.getCode(this.selectedAccount.prefix, corr, 6);
+    this.waves.prefix = this.code;
     // set payments
   }
 
@@ -245,6 +251,15 @@ export class ImportWavesComponent implements OnInit {
     Adata = Adata.replace(' ', '');
     Adata = Adata.replace('_', '');
     Adata = Adata.replace('.', '');
+    return Adata;
+  }
+
+  replazeZone(Adata: string): string{
+    Adata = String(Adata).toUpperCase().trim();
+    Adata = Adata.replace('zone', '');
+    Adata = Adata.replace('zona', '');
+    Adata = Adata.replace(':', '');
+    Adata = Adata.replace(' ', '');
     return Adata;
   }
 
@@ -295,7 +310,7 @@ export class ImportWavesComponent implements OnInit {
       fileReader.onload = (e) => {
         if (!this.completed) {
           this.arrayBuffer = fileReader.result;
-          let num: string = '';
+          let num: string = '1';
           var data = new Uint8Array(this.arrayBuffer);
           var arr = new Array();
           for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
@@ -362,7 +377,7 @@ export class ImportWavesComponent implements OnInit {
             profilef.contact_detail.primary_phone = this.corrigeDatos(this.validateEmptyStr(element['primary_phone']));
             profilef.contact_detail.secondary_phone = this.corrigeDatos(this.validateEmptyStr(element['secondary_phone']));
             address = this.validateEmptyStr(element['first line']) + ', ' + this.validateEmptyStr(element['district'])
-                      + ', Zone: ' + this.validateEmptyStr(element['zone']);
+                      + ', Zona: ' + this.replazeZone(this.validateEmptyStr(element['zone']));
             profilef.contact_detail.address = address;
             profilef.contact_detail.city = this.validateEmptyStr(element['city']);
             profilef.contact_detail.email = this.validateEmptyStr(element['email']);
