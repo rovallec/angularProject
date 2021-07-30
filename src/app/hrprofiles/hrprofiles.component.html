@@ -942,7 +942,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Day 3:</label>
                                     <input type="date" (change)="pushDay3($event.target.value)" class="form-control"
-                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED')">
+                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_3"
                                         *ngIf="!editingSuspension && (activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE' || activeRequest.status === 'COMPLETED')">
