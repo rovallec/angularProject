@@ -18,6 +18,7 @@ $sql = "UPDATE `suspensions` SET `day_1`='$day_1', `day_2`='$day_2', `day_3`='$d
 if(mysqli_query($con, $sql)){
 	http_response_code(200);
 }else{
+	echo($sql);
 	http_response_code(400);
 }
 ?>
