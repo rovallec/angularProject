@@ -110,8 +110,8 @@ class HTML_TO_DOC
             font-family:"Verdana"; 
             mso-fareast-font-family:"Verdana";} 
         @page Section1 
-            {size:8.5in 11.0in; 
-            margin:1.0in 1.25in 1.0in 1.25in; 
+            {size:8.5in 14.0in; 
+            margin:0.5in 0.5in 0.5in 0.5in; 
             mso-header-margin:.5in; 
             mso-footer-margin:.5in; 
             mso-paper-source:0;} 
