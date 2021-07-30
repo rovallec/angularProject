@@ -13,7 +13,7 @@ $day_2 = ($request->day_2);
 $day_3 = ($request->day_3);
 $day_4 = ($request->day_4);
 
-$sql = "UPDATE `suspensions` SET `day_1`='$day_1', `day_2`='$day_2', `day_3`='$day_3', `day_4`='$day_4' WHERE `id_disciplinary_process`='{$id}' LIMIT 1";
+$sql = "UPDATE `suspensions` SET `day_1`=$day_1, `day_2`=$day_2, `day_3`=$day_3, `day_4`=$day_4 WHERE `id_disciplinary_process`='{$id}';";
 
 if(mysqli_query($con, $sql)){
 	http_response_code(200);
