@@ -165,7 +165,7 @@
                                     <td style='width:35%'>
                                         <table style='width:100%'>
                                             <tr style='height:80px'>
-                                            <td><img src='http://172.18.2.45/assets/nSalazar.png' style='width:100%; height:75px'></td>
+                                            <td><img style='width:100%; height:75px'></td>
                                             </tr>
                                             <tr>
                                                 <td style='border-top:2px solid black;font-size:12px;text-align:center'>NANCY LUCRECIA SALAZAR ESCOBAR</td>
