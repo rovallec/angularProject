@@ -151,6 +151,7 @@ export class HrprofilesComponent implements OnInit {
   editingCivil:boolean = false;
   editingNat:boolean = false;
   editingReporter:boolean = false;
+  editingSuspension:boolean = false;
 
   selectedReporter:string = null;
 
@@ -1925,6 +1926,10 @@ export class HrprofilesComponent implements OnInit {
   editReporter(){
     this.editingReporter = true;
   }
+
+  editSuspension(){
+    this.editingSuspension = true;
+  }
   
 
   closeEditNames() {
@@ -2523,6 +2528,13 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.revertJustification(this.attAdjudjment).subscribe((str:string)=>{
       this.attAdjudjment.notes = 'Reverted from ' + this.attAdjudjment.id_process + ' created at ' + this.attAdjudjment.date;
       this.insertAdjustment();
+    })
+  }
+
+  closeSuspension(){
+    this.apiService.updateSuspensionsDays(this.activeRequest).subscribe((str:string)=>{
+      this.editingSuspension = false;
+      this.cancelView();
     })
   }
 }

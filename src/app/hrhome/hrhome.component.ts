@@ -28,7 +28,7 @@ export class HrhomeComponent implements OnInit {
 
   allEmployees: employees[] = [new employees];
   allProcesses: hrProcess[] = [new hrProcess];
-  actualContractReview:contractCheck = new contractCheck;
+  actualContractReview: contractCheck = new contractCheck;
 
   weekdays: string[] = [
     "Sunday",
@@ -49,6 +49,8 @@ export class HrhomeComponent implements OnInit {
   stringDate: string = new Date().getFullYear() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + new Date().getDate().toString().padStart(2, "0");
 
   weekday: string;
+
+  word: boolean = false;
 
   constructor(private authService: AuthServiceService, private apiService: ApiService, private route: Router) { }
 
@@ -89,7 +91,7 @@ export class HrhomeComponent implements OnInit {
 
   gotoProfileP(proc: hrProcess) {
     let emplo: employees[] = [new employees];
-    this.apiService.getSearchEmployees({ filter: 'idemployees', value: proc.id_employee, dp: this.authService.getAuthusr().department, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ filter: 'idemployees', value: proc.id_employee, dp: this.authService.getAuthusr().department, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
       emplo = emp;
       this.route.navigate(['./hrprofiles', emplo[0].id_profile]);
     })
@@ -259,7 +261,7 @@ export class HrhomeComponent implements OnInit {
   }
 
   searchEmployee() {
-    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: this.authService.getAuthusr().department, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: this.authService.getAuthusr().department, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
       this.allEmployees = emp;
     });
     this.searching = true;
@@ -281,17 +283,27 @@ export class HrhomeComponent implements OnInit {
       this.apiService.updateEmployee(employee).subscribe((str: string) => {
       })
     }
-    if (this.contract_type == 'Default') {
-      window.open("http://172.18.2.45/phpscripts/contract.php?id=" + emp.idemployees, "_blank");
+    if (this.word) {
+      window.open("http://172.18.2.45/phpscripts/contract_word.php?id=" + emp.idemployees, "_blank");
     } else {
-      window.open("http://172.18.2.45/phpscripts/staffContract.php?id=" + emp.idemployees + "&other=" + this.bonusHire, "_blank");
+      if (this.contract_type == 'Default') {
+        window.open("http://172.18.2.45/phpscripts/contract.php?id=" + emp.idemployees, "_blank");
+      } else {
+        window.open("http://172.18.2.45/phpscripts/staffContract.php?id=" + emp.idemployees + "&other=" + this.bonusHire, "_blank");
+      }
     }
+    this.word = false;
   }
 
 
-  setContractCheck(id_employee:string){
-    this.apiService.checkContract({id:id_employee}).subscribe((chk:contractCheck)=>{
+  setContractCheck(id_employee: string) {
+    this.apiService.checkContract({ id: id_employee }).subscribe((chk: contractCheck) => {
       this.actualContractReview = chk;
     })
+  }
+
+  downloadContract(emp:hires_template){
+    this.word = true;
+    this.makeContracts(emp);
   }
 }

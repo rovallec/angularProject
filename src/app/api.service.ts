@@ -963,6 +963,10 @@ revertJustification(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertCancelAdjustment.php`, any);
 }
 
+updateSuspensionsDays(dp:disciplinary_processes){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateSuspension.php`, dp);
+}
+
 }
 
 
