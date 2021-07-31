@@ -2084,3 +2084,35 @@ export class contractCheck{
         this.yr = null;        
     }
 }
+
+
+export class employeesByWaves {
+    id_profile: string;
+    idemployees: string;
+    id_account: string;
+    account: string;
+    job: string;
+    name: string;
+    day_of_birth: string;
+    client_id: string;
+    nearsol_id: string;
+    hiring_date: string;
+    state: string;
+    active: string;
+    action: string;
+    constructor(){
+        this.id_profile = null;
+        this.idemployees = null;
+        this.id_account = null;
+        this.account = null;
+        this.job = null;
+        this.name = null;
+        this.day_of_birth = null;
+        this.client_id = null;
+        this.nearsol_id = null;
+        this.hiring_date = null;
+        this.state = null;
+        this.active = null;
+        this.action = null;
+    }
+}

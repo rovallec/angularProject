@@ -40,6 +40,7 @@ import { VacationsRepComponent } from "./vacations-rep/vacations-rep.component";
 import { ItdashboardComponent } from './itdashboard/itdashboard.component';
 import { ItprofilesComponent } from './itprofiles/itprofiles.component';
 import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component';
+import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.component';
 
 const routes:Routes = [
   {
@@ -218,6 +219,11 @@ const routes:Routes = [
   {
     path:'paystubs',
     component:PaystubSendmailComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'wavemaintenance',
+    component:WaveMaintenanceComponent,
     canActivate:[AuthGuard]
   },
   {

@@ -1,0 +1,110 @@
+<div class="col-md-12 row">
+  <div class="col-md-2">
+    <div class="row" style="margin-top:25px">
+      <div class="d-flex justify-content-between mb-3 w-100">
+        <div class="p-2">
+          <button class="btn btn-outline-danger" title="Download Attendance" routerLink="/rehome">
+            <i class="fas fa-ban"></i>
+          </button>
+        </div>
+        <div class="p-2" *ngIf="showdiv">          
+        </div>
+        <div class="p-2" *ngIf="showdiv">          
+        </div>
+        <div class="p-2">
+          <button class="btn btn-outline-success" title="Save wave" (click)="saveWave()">
+            <i class="fas fa-save"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row p-2">
+      <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
+        <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
+      </select>
+    </div>
+    <div class="row p-2">
+      <div class="list-group w-100" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts" [tabindex]="acc.idaccounts"
+          [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}" style="cursor: pointer;"
+          (click)="setAccount(acc)">{{acc.name}}</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-10" style="margin-top: 25px;">
+    <div class="row col-md-12">
+      <div class="col-md-3">
+        <select class="form-control" [(ngModel)]="selectedWave" (change)="setWave(selectedWave)">
+          <option [value]="selectedWave.idwaves" selected>{{ selectedWave.name }}</option>
+          <option *ngFor="let wave of waves" [value]="wave.idwaves">{{wave.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <input type="text" class="form-control" readonly="true" value="Total hires: {{ selectedWave.max_recriut }}" 
+          style="background-color: aliceblue;" *ngIf="employees.length>0">
+      </div>
+      <div class="col-md-3">
+        <input type="text" class="form-control" readonly="true" value="Total active employees: {{ employees.length }}" 
+          style="background-color: aliceblue;" *ngIf="employees.length>0" >
+      </div>
+    </div>
+    <div class="row col-md-12 table-responsive-sm" style="margin-top: 25px;">
+      <table class="table table-hover table-ligth">
+        <thead class="text-center" style="font-weight: bold;">
+          <tr>
+            <td>
+              NAME
+            </td>
+            <td>
+              STATUS
+            </td>
+            <td>
+              JOB
+            </td>
+            <td>
+              BIRTHDAY
+            </td>
+            <td>
+              ACTION
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employees">
+            <td>
+              {{ employee.name }}
+            </td>
+            <td>
+              {{ employee.state }}
+            </td>
+            <td>
+              {{ employee.job }}
+            </td>
+            <td>
+              {{ employee.day_of_birth }}
+            </td>
+            <td>
+              <select class="form-select form-select-sm" [(ngModel)]="employee.action">
+                <option>IGNORE</option>
+                <option value="APPLY">APPLY</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot *ngIf="employees.length>0">
+          <tr>
+            <td colspan="4">
+              
+            </td>
+            <td>
+              <select class="form-select form-select-sm" [(ngModel)]="all" (change)="setAll(all)">
+                <option value="APPLY">APPLY ALL</option>
+                <option value="IGNORE">IGNORE ALL</option>
+              </select>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

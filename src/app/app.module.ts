@@ -46,7 +46,9 @@ import { VacationsRepComponent } from './vacations-rep/vacations-rep.component';
 import { OpsViewComponent } from './ops-view/ops-view.component';
 import { ItdashboardComponent } from './itdashboard/itdashboard.component';
 import { ItprofilesComponent } from './itprofiles/itprofiles.component';
-import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component'
+import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component';
+import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.component';
+
 
 @NgModule({
   declarations: [
@@ -88,7 +90,8 @@ import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.co
     OpsViewComponent,
     ItdashboardComponent,
     ItprofilesComponent,
-    PaystubSendmailComponent
+    PaystubSendmailComponent,
+    WaveMaintenanceComponent
   ],
   imports: [
     BrowserModule,
