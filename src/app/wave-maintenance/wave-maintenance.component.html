@@ -35,8 +35,7 @@
     <div class="row col-md-12">
       <div class="col-md-3">
         <select class="form-control" [(ngModel)]="selectedWave" (change)="setWave(selectedWave)">
-          <option [value]="selectedWave.idwaves" selected>{{ selectedWave.name }}</option>
-          <option *ngFor="let wave of waves" [value]="wave.idwaves">{{wave.name}}</option>
+          <option *ngFor="let wave of waves" [value]="wave" [tabindex]="wave.idwaves" >{{wave.name}}</option>
         </select>
       </div>
       <div class="col-md-3">

@@ -47,11 +47,13 @@ export class WaveMaintenanceComponent implements OnInit {
   }
 
   setAccount(acc) {
-    this.accounts.forEach(ac=>{
+    this.selectedAccount = acc;
+    /*this.accounts.forEach(ac=>{
       if (acc==ac.idaccounts) {
         this.selectedAccount = acc;
       }
     })
+    */
     
     this.apiServices.getWaves().subscribe((wave: waves_template[]) => {
       this.waves = [];
