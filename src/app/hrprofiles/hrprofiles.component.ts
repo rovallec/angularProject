@@ -152,6 +152,8 @@ export class HrprofilesComponent implements OnInit {
   editingNat:boolean = false;
   editingReporter:boolean = false;
   editingSuspension:boolean = false;
+  editingAccessCard:boolean = false;
+  editingHeadsets:boolean = false;
 
   selectedReporter:string = null;
 
@@ -529,12 +531,11 @@ export class HrprofilesComponent implements OnInit {
           chng.tk_exp = '0';
         }
       })
-      this.showAttAdjustments.forEach(at_adj=>{
+      adj.forEach(at_adj=>{
         this.showAttendences.forEach(att_show=>{
           if(att_show.date == at_adj.attendance_date && (at_adj.id_department == '5' || at_adj.id_department == '27')){
             att_show.igss = (Number(att_show.igss) + Number(at_adj.amount)).toFixed(2);
           }else if(att_show.date == at_adj.attendance_date && at_adj.id_department == '28'){
-            console.log(at_adj);
             att_show.tk_exp = (Number(att_show.tk_exp) + Number(at_adj.amount)).toFixed(2);
           }
         })
@@ -1930,6 +1931,14 @@ export class HrprofilesComponent implements OnInit {
   editSuspension(){
     this.editingSuspension = true;
   }
+
+  editAccessCard(){
+    this.editingAccessCard = true;
+  }
+
+  editHeadsets(){
+    this.editingHeadsets = true;
+  }
   
 
   closeEditNames() {
@@ -2535,6 +2544,14 @@ export class HrprofilesComponent implements OnInit {
     this.apiService.updateSuspensionsDays(this.activeRequest).subscribe((str:string)=>{
       this.editingSuspension = false;
       this.cancelView();
+    })
+  }
+
+  updateTermination(){
+    this.apiService.updateTermination(this.actualTerm).subscribe((str:string)=>{
+      this.editingHeadsets = false;
+      this.editingAccessCard = false;
+      window.alert("Record Successfully Updated");
     })
   }
 }

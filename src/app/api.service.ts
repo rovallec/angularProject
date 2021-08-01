@@ -971,6 +971,9 @@ getEmployeeByWave(wave:waves_template){
   return this.httpClient.post<employeesByWaves[]>(`${this.PHP_API_SERVER}/phpscripts/getEmployeeByWave.php`,wave);
 }
 
+updateTermination(term:terminations){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateTerminations.php`, term);
+}
 }
 
 
