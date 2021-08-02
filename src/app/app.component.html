@@ -110,12 +110,14 @@
           [ngClass]="{'act':selectedOption=='CLOSING'}" (click)="SetSel('CLOSING')" routerLink="/closing">CLOSING</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
-        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/wavemaintenance" style="color: white"
-          [ngClass]="{'act':selectedOption=='WAVEMANT'}" (click)="SetSel('WAVEMANT')">WAVE MAINTENANCE</a>
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/vacationsrep"
           style="color: white" [ngClass]="{'act':selectedOption=='VACATIONSREP'}" (click)="SetSel('VACATIONSREP')">VACATIONS REPORT</a>
           <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/paystubs"
           style="color: white" [ngClass]="{'act':selectedOption=='PYST'}" (click)="SetSel('PYST')">PAYSTUBS</a>
+      </li>
+      <li *ngIf="getAuth()" class="nav-item">
+        <a *ngIf="getSaved().department == '5'" class="nav-link" routerLink="/wavemaintenance" style="color: white"
+          [ngClass]="{'act':selectedOption=='WAVEMANT'}" (click)="SetSel('WAVEMANT')">WAVE MAINTENANCE</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
