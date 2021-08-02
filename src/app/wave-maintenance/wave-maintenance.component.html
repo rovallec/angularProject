@@ -3,16 +3,17 @@
     <div class="row" style="margin-top:25px">
       <div class="d-flex justify-content-between mb-3 w-100">
         <div class="p-2">
-          <button class="btn btn-outline-danger" title="Download Attendance" routerLink="/rehome">
+          <button class="btn btn-outline-danger" title="Ignore All" (click)="setAll('IGNORE')">
             <i class="fas fa-ban"></i>
           </button>
         </div>
-        <div class="p-2" *ngIf="showdiv">          
-        </div>
-        <div class="p-2" *ngIf="showdiv">          
+        <div class="p-2">
+          <button type="button" class="btn btn-outline-info" title="Check All" (click)="setAll('APPLY')">
+            <i class="fas fa-check-double"></i>
+          </button>
         </div>
         <div class="p-2">
-          <button class="btn btn-outline-success" title="Save wave" (click)="saveWave()">
+          <button class="btn btn-outline-success" title="Save Wave" data-toggle="modal" data-target="#advanceModal" data-placement="top">
             <i class="fas fa-save"></i>
           </button>
         </div>
@@ -34,17 +35,27 @@
   <div class="col-md-10" style="margin-top: 25px;">
     <div class="row col-md-12">
       <div class="col-md-3">
-        <select class="form-control" [(ngModel)]="selectedWave" (change)="setWave(selectedWave)">
-          <option *ngFor="let wave of waves" [value]="wave" [tabindex]="wave.idwaves" >{{wave.name}}</option>
+        <label>
+          Wave:
+        </label>
+        <select class="form-control" [(ngModel)]="selectedWave">
+          <option *ngFor="let wave of waves" [value]="wave" [tabindex]="wave.idwaves" (click)="setWave(wave)">
+            {{wave.name}}</option>
         </select>
       </div>
       <div class="col-md-3">
-        <input type="text" class="form-control" readonly="true" value="Total hires: {{ selectedWave.max_recriut }}" 
+        <label>
+          Hires:
+        </label>
+        <input type="text" class="form-control" readonly="true" value="{{ selectedWave.max_recriut }}"
           style="background-color: aliceblue;" *ngIf="employees.length>0">
       </div>
       <div class="col-md-3">
-        <input type="text" class="form-control" readonly="true" value="Total active employees: {{ employees.length }}" 
-          style="background-color: aliceblue;" *ngIf="employees.length>0" >
+        <label>
+          Active employees:
+        </label>
+        <input type="text" class="form-control" readonly="true" value="{{ employees.length }}"
+          style="background-color: aliceblue;" *ngIf="employees.length>0">
       </div>
     </div>
     <div class="row col-md-12 table-responsive-sm" style="margin-top: 25px;">
@@ -92,18 +103,128 @@
         </tbody>
         <tfoot *ngIf="employees.length>0">
           <tr>
-            <td colspan="4">
-              
-            </td>
-            <td>
-              <select class="form-select form-select-sm" [(ngModel)]="all" (change)="setAll(all)">
-                <option value="APPLY">APPLY ALL</option>
-                <option value="IGNORE">IGNORE ALL</option>
-              </select>
+            <td colspan="5">
+
             </td>
           </tr>
         </tfoot>
       </table>
+    </div>
+    <!--
+    <div class="row" style="margin-top:25px">
+      <div class="form-group col-md-2">
+        <button class="form-control button-del" data-toggle="modal" data-target="#advanceModal" data-placement="top"
+          title="Save">
+          Accept
+        </button>
+      </div>
+    </div>-->
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal modal-lg fade" id="advanceModal" tabindex="-1" role="dialog" aria-labelledby="advanceModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="advanceModalLabel" style="text-align: center;">
+          <b>
+            Rise
+          </b>
+        </h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group col-md-12">
+          <div class="form-row col-md-12">
+            <div class="form-gorup col-md-4">
+              <label>User:</label>
+              <input type="text" class="form-control" [(ngModel)]="actuallProc.user_name" [disabled]="true">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Status:</label>
+              <input type="text" class="form-control" [(ngModel)]="actuallProc.status" [disabled]="true">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Date:</label>
+              <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date" [disabled]="true">
+            </div>
+          </div>
+          <div class="form-row col-md-12">
+            <div class="form-group col-md-12">
+              <label>New Position:</label>
+              <input type="text" class="form-control" [(ngModel)]="actualRise.new_position">
+            </div>
+            <!--
+            <div class="form-group col-md-6">
+              <label>Old Position</label>
+              <input type="text" class="form-control" [(ngModel)]="actualRise.old_position" [disabled]="true">
+            </div>-->
+          </div>
+            <div class="form-row col-md-12">
+            <div class="form-group col-md-4">
+              <label>New Payment:</label>
+              <input type="text" class="form-control" [(ngModel)]="actualRise.new_salary">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Approved By:</label>
+              <select class="form-control" [(ngModel)]="actualRise.approved_by">
+                <option *ngFor="let app of approvals" [value]="app.iduser">{{app.user_name}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-4">
+              <label>Approved Date:</label>
+              <input type="text" class="form-control" [(ngModel)]="actualRise.approved_date"
+                [disabled]="true" *ngIf="viewRecProd">
+              <input type="date" class="form-control" (change)="setApprovalDate($event.target.value)"
+                *ngIf="!viewRecProd">
+            </div>
+          </div>
+          <div class="form-row col-md-12">
+            <div class="form-group col-md-12">
+              <label>Notes:</label>
+              <textarea class="form-control" width="100%" [(ngModel)]="actuallProc.descritpion"
+                [disabled]="viewRecProd"></textarea>
+            </div>
+          </div>
+          <div class="form-row col-md-12">
+            <div class="form-group col-md-4">
+              <label>Effectve Date:</label>
+              <input type="text" class="form-control" [(ngModel)]="actualRise.effective_date" *ngIf="viewRecProd"
+                [disabled]="true">
+              <input type="date" class="form-control" (change)="setEffectiveDate($event.target.value)"
+                *ngIf="!viewRecProd">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Trial Start:</label>
+              <input type="text" class="form-control" [(ngModel)]="actualRise.trial_start" *ngIf="viewRecProd"
+                [disabled]="true">
+              <input type="date" class="form-control" (change)="setTrialStart($event.target.value)"
+                *ngIf="!viewRecProd">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Trial End:</label>
+              <input type="text" class="form-control" [(ngModel)]="actualRise.trial_end" *ngIf="viewRecProd"
+                [disabled]="true">
+              <input type="date" class="form-control" (change)="setTrialEnd($event.target.value)" *ngIf="!viewRecProd">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-outline-primary" (click)="insertProc()" data-dismiss="modal">
+          Accept
+        </button>
+      </div>
     </div>
   </div>
 </div>
