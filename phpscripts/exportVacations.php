@@ -45,15 +45,13 @@ if($filter == 'explicit'){
         $sql = $sql . " AND employees.active = 1";
     }
 }
-echo($sql);
 
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         fputcsv($output, $row);
-        echo($sql);
     };
 }else{
-    echo($sql);
+    http_response_code(404);
 }
 fclose($output);
 ?>
