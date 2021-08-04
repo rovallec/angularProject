@@ -154,6 +154,10 @@ export class HrprofilesComponent implements OnInit {
   editingSuspension:boolean = false;
   editingAccessCard:boolean = false;
   editingHeadsets:boolean = false;
+  temp_day_1:string = null;
+  temp_day_2:string = null;
+  temp_day_3:string = null;
+  temp_day_4:string = null;
 
   selectedReporter:string = null;
 
@@ -1071,19 +1075,19 @@ export class HrprofilesComponent implements OnInit {
   }
 
   pushDay1(str: any) {
-    this.activeRequest.day_1 = "'" + str + "'";
+    this.activeRequest.day_1 = str;
   }
 
   pushDay2(str: any) {
-    this.activeRequest.day_2 = "'" + str + "'";
+    this.activeRequest.day_2 = str;
   }
 
   pushDay3(str: any) {
-    this.activeRequest.day_3 = "'" + str + "'";
+    this.activeRequest.day_3 = str;
   }
 
   pushDay4(str: any) {
-    this.activeRequest.day_4 = "'" + str + "'";
+    this.activeRequest.day_4 = str;
   }
 
   getBeneficiaries() {
