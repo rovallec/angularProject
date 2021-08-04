@@ -52,6 +52,14 @@ function removeCommas($avalue) {
   return $avalue;
 }
 
+function addQuotes($str){
+	if($str != 'NULL'){
+		return "'" . $str . "'";
+	}else{
+		return $str;
+	}
+}
+
 function getMonth($amonth){
   switch ((int)$amonth) {
     case 1:
