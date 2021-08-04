@@ -45,6 +45,7 @@ if($filter == 'explicit'){
         $sql = $sql . " AND employees.active = 1";
     }
 }
+echo($sql);
 
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
