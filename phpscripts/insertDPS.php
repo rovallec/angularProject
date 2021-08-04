@@ -32,10 +32,12 @@ if($day_3==''){
     $day_3 = 'null';
 }else{
     $day_3 = "'" . $day_3 . "'";
+}
 if($day_4==''){
     $day_4 = 'null';
 }else{
     $day_4 = "'" . $day_4 . "'";
+}
 
 $sql = "UPDATE `hr_processes` SET `status` = '$status' WHERE `idhr_processes` = '$id_process'";
 $sql2 = "INSERT INTO `disciplinary_processes` (`iddisciplinary_processes`,`id_request`,`type`,`cathegory`,`dp_grade`,`motive`,`imposition_date`,`legal_foundament`,`consequences`,`observations`) VALUES (null, '$idrequests', '$type', '$cathegory', '$dp_grade', '$motive', '$imposition_date', '$legal_foundament', '$consequences', '$observations');";
@@ -49,8 +51,6 @@ if(mysqli_query($con,$sql)){
             http_response_code(404);
             echo($sql4);
         }
-    }else{
-        echo($sql);
     }
 }
 ?>
