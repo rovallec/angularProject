@@ -49,6 +49,8 @@ if(mysqli_query($con,$sql)){
             http_response_code(404);
             echo($sql4);
         }
+    }else{
+        echo($sql);
     }
 }
 ?>
