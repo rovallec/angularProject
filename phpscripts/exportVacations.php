@@ -49,6 +49,7 @@ if($filter == 'explicit'){
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         fputcsv($output, $row);
+        echo($sql);
     };
 }else{
     http_response_code(404);
