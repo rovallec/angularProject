@@ -51,8 +51,8 @@ else {
 				  left join hr_processes hp3 on (hp2.id_employee = hp3.id_employee)
 				  left join vacations v4 on (hp3.idhr_processes = v4.id_process and v4.`date` <= v2.`date`)
 				  where hp2.id_type = 4 
-				  and v2.`action` = 'Take' 
-				  GROUP BY hp2.id_employee, v2.`date` and hp3.id_employee in($id_employee)
+				  and v2.`action` = 'Take' and hp3.id_employee in($id_employee)
+				  GROUP BY hp2.id_employee, v2.`date`
 	              ) v3 on (e.idemployees = v3.id_employee and v.`date` = v3.`date`)
       where v.`action` = 'Take'
       and e.idemployees in($id_employee) 
