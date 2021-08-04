@@ -78,7 +78,6 @@ else {
       };
     }else{
         http_response_code(404);
-        echo($sql);
     }
   //}
   fclose($output);
