@@ -31,7 +31,7 @@ if($result = mysqli_query($con, $sql))
 
 	$sql2 = "SELECT employees.idemployees, UPPER(profiles.first_name) AS `first_name`, UPPER(profiles.second_name) AS `second_name`, UPPER(profiles.first_lastname) AS `first_lastname`,
 			UPPER(profiles.second_lastname) AS `second_lastname`, hires.nearsol_id, employees.job, accounts.name AS `account_name`, UPPER(employees.society) AS `society`,
-			employees.hiring_date, terminations.valid_from, CONCAT(UPPER(terminations.reason), ' ', UPPER(terminations.motive)) AS `motive`, UPPER(terminations.reason) AS `reason`, UPPER(terminations.access_card) AS `access_card`,
+			employees.hiring_date, terminations.valid_from, UPPER(terminations.motive) AS `motive`, CONCAT(UPPER(terminations.reason), ' / ',UPPER(terminations.reason)) AS `reason`, UPPER(terminations.access_card) AS `access_card`,
 			UPPER(terminations.headsets) AS `headsets`, terminations.bank_check, COALESCE(`vac`.`count`,0) AS `vacations`, COALESCE(`insurance`.`insurance`, 'No Cuenta Con Beneficio') AS `insurance`,
 			employees.client_id, UPPER(users.user_name) AS `user_name`, terminations.period_to_pay, UPPER(`first_interview`.user_name) AS `recriuter`, UPPER(terminations.rehireable) AS `rehireable`,
 			UPPER(terminations.kind) AS `kind` FROM terminations
