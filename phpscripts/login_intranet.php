@@ -21,17 +21,14 @@ $authUser = [];
 $authUser['idusers'] = 'NULL';
 
 try {
-	function connect(){
-		$connect = mysqli_connect(db_host,db_user,db_password,db_name) or die(json_encode($authUser));
-		return $connect;
-	};
-	
-	$mysqlc = mysqli_connect(db_host,db_user,db_password,db_name)  or die(json_encode($authUser));
+	$mysqlc = mysqli_connect(db_host,db_user,db_password,db_name) or die(json_encode($authUser));
 
 	if (mysqli_connect_errno()) {
 		$authUser['idusers'] = 'NULL';
 	}else{
+		echo(mysqli_error($mysqlc));
 		if($mysqlc){
+			echo(mysqli_error($mysqlc));
 			$sql = "SELECT * FROM `users` where username = '{$usr}';";
 			if($result = $mysqlc->query($sql)){
 				while($row = mysqli_fetch_assoc($result)){
@@ -42,17 +39,24 @@ try {
 					$authUser['active'] = $row['active'];
 					$authUser['id_role'] = $row['id_role'];
 					$authUser['signature'] = $row['signature'];
+					$authUser['id_profile'] = $row['id_profile'];
+
 				};
-			}else{
+			} else {
 				$authUser['idusers'] = 'NULL';
+				echo("Error 0: <br>");
+				echo(mysqli_error($mysqlc));
 			};
-		}else{
+		} else {
 			$authUser['idusers'] = 'NULL';
+			echo("Error conn DB: <br>");
+			echo(mysqli_error($mysqlc));
 		}
 	}
 } catch (\Throwable $th) {
 		http_response_code(400);
 		$authUser['idusers'] = 'NULL';
+		echo(mysqli_error($mysqlc));
 }
 
 echo json_encode($authUser);

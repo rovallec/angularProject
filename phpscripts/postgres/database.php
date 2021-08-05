@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 	die();
 }
 
-define('db_host', 'localhost');
+define('db_host', '172.18.200.21');
 define('db_user','neadmin');
 define('db_password','N$4rsol.@dmin');
 define('db_name','minearsol');

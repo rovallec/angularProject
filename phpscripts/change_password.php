@@ -21,13 +21,21 @@ header('Access-Control-Allow-Headers: *');
 				if (mysqli_query($con, $sql3)) {
 					if (mysqli_query($con, $sql2)) {
 						echo(json_encode('changed'));
-					} else{
+					} else {
+						echo("Error 2: <br>");
 						echo mysqli_error($con);
 					}
+				} else {
+					echo("Error 3: <br>");
+					echo mysqli_error($con);
 				}
-			}else{			
+			} else {
+				echo("Error 0: <br>");
 				echo mysqli_error($con);
 			}
 		}
+	} else {
+		echo("Error 1: <br>");
+		echo mysqli_error($con);
 	}
 ?>
