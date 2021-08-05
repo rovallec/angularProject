@@ -24,19 +24,24 @@ $time = ($request->time);
 $comments = ($request->comments);
 $audience_status = ($request->audience_status);
 //Suspensions
-$day_1 = ($request->day_1);
+$day_1 = "'".($request->day_1)."'";
 $day_2 = ($request->day_2);
 $day_3 = ($request->day_3);
 $day_4 = ($request->day_4);
 if($day_2==''){
     $day_2 = 'null';
+}else{
+    $day_2 = "'" . $day_2 . "'";
 }
 if($day_3==''){
     $day_3 = 'null';
-}
+}else{
+    $day_3 = "'" . $day_3 . "'";
 if($day_4==''){
     $day_4 = 'null';
-}
+}else{
+    $day_4 = "'" . $day_4 . "'";
+
 $sql = "UPDATE `hr_processes` SET `status` = '$status' WHERE `idhr_processes` = '$id_process'";
 $sql2 = "INSERT INTO `disciplinary_processes` (`iddisciplinary_processes`,`id_request`,`type`,`cathegory`,`dp_grade`,`motive`,`imposition_date`,`legal_foundament`,`consequences`,`observations`) VALUES (null, '$idrequests', '$type', '$cathegory', '$dp_grade', '$motive', '$imposition_date', '$legal_foundament', '$consequences', '$observations');";
 if(mysqli_query($con,$sql)){
