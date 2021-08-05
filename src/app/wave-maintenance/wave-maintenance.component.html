@@ -48,14 +48,14 @@
           Hires:
         </label>
         <input type="text" class="form-control" readonly="true" value="{{ selectedWave.max_recriut }}"
-          style="background-color: aliceblue;" *ngIf="employees.length>0">
+          style="background-color: aliceblue;">
       </div>
       <div class="col-md-3">
         <label>
           Active employees:
         </label>
         <input type="text" class="form-control" readonly="true" value="{{ employees.length }}"
-          style="background-color: aliceblue;" *ngIf="employees.length>0">
+          style="background-color: aliceblue;">
       </div>
     </div>
     <div class="row col-md-12 table-responsive-sm" style="margin-top: 25px;">
@@ -125,9 +125,9 @@
 
 
 <!-- Modal -->
-<div class="modal modal-lg fade" id="advanceModal" tabindex="-1" role="dialog" aria-labelledby="advanceModalLabel"
+<div class="modal fade" id="advanceModal" tabindex="-1" role="dialog" aria-labelledby="advanceModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title" id="advanceModalLabel" style="text-align: center;">
