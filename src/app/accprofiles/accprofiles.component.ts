@@ -74,6 +74,8 @@ export class AccprofilesComponent implements OnInit {
   adv: advances_acc = new advances_acc;
   selected_detail: credits = new credits;
   hover: string = null;
+  years:string[] = [];
+  selectedYear:string = null;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -128,6 +130,20 @@ export class AccprofilesComponent implements OnInit {
       this.apiService.getPayments(peridos).subscribe((pym: payments[]) => {
         this.payments = pym;
         this.active_payment = pym[pym.length -1];
+        this.years = [];
+        pym.forEach(element=>{
+          let addthis:boolean = true;
+          let addYear = element.start.split("-")[0];
+          this.years.forEach(year=>{
+            if(year == addYear){
+              addthis = false;
+            }
+          })
+          if(addthis){
+            this.years.push(addYear);
+            this.selectedYear = this.years[0];
+          }
+        })
         this.setPayment();
       });
 
@@ -758,5 +774,20 @@ export class AccprofilesComponent implements OnInit {
         })
       })
     })
+  }
+
+  showPayments(){
+    let pys:payments[] = [];
+    this.payments.forEach(element=>{
+      if(element.start.split('-')[0] == this.selectedYear){
+        pys.push(element);
+      }
+    })
+    return pys;
+  }
+
+  clickSetPayment(py:payments){
+    this.active_payment = py;
+    this.setPayment();
   }
 }

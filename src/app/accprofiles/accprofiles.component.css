@@ -35,3 +35,9 @@ tbody tr{
 i {
     cursor:pointer;
 }
+
+.list-group-item.active{
+    background-color:#003b71;
+    color:white;
+    border-color: #003b71;
+  }

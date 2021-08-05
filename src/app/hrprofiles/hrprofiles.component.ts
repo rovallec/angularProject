@@ -158,6 +158,8 @@ export class HrprofilesComponent implements OnInit {
   temp_day_2:string = null;
   temp_day_3:string = null;
   temp_day_4:string = null;
+  max_vac:number = 10;
+  showMore:string = 'Show More'
 
   selectedReporter:string = null;
 
@@ -394,7 +396,7 @@ export class HrprofilesComponent implements OnInit {
             this.apiService.getDPAtt({ id: this.workingEmployee.idemployees, date_1: actualPeriod.start, date_2: actualPeriod.end }).subscribe((dp: disciplinary_processes[]) => {
               this.apiService.getTermdt(this.workingEmployee).subscribe((trm: terminations) => {
                 this.showAttendences = att;
-
+                
                 this.showAttendences.forEach(atte => {
                   let valid_trm: boolean = false;
                   let activeSuspension: boolean = false;
@@ -587,6 +589,7 @@ export class HrprofilesComponent implements OnInit {
 
   getVacations() {
     let found: boolean = false;
+    let cnt:number = 0;
     let vacYears: vacyear[] = [];
     this.vac = [];
     this.earnVacations = this.vacationsEarned * 1.25;
@@ -625,14 +628,17 @@ export class HrprofilesComponent implements OnInit {
           vacYear.selected = false;
           VacFiltered = this.showVacations.filter(svf => String(svf.year) == new Date(vac.took_date).getFullYear().toString());
           vacYear.vacations.push.apply(vacYear.vacations, VacFiltered);
-          this.vac.push(vacYear);
+            this.vac.push(vacYear);
         }
 
         this.vac.sort((a, b) => a.year - b.year);
+        this.vac.forEach(toSort=>{
+          toSort.vacations.sort((a,b)=> new Date(b.date).getTime() - new Date(a.date).getTime());
+        })
 
         vacYears.forEach(vv => {
           if (vv.year.toString() == new Date().getFullYear().toString()) {
-            vv.selected = true;
+              vv.selected = true;
           }
         })
       })
@@ -2557,5 +2563,15 @@ export class HrprofilesComponent implements OnInit {
       this.editingAccessCard = false;
       window.alert("Record Successfully Updated");
     })
+  }
+
+  showMoreVac(){
+    if(this.max_vac = 10){
+      this.max_vac = 1000;
+      this.showMore = 'Show Less';
+    }else{
+      this.max_vac = 10;
+      this.showMore = 'Show More';
+    }
   }
 }
