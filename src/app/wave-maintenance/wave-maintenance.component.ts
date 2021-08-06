@@ -64,12 +64,6 @@ export class WaveMaintenanceComponent implements OnInit {
 
   setAccount(acc) {
     this.selectedAccount = acc;
-    /*this.accounts.forEach(ac=>{
-      if (acc==ac.idaccounts) {
-        this.selectedAccount = acc;
-      }
-    })
-    */
     
     this.apiServices.getWaves().subscribe((wave: waves_template[]) => {
       this.waves = [];
@@ -123,8 +117,6 @@ export class WaveMaintenanceComponent implements OnInit {
       
       if (employee.action=='APPLY') {
         this.apiServices.getEmployeeId({ id: employee.id_profile }).subscribe((emp: employees) => {
-          //this.actuallProc.descritpion = null;
-//          this.actuallProc = new process;
           this.actuallProc.prc_date = this.todayDate;
           this.actuallProc.status = "CLOSED";
           this.actuallProc.user_name = this.authUser.getAuthusr().user_name;
@@ -132,7 +124,6 @@ export class WaveMaintenanceComponent implements OnInit {
           this.actuallProc.id_profile = emp.idemployees;
           this.actuallProc.idprocesses = '11';
           this.transfer_newCode = employee.nearsol_id;
-          //this.actualRise = new rises;
           this.actualRise.new_position = emp.job;
           this.actualRise.old_position = emp.job;
           this.apiServices.insertProc(this.actuallProc).subscribe((str: string) => {
