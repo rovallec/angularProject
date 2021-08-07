@@ -2566,7 +2566,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   showMoreVac(){
-    if(this.max_vac = 10){
+    if(this.max_vac == 10){
       this.max_vac = 1000;
       this.showMore = 'Show Less';
     }else{
