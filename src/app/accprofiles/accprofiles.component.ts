@@ -790,4 +790,8 @@ export class AccprofilesComponent implements OnInit {
     this.active_payment = py;
     this.setPayment();
   }
+
+  setYear(str:any){
+
+  }
 }
