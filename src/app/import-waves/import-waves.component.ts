@@ -45,6 +45,7 @@ export class ImportWavesComponent implements OnInit {
   fullprofiles: full_profiles[] = [];
   any: any = null;
   code: string = ''; // nuevo código que se le asignará a los agentes.
+  correlative: number = 0;
 
   constructor(public apiServices: ApiService, public router: Router) { }
 
@@ -188,6 +189,8 @@ export class ImportWavesComponent implements OnInit {
               i++;
               if ((i>=this.fullprofiles.length) && (error==false)) {
                 window.alert("Profiles successfuly created");
+                this.apiServices.insertTransfer({ employee: element.employee.idemployees, account: element.employee.id_account, client_id: element.employee.client_id, correlative: this.correlative }).subscribe((str: string) => {
+                })
               }
             })
           })
@@ -215,6 +218,7 @@ export class ImportWavesComponent implements OnInit {
     this.selectedAccount = acc;
     corr = this.selectedAccount.correlative.slice(0, this.selectedAccount.correlative.length-2);
     corr = (Number(corr) + 1).toString();
+    this.correlative = Number(corr) * 100;
     this.code = this.apiServices.getCode(this.selectedAccount.prefix, corr, 6);
     this.waves.prefix = this.code;
     // set payments
@@ -338,12 +342,12 @@ export class ImportWavesComponent implements OnInit {
               num = '0' + count.toString();
             } else {
               num = count.toString();
-            }            
+            }        
             profilef.No = num;
             profilef.wave = this.waves;
             profilef.state = 'Loaded';
             profilef.schedule = this.schedule;
-            profilef.nearsol_id = profilef.wave.prefix + profilef.No;            
+            profilef.nearsol_id = profilef.wave.prefix + profilef.No;
             // profiles
             profilef.tittle = this.validateEmptyStr(element['tittle']);
             profilef.first_name = this.validateEmptyStr(element['first_name']);
@@ -375,11 +379,11 @@ export class ImportWavesComponent implements OnInit {
             profilef.employee.id_account = this.selectedAccount.idaccounts;
             // contact_details            
             profilef.contact_detail.primary_phone = this.corrigeDatos(this.validateEmptyStr(element['primary_phone']));
-            profilef.contact_detail.secondary_phone = this.corrigeDatos(this.validateEmptyStr(element['secondary_phone']));
-            address = this.validateEmptyStr(element['first line']) + ', ' + this.validateEmptyStr(element['district'])
-                      + ', Zona: ' + this.replazeZone(this.validateEmptyStr(element['zone']));
+            profilef.contact_detail.secondary_phone = this.corrigeDatos(this.validateEmptyStr(element['SecondaryPhone']));
+            address = this.validateEmptyStr(element['First Line']) + ', ' + this.validateEmptyStr(element['District'])
+                      + ', Zona: ' + this.replazeZone(this.validateEmptyStr(element['Zone']));
             profilef.contact_detail.address = address;
-            profilef.contact_detail.city = this.validateEmptyStr(element['city']);
+            profilef.contact_detail.city = this.validateEmptyStr(element['City']);
             profilef.contact_detail.email = this.validateEmptyStr(element['email']);
             // emergency_details
             profilef.emergency_first_name = this.validateEmptyStr(element['e_first_name']);
@@ -567,7 +571,7 @@ export class ImportWavesComponent implements OnInit {
           if (count == (this.max_progress)) {
             this.importEnd = true;
             this.completed = true;
-            console.log(profilef);
+            this.correlative = this.correlative + Number(num);
           }
         }
       }
