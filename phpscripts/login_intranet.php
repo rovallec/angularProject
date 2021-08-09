@@ -44,12 +44,10 @@ try {
 				};
 			} else {
 				$authUser['idusers'] = 'NULL';
-				echo("Error 0: <br>");
 				echo(mysqli_error($mysqlc));
 			};
 		} else {
 			$authUser['idusers'] = 'NULL';
-			echo("Error conn DB: <br>");
 			echo(mysqli_error($mysqlc));
 		}
 	}
