@@ -11,7 +11,7 @@ header('Access-Control-Allow-Headers: *');
 		$password = ($request->password);
 		
 		$sql1 = 'USE mysql';
-        $sql = "ALTER user '$user'@'%' IDENTIFIED by '$password';";
+        $sql = "ALTER user '$user'@'localhost' IDENTIFIED by '$password';";
 
 		if (mysqli_query($con, $sql1)) {
 			if(mysqli_query($con, $sql))
