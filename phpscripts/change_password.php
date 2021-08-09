@@ -22,16 +22,16 @@ header('Access-Control-Allow-Headers: *');
 					if (mysqli_query($con, $sql2)) {
 						echo(json_encode('changed'));
 					} else {
-						echo mysqli_error($con);
+						echo (json_encode(mysqli_error($con)));
 					}
 				} else {
-					echo mysqli_error($con);
+					echo (json_encode(mysqli_error($con)));
 				}
 			} else {
-				echo mysqli_error($con);
+				echo (json_encode(mysqli_error($con)));
 			}
 		}
 	} else {		
-		echo mysqli_error($con);
+		echo (json_encode(mysqli_error($con)));
 	}
 ?>
