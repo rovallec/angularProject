@@ -76,6 +76,8 @@ export class AccprofilesComponent implements OnInit {
   hover: string = null;
   years:string[] = [];
   selectedYear:string = null;
+  months:string[] = [];
+  selectedMonth:string = null;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -133,7 +135,9 @@ export class AccprofilesComponent implements OnInit {
         this.years = [];
         pym.forEach(element=>{
           let addthis:boolean = true;
+          let addthisMonth:boolean = true;
           let addYear = element.start.split("-")[0];
+          let addMonth = element.start.split("-")[1];
           this.years.forEach(year=>{
             if(year == addYear){
               addthis = false;
@@ -142,6 +146,15 @@ export class AccprofilesComponent implements OnInit {
           if(addthis){
             this.years.push(addYear);
             this.selectedYear = this.years[0];
+          }
+          this.months.forEach(month=>{
+            if(month == addMonth && this.years[0] == element.start.split('-')[0]){
+              addthisMonth = false;
+            }
+          })
+          if(addthisMonth){
+            this.months.push(addMonth);
+            this.selectedMonth = this.months[this.months.length - 1];
           }
         })
         this.setPayment();
@@ -779,7 +792,7 @@ export class AccprofilesComponent implements OnInit {
   showPayments(){
     let pys:payments[] = [];
     this.payments.forEach(element=>{
-      if(element.start.split('-')[0] == this.selectedYear){
+      if(element.start.split('-')[0] == this.selectedYear && element.start.split('-')[1] == this.selectedMonth){
         pys.push(element);
       }
     })
@@ -791,7 +804,11 @@ export class AccprofilesComponent implements OnInit {
     this.setPayment();
   }
 
-  setYear(str:any){
+  setMonth(str:any){
+    this.clickSetPayment(this.showPayments()[0]);
+  }
 
+  viewDeduction(deduction:any){
+    
   }
 } 

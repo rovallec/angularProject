@@ -103,18 +103,74 @@
                 </div>
                 <div class="tab-pane fade show active" id="nav-attendence" role="tabpanel"
                     aria-labelledby="nav-attendence-tab">
-                    <div class="form-row col-md-12">
+                    <div class="form-row col-md-12" style="margin-top:25px; margin-bottom: 25px;">
                         <div class="col-md-3">
                             <div class="row col-md-12">
                                 <label>Year:</label>
-                                <select class="form-control" [(ngModel)]="selectedYear" (change)="setYear($event.target.value)">
+                                <select class="form-control selectable" [(ngModel)]="selectedYear">
                                     <option *ngFor="let year of years">{{year}}</option>
                                 </select>
                             </div>
+                            <div class="row col-md-12">
+                                <label>Month:</label>
+                                <select class="form-control selectable" [(ngModel)]="selectedMonth"
+                                    (change)="setMonth()">
+                                    <option *ngFor="let month of months">{{month}}</option>
+                                </select>
+                            </div>
                             <div class="row col-md-12" style="margin-top:10px">
+                                <label>Period:</label>
                                 <div class="list-group w-100" id="list-tab" role="tablist">
-                                    <a class="list-group-item list-group-item-action w-100" (click)="clickSetPayment(pys)"
-                                    [ngClass]="{'active': active_payment.idpayments == pys.idpayments}" *ngFor="let pys of showPayments()">{{pys.start}} TO {{pys.end}}</a>
+                                    <a class="list-group-item list-group-item-action w-100 selectable"
+                                        (click)="clickSetPayment(pys)"
+                                        [ngClass]="{'active': active_payment.idpayments == pys.idpayments}"
+                                        *ngFor="let pys of showPayments()">{{pys.start}} TO {{pys.end}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row col-md-12">
+                                <div class="col-md-6 right-border-middle">
+                                    <div class="row col-md-12 d-flex justify-content-center">
+                                        <label style="font-weight: bolder; font-size: 16px;">CREDITS</label>
+                                    </div>
+                                    <div class="row col-md-12 d-flex justify-content-center">
+                                        <table class="table table-light table-hover selectable" style="width: 100%;">
+                                            <thead>
+                                                <th>ID</th>
+                                                <th>CONCEPT</th>
+                                                <th>AMOUNT</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let cred of credits" data-target="#deduction_view" data-toggle="modal" (click)="viewDeduction(cred)">
+                                                    <td>{{cred.iddebits}}</td>
+                                                    <td>{{cred.type}}</td>
+                                                    <td>{{cred.amount}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row col-md-12 d-flex justify-content-center">
+                                        <label style="font-weight: bolder; font-size: 16px;">DEBITS</label>
+                                    </div>
+                                    <div class="row col-md-12 d-flex justify-content-center">
+                                        <table class="table table-light table-hover selectable" style="width: 100%;">
+                                            <thead>
+                                                <th>ID</th>
+                                                <th>CONCEPT</th>
+                                                <th>AMOUNT</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let deb of debits" data-target="#deduction_view" data-toggle="modal" (click)="viewDeduction(deb)">
+                                                    <td>{{deb.iddebits}}</td>
+                                                    <td>{{deb.type}}</td>
+                                                    <td>{{deb.amount}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -393,7 +449,8 @@
                 <div class="modal-body d-flex justify-content-between">
                     <div style="width: 90%; margin-left: 5%;" class="row d-flex flex-column">
                         <div [ngClass]="{'blue-hover':hover==='1'}" (mouseenter)="setHover('2')">
-                            <p style="font-size: 16px; font-weight: bold; border-bottom: solid 4px #003b71;">{{selected_detail.status}}</p>
+                            <p style="font-size: 16px; font-weight: bold; border-bottom: solid 4px #003b71;">
+                                {{selected_detail.status}}</p>
                         </div>
 
                         <div (mouseenter)="setHover('2')" [ngClass]="{'blue-hover':hover==='2'}">
@@ -423,10 +480,29 @@
                             <div>
                                 <p style="text-align: right;">Q.{{selected_detail.amount | number: '3.1-2' }}</p>
                             </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-right mt-2">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                        </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-right mt-2">
-                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
-                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!----------------------------------------------------------------------------------------------CALC DETAIL MODAL--------------------------------------------------------------->
+<div class="modal fade" id="deduction_view" tabindex="-1" role="dialog" aria-labelledby="calc_detail" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="search_modalLabel"
+                    style="font-weight:bold; text-align: center; font-size: 18px;">Dedution Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="modal-body">
                 </div>
             </div>
         </div>
