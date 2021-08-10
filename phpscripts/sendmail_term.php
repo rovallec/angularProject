@@ -82,9 +82,7 @@ if($result = mysqli_query($con, $sql))
 		$mail->Host       = "smtp.gmail.com";
 		$mail->Username   = "tickets@nearsol.us";
 
-		if ($account_name == 'Sprint') {
-			$agent_email = 'agent-terms@nearsol.gt';
-			$agent_name = 'Agent Terms';
+		if ($account_name == 'Zero Variance') {
 			$agent_email = 'itzv.terms@nearsol.gt';
 			$agent_name = 'Zero Variance Terms';
 		} else if ($account_name == 'Arbonne') {
