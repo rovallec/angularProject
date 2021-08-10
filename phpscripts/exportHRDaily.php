@@ -197,6 +197,7 @@ WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '
 AS `report` WHERE `type_of_payment` IN ($filter) OR `type_of_payment` = $filter;";
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH", "NOTES"));
+echo($sql);
 if($result = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($result)){
         fputcsv($output, $row);
