@@ -24,7 +24,7 @@ COALESCE(holidays_hours, 'NULL'), COALESCE(base_complete, 'NULL'), COALESCE(prod
 COALESCE(job_type_py, 'NULL')) FROM payments WHERE idpayments =  $id_payment), ' | ', (SELECT GROUP_CONCAT(`tmp`.`cred`) FROM (SELECT CONCAT_WS(',',COALESCE(idcredits, 'NULL'),
 COALESCE(id_payment, 'NULL'), COALESCE(type, 'NULL'), COALESCE(amount, 'NULL'), COALESCE(status, 'NULL')) AS `cred` FROM credits WHERE id_payment = $id_payment) AS `tmp`), 
 ' | ' ,(SELECT GROUP_CONCAT(`tmp2`.`deb`) FROM (SELECT CONCAT_WS(',',COALESCE(iddebits, 'NULL'), COALESCE(id_payment, 'NULL'), COALESCE(type, 'NULL'), 
-COALESCE(amount, 'NULL'), COALESCE(status, 'NULL')) AS `deb` FROM debits WHERE id_payment = $id_payment) AS `tmp2`)))));";
+COALESCE(amount, 'NULL'), COALESCE(status, 'NULL')) AS `deb` FROM debits WHERE id_payment = $id_payment) AS `tmp2`)));";
 
 if(mysqli_query($con,$sql1)){  
   if(mysqli_query($con,$sql2)){
