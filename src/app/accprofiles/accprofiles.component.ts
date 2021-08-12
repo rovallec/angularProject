@@ -1004,10 +1004,10 @@ export class AccprofilesComponent implements OnInit {
       this.apiService.insertManualPayment(this.activeNewPayment).subscribe((str:string)=>{
         if(str == '1'){
           window.alert("Payment successfuly created");
-          this.start();
         }else{
           window.alert(str);
         }
+        this.start();
       })
     }
   }
@@ -1022,6 +1022,7 @@ export class AccprofilesComponent implements OnInit {
       }else{
         window.alert(str);
       }
+      this.start();
     })
   }
 
