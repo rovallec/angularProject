@@ -9,7 +9,7 @@ $request = json_decode($postdata);
 $idcredits = ($request->iddebits);
 $status = ($request->status);
 $idpayments = ($request->idpayments);
-$id_user = ($request->);
+$id_user = ($request->id_user);
 
 if($status == 'Credit'){
     $sql = "DELETE FROM `credits` WHERE `idcredits` = $idcredits AND `idpayments` = $idpayments";
