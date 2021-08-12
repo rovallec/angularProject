@@ -11,6 +11,8 @@ $status = ($request->status);
 $type = ($request->type);
 $notes = ($request->notes);
 $amount = ($request->amount);
+$id_user = ($request->id_user);
+$id_employee = ($request->id_employee);
 
 if($status == 'EDIT'){
     $sql = "UPDATE `credits` SET `type` = '$type', `amount` = '$amount', `notes` = '$notes' WHERE `idcredits` = $idcredits;";

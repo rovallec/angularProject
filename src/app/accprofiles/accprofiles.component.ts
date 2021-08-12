@@ -1031,9 +1031,9 @@ export class AccprofilesComponent implements OnInit {
   }
 
   updateDeduction(){
-    console.log(this.activeCred);
-    console.log(this.insertN);
+    this.activeCred.id_user = this.authUser.getAuthusr().iduser
     this.activeCred.status = 'EDIT';
+    this.activeCred.id_employee = this.employe_id;
     if(this.insertN == 'Credit'){
       this.apiService.updateCredits(this.activeCred).subscribe((str:string)=>{
         if(str == '1'){
