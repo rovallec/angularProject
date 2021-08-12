@@ -96,6 +96,7 @@ export class AccprofilesComponent implements OnInit {
   start() {
     let peridos: periods = new periods;
     let isChrome: boolean = false;
+    this.editDeduction = false;
     let a_date: string = null;
     let b_date: string = null;
     let todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate().toString();
@@ -1042,8 +1043,25 @@ export class AccprofilesComponent implements OnInit {
           window.alert(str);
         }
       })
+      this.start();
+    }else if(this.insertN == 'Debit'){
+      let db:debits = new debits;
+      db.amount = this.activeCred.amount;
+      db.id_employee = this.activeCred.id_employee;
+      db.id_user = this.activeCred.id_user;
+      db.iddebits = this.activeCred.iddebits;
+      db.idpayments = this.activeCred.idpayments;
+      db.status = this.activeCred.status;
+      db.type = this.activeCred.type;
+      this.apiService.updateDebits(db).subscribe((str:string)=>{
+        if(str == '1'){
+          window.alert("Record successfuly updated");
+        }else{
+          window.alert(str);
+        }
+      })
+      this.start();
     }
-    this.editDeduction = false;
   }
 
   setEdit(){
