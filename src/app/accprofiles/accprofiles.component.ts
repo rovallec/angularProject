@@ -85,6 +85,7 @@ export class AccprofilesComponent implements OnInit {
   activeNewPayment:payments = new payments;
   allAccounts:accounts[] = [];
   allPeriods:periods[] = [];
+  editDeduction:boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -335,6 +336,7 @@ export class AccprofilesComponent implements OnInit {
   }
 
   setCredit(cred: credits) {
+    this.editDeduction = false;
     this.apiService.getPushedCredits(cred).subscribe((de: credits) => {
       this.deductionsType = [
         'Ajustes Periodos Anteriores',
@@ -1035,6 +1037,11 @@ export class AccprofilesComponent implements OnInit {
         }
       })
     }
+    this.editDeduction = false;
+  }
+
+  setEdit(){
+    this.editDeduction = true;
   }
 
 }

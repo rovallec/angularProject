@@ -552,20 +552,20 @@
                     <div class="row col-md-12" style="padding-right:0px">
                         <div class="col-md-5" style="padding-right:0px">
                             <label>Concept:</label>
-                            <select [disabled]='record' class="form-control" [(ngModel)]="activeCred.type" (change)="setActiveCredType($event.target.value)">
+                            <select [disabled]='record || !editDeduction' class="form-control" [(ngModel)]="activeCred.type" (change)="setActiveCredType($event.target.value)">
                                 <option *ngFor="let ded of deductionsType">{{ded}}</option>
                             </select>
                         </div>
                         <div class="col-md-2" style="padding-right:0px"></div>
                         <div class="col-md-5" style="padding-right:0px">
                             <label>Amount:</label>
-                            <input type="text" [disabled]='record' class="form-control" [(ngModel)]="activeCred.amount">
+                            <input type="text" [disabled]='record || !editDeduction' class="form-control" [(ngModel)]="activeCred.amount">
                         </div>
                     </div>
                     <div class="row col-md-12" style="padding-right:0px">
                         <div class="col-md-12" style="padding-right:0px">
                             <label>Notes:</label>
-                            <textarea class="form-control" width="100%" [disabled]='record' [(ngModel)]="activeCred.notes"></textarea>
+                            <textarea class="form-control" width="100%" [disabled]='record || !editDeduction' [(ngModel)]="activeCred.notes"></textarea>
                         </div>
                     </div>
                     <div class="row col-md-12" style="padding-right:0px">
@@ -594,12 +594,13 @@
                     <button class="form-control btn-outline-secondary" data-dismiss="modal">Close</button>
                 </div>
                 <div class="col-md-2" *ngIf="record"></div>
-                <div class="col-md-2" *ngIf="record">
+                <div class="col-md-2" *ngIf="record && !editDeduction">
                     <button class="form-control btn-outline-warning" data-dismiss="modal" (click)="deleteDeduction()">Delete</button>
                 </div>
                 <div class="col-md-2" *ngIf="record"></div>
                 <div class="col-md-2" *ngIf="record">
-                    <button class="form-control btn-outline-primary" data-dismiss="modal" (click)="updateDeduction();">Edit</button>
+                    <button class="form-control btn-outline-primary" data-dismiss="modal" *ngIf="!editDeduction" (click)="setEdit()">Edit</button>
+                    <button class="form-control btn-outline-primary" data-dismiss="modal" *ngIf="editDeduction" (click)="updateDeduction();">Save</button>
                 </div>
                 <div class="col-md-1" *ngIf="record"></div>
             </div>
