@@ -17,8 +17,12 @@ if($status == 'EDIT'){
     COALESCE(type, 'NULL'), COALESCE(amount, 'NULL'), COALESCE(status, 'NULL')) AS `cred` FROM credits WHERE idcredits = $idcredits)));";
     if(mysqli_query($con,$sql2)){
         if(mysqli_query($con,$sql)){
-            echo(mysqli_insert_id($con));
+            echo(json_encode('1'));
+        }else{
+            echo(json_encode(mysqli_error($con)));
         }
+    }else{
+        echo(json_encode(mysqli_error($con)));
     }
 }else{
     $sql = "UPDATE `credits` SET `status` = '$status' WHERE `idcredits` = $idcredits";
