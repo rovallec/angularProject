@@ -6,9 +6,9 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-$id_employee = ($request->id_process);
-$id_paymentmethod = ($request->type);
-$id_account = ($request->description);
+$id_employee = ($request->id_employee);
+$id_paymentmethod = ($request->id_paymentmethod);
+$id_account = ($request->id_account);
 
 $sql = "INSERT INTO `minearsol`.`payments` (`id_employee`, `id_paymentmethod`, `id_period`) VALUES ('$id_employee', '$id_paymentmethod', '$id_period', $id_account);";
 
