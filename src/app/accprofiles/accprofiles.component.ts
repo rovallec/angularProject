@@ -984,7 +984,8 @@ export class AccprofilesComponent implements OnInit {
 
   setNewPayment(){
     this.activeNewPayment = new payments;
-    this.activeNewPayment.id_employee = this.employee.idemployees;
+    this.activeNewPayment.idpayments = this.authUser.getAuthusr().iduser;
+    this.activeNewPayment.id_employee = this.employe_id;
   }
 
   createPayment(){
@@ -998,14 +999,30 @@ export class AccprofilesComponent implements OnInit {
     console.log(this.activeNewPayment);
     if(create){
       if(this.activeNewPayment.id_account_py == this.employee.id_account){
-        this.apiService.insertManualPayment(this.activeNewPayment).subscribe((str:string)=>{
-          if(str == '1'){
-            window.alert("Payment successfuly created");
-          }else{
-            window.alert(str);
-          }
-        })
+        this.activeNewPayment.id_account_py = 'NULL';
       }
+      this.apiService.insertManualPayment(this.activeNewPayment).subscribe((str:string)=>{
+        if(str == '1'){
+          window.alert("Payment successfuly created");
+          this.start();
+        }else{
+          window.alert(str);
+        }
+      })
     }
   }
+
+  deletePayment(){
+    let str:string;
+    str = this.active_payment.id_period;
+    this.active_payment.id_period = this.authUser.getAuthusr().iduser;
+    this.apiService.deleteManualPayment(this.active_payment).subscribe((str:string)=>{
+      if(str == '1'){
+        window.alert("Payment and dependencies successfuly deleted");
+      }else{
+        window.alert(str);
+      }
+    })
+  }
+
 }

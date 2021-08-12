@@ -982,6 +982,10 @@ deleteDeduction(ded:any){
 insertManualPayment(payment:payments){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertManualPayment.php`, payment);
 }
+
+deleteManualPayment(payment:payments){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteManualPayment.php`, payment);
+}
 }
 
 

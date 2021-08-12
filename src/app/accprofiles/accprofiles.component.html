@@ -129,13 +129,13 @@
                             </div>
                             <div class="row col-md-12 d-flex justify-content-between" style="margin-top:25px">
                                 <div>
-                                    <button class="form-control btn btn-outline-danger"><i class="far fa-trash-alt"></i></button>
+                                    <button class="form-control btn btn-outline-danger" data-toggle="modal" data-target="#deletePayment"><i class="far fa-trash-alt"></i></button>
                                 </div>
                                 <div>
                                     <button class="form-control btn btn-outline-warning" (click)="acreditSelection()" [disabled]="acreditType === '0'"><i class="fas fa-credit-card"></i></button>
                                 </div>
                                 <div>
-                                    <button class="form-control btn btn-outline-success" data-toggle="modal" data-target="#addPayment"><i class="fas fa-plus"></i></button>
+                                    <button class="form-control btn btn-outline-success" data-toggle="modal" data-target="#addPayment" (click)="setNewPayment()"><i class="fas fa-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -652,6 +652,38 @@
                 <div class="d-flex col-md-12">
                     <div class="col-md-4">
                         <button class="form-control btn-outline-primary" (click)="createPayment()" data-dismiss="modal">Crete</button>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------------------------------------------------------------ADD PAYMET MODAL--------------------------------------------------------------->
+<div class="modal fade" id="addPayment" tabindex="-1" role="dialog" aria-labelledby="calc_detail"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="search_modalLabel"
+                    style="font-weight:bold; text-align: center; font-size: 18px;">Insert Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding:5px">
+                <div class="col-md-12" >
+                    <label>Delete this record will also delete all associated credits and debits, are you sure you want to proceede?</label>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:25px">
+                <div class="d-flex col-md-12">
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-primary" (click)="deletePayment()" data-dismiss="modal">Accept</button>
                     </div>
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
