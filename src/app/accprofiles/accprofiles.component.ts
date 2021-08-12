@@ -930,7 +930,7 @@ export class AccprofilesComponent implements OnInit {
     this.setPayment();
   }
 
-  setMonth(str:any){
+  setMonth(){
     this.clickSetPayment(this.showPayments()[0]);
   }
 

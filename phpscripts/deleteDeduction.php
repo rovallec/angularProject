@@ -13,10 +13,10 @@ $id_user = ($request->)
 
 if($status == 'Credit'){
     $sql = "DELETE FROM `credits` WHERE `idcredits` = $idcredits AND `idpayments` = $idpayments";
-    $sql1 = "UPDATE FROM `pushed_credits` SET `notes` = CONCAT(`notes`, ' | DELETED BY $id_user AT ', NOW()) WHERE `id_credit` = $idcredits;";
+    $sql1 = "UPDATE `pushed_credits` SET `notes` = CONCAT(`notes`, ' | DELETED BY $id_user AT ', NOW()) WHERE `id_credit` = $idcredits;";
 }else{
     $sql = "DELETE FROM `debits` WHERE `iddebits` = $idcredits AND `idpayments` = $idpayments";
-    $sql1 = "UPDATE FROM `pushed_debits` SET `notes` = CONCAT(`notes`, ' | DELETED BY $id_user AT ', NOW()) WHERE `id_credit` = $idcredits;";
+    $sql1 = "UPDATE `pushed_debits` SET `notes` = CONCAT(`notes`, ' | DELETED BY $id_user AT ', NOW()) WHERE `id_debit` = $idcredits;";
 }
 
 if(mysqli_query($con,$sql1)){

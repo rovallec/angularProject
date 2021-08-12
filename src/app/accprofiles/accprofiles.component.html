@@ -552,7 +552,7 @@
                     <div class="row col-md-12" style="padding-right:0px">
                         <div class="col-md-5" style="padding-right:0px">
                             <label>Concept:</label>
-                            <select [disabled]='record' class="form-control" [(ngModel)]="activeCred.type" (change)="setActiveCredType(ded)">
+                            <select [disabled]='record' class="form-control" [(ngModel)]="activeCred.type" (change)="setActiveCredType($event.target.value)">
                                 <option *ngFor="let ded of deductionsType">{{ded}}</option>
                             </select>
                         </div>
@@ -601,7 +601,7 @@
                 <div class="col-md-2" *ngIf="record">
                     <button class="form-control btn-outline-primary" data-dismiss="modal">Edit</button>
                 </div>
-                <div class="col-md-2" *ngIf="record"></div>
+                <div class="col-md-1" *ngIf="record"></div>
             </div>
         </div>
     </div>
