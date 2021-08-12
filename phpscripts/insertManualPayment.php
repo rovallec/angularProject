@@ -9,6 +9,7 @@ $request = json_decode($postdata);
 $id_employee = ($request->id_employee);
 $id_paymentmethod = ($request->id_paymentmethod);
 $id_account = ($request->id_account_py);
+$id_period = ($request->id_period);
 
 $sql = "INSERT INTO `minearsol`.`payments` (`id_employee`, `id_paymentmethod`, `id_period`) VALUES ('$id_employee', '$id_paymentmethod', '$id_period', $id_account);";
 
