@@ -74,3 +74,8 @@ i {
   .selectable{
       cursor:pointer;
   }
+
+  .hover-blue:hover{
+    background-color: #003b71;
+    color:white;
+  }

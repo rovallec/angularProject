@@ -9,7 +9,7 @@ import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods, hrProcess } from '../fullProcess';
 import { AuthGuard } from '../guard/auth-guard.service';
 import { process } from '../process';
-import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha } from '../process_templates';
+import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha, accounts } from '../process_templates';
 import { profiles } from '../profiles';
 import { Observable } from "rxjs";
 import { async } from '@angular/core/testing';
@@ -78,6 +78,10 @@ export class AccprofilesComponent implements OnInit {
   selectedYear:string = null;
   months:string[] = [];
   selectedMonth:string = null;
+  activeAccountpy:string = null;
+  activePaymentMethodpy:string = null;
+  deductionsType:string[] = [];
+  acreditType:string = '0';
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -175,6 +179,19 @@ export class AccprofilesComponent implements OnInit {
   }
 
   setPayment() {
+    this.activeAccountpy = this.employee.account;
+    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
+      acc.forEach(account=>{
+        if(account.idaccounts == this.active_payment.id_account_py){
+          this.activeAccountpy = account.name
+        }
+      })
+    })
+        this.paymentMethods.forEach(pyM=>{
+      if(pyM.idpayment_methods == this.active_payment.id_paymentmethod){
+        this.activePaymentMethodpy = pyM.type + " | " + pyM.bank
+      }
+    })
     this.apiService.setPayment(this.active_payment).subscribe((_str) => {
       this.apiService.getDebits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((deb: debits[]) => {
         this.apiService.getCredits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((cred: credits[]) => {
@@ -221,10 +238,47 @@ export class AccprofilesComponent implements OnInit {
   newDeduction(str: string) {
     let date: Fecha = new Fecha;
     this.activeCred = new credits;
+    this.activeCred.id_user = this.authUser.getAuthusr().user_name;
     this.activeCred.date = date.today;
     this.insertN = str;
     this.insertNew = true;
     this.record = false;
+    if(str == 'Credit'){
+      this.deductionsType = [
+        'Ajuste de periodos anteriores',
+        'Ajuste periodos anteriores',
+        'Ajustes Periodos Anteriores',
+        'Anticipo Sobre Bono 14',
+        'Bonificacion Decreto',
+        'Bonificacion Productividad',
+        'Bonos Diversos',
+        'Bonos Diversos Cliente TK',
+        'Bonos Diversos Nearsol TK',
+        'Hiring Bonus',
+        'RAF Bonus',
+        'Salario Base',
+        'Treasure Hunt'
+      ]
+    }else{
+      this.deductionsType = [
+        'Ajuste de periodos anteriores',
+        'Anticipo Sobre Sueldo',
+        'Boleto De Ornato',
+        'Bus',
+        'Car Parking',
+        'Descuento IGSS',
+        'Descuento Judicial',
+        'Headset',
+        'ISR',
+        'Monedero',
+        'Motorcycle Parking',
+        'Parqueo',
+        'Prestamo Personal',
+        'Seguro',
+        'TARJETA DE ACCESO/PARQUEO',
+      ]
+    }
+    this.activeCred.type = this.deductionsType[0];
   }
 
   setPaymentMethod(paymentMethod: payment_methods) {
@@ -263,19 +317,65 @@ export class AccprofilesComponent implements OnInit {
 
   setCredit(cred: credits) {
     this.apiService.getPushedCredits(cred).subscribe((de: credits) => {
-      this.activeCred = de;
-      this.insertNew = true;
-      this.insertN = 'Credit';
-      this.record = true;
+      this.deductionsType = [
+        'Ajustes Periodos Anteriores',
+        'Anticipo Sobre Bono 14',
+        'Bonificacion Decreto',
+        'Bonificacion Productividad',
+        'Bonos Diversos',
+        'Bonos Diversos Cliente TK',
+        'Bonos Diversos Nearsol TK',
+        'Hiring Bonus',
+        'RAF Bonus',
+        'Salario Base',
+        'Treasure Hunt',
+        'Anticipo Sobre Sueldo',
+        'Anticipo Sobre Aguinaldo',
+        'Boleto De Ornato',
+        'Bus',
+        'Car Parking',
+        'Descuento IGSS',
+        'Descuento Judicial',
+        'Headset',
+        'ISR',
+        'Monedero',
+        'Motorcycle Parking',
+        'Parqueo',
+        'Prestamo Personal',
+        'Seguro',
+        'TARJETA DE ACCESO/PARQUEO',
+      ]
+      if(isNullOrUndefined(de.iddebits)){
+        this.activeCred.type = cred.type;
+        this.activeCred.amount = cred.amount;
+        this.activeCred.date = this.active_payment.date;
+        this.activeCred.id_user = 'Admin';
+        this.activeCred.notes = 'Inherent Credit By Close Period';
+        this.record = true;
+      }else{
+        this.activeCred = de;
+        this.insertNew = true;
+        this.insertN = 'Credit';
+        this.record = true;
+      }
     })
   }
 
   setDeduction(deb: debits) {
     this.apiService.getPushedDebits(deb).subscribe((de: credits) => {
+      if(isNullOrUndefined(de.iddebits)){
+        this.activeCred.type = deb.type;
+        this.activeCred.amount = deb.amount;
+        this.activeCred.date = deb.date;
+        this.activeCred.id_user = 'Admin';
+        this.activeCred.notes = 'Inherent Debit By Close Period';
+        this.record = true;
+      }else{
       this.activeCred = de;
       this.insertNew = true;
       this.insertN = 'Debit';
       this.record = true;
+      }
     })
   }
 
@@ -602,34 +702,60 @@ export class AccprofilesComponent implements OnInit {
       let db: debits = new debits;
       db.status = "PAID";
       db.iddebits = debit;
-      this.apiService.updateCredits(db).subscribe((str: string) => { });
+      this.apiService.updateDebits(db).subscribe((str: string) => { });
     })
-    this.setPayment();
+    window.alert("Record Updated");
     this.acrediting = false;
+    this.acreditType = '0';
+    this.setPayment();
   }
 
   CancelAcreditSelection(){
     this.setAcreditCredits = "0";
     this.setAcreditDebits = "0";
+    this.acreditType = '0';
     this.acrediting = false;
     this.setPayment();
   }
 
-  selectedCredit(event) {
+  selectedCredit(event, str:string) {
     let val: string = "," + event.target.value;
+    let temp:string = '0';
+    this.acreditType = str;
     if (event.target.checked) {
       this.setAcreditCredits = this.setAcreditCredits + val;
       this.acrediting = true;
     } else {
-      this.setAcreditCredits.replace(val, '');
+      this.setAcreditCredits.split(',').forEach(element => {
+        if(element != event.target.value && element != '0'){
+          temp = temp + "," + element;
+        }
+        this.setAcreditCredits = temp;
+      });
+      if(this.setAcreditCredits == '0'){
+        this.CancelAcreditSelection();
+      }
     }
   }
 
-  selectedDebit(event) {
+  selectedDebit(event, str:string) {
+    let val: string = "," + event.target.value;
+    let temp:string = '0';
+    this.acreditType = str;
     if (event.target.checked) {
-      this.setAcreditDebits = this.setAcreditDebits + "," + event.target.value;
+      this.setAcreditDebits = this.setAcreditDebits + val;
+      this.acrediting = true;
+    } else {
+      this.setAcreditDebits.split(',').forEach(element => {
+        if(element != event.target.value && element != '0'){
+          temp = temp + "," + element;
+        }
+        this.setAcreditDebits = temp;
+      });
+      if(this.setAcreditDebits == '0'){
+        this.CancelAcreditSelection();
+      }
     }
-    this.acrediting = true;
   }
 
   setPayments(adv: advances_acc) {
@@ -808,7 +934,15 @@ export class AccprofilesComponent implements OnInit {
     this.clickSetPayment(this.showPayments()[0]);
   }
 
-  viewDeduction(deduction:any){
-    
+  setActiveCredType(str:string){
+    this.activeCred.type = str;
+  }
+
+  deleteDeduction(){
+    this.apiService.deleteDeduction(this.activeCred).subscribe((str:string)=>{
+      if(str == '1'){
+        window.alert('Record Successfuly Deleted');
+      }
+    })
   }
 } 

@@ -742,7 +742,7 @@ updateCredits(credits:credits){
 }
 
 updateDebits(debits:debits){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateCredits.php`, debits);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateDebits.php`, debits);
 }
 
 insertPayments(payment:payments){
@@ -973,6 +973,10 @@ getEmployeeByWave(wave:waves_template){
 
 updateTermination(term:terminations){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateTerminations.php`, term);
+}
+
+deleteDeduction(ded:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteDeduction.php`, ded);
 }
 }
 
