@@ -22,6 +22,10 @@ if($status == 'Credit'){
 if(mysqli_query($con,$sql1)){
     if(mysqli_query($con,$sql)){
         echo(json_encode('1'));
+    }else{
+        echo($sql);
     }
+}else{
+    echo($sql1);
 }
 ?>
