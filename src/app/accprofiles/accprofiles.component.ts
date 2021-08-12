@@ -337,6 +337,7 @@ export class AccprofilesComponent implements OnInit {
 
   setCredit(cred: credits) {
     this.editDeduction = false;
+    this.insertN = 'Credit';
     this.apiService.getPushedCredits(cred).subscribe((de: credits) => {
       this.deductionsType = [
         'Ajustes Periodos Anteriores',
@@ -378,13 +379,14 @@ export class AccprofilesComponent implements OnInit {
       } else {
         this.activeCred = de;
         this.insertNew = true;
-        this.insertN = 'Credit';
         this.record = true;
       }
     })
   }
 
   setDeduction(deb: debits) {
+    this.editDeduction = false;
+    this.insertN = 'Debit';
     this.apiService.getPushedDebits(deb).subscribe((de: credits) => {
       if (isNullOrUndefined(de.iddebits)) {
         this.activeCred.type = deb.type;
@@ -398,7 +400,6 @@ export class AccprofilesComponent implements OnInit {
       } else {
         this.activeCred = de;
         this.insertNew = true;
-        this.insertN = 'Debit';
         this.record = true;
       }
     })
@@ -747,6 +748,7 @@ export class AccprofilesComponent implements OnInit {
     let val: string = "," + event.target.value;
     let temp: string = '0';
     this.acreditType = str;
+    this.insertN = 'Credit';
     if (event.target.checked) {
       this.setAcreditCredits = this.setAcreditCredits + val;
       this.acrediting = true;
@@ -767,6 +769,7 @@ export class AccprofilesComponent implements OnInit {
     let val: string = "," + event.target.value;
     let temp: string = '0';
     this.acreditType = str;
+    this.insertN = 'Debit';
     if (event.target.checked) {
       this.setAcreditDebits = this.setAcreditDebits + val;
       this.acrediting = true;
@@ -1028,6 +1031,8 @@ export class AccprofilesComponent implements OnInit {
   }
 
   updateDeduction(){
+    console.log(this.activeCred);
+    console.log(this.insertN);
     this.activeCred.status = 'EDIT';
     if(this.insertN == 'Credit'){
       this.apiService.updateCredits(this.activeCred).subscribe((str:string)=>{

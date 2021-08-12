@@ -8,6 +8,8 @@ $request = json_decode($postdata);
 
 $idcredits = ($request->iddebits);
 $status = ($request->status);
+$type = ($request->type);
+$notes = ($request->notes);
 
 if($status == 'EDIT'){
     $sql = "UPDATE `credits` SET `type` = $type, `amount` = $amount;";
