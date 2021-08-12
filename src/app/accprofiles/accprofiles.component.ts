@@ -995,6 +995,7 @@ export class AccprofilesComponent implements OnInit {
         create = false;
       }
     })
+    console.log(this.activeNewPayment);
     if(create){
       if(this.activeNewPayment.id_account_py == this.employee.id_account){
         this.apiService.insertManualPayment(this.activeNewPayment).subscribe((str:string)=>{
