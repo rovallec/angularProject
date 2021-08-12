@@ -19,10 +19,10 @@ if($status == 'EDIT'){
         if(mysqli_query($con,$sql)){
             echo(json_encode('1'));
         }else{
-            echo(json_encode(mysqli_error($con)));
+            echo($sql);
         }
     }else{
-        echo(json_encode(mysqli_error($con)));
+        echo($sql2);
     }
 }else{
     $sql = "UPDATE `credits` SET `status` = '$status' WHERE `idcredits` = $idcredits";
