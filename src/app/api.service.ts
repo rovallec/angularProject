@@ -978,6 +978,10 @@ updateTermination(term:terminations){
 deleteDeduction(ded:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteDeduction.php`, ded);
 }
+
+insertManualPayment(payment:payments){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertManualPayment.php`, payment);
+}
 }
 
 

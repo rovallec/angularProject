@@ -135,7 +135,7 @@
                                     <button class="form-control btn btn-outline-warning" (click)="acreditSelection()" [disabled]="acreditType === '0'"><i class="fas fa-credit-card"></i></button>
                                 </div>
                                 <div>
-                                    <button class="form-control btn btn-outline-success"><i class="fas fa-plus"></i></button>
+                                    <button class="form-control btn btn-outline-success" data-toggle="modal" data-target="#addPayment"><i class="fas fa-plus"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -621,11 +621,43 @@
             </div>
             <div class="modal-body" style="padding:5px">
                 <div class="col-md-12" >
-                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Payment Method:</label>
+                            <select class="form-control" [(ngModel)]="activeNewPayment.id_paymentmethod">
+                                <option *ngFor="let pm of paymentMethods" value="{{pm.idpayment_methods}}">{{pm.type}} - {{pm.bank}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <label>Account:</label>
+                            <select class="form-control" [(ngModel)]="activeNewPayment.id_account_py">
+                                <option *ngFor="let acc of allAccounts" value='{{acc.idaccounts}}'>{{acc.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <label>Period:</label>
+                            <select class="form-control" [(ngModel)]="activeNewPayment.id_period">
+                                <option *ngFor="let period of allPeriods" value="{{period.idperiods}}">{{period.start}} TO {{period.end}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer" style="margin-top:25px">
-                
+                <div class="d-flex col-md-12">
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-primary" (click)="createPayment()" data-dismiss="modal">Crete</button>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -82,6 +82,9 @@ export class AccprofilesComponent implements OnInit {
   activePaymentMethodpy: string = null;
   deductionsType: string[] = [];
   acreditType: string = '0';
+  activeNewPayment:payments = new payments;
+  allAccounts:accounts[] = [];
+  allPeriods:periods[] = [];
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -100,6 +103,9 @@ export class AccprofilesComponent implements OnInit {
       isChrome = true;
     }
 
+    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
+      this.allAccounts = acc;
+    })
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id, rol: this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
@@ -169,6 +175,7 @@ export class AccprofilesComponent implements OnInit {
       })
 
       this.apiService.getPeriods().subscribe((per: periods[]) => {
+        this.allPeriods = per;
         per.forEach(p => {
           if ((p.type_period == '0') && (p.status == '1')) {
             this.actualPeriod = p;
@@ -973,5 +980,31 @@ export class AccprofilesComponent implements OnInit {
       })
     })
     this.cancelDeduction();
+  }
+
+  setNewPayment(){
+    this.activeNewPayment = new payments;
+    this.activeNewPayment.id_employee = this.employee.idemployees;
+  }
+
+  createPayment(){
+    let create:boolean = true;
+    this.payments.forEach(pay=>{
+      if((pay.id_period == this.activeNewPayment.id_period && pay.id_account_py == this.activeNewPayment.id_account_py) || (isNullOrUndefined(pay.id_account_py) && this.activeNewPayment.id_account_py == this.employee.id_account) && create){
+        window.alert('An assiociated payment for this employee on that period already exist');
+        create = false;
+      }
+    })
+    if(create){
+      if(this.activeNewPayment.id_account_py == this.employee.id_account){
+        this.apiService.insertManualPayment(this.activeNewPayment).subscribe((str:string)=>{
+          if(str == '1'){
+            window.alert("Payment successfuly created");
+          }else{
+            window.alert(str);
+          }
+        })
+      }
+    }
   }
 }
