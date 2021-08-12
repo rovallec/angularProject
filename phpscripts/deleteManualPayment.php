@@ -21,12 +21,15 @@ COALESCE(id_employee, 'NULL'), COALESCE(id_paymentmethod, 'NULL'), COALESCE(id_p
 COALESCE(date, 'NULL'), COALESCE(last_seventh, 'NULL'), COALESCE(ot, 'NULL'), COALESCE(ot_hours, 'NULL'), COALESCE(base_hours, 'NULL'), 
 COALESCE(productivity_hours, 'NULL'), COALESCE(base, 'NULL'), COALESCE(productivity, 'NULL'), COALESCE(sevenths, 'NULL'), COALESCE(holidays, 'NULL'), 
 COALESCE(holidays_hours, 'NULL'), COALESCE(base_complete, 'NULL'), COALESCE(productivity_complete, 'NULL'), COALESCE(id_account_py, 'NULL'), 
-COALESCE(job_type_py, 'NULL')) FROM payments WHERE idpayments =  $id_payment)));";
+COALESCE(job_type_py, 'NULL')) FROM payments WHERE idpayments =  $id_payment), ' | ', (SELECT GROUP_CONCAT(`tmp`.`cred`) FROM (SELECT CONCAT_WS(',',COALESCE(idcredits, 'NULL'),
+COALESCE(id_payment, 'NULL'), COALESCE(type, 'NULL'), COALESCE(amount, 'NULL'), COALESCE(status, 'NULL')) AS `cred` FROM credits WHERE id_payment = $id_payment) AS `tmp`), 
+' | ' ,(SELECT GROUP_CONCAT(`tmp2`.`deb`) FROM (SELECT CONCAT_WS(',',COALESCE(iddebits, 'NULL'), COALESCE(id_payment, 'NULL'), COALESCE(type, 'NULL'), 
+COALESCE(amount, 'NULL'), COALESCE(status, 'NULL')) AS `deb` FROM debits WHERE id_payment = $id_payment) AS `tmp2`)))));";
 
-if(mysqli_query($con,$sql2)){  
-  if(mysqli_query($con,$sql3)){
-    if(mysqli_query($con,$sql4)){
-      if(mysqli_query($con,$sql1)){
+if(mysqli_query($con,$sql1)){  
+  if(mysqli_query($con,$sql2)){
+    if(mysqli_query($con,$sql3)){
+      if(mysqli_query($con,$sql4)){
         if(mysqli_query($con,$sql)){
           echo(json_encode("1"));
         }else{
