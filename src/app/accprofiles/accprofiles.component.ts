@@ -996,7 +996,6 @@ export class AccprofilesComponent implements OnInit {
         create = false;
       }
     })
-    console.log(this.activeNewPayment);
     if(create){
       if(this.activeNewPayment.id_account_py == this.employee.id_account){
         this.activeNewPayment.id_account_py = 'NULL';

@@ -9,7 +9,12 @@ $request = json_decode($postdata);
 $idcredits = ($request->iddebits);
 $status = ($request->status);
 
-$sql = "UPDATE `credits` SET `status` = '$status' WHERE `idcredits` = $idcredits";
+if($status == 'EDIT'){
+    $sql = "UPDATE `credits` SET `type` = $type, `amount` = $amount;";
+    $sql2 = "INSERT INTO `internal_processes` (`idinternal_processes`, `id_user`, `id_employee`, `name`, `date`, `status`, `notes`) VALUES (NULL, $id_user, $id_employee, 'Update credit', DATE_FORMAT(NOW(), '%Y-%m-%d'), 'COMPLETED', CONCAT('Manualy Deleted AT ', NOW()));"
+}else{
+    $sql = "UPDATE `credits` SET `status` = '$status' WHERE `idcredits` = $idcredits";
+}
 
 if(mysqli_query($con,$sql)){
     echo(mysqli_insert_id($con));
