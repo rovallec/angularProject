@@ -12,10 +12,10 @@ $idpayments = ($request->idpayments);
 $id_user = ($request->id_user);
 
 if($status == 'Credit'){
-    $sql = "DELETE FROM `credits` WHERE `idcredits` = $idcredits AND `idpayments` = $idpayments";
+    $sql = "DELETE FROM `credits` WHERE `idcredits` = $idcredits AND `id_payment` = $idpayments";
     $sql1 = "UPDATE `pushed_credits` SET `notes` = CONCAT(`notes`, ' | DELETED BY $id_user AT ', NOW()) WHERE `id_credit` = $idcredits;";
 }else{
-    $sql = "DELETE FROM `debits` WHERE `iddebits` = $idcredits AND `idpayments` = $idpayments";
+    $sql = "DELETE FROM `debits` WHERE `iddebits` = $idcredits AND `id_payment` = $idpayments";
     $sql1 = "UPDATE `pushed_debits` SET `notes` = CONCAT(`notes`, ' | DELETED BY $id_user AT ', NOW()) WHERE `id_debit` = $idcredits;";
 }
 

@@ -349,6 +349,8 @@ export class AccprofilesComponent implements OnInit {
         this.activeCred.type = cred.type;
         this.activeCred.amount = cred.amount;
         this.activeCred.date = this.active_payment.date;
+        this.activeCred.iddebits = cred.iddebits;
+        this.activeCred.idpayments = cred.idpayments;
         this.activeCred.id_user = 'Admin';
         this.activeCred.notes = 'Inherent Credit By Close Period';
         this.record = true;
@@ -367,6 +369,8 @@ export class AccprofilesComponent implements OnInit {
         this.activeCred.type = deb.type;
         this.activeCred.amount = deb.amount;
         this.activeCred.date = deb.date;
+        this.activeCred.iddebits = deb.iddebits;
+        this.activeCred.idpayments = deb.idpayments;
         this.activeCred.id_user = 'Admin';
         this.activeCred.notes = 'Inherent Debit By Close Period';
         this.record = true;
@@ -939,6 +943,7 @@ export class AccprofilesComponent implements OnInit {
   }
 
   deleteDeduction(){
+    console.log(this.activeCred);
     this.apiService.deleteDeduction(this.activeCred).subscribe((str:string)=>{
       if(str == '1'){
         window.alert('Record Successfuly Deleted');
