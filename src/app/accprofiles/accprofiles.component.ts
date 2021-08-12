@@ -1028,6 +1028,7 @@ export class AccprofilesComponent implements OnInit {
   }
 
   updateDeduction(){
+    this.activeCred.status = 'EDIT';
     if(this.insertN == 'Credit'){
       this.apiService.updateCredits(this.activeCred).subscribe((str:string)=>{
         if(str == '1'){
