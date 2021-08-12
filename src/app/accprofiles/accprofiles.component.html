@@ -552,20 +552,20 @@
                     <div class="row col-md-12" style="padding-right:0px">
                         <div class="col-md-5" style="padding-right:0px">
                             <label>Concept:</label>
-                            <select [disabled]='record || !editDeduction' class="form-control" [(ngModel)]="activeCred.type" (change)="setActiveCredType($event.target.value)">
+                            <select [disabled]='record && !editDeduction' class="form-control" [(ngModel)]="activeCred.type" (change)="setActiveCredType($event.target.value)">
                                 <option *ngFor="let ded of deductionsType">{{ded}}</option>
                             </select>
                         </div>
                         <div class="col-md-2" style="padding-right:0px"></div>
                         <div class="col-md-5" style="padding-right:0px">
                             <label>Amount:</label>
-                            <input type="text" [disabled]='record || !editDeduction' class="form-control" [(ngModel)]="activeCred.amount">
+                            <input type="text" [disabled]='record && !editDeduction' class="form-control" [(ngModel)]="activeCred.amount">
                         </div>
                     </div>
                     <div class="row col-md-12" style="padding-right:0px">
                         <div class="col-md-12" style="padding-right:0px">
                             <label>Notes:</label>
-                            <textarea class="form-control" width="100%" [disabled]='record || !editDeduction' [(ngModel)]="activeCred.notes"></textarea>
+                            <textarea class="form-control" width="100%" [disabled]='record && !editDeduction' [(ngModel)]="activeCred.notes"></textarea>
                         </div>
                     </div>
                     <div class="row col-md-12" style="padding-right:0px">
