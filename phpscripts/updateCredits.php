@@ -9,13 +9,12 @@ $request = json_decode($postdata);
 $idcredits = ($request->iddebits);
 $status = ($request->status);
 $type = ($request->type);
-$notes = ($request->notes);
 $amount = ($request->amount);
 $id_user = ($request->id_user);
 $id_employee = ($request->id_employee);
 
 if($status == 'EDIT'){
-    $sql = "UPDATE `credits` SET `type` = '$type', `amount` = '$amount', `notes` = '$notes' WHERE `idcredits` = $idcredits;";
+    $sql = "UPDATE `credits` SET `type` = '$type', `amount` = '$amount' WHERE `idcredits` = $idcredits;";
     $sql2 = "INSERT INTO `internal_processes` (`idinternal_processes`, `id_user`, `id_employee`, `name`, `date`, `status`, `notes`) VALUES 
     (NULL, $id_user, $id_employee, 'Update credit', DATE_FORMAT(NOW(), '%Y-%m-%d'), 'COMPLETED', CONCAT('Manualy Deleted AT ', NOW(), ' | ', 
     (SELECT CONCAT_WS(',',COALESCE(idcredits, 'NULL'), COALESCE(id_payment, 'NULL'),
