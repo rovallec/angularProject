@@ -74,14 +74,14 @@ export class AccprofilesComponent implements OnInit {
   adv: advances_acc = new advances_acc;
   selected_detail: credits = new credits;
   hover: string = null;
-  years:string[] = [];
-  selectedYear:string = null;
-  months:string[] = [];
-  selectedMonth:string = null;
-  activeAccountpy:string = null;
-  activePaymentMethodpy:string = null;
-  deductionsType:string[] = [];
-  acreditType:string = '0';
+  years: string[] = [];
+  selectedYear: string = null;
+  months: string[] = [];
+  selectedMonth: string = null;
+  activeAccountpy: string = null;
+  activePaymentMethodpy: string = null;
+  deductionsType: string[] = [];
+  acreditType: string = '0';
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -102,7 +102,7 @@ export class AccprofilesComponent implements OnInit {
 
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
-    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id, rol: this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
 
       if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-12-01").getTime()) <= 0)) {
         a_date = (new Date(todayDate).getFullYear() - 1) + '-12-01';
@@ -135,28 +135,28 @@ export class AccprofilesComponent implements OnInit {
 
       this.apiService.getPayments(peridos).subscribe((pym: payments[]) => {
         this.payments = pym;
-        this.active_payment = pym[pym.length -1];
+        this.active_payment = pym[pym.length - 1];
         this.years = [];
-        pym.forEach(element=>{
-          let addthis:boolean = true;
-          let addthisMonth:boolean = true;
+        pym.forEach(element => {
+          let addthis: boolean = true;
+          let addthisMonth: boolean = true;
           let addYear = element.start.split("-")[0];
           let addMonth = element.start.split("-")[1];
-          this.years.forEach(year=>{
-            if(year == addYear){
+          this.years.forEach(year => {
+            if (year == addYear) {
               addthis = false;
             }
           })
-          if(addthis){
+          if (addthis) {
             this.years.push(addYear);
             this.selectedYear = this.years[0];
           }
-          this.months.forEach(month=>{
-            if(month == addMonth && this.years[0] == element.start.split('-')[0]){
+          this.months.forEach(month => {
+            if (month == addMonth && this.years[0] == element.start.split('-')[0]) {
               addthisMonth = false;
             }
           })
-          if(addthisMonth){
+          if (addthisMonth) {
             this.months.push(addMonth);
             this.selectedMonth = this.months[this.months.length - 1];
           }
@@ -180,15 +180,15 @@ export class AccprofilesComponent implements OnInit {
 
   setPayment() {
     this.activeAccountpy = this.employee.account;
-    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
-      acc.forEach(account=>{
-        if(account.idaccounts == this.active_payment.id_account_py){
+    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
+      acc.forEach(account => {
+        if (account.idaccounts == this.active_payment.id_account_py) {
           this.activeAccountpy = account.name
         }
       })
     })
-        this.paymentMethods.forEach(pyM=>{
-      if(pyM.idpayment_methods == this.active_payment.id_paymentmethod){
+    this.paymentMethods.forEach(pyM => {
+      if (pyM.idpayment_methods == this.active_payment.id_paymentmethod) {
         this.activePaymentMethodpy = pyM.type + " | " + pyM.bank
       }
     })
@@ -201,10 +201,10 @@ export class AccprofilesComponent implements OnInit {
             this.cred_benefits = cred;
             this.deb_benefits = deb;
             this.total = 0;
-            cred.forEach(c=>{
+            cred.forEach(c => {
               this.total = this.total + Number(c.amount);
             })
-            deb.forEach(d=>{
+            deb.forEach(d => {
               this.total = this.total - Number(d.amount);
             })
           }
@@ -243,7 +243,7 @@ export class AccprofilesComponent implements OnInit {
     this.insertN = str;
     this.insertNew = true;
     this.record = false;
-    if(str == 'Credit'){
+    if (str == 'Credit') {
       this.deductionsType = [
         'Ajuste de periodos anteriores',
         'Ajuste periodos anteriores',
@@ -259,7 +259,7 @@ export class AccprofilesComponent implements OnInit {
         'Salario Base',
         'Treasure Hunt'
       ]
-    }else{
+    } else {
       this.deductionsType = [
         'Ajuste de periodos anteriores',
         'Anticipo Sobre Sueldo',
@@ -287,27 +287,39 @@ export class AccprofilesComponent implements OnInit {
   }
 
   insertDeduction() {
-    this.activeCred.id_user = this.authUser.getAuthusr().iduser;
-    this.activeCred.idpayments = this.active_payment.idpayments;
-    this.activeCred.id_employee = this.employe_id;
-    if (this.insertN == 'Debit') {
-      this.active_payment.debits = (Number(this.active_payment.debits) + Number(this.activeCred.amount)).toFixed(2);
-      this.apiService.insertDebits(this.activeCred).subscribe((str: string) => {
-        this.activeCred.iddebits = str;
-        this.apiService.insertPushedDebit(this.activeCred).subscribe((str: string) => {
-          this.setPayment();
-        })
+
+    this.apiService.getPeriods().subscribe((period: periods[]) => {
+      period.forEach(element => {
+        if (element.idperiods == this.active_payment.id_period) {
+          if (element.status != '0') {
+            this.activeCred.id_user = this.authUser.getAuthusr().iduser;
+            this.activeCred.idpayments = this.active_payment.idpayments;
+            this.activeCred.id_employee = this.employe_id;
+            if (this.insertN == 'Debit') {
+              this.active_payment.debits = (Number(this.active_payment.debits) + Number(this.activeCred.amount)).toFixed(2);
+              this.apiService.insertDebits(this.activeCred).subscribe((str: string) => {
+                this.activeCred.iddebits = str;
+                this.apiService.insertPushedDebit(this.activeCred).subscribe((str: string) => {
+                  this.setPayment();
+                })
+              })
+            } else {
+              this.active_payment.credits = (Number(this.active_payment.credits) + Number(this.activeCred.amount)).toFixed(2);
+              this.apiService.insertCredits(this.activeCred).subscribe((str: string) => {
+                this.activeCred.iddebits = str;
+                this.apiService.insertPushedCredit(this.activeCred).subscribe((str: string) => {
+                  this.setPayment();
+                })
+              })
+            }
+            this.insertNew = false;
+          }else{
+            window.alert('Insert records is only available for open periods');
+          }
+        }
       })
-    } else {
-      this.active_payment.credits = (Number(this.active_payment.credits) + Number(this.activeCred.amount)).toFixed(2);
-      this.apiService.insertCredits(this.activeCred).subscribe((str: string) => {
-        this.activeCred.iddebits = str;
-        this.apiService.insertPushedCredit(this.activeCred).subscribe((str: string) => {
-          this.setPayment();
-        })
-      })
-    }
-    this.insertNew = false;
+    })
+
   }
 
   cancelDeduction() {
@@ -345,7 +357,7 @@ export class AccprofilesComponent implements OnInit {
         'Seguro',
         'TARJETA DE ACCESO/PARQUEO',
       ]
-      if(isNullOrUndefined(de.iddebits)){
+      if (isNullOrUndefined(de.iddebits)) {
         this.activeCred.type = cred.type;
         this.activeCred.amount = cred.amount;
         this.activeCred.date = this.active_payment.date;
@@ -354,7 +366,7 @@ export class AccprofilesComponent implements OnInit {
         this.activeCred.id_user = 'Admin';
         this.activeCred.notes = 'Inherent Credit By Close Period';
         this.record = true;
-      }else{
+      } else {
         this.activeCred = de;
         this.insertNew = true;
         this.insertN = 'Credit';
@@ -365,7 +377,7 @@ export class AccprofilesComponent implements OnInit {
 
   setDeduction(deb: debits) {
     this.apiService.getPushedDebits(deb).subscribe((de: credits) => {
-      if(isNullOrUndefined(de.iddebits)){
+      if (isNullOrUndefined(de.iddebits)) {
         this.activeCred.type = deb.type;
         this.activeCred.amount = deb.amount;
         this.activeCred.date = deb.date;
@@ -374,11 +386,11 @@ export class AccprofilesComponent implements OnInit {
         this.activeCred.id_user = 'Admin';
         this.activeCred.notes = 'Inherent Debit By Close Period';
         this.record = true;
-      }else{
-      this.activeCred = de;
-      this.insertNew = true;
-      this.insertN = 'Debit';
-      this.record = true;
+      } else {
+        this.activeCred = de;
+        this.insertNew = true;
+        this.insertN = 'Debit';
+        this.record = true;
       }
     })
   }
@@ -524,7 +536,7 @@ export class AccprofilesComponent implements OnInit {
                       cred_aguinaldo_productivity.notes = avg_productivity + "/ 365 *" + (Number((((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(a_date).getTime())))) / (1000 * 3600 * 24)).toFixed(2) + " = " + cred_aguinaldo_productivity.amount;
                     }
                     this.cred_benefits.push(cred_aguinaldo_base);
-                    this.cred_benefits.push(cred_aguinaldo_productivity);                  
+                    this.cred_benefits.push(cred_aguinaldo_productivity);
 
                     if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)) {
                       b_date = this.employee.hiring_date;
@@ -608,19 +620,19 @@ export class AccprofilesComponent implements OnInit {
                               this.cred_benefits.push(credit);
                             })
                           }
-                        this.apiService.getDebits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((deb: debits[]) => {
-                          if (!isNullOrUndefined(deb)) {
-                            deb.forEach(debit => {
-                              this.deb_benefits.push(debit);
+                          this.apiService.getDebits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((deb: debits[]) => {
+                            if (!isNullOrUndefined(deb)) {
+                              deb.forEach(debit => {
+                                this.deb_benefits.push(debit);
+                              })
+                            }
+                            this.cred_benefits.forEach((crd: credits) => {
+                              this.total = this.total + Number(crd.amount);
+                            });
+                            this.deb_benefits.forEach((dbd: credits) => {
+                              this.total = this.total - Number(dbd.amount);
                             })
-                          }
-                          this.cred_benefits.forEach((crd:credits)=>{
-                            this.total = this.total + Number(crd.amount);
                           });
-                          this.deb_benefits.forEach((dbd:credits)=>{
-                            this.total = this.total - Number(dbd.amount);
-                          })
-                        });
                         })
                       }
                     })
@@ -714,7 +726,7 @@ export class AccprofilesComponent implements OnInit {
     this.setPayment();
   }
 
-  CancelAcreditSelection(){
+  CancelAcreditSelection() {
     this.setAcreditCredits = "0";
     this.setAcreditDebits = "0";
     this.acreditType = '0';
@@ -722,41 +734,41 @@ export class AccprofilesComponent implements OnInit {
     this.setPayment();
   }
 
-  selectedCredit(event, str:string) {
+  selectedCredit(event, str: string) {
     let val: string = "," + event.target.value;
-    let temp:string = '0';
+    let temp: string = '0';
     this.acreditType = str;
     if (event.target.checked) {
       this.setAcreditCredits = this.setAcreditCredits + val;
       this.acrediting = true;
     } else {
       this.setAcreditCredits.split(',').forEach(element => {
-        if(element != event.target.value && element != '0'){
+        if (element != event.target.value && element != '0') {
           temp = temp + "," + element;
         }
         this.setAcreditCredits = temp;
       });
-      if(this.setAcreditCredits == '0'){
+      if (this.setAcreditCredits == '0') {
         this.CancelAcreditSelection();
       }
     }
   }
 
-  selectedDebit(event, str:string) {
+  selectedDebit(event, str: string) {
     let val: string = "," + event.target.value;
-    let temp:string = '0';
+    let temp: string = '0';
     this.acreditType = str;
     if (event.target.checked) {
       this.setAcreditDebits = this.setAcreditDebits + val;
       this.acrediting = true;
     } else {
       this.setAcreditDebits.split(',').forEach(element => {
-        if(element != event.target.value && element != '0'){
+        if (element != event.target.value && element != '0') {
           temp = temp + "," + element;
         }
         this.setAcreditDebits = temp;
       });
-      if(this.setAcreditDebits == '0'){
+      if (this.setAcreditDebits == '0') {
         this.CancelAcreditSelection();
       }
     }
@@ -836,7 +848,7 @@ export class AccprofilesComponent implements OnInit {
     this.adv = adv;
     this.adv.notes = '';
   }
-  
+
   setSelectedDetail(cred: credits) {
     this.selected_detail.type = cred.type;
     let i: number = 0;
@@ -919,35 +931,47 @@ export class AccprofilesComponent implements OnInit {
     })
   }
 
-  showPayments(){
-    let pys:payments[] = [];
-    this.payments.forEach(element=>{
-      if(element.start.split('-')[0] == this.selectedYear && element.start.split('-')[1] == this.selectedMonth){
+  showPayments() {
+    let pys: payments[] = [];
+    this.payments.forEach(element => {
+      if (element.start.split('-')[0] == this.selectedYear && element.start.split('-')[1] == this.selectedMonth) {
         pys.push(element);
       }
     })
     return pys;
   }
 
-  clickSetPayment(py:payments){
+  clickSetPayment(py: payments) {
     this.active_payment = py;
     this.setPayment();
   }
 
-  setMonth(){
+  setMonth() {
     this.clickSetPayment(this.showPayments()[0]);
   }
 
-  setActiveCredType(str:string){
+  setActiveCredType(str: string) {
     this.activeCred.type = str;
   }
 
-  deleteDeduction(){
-    console.log(this.activeCred);
-    this.apiService.deleteDeduction(this.activeCred).subscribe((str:string)=>{
-      if(str == '1'){
-        window.alert('Record Successfuly Deleted');
-      }
+  deleteDeduction() {
+    this.apiService.getPeriods().subscribe((period: periods[]) => {
+      period.forEach(element => {
+        if (element.idperiods == this.active_payment.id_period) {
+          if (element.status != '0') {
+            this.activeCred.status = this.insertN;
+            this.apiService.deleteDeduction(this.activeCred).subscribe((str: string) => {
+              if (str == '1') {
+                window.alert('Record Successfuly Deleted');
+                this.cancelDeduction();
+              }
+            })
+          } else {
+            window.alert('Delete records is only available for open periods')
+          }
+        }
+      })
     })
+    this.cancelDeduction();
   }
-} 
+}
