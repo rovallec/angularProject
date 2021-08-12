@@ -16,9 +16,30 @@ $sql3 = "DELETE FROM debits WHERE id_payment = $id_payment;";
 $sql4 = "DELETE FROM payroll_values WHERE id_payment = $id_payment;";
 $sql1= "INSERT INTO `internal_processes` (`idinternal_processes`, `id_user`, `id_employee`, `name`, `date`, `status`, `notes`) VALUES (NULL, $id_user, $id_employee, 'Delete payment', DATE_FORMAT(NOW(), '%Y-%m-%d'), CONCAT('Manualy Deleted AT ', NOW()));";
 
-echo($sql);
-echo($sql1);
-echo($sql2);
-echo($sql3);
-echo($sql4);
+if(mysqli_query($con,$sql2)){  
+  if(mysqli_query($con,$sql3)){
+    if(mysqli_query($con,$sql4)){
+      if(mysqli_query($con,$sql1)){
+        if(mysqli_query($con,$sql)){
+          echo(json_encode("1"));
+        }else{
+          $error = $sql . "|" . mysqli_error($con);
+          echo(json_encode($error));
+        }
+      }else{
+        $error = $sql1 . "|" . mysqli_error($con);
+        echo(json_encode($error));
+      }
+    }else{
+      $error = $sql4 . "|" . mysqli_error($con);
+      echo(json_encode($error));
+    }
+  }else{
+    $error = $sql3 . "|" . mysqli_error($con);
+    echo(json_encode($error));
+  }
+}else{  
+  $error = $sql2 . "|" . mysqli_error($con);
+  echo(json_encode($error));
+}
 ?>
