@@ -388,6 +388,34 @@ export class AccprofilesComponent implements OnInit {
   setDeduction(deb: debits) {
     this.editDeduction = false;
     this.insertN = 'Debit';
+    this.deductionsType = [
+      'Ajustes Periodos Anteriores',
+      'Anticipo Sobre Bono 14',
+      'Bonificacion Decreto',
+      'Bonificacion Productividad',
+      'Bonos Diversos',
+      'Bonos Diversos Cliente TK',
+      'Bonos Diversos Nearsol TK',
+      'Hiring Bonus',
+      'RAF Bonus',
+      'Salario Base',
+      'Treasure Hunt',
+      'Anticipo Sobre Sueldo',
+      'Anticipo Sobre Aguinaldo',
+      'Boleto De Ornato',
+      'Bus',
+      'Car Parking',
+      'Descuento IGSS',
+      'Descuento Judicial',
+      'Headset',
+      'ISR',
+      'Monedero',
+      'Motorcycle Parking',
+      'Parqueo',
+      'Prestamo Personal',
+      'Seguro',
+      'TARJETA DE ACCESO/PARQUEO',
+    ]
     this.apiService.getPushedDebits(deb).subscribe((de: credits) => {
       if (isNullOrUndefined(de.iddebits)) {
         this.activeCred.type = deb.type;

@@ -25,7 +25,7 @@
                             class="fas fa-file-upload"></i></button>
                     <button class="btn btn-outline-success" [disabled]="actualPeriod.status == '3'" title="Save upload"
                         (click)="saveImport()" *ngIf="working && !saving"><i class="fas fa-check"></i></button>
-                </div> 
+                </div>
             </div>
         </div>
         <div class="row p-2">
@@ -93,7 +93,7 @@
                     <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
                         <a class="nav-item nav-link active" id="nav-payroll-tab" data-toggle="tab" href="#nav-payroll"
                             role="tab" aria-controls="nav-payroll" aria-selected="true" *ngIf="!working">Payroll
-                            Values</a>
+                            Values <i class="fas fa-filter" data-toggle="modal" data-target="#filterModal"></i></a>
                         <a class="nav-item nav-link" id="nav-resume-tab" data-toggle="tab" href="#nav-resume" role="tab"
                             aria-controls="nav-resume" aria-selected="true" *ngIf="!working">Resume</a>
                         <a class="nav-item nav-link" id="nav-excep-tab" data-toggle="tab" href="#nav-excep" role="tab"
@@ -120,9 +120,9 @@
                                 <td>NEARSOL BONUS</td>
                                 <td>CLIENT BONUS</td>
                                 <td>TREASURE HUNT</td>
-                                <td>ADJUTED TIME</td>
-                                <td>ADJUTED OT</td>
-                                <td>ADJUTED HOLIDAY</td>
+                                <td>ADJUSTED TIME</td>
+                                <td>ADJUSTED OT</td>
+                                <td>ADJUSTED HOLIDAY</td>
                                 <td>STATUS</td>
                             </tr>
                             <tbody>
@@ -210,6 +210,7 @@
                                 <th>IGSS Hrs.</th>
                                 <th>INSURANCE</th>
                                 <th>OTHER Hrs.</th>
+                                <th>NON SHOW</th>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let r of resumes">
@@ -223,6 +224,7 @@
                                     <td>{{r.igss_hrs}}</td>
                                     <td>{{r.insurance}}</td>
                                     <td>{{r.other_hrs}}</td>
+                                    <td>{{r.ns}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -451,3 +453,52 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<!---------------------------------------------------------------------------------- FILTER MODAL ------------------------------------------------>
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="uploadBonusesLabel">FILTER</h5>
+            </div>
+            <div class="modal-body">
+                <div class="list-group">
+                    <label class="list-group-item hover_item" *ngFor="let filter of filterList; index as i"
+                        style="padding:0px; cursor:pointer;" [ngClass]="{'activeFilter':verifyExist(filter)}">
+                        <div class="row">
+                            <div class="col-md-5">
+                            <input class="form-check-input me-1" type="checkbox"
+                                style="margin-left:15px;cursor:pointer;" value="{{filter}}"
+                                (change)="togleFilter(filter)">
+                            <label style="margin-left:40px;cursor:pointer;font-size: 12px;">{{filter}}</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" *ngIf="verifyExist(filter)" style="padding:0px;max-height:25px;margin-top:5px;margin-bottom:5px;font-size:13px" [(ngModel)]="filterLogic[i]">
+                                <option>OR</option>
+                                <option>AND</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" *ngIf="verifyExist(filter)" style="padding:0px;max-height:25px;margin-top:5px;margin-bottom:5px;font-size:13px" [(ngModel)]="filterCompare[i]">
+                                <option>=</option>
+                                <option>></option>
+                                <option><</option>
+                                <option>>=</option>
+                                <option><=</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" *ngIf="verifyExist(filter)" [(ngModel)]="filterValue[i]" style="margin-top:5px; margin-bottom:5px;margin-left:-5px;max-height:25px">
+                        </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="applyFilter()">APPLY</button>
+            </div>
+        </div>
+    </div>
+</div>

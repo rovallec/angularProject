@@ -44,3 +44,9 @@ i{
   color:white;
   border-color: #003b71;
 }
+
+.activeFilter{
+    background-color:#003b71;
+    color:white;
+    border-color: white;
+}

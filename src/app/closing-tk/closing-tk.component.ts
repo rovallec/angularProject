@@ -66,6 +66,19 @@ export class ClosingTkComponent implements OnInit {
   deadline_time:string = new Date().getHours() + ":" + new Date().getMinutes();
   disable_date:boolean = false;
   disable_time:boolean = false;
+  filterList:string[] = ['DISCOUNTED DAYS','HOURS',	'SEVENTH', 'OT',	'HOLIDAYS',	
+  'NEARSOL BONUS',	'CLIENT BONUS',	'TREASURE HUNT',	'ADJUSTED TIME',	'ADJUSTED OT',	
+  'ADJUSTED HOLIDAY', 'VACATIONS',	'JANP',	'JAP',	'IGSS',	'IGSS Hrs.',	'INSURANCE',	'OTHER Hrs.', 'NON SHOW'];
+  filterValue:string[] = ['','','','','','','','','','','', '',	'',	'',	'',	'',	'',	'',	''];
+  setFilter:string = '0';
+  filterLogic:string[] = ['','','','','','','','','','','','','','','','','','',	''];
+  filterCompare:string[] = ['','','','','','','','','','','','','','','','','','',	''];
+  allPayroll:payroll_values_gt[] = [];
+  filterNames:string[] = ['discounted_days','discounted_hours',	'seventh', 'ot_hours',	'holidays_hours',	
+  'nearsol_bonus',	'performance_bonus',	'treasure_hunt',	'adj_hours',	'adj_ot',	
+  'adj_holidays', 'vacations','janp','jap','igss','igss_hrs','insurance','other_hrs',	'ns'];
+  activeFilter:boolean = false;
+  
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
@@ -406,6 +419,7 @@ export class ClosingTkComponent implements OnInit {
                                             if (Number(attendance.worked_time) == 0) {
                                               attendance.balance = "NS";
                                               ns_count++;
+                                              rs.ns = (Number(rs.ns) + 1).toFixed(0);
                                               if (!non_show) {
                                                 non_show = true;
                                                 discounted_days = discounted_days + 1;
@@ -1265,4 +1279,167 @@ export class ClosingTkComponent implements OnInit {
   enableTime(){
     this.disable_time = false;
   }
+
+  applyFilter(){
+    let union:string= null;
+    let temp_p:payroll_resume[] = [];
+    let temp_resume:payroll_resume[] =[];
+    let first:boolean = true;
+
+    if(this.activeFilter){
+      this.payroll_values = this.allPayroll;
+    }else{
+      this.allPayroll = this.payroll_values;
+    }
+    this.activeFilter = true;
+    for (let i = 0; i < 11; i++) {
+      let temp_p:payroll_values_gt[] = [];
+      if(this.verifyExist(this.filterList[i])){
+        if(this.filterLogic[i] == "AND"){
+          if(this.filterCompare[i] == "="){
+            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] == this.filterValue[i]);
+          }else if(this.filterCompare[i] == ">"){
+            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] > this.filterValue[i]);
+          }else if(this.filterCompare[i] == ">="){
+            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] >= this.filterValue[i]);
+          }else if(this.filterCompare[i] == "<"){
+            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] < this.filterValue[i]);
+          }else if(this.filterCompare[i] == "<="){
+            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] <= this.filterValue[i]);
+          }
+        }else if(this.filterLogic[i] == "OR"){
+          if(this.payroll_values.length == this.allPayroll.length){
+            this.payroll_values = [];
+          }
+          if(this.filterCompare[i] == "="){
+            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] == this.filterValue[i]);
+          }else if(this.filterCompare[i] == ">"){
+            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] > this.filterValue[i]);
+          }else if(this.filterCompare[i] == ">="){
+            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] >= this.filterValue[i]);
+          }else if(this.filterCompare[i] == "<"){
+            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] < this.filterValue[i]);
+          }else if(this.filterCompare[i] == "<="){
+            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] <= this.filterValue[i]);
+          }
+          temp_p.forEach(element=>{
+            this.payroll_values.push(element);
+          })
+        }
+      }
+    }
+
+    for (let b = 11; b < 18; b++) {
+      if(this.verifyExist(this.filterList[b])){
+        if(this.filterLogic[b] == "AND"){
+          if(isNullOrUndefined(union)){union = "AND"};
+          if(first){
+            this.payroll_values.forEach(ele=>{
+              this.resumes.forEach(res=>{
+                if(ele.id_employee == res.id_employee){
+                  temp_resume.push(res);
+                }
+              })
+            })
+          }
+          first = false;
+          if(this.filterCompare[b] == "="){
+            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] == this.filterValue[b]);
+          }else if(this.filterCompare[b] == ">"){
+            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] > this.filterValue[b]);
+          }else if(this.filterCompare[b] == ">="){
+            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] >= this.filterValue[b]);
+          }else if(this.filterCompare[b] == "<"){
+            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] < this.filterValue[b]);
+          }else if(this.filterCompare[b] == "<="){
+            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] <= this.filterValue[b]);
+          }
+        }else if(this.filterLogic[b] == "OR"){
+          if(isNullOrUndefined(union)){union = "OR"};
+          if(first){
+            this.payroll_values.forEach(ele=>{
+              this.resumes.forEach(res=>{
+                if(ele.id_employee == res.id_employee){
+                  temp_resume.push(res);
+                }
+              })
+            })
+          }
+          if(this.filterCompare[b] == "="){
+            temp_p = temp_resume.filter(r => r[this.filterNames[b]] == this.filterValue[b]);
+          }else if(this.filterCompare[b] == ">"){
+            temp_p = temp_resume.filter(r => r[this.filterNames[b]] > this.filterValue[b]);
+          }else if(this.filterCompare[b] == ">="){
+            temp_p = temp_resume.filter(r => r[this.filterNames[b]] >= this.filterValue[b]);
+          }else if(this.filterCompare[b] == "<"){
+            temp_p = temp_resume.filter(r => r[this.filterNames[b]] < this.filterValue[b]);
+          }else if(this.filterCompare[b] == "<="){
+            temp_p = temp_resume.filter(r => r[this.filterNames[b]] <= this.filterValue[b]);
+          }
+          temp_p.forEach(element=>{
+            if(temp_resume.length == this.resumes.length){
+              temp_resume = [];
+            }
+            temp_resume.push(element);
+          })
+        }
+      }
+    }
+
+    if(!isNullOrUndefined(union)){
+      let temp_to_res:payroll_values_gt[] = [];
+      temp_resume.forEach(element=>{
+        this.allPayroll.forEach(p_temp=>{
+          if(p_temp.id_employee == element.id_employee){
+            temp_to_res.push(p_temp);
+          }
+        })
+      })
+      if(union == "AND"){
+        this.payroll_values = temp_to_res;
+      }else if(union == "OR"){
+        temp_to_res.forEach(to_push => {
+          this.payroll_values.push(to_push);
+        });
+      }
+    }
+  }
+
+  togleFilter(str:string){
+    let add:boolean = true;
+    let temp:string = "0";
+    this.setFilter.split(',').forEach(ss=>{
+      if(ss != "0"){
+        if(ss.toString() == str.toString()){
+          add = false;
+        }
+      }
+    })
+    if(add){
+      this.setFilter = this.setFilter + "," + str;
+    }else{
+      this.setFilter.split(',').forEach(ss=>{
+        if(ss != "0"){
+          if(ss != str){
+            temp = temp + "," + ss ;
+          }
+        }
+      });
+      if(this.setFilter == '0'){
+        this.activeFilter = false;
+      }
+      this.setFilter = temp;
+    }
+  }
+
+  verifyExist(str:string){
+    let exist:boolean = false;
+    this.setFilter.split(',').forEach(element => {
+      if(str == element){
+        exist = true;
+      }
+    });
+    return exist;
+  }
+
 }

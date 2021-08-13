@@ -1307,13 +1307,6 @@ export class payroll_values_gt{
     id_payment:string = null;
     client_id:string = null;
     nearsol_id:string = null;
-    discounted_days:string = null;
-    seventh:string = null;
-    discounted_hours:string = null;
-    ot_hours:string = null;
-    holidays_hours:string = null;
-    performance_bonus:string = null;
-    treasure_hunt:string = null;
     agent_name:string = null;
     account_name:string = null;
     agent_status:string = null;
@@ -1321,10 +1314,17 @@ export class payroll_values_gt{
     hrs:number = null;
     next_seventh:number = null;
     adjustments:string = null;
-    adj_holidays:string = null;
-    adj_ot:string = null;
-    adj_hours:string = null;
+    discounted_days:string = null;
+    discounted_hours:string = null;
+    seventh:string = null;
+    ot_hours:string = null;
+    holidays_hours:string = null;
     nearsol_bonus:string = null;
+    performance_bonus:string = null;
+    treasure_hunt:string = null;
+    adj_hours:string = null;
+    adj_ot:string = null;
+    adj_holidays:string = null;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;
@@ -1682,6 +1682,7 @@ export class payroll_resume{
     igss_hrs:string;
     insurance:string;
     other_hrs:string;
+    ns:string;
     constructor(){
         this.nearsol_id = null;
         this.client_id = null;
@@ -1693,6 +1694,7 @@ export class payroll_resume{
         this.igss_hrs = '0';
         this.insurance = '0';
         this.other_hrs = '0';
+        this.ns = '0';
     }
 }
 
