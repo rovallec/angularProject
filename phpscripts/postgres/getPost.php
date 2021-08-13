@@ -26,7 +26,7 @@ $sql = "select * from posts " . $where . $order;
 
 
 if($result = pg_query($con,$sql)){
-  while($row = pg_fetch_array($result)) {    
+  while($row = pg_fetch_array($result)) {
     $return[$i]['id'] = $row['id'];
     $return[$i]['location'] = $row['location'];
     $return[$i]['header'] = $row['header'];
@@ -38,13 +38,13 @@ if($result = pg_query($con,$sql)){
     $return[$i]['date_post'] = $row['date_post'];
     $return[$i]['origin'] = $row['origin'];
     $return[$i]['label'] = $row['label'];
-    $i++;    
+    $i++;
   }
 //  echo($sql);
     echo(json_encode($return));
 }else{
   http_response_code(400);
-  echo($con->error);
+  echo(pg_result_error($con));
   echo("<br>");
   echo($sql);
 }
