@@ -33,7 +33,7 @@ export class ImportWavesComponent implements OnInit {
   date: string = null;
   start_time: string = null;
   end_time: string = null;
-  days_off: string = null;  
+  days_off: string = null;
   // file
   file: any;
   completed: boolean = false;
@@ -59,7 +59,7 @@ export class ImportWavesComponent implements OnInit {
     this.days_off = null;
     this.start_time = null;
     this.end_time = null;
-    this.date = fecha.today;    
+    this.date = fecha.today;
     this.isLoading = false;
     this.fullprofiles = [];
     this.apiServices.getClients().subscribe((cls: clients[]) => {
@@ -91,7 +91,7 @@ export class ImportWavesComponent implements OnInit {
       return true;
     } else {
       return false;
-    }    
+    }
   }
 
   saveWave() {
@@ -139,7 +139,7 @@ export class ImportWavesComponent implements OnInit {
       // ya hechas las validaciones correspondientes envia la información a grabarse en la BD.
 
       this.apiServices.insertNewWave(this.waves).subscribe((idwave: string) => {
-        this.waves.idwaves = idwave;        
+        this.waves.idwaves = idwave;
         this.schedule.id_wave = this.waves.idwaves;
         this.apiServices.insertNewSchedule(this.schedule).subscribe((idschedules: string) => {
           this.schedule.idschedules = idschedules;
@@ -164,7 +164,7 @@ export class ImportWavesComponent implements OnInit {
                 this.apiServices.insertcontact(element.contact_detail).subscribe(async (_str: string) => {
                   for await (const fam of element.family) {
                     this.apiServices.createFamily(fam).subscribe((fstr: string) => {
-                      if (String(fstr).split("|")[0]=="1"){   
+                      if (String(fstr).split("|")[0]=="1"){
                         element.state = 'Saved';
                         //window.alert("Action successfuly recorded.");
                       } else {
@@ -284,20 +284,20 @@ export class ImportWavesComponent implements OnInit {
 
     if (isTrue == false) {
       Aprofile.state = 'Error';
-      Aprofile.error_message = 'The marital status must be entered in Spanish. \n The allowed values ar the following: \n' + 
+      Aprofile.error_message = 'The marital status must be entered in Spanish. \n The allowed values ar the following: \n' +
                           'Soltero(a), Casado(a), Viudo(a), Separado(a), Divorciado(a).';
     }
   }
 
   addfile(event) {
-    let fecha: Fecha = new Fecha;    
+    let fecha: Fecha = new Fecha;
     let ldate: Date = new Date;
     this.file = event.target.files[0];
     let fileReader = new FileReader();
     let profilef: full_profiles = new full_profiles;
     let count: number = 0;
     let address: string = '';
-    
+
     this.waves.id_account = this.selectedAccount.idaccounts;
     this.waves.starting_date = fecha.today;
     this.waves.end_date = fecha.today;
@@ -342,7 +342,7 @@ export class ImportWavesComponent implements OnInit {
               num = '0' + count.toString();
             } else {
               num = count.toString();
-            }        
+            }
             profilef.No = num;
             profilef.wave = this.waves;
             profilef.state = 'Loaded';
@@ -377,7 +377,7 @@ export class ImportWavesComponent implements OnInit {
             profilef.employee.reporter = this.actualReporter.idUser;
             profilef.employee.client_id = profilef.nearsol_id;
             profilef.employee.id_account = this.selectedAccount.idaccounts;
-            // contact_details            
+            // contact_details
             profilef.contact_detail.primary_phone = this.corrigeDatos(this.validateEmptyStr(element['primary_phone']));
             profilef.contact_detail.secondary_phone = this.corrigeDatos(this.validateEmptyStr(element['SecondaryPhone']));
             address = this.validateEmptyStr(element['First Line']) + ', ' + this.validateEmptyStr(element['District'])
@@ -409,7 +409,7 @@ export class ImportWavesComponent implements OnInit {
               fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }
-            
+
             if (this.isEmpty(element['f2_first_name']) && this.isEmpty(element['f2_second_name']) && this.isEmpty(element['f2_first_last_name']) && this.isEmpty(element['f2_second_last_name'])) {
               // no hacer nada.
             } else {
@@ -424,7 +424,7 @@ export class ImportWavesComponent implements OnInit {
               fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }
-            
+
             if (this.isEmpty(element['f3_first_name']) && this.isEmpty(element['f3_second_name']) && this.isEmpty(element['f3_first_last_name']) && this.isEmpty(element['f3_second_last_name'])) {
               // no hacer nada.
             } else {
@@ -438,7 +438,7 @@ export class ImportWavesComponent implements OnInit {
               fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }
-            
+
             if (this.isEmpty(element['f4_first_name']) && this.isEmpty(element['f4_second_name']) && this.isEmpty(element['f4_first_last_name']) && this.isEmpty(element['f4_second_last_name'])) {
               // no hacer nada.
             } else {
@@ -452,7 +452,7 @@ export class ImportWavesComponent implements OnInit {
               fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
             }
-            
+
             if (this.isEmpty(element['f5_first_name']) && this.isEmpty(element['f5_second_name']) && this.isEmpty(element['f5_first_last_name']) && this.isEmpty(element['f5_second_last_name'])) {
               // no hacer nada.
             } else {
@@ -465,10 +465,10 @@ export class ImportWavesComponent implements OnInit {
               ldate = new Date(this.validateEmptyStr(element['f5_birthdate']));
               fam.affinity_birthdate = new Date(fecha.transform(ldate));
               profilef.family.push(fam);
-            }            
+            }
             // job_histories
-            if (this.isEmpty(element['jh1_company']) && this.isEmpty(element['jh1_date_joining']) && 
-              this.isEmpty(element['jh1_date_end']) && this.isEmpty(element['jh1_reference_name']) && 
+            if (this.isEmpty(element['jh1_company']) && this.isEmpty(element['jh1_date_joining']) &&
+              this.isEmpty(element['jh1_date_end']) && this.isEmpty(element['jh1_reference_name']) &&
               this.isEmpty(element['jh1_reference_phone'])) {
               // no hacer nada.
             } else {
@@ -486,9 +486,9 @@ export class ImportWavesComponent implements OnInit {
               job.working = this.validateEmptyStr(element['jh1_working']);
               profilef.job_history.push(job);
             }
-            
-            if (this.isEmpty(element['jh2_company']) && this.isEmpty(element['jh2_date_joining']) && 
-              this.isEmpty(element['jh2_date_end']) && this.isEmpty(element['jh2_reference_name']) && 
+
+            if (this.isEmpty(element['jh2_company']) && this.isEmpty(element['jh2_date_joining']) &&
+              this.isEmpty(element['jh2_date_end']) && this.isEmpty(element['jh2_reference_name']) &&
               this.isEmpty(element['jh2_reference_phone'])) {
               // no hacer nada.
             } else {
@@ -507,9 +507,9 @@ export class ImportWavesComponent implements OnInit {
               job.working = this.validateEmptyStr(element['jh2_working']);
               profilef.job_history.push(job);
             }
-            
-            if (this.isEmpty(element['jh3_company']) && this.isEmpty(element['jh3_date_joining']) && 
-              this.isEmpty(element['jh3_date_end']) && this.isEmpty(element['jh3_reference_name']) && 
+
+            if (this.isEmpty(element['jh3_company']) && this.isEmpty(element['jh3_date_joining']) &&
+              this.isEmpty(element['jh3_date_end']) && this.isEmpty(element['jh3_reference_name']) &&
               this.isEmpty(element['jh3_reference_phone'])) {
               // no hacer nada.
             } else {
@@ -527,7 +527,7 @@ export class ImportWavesComponent implements OnInit {
               job.reference_phone = this.corrigeDatos(this.validateEmptyStr(element['jh3_reference_phone']));
               job.working = this.validateEmptyStr(element['jh3_working']);
               profilef.job_history.push(job);
-            }            
+            }
             // education_details
             profilef.current_level = this.validateEmptyStr(element['current_level']);
             profilef.further_education = this.validateEmptyStr(element['further_education']);

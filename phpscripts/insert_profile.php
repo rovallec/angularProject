@@ -7,13 +7,13 @@ require 'funcionesVarias.php';
 mysqli_begin_transaction($con, MYSQLI_TRANS_START_READ_WRITE);
 mysqli_autocommit($con, FALSE);
 $id_profile ='';
-$id_hire =''; 
-$id_employees=''; 
-$idemergency_Details=''; 
+$id_hire ='';
+$id_employees='';
+$idemergency_Details='';
 $idmedical_details='';
 $ideducation_details='';
 $id_process='';
-$idmarketing_details=''; 
+$idmarketing_details='';
 $idprocess_details='';
 $idinternal_processes='';
 $idservices='';
@@ -26,14 +26,14 @@ function strReplace($Astring) : string {
 }
 
 $postdata = file_get_contents("php://input");
-if(isset($postdata) && !empty($postdata)){	
+if(isset($postdata) && !empty($postdata)){
   $request = json_decode($postdata);
   $tittle = ($request->tittle);
   $first_name = ($request->first_name);
   $second_name = ($request->second_name);
   $first_lastname = ($request->first_lastname);
   $second_lastname = ($request->second_lastname);
-  $day_of_birthday = formatDates($request->day_of_birth);
+  $day_of_birthday = formatDatesPlus($request->day_of_birth, 1);
   $nationality = ($request->nationality);
   $marital_status = ($request->marital_status);
   $dpi = strReplace($request->dpi);
@@ -59,7 +59,7 @@ if(isset($postdata) && !empty($postdata)){
   $further_education = ($request->further_education);
   $currently_studing = ($request->currently_studing);
   $institution_name = ($request->institution_name);
-  $degree = ($request->degree);  
+  $degree = ($request->degree);
   $name = ($request->name);
   $description = ($request->description);
   $waves = json_decode(json_encode($request->wave));
@@ -78,7 +78,7 @@ if(isset($postdata) && !empty($postdata)){
   $post = ($request->post);
   $refer = ($request->refer);
   $about = ($request->about);
-  
+
   $employee = json_decode(json_encode($request->employee));
   $id_account = ($employee->id_account);
   $reporter = ($employee->reporter);
@@ -88,20 +88,20 @@ if(isset($postdata) && !empty($postdata)){
   $base_payment = ($employee->base_payment);
   $productivity_payment = ($employee->productivity_payment);
   $platform = ($employee->platform);
- 
+
   $sql =  "INSERT INTO profiles (tittle, first_name, second_name, first_lastname, second_lastname, day_of_birth, " .
-          "nationality, marital_status, dpi, nit, iggs, irtra, status, bank, account, account_type, gender, etnia, " . 
+          "nationality, marital_status, dpi, nit, iggs, irtra, status, bank, account, account_type, gender, etnia, " .
           "profesion, birth_place) " .
           "VALUE ('{$tittle}', '{$first_name}','{$second_name}','{$first_lastname}','{$second_lastname}', " .
           "'{$day_of_birthday}' ,'{$nationality}','{$marital_status}','{$dpi}','{$nit}','{$igss}', " .
           "'{$irtra}','EMPLOYEE', '{$bank}', '{$account}', '{$account_type}', '{$gender}', '{$etnia}', " .
-          "'{$profesion}', '{$birth_place}');";  
+          "'{$profesion}', '{$birth_place}');";
 
-  try 
+  try
   {
     if(mysqli_query($con, $sql))
     {
-      $id_profile = mysqli_insert_id($con);    
+      $id_profile = mysqli_insert_id($con);
 
       $sql2 = "INSERT INTO hires (idhires, id_profile, id_wave, nearsol_id, reports_to, id_schedule) " .
               "VALUES (null, '$id_profile', '$id_wave', '$nearsol_id', '$reports_to', '$id_schedule');";
@@ -120,7 +120,7 @@ if(isset($postdata) && !empty($postdata)){
           $id_employees = mysqli_insert_id($con);
 
           $sql4 = "INSERT INTO emergency_details(id_profile, e_first_name, e_second_name, e_first_lastname, " .
-                  "e_second_lastname, phone, relationship) VALUES ('{$id_profile}','{$emergency_first_name}', " . 
+                  "e_second_lastname, phone, relationship) VALUES ('{$id_profile}','{$emergency_first_name}', " .
                   "'{$emergency_second_name}', '{$emergency_first_lastname}', '{$emergency_second_lastname}', '{$emergency_phone}', '{$emergency_relationship}');";
 
           if(mysqli_query($con, $sql4))
@@ -134,11 +134,11 @@ if(isset($postdata) && !empty($postdata)){
             {
               $idmedical_details = mysqli_insert_id($con);
 
-              $sql6 = "INSERT INTO education_details(ideducation_details, id_profile, current_level, " . 
+              $sql6 = "INSERT INTO education_details(ideducation_details, id_profile, current_level, " .
                       "further_education, currently_studing, institution_name, `degree`) ".
-                      "VALUES (null, $id_profile, '$current_level', '$further_education', '$currently_studing', ". 
+                      "VALUES (null, $id_profile, '$current_level', '$further_education', '$currently_studing', ".
                       "'$institution_name', '$degree');";
-                      
+
               if(mysqli_query($con, $sql6))
               {
                 $ideducation_details = mysqli_insert_id($con);
@@ -152,11 +152,11 @@ if(isset($postdata) && !empty($postdata)){
 
                   $sql8 = "INSERT INTO marketing_details(id_process, source, post, referrer, about) " .
                           "VALUES ($id_process, '$source', '$post', '$refer', '$about');";
-                          
+
                   if(mysqli_query($con, $sql8))
                   {
                     $idmarketing_details = mysqli_insert_id($con);
-                    
+
                     $sql9 = "INSERT INTO process_details(id_process, name, value) " .
                             "VALUES ($id_process, 'Notes', 'Contratacion Completada'), ($id_process, 'Result', 'Aproved');";
 
@@ -239,7 +239,7 @@ if(isset($postdata) && !empty($postdata)){
     mysqli_rollback($con);
     echo('Error: ' . $e->getMessage() . "\n");
   }
-}  
+}
 
 //$data = "{id_profile: $id_profile, id_hire: $id_hire, id_employees: $id_employees, idemergency_Details: $idemergency_Details, idmedical_details: $idmedical_details, ideducation_details: $ideducation_details, id_process: $id_process, idmarketing_details: $idmarketing_details, idprocess_details: $idprocess_details, idinternal_processes: $idinternal_processes, idservices: $idservices}";
 $data = [$id_profile, $id_hire, $id_employees, $idemergency_Details, $idmedical_details, $ideducation_details, $id_process, $idmarketing_details, $idprocess_details, $idinternal_processes, $idservices];

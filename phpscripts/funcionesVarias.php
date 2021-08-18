@@ -21,7 +21,7 @@ function validateDataToZero($adato) {
 function validarDatosString($adato) {
   if (empty($adato) || is_null($adato)) {
     $adato = '';
-  } 
+  }
   return $adato;
 }
 
@@ -39,6 +39,23 @@ function formatDates($adate) {
   }
 }
 
+function formatDatesPlus($adate, $plus) {
+  $format = 'Y-m-d';
+
+  if (is_numeric($adate)) {
+    $adate = PHPExcel_Shared_Date::ExcelToPHP($adate+$plus);
+    $date = new DateTime("@$adate");
+    return $date->format($format);
+  } else if (is_string($adate)) {
+    $date = new DateTime($adate);
+    return $date->format($format);
+  } else {
+    return $adate;
+  }
+}
+
+
+
 function ifExist($adato) {
   if (!isset($adato) || empty($adato) || is_null($adato) || is_nan($adato)) {
     return false;
@@ -48,7 +65,7 @@ function ifExist($adato) {
 }
 
 function removeCommas($avalue) {
-  $avalue = str_replace(',','',$avalue);  
+  $avalue = str_replace(',','',$avalue);
   return $avalue;
 }
 
