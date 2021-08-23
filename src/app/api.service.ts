@@ -992,7 +992,7 @@ getRoster_tags(){
 }
 
 getRosterTemplates(str:string){
-  return this.httpClient.post<roster_types[]>(`${this.PHP_API_SERVER}/phpscripts/getRosterTypes.php`,str);
+  return this.httpClient.post<roster_types[]>(`${this.PHP_API_SERVER}/phpscripts/getRosterTemplates.php`,str);
 }
 }
 
