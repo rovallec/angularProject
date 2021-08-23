@@ -10,7 +10,7 @@ $i = 0;
 $sql = "SELECT DISTINCT(tag) FROM roster_types;";
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
-            $proccesses[$i] = $row['idprocess_types'];
+            $proccesses[$i] = $row['tag'];
             $i++;
         };
         echo json_encode($proccesses);
