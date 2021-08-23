@@ -4,10 +4,7 @@ header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
 $postdata = file_get_contents("php://input");
-echo($postdata);
-$request = json_decode($postdata);
-
-$str = ($request);
+$str = ($postdata);
 
 $proccesses = [];
 $i = 0;
