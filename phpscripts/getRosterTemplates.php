@@ -12,7 +12,7 @@ $i = 0;
 
 $sql = "SELECT roster_types.*, a.start AS `mon_start`, a.end AS `mon_end`, b.start AS `tue_start`, b.end AS `tue_end`, c.start AS `wed_start`, c.end AS `wed_end`,
                d.start AS `thur_start`, d.end AS `thur_end`, e.start AS `fri_start`, e.end AS `fri_end`, f.start AS `sat_start`, f.end AS `sat_end`,
-               g.start AS `sun_start`, g.end AS `sun_end`, FROM roster_types
+               g.start AS `sun_start`, g.end AS `sun_end` FROM roster_types
         INNER JOIN roster_times a ON a.idroster_times = roster_types.id_time_mon
         INNER JOIN roster_times b ON b.idroster_times = roster_types.id_time_tue
         INNER JOIN roster_times c ON c.idroster_times = roster_types.id_time_wed
@@ -51,7 +51,6 @@ $sql = "SELECT roster_types.*, a.start AS `mon_start`, a.end AS `mon_end`, b.sta
         };
         echo json_encode($proccesses);
     }else{
-        echo($sql);
         http_response_code(400);
     }
 
