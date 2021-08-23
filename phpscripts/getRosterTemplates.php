@@ -6,6 +6,8 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $str = ($postdata);
 
+echo($str);
+
 $proccesses = [];
 $i = 0;
 
