@@ -2118,3 +2118,75 @@ export class employeesByWaves {
         this.action = null;
     }
 }
+
+export class tk_import{
+    idpayments:string;
+    client_bonus:string;
+    nearsol_bonus:string;
+    treasure_hunt:string;
+    adjust_hrs:string;
+    adjust_ot:string;
+    adjust_hld:string;
+    constructor(){
+        this.idpayments = null;
+        this.client_bonus = null;
+        this.nearsol_bonus = null;
+        this.treasure_hunt = null;
+        this.adjust_hrs = null;
+        this.adjust_ot = null;
+        this.adjust_hld = null;
+    }
+}
+
+export class roster_types{
+    idroster_types:string;
+    tag:string;
+    name:string;
+    id_time_mon:string;
+    id_time_tue:string;
+    id_time_wed:string;
+    id_time_thur:string;
+    id_time_fri:string;
+    id_time_sat:string;
+    id_time_sun:string;
+    mon_start:string;
+    mon_end:string;
+    tue_start:string;
+    tue_end:string;
+    wed_start:string;
+    wed_end:string;
+    thur_start:string;
+    thur_end:string;
+    fri_start:string;
+    fri_end:string;
+    sat_start:string;
+    sat_end:string;
+    sun_start:string;
+    sun_end:string;
+    constructor(){
+        this.idroster_types = null;
+        this.tag = null;
+        this.name = null;
+        this.id_time_mon = null;
+        this.id_time_tue = null;
+        this.id_time_wed = null;
+        this.id_time_thur = null;
+        this.id_time_fri = null;
+        this.id_time_sat = null;
+        this.id_time_sun = null;
+        this.mon_start = null;
+        this.mon_end = null;
+        this.tue_start = null;
+        this.tue_end = null;
+        this.wed_start = null;
+        this.wed_end = null;
+        this.thur_start = null;
+        this.thur_end = null;
+        this.fri_start = null;
+        this.fri_end = null;
+        this.sat_start = null;
+        this.sat_end = null;
+        this.sun_start = null;
+        this.sun_end = null;
+    }
+}

@@ -41,6 +41,7 @@ import { ItdashboardComponent } from './itdashboard/itdashboard.component';
 import { ItprofilesComponent } from './itprofiles/itprofiles.component';
 import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component';
 import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.component';
+import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenance.component';
 
 const routes:Routes = [
   {
@@ -224,6 +225,11 @@ const routes:Routes = [
   {
     path:'wavemaintenance',
     component:WaveMaintenanceComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'roster',
+    component:RostermaintenanceComponent,
     canActivate:[AuthGuard]
   },
   {

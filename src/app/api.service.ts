@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, roster_types } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -985,6 +985,14 @@ insertManualPayment(payment:payments){
 
 deleteManualPayment(payment:payments){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteManualPayment.php`, payment);
+}
+
+getRoster_tags(){
+  return this.httpClient.get<string[]>(`${this.PHP_API_SERVER}/phpscripts/getTags.php`);
+}
+
+getRosterTemplates(str:string){
+  return this.httpClient.post<roster_types[]>(`${this.PHP_API_SERVER}/phpscripts/getRosterTypes.php`,str);
 }
 }
 

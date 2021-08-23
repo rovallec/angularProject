@@ -48,6 +48,7 @@ import { ItdashboardComponent } from './itdashboard/itdashboard.component';
 import { ItprofilesComponent } from './itprofiles/itprofiles.component';
 import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component';
 import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.component';
+import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenance.component';
 
 
 @NgModule({
@@ -91,7 +92,8 @@ import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.co
     ItdashboardComponent,
     ItprofilesComponent,
     PaystubSendmailComponent,
-    WaveMaintenanceComponent
+    WaveMaintenanceComponent,
+    RostermaintenanceComponent
   ],
   imports: [
     BrowserModule,

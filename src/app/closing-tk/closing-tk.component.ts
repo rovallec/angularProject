@@ -1,11 +1,11 @@
 import { importType, isNull, TypeModifier } from '@angular/compiler/src/output/output_ast';
-import { Attribute, Component, OnInit } from '@angular/core';
+import { Attribute, Component, OnInit, TRANSLATIONS_FORMAT } from '@angular/core';
 import { isNullOrUndefined, isNumber } from 'util';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, credits, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, timekeeping_adjustments, vacations } from '../process_templates';
+import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, credits, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, timekeeping_adjustments, tk_import, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { BADFLAGS, DESTRUCTION } from 'dns';
 import { exit } from 'process';
@@ -78,6 +78,8 @@ export class ClosingTkComponent implements OnInit {
   'nearsol_bonus',	'performance_bonus',	'treasure_hunt',	'adj_hours',	'adj_ot',	
   'adj_holidays', 'vacations','janp','jap','igss','igss_hrs','insurance','other_hrs',	'ns'];
   activeFilter:boolean = false;
+  import_tk:tk_import[] = [];
+  fullImport:boolean = false;
   
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
@@ -1130,16 +1132,31 @@ export class ClosingTkComponent implements OnInit {
           var worksheet = workbook.Sheets[first_sheet_name];
           let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
           sheetToJson.forEach(element => {
-            let cred: credits = new credits;
-            cred.iddebits = element['Nearsol ID'];
-            cred.amount = element['Amount'];
-            partial_credits.push(cred);
+            if(this.fullImport){
+              let types:string[] = ['NEARSOL BONUS', 'CLIENT BONUS', 'TREASURE HUNT', 'AJUSTES A PERIODOS ANTERIORES HORAS', 'AJUSTES A PERIODOS ANTERIORES OT', 'AJUSTES A PERIODOS ANTERIORES ASUETOS'];
+              for (let i = 0; i < types.length; i++) {
+                if(Number(element[types[i]]) > 0){
+                  let cred: credits = new credits;
+                  cred.iddebits = element['Nearsol ID'];
+                  cred.amount = element[types[i]];
+                  cred.type = types[i];
+                  partial_credits.push(cred);
+                }
+              }
+            }else{
+              let cred: credits = new credits;
+              cred.iddebits = element['Nearsol ID'];
+              cred.amount = element['Amount'];
+              cred.type = this.import_type;
+              partial_credits.push(cred);
+            }
           })
           ws++;
         })
         let count: number = 0;
         this.apiServices.getPayments(provitional_period).subscribe((paymnts: payments[]) => {
           partial_credits.forEach(ele => {
+            this.import_type = ele.type;
             this.apiServices.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               if (!isNullOrUndefined(emp[0])) {
                 paymnts.forEach(py => {
@@ -1299,13 +1316,13 @@ export class ClosingTkComponent implements OnInit {
           if(this.filterCompare[i] == "="){
             this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] == this.filterValue[i]);
           }else if(this.filterCompare[i] == ">"){
-            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] > this.filterValue[i]);
+            this.payroll_values = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) > Number(this.filterValue[i]));
           }else if(this.filterCompare[i] == ">="){
-            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] >= this.filterValue[i]);
+            this.payroll_values = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) >= Number(this.filterValue[i]));
           }else if(this.filterCompare[i] == "<"){
-            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] < this.filterValue[i]);
+            this.payroll_values = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) < Number(this.filterValue[i]));
           }else if(this.filterCompare[i] == "<="){
-            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] <= this.filterValue[i]);
+            this.payroll_values = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) <= Number(this.filterValue[i]));
           }
         }else if(this.filterLogic[i] == "OR"){
           if(this.payroll_values.length == this.allPayroll.length){
@@ -1314,13 +1331,13 @@ export class ClosingTkComponent implements OnInit {
           if(this.filterCompare[i] == "="){
             temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] == this.filterValue[i]);
           }else if(this.filterCompare[i] == ">"){
-            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] > this.filterValue[i]);
+            temp_p = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) > Number(this.filterValue[i]));
           }else if(this.filterCompare[i] == ">="){
-            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] >= this.filterValue[i]);
+            temp_p = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) >= Number(this.filterValue[i]));
           }else if(this.filterCompare[i] == "<"){
-            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] < this.filterValue[i]);
+            temp_p = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) < Number(this.filterValue[i]));
           }else if(this.filterCompare[i] == "<="){
-            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] <= this.filterValue[i]);
+            temp_p = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) <= Number(this.filterValue[i]));
           }
           temp_p.forEach(element=>{
             this.payroll_values.push(element);
@@ -1346,35 +1363,27 @@ export class ClosingTkComponent implements OnInit {
           if(this.filterCompare[b] == "="){
             temp_resume = temp_resume.filter(r => r[this.filterNames[b]] == this.filterValue[b]);
           }else if(this.filterCompare[b] == ">"){
-            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] > this.filterValue[b]);
+            temp_resume = temp_resume.filter(r => Number(r[this.filterNames[b]]) > Number(this.filterValue[b]));
           }else if(this.filterCompare[b] == ">="){
-            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] >= this.filterValue[b]);
+            temp_resume = temp_resume.filter(r => Number(r[this.filterNames[b]]) >= Number(this.filterValue[b]));
           }else if(this.filterCompare[b] == "<"){
-            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] < this.filterValue[b]);
+            temp_resume = temp_resume.filter(r => Number(r[this.filterNames[b]]) < Number(this.filterValue[b]));
           }else if(this.filterCompare[b] == "<="){
-            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] <= this.filterValue[b]);
+            temp_resume = temp_resume.filter(r => Number(r[this.filterNames[b]]) <= Number(this.filterValue[b]));
           }
         }else if(this.filterLogic[b] == "OR"){
           if(isNullOrUndefined(union)){union = "OR"};
-          if(first){
-            this.payroll_values.forEach(ele=>{
-              this.resumes.forEach(res=>{
-                if(ele.id_employee == res.id_employee){
-                  temp_resume.push(res);
-                }
-              })
-            })
-          }
+          temp_resume = this.resumes;
           if(this.filterCompare[b] == "="){
             temp_p = temp_resume.filter(r => r[this.filterNames[b]] == this.filterValue[b]);
           }else if(this.filterCompare[b] == ">"){
-            temp_p = temp_resume.filter(r => r[this.filterNames[b]] > this.filterValue[b]);
+            temp_p = temp_resume.filter(r => Number(r[this.filterNames[b]]) > Number(this.filterValue[b]));
           }else if(this.filterCompare[b] == ">="){
-            temp_p = temp_resume.filter(r => r[this.filterNames[b]] >= this.filterValue[b]);
+            temp_p = temp_resume.filter(r => Number(r[this.filterNames[b]]) >= Number(this.filterValue[b]));
           }else if(this.filterCompare[b] == "<"){
-            temp_p = temp_resume.filter(r => r[this.filterNames[b]] < this.filterValue[b]);
+            temp_p = temp_resume.filter(r => Number(r[this.filterNames[b]]) < Number(this.filterValue[b]));
           }else if(this.filterCompare[b] == "<="){
-            temp_p = temp_resume.filter(r => r[this.filterNames[b]] <= this.filterValue[b]);
+            temp_p = temp_resume.filter(r => Number(r[this.filterNames[b]]) <= Number(this.filterValue[b]));
           }
           temp_p.forEach(element=>{
             if(temp_resume.length == this.resumes.length){
@@ -1388,6 +1397,7 @@ export class ClosingTkComponent implements OnInit {
 
     if(!isNullOrUndefined(union)){
       let temp_to_res:payroll_values_gt[] = [];
+      let push:boolean = false;
       temp_resume.forEach(element=>{
         this.allPayroll.forEach(p_temp=>{
           if(p_temp.id_employee == element.id_employee){
@@ -1395,11 +1405,20 @@ export class ClosingTkComponent implements OnInit {
           }
         })
       })
+
       if(union == "AND"){
         this.payroll_values = temp_to_res;
       }else if(union == "OR"){
         temp_to_res.forEach(to_push => {
-          this.payroll_values.push(to_push);
+          push = false;
+          this.payroll_values.forEach(py_val=>{
+            if(py_val.id_employee == to_push.id_employee){
+              push = true;
+            }
+          })
+          if(!push){
+            this.payroll_values.push(to_push);
+          }
         });
       }
     }
@@ -1442,4 +1461,7 @@ export class ClosingTkComponent implements OnInit {
     return exist;
   }
 
+  setFull(){
+    this.fullImport = !this.fullImport;
+  }
 }
