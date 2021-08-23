@@ -7,6 +7,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $str = ($request);
+echo($str);
 
 $proccesses = [];
 $i = 0;
@@ -53,7 +54,7 @@ $sql = "SELECT roster_types.*, a.start AS `mon_start`, a.end AS `mon_end`, b.sta
         };
         echo json_encode($proccesses);
     }else{
-        http_response_code(404);
+        http_response_code(400);
     }
 
 ?>
