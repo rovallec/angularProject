@@ -31,6 +31,7 @@ if($r = mysqli_query($con, $sql1)){
         if(mysqli_query($con, $sql2)){
             http_response_code(200);
         }else{
+          echo(json_encode(mysqli_error($con)));
             http_response_code(404);
         }
     }

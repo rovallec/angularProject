@@ -349,6 +349,8 @@ export class ImportWavesComponent implements OnInit {
             profilef.schedule = this.schedule;
             profilef.nearsol_id = profilef.wave.prefix + profilef.No;
             // profiles
+            element['day_of_birth'] = fecha.transform(fecha.dateExcel(element['day_of_birth']));
+            console.log(element['day_of_birth']);
             profilef.tittle = this.validateEmptyStr(element['tittle']);
             profilef.first_name = this.validateEmptyStr(element['first_name']);
             profilef.second_name = this.validateEmptyStr(element['second_name']);

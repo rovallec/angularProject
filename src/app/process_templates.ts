@@ -297,7 +297,7 @@ export class vacyear {
       this.selected = false;
       this.vacations = [];
     }
-  
+
     vacSelected(sel: boolean) {
       this.selected = sel;
     }
@@ -519,7 +519,7 @@ export class employees_Bonuses {
   idemployees: string;
   nearsol_id: string;
   name: string;
-  account: string;  
+  account: string;
   hiring_date: string;
   days_to_pay: string;
   base_payment: string;
@@ -1293,6 +1293,12 @@ export class Fecha{
         return sdate;
     }
 
+    dateExcel(d): Date {
+      let date = new Date(Math.round((d - 25569) * 864e5));
+      date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+      return date;
+    }
+
     constructor() {
         this.today = this.getToday();
     }
@@ -1431,8 +1437,8 @@ export class full_profiles {
     id_user: string;
     wave: waves_template;
     schedule: schedules;
-    employee: employees; 
-    contact_detail: contact_details;   
+    employee: employees;
+    contact_detail: contact_details;
     // profiles
     idprofiles: string;
     tittle: string;
@@ -1472,19 +1478,19 @@ export class full_profiles {
     first_lenguage: string;
     second_lenguage: string;
     third_lenguage: string;
-    idemergency_details: string;    
+    idemergency_details: string;
     phone: string;
     relationship: string;
-    idmedical_details: string;    
+    idmedical_details: string;
     ideducation_details: string;
     iddocuments: string;
     doc_type: string;
     doc_path: string;
 
     // hires
-    idhires: string;    
-    id_wave: string;    
-    id_schedule: string;    
+    idhires: string;
+    id_wave: string;
+    id_schedule: string;
     reports_to: string;
     // emergency_details
     emergency_first_name: string;
@@ -1492,13 +1498,13 @@ export class full_profiles {
     emergency_first_lastname: string;
     emergency_second_lastname: string;
     emergency_phone: string;
-    emergency_relationship: string; 
+    emergency_relationship: string;
     // medical_details
     medical_treatment: string;
     medical_prescription: string;
     family: profiles_family[];
-    job_history: job_histories[];  
-    // education_details  
+    job_history: job_histories[];
+    // education_details
     current_level: string;
     further_education: string;
     currently_studing: string;
@@ -1590,9 +1596,9 @@ export class full_profiles {
         this.doc_type = null;
         this.doc_path = null;
         // hires
-        this.idhires = null;    
-        this.id_wave = null;    
-        this.id_schedule = null;    
+        this.idhires = null;
+        this.id_wave = null;
+        this.id_schedule = null;
         this.reports_to = null;
         this.employee = new employees;
         this.contact_detail = new contact_details;
@@ -1780,7 +1786,7 @@ export class AccountingAccounts {
         this.name = null;
         this.clasif = null;
         this.idperiod = null;
-    }    
+    }
 }
 
 export class timekeeping_adjustments{
@@ -2081,7 +2087,7 @@ export class contractCheck{
         this.dt_end = null;
         this.day = null;
         this.mn = null;
-        this.yr = null;        
+        this.yr = null;
     }
 }
 

@@ -71,7 +71,7 @@ if($result = mysqli_query($con, $sql))
 
 		$i++;
 	}
-	
+
 	echo json_encode($hires);
 }else{
 	http_response_code(404);

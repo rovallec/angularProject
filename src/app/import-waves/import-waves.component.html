@@ -7,9 +7,9 @@
             <i class="fas fa-ban"></i>
           </button>
         </div>
-        <div class="p-2" *ngIf="showdiv">          
+        <div class="p-2" *ngIf="showdiv">
         </div>
-        <div class="p-2" *ngIf="showdiv">          
+        <div class="p-2" *ngIf="showdiv">
         </div>
         <div class="p-2">
           <button class="btn btn-outline-success" title="Save wave" (click)="saveWave()">
@@ -74,13 +74,13 @@
       </div>
       <div class="col-md-3">
         <label>DAYS OFF:</label>
-        <input type="text" class="form-control" [(ngModel)]="days_off">        
+        <input type="text" class="form-control" [(ngModel)]="days_off">
       </div>
       <div class="col-md-1">
       </div>
     </div>
     <div class="row col-md-12">
-      <div class="col-md-3">        
+      <div class="col-md-3">
 
       </div>
       <div class="col-md-5">
@@ -111,12 +111,15 @@
               Second Last Name
             </th>
             <th scope="col">
+              Day of Birthdate
+            </th>
+            <th scope="col">
               State
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let prof of fullprofiles">                      
+          <tr *ngFor="let prof of fullprofiles">
             <td>
               {{ prof.nearsol_id }}
             </td>
@@ -131,6 +134,9 @@
             </td>
             <td>
               {{ prof.second_lastname }}
+            </td>
+            <td>
+              <input type="date" [(ngModel)]="prof.day_of_birth" class="form-control">
             </td>
             <td>
               <button class="btn-outline-warning" *ngIf="prof.state=='Error'" disabled="true" data-toggle="tooltip"
@@ -148,11 +154,11 @@
             </td>
           </tr>
           <tr *ngIf="fullprofiles.length>0">
-            <td style="align-content: center;" colspan="6">
+            <td style="align-content: center;" colspan="7">
               DOCUMENT LOADED
             </td>
           </tr>
         </tbody>
-      </table>      
+      </table>
     </div>
   </div>

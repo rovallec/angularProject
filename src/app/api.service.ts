@@ -22,8 +22,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = environment.PHP_root; // Desarrollo
-PHP_API_SERVER = "http://172.18.2.45";  // produccion
+PHP_API_SERVER = environment.PHP_root; // Desarrollo
+//PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -916,11 +916,11 @@ revertTermination(any:any){
 getCode(prefix: string, correlative:string, length:number) {
   let corrlength: number = 0;
   try {
-    corrlength = length - prefix.length;  
+    corrlength = length - prefix.length;
   } catch (error) {
     corrlength = length;
   }
-  
+
   let mask: string = '';
   try {
     mask = correlative;
@@ -933,18 +933,18 @@ getCode(prefix: string, correlative:string, length:number) {
   } else {
     mask = prefix + this.maskZero(mask, corrlength);
   }
-  
+
   return mask;
 }
 
 maskZero(str: string, length:number): string {
   let masklength: number = 0;
   try {
-    masklength = length - str.length;  
+    masklength = length - str.length;
   } catch (error) {
     masklength = length;
   }
-  
+
   let mask: string = '';
   try {
     mask = str;
@@ -974,6 +974,11 @@ getEmployeeByWave(wave:waves_template){
 updateTermination(term:terminations){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateTerminations.php`, term);
 }
+
+getDates(Dates:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/getDates.php`, Dates);
+}
+
 }
 
 
