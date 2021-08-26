@@ -21,7 +21,7 @@ if(strpos($str, "=")){
     INNER JOIN roster_times e ON e.idroster_times = roster_types.id_time_fri
     INNER JOIN roster_times f ON f.idroster_times = roster_types.id_time_sat
     INNER JOIN roster_times g ON g.idroster_times = roster_types.id_time_sun
-    WHERE tag = '$str';"
+    WHERE tag = '$str';";
 }else{
     $sql = "SELECT roster_types.*, a.start AS `mon_start`, a.end AS `mon_end`, b.start AS `tue_start`, b.end AS `tue_end`, c.start AS `wed_start`, c.end AS `wed_end`,
                d.start AS `thur_start`, d.end AS `thur_end`, e.start AS `fri_start`, e.end AS `fri_end`, f.start AS `sat_start`, f.end AS `sat_end`,
