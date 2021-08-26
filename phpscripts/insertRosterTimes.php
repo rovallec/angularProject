@@ -14,7 +14,7 @@ $sql = "INSERT INTO `roster_times` VALUES (NULL, $start, $end);";
 if(mysqli_query($con, $sql)){
     echo json_encode("1");
 }else{
-    http_response_code(404);
+    echo(mysqli_error($con));
 }
 
 ?>
