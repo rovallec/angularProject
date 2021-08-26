@@ -36,7 +36,6 @@ if(strpos($str, "=") !== false){
         WHERE tag = '$str';";
 }
 
-echo($sql);
 
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
