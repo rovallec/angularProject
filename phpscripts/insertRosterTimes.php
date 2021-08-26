@@ -9,7 +9,7 @@ $request = json_decode($postdata);
 $start = ($request->start);
 $end = ($request->end);
 
-$sql = "INSERT INTO `roster_times` VALUES (NULL, $start, $end);";
+$sql = "INSERT INTO `roster_times` VALUES (NULL, '$start', '$end');";
 
 if(mysqli_query($con, $sql)){
     echo json_encode("1");
