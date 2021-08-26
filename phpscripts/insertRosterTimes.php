@@ -7,7 +7,7 @@ $user = [];
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $start = ($request->start);
-$endS = ($request->end);
+$end = ($request->end);
 
 $sql = "INSERT INTO `roster_times` VALUES (NULL, $start, $end);";
 
