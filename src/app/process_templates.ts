@@ -2190,3 +2190,14 @@ export class roster_types{
         this.sun_end = null;
     }
 }
+
+export class roster_times{
+    idroster_times:string;
+    start:string;
+    end:string;
+    constructor(){
+        this.idroster_times = null;
+        this.start = null;
+        this.end = null;
+    }
+}
