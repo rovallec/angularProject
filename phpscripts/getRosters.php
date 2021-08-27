@@ -7,7 +7,7 @@ $i = 0;
 $return = [];
 $date = date("Y-m-d");
 
-$sql = "SELECT CONCAT(UPPER(profiles.first_name), " ", UPPER(profiles.second_name), " ", UPPER(profiles.first_lastname), " ", UPPER(profiles.second_lastname)) AS `name`, 
+$sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_name), ' ', UPPER(profiles.first_lastname), ' '', UPPER(profiles.second_lastname)) AS `name`, 
         hires.nearsol_id, employees.client_id, b.start AS `mon_start`, b.end AS `mon_end`, c.start AS `tue_start`, c.end AS `tue_end`, d.start AS `wed_start`,
         d.end AS `wed_end`, e.start AS `fri_start`, e.end AS `fri_end`, f.start AS `sat_start`, f.end AS `sat_end`, g.start AS `sun_start`, g.end AS `sun_end` from rosters
         INNER JOIN employees ON employees.idemployees = rosters.id_employee
