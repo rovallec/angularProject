@@ -16,7 +16,7 @@
     <div class="col-md-10" style="margin-top:20px">
         <div class="row d-flex justify-content-end">
             <button class="btn btn-outline-info" style="margin-right:15px" data-target="#rosterTypes"
-                data-toggle="modal"><i class="far fa-clock"></i></button>
+                data-toggle="modal" (click)="clearSet()"><i class="far fa-clock"></i></button>
             <button class="btn btn-outline-warning" style="margin-right:15px"><i
                     class="fas fa-check-double"></i></button>
             <button class="btn btn-outline-secondary" style="margin-right:15px"><i class="fas fa-filter"></i></button>
@@ -92,60 +92,82 @@
                                             <span>START</span>
                                         </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(1)}"
-                                            (dblclick)="change(selectedType.id_time_mon)">{{selectedType.mon_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_mon,1)">{{selectedType.mon_start}}</td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(2)}"
-                                            (dblclick)="change(selectedType.id_time_tue)">{{selectedType.tue_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_tue,2)">{{selectedType.tue_start}}</td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(3)}"
-                                            (dblclick)="change(selectedType.id_time_wed)">{{selectedType.wed_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_wed,3)">{{selectedType.wed_start}}</td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(4)}"
-                                            (dblclick)="change(selectedType.id_time_thur)">{{selectedType.thur_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_thur,4)">{{selectedType.thur_start}}</td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(5)}"
-                                            (dblclick)="change(selectedType.id_time_fri)">{{selectedType.fri_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_fri,5)">{{selectedType.fri_start}}</td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(6)}"
-                                            (dblclick)="change(selectedType.id_time_sat)">{{selectedType.sat_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_sat,6)">{{selectedType.sat_start}}</td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(7)}"
-                                            (dblclick)="change(selectedType.id_time_sun)">{{selectedType.sun_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_sun,7)">{{selectedType.sun_start}}</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span>END</span>
                                         </td>
-                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(8)}"
-                                            (dblclick)="change(selectedType.id_time_mon)">{{selectedType.mon_end}}</td>
-                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(9)}"
-                                            (dblclick)="change(selectedType.id_time_tue)">{{selectedType.tue_end}}</td>
-                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(10)}"
-                                            (dblclick)="change(selectedType.id_time_wed)">{{selectedType.wed_end}}</td>
-                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(11)}"
-                                            (dblclick)="change(selectedType.id_time_thur)">{{selectedType.thur_end}}</td>
-                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(12)}"
-                                            (dblclick)="change(selectedType.id_time_fri)">{{selectedType.fri_end}}</td>
-                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(13)}"
-                                            (dblclick)="change(selectedType.id_time_sat)">{{selectedType.sat_end}}</td>
-                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(14)}"
-                                            (dblclick)="change(selectedType.id_time_sun)">{{selectedType.sun_end}}</td>
+                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(1)}"
+                                            (dblclick)="change(selectedType.id_time_mon,1)">{{selectedType.mon_end}}</td>
+                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(2)}"
+                                            (dblclick)="change(selectedType.id_time_tue,2)">{{selectedType.tue_end}}</td>
+                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(3)}"
+                                            (dblclick)="change(selectedType.id_time_wed,3)">{{selectedType.wed_end}}</td>
+                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(4)}"
+                                            (dblclick)="change(selectedType.id_time_thur,4)">{{selectedType.thur_end}}</td>
+                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(5)}"
+                                            (dblclick)="change(selectedType.id_time_fri,5)">{{selectedType.fri_end}}</td>
+                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(6)}"
+                                            (dblclick)="change(selectedType.id_time_sat,6)">{{selectedType.sat_end}}</td>
+                                        <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(7)}"
+                                            (dblclick)="change(selectedType.id_time_sun,7)">{{selectedType.sun_end}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="row" *ngIf="editingRosterTemplate">
-                            <div class="col-md-4">
-                                <label>ID:</label>
-                                <select class="form-control" size="4" (change)="setSchedule_type($event.target.value)">
-                                    <option *ngFor="let schedule_type of schedule_types" [ngClass]="{'optActive':selectedSchedule.idroster_times == schedule_type.idroster_times}">
-                                        {{schedule_type.idroster_times}}</option>
-                                </select>
+                        <div class="row" *ngIf="editingRosterTemplate" style="margin-top:15px">
+                            <div class="row col-md-12">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8" style="border-bottom: solid 4px #e3f2fd; height: 20px;"></div>
+                                <div class="col-md-2"></div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>Start:</label>
-                                        <input class="form-control" [(ngModel)]="selectedSchedule.start">
+                            <div class="row col-md-12">
+                                <div class="col-md-4">
+                                    <div class="row col-md-12">
+                                    <label>ID:</label>
+                                    <select class="form-control" size="4" (change)="setSchedule_type($event.target.value)">
+                                        <option *ngFor="let schedule_type of schedule_types" [ngClass]="{'optActive':selectedSchedule.idroster_times == schedule_type.idroster_times}">
+                                            {{schedule_type.idroster_times}}</option>
+                                    </select>
+                                </div>
+                                <div class="row justify-content-end col-md-12" style="margin-top:5px">
+                                    <button class="btn btn-outline-success" [disabled]="editingTimes" (click)="setTime()"><i class="fas fa-check"></i></button>
+                                    <button class="btn btn-outline-info" style="margin-left:10px" (click)="addTime()" *ngIf="!editingTimes"><i class="fas fa-plus"></i></button>
+                                    <button class="btn btn-outline-info" style="margin-left:10px" *ngIf="editingTimes" (click)="saveTime()"><i class="fas fa-save"></i></button>
+                                </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Start:</label>
+                                            <input type=text class="form-control" [(ngModel)]="selectedSchedule.start" [disabled]="true" *ngIf="!editingTimes">
+                                            <input type="time" class="form-control" [(ngModel)]="selectedSchedule.start" *ngIf="editingTimes">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>End:</label>
+                                            <input type=text class="form-control" [(ngModel)]="selectedSchedule.end" [disabled]="true" *ngIf="!editingTimes">
+                                            <input type="time" class="form-control" [(ngModel)]="selectedSchedule.end" *ngIf="editingTimes">
+                                        </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <label>End:</label>
-                                        <input class="form-control" [(ngModel)]="selectedSchedule.end">
-                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Used On</label>
+                                    <select size=4 class="form-control" [disabled]="true">
+                                        <option *ngFor="let used of useds">{{used.name}}</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -154,8 +176,8 @@
             </div>
             <div class="modal-footer d-flex justify-content-between mt-2">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCE</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">SAVE</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">ADD</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" *ngIf="!needUpdate(1) && !needUpdate(2) && !needUpdate(3) && !needUpdate(4) && !needUpdate(5) && !needUpdate(6) && !needUpdate(7)">ADD</button>
+                <button type="button" class="btn btn-outline-secondary" *ngIf="needUpdate(1) || needUpdate(2) || needUpdate(3) || needUpdate(4) || needUpdate(5) || needUpdate(6) || needUpdate(7)" (click)="saveRooster()">SAVE</button>
             </div>
         </div>
     </div>

@@ -999,6 +999,13 @@ getRosterTimes(){
   return this.httpClient.get<roster_times[]>(`${this.PHP_API_SERVER}/phpscripts/getRosterTimes.php`);
 }
 
+insertTimes(time:roster_times){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertRosterTimes.php`, time);
+}
+
+updateRosterType(rst:roster_types){
+  return this.httpClient.post<roster_types[]>(`${this.PHP_API_SERVER}/phpscripts/updateRoosterType.php`, rst);
+}
 }
 
 

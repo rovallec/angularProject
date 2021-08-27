@@ -22,8 +22,12 @@ export class RostermaintenanceComponent implements OnInit {
   selected_types: roster_types[] = [];
   selectedType: roster_types = new roster_types;
   editingRosterTemplate: boolean = false;
-  schedule_types:roster_times[] = [];
-  selectedSchedule:roster_times = new roster_times;
+  schedule_types: roster_times[] = [];
+  selectedSchedule: roster_times = new roster_times;
+  useds: roster_types[] = [];
+  editingTimes: boolean = false;
+  selectedDay: number = 0;
+  updatePending:boolean[] = [false,false,false,false,false,false,false];
 
   ngOnInit() {
     this.apiServices.getRoster_tags().subscribe((str: string[]) => {
@@ -77,7 +81,7 @@ export class RostermaintenanceComponent implements OnInit {
     })
   }
 
-  getTemplate(idTemplate:roster_types) {
+  getTemplate(idTemplate: roster_types) {
     if (isNullOrUndefined(this.selected_types.find(sel => sel.idroster_types == idTemplate.idroster_types))) {
       let r: roster_types = new roster_types;
       r.mon_start = "00:00";
@@ -100,71 +104,102 @@ export class RostermaintenanceComponent implements OnInit {
     }
   }
 
-  change(any:string) {
+  change(any: string, nb:number) {
+    this.selectedDay = Number(nb);
     this.editingRosterTemplate = true;
-    this.apiServices.getRosterTimes().subscribe((rst:roster_times[])=>{
+    this.apiServices.getRosterTimes().subscribe((rst: roster_times[]) => {
       this.schedule_types = rst;
-      if(!isNullOrUndefined(any)){
+      if (!isNullOrUndefined(any)) {
         this.selectedSchedule = rst.find(v => v.idroster_times == any);
-      }else{
+      } else {
         this.selectedSchedule = rst[0];
       }
       this.apiServices.getRosterTemplates(" id_time_mon = " + this.selectedSchedule.idroster_times + " OR id_time_tue = " + this.selectedSchedule.idroster_times + " OR id_time_wed = "
-      + this.selectedSchedule.idroster_times + " OR id_time_thur = " + this.selectedSchedule.idroster_times + " OR id_time_fri = " + this.selectedSchedule.idroster_times + " OR id_time_sat = " + this.selectedSchedule.idroster_times
-      + " OR id_time_sun = " + this.selectedSchedule.idroster_times).subscribe((ss:roster_types[])=>{
-        console.log(ss);
-      })
+        + this.selectedSchedule.idroster_times + " OR id_time_thur = " + this.selectedSchedule.idroster_times + " OR id_time_fri = " + this.selectedSchedule.idroster_times + " OR id_time_sat = " + this.selectedSchedule.idroster_times
+        + " OR id_time_sun = " + this.selectedSchedule.idroster_times).subscribe((ss: roster_types[]) => {
+          this.useds = ss;
+        })
     })
   }
 
   needUpdate(nb: number) {
-    switch (nb) {
-      case 1:
-        return (this.selectedType.mon_start != this.getTemplate(this.selectedType).mon_start);
-        break;
-      case 2:
-        return (this.selectedType.tue_start != this.getTemplate(this.selectedType).tue_start);
-        break;
-      case 3:
-        return (this.selectedType.wed_start != this.getTemplate(this.selectedType).wed_start);
-        break;
-      case 4:
-        return (this.selectedType.thur_start != this.getTemplate(this.selectedType).thur_start);
-        break;
-      case 5:
-        return (this.selectedType.fri_start != this.getTemplate(this.selectedType).fri_start);
-        break;
-      case 6:
-        return (this.selectedType.sat_start != this.getTemplate(this.selectedType).sat_start);
-        break;
-      case 7:
-        return (this.selectedType.sun_start != this.getTemplate(this.selectedType).sun_start);
-        break;
-      case 8:
-        return (this.selectedType.mon_end != this.getTemplate(this.selectedType).mon_end);
-        break;
-      case 9:
-        return (this.selectedType.tue_end != this.getTemplate(this.selectedType).tue_end);
-        break;
-      case 10:
-        return (this.selectedType.wed_end != this.getTemplate(this.selectedType).wed_end);
-        break;
-      case 11:
-        return (this.selectedType.thur_start != this.getTemplate(this.selectedType).thur_start);
-        break;
-      case 12:
-        return (this.selectedType.fri_start != this.getTemplate(this.selectedType).fri_start);
-        break;
-      case 13:
-        return (this.selectedType.sat_start != this.getTemplate(this.selectedType).sat_start);
-        break;
-      case 14:
-        return (this.selectedType.sun_end != this.getTemplate(this.selectedType).sun_end);
-        break;
-    }
+    return this.updatePending[Number(nb) -1];
   }
 
-  setSchedule_type(idRosterTime){
+  setSchedule_type(idRosterTime) {
     this.selectedSchedule = this.schedule_types.find(val => val.idroster_times == idRosterTime);
+    this.apiServices.getRosterTemplates(" id_time_mon = " + this.selectedSchedule.idroster_times + " OR id_time_tue = " + this.selectedSchedule.idroster_times + " OR id_time_wed = "
+      + this.selectedSchedule.idroster_times + " OR id_time_thur = " + this.selectedSchedule.idroster_times + " OR id_time_fri = " + this.selectedSchedule.idroster_times + " OR id_time_sat = " + this.selectedSchedule.idroster_times
+      + " OR id_time_sun = " + this.selectedSchedule.idroster_times).subscribe((ss: roster_types[]) => {
+        this.useds = ss;
+      })
+  }
+
+  addTime() {
+    this.editingTimes = true
+    let sch: roster_times = new roster_times;
+    this.schedule_types.push(sch);
+    this.selectedSchedule = this.schedule_types[this.schedule_types.length - 1];
+  }
+
+  saveTime() {
+    this.apiServices.insertTimes(this.selectedSchedule).subscribe((str: string) => {
+      this.editingTimes = false;
+      this.editingRosterTemplate = false;
+    })
+  }
+
+  clearSet() {
+    this.editingRosterTemplate = false;
+    this.editingTimes = false;
+  }
+
+  setTime() {
+    this.updatePending[Number(this.selectedDay) - 1] = true;
+    switch (this.selectedDay) {
+      case 1:
+        this.selectedType.id_time_mon = this.selectedSchedule.idroster_times;
+        this.selectedType.mon_start = this.selectedSchedule.start;
+        this.selectedType.mon_end = this.selectedSchedule.end;
+        break;
+      case 2:
+        this.selectedType.id_time_tue = this.selectedSchedule.idroster_times;
+        this.selectedType.tue_start = this.selectedSchedule.start;
+        this.selectedType.tue_end = this.selectedSchedule.end;
+        break;
+      case 3:
+        this.selectedType.id_time_wed = this.selectedSchedule.idroster_times;
+        this.selectedType.wed_start = this.selectedSchedule.start;
+        this.selectedType.wed_end = this.selectedSchedule.end;
+        break;
+      case 4:
+        this.selectedType.id_time_thur = this.selectedSchedule.idroster_times;
+        this.selectedType.thur_start = this.selectedSchedule.start;
+        this.selectedType.thur_end = this.selectedSchedule.end;
+        break;
+      case 5:
+        this.selectedType.id_time_fri = this.selectedSchedule.idroster_times;
+        this.selectedType.fri_start = this.selectedSchedule.start;
+        this.selectedType.fri_end = this.selectedSchedule.end;
+        break;
+      case 6:
+        this.selectedType.id_time_sat = this.selectedSchedule.idroster_times;
+        this.selectedType.sat_start = this.selectedSchedule.start;
+        this.selectedType.sat_end = this.selectedSchedule.end;
+        break;
+      case 7:
+        this.selectedType.id_time_sun = this.selectedSchedule.idroster_times;
+        this.selectedType.sun_start = this.selectedSchedule.start;
+        this.selectedType.sun_end = this.selectedSchedule.end;
+        break;
+    }
+    this.clearSet();    
+  }
+
+  saveRooster(){
+    this.apiServices.updateRosterType(this.selectedType).subscribe((str:roster_types[])=>{
+      this.selected_types = str;
+      this.selectedType = str[str.length - 1];
+    })
   }
 }
