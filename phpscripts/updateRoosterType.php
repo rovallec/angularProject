@@ -16,7 +16,6 @@ $sat = $request->id_time_sat;
 $sun = $request->id_time_sun;
 
 $sql = "UPDATE `roster_types` SET id_time_mon = $mon, id_time_tue = $tue, id_time_wed = $wed, id_time_thur = $thur, id_time_fri = $fri, id_time_sat = $sat, id_time_sun = $sun WHERE idroster_types = $id;";
-echo($sql);
 
 if(mysqli_query($con, $sql)){
     $sql2 = "SELECT roster_types.*, a.start AS `mon_start`, a.end AS `mon_end`, b.start AS `tue_start`, b.end AS `tue_end`, c.start AS `wed_start`, c.end AS `wed_end`,
@@ -29,7 +28,7 @@ if(mysqli_query($con, $sql)){
         INNER JOIN roster_times e ON e.idroster_times = roster_types.id_time_fri
         INNER JOIN roster_times f ON f.idroster_times = roster_types.id_time_sat
         INNER JOIN roster_times g ON g.idroster_times = roster_types.id_time_sun
-        WHERE $str;";
+        WHERE tag = (SELECT tag FROM roster_types WHERE idroster_types = $id);";
     if($result = mysqli_query($con,$sql2)){
         while($row = mysqli_fetch_assoc($result)){
             $proccesses[$i]['idroster_types'] = $row['idroster_types'];
