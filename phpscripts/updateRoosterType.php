@@ -28,7 +28,7 @@ if(mysqli_query($con, $sql)){
         INNER JOIN roster_times e ON e.idroster_times = roster_types.id_time_fri
         INNER JOIN roster_times f ON f.idroster_times = roster_types.id_time_sat
         INNER JOIN roster_times g ON g.idroster_times = roster_types.id_time_sun
-        WHERE $str;"
+        WHERE $str;";
     if($result = mysqli_query($con,$sql)){
         while($row = mysqli_fetch_assoc($result)){
             $proccesses[$i]['idroster_types'] = $row['idroster_types'];
