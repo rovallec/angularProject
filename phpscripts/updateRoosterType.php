@@ -15,7 +15,7 @@ $fri = $request->id_time_fri;
 $sat = $request->id_time_sat;
 $sun = $request->id_time_sun;
 
-$sql = "UPDATE `roster_types` SET id_time_mon = $mon, id_time_tue = $tue, id_time_wed = $wed, id_time_thur = $thur, id_time_fri = $fir, id_time_sat = $sat, id_time_sun = $sun WHERE idroster_types = $id;";
+$sql = "UPDATE `roster_types` SET id_time_mon = $mon, id_time_tue = $tue, id_time_wed = $wed, id_time_thur = $thur, id_time_fri = $fri, id_time_sat = $sat, id_time_sun = $sun WHERE idroster_types = $id;";
 echo($sql);
 
 if(mysqli_query($con, $sql)){
