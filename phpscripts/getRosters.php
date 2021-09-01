@@ -33,10 +33,14 @@ if($result = mysqli_query($con, $sql)){
     $return[$i]['tue_end'] = $res['tue_end'];
     $return[$i]['wed_start'] = $res['wed_start'];
     $return[$i]['wed_end'] = $res['wed_end'];
+    $return[$i]['thur_start'] = $res['thur_start'];
+    $return[$i]['thur_end'] = $res['thur_end'];
     $return[$i]['fri_start'] = $res['fri_start'];
     $return[$i]['fri_end'] = $res['fri_end'];
     $return[$i]['sat_start'] = $res['sat_start'];
+    $return[$i]['sat_end'] = $res['sat_end'];
     $return[$i]['sun_start'] = $res['sun_start'];
+    $return[$i]['sun_end'] = $res['sun_end'];
     $i++;
   }
   echo(json_encode($return));
