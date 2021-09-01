@@ -26,7 +26,7 @@ $sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_nam
         INNER JOIN roster_times h ON h.idroster_times = a.id_time_sun
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
         WHERE rosters.id_period IS NULL OR rosters.id_period = $str;";
-
+echo($sql);
 if($result = mysqli_query($con, $sql)){
   while($res = mysqli_fetch_assoc($result)){
     $return[$i]['name'] = $res['name'];
