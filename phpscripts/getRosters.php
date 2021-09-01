@@ -50,5 +50,7 @@ if($result = mysqli_query($con, $sql)){
   }
   echo(json_encode($return));
   http_response_code(200);
+}else{
+  echo($sql);
 }
 ?>
