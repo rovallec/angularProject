@@ -3,6 +3,9 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
+$postdata = file_get_contents("php://input");
+$str = ($postdata);
+
 $i = 0;
 $return = [];
 $date = date("Y-m-d");
@@ -10,10 +13,10 @@ $date = date("Y-m-d");
 $sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_name), ' ', UPPER(profiles.first_lastname), ' ', UPPER(profiles.second_lastname)) AS `name`, 
         hires.nearsol_id, employees.client_id, b.start AS `mon_start`, b.end AS `mon_end`, c.start AS `tue_start`, c.end AS `tue_end`, d.start AS `wed_start`,
         d.end AS `wed_end`, e.start AS `thur_start`, e.end AS `thur_end`, f.start AS `fri_start`, f.end AS `fri_end`, g.start AS `sat_start`, g.end AS `sat_end`,
-        h.start AS `sun_start`, h.end AS `sun_end` from rosters
-        INNER JOIN employees ON employees.idemployees = rosters.id_employee
+        h.start AS `sun_start`, h.end AS `sun_end` from employees
+        INNER JOIN rosters ON employees.idemployees = rosters.id_employee
         INNER JOIN hires ON hires.idhires = employees.id_hire
-        INNER JOIN roster_types a ON a.idroster_types = rosters.id_type
+        LEFT JOIN roster_types a ON a.idroster_types = rosters.id_type
         INNER JOIN roster_times b ON b.idroster_times = a.id_time_mon
         INNER JOIN roster_times c ON c.idroster_times = a.id_time_tue
         INNER JOIN roster_times d ON d.idroster_times = a.id_time_wed
@@ -21,7 +24,8 @@ $sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_nam
         INNER JOIN roster_times f ON f.idroster_times = a.id_time_fri
         INNER JOIN roster_times g ON g.idroster_times = a.id_time_sat
         INNER JOIN roster_times h ON h.idroster_times = a.id_time_sun
-        INNER JOIN profiles ON profiles.idprofiles = hires.id_profile;";
+        INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+        WHERE rosters.id_period IS NULL OR rosters.id_period = $str;";
 
 if($result = mysqli_query($con, $sql)){
   while($res = mysqli_fetch_assoc($result)){
