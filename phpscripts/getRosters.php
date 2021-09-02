@@ -13,7 +13,7 @@ $date = date("Y-m-d");
 $sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_name), ' ', UPPER(profiles.first_lastname), ' ', UPPER(profiles.second_lastname)) AS `name`, 
         hires.nearsol_id, employees.client_id, b.start AS `mon_start`, b.end AS `mon_end`, c.start AS `tue_start`, c.end AS `tue_end`, d.start AS `wed_start`,
         d.end AS `wed_end`, e.start AS `thur_start`, e.end AS `thur_end`, f.start AS `fri_start`, f.end AS `fri_end`, g.start AS `sat_start`, g.end AS `sat_end`,
-        h.start AS `sun_start`, h.end AS `sun_end`, rosters.week_value from employees
+        h.start AS `sun_start`, h.end AS `sun_end`, rosters.week_value, `cnt`.`count` From employees
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
         LEFT JOIN rosters ON employees.idemployees = rosters.id_employee
@@ -25,7 +25,9 @@ $sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_nam
         LEFT JOIN roster_times f ON f.idroster_times = a.id_time_fri
         LEFT JOIN roster_times g ON g.idroster_times = a.id_time_sat
         LEFT JOIN roster_times h ON h.idroster_times = a.id_time_sun
+        LEFT JOIN (SELECT COUNT(idrosters) AS `count`, id_employee FROM rosters WHERE id_period = $str GROUP BY id_employee) AS `cnt` ON `cnt`.id_employee = employees.idemployees
         WHERE rosters.id_period IS NULL OR rosters.id_period = $str;";
+
 if($result = mysqli_query($con, $sql)){
   while($res = mysqli_fetch_assoc($result)){
     $return[$i]['name'] = $res['name'];
@@ -46,6 +48,7 @@ if($result = mysqli_query($con, $sql)){
     $return[$i]['sun_start'] = $res['sun_start'];
     $return[$i]['sun_end'] = $res['sun_end'];
     $return[$i]['week_value'] = $res['week_value'];
+    $return[$i]['count'] = $res['count'];
     $i++;
   }
   echo(json_encode($return));
