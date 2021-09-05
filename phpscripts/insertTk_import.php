@@ -20,6 +20,10 @@ if($result = mysqli_query($con, $sql1)){
         $res['path'] = $path;
         $res['idtk_import'] = (mysqli_insert_id($con));
         echo(json_encode($res));
+    }else{
+        echo(mysqli_error($con));
     }
+}else{
+    echo(mysqli_error($con));
 }
 ?>
