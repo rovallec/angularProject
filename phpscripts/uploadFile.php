@@ -5,6 +5,22 @@ $profile = $_POST["profile"];
 $user = $_POST["user"];
 $rnd =  rand(99,99999);
 
+
+if($_POST['process']=="tk_exception"){
+    $actualName = $user . ".xls";
+    $targetPath = "/var/www/html/uploads/" . basename($actualName);
+
+    if (file_exists($targetPath)){
+        unlink($targetPath);
+    }
+
+    $res = [];
+
+    if(move_uploaded_file($_FILES["file1"]["tmp_name"], $targetPath)){
+         $res['EnglishTest'] = $actualName;
+         echo json_encode($res);
+    }
+}
 if($_POST['process']=="updateSignature"){
     $actualName = $user  . "_Signatures_" . ".jpeg";
     $targetPath = "/var/www/html/uploads/" . basename($actualName);
@@ -20,7 +36,6 @@ if($_POST['process']=="updateSignature"){
          echo json_encode($res);
     }
 }
-
 if($_POST['process']=="secondInterview"){
 
     $names = [];

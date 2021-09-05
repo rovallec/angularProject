@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { accounts, attendences, attendences_adjustment, sup_exception } from '../process_templates';
+import { accounts, attendences, attendences_adjustment, sup_exception, tk_upload } from '../process_templates';
 import { ApiService } from '../api.service';
-import { employees } from '../fullProcess';
+import { employees, fullDoc_Proc, testRes } from '../fullProcess';
 import { isNullOrUndefined, isNull } from 'util';
 import { AuthServiceService } from '../auth-service.service';
 
@@ -31,12 +31,14 @@ export class AttendenceImportComponent implements OnInit {
   sups: sup_exception[] = [];
 
   attendences: attendences[] = [];
+  addDoc_proc:fullDoc_Proc[] = [new fullDoc_Proc];
   constructor(private apiService: ApiService, public authService: AuthServiceService) { }
 
   ngOnInit() {
   }
 
   addfile(event) {
+    this.addDoc_proc[0].doc_path = event.target.files[0];
     this.sups = [];
     this.file = event.target.files[0];
     let fileReader = new FileReader();
@@ -199,35 +201,45 @@ export class AttendenceImportComponent implements OnInit {
       this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {
         this.importCompleted = true;
         //TAB 2
-        let adjustments: attendences_adjustment[] = [];
-        let i: number = 0;
-        this.sups.forEach(sup => {
-          i = i + 1;
-          if (sup.status == 'TRUE') {
-            this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-              this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: emp[0].idemployees }).subscribe((attendance: attendences[]) => {
-                let adjustment: attendences_adjustment = new attendences_adjustment;
-                adjustment.id_employee = emp[0].idemployees;
-                adjustment.id_user = this.authService.getAuthusr().iduser;
-                adjustment.id_type = '2';
-                adjustment.id_department = '28';
-                adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString());
-                adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
-                adjustment.status = 'PENDING';
-                adjustment.reason = 'Supervisor Exception';
-                adjustment.id_attendence = attendance[0].idattendences;
-                adjustment.time_before = attendance[0].worked_time;
-                adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
-                adjustment.amount = sup.time;
-                adjustment.state = "PENDING";
-                this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {
-                  if (i == this.sups.length) {
-                    this.completed = true;
-                  }
+        this.apiService.insertTkimport().subscribe((str:tk_upload)=>{
+          let formData = new FormData;
+          formData.append('profile', 'NULL');
+          formData.append('process', 'tk_exception');
+          formData.append('file1', this.addDoc_proc[0].doc_path);
+          formData.append('user', str.path);
+          this.apiService.insDocProc_doc(formData).subscribe((tst:testRes)=>{
+            let adjustments: attendences_adjustment[] = [];
+            let i: number = 0;
+            this.sups.forEach(sup => {
+              i = i + 1;
+              if (sup.status == 'TRUE') {
+                this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+                  this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: emp[0].idemployees }).subscribe((attendance: attendences[]) => {
+                    let adjustment: attendences_adjustment = new attendences_adjustment;
+                    adjustment.id_import = str.idtk_import;
+                    adjustment.id_employee = emp[0].idemployees;
+                    adjustment.id_user = this.authService.getAuthusr().iduser;
+                    adjustment.id_type = '2';
+                    adjustment.id_department = '28';
+                    adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString());
+                    adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
+                    adjustment.status = 'PENDING';
+                    adjustment.reason = 'Supervisor Exception';
+                    adjustment.id_attendence = attendance[0].idattendences;
+                    adjustment.time_before = attendance[0].worked_time;
+                    adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
+                    adjustment.amount = sup.time;
+                    adjustment.state = "PENDING";
+                    this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {
+                      if (i == this.sups.length) {
+                        this.completed = true;
+                      }
+                    })
+                  })
                 })
-              })
+              }
             })
-          }
+          })
         })
       });
     }
