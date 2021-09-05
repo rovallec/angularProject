@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
-require 'database_ph.php';
+require 'database.php';
 
 $id_import = 0;
 $path = '';
