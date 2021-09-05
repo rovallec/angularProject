@@ -9,7 +9,7 @@ $date = date("Y-m-d");
 
 $res[] = [];
 
-$sql1 = "SELECT id_tkimports FROM `tk_imports` ORDER BY idtk_imports DESC LIMIT 1;";
+$sql1 = "SELECT idtk_imports FROM `tk_imports` ORDER BY idtk_imports DESC LIMIT 1;";
 if($result = mysqli_query($con, $sql1)){
     while($row = mysqli_fetch_assoc($result)){
         $id_import = $row['idtk_imports'];
