@@ -32,7 +32,13 @@ if($_POST['process']=="tk_exception"){
 
     } catch (RuntimeException $th) {
     }
+    
+    $res['EnglishTest'] = $nameNow[0];
+    $res['TypingTest'] = $nameNow[1];
+    $res['PsicometricTest'] = $nameNow[2];
 
+    echo(json_encode($res));
+}
 if($_POST['process']=="updateSignature"){
     $actualName = $user  . "_Signatures_" . ".jpeg";
     $targetPath = "/var/www/html/uploads/" . basename($actualName);
