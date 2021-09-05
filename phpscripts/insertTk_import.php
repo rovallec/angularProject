@@ -15,7 +15,7 @@ if($result = mysqli_query($con, $sql1)){
         $id_import = $row['idtk_imports'];
     }
     $path = "import_". ($id_import + 1) . ".xls";
-    $sql = "INSERT INTO `tk_imports` (`idtk_imports`, `date`, `path`) VALUES (null, $date, '$path');";
+    $sql = "INSERT INTO `tk_imports` (`idtk_imports`, `date`, `path`) VALUES (null, '$date', '$path');";
     if(mysqli_query($con,$sql)){
         $res['path'] = $path;
         $res['idtk_import'] = (mysqli_insert_id($con));
