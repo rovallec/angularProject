@@ -223,6 +223,7 @@ export class attendences_adjustment {
     nearsol_id:string;
     adj_type:string;
     account:string;
+    id_import:string;
     constructor() {
         //adjustments
         this.idattendence_adjustemnt = null;
@@ -250,6 +251,7 @@ export class attendences_adjustment {
         this.error = null;
         this.nearsol_id = null;
         this.adj_type = null;
+        this.id_import = '0';
     }
 }
 
@@ -2199,5 +2201,102 @@ export class roster_times{
         this.idroster_times = null;
         this.start = null;
         this.end = null;
+    }
+}
+
+export class rosters{
+    idrosters:string;
+    name:string;
+    nearsol_id:string;
+    client_id:string;
+    mon_start:string;
+    mon_end:string;
+    tue_start:string;
+    tue_end:string;
+    wed_start:string;
+    wed_end:string;
+    thur_start:string;
+    thur_end:string;
+    fri_start:string;
+    fri_end:string;
+    sat_start:string;
+    sat_end:string;
+    sun_start:string;
+    sun_end:string;
+    week_value:string;
+    count:string;
+    showed:string;
+    constructor(){
+        this.idrosters = null;
+        this.name = null;
+        this.nearsol_id = null;
+        this.client_id = null;
+        this.mon_start = null;
+        this.mon_end = null;
+        this.tue_start = null;
+        this.tue_end = null;
+        this.wed_start = null;
+        this.wed_end = null;
+        this.fri_start = null;
+        this.fri_end = null;
+        this.sat_start = null;
+        this.sun_start = null;
+        this.week_value = null;
+        this.count = null;
+        this.showed = null;
+    }
+}
+
+export class roster_views{
+    nearsol_id:string;
+    client_id:string;
+    name:string;
+    day_1:string;
+    day_2:string;
+    day_3:string;
+    day_4:string;
+    day_5:string;
+    day_6:string;
+    day_7:string;
+    day_8:string;
+    day_9:string;
+    day_10:string;
+    day_11:string;
+    day_12:string;
+    day_13:string;
+    day_14:string;
+    day_15:string;
+    day_16:string;
+    constructor(){
+        this.nearsol_id = null;
+        this.client_id = null;
+        this.name = null;
+        this.day_1 = null;
+        this.day_2 = null;
+        this.day_3 = null;
+        this.day_4 = null;
+        this.day_5 = null;
+        this.day_6 = null;
+        this.day_7 = null;
+        this.day_8 = null;
+        this.day_9 = null;
+        this.day_10 = null;
+        this.day_11 = null;
+        this.day_12 = null;
+        this.day_13 = null;
+        this.day_14 = null;
+        this.day_15 = null;
+        this.day_16 = null;
+    }
+}
+
+export class tk_upload{
+    idtk_import:string;
+    date:string;
+    path:string;
+    constructor(){
+        this.idtk_import = null;
+        this.date = null;
+        this.path = null;
     }
 }
