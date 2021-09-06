@@ -12,6 +12,7 @@ $sql = "UPDATE hr_processes
 		INNER JOIN employees ON employees.idemployees = hr_processes.id_employee
 		SET notes = CONCAT(`notes`, ' | REVERTED AT ', now()),
 			`id_type` = 22,
+			employees.active = 1,
 			employees.termination_date = NULL
 		WHERE idhr_processes = $idhr_process;";
 
