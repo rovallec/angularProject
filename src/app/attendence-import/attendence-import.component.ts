@@ -280,7 +280,7 @@ export class AttendenceImportComponent implements OnInit {
   }
 
   getTk_upload(){
-    this.apiService.getTkUploads({date:' BETWEEN ' + this.selectedStart } + " AND " + this.selectedEnd).subscribe((imp:tk_upload[])=>{
+    this.apiService.getTkUploads({date:' BETWEEN ' + this.selectedStart + " AND " + this.selectedEnd}).subscribe((imp:tk_upload[])=>{
       this.imports = imp;
     });
   }
