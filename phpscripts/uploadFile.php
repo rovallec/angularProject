@@ -34,8 +34,6 @@ if($_POST['process']=="tk_exception"){
     }
     
     $res['EnglishTest'] = $nameNow[0];
-    $res['TypingTest'] = $nameNow[1];
-    $res['PsicometricTest'] = $nameNow[2];
 
     echo(json_encode($res));
 }
