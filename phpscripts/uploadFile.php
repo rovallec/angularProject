@@ -17,7 +17,7 @@ if($_POST['process']=="tk_exception"){
     $names[0] = $user;
 
     try {
-        $nameNow[0] = $names[0] . ".xls";
+        $nameNow[0] = $names[0];
         $storeName[0] = "/var/www/html/uploads/" . basename($nameNow[0]);
        if(!isset($_FILES['file1']['error']) || is_array($_FILES['file1']['error'])){
             $nameNow[0] = 'NoFile.jpeg';
