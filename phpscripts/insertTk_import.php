@@ -14,7 +14,7 @@ if($result = mysqli_query($con, $sql1)){
     while($row = mysqli_fetch_assoc($result)){
         $id_import = $row['idtk_imports'];
     }
-    $path = "import_". ($id_import + 1) . ".xls";
+    $path = "import_". ($id_import + 1) . ".xlsx";
     $sql = "INSERT INTO `tk_imports` (`idtk_imports`, `date`, `path`) VALUES (null, '$date', '$path');";
     if(mysqli_query($con,$sql)){
         $res['path'] = $path;
