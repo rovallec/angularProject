@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
-import { accounts, attendences, attendences_adjustment, sup_exception, tk_upload } from '../process_templates';
+import { accounts, attendences, attendences_adjustment, sup_exception, tk_import, tk_upload } from '../process_templates';
 import { ApiService } from '../api.service';
 import { employees, fullDoc_Proc, testRes } from '../fullProcess';
 import { isNullOrUndefined, isNull } from 'util';
@@ -32,6 +32,11 @@ export class AttendenceImportComponent implements OnInit {
 
   attendences: attendences[] = [];
   addDoc_proc:fullDoc_Proc[] = [new fullDoc_Proc];
+  showReg:boolean = false;
+  selectedStart:string = null;
+  selectedEnd:string = null;
+  imports:tk_upload[] = [];
+
   constructor(private apiService: ApiService, public authService: AuthServiceService) { }
 
   ngOnInit() {
@@ -257,5 +262,26 @@ export class AttendenceImportComponent implements OnInit {
 
   getRoster() {
     window.open("http://172.18.2.45/phpscripts/exportRoster.php?acc=" + this.selectedAccount, "_blank")
+  }
+
+  toggleReg(){
+    this.showReg = !this.showReg;
+    if(this.showReg){
+      this.getTk_upload();
+    }
+  }
+
+  setStart(event){
+    this.selectedStart = "'" + event + "'";
+  }
+
+  setEnd(event){
+    this.selectedEnd ="'" + event + "'";
+  }
+
+  getTk_upload(){
+    this.apiService.getTkUploads({date:' BETWEEN ' + this.selectedStart } + " AND " + this.selectedEnd).subscribe((imp:tk_upload[])=>{
+      this.imports = imp;
+    });
   }
 }
