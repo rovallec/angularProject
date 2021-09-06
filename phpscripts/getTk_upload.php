@@ -18,6 +18,7 @@ if($result = mysqli_query($con, $sql1)){
         $res[$i]['path'] = $row['path'];
         $i++;
     }
+    echo(json_encode($res));
 }else{
     echo(mysqli_error($con));
 }
