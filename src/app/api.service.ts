@@ -1014,6 +1014,10 @@ getRosters(str:string){
 insertTkimport(){
   return this.httpClient.get<tk_upload>(`${this.PHP_API_SERVER}/phpscripts/insertTk_import.php`)
 }
+
+getTkUploads(dt:any){
+  return this.httpClient.post<tk_upload[]>(`${this.PHP_API_SERVER}/phpscripts/getTk_upload.php`, dt)
+}
 }
 
 
