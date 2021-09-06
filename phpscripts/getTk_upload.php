@@ -11,7 +11,6 @@ $res[] = [];
 $i = 0;
 
 $sql1 = "SELECT * FROM `tk_imports` WHERE `date` $date;";
-echo($sql1);
 if($result = mysqli_query($con, $sql1)){
     while($row = mysqli_fetch_assoc($result)){
         $res[$i]['idtk_import'] = $row['idtk_imports'];
