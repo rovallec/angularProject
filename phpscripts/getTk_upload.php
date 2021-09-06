@@ -8,7 +8,7 @@ $request = json_decode($postdata);
 $date = ($request->date);
 
 $res[] = [];
-$i = 0
+$i = 0;
 
 $sql1 = "SELECT * FROM `tk_imports` WHERE `date` $date;";
 if($result = mysqli_query($con, $sql1)){
