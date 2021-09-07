@@ -24,7 +24,7 @@
             $id = validarDatos($de->id_wave);
             $d_off = validarDatos($de->day_off1);
             try {
-                $tk_imp = ($request->tk_imp);
+                $tk_imp = validarDatos($de->tk_imp);
             } catch (\Throwable $th) {
                 $tk_imp = 'NULL';
             }
