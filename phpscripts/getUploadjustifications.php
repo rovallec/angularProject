@@ -42,6 +42,9 @@ if($result = mysqli_query($con,$sql)){
         $adjustes[$i]['dateTime'] = $res['time'];
         $i++;
     }
+    echo(json_encode($adjustes));
+}else{
+    echo(mysqli_error($con));
 }
-echo(json_encode($adjustes));
+
 ?>
