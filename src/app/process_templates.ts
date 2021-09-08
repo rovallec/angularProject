@@ -171,6 +171,7 @@ export class attendences {
     state: string;
     igss:string;
     tk_exp:string;
+    tk_imp:string;
     constructor() {
         this.igss = '0';
         this.tk_exp = '0';
@@ -191,6 +192,7 @@ export class attendences {
         this.id_wave = null;
         this.balance = null;
         this.state = null;
+        this.tk_imp = null;
     }
 }
 
@@ -224,6 +226,7 @@ export class attendences_adjustment {
     adj_type:string;
     account:string;
     id_import:string;
+    name:string;
     constructor() {
         //adjustments
         this.idattendence_adjustemnt = null;
@@ -252,6 +255,7 @@ export class attendences_adjustment {
         this.nearsol_id = null;
         this.adj_type = null;
         this.id_import = '0';
+        this.name = null;
     }
 }
 

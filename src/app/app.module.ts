@@ -49,6 +49,7 @@ import { ItprofilesComponent } from './itprofiles/itprofiles.component';
 import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component';
 import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.component';
 import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenance.component';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -101,7 +102,7 @@ import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenanc
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

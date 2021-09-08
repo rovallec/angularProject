@@ -5,6 +5,7 @@ import { ApiService } from '../api.service';
 import { employees, fullDoc_Proc, testRes } from '../fullProcess';
 import { isNullOrUndefined, isNull } from 'util';
 import { AuthServiceService } from '../auth-service.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-attendence-import',
@@ -31,15 +32,19 @@ export class AttendenceImportComponent implements OnInit {
   sups: sup_exception[] = [];
 
   attendences: attendences[] = [];
-  addDoc_proc:fullDoc_Proc[] = [new fullDoc_Proc];
-  showReg:boolean = false;
-  selectedStart:string = null;
-  selectedEnd:string = null;
-  imports:tk_upload[] = [];
+  addDoc_proc: fullDoc_Proc[] = [new fullDoc_Proc];
+  showReg: boolean = false;
+  todayDate: Date = new Date();
+  selectedStart: string = null;
+  selectedEnd: string = null;
+  imports: tk_upload[] = [];
+  selectedImp:tk_upload = new tk_upload;
 
-  constructor(private apiService: ApiService, public authService: AuthServiceService) { }
+  constructor(private apiService: ApiService, public authService: AuthServiceService, public datepipe: DatePipe) { }
 
   ngOnInit() {
+    this.selectedStart = this.datepipe.transform(this.todayDate, 'yyyy-MM-dd');
+    this.selectedEnd = this.datepipe.transform(this.todayDate, 'yyyy-MM-dd');
   }
 
   addfile(event) {
@@ -94,7 +99,7 @@ export class AttendenceImportComponent implements OnInit {
 
         this.attendences.forEach(elem => {
           elem.day_off1 = "NO MATCH";
-          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp: 'exact', rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp: 'exact', rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
             if (!isNullOrUndefined(emp[0])) {
               this.apiService.getAttendences({ date: elem.date + ";" + emp[0].idemployees, id: 'NULL' }).subscribe((att: attendences[]) => {
                 if (att.length > 0) {
@@ -127,7 +132,7 @@ export class AttendenceImportComponent implements OnInit {
               supervisors.reason = element['REASON'];
               supervisors.supervisor = element['SUPERVISOR'];
               supervisors.time = element['TIME'];
-              this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: supervisors.avaya, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+              this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: supervisors.avaya, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
                 if (isNull(emp)) {
                   supervisors.status = 'FALSE';
                 } else {
@@ -136,11 +141,11 @@ export class AttendenceImportComponent implements OnInit {
                 this.sups.push(supervisors);
               })
             } catch (error2) {
-  
+
             }
           })
         } catch (error) {
-          
+
         }
         this.attendences = att;
         this.failCount = this.attendences.length - this.checkedCount;
@@ -173,12 +178,12 @@ export class AttendenceImportComponent implements OnInit {
     });
 
     this.apply.forEach(app => {
-      this.apiService.getAttAdjustments({ id: "id|p;" + app.id_employee + "|'" + app.date + "' AND '" + app.date + "'" }).subscribe((adjust:attendences_adjustment[])=>{
+      this.apiService.getAttAdjustments({ id: "id|p;" + app.id_employee + "|'" + app.date + "' AND '" + app.date + "'" }).subscribe((adjust: attendences_adjustment[]) => {
         console.log(adjust);
-        if(!isNullOrUndefined(adjust)){
-          adjust.forEach(adjustment=>{
-            if(adjustment.id_department == '27' || adjustment.id_department == '5'){
-            app.worked_time = (Number(app.worked_time) + Number(adjustment.amount)).toFixed(3);
+        if (!isNullOrUndefined(adjust)) {
+          adjust.forEach(adjustment => {
+            if (adjustment.id_department == '27' || adjustment.id_department == '5') {
+              app.worked_time = (Number(app.worked_time) + Number(adjustment.amount)).toFixed(3);
             }
           })
         }
@@ -202,23 +207,26 @@ export class AttendenceImportComponent implements OnInit {
       })
     })
 
-    if(this.correct.length > 0){
-      this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {
-        this.importCompleted = true;
-        //TAB 2
-        this.apiService.insertTkimport().subscribe((str:tk_upload)=>{
-          let formData = new FormData;
-          formData.append('profile', 'NULL');
-          formData.append('process', 'tk_exception');
-          formData.append('file1', this.addDoc_proc[0].doc_path);
-          formData.append('user', str.path);
-          this.apiService.insDocProc_doc(formData).subscribe((tst:testRes)=>{
+    if (this.correct.length > 0) {
+      this.apiService.insertTkimport().subscribe((str: tk_upload) => {
+        let formData = new FormData;
+        formData.append('profile', 'NULL');
+        formData.append('process', 'tk_exception');
+        formData.append('file1', this.addDoc_proc[0].doc_path);
+        formData.append('user', str.path);
+        this.correct.forEach(corr=>{
+          corr.tk_imp = str.idtk_import;
+        })
+        this.apiService.insDocProc_doc(formData).subscribe((tst: testRes) => {
+          this.apiService.insertAttendences(this.correct).subscribe((att: attendences[]) => {
+            this.importCompleted = true;
+            //TAB 2
             let adjustments: attendences_adjustment[] = [];
             let i: number = 0;
             this.sups.forEach(sup => {
               i = i + 1;
               if (sup.status == 'TRUE') {
-                this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+                this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
                   this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: emp[0].idemployees }).subscribe((attendance: attendences[]) => {
                     let adjustment: attendences_adjustment = new attendences_adjustment;
                     adjustment.id_import = str.idtk_import;
@@ -244,9 +252,9 @@ export class AttendenceImportComponent implements OnInit {
                 })
               }
             })
-          })
+          });
         })
-      });
+      })
     }
   }
 
@@ -264,24 +272,57 @@ export class AttendenceImportComponent implements OnInit {
     window.open("http://172.18.2.45/phpscripts/exportRoster.php?acc=" + this.selectedAccount, "_blank")
   }
 
-  toggleReg(){
+  toggleReg() {
     this.showReg = !this.showReg;
-    if(this.showReg){
+    this.imports = [];
+    this.selectedImp = new tk_upload;
+    this.attendences = [];
+    if (this.showReg) {
       this.getTk_upload();
     }
   }
 
-  setStart(event){
-    this.selectedStart = "'" + event + "'";
+  setStart(event) {
+    this.selectedStart = event;
+    this.getTk_upload();
   }
 
-  setEnd(event){
-    this.selectedEnd ="'" + event + "'";
+  setEnd(event) {
+    this.selectedEnd = event;
+    this.getTk_upload();
   }
 
-  getTk_upload(){
-    this.apiService.getTkUploads({date:' BETWEEN ' + this.selectedStart + " AND " + this.selectedEnd}).subscribe((imp:tk_upload[])=>{
+  getTk_upload() {
+    this.apiService.getTkUploads({ date: ' BETWEEN ' + "'" + this.selectedStart + "'" + " AND " + "'" + this.selectedEnd + "'" }).subscribe((imp: tk_upload[]) => {
       this.imports = imp;
     });
+  }
+
+  getImport_tk(imp: tk_upload) {
+    this.selectedImp = imp;
+    window.open("http://172.18.2.45/uploads/" + imp.path, "_blank");
+  }
+
+  setImport(imp: tk_upload) {
+    this.selectedImp = imp;
+    console.log(this.selectedImp);
+    this.apiService.getAttendences({ id: "IMPORT", date: imp.idtk_import }).subscribe((att: attendences[]) => {
+      this.attendences = att;
+      this.apiService.getUploadedAdjustments({id:imp.idtk_import}).subscribe((adj:attendences_adjustment[])=>{
+        adj.forEach(adjustment=>{
+          let sup:sup_exception = new sup_exception;
+          sup.avaya = adjustment.id_attendence;
+          sup.date = adjustment.attendance_date;
+          sup.name = adjustment.name;
+          sup.notes = adjustment.notes;
+          sup.reason = adjustment.reason;
+          sup.status = adjustment.status;
+          sup.time = adjustment.amount;
+          this.sups.push(sup);
+        })
+      })
+      let element:HTMLElement = document.getElementById('nav-attendence-tab');
+      element.click();
+    })
   }
 }

@@ -1018,6 +1018,10 @@ insertTkimport(){
 getTkUploads(dt:any){
   return this.httpClient.post<tk_upload[]>(`${this.PHP_API_SERVER}/phpscripts/getTk_upload.php`, dt)
 }
+
+getUploadedAdjustments(any:any){
+  return this.httpClient.post<attendences_adjustment[]>(`${this.PHP_API_SERVER}/phpscripts/getUploadjustifications.php`, any);
+}
 }
 
 
