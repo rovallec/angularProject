@@ -40,12 +40,9 @@ if($result = pg_query($con,$sql)){
     $return[$i]['label'] = $row['label'];
     $i++;
   }
-//  echo($sql);
+echo($sql);
     echo(json_encode($return));
 }else{
-  http_response_code(400);
-  echo(pg_result_error($con));
-  echo("<br>");
   echo($sql);
 }
 ?>
