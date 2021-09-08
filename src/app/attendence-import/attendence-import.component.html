@@ -114,15 +114,19 @@
                         <th *ngIf="!showReg">Status</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let att of attendences">
+                        <tr *ngFor="let att of sortAttendances()" [ngClass]="{'table-warning':att.id_wave === '1', 'table-success':att.day_off1 === 'CORRECT' && att.id_wave != '1', 'table-danger':att.day_off1 ==='NOT MATCH', 'table-light':att.day_off1 === 'OMMIT'}">
                             <td>{{att.id_employee}}</td>
                             <td>{{att.date}}</td>
                             <td>{{att.client_id}}</td>
-                            <td>{{att.first_name}} {{att.second_name}} {{att.first_lastname}} {{att.second_lastname}}
+                            <td *ngIf="att.id_wave === '0' || showReg">{{att.first_name}} {{att.second_name}} {{att.first_lastname}} {{att.second_lastname}}
                             </td>
+                            <td *ngIf="att.id_wave === '1' && !showReg"><select class="form-control" (change)="setEmployeeRepeated(att, $event.target.value)" style="font-size: 13px;">
+                                <option *ngFor="let rep of getReapeted(att)" [value]="rep.idemployees">{{rep.name}}</option>
+                            </select></td>
                             <td>{{att.scheduled}}</td>
                             <td>{{att.worked_time}}</td>
-                            <td *ngIf="!showReg">{{att.balance}}</td><td *ngIf="showReg">{{att.worked_time - att.scheduled}}</td>
+                            <td *ngIf="!showReg">{{att.balance}}</td>
+                            <td *ngIf="showReg">{{att.worked_time - att.scheduled}}</td>
                             <td *ngIf="!showReg">
                                 <select [(ngModel)]="att.day_off1" [disabled]="att.day_off1 != 'OMMIT'"
                                     class="form-control" (change)="setAction(att)">
@@ -151,9 +155,12 @@
                         <th>STATUS</th>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let sup of sups">
+                        <tr *ngFor="let sup of sortExceptions()" [ngClass]="{'table-warning':sup.duplicated === '1', 'table-success': sup.duplicated != '1' && sup.status === 'TRUE', 'table-danger':sup.status === 'FALSE'}">
                             <td>{{sup.avaya}}</td>
-                            <td>{{sup.name}}</td>
+                            <td *ngIf="sup.duplicated === '0'">{{sup.name}}</td>
+                            <td *ngIf="sup.duplicated === '1'"><select class="form-control" (change)="setExpReapeted(sup, $event.target.value)" style="font-size: 13px;">
+                                <option *ngFor="let rep of getRepeatedExp(sup)" [value]="rep.idemployees">{{rep.name}}</option>
+                            </select></td>
                             <td>{{sup.date}}</td>
                             <td>{{sup.reason}}</td>
                             <td>{{sup.time}}</td>

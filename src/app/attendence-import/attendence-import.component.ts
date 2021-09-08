@@ -38,7 +38,9 @@ export class AttendenceImportComponent implements OnInit {
   selectedStart: string = null;
   selectedEnd: string = null;
   imports: tk_upload[] = [];
-  selectedImp:tk_upload = new tk_upload;
+  selectedImp: tk_upload = new tk_upload;
+  reapetedEmployees: employees[] = [];
+  repeatedExp: employees[] = [];
 
   constructor(private apiService: ApiService, public authService: AuthServiceService, public datepipe: DatePipe) { }
 
@@ -100,6 +102,15 @@ export class AttendenceImportComponent implements OnInit {
         this.attendences.forEach(elem => {
           elem.day_off1 = "NO MATCH";
           this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp: 'exact', rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+            emp = emp.sort((a, b) => Number(b.active) - Number(a.active))
+            if (emp.length > 1) {
+              emp.forEach(reapeted => {
+                this.reapetedEmployees.push(reapeted);
+              })
+              elem.id_wave = "1";
+            } else {
+              elem.id_wave = "0";
+            }
             if (!isNullOrUndefined(emp[0])) {
               this.apiService.getAttendences({ date: elem.date + ";" + emp[0].idemployees, id: 'NULL' }).subscribe((att: attendences[]) => {
                 if (att.length > 0) {
@@ -120,6 +131,8 @@ export class AttendenceImportComponent implements OnInit {
 
         try {
           //TAB 2
+          let duplicated: number = 0;
+          let count: number = 1;
           var worksheet_2 = workbook.Sheets[first_sheet_name_2];
           let sheetToJson_2 = XLSX.utils.sheet_to_json(worksheet_2, { raw: true });
           sheetToJson_2.forEach(element => {
@@ -138,7 +151,38 @@ export class AttendenceImportComponent implements OnInit {
                 } else {
                   supervisors.status = 'TRUE';
                 }
+                emp = emp.sort((a, b) => Number(b.active) - Number(a.active));
+                if(emp.length > 1){
+                  supervisors.duplicated = '1';
+                  emp.forEach(toPush=>{
+                    this.repeatedExp.push(toPush);
+                  })
+                }else{
+                  supervisors.duplicated = '0';
+                }
+                supervisors.name = emp[0].name;
+                supervisors.id_employee = emp[0].idemployees;
+                count++;
                 this.sups.push(supervisors);
+                let temp_sups: sup_exception[] = [];
+                this.sups.forEach(element => {
+                  let add: boolean = true;
+                  temp_sups.forEach(temp => {
+                    if (temp.avaya == element.avaya && temp.date == element.date && temp.time == element.time) {
+                      add = false;
+                      duplicated++;
+                    }
+                  })
+                  if (add) {
+                    temp_sups.push(element);
+                  }
+                })
+                this.sups = temp_sups;
+                if (count > sheetToJson_2.length) {
+                  if (duplicated > 0) {
+                    window.alert("Automaticly deleted " + (duplicated) + " duplicated Exceptions");
+                  }
+                }
               })
             } catch (error2) {
 
@@ -207,14 +251,14 @@ export class AttendenceImportComponent implements OnInit {
       })
     })
 
-    if (this.correct.length > 0) {
+    if (this.fail.length + this.correct.length + this.apply.length == this.attendences.length) {
       this.apiService.insertTkimport().subscribe((str: tk_upload) => {
         let formData = new FormData;
         formData.append('profile', 'NULL');
         formData.append('process', 'tk_exception');
         formData.append('file1', this.addDoc_proc[0].doc_path);
         formData.append('user', str.path);
-        this.correct.forEach(corr=>{
+        this.correct.forEach(corr => {
           corr.tk_imp = str.idtk_import;
         })
         this.apiService.insDocProc_doc(formData).subscribe((tst: testRes) => {
@@ -226,28 +270,26 @@ export class AttendenceImportComponent implements OnInit {
             this.sups.forEach(sup => {
               i = i + 1;
               if (sup.status == 'TRUE') {
-                this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: sup.avaya, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-                  this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: emp[0].idemployees }).subscribe((attendance: attendences[]) => {
-                    let adjustment: attendences_adjustment = new attendences_adjustment;
-                    adjustment.id_import = str.idtk_import;
-                    adjustment.id_employee = emp[0].idemployees;
-                    adjustment.id_user = this.authService.getAuthusr().iduser;
-                    adjustment.id_type = '2';
-                    adjustment.id_department = '28';
-                    adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString());
-                    adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
-                    adjustment.status = 'PENDING';
-                    adjustment.reason = 'Supervisor Exception';
-                    adjustment.id_attendence = attendance[0].idattendences;
-                    adjustment.time_before = attendance[0].worked_time;
-                    adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
-                    adjustment.amount = sup.time;
-                    adjustment.state = "PENDING";
-                    this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {
-                      if (i == this.sups.length) {
-                        this.completed = true;
-                      }
-                    })
+                this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: sup.id_employee }).subscribe((attendance: attendences[]) => {
+                  let adjustment: attendences_adjustment = new attendences_adjustment;
+                  adjustment.id_import = str.idtk_import;
+                  adjustment.id_employee = sup.id_employee;
+                  adjustment.id_user = this.authService.getAuthusr().iduser;
+                  adjustment.id_type = '2';
+                  adjustment.id_department = '28';
+                  adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString());
+                  adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
+                  adjustment.status = 'PENDING';
+                  adjustment.reason = 'Supervisor Exception';
+                  adjustment.id_attendence = attendance[0].idattendences;
+                  adjustment.time_before = attendance[0].worked_time;
+                  adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
+                  adjustment.amount = sup.time;
+                  adjustment.state = "PENDING";
+                  this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {
+                    if (i == this.sups.length) {
+                      this.completed = true;
+                    }
                   })
                 })
               }
@@ -273,10 +315,13 @@ export class AttendenceImportComponent implements OnInit {
   }
 
   toggleReg() {
+    let element: HTMLElement = document.getElementById('nav-attendence-tab');
+    element.click();
     this.showReg = !this.showReg;
     this.imports = [];
     this.selectedImp = new tk_upload;
     this.attendences = [];
+    this.sups = [];
     if (this.showReg) {
       this.getTk_upload();
     }
@@ -304,12 +349,13 @@ export class AttendenceImportComponent implements OnInit {
   }
 
   setImport(imp: tk_upload) {
+    this.sups = [];
     this.selectedImp = imp;
     this.apiService.getAttendences({ id: "IMPORT", date: imp.idtk_import }).subscribe((att: attendences[]) => {
       this.attendences = att;
-      this.apiService.getUploadedAdjustments({id:imp.idtk_import}).subscribe((adj:attendences_adjustment[])=>{
-        adj.forEach(adjustment=>{
-          let sup:sup_exception = new sup_exception;
+      this.apiService.getUploadedAdjustments({ id: imp.idtk_import }).subscribe((adj: attendences_adjustment[]) => {
+        adj.forEach(adjustment => {
+          let sup: sup_exception = new sup_exception;
           sup.avaya = adjustment.id_attendence;
           sup.date = adjustment.attendance_date;
           sup.name = adjustment.name;
@@ -320,8 +366,41 @@ export class AttendenceImportComponent implements OnInit {
           this.sups.push(sup);
         })
       })
-      let element:HTMLElement = document.getElementById('nav-attendence-tab');
+      let element: HTMLElement = document.getElementById('nav-attendence-tab');
       element.click();
     })
+  }
+
+  sortAttendances() {
+    return this.attendences.sort((a, b) => Number(b.id_wave) - Number(a.id_wave));
+  }
+
+  sortExceptions(){
+    return this.sups.sort((a,b)=>Number(b.duplicated) - Number(a.duplicated));
+  }
+  getReapeted(att: attendences) {
+    return this.reapetedEmployees.filter((a, b) => this.reapetedEmployees.findIndex(item => item.name == a.name) === b).filter(c => c.client_id == att.client_id);
+  }
+
+  getRepeatedExp(exp: sup_exception) {
+    return this.repeatedExp.filter((a, b) => this.repeatedExp.findIndex(item => item.name == a.name) === b).filter(c => c.client_id == exp.avaya);
+  }
+
+  setExpReapeted(sup:sup_exception,rep:string){
+    sup.id_employee = rep;
+  }
+
+  setEmployeeRepeated(attnd: attendences, rep: string) {
+    this.apiService.getAttendences({ date: attnd.date + ";" + rep, id: 'NULL' }).subscribe((att: attendences[]) => {
+      if (att.length > 0) {
+        attnd.idattendences = att[0].idattendences;
+        attnd.id_employee = att[0].id_employee;
+        attnd.day_off2 = att[0].worked_time;
+        attnd.day_off1 = "OMMIT";
+      } else {
+        attnd.day_off1 = "CORRECT";
+      }
+    })
+    attnd.id_employee = rep;
   }
 }

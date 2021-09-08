@@ -976,6 +976,8 @@ export class sup_exception {
     notes: string;
     supervisor: string;
     status: string;
+    id_employee:string;
+    duplicated:string;
     constructor() {
         this.avaya = null;
         this.name = null;
@@ -985,6 +987,8 @@ export class sup_exception {
         this.notes = null;
         this.supervisor = null;
         this.status = "FALSE";
+        this.id_employee = null;
+        this.duplicated = '0';
     }
 }
 

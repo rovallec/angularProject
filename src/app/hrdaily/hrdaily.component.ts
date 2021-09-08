@@ -128,9 +128,17 @@ export class HrdailyComponent implements OnInit {
         }
         acId = acId + itm.idaccounts;
       })
-      if (this.me.department == '28') {
+      if (this.me.department == '28' && this.setFilter == "'-1'") {
         window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo + "&state=" + this.targetStatus, "_blank");
       } else {
+        if(this.me.department == '28'){
+          this.accounts.forEach((itm: accounts) => {
+            if (this.exportAccounts.indexOf(itm) != 0) {
+              acId = acId + ",";
+            }
+            acId = acId + itm.idaccounts;
+          })
+        }
         window.open("http://172.18.2.45/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId + "&state=" + this.targetStatus + "&filter=" + this.setFilter, "_blank");
       }
     }
