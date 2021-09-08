@@ -18,6 +18,8 @@ $sql = "SELECT attendences.date AS `attdate`, profiles.*, hires.*, employees.*, 
         INNER JOIN accounts ON accounts.idaccounts = employees.id_account
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile";
 
+        echo($slq);
+
 if($result = mysqli_query($con,$sql)){
     while($res = mysqli_fetch_assoc($result)){
         $adjustes[$i]['idattendence_adjustemnt'] = $res['idattendence_adjustemnt'];
