@@ -40,7 +40,6 @@ if($result = pg_query($con,$sql)){
     $return[$i]['label'] = $row['label'];
     $i++;
   }
-echo($sql);
     echo(json_encode($return));
 }else{
   echo($sql);
