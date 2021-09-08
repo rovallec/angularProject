@@ -16,6 +16,7 @@ $sql = "SELECT attendences.date AS `attdate`, attendence_adjustemnt.*,  profiles
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN accounts ON accounts.idaccounts = employees.id_account
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile";
+
 if($result = mysqli_query($con,$sql)){
     while($res = mysqli_fetch_assoc($result)){
         $adjustes[$i]['idattendence_adjustemnt'] = $res['idattendence_adjustemnt'];
@@ -27,7 +28,6 @@ if($result = mysqli_query($con,$sql)){
         $adjustes[$i]['state'] = $res['state'];
         $adjustes[$i]['id_process'] = $res['idhr_processes'];
         $adjustes[$i]['reason'] = $res['reason'];
-        $adjustes[$i]['id_user'] = $res['user_name'];
         $adjustes[$i]['id_employee'] = $res['id_employee'];
         $adjustes[$i]['id_type'] = $res['id_type'];
         $adjustes[$i]['id_department'] = $res['id_department'];
