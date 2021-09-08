@@ -6,7 +6,6 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $id = ($request->id);
-$id = $id . ";";
 $i = 0;
 $adjustes = [];
 $sql = "SELECT attendences.date AS `attdate`, profiles.*, hires.*, employees.*, hr_processes.*, accounts.name AS `acn` FROM attendence_justifications
@@ -17,7 +16,6 @@ $sql = "SELECT attendences.date AS `attdate`, profiles.*, hires.*, employees.*, 
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN accounts ON accounts.idaccounts = employees.id_account
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile";
-
 if($result = mysqli_query($con,$sql)){
     while($res = mysqli_fetch_assoc($result)){
         $adjustes[$i]['idattendence_adjustemnt'] = $res['idattendence_adjustemnt'];
