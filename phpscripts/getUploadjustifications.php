@@ -9,7 +9,7 @@ $id = ($request->id);
 $i = 0;
 $adjustes = [];
 $sql = "SELECT attendences.date AS `attdate`, attendence_adjustemnt.*,  profiles.*, hires.*, employees.*, hr_processes.*, accounts.name AS `acn`, attendence_justifications.* FROM attendence_justifications
-        INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process AND attendence_justifications.id_import = $id
+        INNER JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process AND hr_processes.id_import = $id
         INNER JOIN attendence_adjustemnt ON attendence_adjustemnt.id_justification = attendence_justifications.idattendence_justifications 
         INNER JOIN attendences ON attendences.idattendences = attendence_adjustemnt.id_attendence
         INNER JOIN employees ON employees.idemployees = attendences.id_employee

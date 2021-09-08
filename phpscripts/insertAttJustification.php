@@ -20,7 +20,7 @@
     $str = "";
 
     $sql = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`, `id_import`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status', '$id_import');";
-echo($sql);
+
     if(mysqli_query($con, $sql)){
         $idprocess = mysqli_insert_id($con);
         $reason = ($request->reason);
