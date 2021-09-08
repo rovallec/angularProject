@@ -305,7 +305,6 @@ export class AttendenceImportComponent implements OnInit {
 
   setImport(imp: tk_upload) {
     this.selectedImp = imp;
-    console.log(this.selectedImp);
     this.apiService.getAttendences({ id: "IMPORT", date: imp.idtk_import }).subscribe((att: attendences[]) => {
       this.attendences = att;
       this.apiService.getUploadedAdjustments({id:imp.idtk_import}).subscribe((adj:attendences_adjustment[])=>{

@@ -40,6 +40,10 @@ tr:hover{
     color:white;
 }
 
+td{
+    padding:0%;
+}
+
 .non_select{
     white-space: nowrap;
     -webkit-touch-callout: none;
