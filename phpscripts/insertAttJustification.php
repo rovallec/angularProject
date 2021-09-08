@@ -15,15 +15,12 @@
     $start = ($request->start);
     $end = ($request->end);
     $id_import = '0';
-    try {
-        $id_import = ($request->id_import);
-    } catch (\Throwable $th) {
-        
-    }
+    $id_import = ($request->id_import);
+
     $str = "";
 
     $sql = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`, `id_import`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status', '$id_import');";
-
+echo($sql);
     if(mysqli_query($con, $sql)){
         $idprocess = mysqli_insert_id($con);
         $reason = ($request->reason);
