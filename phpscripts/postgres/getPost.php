@@ -2,7 +2,8 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 
-require 'database.php';
+//require 'database.php';
+include('database.php');
 //require '../funcionesVarias.php';
 
 $postdata = file_get_contents("php://input");
@@ -35,7 +36,8 @@ if($result = pg_query($con,$sql)){
     $return[$i]['fragment'] = $row['fragment'];
     $return[$i]['article'] = $row['article'];
     $return[$i]['author'] = $row['author'];
-    $return[$i]['date_post'] = $row['date_post'];
+    $return[$i]['date'] = $row['date_post'];
+    $return[$i]['url'] = $row['url'];
     $return[$i]['origin'] = $row['origin'];
     $return[$i]['label'] = $row['label'];
     $i++;
@@ -43,9 +45,9 @@ if($result = pg_query($con,$sql)){
 //  echo($sql);
     echo(json_encode($return));
 }else{
-  http_response_code(400);
   echo(pg_result_error($con));
   echo("<br>");
   echo($sql);
+  http_response_code(400);
 }
 ?>

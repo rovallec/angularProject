@@ -12,8 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 	die();
 }
 
-//define('db_host', '172.18.200.21');
-define('db_host', 'localhost');
+define('db_host', '172.18.200.21');
+//define('db_host', 'localhost');
 define('db_user','neadmin');
 define('db_password','N$4rsol.@dmin');
 define('db_name','minearsol');
@@ -24,7 +24,7 @@ function connect()
     or die('No se ha podido conectar: ' . pg_last_error());
 
   if (!$connect) {
-    die('Error de conexión: ' . mysqli_connect_error());
+    die('Error de conexión: ' . pg_result_error($connect));
   }
 	/*if(mysqli_connect_errno($connect))
 	{
@@ -41,7 +41,7 @@ function transaction() {
 	or die('No se ha podido conectar: ' . pg_last_error());
 
 	if (!$connect) {
-	  die('Error de conexión: ' . mysqli_connect_error());
+	  die('Error de conexión: ' . pg_result_error($connect));
 	}
 	return $connect;
 }
