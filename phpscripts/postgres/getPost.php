@@ -23,7 +23,19 @@ $order = " order by date_post DESC;";
 
 $i = 0;
 $return = array();
-$sql = "select * from posts " . $where . $order;
+$sql = "select id,
+          location,
+          header,
+          byline,
+          multimedia,
+          fragment,
+          article,
+          author,
+          date_post,
+          url,
+          origin,
+          label 
+        from posts " . $where . $order;
 
 
 if($result = pg_query($con,$sql)){
