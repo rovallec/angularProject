@@ -16,7 +16,7 @@ require 'database.php';
         if(mysqli_query($con,$sql)){
             echo("1");
         }else{
-            echo("0" + mysqli_error($con));
+            echo("0" . mysqli_error($con));
             http_response_code(200);
         }
     }
