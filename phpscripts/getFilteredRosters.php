@@ -32,6 +32,8 @@ $sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_nam
         LEFT JOIN (SELECT COUNT(idrosters) AS `count`, id_employee FROM rosters WHERE id_period = $id_period GROUP BY id_employee) AS `cnt` ON `cnt`.id_employee = employees.idemployees
         WHERE idemployees =  $id_employee GROUP BY idrosters;";
 
+echo($sql);
+
 if($result = mysqli_query($con, $sql)){
   while($res = mysqli_fetch_assoc($result)){
     $return[$i]['name'] = $res['name'];
