@@ -565,6 +565,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.time_after = this.attAdjudjment.time_before;
     this.attAdjudjment.id_department = this.authUser.getAuthusr().department;
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
+    this.attAdjudjment.id_import = '0';
     this.addJ = true;
   }
 
@@ -2544,6 +2545,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.amount = (Number(this.attAdjudjment.amount) * - 1).toFixed(2);
     this.attAdjudjment.time_before = this.attAdjudjment.time_after;
     this.attAdjudjment.time_after = (Number(this.attAdjudjment.time_after) + Number(this.attAdjudjment.amount)).toFixed(2);
+    this.attAdjudjment.id_import = '0';
     this.apiService.revertJustification(this.attAdjudjment).subscribe((str:string)=>{
       this.attAdjudjment.notes = 'Reverted from ' + this.attAdjudjment.id_process + ' created at ' + this.attAdjudjment.date;
       this.insertAdjustment();
