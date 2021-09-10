@@ -52,7 +52,7 @@ if($result = mysqli_query($con, $sql)){
     $return[$i]['count'] = $res['count'];
     $return[$i]['id_employee'] = $res['idemployees'];
     $return[$i]['id_account'] = $res['id_account'];
-    $return[$i]['id_schedule'] = $res['id_type']
+    $return[$i]['id_schedule'] = $res['id_type'];
     $i++;
   }
   echo(json_encode($return));
