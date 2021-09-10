@@ -13,7 +13,7 @@ $date = date("Y-m-d");
 $sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_name), ' ', UPPER(profiles.first_lastname), ' ', UPPER(profiles.second_lastname)) AS `name`, 
         hires.nearsol_id, employees.client_id, b.start AS `mon_start`, b.end AS `mon_end`, c.start AS `tue_start`, c.end AS `tue_end`, d.start AS `wed_start`,
         d.end AS `wed_end`, e.start AS `thur_start`, e.end AS `thur_end`, f.start AS `fri_start`, f.end AS `fri_end`, g.start AS `sat_start`, g.end AS `sat_end`,
-        h.start AS `sun_start`, h.end AS `sun_end`, rosters.week_value, COALESCE(`cnt`.`count`,1) AS `count`, idemployees, COALESCE(payments.id_account_py, employees.id_account) AS `id_account` FROM payments
+        h.start AS `sun_start`, h.end AS `sun_end`, rosters.week_value, COALESCE(`cnt`.`count`,1) AS `count`, idemployees, rosters.id_type, COALESCE(payments.id_account_py, employees.id_account) AS `id_account` FROM payments
         INNER JOIN employees ON employees.idemployees = payments.id_employee
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
@@ -52,6 +52,7 @@ if($result = mysqli_query($con, $sql)){
     $return[$i]['count'] = $res['count'];
     $return[$i]['id_employee'] = $res['idemployees'];
     $return[$i]['id_account'] = $res['id_account'];
+    $return[$i]['id_schedule'] = $res['id_type']
     $i++;
   }
   echo(json_encode($return));
