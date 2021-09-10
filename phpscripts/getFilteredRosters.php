@@ -5,7 +5,7 @@ require 'database.php';
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
-$id_employee = ($request->id_employee)
+$id_employee = ($request->id_employee);
 
 $i = 0;
 $return = [];
