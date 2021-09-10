@@ -67,6 +67,7 @@ if(strpos($str, "=")){
         };
         echo json_encode($proccesses);
     }else{
+        echo($sql);
         http_response_code(400);
     }
 
