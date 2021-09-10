@@ -50,8 +50,6 @@ INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 INNER JOIN accounts ON accounts.idaccounts = employees.id_account
 GROUP BY `tmp`.id_employee;";
 
-echo("1");
-
 if($request = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($request)){
         $res[$i]['id_profile'] = $row['idprofiles'];
