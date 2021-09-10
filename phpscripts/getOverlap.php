@@ -24,7 +24,7 @@ INNER JOIN leaves ON attendences.date BETWEEN leaves.start AND leaves.end AND le
 WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING'
 UNION 
 SELECT idattendences, id_employee, date, scheduled, worked_time, id_import FROM (
-SELECT attendences.idattendences, attendences.id_employee, attendences.date, attendences.id_import
+SELECT attendences.idattendences, attendences.id_employee, attendences.date, attendences.id_import,
 attendences.scheduled, attendences.worked_time, COUNT(leaves.idleaves) AS `cnt`, COUNT(vacations.idvacations) AS `vac_count`,
 `susp`.`cnt` AS `suspensions_count`
 FROM attendences
