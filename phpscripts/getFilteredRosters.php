@@ -4,7 +4,8 @@ header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
 $postdata = file_get_contents("php://input");
-$str = ($postdata);
+$request = json_decode($postdata);
+$id_employee = ($request->id_employee)
 
 $i = 0;
 $return = [];
