@@ -1022,6 +1022,10 @@ getTkUploads(dt:any){
 getUploadedAdjustments(any:any){
   return this.httpClient.post<attendences_adjustment[]>(`${this.PHP_API_SERVER}/phpscripts/getUploadjustifications.php`, any);
 }
+
+updateRosters(rost:rosters){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateRosters.php`, rost);
+}
 }
 
 

@@ -17,20 +17,111 @@
         <div class="row d-flex justify-content-end">
             <button class="btn btn-outline-info" style="margin-right:15px" data-target="#rosterTypes"
                 data-toggle="modal" (click)="clearSet()"><i class="far fa-clock"></i></button>
-            <button class="btn btn-outline-warning" style="margin-right:15px"><i
-                    class="fas fa-check-double"></i></button>
+            <button class="btn btn-outline-warning" style="margin-right:15px" data-target="#rosterAssign" data-toggle="modal"><i
+                    class="fas fa-hammer"></i></button>
             <button class="btn btn-outline-secondary" style="margin-right:15px"><i class="fas fa-filter"></i></button>
             <button class="btn btn-outline-success" style="margin-right:15px"><i class="far fa-save"></i></button>
         </div>
         <div class="row" style="margin-top:20px">
-            <table class="table table-hover table-light ">
+            <table class="table table-hover table-light selectable">
                 <thead>
                     <th>NEARSOL ID</th>
                     <th>CLIENT ID</th>
                     <th>NAME</th>
                     <th *ngFor="let d of period_days">{{d}}</th>
                 </thead>
+                <tbody>
+                    <tr *ngFor="let roster of rosters_show" (dblclick)="addSelection(roster)" [ngClass]="{'selectedRow':isSelected(roster)}">
+                        <td>{{roster.nearsol_id}}</td>
+                        <td>{{roster.client_id}}</td>
+                        <td>{{roster.name}}</td>
+                        <td *ngIf="dayExist(0)">{{roster.day_1}}</td>
+                        <td *ngIf="dayExist(1)">{{roster.day_2}}</td>
+                        <td *ngIf="dayExist(2)">{{roster.day_3}}</td>
+                        <td *ngIf="dayExist(3)">{{roster.day_4}}</td>
+                        <td *ngIf="dayExist(4)">{{roster.day_5}}</td>
+                        <td *ngIf="dayExist(5)">{{roster.day_6}}</td>
+                        <td *ngIf="dayExist(6)">{{roster.day_7}}</td>
+                        <td *ngIf="dayExist(7)">{{roster.day_8}}</td>
+                        <td *ngIf="dayExist(8)">{{roster.day_9}}</td>
+                        <td *ngIf="dayExist(9)">{{roster.day_10}}</td>
+                        <td *ngIf="dayExist(10)">{{roster.day_11}}</td>
+                        <td *ngIf="dayExist(11)">{{roster.day_12}}</td>
+                        <td *ngIf="dayExist(12)">{{roster.day_13}}</td>
+                        <td *ngIf="dayExist(13)">{{roster.day_14}}</td>
+                        <td *ngIf="dayExist(14)">{{roster.day_15}}</td>
+                        <td *ngIf="dayExist(15)">{{roster.day_16}}</td>
+                    </tr>
+                </tbody>
             </table>
+        </div>
+    </div>
+</div>
+<!------------------------------------------------------------------------------- ROSTER ASSIGN MODAL --------------------------------------------------------------------->
+<div class="modal fade" id="rosterAssign" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="uploadBonusesLabel">ROSTERS</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="col-md-6 form-group">
+                        <div class="row">
+                        <label>Tag</label>
+                            <select class="form-control" (change)="getRosters_templates($event.target.value)">
+                                <option *ngFor="let tag of roster_tags">{{tag}}</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <label>Week</label>
+                            <select class="form-control" [(ngModel)]="week_value">
+                                <option>1</option>
+                                <option *ngIf="getMaxWeek() >= 2">2</option>
+                                <option *ngIf="getMaxWeek() >= 3">3</option>
+                            </select>
+                        </div>
+                    </div>
+                   <div class="col-md-6 form-group">
+                       <label>Types:</label>
+                       <select size=5 class="form-control" (change)="setRosterType($event.target.value)">
+                           <option *ngFor="let roster of selected_types" value="{{roster.idroster_types}}">{{roster.name}}</option>
+                       </select>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <table class="table table-hover">
+
+                        </table>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8" style="border-top: solid 4px #e3f2fd; height: 20px;"></div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <label>Employees</label>
+                        <select class="form-control" [size]="maxSelection()" disabled="true">
+                            <option *ngFor="let selection of selectedRosters">{{selection.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" [disabled]="!working">CANCE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="saveRosters()" *ngIf="!working">SAVE</button>
+                <button class="btn btn-outline-secondary" type="button" disabled *ngIf="working">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+            </div>
         </div>
     </div>
 </div>
@@ -177,7 +268,7 @@
             <div class="modal-footer d-flex justify-content-between mt-2">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCE</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" *ngIf="!needUpdate(1) && !needUpdate(2) && !needUpdate(3) && !needUpdate(4) && !needUpdate(5) && !needUpdate(6) && !needUpdate(7)">ADD</button>
-                <button type="button" class="btn btn-outline-secondary" *ngIf="needUpdate(1) || needUpdate(2) || needUpdate(3) || needUpdate(4) || needUpdate(5) || needUpdate(6) || needUpdate(7)" (click)="saveRooster()">SAVE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" *ngIf="needUpdate(1) || needUpdate(2) || needUpdate(3) || needUpdate(4) || needUpdate(5) || needUpdate(6) || needUpdate(7)" (click)="saveRooster()">SAVE</button>
             </div>
         </div>
     </div>
