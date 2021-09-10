@@ -1026,6 +1026,10 @@ getUploadedAdjustments(any:any){
 updateRosters(rost:rosters){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateRosters.php`, rost);
 }
+
+getRosterFilter(any:any){
+  return this.httpClient.post<rosters[]>(`${this.PHP_API_SERVER}/phpscripts/getFilteredRosters.php`, any);
+}
 }
 
 

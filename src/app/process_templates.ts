@@ -2238,6 +2238,7 @@ export class rosters{
     id_schedule:string;
     status:string;
     id_period:string;
+    id_account:string;
     constructor(){
         this.idrosters = null;
         this.name = null;
@@ -2259,10 +2260,13 @@ export class rosters{
         this.id_employee = null;
         this.status = null;
         this.id_period = null;
+        this.id_account = null;
     }
 }
 
 export class roster_views{
+    idrosters:string;
+    id_account:string;
     id_employee:string;
     nearsol_id:string;
     client_id:string;
@@ -2283,7 +2287,10 @@ export class roster_views{
     day_14:string;
     day_15:string;
     day_16:string;
+    status:string;
     constructor(){
+        this.idrosters = null;
+        this.id_account = null;
         this.id_employee = null;
         this.nearsol_id = null;
         this.client_id = null;
@@ -2304,6 +2311,7 @@ export class roster_views{
         this.day_14 = null;
         this.day_15 = null;
         this.day_16 = null;
+        this.status = null;
     }
 }
 

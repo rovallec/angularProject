@@ -36,9 +36,27 @@ export class RostermaintenanceComponent implements OnInit {
   rosters_show: roster_views[] = [];
   roster_modifications:string[] = [];
   working:boolean = false;
-  week_value:string = null;
+  week_value:string = '1';
+  completed:boolean = false;
+  searchString:string;
+  searching:boolean = false;
+  employeeRoster:rosters[] = [];
 
   ngOnInit() {
+    this.roster_modifications = [];
+    this.rosters_show = [];
+    this.selectedRosters = [];
+    this.rosters = [];
+    this.updatePending = [false, false, false, false, false, false, false];
+    this.useds = [];
+    this.schedule_types = [];
+    this.selected_types = [];
+    this.period_days = [];
+    this.roster_tags = [];
+    this.clients = [];
+    this.accounts = [];
+    this.searching = false;
+
     this.apiServices.getRoster_tags().subscribe((str: string[]) => {
       this.roster_tags = str;
       this.getRosters_templates(this.roster_tags[0]);
@@ -46,15 +64,27 @@ export class RostermaintenanceComponent implements OnInit {
     this.apiServices.getPeriods().subscribe((periods: periods[]) => {
       this.activePeriod = periods[periods.length - 1];
       this.apiServices.getRosters("'" + this.activePeriod.idperiods + "'").subscribe((rsts: rosters[]) => {
+        rsts.forEach(rs=>{
+          let cnt:number = 0;
+          let temp = rsts.filter(f => f.id_employee == rs.id_employee);
+          temp = temp.filter(f=>f.id_account == rs.id_account);
+          temp.forEach(tmp=>{
+            cnt = cnt + Number(tmp.week_value);
+          })
+          if((cnt > this.getMaxWeek() || cnt < this.getMaxWeek()) && !isNullOrUndefined(rs.mon_end)){
+            rs.status = "3";
+          }else if(isNullOrUndefined(rs.mon_end)){
+            rs.status = "0";
+          }else if(cnt == this.getMaxWeek()){
+            rs.status = "1";
+          }
+        })
         this.rosters = rsts;
         let dt: number = new Date(periods[periods.length - 1].start).getTime();
         while (dt <= new Date(periods[periods.length - 1].end).getTime()) {
           dt = dt + (1000 * 3600 * 24);
           this.period_days.push(new Date(dt).getDate().toFixed(0));
         }
-        this.rosters.forEach((setRost: rosters) => {
-
-        })
         this.rosters.forEach((roster_toShow:rosters)=>{
           let activeShow:boolean = false;
           this.rosters_show.forEach((showed:roster_views)=>{
@@ -63,11 +93,14 @@ export class RostermaintenanceComponent implements OnInit {
             }
           })
           if(!activeShow){
-            let toShow:roster_views = new roster_views;
+          let toShow:roster_views = new roster_views;
+          toShow.id_account = roster_toShow.id_account;
           toShow.nearsol_id = roster_toShow.nearsol_id;
           toShow.client_id = roster_toShow.client_id;
           toShow.name = roster_toShow.name;
           toShow.id_employee = roster_toShow.id_employee;
+          toShow.status = roster_toShow.status;
+          toShow.idrosters = roster_toShow.idrosters;
             if(this.dayExist(0)){
               toShow.day_1 = this.getRosterDay(0, roster_toShow);
             }
@@ -126,6 +159,14 @@ export class RostermaintenanceComponent implements OnInit {
       this.selectedClient = cls[0].idclients;
       this.setClient(this.selectedClient);
     })
+  }
+
+  sortRosters(){
+    if(this.searching){
+      return this.rosters_show.sort((a,b)=>Number(b.status) - Number(a.status)).filter(f=>f.id_account === this.selectedAccount.idaccounts).filter(t=>t.name.includes(this.searchString.toUpperCase()) || t.nearsol_id.includes(this.searchString.toUpperCase()) || t.client_id.includes(this.searchString.toUpperCase()));
+    }else{
+      return this.rosters_show.sort((a,b)=>Number(b.status) - Number(a.status)).filter(f=>f.id_account === this.selectedAccount.idaccounts);
+    }
   }
 
   setClient(cl: string) {
@@ -293,7 +334,7 @@ export class RostermaintenanceComponent implements OnInit {
     let rtn: string = '';
     this.roster_view++;
 
-    if (Number(rt.count) > 1) {
+    if (Number(rt.count) >= 1) {
       let mixed_schedules: rosters[] = this.rosters.filter(f => f.nearsol_id == rt.nearsol_id);
       let week: number = 0;
 
@@ -314,28 +355,34 @@ export class RostermaintenanceComponent implements OnInit {
         }
         counter++;
       })
-      switch (dt.getDay()) {
-        case 1:
-          rtn = ((mixed_schedules[week].mon_start + " - " + (mixed_schedules[week].mon_end)));
-          break;
-        case 2:
-          rtn = ((mixed_schedules[week].tue_start + " - " + mixed_schedules[week].tue_end));
-          break;
-        case 3:
-          rtn = (mixed_schedules[week].wed_start + " - " + mixed_schedules[week].wed_end);
-          break;
-        case 4:
-          rtn = ((mixed_schedules[week].thur_start + " - " + mixed_schedules[week].thur_end));
-          break;
-        case 5:
-          rtn = ((mixed_schedules[week].fri_start + " - " + mixed_schedules[week].fri_end));
-          break;
-        case 6:
-          rtn = (mixed_schedules[week].sat_start + " - " + mixed_schedules[week].sat_end);
-          break;
-        case 0:
-          rtn = (mixed_schedules[week].sun_start + " - " + mixed_schedules[week].sun_end);
-          break;
+      if(mixed_schedules.length > (week)){
+        switch (dt.getDay()) {
+          case 1:
+            rtn = ((mixed_schedules[week].mon_start + " - " + (mixed_schedules[week].mon_end)));
+            break;
+          case 2:
+            rtn = ((mixed_schedules[week].tue_start + " - " + mixed_schedules[week].tue_end));
+            break;
+          case 3:
+            rtn = (mixed_schedules[week].wed_start + " - " + mixed_schedules[week].wed_end);
+            break;
+          case 4:
+            rtn = ((mixed_schedules[week].thur_start + " - " + mixed_schedules[week].thur_end));
+            break;
+          case 5:
+            rtn = ((mixed_schedules[week].fri_start + " - " + mixed_schedules[week].fri_end));
+            break;
+          case 6:
+            rtn = (mixed_schedules[week].sat_start + " - " + mixed_schedules[week].sat_end);
+            break;
+          case 0:
+            rtn = (mixed_schedules[week].sun_start + " - " + mixed_schedules[week].sun_end);
+            break;
+        }
+      }else{
+        if(week <= this.getMaxWeek()){
+          rtn = 'null - null';
+        }
       }
     } else {
       switch (dt.getDay()) {
@@ -421,7 +468,7 @@ export class RostermaintenanceComponent implements OnInit {
   saveRosters(){
     this.working = true;
     let count:number = 0;
-    let rosrters_result:rosters[] = [];
+    let rosters_result:rosters[] = [];
     this.selectedRosters.forEach(selection=>{
       let roster:rosters = new rosters;
       roster.id_employee = selection.id_employee;
@@ -431,11 +478,40 @@ export class RostermaintenanceComponent implements OnInit {
       this.apiServices.updateRosters(roster).subscribe((str:string)=>{
         roster.status = str;
         count++;
-        rosrters_result.push(roster);
+        rosters_result.push(roster);
         if(count >= this.selectedRosters.length){
           this.working = false;
+          this.completed = true;
+          let strs:string = null;
+          rosters_result.forEach(rst=>{
+            if(rst.status != '1'){
+              strs = strs + rst.status; 
+            }
+          })
+          if(isNullOrUndefined(strs)){
+            strs = "Success";
+          }
         }
       })
+    })
+  }
+
+  reload(){
+    this.ngOnInit();
+  }
+
+  reset_value(){
+    this.completed = false;
+    this.working = false;
+  }
+
+  searchRoster(){
+    this.searching = !this.searching;
+  }
+
+  setEmployee(rst:string){
+    this.apiServices.getRosterFilter({id_employee:rst}).subscribe((roster:rosters[])=>{
+      this.employeeRoster = roster;
     })
   }
 }

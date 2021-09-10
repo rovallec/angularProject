@@ -18,9 +18,10 @@
             <button class="btn btn-outline-info" style="margin-right:15px" data-target="#rosterTypes"
                 data-toggle="modal" (click)="clearSet()"><i class="far fa-clock"></i></button>
             <button class="btn btn-outline-warning" style="margin-right:15px" data-target="#rosterAssign" data-toggle="modal"><i
-                    class="fas fa-hammer"></i></button>
-            <button class="btn btn-outline-secondary" style="margin-right:15px"><i class="fas fa-filter"></i></button>
-            <button class="btn btn-outline-success" style="margin-right:15px"><i class="far fa-save"></i></button>
+                    class="fas fa-hammer" (click)="reset_value()"></i></button>
+            <button class="btn btn-outline-secondary" style="margin-right:15px" data-target="#rosterSearch" data-toggle="modal" *ngIf="!searching"><i Class="fas fa-filter"></i></button>
+            <button class="btn btn-outline-secondary" style="margin-right:15px" *ngIf="searching" (click)="searchRoster()"><i Class="far fa-times-circle"></i></button>
+            <button class="btn btn-outline-primary" style="margin-right:15px" data-target="#rosterSetup" data-toggle="modal"><i class="fas fa-cogs"></i></button>
         </div>
         <div class="row" style="margin-top:20px">
             <table class="table table-hover table-light selectable">
@@ -31,7 +32,7 @@
                     <th *ngFor="let d of period_days">{{d}}</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let roster of rosters_show" (dblclick)="addSelection(roster)" [ngClass]="{'selectedRow':isSelected(roster)}">
+                    <tr *ngFor="let roster of sortRosters()" (dblclick)="addSelection(roster)" [ngClass]="{'table-success':roster.status === '1' && !isSelected(roster),'selectedRow':isSelected(roster), 'table-warning':roster.status === '3' && !isSelected(roster), 'table-danger':roster.status === '0' && !isSelected(roster)}">
                         <td>{{roster.nearsol_id}}</td>
                         <td>{{roster.client_id}}</td>
                         <td>{{roster.name}}</td>
@@ -57,6 +58,65 @@
         </div>
     </div>
 </div>
+<!------------------------------------------------------------------------------- ROSTER SETUP MODAL --------------------------------------------------------------------->
+<div class="modal fade" id="rosterSearch" tabindex="-1" role="dialog" aria-labelledby="rosterSearchlLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="rosterSearchLabel">FIND</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="col-md-4">
+                        <label>EMPLOYEE:</label>
+                        <select size="maxSelection()" class="form-control" (change)="setEmployee($event.target.value)">
+                            <option *ngFor='let employee of selectedRosters' [value]="employee.idrosters + ' AND ' + employee.id_account">{{employee.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>ROSTERS:</label>
+                        <select size="3" class="form-control">
+                            <option *ngFor="let rost of employeeRoster let i = index">{{i}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex mt-2 justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="searchRoster()">FILTER</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------------------------------------------------------------- ROSTER FILTER MODAL --------------------------------------------------------------------->
+<div class="modal fade" id="rosterSetup" tabindex="-1" role="dialog" aria-labelledby="rosterSetuplLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="rosterSetupLabel">FIND</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="col-md-2"></div>
+                    <div class="form-group col-md-8">
+                        <label>Filter:</label>
+                        <input type="text" class="form-control" [(ngModel)]="searchString">
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex mt-2 justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="searchRoster()">FILTER</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!------------------------------------------------------------------------------- ROSTER ASSIGN MODAL --------------------------------------------------------------------->
 <div class="modal fade" id="rosterAssign" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
     aria-hidden="true">
@@ -64,6 +124,9 @@
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center">
                 <h5 class="modal-title" id="uploadBonusesLabel">ROSTERS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="row col-md-12">
@@ -115,9 +178,9 @@
                     <div class="col-md-1"></div>
                 </div>
             </div>
-            <div class="modal-footer d-flex justify-content-between mt-2">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" [disabled]="!working">CANCE</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="saveRosters()" *ngIf="!working">SAVE</button>
+            <div class="modal-footer d-flex mt-2" [ngClass]="{'justify-content-between':!completed, 'justify-content-center':completed}">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" [disabled]="!working && !completed" (click)="reload()">CLOSE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="saveRosters()" *ngIf="!working && !completed">SAVE</button>
                 <button class="btn btn-outline-secondary" type="button" disabled *ngIf="working">
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     Loading...
@@ -133,6 +196,9 @@
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center">
                 <h5 class="modal-title" id="uploadBonusesLabel">ROSTERS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="row">
