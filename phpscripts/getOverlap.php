@@ -63,5 +63,7 @@ if($request = mysqli_query($con,$sql)){
         $i++;
     }
     echo(json_encode($res));
+}else{
+    echo($sql);
 }
 ?>
