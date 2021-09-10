@@ -56,7 +56,7 @@ if($result = mysqli_query($con, $sql)){
     $return[$i]['id_employee'] = $res['idemployees'];
     $return[$i]['id_account'] = $res['id_account'];
     $return[$i]['id_schedule'] = $res['id_type'];
-    $return[$i]['idrosters'] = $res['idroster'];
+    $return[$i]['idrosters'] = $res['idrosters'];
     $return[$i]['tag'] = $res['tag'];
     $return[$i]['roster_name'] = $res['roster_name'];
     $i++;
