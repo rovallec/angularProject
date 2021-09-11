@@ -28,7 +28,7 @@ $sql = "SELECT DISTINCT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.s
         LEFT JOIN roster_times h ON h.idroster_times = a.id_time_sun
         LEFT JOIN (SELECT COUNT(idrosters) AS `count`, id_employee FROM rosters WHERE id_period = $str GROUP BY id_employee) AS `cnt` ON `cnt`.id_employee = employees.idemployees
         WHERE employees.active = '1' AND (rosters.id_period IS NULL OR rosters.id_period = $str);";
-
+echo($sql);
 if($result = mysqli_query($con, $sql)){
   while($res = mysqli_fetch_assoc($result)){
     $return[$i]['name'] = $res['name'];
