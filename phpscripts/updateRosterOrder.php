@@ -24,6 +24,7 @@ if($result = $transact->query($sql)){
         if($result = $transact->query($sql3)){
             $sql4 = "UPDATE rosters SET idrosters = $id_old_2 WHERE idrosters = $id_new_1";
             $sql5 = "UPDATE rosters SET idrosters = $id_old_1 WHERE idrosters = $id_new_2";
+            echo($sql . $sql2 . $sql3 . $sql4 . $sql4);
             if($result = $transact->query($sql4)){
                 if($result = $transact->query($sql5)){
                     $transact->commit();
