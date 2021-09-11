@@ -28,7 +28,7 @@ $sql = "SELECT DISTINCT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.s
         LEFT JOIN roster_times h ON h.idroster_times = a.id_time_sun
         LEFT JOIN (SELECT COUNT(idrosters) AS `count`, id_employee FROM rosters WHERE id_period = $str GROUP BY id_employee) AS `cnt` ON `cnt`.id_employee = employees.idemployees
         WHERE employees.active = '1' AND (rosters.id_period IS NULL OR rosters.id_period = $str);";
-echo($sql);
+
 if($result = mysqli_query($con, $sql)){
   while($res = mysqli_fetch_assoc($result)){
     $return[$i]['name'] = $res['name'];
@@ -53,13 +53,13 @@ if($result = mysqli_query($con, $sql)){
     $return[$i]['id_employee'] = $res['idemployees'];
     $return[$i]['id_account'] = $res['id_account'];
     $return[$i]['id_schedule'] = $res['id_type'];
-    $retunr[$i]['mon_fixed'] = $res['mon_fixed'];
-    $retunr[$i]['tue_fixed'] = $res['tue_fixed'];
-    $retunr[$i]['wed_fixed'] = $res['wed_fixed'];
-    $retunr[$i]['thur_fixed'] = $res['thur_fixed'];
-    $retunr[$i]['fri_fixed'] = $res['fri_fixed'];
-    $retunr[$i]['sat_fixed'] = $res['sat_fixed'];
-    $retunr[$i]['sun_fixed'] = $res['sun_fixed'];
+    $return[$i]['mon_fixed'] = $res['mon_fixed'];
+    $return[$i]['tue_fixed'] = $res['tue_fixed'];
+    $return[$i]['wed_fixed'] = $res['wed_fixed'];
+    $return[$i]['thur_fixed'] = $res['thur_fixed'];
+    $return[$i]['fri_fixed'] = $res['fri_fixed'];
+    $return[$i]['sat_fixed'] = $res['sat_fixed'];
+    $return[$i]['sun_fixed'] = $res['sun_fixed'];
     $i++;
   }
   echo(json_encode($return));
