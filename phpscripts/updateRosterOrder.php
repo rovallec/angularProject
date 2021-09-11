@@ -16,8 +16,8 @@ $sql = "SELECT idrosters FROM rosters ORDER BY idrosters DESC LIMIT 1;";
 
 if($result = $transact->query($sql)){
     $row = $result->fetch_assoc();
-    $id_new_1 = ((int)$row[0]['idrosters']) + 1;
-    $id_new_2 = ((int)$row[0]['idrosters']) + 2;
+    $id_new_1 = ((int)$row['idrosters']) + 1;
+    $id_new_2 = ((int)$row['idrosters']) + 2;
     $sql2 = "UPDATE rosters SET idrosters = $id_new_1 WHERE idrosters = $id_old_1";
     $sql3 = "UPDATE rosters SET idrosters = $id_new_2 WHERE idrosters = $id_old_2";
     if($result = $transact->query($sql2)){
