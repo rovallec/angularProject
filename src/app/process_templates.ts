@@ -188,7 +188,7 @@ export class attendences {
         this.second_lastname = null;
         this.day_off1 = null;
         this.day_off2 = null;
-        this.status = null;
+        this.status = '0';
         this.id_wave = null;
         this.balance = null;
         this.state = null;
@@ -2239,6 +2239,8 @@ export class rosters{
     status:string;
     id_period:string;
     id_account:string;
+    tag:string;
+    roster_name:string;
     constructor(){
         this.idrosters = null;
         this.name = null;
@@ -2261,6 +2263,8 @@ export class rosters{
         this.status = null;
         this.id_period = null;
         this.id_account = null;
+        this.tag = null;
+        this.roster_name = null
     }
 }
 

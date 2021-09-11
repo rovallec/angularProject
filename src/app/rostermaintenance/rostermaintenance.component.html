@@ -17,11 +17,14 @@
         <div class="row d-flex justify-content-end">
             <button class="btn btn-outline-info" style="margin-right:15px" data-target="#rosterTypes"
                 data-toggle="modal" (click)="clearSet()"><i class="far fa-clock"></i></button>
-            <button class="btn btn-outline-warning" style="margin-right:15px" data-target="#rosterAssign" data-toggle="modal"><i
-                    class="fas fa-hammer" (click)="reset_value()"></i></button>
-            <button class="btn btn-outline-secondary" style="margin-right:15px" data-target="#rosterSearch" data-toggle="modal" *ngIf="!searching"><i Class="fas fa-filter"></i></button>
-            <button class="btn btn-outline-secondary" style="margin-right:15px" *ngIf="searching" (click)="searchRoster()"><i Class="far fa-times-circle"></i></button>
-            <button class="btn btn-outline-primary" style="margin-right:15px" data-target="#rosterSetup" data-toggle="modal"><i class="fas fa-cogs"></i></button>
+            <button class="btn btn-outline-warning" style="margin-right:15px" data-target="#rosterAssign"
+                data-toggle="modal"><i class="fas fa-hammer" (click)="reset_value()"></i></button>
+            <button class="btn btn-outline-secondary" style="margin-right:15px" data-target="#rosterSearch"
+                data-toggle="modal" *ngIf="!searching"><i Class="fas fa-filter"></i></button>
+            <button class="btn btn-outline-secondary" style="margin-right:15px" *ngIf="searching"
+                (click)="searchRoster()"><i Class="far fa-times-circle"></i></button>
+            <button class="btn btn-outline-primary" style="margin-right:15px" data-target="#rosterSetup"
+                data-toggle="modal" (click)="reset_value()"><i class="fas fa-cogs"></i></button>
         </div>
         <div class="row" style="margin-top:20px">
             <table class="table table-hover table-light selectable">
@@ -32,7 +35,8 @@
                     <th *ngFor="let d of period_days">{{d}}</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let roster of sortRosters()" (dblclick)="addSelection(roster)" [ngClass]="{'table-success':roster.status === '1' && !isSelected(roster),'selectedRow':isSelected(roster), 'table-warning':roster.status === '3' && !isSelected(roster), 'table-danger':roster.status === '0' && !isSelected(roster)}">
+                    <tr *ngFor="let roster of sortRosters()" (dblclick)="addSelection(roster)"
+                        [ngClass]="{'table-success':roster.status === '1' && !isSelected(roster),'selectedRow':isSelected(roster), 'table-warning':roster.status === '3' && !isSelected(roster), 'table-danger':roster.status === '0' && !isSelected(roster)}">
                         <td>{{roster.nearsol_id}}</td>
                         <td>{{roster.client_id}}</td>
                         <td>{{roster.name}}</td>
@@ -64,27 +68,57 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center">
-                <h5 class="modal-title" id="rosterSetupLabel">FIND</h5>
+                <h5 class="modal-title" id="rosterSetupLabel">MAINTENANCE</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-                <div class="row col-md-12">
-                    <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-6">
                         <label>EMPLOYEE:</label>
-                        <select size="maxSelection()" class="form-control" (change)="setEmployee($event.target.value)">
-                            <option *ngFor='let employee of selectedRosters' [value]="employee.idrosters + ' AND ' + employee.id_account">{{employee.name}}</option>
+                        <select [size]="5" class="form-control" (change)="setEmployee($event.target.value)" [(ngModel)]="selectedEmployeeRoster.id_employee">
+                            <option *ngFor='let employee of selectedRosters' [value]="employee.id_employee">
+                                {{employee.name}}</option>
                         </select>
                     </div>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <div class="col-md-12" style="padding:0px">
+                                <label>ROSTERS:</label>
+                                <select size="3" class="form-control" (change)="setEmployeeRoster($event.target.value)" [(ngModel)]="selectedEmployeeRoster.idrosters">
+                                    <option *ngFor="let rost of employeeRoster let i = index" [value]="rost.idrosters">{{i}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:10px">
+                            <div class="col-md-12" style="max-height:30px; padding:0px">
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-outline-success" (click)="changeRoster(1)"><i class="fas fa-arrow-up"></i></button>
+                                    <button class="btn btn-outline-warning" (click)="changeRoster(-1)"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn btn-outline-danger"><i class="fas fa-minus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-4">
-                        <label>ROSTERS:</label>
-                        <select size="3" class="form-control">
-                            <option *ngFor="let rost of employeeRoster let i = index">{{i}}</option>
-                        </select>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label>TAG:</label>
+                                <input type="text" [disabled]="true" class="form-control" [(ngModel)]="selectedEmployeeRoster.tag">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label>ACTIVE WEEK:</label>
+                                <input type="text" [disabled]="true" class="form-control" [(ngModel)]="selectedEmployeeRoster.week_value">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer d-flex mt-2 justify-content-between">
+            <div class="modal-footer d-flex mt-2 justify-content-center">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="searchRoster()">FILTER</button>
             </div>
         </div>
     </div>
@@ -112,7 +146,8 @@
             </div>
             <div class="modal-footer d-flex mt-2 justify-content-between">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="searchRoster()">FILTER</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+                    (click)="searchRoster()">FILTER</button>
             </div>
         </div>
     </div>
@@ -132,7 +167,7 @@
                 <div class="row col-md-12">
                     <div class="col-md-6 form-group">
                         <div class="row">
-                        <label>Tag</label>
+                            <label>Tag</label>
                             <select class="form-control" (change)="getRosters_templates($event.target.value)">
                                 <option *ngFor="let tag of roster_tags">{{tag}}</option>
                             </select>
@@ -146,11 +181,12 @@
                             </select>
                         </div>
                     </div>
-                   <div class="col-md-6 form-group">
-                       <label>Types:</label>
-                       <select size=5 class="form-control" (change)="setRosterType($event.target.value)">
-                           <option *ngFor="let roster of selected_types" value="{{roster.idroster_types}}">{{roster.name}}</option>
-                       </select>
+                    <div class="col-md-6 form-group">
+                        <label>Types:</label>
+                        <select size=5 class="form-control" (change)="setRosterType($event.target.value)">
+                            <option *ngFor="let roster of selected_types" value="{{roster.idroster_types}}">
+                                {{roster.name}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row col-md-12">
@@ -178,9 +214,12 @@
                     <div class="col-md-1"></div>
                 </div>
             </div>
-            <div class="modal-footer d-flex mt-2" [ngClass]="{'justify-content-between':!completed, 'justify-content-center':completed}">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" [disabled]="!working && !completed" (click)="reload()">CLOSE</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="saveRosters()" *ngIf="!working && !completed">SAVE</button>
+            <div class="modal-footer d-flex mt-2"
+                [ngClass]="{'justify-content-between':!completed, 'justify-content-center':completed}">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+                    [disabled]="!working && !completed" (click)="reload()">CLOSE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="saveRosters()"
+                    *ngIf="!working && !completed">SAVE</button>
                 <button class="btn btn-outline-secondary" type="button" disabled *ngIf="working">
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     Loading...
@@ -250,38 +289,52 @@
                                             <span>START</span>
                                         </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(1)}"
-                                            (dblclick)="change(selectedType.id_time_mon,1)">{{selectedType.mon_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_mon,1)">{{selectedType.mon_start}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(2)}"
-                                            (dblclick)="change(selectedType.id_time_tue,2)">{{selectedType.tue_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_tue,2)">{{selectedType.tue_start}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(3)}"
-                                            (dblclick)="change(selectedType.id_time_wed,3)">{{selectedType.wed_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_wed,3)">{{selectedType.wed_start}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(4)}"
-                                            (dblclick)="change(selectedType.id_time_thur,4)">{{selectedType.thur_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_thur,4)">{{selectedType.thur_start}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(5)}"
-                                            (dblclick)="change(selectedType.id_time_fri,5)">{{selectedType.fri_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_fri,5)">{{selectedType.fri_start}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(6)}"
-                                            (dblclick)="change(selectedType.id_time_sat,6)">{{selectedType.sat_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_sat,6)">{{selectedType.sat_start}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(7)}"
-                                            (dblclick)="change(selectedType.id_time_sun,7)">{{selectedType.sun_start}}</td>
+                                            (dblclick)="change(selectedType.id_time_sun,7)">{{selectedType.sun_start}}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span>END</span>
                                         </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(1)}"
-                                            (dblclick)="change(selectedType.id_time_mon,1)">{{selectedType.mon_end}}</td>
+                                            (dblclick)="change(selectedType.id_time_mon,1)">{{selectedType.mon_end}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(2)}"
-                                            (dblclick)="change(selectedType.id_time_tue,2)">{{selectedType.tue_end}}</td>
+                                            (dblclick)="change(selectedType.id_time_tue,2)">{{selectedType.tue_end}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(3)}"
-                                            (dblclick)="change(selectedType.id_time_wed,3)">{{selectedType.wed_end}}</td>
+                                            (dblclick)="change(selectedType.id_time_wed,3)">{{selectedType.wed_end}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(4)}"
-                                            (dblclick)="change(selectedType.id_time_thur,4)">{{selectedType.thur_end}}</td>
+                                            (dblclick)="change(selectedType.id_time_thur,4)">{{selectedType.thur_end}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(5)}"
-                                            (dblclick)="change(selectedType.id_time_fri,5)">{{selectedType.fri_end}}</td>
+                                            (dblclick)="change(selectedType.id_time_fri,5)">{{selectedType.fri_end}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(6)}"
-                                            (dblclick)="change(selectedType.id_time_sat,6)">{{selectedType.sat_end}}</td>
+                                            (dblclick)="change(selectedType.id_time_sat,6)">{{selectedType.sat_end}}
+                                        </td>
                                         <td class="selectable td_hover" [ngClass]="{'td_updated': needUpdate(7)}"
-                                            (dblclick)="change(selectedType.id_time_sun,7)">{{selectedType.sun_end}}</td>
+                                            (dblclick)="change(selectedType.id_time_sun,7)">{{selectedType.sun_end}}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -295,29 +348,40 @@
                             <div class="row col-md-12">
                                 <div class="col-md-4">
                                     <div class="row col-md-12">
-                                    <label>ID:</label>
-                                    <select class="form-control" size="4" (change)="setSchedule_type($event.target.value)">
-                                        <option *ngFor="let schedule_type of schedule_types" [ngClass]="{'optActive':selectedSchedule.idroster_times == schedule_type.idroster_times}">
-                                            {{schedule_type.idroster_times}}</option>
-                                    </select>
-                                </div>
-                                <div class="row justify-content-end col-md-12" style="margin-top:5px">
-                                    <button class="btn btn-outline-success" [disabled]="editingTimes" (click)="setTime()"><i class="fas fa-check"></i></button>
-                                    <button class="btn btn-outline-info" style="margin-left:10px" (click)="addTime()" *ngIf="!editingTimes"><i class="fas fa-plus"></i></button>
-                                    <button class="btn btn-outline-info" style="margin-left:10px" *ngIf="editingTimes" (click)="saveTime()"><i class="fas fa-save"></i></button>
-                                </div>
+                                        <label>ID:</label>
+                                        <select class="form-control" size="4"
+                                            (change)="setSchedule_type($event.target.value)">
+                                            <option *ngFor="let schedule_type of schedule_types"
+                                                [ngClass]="{'optActive':selectedSchedule.idroster_times == schedule_type.idroster_times}">
+                                                {{schedule_type.idroster_times}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="row justify-content-end col-md-12" style="margin-top:5px">
+                                        <button class="btn btn-outline-success" [disabled]="editingTimes"
+                                            (click)="setTime()"><i class="fas fa-check"></i></button>
+                                        <button class="btn btn-outline-info" style="margin-left:10px"
+                                            (click)="addTime()" *ngIf="!editingTimes"><i
+                                                class="fas fa-plus"></i></button>
+                                        <button class="btn btn-outline-info" style="margin-left:10px"
+                                            *ngIf="editingTimes" (click)="saveTime()"><i
+                                                class="fas fa-save"></i></button>
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label>Start:</label>
-                                            <input type=text class="form-control" [(ngModel)]="selectedSchedule.start" [disabled]="true" *ngIf="!editingTimes">
-                                            <input type="time" class="form-control" [(ngModel)]="selectedSchedule.start" *ngIf="editingTimes">
+                                            <input type=text class="form-control" [(ngModel)]="selectedSchedule.start"
+                                                [disabled]="true" *ngIf="!editingTimes">
+                                            <input type="time" class="form-control" [(ngModel)]="selectedSchedule.start"
+                                                *ngIf="editingTimes">
                                         </div>
                                         <div class="col-md-12">
                                             <label>End:</label>
-                                            <input type=text class="form-control" [(ngModel)]="selectedSchedule.end" [disabled]="true" *ngIf="!editingTimes">
-                                            <input type="time" class="form-control" [(ngModel)]="selectedSchedule.end" *ngIf="editingTimes">
+                                            <input type=text class="form-control" [(ngModel)]="selectedSchedule.end"
+                                                [disabled]="true" *ngIf="!editingTimes">
+                                            <input type="time" class="form-control" [(ngModel)]="selectedSchedule.end"
+                                                *ngIf="editingTimes">
                                         </div>
                                     </div>
                                 </div>
@@ -334,8 +398,11 @@
             </div>
             <div class="modal-footer d-flex justify-content-between mt-2">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCE</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" *ngIf="!needUpdate(1) && !needUpdate(2) && !needUpdate(3) && !needUpdate(4) && !needUpdate(5) && !needUpdate(6) && !needUpdate(7)">ADD</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" *ngIf="needUpdate(1) || needUpdate(2) || needUpdate(3) || needUpdate(4) || needUpdate(5) || needUpdate(6) || needUpdate(7)" (click)="saveRooster()">SAVE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+                    *ngIf="!needUpdate(1) && !needUpdate(2) && !needUpdate(3) && !needUpdate(4) && !needUpdate(5) && !needUpdate(6) && !needUpdate(7)">ADD</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+                    *ngIf="needUpdate(1) || needUpdate(2) || needUpdate(3) || needUpdate(4) || needUpdate(5) || needUpdate(6) || needUpdate(7)"
+                    (click)="saveRooster()">SAVE</button>
             </div>
         </div>
     </div>

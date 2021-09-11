@@ -250,7 +250,7 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let att of attendances" class="selectable"
-                                        [ngClass]="{'table-danger': att.status === 'overlap', 'table-secondary': !isPeriod(att.date)}">
+                                        [ngClass]="{'table-danger': att.status === 'overlap', 'table-secondary': !isPeriod(att.date) && att.status != 'overlap'}">
                                         <td (click)="showReg(att)">{{att.date}}</td>
                                         <td *ngIf="att.state!='edit'" (click)="showReg(att)">{{att.scheduled}}</td>
                                         <td *ngIf="att.state=='edit'">

@@ -102,7 +102,7 @@ export class AttendenceImportComponent implements OnInit {
         this.attendences.forEach(elem => {
           elem.day_off1 = "NO MATCH";
           this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp: 'exact', rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-            emp = emp.sort((a, b) => Number(b.active) - Number(a.active))
+            emp = emp.sort((a, b) => Number(b.active) - Number(a.active)).sort((c,d)=>Number(d.idemployees) - Number(c.idemployees))
             if (emp.length > 1) {
               emp.forEach(reapeted => {
                 this.reapetedEmployees.push(reapeted);
@@ -151,7 +151,7 @@ export class AttendenceImportComponent implements OnInit {
                 } else {
                   supervisors.status = 'TRUE';
                 }
-                emp = emp.sort((a, b) => Number(b.active) - Number(a.active));
+                emp = emp.sort((a, b) => Number(b.active) - Number(a.active)).sort((c,d)=>Number(d.idemployees)-Number(c.idemployees));
                 if(emp.length > 1){
                   supervisors.duplicated = '1';
                   emp.forEach(toPush=>{
@@ -223,7 +223,6 @@ export class AttendenceImportComponent implements OnInit {
 
     this.apply.forEach(app => {
       this.apiService.getAttAdjustments({ id: "id|p;" + app.id_employee + "|'" + app.date + "' AND '" + app.date + "'" }).subscribe((adjust: attendences_adjustment[]) => {
-        console.log(adjust);
         if (!isNullOrUndefined(adjust)) {
           adjust.forEach(adjustment => {
             if (adjustment.id_department == '27' || adjustment.id_department == '5') {

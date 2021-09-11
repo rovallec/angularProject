@@ -161,9 +161,11 @@ export class PyprofilesComponent implements OnInit {
               this.apiService.getAttPeriod({ id: emp[0].idemployees, date_1: strt, date_2: nd }).subscribe((att: attendences[]) => {
                 this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                   this.apiService.getTermdt(emp[0]).subscribe((trm: terminations) => {
-
+                    this.vacations = vac;
+                    this.dps = dp;
+                    this.leaves = leave;
                     let prov_period: periods = new periods;
-                    let dt: Date = new Date(periods_pr[periods_pr.length - 1].start);
+                    let dt: Date = new Date(periods_pr[periods_pr.length - 2].start);
                     dt.setDate((dt.getDate() + 1) - (dt.getDay()));
                     prov_period.idperiods = emp[0].idemployees;
                     prov_period.end = "'" + dt.getFullYear() + "-" +
@@ -172,7 +174,23 @@ export class PyprofilesComponent implements OnInit {
                       periods_pr[periods_pr.length - 1].start + "' AND `balance` = 'NS'";
                     prov_period.start = "explicit";
                     this.apiService.getPaidAttendances(prov_period).subscribe((p_at: paid_attendances[]) => {
-
+                      let pp:periods = new periods;
+                      pp.idperiods = emp[0].idemployees;
+                      pp.end =  "'" + dt.getFullYear() + "-" +
+                      (dt.getMonth() + 1).toString().padStart(2, "0") + "-" +
+                      (dt.getDate()).toString().padStart(2, "0") + "' AND '" +
+                      periods_pr[periods_pr.length - 1].start + "'";
+                      pp.start = "explicit";
+                      console.log(pp.end);
+                      this.apiService.getPaidAttendances(pp).subscribe((p_balance:paid_attendances[])=>{
+                        att.forEach(p_balance_at=>{
+                          p_balance.forEach(element => {
+                            if(p_balance_at.date == element.date){
+                              p_balance_at.balance = element.balance;
+                            }
+                          });
+                        })
+                      
                       if (att.length != 0) {
                         this.attendances = att;
 
@@ -303,7 +321,7 @@ export class PyprofilesComponent implements OnInit {
                                   attendance.balance = (Number(attendance.worked_time)).toFixed(3);
                                   discounted_hours = discounted_hours + Number(attendance.worked_time);
                                 }
-                              } else {
+                              } else if(!activeSuspension && !activeLeave && !activeVacation){
                                 if (!isNullOrUndefined(emp[0].children) && !isNullOrUndefined(emp[0].gender)) {
                                   if (Number(emp[0].children) > 0) {
                                     if (emp[0].gender == 'Femenino') {
@@ -452,13 +470,30 @@ export class PyprofilesComponent implements OnInit {
                         this.absence_fixed = discounted_days.toFixed(2);
                         this.seventh = sevenths;
                       }
-
                       this.attendances.forEach(attend => {
-                        if (((Number(attend.worked_time) > 0) && attend.balance == 'VAC') || ((Number(attend.worked_time) > 0) && attend.balance == 'SUSPENSION') || ((Number(attend.worked_time) > 0) && attend.balance == 'JANP') || ((Number(attend.worked_time) > 0) && attend.balance == 'JAP')) {
-                          attend.status = 'overlap';
-                        }
+                        let actualDate: Date = new Date(attend.date);
+                        this.vacations.forEach(vac => {
+                          if ((vac.took_date == attend.date && (vac.status != "DISMISSED" && vac.status != "COMPLETED") && Number(attend.worked_time) > 0)) {
+                            attend.status = 'overlap';
+                          }
+                        })
+                    
+                        this.leaves.forEach(leave => {
+                          let startDate: Date = new Date(leave.start);
+                          let endDate: Date = new Date(leave.end);
+                          if (Number(attend.worked_time) > 0 && ((startDate.getTime() <= actualDate.getTime() && endDate.getTime() >= actualDate.getTime()) && (leave.status != "DISMISSED" && leave.status != "COMPLETED"))){
+                            attend.status = 'overlap';
+                          }
+                        })
+                    
+                        this.dps.forEach(dp => {
+                          if(Number(attend.worked_time) > 0 && ((dp.day_1 == attend.date || dp.day_2 == attend.date || dp.day_3 == attend.date || dp.day_4 == attend.date) && (dp.status != "DISMISSED" && dp.status != "COMPLETED"))){
+                            attend.status = 'overlap';
+                          }
+                        })
                       });
                     })
+                  })
                   })
                 })
               })
@@ -546,7 +581,6 @@ export class PyprofilesComponent implements OnInit {
   }
 
   isPeriod(dt: string) {
-    console.log(new Date(this.todayDate).getTime() <= new Date(dt).getTime());
     return (new Date(this.todayDate).getTime() <= new Date(dt).getTime());
   }
 }

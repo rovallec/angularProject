@@ -41,6 +41,7 @@ export class RostermaintenanceComponent implements OnInit {
   searchString:string;
   searching:boolean = false;
   employeeRoster:rosters[] = [];
+  selectedEmployeeRoster:rosters = new rosters;
 
   ngOnInit() {
     this.roster_modifications = [];
@@ -67,7 +68,6 @@ export class RostermaintenanceComponent implements OnInit {
         rsts.forEach(rs=>{
           let cnt:number = 0;
           let temp = rsts.filter(f => f.id_employee == rs.id_employee);
-          temp = temp.filter(f=>f.id_account == rs.id_account);
           temp.forEach(tmp=>{
             cnt = cnt + Number(tmp.week_value);
           })
@@ -158,6 +158,7 @@ export class RostermaintenanceComponent implements OnInit {
       this.clients = cls;
       this.selectedClient = cls[0].idclients;
       this.setClient(this.selectedClient);
+      this.reset_value();
     })
   }
 
@@ -183,6 +184,7 @@ export class RostermaintenanceComponent implements OnInit {
 
 
   setAccount(acc: accounts) {
+    this.selectedRosters = [];
     this.isSearching = false;
     this.selectedAccount = acc;
   }
@@ -501,6 +503,8 @@ export class RostermaintenanceComponent implements OnInit {
   }
 
   reset_value(){
+    this.employeeRoster = [];
+    this.selectedEmployeeRoster = new rosters;
     this.completed = false;
     this.working = false;
   }
@@ -510,8 +514,27 @@ export class RostermaintenanceComponent implements OnInit {
   }
 
   setEmployee(rst:string){
-    this.apiServices.getRosterFilter({id_employee:rst}).subscribe((roster:rosters[])=>{
+    this.apiServices.getRosterFilter({id_employee:rst, id_period:this.activePeriod.idperiods}).subscribe((roster:rosters[])=>{
       this.employeeRoster = roster;
+    })
+  }
+
+  setEmployeeRoster(str){
+    let stss:string = this.employeeRoster.find(f=>f.idrosters == str).id_employee + " AND idrosters = " + str;
+    this.apiServices.getRosterFilter({id_employee: stss, id_period:this.activePeriod.idperiods}).subscribe((res:rosters[])=>{
+      this.selectedEmployeeRoster = res[0];
+    })
+  }
+
+  changeRoster(type:number){
+    let old_id_1:string;
+    let old_id_2:string;
+    old_id_1 = this.employeeRoster.find(f=> f.idrosters == this.selectedEmployeeRoster.idrosters).idrosters;
+    old_id_2 = this.employeeRoster[this.employeeRoster.indexOf(this.employeeRoster.find(f=> f.idrosters == this.selectedEmployeeRoster.idrosters)) - (type)].idrosters;
+    this.apiServices.updateRosterOrder({id_old_1:old_id_1, id_old_2:old_id_2}).subscribe((str:string)=>{
+      if(str != '1'){
+        window.alert("ERROR \n" + str);
+      }
     })
   }
 }

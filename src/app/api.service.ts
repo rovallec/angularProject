@@ -1030,6 +1030,10 @@ updateRosters(rost:rosters){
 getRosterFilter(any:any){
   return this.httpClient.post<rosters[]>(`${this.PHP_API_SERVER}/phpscripts/getFilteredRosters.php`, any);
 }
+
+updateRosterOrder(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateRosterOrder.php`, any);
+}
 }
 
 
