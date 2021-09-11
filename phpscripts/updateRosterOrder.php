@@ -7,7 +7,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $id_old_2 = ($request->old_id_1);
-$id_old_2 = $request->old_id_2);
+$id_old_2 = ($request->old_id_2);
 
 $transact->begin_transaction();
 $error = '';
