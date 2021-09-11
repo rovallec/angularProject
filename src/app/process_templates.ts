@@ -2241,6 +2241,13 @@ export class rosters{
     id_account:string;
     tag:string;
     roster_name:string;
+    mon_fixed:string;
+    tue_fixed:string;
+    wed_fixed:string;
+    thur_fixed:string;
+    fri_fixed:string;
+    sat_fixed:string;
+    sun_fixed:string;
     constructor(){
         this.idrosters = null;
         this.name = null;
@@ -2264,7 +2271,14 @@ export class rosters{
         this.id_period = null;
         this.id_account = null;
         this.tag = null;
-        this.roster_name = null
+        this.roster_name = null;
+        this.mon_fixed = null;
+        this.tue_fixed = null;
+        this.wed_fixed = null;
+        this.thur_fixed = null;
+        this.fri_fixed = null;
+        this.sat_fixed = null;
+        this.sun_fixed = null;
     }
 }
 

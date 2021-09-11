@@ -25,9 +25,13 @@
                 (click)="searchRoster()"><i Class="far fa-times-circle"></i></button>
             <button class="btn btn-outline-primary" style="margin-right:15px" data-target="#rosterSetup"
                 data-toggle="modal" (click)="reset_value()"><i class="fas fa-cogs"></i></button>
+                <button class="btn btn-outline-dark" style="margin-right: 15px;" (click)="setAttendances()"><i class="far fa-clock"></i></button>
         </div>
         <div class="row" style="margin-top:20px">
-            <table class="table table-hover table-light selectable">
+            <table class="table table-hover table-light selectable" *ngIf='!createAttendances'>
+                
+            </table>
+            <table class="table table-hover table-light selectable" *ngIf='!createAttendances'>
                 <thead>
                     <th>NEARSOL ID</th>
                     <th>CLIENT ID</th>
@@ -77,7 +81,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>EMPLOYEE:</label>
-                        <select [size]="5" class="form-control" (change)="setEmployee($event.target.value)" [(ngModel)]="selectedEmployeeRoster.id_employee">
+                        <select [size]="7" class="form-control" (change)="setEmployee($event.target.value)" [(ngModel)]="selectedEmployeeRoster.id_employee">
                             <option *ngFor='let employee of selectedRosters' [value]="employee.id_employee">
                                 {{employee.name}}</option>
                         </select>
@@ -86,7 +90,7 @@
                         <div class="row">
                             <div class="col-md-12" style="padding:0px">
                                 <label>ROSTERS:</label>
-                                <select size="3" class="form-control" (change)="setEmployeeRoster($event.target.value)" [(ngModel)]="selectedEmployeeRoster.idrosters">
+                                <select size="5" class="form-control" (change)="setEmployeeRoster($event.target.value)" [(ngModel)]="selectedEmployeeRoster.idrosters">
                                     <option *ngFor="let rost of employeeRoster let i = index" [value]="rost.idrosters">{{i}}</option>
                                 </select>
                             </div>
@@ -106,6 +110,12 @@
                             <div class="form-group col-md-12">
                                 <label>TAG:</label>
                                 <input type="text" [disabled]="true" class="form-control" [(ngModel)]="selectedEmployeeRoster.tag">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label>TAG:</label>
+                                <input type="text" [disabled]="true" class="form-control" [(ngModel)]="selectedEmployeeRoster.roster_name">
                             </div>
                         </div>
                         <div class="row">

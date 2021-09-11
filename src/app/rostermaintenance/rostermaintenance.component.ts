@@ -42,6 +42,7 @@ export class RostermaintenanceComponent implements OnInit {
   searching:boolean = false;
   employeeRoster:rosters[] = [];
   selectedEmployeeRoster:rosters = new rosters;
+  createAttendances:boolean = false;
 
   ngOnInit() {
     this.roster_modifications = [];
@@ -532,10 +533,16 @@ export class RostermaintenanceComponent implements OnInit {
     old_id_1 = this.employeeRoster.find(f=> f.idrosters == this.selectedEmployeeRoster.idrosters).idrosters;
     old_id_2 = this.employeeRoster[this.employeeRoster.indexOf(this.employeeRoster.find(f=> f.idrosters == this.selectedEmployeeRoster.idrosters)) - (type)].idrosters;
     this.apiServices.updateRosterOrder({id_old_1:old_id_1, id_old_2:old_id_2}).subscribe((str:string)=>{
-      console.log(str);
       if(str != '1'){
         window.alert("ERROR \n" + str);
+      }else{
+        this.setEmployeeRoster(this.selectedEmployeeRoster.idrosters); 
       }
     })
+  }
+
+  setAttendances(){
+    this.createAttendances = true;
+    
   }
 }
