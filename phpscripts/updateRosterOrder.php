@@ -29,27 +29,27 @@ if($result = $transact->query($sql)){
                     $transact->commit();
                     echo("1");
                 }else{
-                    $error = echo(mysqli_error($transact));
+                    $error = mysqli_error($transact);
                     $transact->rollback();
                     echo($error);
                 }
             }else{
-                $error = echo(mysqli_error($transact));
+                $error = mysqli_error($transact);
                 $transact->rollback();
                 echo($error);
             }
         }else{
-            $error = echo(mysqli_error($transact));
+            $error = mysqli_error($transact);
             $transact->rollback();
             echo($error);
         }
     }else{
-        $error = echo(mysqli_error($transact));
+        $error = mysqli_error($transact);
         $transact->rollback();
         echo($error);
     }
 }else{
-    $error = echo(mysqli_error($transact));
+    $error = mysqli_error($transact);
     $transact->rollback();
     echo($error);
 }
