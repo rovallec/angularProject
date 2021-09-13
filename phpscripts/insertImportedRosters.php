@@ -164,6 +164,7 @@ for ($i=0; $i < count($request); $i++) {
 }else{
     echo($sql);
 }
+}
 if($count >= count($request) - 1){
     $transact->commit();
     echo($count);
