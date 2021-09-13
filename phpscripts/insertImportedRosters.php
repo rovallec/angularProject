@@ -58,7 +58,7 @@ for ($i=0; $i < count($request); $i++) {
             ORDER BY idroster_types DESC LIMIT 1;";
     if($result = mysqli_query($con, $sql)){
         $res = mysqli_fetch_assoc($result);
-        if(mysql_num_rows($result)){
+        if(mysqli_num_rows($result)){
             $id_type = $res[0]['idroster_types'];
         }else{
             $sql_time_mon = "SELECT idroster_times FROM roster_times WHERE (start = '$mon_start' AND end = '$mon_end' AND fixed_schedule = '$mon_fixed') OR ('$mon_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
@@ -82,9 +82,9 @@ for ($i=0; $i < count($request); $i++) {
                                         $res_fri = mysqli_fetch_assoc($query_fri);
                                         $res_sat = mysqli_fetch_assoc($query_sat);
                                         $res_sun = mysqli_fetch_assoc($query_sun);
-                                        if(mysql_num_rows($query_sun) > 0 && mysql_num_rows($query_sat) > 0 && mysql_num_rows($query_fri) > 0 &&
-                                        mysql_num_rows($query_thur) > 0 && mysql_num_rows($query_wed) > 0 && mysql_num_rows($query_tue) > 0 &&
-                                        mysql_num_rows($query_mon) > 0){
+                                        if(mysqli_num_rows($query_sun) > 0 && mysqli_num_rows($query_sat) > 0 && mysqli_num_rows($query_fri) > 0 &&
+                                        mysqli_num_rows($query_thur) > 0 && mysqli_num_rows($query_wed) > 0 && mysqli_num_rows($query_tue) > 0 &&
+                                        mysqli_num_rows($query_mon) > 0){
                                             $id_mon = $res_mon[0]['idroster_times'];
                                             $id_tue = $res_tue[0]['idroster_times'];
                                             $id_wed = $res_wed[0]['idroster_times'];
@@ -97,31 +97,31 @@ for ($i=0; $i < count($request); $i++) {
                                                 $id_type = mysqli_insert_id($transact);
                                             }
                                         }else{
-                                            if(mysql_num_rows($query_mon) <= 0){
+                                            if(mysqli_num_rows($query_mon) <= 0){
                                                 $sql_insert_mon = "INSERT INTO roster_times VALUES (NULL, '$mon_start', '$mon_end', '$mon_fixed');";
                                                 $id_mon = mysqli_insert_id($transact);
                                             }
-                                            if(mysql_num_rows($query_tue) <= 0){
+                                            if(mysqli_num_rows($query_tue) <= 0){
                                                 $sql_insert_tue = "INSERT INTO roster_times VALUES (NULL, '$tue_start', '$tue_end', '$tue_fixed');";
                                                 $id_tue = mysqli_insert_id($transact);
                                             }
-                                            if(mysql_num_rows($query_wed) <= 0){
+                                            if(mysqli_num_rows($query_wed) <= 0){
                                                 $sql_insert_wed = "INSERT INTO roster_times VALUES (NULL, '$wed_start', '$wed_end', '$wed_fixed');";
                                                 $id_wed = mysqli_insert_id($transact);
                                             }
-                                            if(mysql_num_rows($query_thur) <= 0){
+                                            if(mysqli_num_rows($query_thur) <= 0){
                                                 $sql_insert_thur = "INSERT INTO roster_times VALUES (NULL, '$thur_start', '$thur_end', '$thur_fixed');";
                                                 $id_thur = mysqli_insert_id($transact);
                                             }
-                                            if(mysql_num_rows($sql_time_fri) <= 0){
+                                            if(mysqli_num_rows($sql_time_fri) <= 0){
                                                 $sql_insert_fri = "INSERT INTO roster_times VALUES (NULL, '$fri_start', '$fri_end', '$fri_fixed');";
                                                 $id_fri = mysqli_insert_id($transact);
                                             }
-                                            if(mysql_num_rows($query_sat) <= 0){
+                                            if(mysqli_num_rows($query_sat) <= 0){
                                                 $sql_insert_sat = "INSERT INTO roster_times VALUES (NULL, '$sat_start', '$sat_end', '$sat_fixed');";
                                                 $id_sat = mysqli_insert_id($transact);
                                             }
-                                            if(mysql_num_rows($query_sun) <= 0){
+                                            if(mysqli_num_rows($query_sun) <= 0){
                                                 $sql_insert_sun = "INSERT INTO roster_times VALUES (NULL, '$sun_start', '$sun_end', '$sun_fixed');";
                                                 $id_sun = mysqli_insert_id($transact);
                                             }
