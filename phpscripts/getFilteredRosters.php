@@ -14,7 +14,7 @@ $date = date("Y-m-d");
 
 $sql = "SELECT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_name), ' ', UPPER(profiles.first_lastname), ' ', UPPER(profiles.second_lastname)) AS `name`, 
 hires.nearsol_id, employees.client_id, b.start AS `mon_start`, b.end AS `mon_end`, b.fixed_schedule AS `mon_fixed`, c.start AS `tue_start`, c.end AS `tue_end`,  c.fixed_schedule AS `tue_fixed`, d.start AS `wed_start`,
-        d.end AS `wed_end`,  d.fixed_schedule AS `wed_fixed`, e.start AS `thur_start`, e.end AS `thur_end`, e.fixed_schedule AS `thur_fixed`, f.start AS `fri_start`, f.end AS `fri_end`,  f.fixed_schedule AS `fri_fixed`, g.start AS `sat_start`, g.end AS `sat_end`,  g.fixed_schedule AS `sat_fixed` rosters.id_type,
+        d.end AS `wed_end`,  d.fixed_schedule AS `wed_fixed`, e.start AS `thur_start`, e.end AS `thur_end`, e.fixed_schedule AS `thur_fixed`, f.start AS `fri_start`, f.end AS `fri_end`,  f.fixed_schedule AS `fri_fixed`, g.start AS `sat_start`, g.end AS `sat_end`,  g.fixed_schedule AS `sat_fixed`, rosters.id_type,
         h.start AS `sun_start`, h.end AS `sun_end`, h.fixed_schedule AS `sun_fixed`, rosters.week_value, COALESCE(`cnt`.`count`,1) AS `count`, idemployees, 
         GROUP_CONCAT(DISTINCT(COALESCE(payments.id_account_py, employees.id_account))) AS `id_account`, idrosters, rosters.id_type, a.tag, a.name AS `roster_name` FROM payments
         INNER JOIN employees ON employees.idemployees = payments.id_employee
