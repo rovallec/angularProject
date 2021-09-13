@@ -9,9 +9,16 @@ $request = json_decode($postdata);
 
 $count = 0;
 
-$transact->begin_transaction();
-
 $res = [];
+$res_mon = [];
+$res_tue = [];
+$res_wed = [];
+$res_thur = [];
+$res_fri = [];
+$res_sat = [];
+$res_sun = [];
+
+$transact->begin_transaction();
 
 for ($i=0; $i < count($request); $i++) {
     $en = json_encode($request[$i]);
