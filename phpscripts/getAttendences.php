@@ -35,6 +35,8 @@ if(explode(" ", $date)[0] === "<=" || explode(" ", $date)[0] ===  "<"){
 							INNER JOIN employees ON employees.idemployees = attendences.id_employee
 							INNER JOIN hires ON hires.idhires = employees.id_hire
 							INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+							INNER JOIN waves ON waves.idwaves = hires.id_wave
+							INNER JOIN schedules ON schedules.idschedules = hires.id_schedule
 							WHERE date BETWEEN $date;";
 				}else{
 					$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
