@@ -46,7 +46,7 @@ for ($i=0; $i < count($request); $i++) {
     $sun_fixed = validarDatos($roster->sun_fixed);
     $id_employee = validarDatos($roster->id_employee);
     $id_period = validarDatos($roster->id_period);
-
+    echo($roster);
     $sql = "SELECT idroster_types FROM roster_types
             INNER JOIN roster_times mon ON (mon.idroster_times = roster_types.id_time_mon AND mon.start = '$mon_start' AND mon.end = '$mon_end' AND mon.fixed_schedule = '$mon_fixed') OR ('$mon_start' = 'NULL')
             INNER JOIN roster_times tue ON (tue.idroster_times = roster_types.id_time_tue AND tue.start = '$tue_start' AND tue.end = '$tue_end' AND tue.fixed_schedule = '$tue_fixed') OR ('$tue_start' = 'NULL')
