@@ -39,13 +39,13 @@ for ($i=0; $i < count($request); $i++) {
     $id_period = validarDatos($roster->id_period);
 
     $sql = "SELECT idroster_types FROM roster_types
-            INNER JOIN roster_times mon ON (mon.idroster_times = roster_types.id_time_mon AND mon.start = '$mon_start' AND mon.end = '$mon_end' AND mon.fixed_schedule = '$mon_fixed') OR ($mon_start = 'NULL')
-            INNER JOIN roster_times tue ON (tue.idroster_times = roster_types.id_time_tue AND tue.start = '$tue_start' AND tue.end = '$tue_end' AND tue.fixed_schedule = '$tue_fixed') OR ($tue_start = 'NULL')
-            INNER JOIN roster_times wed ON (wed.idroster_times = roster_types.id_time_wed AND wed.start = '$wed_start' AND wed.end = '$wed_end' AND wed.fixed_schedule = '$wed_fixed') OR ($wed_start = 'NULL')
-            INNER JOIN roster_times thur ON (thur.idroster_times = roster_types.id_time_thur AND thur.start = '$thur_start' AND thur.end = '$thur_end' AND thur.fixed_schedule = '$thur_fixed') OR ($thur_start = 'NULL')
-            INNER JOIN roster_times fri ON (fri.idroster_times =  roster_types.id_time_fri AND fri.start = '$fri_start' AND fri.end = '$fri_end' AND fri.fixed_schedule = '$fri_fixed') OR ($fri_start = 'NULL')
-            INNER JOIN roster_times sat ON (sat.idroster_times =  roster_types.id_time_sat AND sat.start = '$sat_start' AND sat.end = '$sat_end' AND sat.fixed_schedule = '$sat_fixed') OR ($sat_start = 'NULL')
-            INNER JOIN roster_times sun ON (sun.idroster_times =  roster_types.id_time_sun AND sun.start = '$sun_start' AND sun.end = '$sun_end' AND sun.fixed_schedule = '$sun_fixed') OR ($sun_start = 'NULL')
+            INNER JOIN roster_times mon ON (mon.idroster_times = roster_types.id_time_mon AND mon.start = '$mon_start' AND mon.end = '$mon_end' AND mon.fixed_schedule = '$mon_fixed') OR ('$mon_start' = 'NULL')
+            INNER JOIN roster_times tue ON (tue.idroster_times = roster_types.id_time_tue AND tue.start = '$tue_start' AND tue.end = '$tue_end' AND tue.fixed_schedule = '$tue_fixed') OR ('$tue_start' = 'NULL')
+            INNER JOIN roster_times wed ON (wed.idroster_times = roster_types.id_time_wed AND wed.start = '$wed_start' AND wed.end = '$wed_end' AND wed.fixed_schedule = '$wed_fixed') OR ('$wed_start' = 'NULL')
+            INNER JOIN roster_times thur ON (thur.idroster_times = roster_types.id_time_thur AND thur.start = '$thur_start' AND thur.end = '$thur_end' AND thur.fixed_schedule = '$thur_fixed') OR ('$thur_start' = 'NULL')
+            INNER JOIN roster_times fri ON (fri.idroster_times =  roster_types.id_time_fri AND fri.start = '$fri_start' AND fri.end = '$fri_end' AND fri.fixed_schedule = '$fri_fixed') OR ('$fri_start' = 'NULL')
+            INNER JOIN roster_times sat ON (sat.idroster_times =  roster_types.id_time_sat AND sat.start = '$sat_start' AND sat.end = '$sat_end' AND sat.fixed_schedule = '$sat_fixed') OR ('$sat_start' = 'NULL')
+            INNER JOIN roster_times sun ON (sun.idroster_times =  roster_types.id_time_sun AND sun.start = '$sun_start' AND sun.end = '$sun_end' AND sun.fixed_schedule = '$sun_fixed') OR ('$sun_start' = 'NULL')
             ORDER BY idroster_types DESC LIMIT 1;";
     
     if($query_res = $transact->query($sql)){
@@ -53,13 +53,13 @@ for ($i=0; $i < count($request); $i++) {
         if(count($res) > 0){
             $id_type = $res[0]['idroster_types'];
         }else{
-            $sql_time_mon = "SELECT idroster_times FROM roster_times WHERE (start = '$mon_start' AND end = '$mon_end' AND fixed_schedule = '$mon_fixed') OR ($mon_start = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
-            $sql_time_tue = "SELECT idroster_times FROM roster_times WHERE (start = '$tue_start' AND end = '$tue_end' AND fixed_schedule = '$tue_fixed') OR ($tue_start = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
-            $sql_time_wed = "SELECT idroster_times FROM roster_times WHERE (start = '$wed_start' AND end = '$wed_end' AND fixed_schedule = '$wed_fixed') OR ($wed_start = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
-            $sql_time_thur = "SELECT idroster_times FROM roster_times WHERE (start = '$thur_start' AND end = '$thur_end' AND fixed_schedule = '$thur_fixed') OR ($thur_start = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
-            $sql_time_fri = "SELECT idroster_times FROM roster_times WHERE (start = '$fri_start' AND end = '$fri_end' AND fixed_schedule = '$fri_fixed') OR ($fri_start = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
-            $sql_time_sat = "SELECT idroster_times FROM roster_times WHERE (start = '$sat_start' AND end = '$sat_end' AND fixed_schedule = '$sat_fixed') OR ($sat_start = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
-            $sql_time_sun = "SELECT idroster_times FROM roster_times WHERE (start = '$sun_start' AND end = '$sun_end' AND fixed_schedule = '$sun_fixed') OR ($sun_start = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
+            $sql_time_mon = "SELECT idroster_times FROM roster_times WHERE (start = '$mon_start' AND end = '$mon_end' AND fixed_schedule = '$mon_fixed') OR ('$mon_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
+            $sql_time_tue = "SELECT idroster_times FROM roster_times WHERE (start = '$tue_start' AND end = '$tue_end' AND fixed_schedule = '$tue_fixed') OR ('$tue_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
+            $sql_time_wed = "SELECT idroster_times FROM roster_times WHERE (start = '$wed_start' AND end = '$wed_end' AND fixed_schedule = '$wed_fixed') OR ('$wed_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
+            $sql_time_thur = "SELECT idroster_times FROM roster_times WHERE (start = '$thur_start' AND end = '$thur_end' AND fixed_schedule = '$thur_fixed') OR ('$thur_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
+            $sql_time_fri = "SELECT idroster_times FROM roster_times WHERE (start = '$fri_start' AND end = '$fri_end' AND fixed_schedule = '$fri_fixed') OR ('$fri_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
+            $sql_time_sat = "SELECT idroster_times FROM roster_times WHERE (start = '$sat_start' AND end = '$sat_end' AND fixed_schedule = '$sat_fixed') OR ('$sat_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
+            $sql_time_sun = "SELECT idroster_times FROM roster_times WHERE (start = '$sun_start' AND end = '$sun_end' AND fixed_schedule = '$sun_fixed') OR ('$sun_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
             if($query_mon = $transact->query($sql_time_mon)){
                 if($query_tue = $transact->query($sql_time_tue)){
                     if($query_wed = $transact->query($sql_time_wed)){
