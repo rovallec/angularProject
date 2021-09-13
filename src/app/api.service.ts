@@ -1038,6 +1038,10 @@ updateRosterOrder(any:any){
 insertImportedRosters(rosters:roster_weeks[]){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertImportedRosters.php`, rosters);
 }
+
+deleteRoster(rst:rosters){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteRosters.php`, rst);
+}
 }
 
 

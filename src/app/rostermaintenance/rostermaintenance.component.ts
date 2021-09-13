@@ -955,7 +955,11 @@ export class RostermaintenanceComponent implements OnInit {
           }
           if(num >= sheetToJson.length){
             this.apiServices.insertImportedRosters(push).subscribe((str:string)=>{
-              window.alert(str);
+              if(Number(str) > 0){
+                window.alert("Roster Inserted: " + str);
+              }else{
+                window.alert("Please contact your administrator\n" + str);
+              }
             })
           }
         })
@@ -963,7 +967,13 @@ export class RostermaintenanceComponent implements OnInit {
     }
   }
 
-  closeUpload(){
-
+  deleteRoster(){
+    this.apiServices.deleteRoster(this.selectedEmployeeRoster).subscribe((str:string)=>{
+      if(str == '1'){
+        window.alert("Record successfully deleted");
+      }else{
+        window.alert("Please contact your administrator\n" + str);
+      }
+    })
   }
 }
