@@ -123,43 +123,43 @@ for ($i=0; $i < count($request); $i++) {
                                         }else{
                                             if(mysqli_num_rows($query_mon) <= 0){
                                                 $sql_insert_mon = "INSERT INTO roster_times VALUES (NULL, '$mon_start', '$mon_end', '$mon_fixed');";
-                                                if($transact->query($sql_insert_mon){
+                                                if($transact->query($sql_insert_mon)){
                                                     $id_mon = mysqli_insert_id($transact);
                                                 }
                                             }
                                             if(mysqli_num_rows($query_tue) <= 0){
                                                 $sql_insert_tue = "INSERT INTO roster_times VALUES (NULL, '$tue_start', '$tue_end', '$tue_fixed');";
-                                                if($transact->query($sql_insert_tue){
+                                                if($transact->query($sql_insert_tue)){
                                                     $id_tue = mysqli_insert_id($transact);
                                                 }
                                             }
                                             if(mysqli_num_rows($query_wed) <= 0){
                                                 $sql_insert_wed = "INSERT INTO roster_times VALUES (NULL, '$wed_start', '$wed_end', '$wed_fixed');";
-                                                if($transact->query($sql_insert_wed){
+                                                if($transact->query($sql_insert_wed)){
                                                     $id_wed = mysqli_insert_id($transact);
                                                 }
                                             }
                                             if(mysqli_num_rows($query_thur) <= 0){
                                                 $sql_insert_thur = "INSERT INTO roster_times VALUES (NULL, '$thur_start', '$thur_end', '$thur_fixed');";
-                                                if($transact->query($sql_insert_thur){
+                                                if($transact->query($sql_insert_thur)){
                                                     $thur = mysqli_insert_id($transact);
                                                 }
                                             }
                                             if(mysqli_num_rows($query_fri) <= 0){
                                                 $sql_insert_fri = "INSERT INTO roster_times VALUES (NULL, '$fri_start', '$fri_end', '$fri_fixed');";
-                                                if($transact->query($sql_insert_fri){
+                                                if($transact->query($sql_insert_fri)){
                                                     $id_fri = mysqli_insert_id($transact);
                                                 }
                                             }
                                             if(mysqli_num_rows($query_sat) <= 0){
                                                 $sql_insert_sat = "INSERT INTO roster_times VALUES (NULL, '$sat_start', '$sat_end', '$sat_fixed');";
-                                                if($transact->query($sql_insert_sat){
+                                                if($transact->query($sql_insert_sat)){
                                                     $id_sat = mysqli_insert_id($transact);
                                                 }
                                             }
                                             if(mysqli_num_rows($query_sun) <= 0){
                                                 $sql_insert_sun = "INSERT INTO roster_times VALUES (NULL, '$sun_start', '$sun_end', '$sun_fixed');";
-                                                if($transact->query($sql_insert_sun){
+                                                if($transact->query($sql_insert_sun)){
                                                     $id_sun = mysqli_insert_id($transact);
                                                 }
                                             }
