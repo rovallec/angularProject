@@ -10,31 +10,31 @@ $count = 0;
 
 $transact->begin_transaction();
 
-for ($i=0; $i < count($request) - 1; $i++) {
+for ($i=0; $i < count($request); $i++) {
     $roster = json_encode($request[$i]);
-    $mon_start = ($roster['mon_start']);
-    $mon_end = ($roster['mon_start']);
-    $mon_fixed = ($roster['mon_fixed']);
-    $tue_start = ($roster['tue_start']);
-    $tue_end = ($roster['tue_start']);
-    $tue_fixed = ($roster['tue_fixed']);
-    $wed_start = ($roster['wed_start']);
-    $wed_end = ($roster['wed_start']);
-    $wed_fixed = ($roster['wed_fixed']);
-    $thur_start = ($roster['thur_start']);
-    $thur_end = ($roster['thur_start']);
-    $thur_fixed = ($roster['thur_fixed']);
-    $fri_start = ($roster['fri_start']);
-    $fri_end = ($roster['fri_start']);
-    $fri_fixed = ($roster['fri_fixed']);
-    $sat_start = ($roster['sat_start']);
-    $sat_end = ($roster['sat_start']);
-    $sat_fixed = ($roster['sat_fixed']);
-    $sun_start = ($roster['sun_start']);
-    $sun_end = ($roster['sun_start']);
-    $sun_fixed = ($roster['sun_fixed']);
-    $id_employee = ($roster['id_employee']);
-    $id_period = ($roster['id_period']);
+    $mon_start = ($roster->mon_start);
+    $mon_end = ($roster->mon_start);
+    $mon_fixed = ($roster->mon_fixed);
+    $tue_start = ($roster->tue_start);
+    $tue_end = ($roster->tue_start);
+    $tue_fixed = ($roster->tue_fixed);
+    $wed_start = ($roster->wed_start);
+    $wed_end = ($roster->wed_start);
+    $wed_fixed = ($roster->wed_fixed);
+    $thur_start = ($roster->thur_start);
+    $thur_end = ($roster->thur_start);
+    $thur_fixed = ($roster->thur_fixed);
+    $fri_start = ($roster->fri_start);
+    $fri_end = ($roster->fri_start);
+    $fri_fixed = ($roster->fri_fixed);
+    $sat_start = ($roster->sat_start);
+    $sat_end = ($roster->sat_start);
+    $sat_fixed = ($roster->sat_fixed);
+    $sun_start = ($roster->sun_start);
+    $sun_end = ($roster->sun_start);
+    $sun_fixed = ($roster->sun_fixed);
+    $id_employee = ($roster->id_employee);
+    $id_period = ($roster->id_period);
 
     $sql = "SELECT idroster_types FROM roster_types
             INNER JOIN roster_times mon ON (mon.idroster_times = roster_types.id_time_mon AND mon.start = '$mon_start' AND mon.end = '$mon_end' AND mon.fixed_schedule = '$mon_fixed') OR ($mon_start = 'NULL')
