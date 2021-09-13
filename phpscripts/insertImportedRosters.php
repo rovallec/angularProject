@@ -57,8 +57,10 @@ for ($i=0; $i < count($request); $i++) {
             INNER JOIN roster_times sun ON (sun.idroster_times =  roster_types.id_time_sun AND sun.start = '$sun_start' AND sun.end = '$sun_end' AND sun.fixed_schedule = '$sun_fixed') OR ('$sun_start' = 'NULL')
             ORDER BY idroster_types DESC LIMIT 1;";
     
-    if($query_res = $transact->query($sql)-fetch_assoc()){
-        echo($query_res);
+    if($query_res = $transact->query($sql)->fetch_assoc()){
+        echo($query_res)
+    }else{
+        echo($sql);
     }
 }
 if($count >= count($request) - 1){
