@@ -85,6 +85,7 @@ for ($i=0; $i < count($request); $i++) {
                                 if($query_sat = mysqli_query($transact,$sql_time_sat)){
                                     if($query_sun = mysqli_query($transact,$sql_time_sun)){
                                         $res_mon = mysqli_fetch_assoc($query_mon);
+                                        echo($res_mon);
                                         $res_tue = mysqli_fetch_assoc($query_tue);
                                         $res_wed = mysqli_fetch_assoc($query_wed);
                                         $res_thur = mysqli_fetch_assoc($query_thur);
