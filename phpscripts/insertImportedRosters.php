@@ -104,6 +104,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 $sql_insert_mon = "INSERT INTO roster_times VALUES (NULL, '$mon_start', '$mon_end', '$mon_fixed');";
                                                 if($transact->query($sql_insert_mon)){
                                                     $id_mon = mysqli_insert_id($transact);
+                                                }else{
+                                                    echo($sql_insert_mon);
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_mon)){
@@ -115,6 +117,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 $sql_insert_tue = "INSERT INTO roster_times VALUES (NULL, '$tue_start', '$tue_end', '$tue_fixed');";
                                                 if($transact->query($sql_insert_tue)){
                                                     $id_tue = mysqli_insert_id($transact);
+                                                }else{
+                                                    echo($sql_insert_tue);
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_tue)){
@@ -126,6 +130,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 $sql_insert_wed = "INSERT INTO roster_times VALUES (NULL, '$wed_start', '$wed_end', '$wed_fixed');";
                                                 if($transact->query($sql_insert_wed)){
                                                     $id_wed = mysqli_insert_id($transact);
+                                                }else{
+                                                    echo($sql_insert_wed);
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_wed)){
@@ -137,6 +143,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 $sql_insert_thur = "INSERT INTO roster_times VALUES (NULL, '$thur_start', '$thur_end', '$thur_fixed');";
                                                 if($transact->query($sql_insert_thur)){
                                                     $thur = mysqli_insert_id($transact);
+                                                }else{
+                                                    echo($sql_insert_thur);
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_thur)){
@@ -148,6 +156,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 $sql_insert_fri = "INSERT INTO roster_times VALUES (NULL, '$fri_start', '$fri_end', '$fri_fixed');";
                                                 if($transact->query($sql_insert_fri)){
                                                     $id_fri = mysqli_insert_id($transact);
+                                                }else{
+                                                    echo($sql_insert_fri);
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_fri)){
@@ -159,6 +169,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 $sql_insert_sat = "INSERT INTO roster_times VALUES (NULL, '$sat_start', '$sat_end', '$sat_fixed');";
                                                 if($transact->query($sql_insert_sat)){
                                                     $id_sat = mysqli_insert_id($transact);
+                                                }else{
+                                                    echo($sql_insert_sat);
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_sat)){
@@ -170,6 +182,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 $sql_insert_sun = "INSERT INTO roster_times VALUES (NULL, '$sun_start', '$sun_end', '$sun_fixed');";
                                                 if($transact->query($sql_insert_sun)){
                                                     $id_sun = mysqli_insert_id($transact);
+                                                }else{
+                                                    echo($sql_insert_sun);
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_sun)){
@@ -177,7 +191,6 @@ for ($i=0; $i < count($request); $i++) {
                                                     $id_sun = '100';
                                                 }
                                             }
-                                            
                                             $sql_insert_type = "INSERT INTO roster_types VALUES (NULL, 'IMPORT', NOW(), $id_mon, $id_tue, $id_wed, $id_thur, $id_fri, $id_sat, $id_sun);";
                                             if($query_insert_type = mysqli_query($transact,$sql_insert_type)){
                                                 $id_type = mysqli_insert_id($transact);
