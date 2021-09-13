@@ -10,7 +10,7 @@ $count = 0;
 
 $transact->begin_transaction();
 
-for ($i=0; $i < count($request); $i++) {
+for ($i=0; $i < count($request) - 1; $i++) {
     $roster = json_encode($request[$i]);
     $mon_start = ($roster->mon_start);
     $mon_end = ($roster->mon_start);
