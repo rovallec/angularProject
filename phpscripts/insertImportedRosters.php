@@ -10,31 +10,32 @@ $count = 0;
 
 $transact->begin_transaction();
 
-for ($i=0; $i < count($request) - 1; $i++) {
-    $roster = json_encode($request[$i]);
-    $mon_start = ($roster['mon_start']);
-    $mon_end = ($roster['mon_end']);
-    $mon_fixed = ($roster['mon_fixed']);
-    $tue_start = ($roster['tue_start']);
-    $tue_end = ($roster['tue_start']);
-    $tue_fixed = ($roster['tue_fixed']);
-    $wed_start = ($roster['wed_start']);
-    $wed_end = ($roster['wed_start']);
-    $wed_fixed = ($roster['wed_fixed']);
-    $thur_start = ($roster['thur_start']);
-    $thur_end = ($roster['thur_start']);
-    $thur_fixed = ($roster['thur_fixed']);
-    $fri_start = ($roster['fri_start']);
-    $fri_end = ($roster['fri_start']);
-    $fri_fixed = ($roster['fri_fixed']);
-    $sat_start = ($roster['sat_start']);
-    $sat_end = ($roster['sat_start']);
-    $sat_fixed = ($roster['sat_fixed']);
-    $sun_start = ($roster['sun_start']);
-    $sun_end = ($roster['sun_start']);
-    $sun_fixed = ($roster['sun_fixed']);
-    $id_employee = ($roster['id_employee']);
-    $id_period = ($roster['id_period']);
+for ($i=0; $i < count($request); $i++) {
+    $en = json_encode($request[$i]);
+    $roster = json_decode($en);
+    $mon_start = validarDatos($roster->mon_start);
+    $mon_end = validarDatos($roster->mon_end);
+    $mon_fixed = validarDatos($roster->mon_fixed);
+    $tue_start = validarDatos($roster->tue_start);
+    $tue_end = validarDatos($roster->tue_start);
+    $tue_fixed = validarDatos($roster->tue_fixed);
+    $wed_start = validarDatos($roster->wed_start);
+    $wed_end = validarDatos($roster->wed_start);
+    $wed_fixed = validarDatos($roster->wed_fixed);
+    $thur_start = validarDatos($roster->thur_start);
+    $thur_end = validarDatos($roster->thur_start);
+    $thur_fixed = validarDatos($roster->thur_fixed);
+    $fri_start = validarDatos($roster->fri_start);
+    $fri_end = validarDatos($roster->fri_start);
+    $fri_fixed = validarDatos($roster->fri_fixed);
+    $sat_start = validarDatos($roster->sat_start);
+    $sat_end = validarDatos($roster->sat_start);
+    $sat_fixed = validarDatos($roster->sat_fixed);
+    $sun_start = validarDatos($roster->sun_start);
+    $sun_end = validarDatos($roster->sun_start);
+    $sun_fixed = validarDatos($roster->sun_fixed);
+    $id_employee = validarDatos($roster->id_employee);
+    $id_period = validarDatos($roster->id_period);
 
     $sql = "SELECT idroster_types FROM roster_types
             INNER JOIN roster_times mon ON (mon.idroster_times = roster_types.id_time_mon AND mon.start = '$mon_start' AND mon.end = '$mon_end' AND mon.fixed_schedule = '$mon_fixed') OR ($mon_start = 'NULL')
