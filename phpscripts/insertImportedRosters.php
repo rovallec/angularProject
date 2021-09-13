@@ -198,6 +198,8 @@ if($count >= count($request) - 1){
     $transact->commit();
     echo($count);
 }else{
+    $error = mysqli_error($transact);
     $transact->rollback();
+    echo($error);
 }
 ?>
