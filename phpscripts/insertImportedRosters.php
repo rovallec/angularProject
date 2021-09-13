@@ -95,34 +95,6 @@ for ($i=0; $i < count($request); $i++) {
                                         if(mysqli_num_rows($query_sun) > 0 && mysqli_num_rows($query_sat) > 0 && mysqli_num_rows($query_fri) > 0 &&
                                         mysqli_num_rows($query_thur) > 0 && mysqli_num_rows($query_wed) > 0 && mysqli_num_rows($query_tue) > 0 &&
                                         mysqli_num_rows($query_mon) > 0){
-                                            while($row = mysqli_fetch_assoc($query_mon)){
-                                                echo($row['idroster_times']);
-                                                $id_mon = $row['idroster_times'];
-                                            }
-                                            while($row = mysqli_fetch_assoc($query_tue)){
-                                                echo($row['idroster_times']);
-                                                $id_tue = $row['idroster_times'];
-                                            }
-                                            while($row = mysqli_fetch_assoc($query_wed)){
-                                                echo($row['idroster_times']);
-                                                $id_wed = $row['idroster_times'];
-                                            }
-                                            while($row = mysqli_fetch_assoc($query_thur)){
-                                                echo($row['idroster_times']);
-                                                $id_thur = $row['idroster_times'];
-                                            }
-                                            while($row = mysqli_fetch_assoc($query_fri)){
-                                                echo($row['idroster_times']);
-                                                $id_fri = $row['idroster_times'];
-                                            }
-                                            while($row = mysqli_fetch_assoc($query_sat)){
-                                                echo($row['idroster_times']);
-                                                $id_sat = $row['idroster_times'];
-                                            }
-                                            while($row = mysqli_fetch_assoc($query_sun)){
-                                                echo($row['idroster_times']);
-                                                $id_sun = $row['idroster_times'];
-                                            }
                                             $sql_insert_type = "INSERT INTO roster_types VALUES (NULL, 'IMPORT', NOW(), $id_mon, $id_tue, $id_wed, $id_thur, $id_fri, $id_sat, $id_sun);";
                                             if($query_insert_type = mysqli_query($transact,$sql_insert_type)){
                                                 $id_type = mysqli_insert_id($transact);
@@ -133,11 +105,21 @@ for ($i=0; $i < count($request); $i++) {
                                                 if($transact->query($sql_insert_mon)){
                                                     $id_mon = mysqli_insert_id($transact);
                                                 }
+                                            }else{
+                                                while($row = mysqli_fetch_assoc($query_mon)){
+                                                    echo($row['idroster_times']);
+                                                    $id_mon = $row['idroster_times'];
+                                                }
                                             }
                                             if(mysqli_num_rows($query_tue) <= 0){
                                                 $sql_insert_tue = "INSERT INTO roster_times VALUES (NULL, '$tue_start', '$tue_end', '$tue_fixed');";
                                                 if($transact->query($sql_insert_tue)){
                                                     $id_tue = mysqli_insert_id($transact);
+                                                }
+                                            }else{
+                                                while($row = mysqli_fetch_assoc($query_tue)){
+                                                    echo($row['idroster_times']);
+                                                    $id_tue = $row['idroster_times'];
                                                 }
                                             }
                                             if(mysqli_num_rows($query_wed) <= 0){
@@ -145,11 +127,21 @@ for ($i=0; $i < count($request); $i++) {
                                                 if($transact->query($sql_insert_wed)){
                                                     $id_wed = mysqli_insert_id($transact);
                                                 }
+                                            }else{
+                                                while($row = mysqli_fetch_assoc($query_wed)){
+                                                    echo($row['idroster_times']);
+                                                    $id_wed = $row['idroster_times'];
+                                                }
                                             }
                                             if(mysqli_num_rows($query_thur) <= 0){
                                                 $sql_insert_thur = "INSERT INTO roster_times VALUES (NULL, '$thur_start', '$thur_end', '$thur_fixed');";
                                                 if($transact->query($sql_insert_thur)){
                                                     $thur = mysqli_insert_id($transact);
+                                                }
+                                            }else{
+                                                while($row = mysqli_fetch_assoc($query_thur)){
+                                                    echo($row['idroster_times']);
+                                                    $id_thur = $row['idroster_times'];
                                                 }
                                             }
                                             if(mysqli_num_rows($query_fri) <= 0){
@@ -157,17 +149,32 @@ for ($i=0; $i < count($request); $i++) {
                                                 if($transact->query($sql_insert_fri)){
                                                     $id_fri = mysqli_insert_id($transact);
                                                 }
+                                            }else{
+                                                while($row = mysqli_fetch_assoc($query_fri)){
+                                                    echo($row['idroster_times']);
+                                                    $id_fri = $row['idroster_times'];
+                                                }
                                             }
                                             if(mysqli_num_rows($query_sat) <= 0){
                                                 $sql_insert_sat = "INSERT INTO roster_times VALUES (NULL, '$sat_start', '$sat_end', '$sat_fixed');";
                                                 if($transact->query($sql_insert_sat)){
                                                     $id_sat = mysqli_insert_id($transact);
                                                 }
+                                            }else{
+                                                while($row = mysqli_fetch_assoc($query_sat)){
+                                                    echo($row['idroster_times']);
+                                                    $id_sat = $row['idroster_times'];
+                                                }
                                             }
                                             if(mysqli_num_rows($query_sun) <= 0){
                                                 $sql_insert_sun = "INSERT INTO roster_times VALUES (NULL, '$sun_start', '$sun_end', '$sun_fixed');";
                                                 if($transact->query($sql_insert_sun)){
                                                     $id_sun = mysqli_insert_id($transact);
+                                                }
+                                            }else{
+                                                while($row = mysqli_fetch_assoc($query_sun)){
+                                                    echo($row['idroster_times']);
+                                                    $id_sun = $row['idroster_times'];
                                                 }
                                             }
                                             
