@@ -949,15 +949,19 @@ export class RostermaintenanceComponent implements OnInit {
               }else if(i == this.period_days.length - 1){
                 push.push(toInsert);
               }
-              if(num >= sheetToJson.length){
-                this.apiServices.insertImportedRosters(push).subscribe((str:string)=>{
-                  window.alert(str);
-                })
-              }
             }
+          }
+          if(num >= sheetToJson.length){
+            this.apiServices.insertImportedRosters(push).subscribe((str:string)=>{
+              window.alert(str);
+            })
           }
         })
       })
     }
+  }
+
+  closeUpload(){
+
   }
 }
