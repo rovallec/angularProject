@@ -946,6 +946,8 @@ export class RostermaintenanceComponent implements OnInit {
               if (new Date(this.activePeriod.start.split('-')[0] + "-" + this.activePeriod.start.split('-')[1] + "-" + this.period_days[i + 1]).getDay() == 0) {
                 push.push(toInsert);
                 toInsert = new roster_weeks;
+                toInsert.id_employee = emp.sort((a, b) => Number(a.active) - Number(b.active))[0].idemployees;
+                toInsert.id_period = this.activePeriod.idperiods
               }else if(i == this.period_days.length - 1){
                 push.push(toInsert);
               }
