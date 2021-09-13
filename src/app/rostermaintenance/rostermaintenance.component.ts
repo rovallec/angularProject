@@ -969,6 +969,7 @@ export class RostermaintenanceComponent implements OnInit {
 
   deleteRoster(){
     this.apiServices.deleteRoster(this.selectedEmployeeRoster).subscribe((str:string)=>{
+      this.employeeRoster.splice(this.employeeRoster.indexOf(this.selectedEmployeeRoster), 1);
       if(str == '1'){
         window.alert("Record successfully deleted");
       }else{

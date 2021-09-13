@@ -2205,10 +2205,12 @@ export class roster_times{
     idroster_times:string;
     start:string;
     end:string;
+    fixed:string;
     constructor(){
         this.idroster_times = null;
         this.start = null;
         this.end = null;
+        this.fixed = null;
     }
 }
 

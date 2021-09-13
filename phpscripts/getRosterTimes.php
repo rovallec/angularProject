@@ -12,6 +12,7 @@ if($result = mysqli_query($con, $sql)){
         $user[$i]['idroster_times'] = $row['idroster_times'];
         $user[$i]['start'] = $row['start'];
         $user[$i]['end'] = $row['end'];
+        $user[$i]['fixed'] = $row['fixed'];
         $i++;
     };
     echo json_encode($user);
