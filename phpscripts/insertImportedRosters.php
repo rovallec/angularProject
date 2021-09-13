@@ -57,7 +57,7 @@ for ($i=0; $i < count($request); $i++) {
             INNER JOIN roster_times sun ON (sun.idroster_times =  roster_types.id_time_sun AND sun.start = '$sun_start' AND sun.end = '$sun_end' AND sun.fixed_schedule = '$sun_fixed') OR ('$sun_start' = 'NULL')
             ORDER BY idroster_types DESC LIMIT 1;";
     if($result = mysqli_query($con, $sql)){
-        $res = mysqli_fetch_assoc($result)
+        $res = mysqli_fetch_assoc($result);
         if(count($res) > 0){
             $id_type = $res[0]['idroster_types'];
         }else{
