@@ -70,6 +70,12 @@ for ($i=0; $i < count($request); $i++) {
             while($row = mysqli_fetch_assoc($result)){
                 $id_type = $row['idroster_types'];
             }
+            $sql_insert_roster = "INSERT INTO rosters VALUES (NULL, $id_employee, $id_period, $id_type, '1');";
+            if(mysqli_query($transact,$sql_insert_roster)){
+                $count++;
+            }else{
+                echo($sql_insert_roster);
+            }
         }else{
             $sql_time_mon = "SELECT idroster_times FROM roster_times WHERE (start = '$mon_start' AND end = '$mon_end' AND fixed_schedule = '$mon_fixed') OR ('$mon_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
             $sql_time_tue = "SELECT idroster_times FROM roster_times WHERE (start = '$tue_start' AND end = '$tue_end' AND fixed_schedule = '$tue_fixed') OR ('$tue_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
