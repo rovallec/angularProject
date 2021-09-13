@@ -146,7 +146,7 @@ for ($i=0; $i < count($request); $i++) {
         }
         $sql_insert_roster = "INSERT INTO rosters VALUES (NULL, $id_employee, $id_period, $id_type, '1');";
         if($transact->query($sql_insert_roster)){
-            $count++
+            $count++;
         }else{
             echo($sql_insert_roster);
         }
