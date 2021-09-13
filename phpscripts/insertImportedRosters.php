@@ -141,7 +141,7 @@ for ($i=0; $i < count($request); $i++) {
                     echo($sql_time_tue);
                 }
             }else{
-                echo($sql_time_mon)
+                echo($sql_time_mon);
             }
         }
         $sql_insert_roster = "INSERT INTO rosters VALUES (NULL, $id_employee, $id_period, $id_type, '1');";
