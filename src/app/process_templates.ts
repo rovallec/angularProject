@@ -2337,6 +2337,7 @@ export class roster_views{
     att_status_14:string;
     att_status_15:string;
     att_status_16:string;
+    id_period:string;
     status:string;
     constructor(){
         this.idrosters = null;
@@ -2393,6 +2394,7 @@ export class roster_views{
         this.att_status_14 = '1';
         this.att_status_15 = '1';
         this.att_status_16 = '1';
+        this.id_period = null;
         this.status = null;
     }
 }
@@ -2405,5 +2407,56 @@ export class tk_upload{
         this.idtk_import = null;
         this.date = null;
         this.path = null;
+    }
+}
+
+export class roster_weeks{
+    id_employee:string;
+    id_period:string;
+    mon_start:string;
+    mon_end:string;
+    mon_fixed:string;
+    tue_start:string;
+    tue_end:string;
+    tue_fixed:string;
+    wed_start:string;
+    wed_end:string;
+    wed_fixed:string;
+    thur_start:string;
+    thur_end:string;
+    thur_fixed:string;
+    fri_start:string;
+    fri_end:string;
+    fri_fixed:string;
+    sat_start:string;
+    sat_end:string;
+    sat_fixed:string;
+    sun_start:string;
+    sun_end:string;
+    sun_fixed:string;
+    constructor(){
+        this.id_employee = null;
+        this.id_period = null;
+        this.mon_start = null;
+        this.mon_end = null;
+        this.mon_fixed = null;
+        this.tue_start = null;
+        this.tue_end = null;
+        this.tue_fixed = null;
+        this.wed_start = null;
+        this.wed_end = null;
+        this.wed_fixed = null;
+        this.thur_start = null;
+        this.thur_end = null;
+        this.thur_fixed = null;
+        this.fri_start = null;
+        this.fri_end = null;
+        this.fri_fixed = null;
+        this.sat_start = null;
+        this.sat_end = null;
+        this.sat_fixed = null;
+        this.sun_start = null;
+        this.sun_end = null;
+        this.sun_fixed = null;
     }
 }

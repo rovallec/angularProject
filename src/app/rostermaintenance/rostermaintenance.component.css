@@ -193,3 +193,15 @@ color: white;
   color: white;
   border-color: #003b71;
 }
+
+.btn-outline-purpple{
+  background-color: white;
+  border-color: #a370f7;
+  color: #a370f7;
+}
+
+.btn-outline-purpple:hover{
+  background-color:#a370f7;
+  border-color: #a370f7;
+  color: white;
+}
