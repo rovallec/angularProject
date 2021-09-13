@@ -66,9 +66,10 @@ for ($i=0; $i < count($request); $i++) {
             INNER JOIN roster_times sun ON (sun.idroster_times =  roster_types.id_time_sun AND sun.start = '$sun_start' AND sun.end = '$sun_end' AND sun.fixed_schedule = '$sun_fixed') OR ('$sun_start' = 'NULL')
             ORDER BY idroster_types DESC LIMIT 1;";
     if($result = mysqli_query($con, $sql)){
-        $res = mysqli_fetch_assoc($result);
         if(mysqli_num_rows($result)){
-            $id_type = $res[0]['idroster_types'];
+            while($row = mysqli_fetch_assoc($result)){
+                $id_type = $row['idroster_types'];
+            }
         }else{
             $sql_time_mon = "SELECT idroster_times FROM roster_times WHERE (start = '$mon_start' AND end = '$mon_end' AND fixed_schedule = '$mon_fixed') OR ('$mon_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
             $sql_time_tue = "SELECT idroster_times FROM roster_times WHERE (start = '$tue_start' AND end = '$tue_end' AND fixed_schedule = '$tue_fixed') OR ('$tue_start' = 'NULL') ORDER BY idroster_times DESC LIMIT 1;";
@@ -85,7 +86,6 @@ for ($i=0; $i < count($request); $i++) {
                                 if($query_sat = mysqli_query($transact,$sql_time_sat)){
                                     if($query_sun = mysqli_query($transact,$sql_time_sun)){
                                         $res_mon = mysqli_fetch_assoc($query_mon);
-                                        echo($res_mon);
                                         $res_tue = mysqli_fetch_assoc($query_tue);
                                         $res_wed = mysqli_fetch_assoc($query_wed);
                                         $res_thur = mysqli_fetch_assoc($query_thur);
@@ -95,13 +95,27 @@ for ($i=0; $i < count($request); $i++) {
                                         if(mysqli_num_rows($query_sun) > 0 && mysqli_num_rows($query_sat) > 0 && mysqli_num_rows($query_fri) > 0 &&
                                         mysqli_num_rows($query_thur) > 0 && mysqli_num_rows($query_wed) > 0 && mysqli_num_rows($query_tue) > 0 &&
                                         mysqli_num_rows($query_mon) > 0){
-                                            $id_mon = $res_mon[0]['idroster_times'];
-                                            $id_tue = $res_tue[0]['idroster_times'];
-                                            $id_wed = $res_wed[0]['idroster_times'];
-                                            $id_thur = $res_thur[0]['idroster_times'];
-                                            $id_fri = $res_fri[0]['idroster_times'];
-                                            $id_sat = $res_sat[0]['idroster_times'];
-                                            $id_sun = $res_sun[0]['idroster_times'];
+                                            while($row = mysqli_fetch_assoc($query_mon)){
+                                            $id_mon = $row['idroster_times'];
+                                            }
+                                            while($row = mysqli_fetch_assoc($query_tue)){
+                                                $id_tue = $row['idroster_times'];
+                                            }
+                                            while($row = mysqli_fetch_assoc($query_wed)){
+                                                $id_wed = $row['idroster_times'];
+                                            }
+                                            while($row = mysqli_fetch_assoc($query_thur)){
+                                                $id_thur = $row['idroster_times'];
+                                            }
+                                            while($row = mysqli_fetch_assoc($query_fri)){
+                                                $id_fri = $row['idroster_times'];
+                                            }
+                                            while($row = mysqli_fetch_assoc($query_sat)){
+                                                $id_sat = $row['idroster_times'];
+                                            }
+                                            while($row = mysqli_fetch_assoc($query_sun)){
+                                                $id_sun = $row['idroster_times'];
+                                            }
                                             $sql_insert_type = "INSERT INTO roster_types VALUES (NULL, 'IMPORT', NOW(), $id_mon, $id_tue, $id_wed, $id_thur, $id_fri, $id_sat, $id_sun);";
                                             if($query_insert_type = mysqli_query($transact,$sql_insert_type)){
                                                 $id_type = mysqli_insert_id($transact);
