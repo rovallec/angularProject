@@ -113,7 +113,7 @@ for ($i=0; $i < count($request); $i++) {
                                                 $sql_insert_thur = "INSERT INTO roster_times VALUES (NULL, '$thur_start', '$thur_end', '$thur_fixed');";
                                                 $id_thur = mysqli_insert_id($transact);
                                             }
-                                            if(mysqli_num_rows($sql_time_fri) <= 0){
+                                            if(mysqli_num_rows($query_fri) <= 0){
                                                 $sql_insert_fri = "INSERT INTO roster_times VALUES (NULL, '$fri_start', '$fri_end', '$fri_fixed');";
                                                 $id_fri = mysqli_insert_id($transact);
                                             }
