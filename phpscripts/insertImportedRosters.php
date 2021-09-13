@@ -26,6 +26,8 @@ $id_fri = '';
 $id_sat = '';
 $id_sun = '';
 
+$id_type = '';
+
 $transact->begin_transaction();
 
 for ($i=0; $i < count($request); $i++) {
