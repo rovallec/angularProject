@@ -98,6 +98,8 @@ for ($i=0; $i < count($request); $i++) {
                                             $sql_insert_type = "INSERT INTO roster_types VALUES (NULL, 'IMPORT', NOW(), $id_mon, $id_tue, $id_wed, $id_thur, $id_fri, $id_sat, $id_sun);";
                                             if($query_insert_type = mysqli_query($transact,$sql_insert_type)){
                                                 $id_type = mysqli_insert_id($transact);
+                                            }else{
+                                                echo($sql_insert_type);
                                             }
                                         }else{
                                             if(mysqli_num_rows($query_mon) <= 0){
