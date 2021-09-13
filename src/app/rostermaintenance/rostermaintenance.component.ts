@@ -731,4 +731,8 @@ export class RostermaintenanceComponent implements OnInit {
         break;
     }
   }
+
+  insertAttendances(){
+    
+  }
 }
