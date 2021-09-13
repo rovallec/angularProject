@@ -560,6 +560,7 @@ export class RostermaintenanceComponent implements OnInit {
   setAttendances(){
     this.createAttendances = !this.createAttendances;
     this.apiServices.getAttendences({id:'ALL', date:this.activePeriod.start + " AND " + this.activePeriod.end}).subscribe((att:attendences[])=>{
+      console.log(att);
       att.forEach(attendance=>{
         switch (attendance.date.split("-")[2]) {
           case this.period_days[0].padStart(2,"0"):
@@ -733,6 +734,6 @@ export class RostermaintenanceComponent implements OnInit {
   }
 
   insertAttendances(){
-    
+
   }
 }

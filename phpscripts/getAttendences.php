@@ -47,6 +47,7 @@ if(explode(" ", $date)[0] === "<=" || explode(" ", $date)[0] ===  "<"){
 			}
 		}
 	}
+echo($sql);
 if($result = mysqli_query($con, $sql))
 {
 	$i = 0;
