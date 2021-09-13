@@ -58,7 +58,7 @@ for ($i=0; $i < count($request); $i++) {
             ORDER BY idroster_types DESC LIMIT 1;";
     
     if($query_res = $transact->query($sql)->fetch_assoc()){
-        echo($query_res)
+        echo($query_res);
     }else{
         echo($sql);
     }
