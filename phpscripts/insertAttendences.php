@@ -72,9 +72,9 @@
                         $att[$i]['status'] = $row['status'];
                         $i++;
                     }
-                    
                     echo json_encode($att);
                 }else{
+                    echo($sql);
                     http_response_code(200);
                 }
     }
