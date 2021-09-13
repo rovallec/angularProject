@@ -107,8 +107,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_mon)){
-                                                    echo($row['idroster_times']);
                                                     $id_mon = $row['idroster_times'];
+                                                    $id_mon = '100';
                                                 }
                                             }
                                             if(mysqli_num_rows($query_tue) <= 0){
@@ -118,8 +118,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_tue)){
-                                                    echo($row['idroster_times']);
                                                     $id_tue = $row['idroster_times'];
+                                                    $id_tue = '100';
                                                 }
                                             }
                                             if(mysqli_num_rows($query_wed) <= 0){
@@ -129,8 +129,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_wed)){
-                                                    echo($row['idroster_times']);
                                                     $id_wed = $row['idroster_times'];
+                                                    $id_wed = '100';
                                                 }
                                             }
                                             if(mysqli_num_rows($query_thur) <= 0){
@@ -140,8 +140,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_thur)){
-                                                    echo($row['idroster_times']);
                                                     $id_thur = $row['idroster_times'];
+                                                    $id_thur = '100';
                                                 }
                                             }
                                             if(mysqli_num_rows($query_fri) <= 0){
@@ -151,8 +151,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_fri)){
-                                                    echo($row['idroster_times']);
                                                     $id_fri = $row['idroster_times'];
+                                                    $id_fri = '100';
                                                 }
                                             }
                                             if(mysqli_num_rows($query_sat) <= 0){
@@ -162,8 +162,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_sat)){
-                                                    echo($row['idroster_times']);
                                                     $id_sat = $row['idroster_times'];
+                                                    $id_sat = '100';
                                                 }
                                             }
                                             if(mysqli_num_rows($query_sun) <= 0){
@@ -173,8 +173,8 @@ for ($i=0; $i < count($request); $i++) {
                                                 }
                                             }else{
                                                 while($row = mysqli_fetch_assoc($query_sun)){
-                                                    echo($row['idroster_times']);
                                                     $id_sun = $row['idroster_times'];
+                                                    $id_sun = '100';
                                                 }
                                             }
                                             
