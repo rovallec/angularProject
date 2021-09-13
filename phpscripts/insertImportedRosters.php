@@ -74,13 +74,13 @@ for ($i=0; $i < count($request); $i++) {
                             if($query_fri = $transact->query($sql_time_fri)){
                                 if($query_sat = $transact->query($sql_time_sat)){
                                     if($query_sun = $transact->query($sql_time_sun)){
-                                        $res_mon = $query_mon->fetch_assoc();
-                                        $res_tue = $query_tue->fetch_assoc();
-                                        $res_wed = $query_wed->fetch_assoc();
-                                        $res_thur = $query_thur->fetch_assoc();
-                                        $res_fri = $query_fri->fetch_assoc();
-                                        $res_sat = $query_sat->fetch_assoc();
-                                        $res_sun = $query_sun->fetch_assoc();
+                                        $res_mon = $query_mon->fetch();
+                                        $res_tue = $query_tue->fetch();
+                                        $res_wed = $query_wed->fetch();
+                                        $res_thur = $query_thur->fetch();
+                                        $res_fri = $query_fri->fetch();
+                                        $res_sat = $query_sat->fetch();
+                                        $res_sun = $query_sun->fetch();
                                         if(count($res_mon) > 0 && count($res_tue) > 0 && count($res_wed) > 0 && count($res_thur) > 0 &&
                                         count($res_fri) > 0 && count($res_sat) > 0 && count($res_sun) > 0){
                                             $id_mon = $res_mon[0]['idroster_times'];
