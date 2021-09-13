@@ -81,6 +81,7 @@ export class RostermaintenanceComponent implements OnInit {
           }
         })
         this.rosters = rsts;
+        console.log(rsts);
         let dt: number = new Date(periods[periods.length - 1].start).getTime();
         while (dt <= new Date(periods[periods.length - 1].end).getTime()) {
           dt = dt + (1000 * 3600 * 24);
@@ -103,52 +104,68 @@ export class RostermaintenanceComponent implements OnInit {
           toShow.status = roster_toShow.status;
           toShow.idrosters = roster_toShow.idrosters;
             if(this.dayExist(0)){
-              toShow.day_1 = this.getRosterDay(0, roster_toShow);
+              toShow.day_1 = this.getRosterDay(0, roster_toShow).split("|")[0];
+              toShow.fixed_1 = this.getRosterDay(0, roster_toShow).split("|")[1];
             }
             if(this.dayExist(1)){
-              toShow.day_2 = this.getRosterDay(1, roster_toShow);
+              toShow.day_2 = this.getRosterDay(1, roster_toShow).split("|")[0];
+              toShow.fixed_2 = this.getRosterDay(1, roster_toShow).split("|")[1];
             }
             if(this.dayExist(2)){
-              toShow.day_3 = this.getRosterDay(2, roster_toShow);
+              toShow.day_3 = this.getRosterDay(2, roster_toShow).split("|")[0];
+              toShow.fixed_3 = this.getRosterDay(2, roster_toShow).split("|")[1];
             }
             if(this.dayExist(3)){
-              toShow.day_4 = this.getRosterDay(3, roster_toShow);
+              toShow.day_4 = this.getRosterDay(3, roster_toShow).split("|")[0];
+              toShow.fixed_4 = this.getRosterDay(3, roster_toShow).split("|")[1];
             }
             if(this.dayExist(4)){
-              toShow.day_5 = this.getRosterDay(4, roster_toShow);
+              toShow.day_5 = this.getRosterDay(4, roster_toShow).split("|")[0];
+              toShow.fixed_5 = this.getRosterDay(4, roster_toShow).split("|")[1];
             }
             if(this.dayExist(5)){
-              toShow.day_6 = this.getRosterDay(5, roster_toShow);
+              toShow.day_6 = this.getRosterDay(5, roster_toShow).split("|")[0];
+              toShow.fixed_6 = this.getRosterDay(5, roster_toShow).split("|")[1]; 
             }
             if(this.dayExist(6)){
-              toShow.day_7 = this.getRosterDay(6, roster_toShow);
+              toShow.day_7 = this.getRosterDay(6, roster_toShow).split("|")[0];
+              toShow.fixed_7 = this.getRosterDay(6, roster_toShow).split("|")[1];
             }
             if(this.dayExist(7)){
-              toShow.day_8 = this.getRosterDay(7, roster_toShow);
+              toShow.day_8 = this.getRosterDay(7, roster_toShow).split("|")[0];
+              toShow.fixed_8 = this.getRosterDay(7, roster_toShow).split("|")[1];
             }
             if(this.dayExist(8)){
-              toShow.day_9 = this.getRosterDay(8, roster_toShow);
+              toShow.day_9 = this.getRosterDay(8, roster_toShow).split("|")[0];
+              toShow.fixed_9 = this.getRosterDay(8, roster_toShow).split("|")[1];
             }
             if(this.dayExist(9)){
-              toShow.day_10 = this.getRosterDay(9, roster_toShow);
+              toShow.day_10 = this.getRosterDay(9, roster_toShow).split("|")[0];
+              toShow.fixed_10 = this.getRosterDay(9, roster_toShow).split("|")[1];
             }
             if(this.dayExist(10)){
-              toShow.day_11 = this.getRosterDay(10, roster_toShow);
+              toShow.day_11 = this.getRosterDay(10, roster_toShow).split("|")[0];
+              toShow.fixed_11 = this.getRosterDay(10, roster_toShow).split("|")[1];
             }
             if(this.dayExist(11)){
-              toShow.day_12 = this.getRosterDay(11, roster_toShow);
+              toShow.day_12 = this.getRosterDay(11, roster_toShow).split("|")[0];
+              toShow.fixed_12 = this.getRosterDay(11, roster_toShow).split("|")[1];
             }
             if(this.dayExist(12)){
-              toShow.day_13 = this.getRosterDay(12, roster_toShow);
+              toShow.day_13 = this.getRosterDay(12, roster_toShow).split("|")[0];
+              toShow.fixed_13 = this.getRosterDay(12, roster_toShow).split("|")[1];
             }
             if(this.dayExist(13)){
-              toShow.day_14 = this.getRosterDay(13, roster_toShow);
+              toShow.day_14 = this.getRosterDay(13, roster_toShow).split("|")[0];
+              toShow.fixed_14 = this.getRosterDay(13, roster_toShow).split("|")[1];
             }
             if(this.dayExist(14)){
-              toShow.day_15 = this.getRosterDay(14, roster_toShow);
+              toShow.day_15 = this.getRosterDay(14, roster_toShow).split("|")[0];
+              toShow.fixed_15 = this.getRosterDay(14, roster_toShow).split("|")[1];
             }
             if(this.dayExist(15)){
-              toShow.day_16 = this.getRosterDay(15, roster_toShow);
+              toShow.day_16 = this.getRosterDay(15, roster_toShow).split("|")[0];
+              toShow.fixed_16 = this.getRosterDay(15, roster_toShow).split("|")[1];
             }
             this.rosters_show.push(toShow);
           }
@@ -361,54 +378,54 @@ export class RostermaintenanceComponent implements OnInit {
       if(mixed_schedules.length > (week)){
         switch (dt.getDay()) {
           case 1:
-            rtn = ((mixed_schedules[week].mon_start + " - " + (mixed_schedules[week].mon_end)));
+            rtn = ((mixed_schedules[week].mon_start + " - " + (mixed_schedules[week].mon_end)) + "|" + mixed_schedules[week].mon_fixed);
             break;
           case 2:
-            rtn = ((mixed_schedules[week].tue_start + " - " + mixed_schedules[week].tue_end));
+            rtn = ((mixed_schedules[week].tue_start + " - " + mixed_schedules[week].tue_end)  + "|" + mixed_schedules[week].tue_fixed);
             break;
           case 3:
-            rtn = (mixed_schedules[week].wed_start + " - " + mixed_schedules[week].wed_end);
+            rtn = (mixed_schedules[week].wed_start + " - " + mixed_schedules[week].wed_end)  + "|" + mixed_schedules[week].wed_fixed;
             break;
           case 4:
-            rtn = ((mixed_schedules[week].thur_start + " - " + mixed_schedules[week].thur_end));
+            rtn = ((mixed_schedules[week].thur_start + " - " + mixed_schedules[week].thur_end)  + "|" + mixed_schedules[week].thur_fixed);
             break;
           case 5:
-            rtn = ((mixed_schedules[week].fri_start + " - " + mixed_schedules[week].fri_end));
+            rtn = ((mixed_schedules[week].fri_start + " - " + mixed_schedules[week].fri_end)  + "|" + mixed_schedules[week].fri_fixed);
             break;
           case 6:
-            rtn = (mixed_schedules[week].sat_start + " - " + mixed_schedules[week].sat_end);
+            rtn = (mixed_schedules[week].sat_start + " - " + mixed_schedules[week].sat_end)  + "|" + mixed_schedules[week].sat_fixed;
             break;
           case 0:
-            rtn = (mixed_schedules[week].sun_start + " - " + mixed_schedules[week].sun_end);
+            rtn = (mixed_schedules[week].sun_start + " - " + mixed_schedules[week].sun_end)  + "|" + mixed_schedules[week].sun_fixed;
             break;
         }
       }else{
         if(week <= this.getMaxWeek()){
-          rtn = 'null - null';
+          rtn = 'null - null|null';
         }
       }
     } else {
       switch (dt.getDay()) {
         case 1:
-          rtn = (rt.mon_start + " - " + rt.mon_end);
+          rtn = (rt.mon_start + " - " + rt.mon_end)  + "|" + rt.mon_fixed;
           break;
         case 2:
-          rtn = (rt.tue_start + " - " + rt.tue_end);
+          rtn = (rt.tue_start + " - " + rt.tue_end)  + "|" + rt.tue_fixed;
           break;
         case 3:
-          rtn = (rt.wed_start + " - " + rt.wed_end);
+          rtn = (rt.wed_start + " - " + rt.wed_end)  + "|" + rt.wed_fixed;
           break;
         case 4:
-          rtn = (rt.thur_start + " - " + rt.thur_end);
+          rtn = (rt.thur_start + " - " + rt.thur_end)  + "|" + rt.thur_fixed;
           break;
         case 5:
-          rtn = (rt.fri_start + " - " + rt.fri_end);
+          rtn = (rt.fri_start + " - " + rt.fri_end)  + "|" + rt.fri_fixed;
           break;
         case 6:
-          rtn = (rt.sat_start + " - " + rt.sat_end);
+          rtn = (rt.sat_start + " - " + rt.sat_end)  + "|" + rt.sat_fixed;
           break;
         case 0:
-          rtn = (rt.sun_start + " - " + rt.sun_end);
+          rtn = (rt.sun_start + " - " + rt.sun_end)  + "|" + rt.sun_fixed;
           break;
       }
     }
@@ -542,7 +559,177 @@ export class RostermaintenanceComponent implements OnInit {
   }
 
   setAttendances(){
-    this.createAttendances = true;
-    
+    this.createAttendances = !this.createAttendances;
+    this.apiServices.getAttendences({id:'ALL', date:this.activePeriod.start + " AND " + this.activePeriod.end}).subscribe((att:attendences[])=>{
+      att.forEach(attendance=>{
+        switch (attendance.date.split("-")[2]) {
+          case this.period_days[0].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_1 = '0';
+            break;
+            case this.period_days[1].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_2 = '0';
+            break;
+            case this.period_days[2].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_3 = '0';
+            break;
+            case this.period_days[3].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_4 = '0';
+            break;
+            case this.period_days[4].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_5 = '0';
+            break;
+            case this.period_days[5].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_6 = '0';
+            break;
+            case this.period_days[6].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_7 = '0';
+            break;
+            case this.period_days[7].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_8 = '0';
+            break;
+            case this.period_days[8].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_9 = '0';
+            break;
+            case this.period_days[9].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_10 = '0';
+            break;
+            case this.period_days[10].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_11 = '0';
+            break;
+            case this.period_days[11].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_12 = '0';
+            break;
+            case this.period_days[12].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_13 = '0';
+            break;
+            case this.period_days[13].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_14 = '0';
+            break;
+            case this.period_days[14].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_15 = '0';
+            break;
+            case this.period_days[15].padStart(2,"0"):
+            this.rosters_show.find(f=>f.id_employee == attendance.id_employee).att_status_16 = '0';
+            break;
+        }
+      })
+    })
+  }
+
+  isPending(day:string, roster:roster_views){
+    switch (day) {
+      case '1':
+        if(roster.fixed_1 == 'null'){
+          return '2';
+        }else{
+          return roster.att_status_1;  
+        }
+        break;
+        case '2':
+          if(roster.fixed_2 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_2;  
+          }
+        break;
+        case '3':
+          if(roster.fixed_3 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_3;
+          }
+        break;
+        case '4':
+          if(roster.fixed_4 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_4;
+          }
+        break;
+        case '5':
+          if(roster.fixed_5 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_5;
+          }
+        break;
+        case '6':
+          if(roster.fixed_6 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_6;
+          }
+        break;
+        case '7':
+          if(roster.fixed_7 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_7;
+          }
+        break;
+        case '8':
+          if(roster.fixed_8 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_8;
+          }
+        break;
+        case '9':
+          if(roster.fixed_9 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_9;
+          }
+        break;
+        case '10':
+          if(roster.fixed_10 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_10;
+          }
+        break;
+        case '11':
+          if(roster.fixed_11 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_11;
+          }
+        break;
+        case '12':
+          if(roster.fixed_12 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_12;
+          }
+        break;
+        case '13':
+          if(roster.fixed_13 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_13;
+          }
+        break;
+        case '14':
+          if(roster.fixed_14 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_14;
+          }
+        break;
+        case '15':
+          if(roster.fixed_15 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_15;
+          }
+        break;
+        case '16':
+          if(roster.fixed_16 == 'null'){
+            return '2';
+          }else{
+            return roster.att_status_16;
+          }
+        break;
+    }
   }
 }
