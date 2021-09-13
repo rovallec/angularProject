@@ -11,6 +11,8 @@ $count = 0;
 
 $transact->begin_transaction();
 
+$res = [];
+
 for ($i=0; $i < count($request); $i++) {
     $en = json_encode($request[$i]);
     $roster = json_decode($en);
