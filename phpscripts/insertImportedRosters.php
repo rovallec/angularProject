@@ -160,9 +160,9 @@ for ($i=0; $i < count($request); $i++) {
         }else{
             echo($sql_insert_roster);
         }
-    }else{
-        echo($sql);
     }
+}else{
+    echo($sql);
 }
 if($count >= count($request) - 1){
     $transact->commit();
