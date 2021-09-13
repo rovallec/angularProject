@@ -16,20 +16,51 @@
     <div class="col-md-10" style="margin-top:20px">
         <div class="row d-flex justify-content-end">
             <button class="btn btn-outline-info" style="margin-right:15px" data-target="#rosterTypes"
-                data-toggle="modal" (click)="clearSet()"><i class="far fa-clock"></i></button>
+                data-toggle="modal" (click)="clearSet()" *ngIf="!createAttendances"><i class="far fa-clock"></i></button>
             <button class="btn btn-outline-warning" style="margin-right:15px" data-target="#rosterAssign"
-                data-toggle="modal"><i class="fas fa-hammer" (click)="reset_value()"></i></button>
+                data-toggle="modal" *ngIf="!createAttendances"><i class="fas fa-hammer" (click)="reset_value()"></i></button>
             <button class="btn btn-outline-secondary" style="margin-right:15px" data-target="#rosterSearch"
-                data-toggle="modal" *ngIf="!searching"><i Class="fas fa-filter"></i></button>
+                data-toggle="modal" *ngIf="!searching && !createAttendances"><i Class="fas fa-filter"></i></button>
             <button class="btn btn-outline-secondary" style="margin-right:15px" *ngIf="searching"
-                (click)="searchRoster()"><i Class="far fa-times-circle"></i></button>
+                (click)="searchRoster()"><i Class="far fa-times-circle" *ngIf="!createAttendances"></i></button>
             <button class="btn btn-outline-primary" style="margin-right:15px" data-target="#rosterSetup"
-                data-toggle="modal" (click)="reset_value()"><i class="fas fa-cogs"></i></button>
-                <button class="btn btn-outline-dark" style="margin-right: 15px;" (click)="setAttendances()"><i class="far fa-clock"></i></button>
+                data-toggle="modal" (click)="reset_value()" *ngIf="!createAttendances"><i class="fas fa-cogs"></i></button>
+            <button class="btn btn-outline-dark" style="margin-right: 15px;" (click)="setAttendances()"><i
+                    class="far fa-calendar-alt"></i></button>
+            <button class="btn btn-outline-success" style="margin-right: 15px;" (click)="createAttendances()" *ngIf="createAttendances"><i
+                        class="fas fa-check-double"></i></button>
         </div>
         <div class="row" style="margin-top:20px">
-            <table class="table table-hover table-light selectable" *ngIf='!createAttendances'>
-                
+            <table class="table table-hover table-light selectable" *ngIf='createAttendances'>
+                <thead class="thead-dark">
+                    <th>NEARSOL ID</th>
+                    <th>CLIENT ID</th>
+                    <th>NAME</th>
+                    <th *ngFor="let d of period_days">{{d}}</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let roster of sortRosters()" (dblclick)="addSelection(roster)">
+                        <td class="table-secondary">{{roster.nearsol_id}}</td>
+                        <td class="table-secondary">{{roster.client_id}}</td>
+                        <td class="table-secondary">{{roster.name}}</td>
+                        <td *ngIf="dayExist(0)" [ngClass]="{'table-success':isPending('1', roster) === '1', 'table-info': isPending('1', roster) === '0', 'table-danger':isPending('1', roster) === '2'}">{{roster.fixed_1}}</td>
+                        <td *ngIf="dayExist(1)" [ngClass]="{'table-success':isPending('2', roster) === '1', 'table-info': isPending('2', roster) === '0', 'table-danger':isPending('2', roster) === '2'}">{{roster.fixed_2}}</td>
+                        <td *ngIf="dayExist(2)" [ngClass]="{'table-success':isPending('3', roster) === '1', 'table-info': isPending('3', roster) === '0', 'table-danger':isPending('3', roster) === '2'}">{{roster.fixed_3}}</td>
+                        <td *ngIf="dayExist(3)" [ngClass]="{'table-success':isPending('4', roster) === '1', 'table-info': isPending('4', roster) === '0', 'table-danger':isPending('4', roster) === '2'}">{{roster.fixed_4}}</td>
+                        <td *ngIf="dayExist(4)" [ngClass]="{'table-success':isPending('5', roster) === '1', 'table-info': isPending('5', roster) === '0', 'table-danger':isPending('5', roster) === '2'}">{{roster.fixed_5}}</td>
+                        <td *ngIf="dayExist(5)" [ngClass]="{'table-success':isPending('6', roster) === '1', 'table-info': isPending('6', roster) === '0', 'table-danger':isPending('6', roster) === '2'}">{{roster.fixed_6}}</td>
+                        <td *ngIf="dayExist(6)" [ngClass]="{'table-success':isPending('7', roster) === '1', 'table-info': isPending('7', roster) === '0', 'table-danger':isPending('7', roster) === '2'}">{{roster.fixed_7}}</td>
+                        <td *ngIf="dayExist(7)" [ngClass]="{'table-success':isPending('8', roster) === '1', 'table-info': isPending('8', roster) === '0', 'table-danger':isPending('8', roster) === '2'}">{{roster.fixed_8}}</td>
+                        <td *ngIf="dayExist(8)" [ngClass]="{'table-success':isPending('9', roster) === '1', 'table-info': isPending('9', roster) === '0', 'table-danger':isPending('9', roster) === '2'}">{{roster.fixed_9}}</td>
+                        <td *ngIf="dayExist(9)" [ngClass]="{'table-success':isPending('10', roster) === '1', 'table-info': isPending('10', roster) === '0', 'table-danger':isPending('10', roster) === '2'}">{{roster.fixed_10}}</td>
+                        <td *ngIf="dayExist(10)" [ngClass]="{'table-success':isPending('11', roster) === '1', 'table-info': isPending('11', roster) === '0', 'table-danger':isPending('11', roster) === '2'}">{{roster.fixed_11}}</td>
+                        <td *ngIf="dayExist(11)" [ngClass]="{'table-success':isPending('12', roster) === '1', 'table-info': isPending('12', roster) === '0', 'table-danger':isPending('12', roster) === '2'}">{{roster.fixed_12}}</td>
+                        <td *ngIf="dayExist(12)" [ngClass]="{'table-success':isPending('13', roster) === '1', 'table-info': isPending('13', roster) === '0', 'table-danger':isPending('13', roster) === '2'}">{{roster.fixed_13}}</td>
+                        <td *ngIf="dayExist(13)" [ngClass]="{'table-success':isPending('14', roster) === '1', 'table-info': isPending('14', roster) === '0', 'table-danger':isPending('14', roster) === '2'}">{{roster.fixed_14}}</td>
+                        <td *ngIf="dayExist(14)" [ngClass]="{'table-success':isPending('15', roster) === '1', 'table-info': isPending('15', roster) === '0', 'table-danger':isPending('15', roster) === '2'}">{{roster.fixed_15}}</td>
+                        <td *ngIf="dayExist(15)" [ngClass]="{'table-success':isPending('16', roster) === '1', 'table-info': isPending('16', roster) === '0', 'table-danger':isPending('16', roster) === '2'}">{{roster.fixed_16}}</td>
+                    </tr>
+                </tbody>
             </table>
             <table class="table table-hover table-light selectable" *ngIf='!createAttendances'>
                 <thead>
@@ -81,7 +112,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>EMPLOYEE:</label>
-                        <select [size]="7" class="form-control" (change)="setEmployee($event.target.value)" [(ngModel)]="selectedEmployeeRoster.id_employee">
+                        <select [size]="7" class="form-control" (change)="setEmployee($event.target.value)"
+                            [(ngModel)]="selectedEmployeeRoster.id_employee">
                             <option *ngFor='let employee of selectedRosters' [value]="employee.id_employee">
                                 {{employee.name}}</option>
                         </select>
@@ -90,16 +122,20 @@
                         <div class="row">
                             <div class="col-md-12" style="padding:0px">
                                 <label>ROSTERS:</label>
-                                <select size="5" class="form-control" (change)="setEmployeeRoster($event.target.value)" [(ngModel)]="selectedEmployeeRoster.idrosters">
-                                    <option *ngFor="let rost of employeeRoster let i = index" [value]="rost.idrosters">{{i}}</option>
+                                <select size="5" class="form-control" (change)="setEmployeeRoster($event.target.value)"
+                                    [(ngModel)]="selectedEmployeeRoster.idrosters">
+                                    <option *ngFor="let rost of employeeRoster let i = index" [value]="rost.idrosters">
+                                        {{i}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row" style="margin-top:10px">
                             <div class="col-md-12" style="max-height:30px; padding:0px">
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn btn-outline-success" (click)="changeRoster(1)"><i class="fas fa-arrow-up"></i></button>
-                                    <button class="btn btn-outline-warning" (click)="changeRoster(-1)"><i class="fas fa-arrow-down"></i></button>
+                                    <button class="btn btn-outline-success" (click)="changeRoster(1)"><i
+                                            class="fas fa-arrow-up"></i></button>
+                                    <button class="btn btn-outline-warning" (click)="changeRoster(-1)"><i
+                                            class="fas fa-arrow-down"></i></button>
                                     <button class="btn btn-outline-danger"><i class="fas fa-minus"></i></button>
                                 </div>
                             </div>
@@ -109,19 +145,22 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label>TAG:</label>
-                                <input type="text" [disabled]="true" class="form-control" [(ngModel)]="selectedEmployeeRoster.tag">
+                                <input type="text" [disabled]="true" class="form-control"
+                                    [(ngModel)]="selectedEmployeeRoster.tag">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label>TAG:</label>
-                                <input type="text" [disabled]="true" class="form-control" [(ngModel)]="selectedEmployeeRoster.roster_name">
+                                <input type="text" [disabled]="true" class="form-control"
+                                    [(ngModel)]="selectedEmployeeRoster.roster_name">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label>ACTIVE WEEK:</label>
-                                <input type="text" [disabled]="true" class="form-control" [(ngModel)]="selectedEmployeeRoster.week_value">
+                                <input type="text" [disabled]="true" class="form-control"
+                                    [(ngModel)]="selectedEmployeeRoster.week_value">
                             </div>
                         </div>
                     </div>

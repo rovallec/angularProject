@@ -81,7 +81,6 @@ export class RostermaintenanceComponent implements OnInit {
           }
         })
         this.rosters = rsts;
-        console.log(rsts);
         let dt: number = new Date(periods[periods.length - 1].start).getTime();
         while (dt <= new Date(periods[periods.length - 1].end).getTime()) {
           dt = dt + (1000 * 3600 * 24);
