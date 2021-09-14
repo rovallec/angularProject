@@ -21,7 +21,7 @@ $sql = "INSERT INTO roster_types VALUES (NULL, '$tag', '$name', $id_mon, $id_tue
 if($result = mysqli_query($con, $sql)){
     echo("1");
 }else{
-    echo(mysqli_error($con));
+    echo(mysqli_error($con . " | " . $sql));
     http_response_code(404);
 }
 
