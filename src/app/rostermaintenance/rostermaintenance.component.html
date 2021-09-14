@@ -34,6 +34,9 @@
                 [disabled]="working" [ngClass]="{'btn-outline-success':!working, 'btn-outline-secondary':working}"><span
                     class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" *ngIf="working"></span><i
                     *ngIf="!working" class="fas fa-check-double"></i></button>
+            <button class="btn btn-outline-pink" style="margin-right: 15px;" [disabled]="working"
+                *ngIf="!createAttendances" data-toggle="modal" data-target="#copyRoster"><i
+                    class="far fa-copy"></i></button>
             <button class="btn btn-outline-purpple" style="margin-right: 15px;" [disabled]="working"
                 *ngIf="!createAttendances" data-target="#uploadRoster" data-toggle="modal"><i
                     class="fas fa-upload"></i></button>
@@ -216,7 +219,7 @@
         </div>
     </div>
 </div>
-<!------------------------------------------------------------------------------- ROSTER FILTER MODAL --------------------------------------------------------------------->
+<!------------------------------------------------------------------------------- ROSTER COPY MODAL --------------------------------------------------------------------->
 <div class="modal fade" id="uploadRoster" tabindex="-1" role="dialog" aria-labelledby="uploadRosterlLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -240,6 +243,48 @@
             <div class="modal-footer d-flex mt-2 justify-content-center">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
                     (mouseup)="ngOnInit()">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!------------------------------------------------------------------------------- ROSTER UPLOAD MODAL --------------------------------------------------------------------->
+<div class="modal fade" id="copyRoster" tabindex="-1" role="dialog" aria-labelledby="copyRosterLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="copyRosterLabel">COPY</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <label>FROM:</label>
+                        <select class="form-control" [(ngModel)]="selectedFromPeriod.idperiods" (change)="splicePeriods_to($event.target.value)">
+                            <option *ngFor="let period of periods_from" [value]="period.idperiods">{{period.start}} TO {{period.end}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label>TO:</label>
+                        <select class="form-control" [(ngModel)]="selectedToPeriod.idperiods" (change)="splicePeriods_from($event.target.value)">
+                            <option *ngFor="let period of periods_to" [value]="period.idperiods">{{period.start}} TO {{period.end}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-12">
+                        <label *ngIf="msg != ''" style="font-size: 14px; color:red">{{msg}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex mt-2 justify-content-center">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+                    (mouseup)="ngOnInit()">CLOSE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="copyRoster()">COPY</button>
             </div>
         </div>
     </div>
@@ -366,18 +411,22 @@
                         <div class="row col-md-12">
                             <div class="col-md-6">
                                 <label>TAG:</label>
-                                <select class="form-control" (change)="getRosters_templates($event.target.value)" *ngIf="!newRoster">
+                                <select class="form-control" (change)="getRosters_templates($event.target.value)"
+                                    *ngIf="!newRoster">
                                     <option *ngFor="let tag of roster_tags">{{tag}}</option>
                                 </select>
-                                <input type="text" *ngIf="newRoster" class="form-control" [(ngModel)]="selectedType.tag">
+                                <input type="text" *ngIf="newRoster" class="form-control"
+                                    [(ngModel)]="selectedType.tag">
                             </div>
                             <div class="col-md-6">
                                 <label>NAME:</label>
-                                <select class="form-control" (change)="setRosterType($event.target.value)" *ngIf="!newRoster">
+                                <select class="form-control" (change)="setRosterType($event.target.value)"
+                                    *ngIf="!newRoster">
                                     <option *ngFor="let roster of selected_types" value="{{roster.idroster_types}}">
                                         {{roster.name}}</option>
                                 </select>
-                                <input type="text" *ngIf="newRoster" class="form-control" [(ngModel)]="selectedType.name">
+                                <input type="text" *ngIf="newRoster" class="form-control"
+                                    [(ngModel)]="selectedType.name">
                             </div>
                         </div>
                         <div class="row col-md-12" style="margin-top:25px">

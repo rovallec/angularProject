@@ -46,6 +46,7 @@ if($res = mysqli_query($con, $sql)){
         }
     }
     if(mysqli_num_rows($res) == $eof){
+        echo(mysqli_affected_rows($transact));
         $transact->commit();
     }else{
         $error = mysqli_error($transact);

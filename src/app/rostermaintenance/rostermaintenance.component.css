@@ -205,3 +205,15 @@ color: white;
   border-color: #a370f7;
   color: white;
 }
+
+.btn-outline-pink{
+  background-color: white;
+  border-color: #e35d6a;
+  color: #e35d6a;
+}
+
+.btn-outline-pink:hover{
+  background-color: #e35d6a;
+  border-color: #e35d6a;
+  color:white;
+}

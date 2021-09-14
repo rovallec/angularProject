@@ -5,6 +5,7 @@ import { employees } from '../fullProcess';
 import { accounts, attendences, clients, periods, rosters, roster_times, roster_types, roster_views, roster_weeks } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { AuthServiceService } from '../auth-service.service';
+import { isNull } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-rostermaintenance',
@@ -49,9 +50,15 @@ export class RostermaintenanceComponent implements OnInit {
   file: any;
   arrayBuffer: any;
   filelist: any;
-  newRoster:boolean = false;
+  newRoster: boolean = false;
+  selectedFromPeriod: periods = new periods;
+  selectedToPeriod: periods = new periods;
+  periods_to: periods[] = [];
+  periods_from: periods[] = [];
+  msg: string = '';
 
   ngOnInit() {
+    this.newRoster = false;
     this.roster_modifications = [];
     this.rosters_show = [];
     this.selectedRosters = [];
@@ -66,7 +73,13 @@ export class RostermaintenanceComponent implements OnInit {
     this.accounts = [];
     this.searching = false;
     this.isAttendance = false;
+    this.periods_to = [];
+    this.periods_from = [];
 
+    this.apiServices.getPeriods().subscribe((p: periods[]) => {
+      this.periods_to = p;
+      this.periods_from = p;
+    })
     this.apiServices.getRoster_tags().subscribe((str: string[]) => {
       this.roster_tags = str;
       this.getRosters_templates(this.roster_tags[0]);
@@ -347,13 +360,16 @@ export class RostermaintenanceComponent implements OnInit {
   }
 
   saveRooster() {
-    if(this.newRoster){
-       
+    if (this.newRoster) {
+      this.apiServices.insertRosters(this.selectedType).subscribe((str: string) => {
+        this.ngOnInit();
+      })
+    } else {
+      this.apiServices.updateRosterType(this.selectedType).subscribe((str: roster_types[]) => {
+        this.selected_types = str;
+        this.selectedType = str[str.length - 1];
+      })
     }
-    this.apiServices.updateRosterType(this.selectedType).subscribe((str: roster_types[]) => {
-      this.selected_types = str;
-      this.selectedType = str[str.length - 1];
-    })
   }
 
   dayExist(nmb) {
@@ -952,16 +968,16 @@ export class RostermaintenanceComponent implements OnInit {
                 toInsert = new roster_weeks;
                 toInsert.id_employee = emp.sort((a, b) => Number(a.active) - Number(b.active))[0].idemployees;
                 toInsert.id_period = this.activePeriod.idperiods
-              }else if(i == this.period_days.length - 1){
+              } else if (i == this.period_days.length - 1) {
                 push.push(toInsert);
               }
             }
           }
-          if(num >= sheetToJson.length){
-            this.apiServices.insertImportedRosters(push).subscribe((str:string)=>{
-              if(Number(str) > 0){
+          if (num >= sheetToJson.length) {
+            this.apiServices.insertImportedRosters(push).subscribe((str: string) => {
+              if (Number(str) > 0) {
                 window.alert("Roster Inserted: " + str);
-              }else{
+              } else {
                 window.alert("Please contact your administrator\n" + str);
               }
             })
@@ -971,19 +987,84 @@ export class RostermaintenanceComponent implements OnInit {
     }
   }
 
-  deleteRoster(){
-    this.apiServices.deleteRoster(this.selectedEmployeeRoster).subscribe((str:string)=>{
+  deleteRoster() {
+    this.apiServices.deleteRoster(this.selectedEmployeeRoster).subscribe((str: string) => {
       this.employeeRoster.splice(this.employeeRoster.indexOf(this.selectedEmployeeRoster), 1);
-      if(str == '1'){
+      if (str == '1') {
         window.alert("Record successfully deleted");
-      }else{
+      } else {
         window.alert("Please contact your administrator\n" + str);
       }
     })
   }
 
-  setNewRoster(){
+  setNewRoster() {
     this.newRoster = true;
     this.selectedType = new roster_types;
+  }
+
+  splicePeriods_to(st: string) {
+    let periodToMove: periods = new periods;
+    let temp: periods[] = [];
+    this.apiServices.getPeriods().subscribe((p: periods[]) => {
+      this.periods_to = p;
+      this.periods_to.forEach(pp => {
+        if (pp.idperiods != st) {
+          temp.push(pp);
+        } else {
+          periodToMove = pp;
+        }
+      })
+      this.selectedFromPeriod = periodToMove;
+      this.periods_to = temp;
+      console.log(this.getMaxWeek_p(this.selectedToPeriod) + "|" + this.getMaxWeek_p(this.selectedFromPeriod));
+      if (this.getMaxWeek_p(this.selectedToPeriod) > this.getMaxWeek_p(this.selectedFromPeriod)) {
+        this.msg = "Doe the FROM period is smaller than the TO period, the last week will be duplicated";
+      } else if (this.getMaxWeek_p(this.selectedToPeriod) < this.getMaxWeek_p(this.selectedFromPeriod)) {
+        this.msg = "Doe the TO period is smaller than the FROM period, the last week will be ommited";
+      }
+    })
+  }
+
+  splicePeriods_from(st: string) {
+    let periodToMove: periods = new periods;
+    let temp: periods[] = [];
+    this.apiServices.getPeriods().subscribe((p: periods[]) => {
+      this.periods_from = p;
+      this.periods_from.forEach(pp => {
+        if (pp.idperiods != st) {
+          temp.push(pp);
+        } else {
+          periodToMove = pp;
+        }
+      })
+      this.selectedToPeriod = periodToMove;
+      this.periods_from = temp;
+      console.log(this.getMaxWeek_p(this.selectedToPeriod) + "|" + this.getMaxWeek_p(this.selectedFromPeriod));
+      if (this.getMaxWeek_p(this.selectedToPeriod) > this.getMaxWeek_p(this.selectedFromPeriod)) {
+        this.msg = "Doe the FROM period is smaller than the TO period, the last week will be duplicated";
+      } else if (this.getMaxWeek_p(this.selectedToPeriod) < this.getMaxWeek_p(this.selectedFromPeriod)) {
+        this.msg = "Doe the TO period is smaller than the FROM period, the last week will be ommited";
+      }
+    })
+  }
+
+  getMaxWeek_p(p: periods) {
+    let week: number = 1;
+    let dt: Date = new Date(p.start);
+    while (dt.getTime() <= new Date(p.end).getTime()) {
+      dt = new Date(dt.getTime() + (1000 * 3600 * 24));
+      if (dt.getDay() == 1) {
+        week++;
+      }
+    }
+    return week;
+  }
+
+  copyRoster(){
+    console.log({id_from:this.selectedFromPeriod.idperiods, id_to:this.selectedToPeriod.idperiods, max_week:this.getMaxWeek_p(this.selectedToPeriod)});
+    this.apiServices.copyRosters({id_from:this.selectedFromPeriod.idperiods, id_to:this.selectedToPeriod.idperiods, max_week:this.getMaxWeek_p(this.selectedToPeriod)}).subscribe((str:string)=>{
+      window.alert('Successfully copied ' + str + ' rosters from selected period');
+    })
   }
 }

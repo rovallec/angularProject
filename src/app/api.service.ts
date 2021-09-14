@@ -1046,6 +1046,10 @@ deleteRoster(rst:rosters){
 insertRosters(rst:roster_types){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertRostersTemplates.php`, rst);
 }
+
+copyRosters(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/copyRosters.php`, any);
+}
 }
 
 
