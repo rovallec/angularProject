@@ -22,7 +22,7 @@ $transact->begin_transaction();
 if($res = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($res)){
         if($id_employee != $row['id_employee']){
-            while($count <= $max){
+            while($count <= $max && $count != 0){
                 if($transact->query($sql_1)){
                     $count++;
                     $eof++;
