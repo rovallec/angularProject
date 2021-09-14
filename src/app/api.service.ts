@@ -1042,6 +1042,10 @@ insertImportedRosters(rosters:roster_weeks[]){
 deleteRoster(rst:rosters){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteRosters.php`, rst);
 }
+
+insertRosters(rst:roster_types){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertRostersTemplates.php`, rst);
+}
 }
 
 

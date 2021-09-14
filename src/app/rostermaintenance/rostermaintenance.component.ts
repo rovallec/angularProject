@@ -49,6 +49,7 @@ export class RostermaintenanceComponent implements OnInit {
   file: any;
   arrayBuffer: any;
   filelist: any;
+  newRoster:boolean = false;
 
   ngOnInit() {
     this.roster_modifications = [];
@@ -346,6 +347,9 @@ export class RostermaintenanceComponent implements OnInit {
   }
 
   saveRooster() {
+    if(this.newRoster){
+       
+    }
     this.apiServices.updateRosterType(this.selectedType).subscribe((str: roster_types[]) => {
       this.selected_types = str;
       this.selectedType = str[str.length - 1];
@@ -976,5 +980,10 @@ export class RostermaintenanceComponent implements OnInit {
         window.alert("Please contact your administrator\n" + str);
       }
     })
+  }
+
+  setNewRoster(){
+    this.newRoster = true;
+    this.selectedType = new roster_types;
   }
 }

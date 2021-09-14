@@ -34,8 +34,9 @@
                 [disabled]="working" [ngClass]="{'btn-outline-success':!working, 'btn-outline-secondary':working}"><span
                     class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true" *ngIf="working"></span><i
                     *ngIf="!working" class="fas fa-check-double"></i></button>
-            <button class="btn btn-outline-purpple" style="margin-right: 15px;"
-                [disabled]="working" *ngIf="!createAttendances" data-target="#uploadRoster" data-toggle="modal"><i class="fas fa-upload"></i></button>
+            <button class="btn btn-outline-purpple" style="margin-right: 15px;" [disabled]="working"
+                *ngIf="!createAttendances" data-target="#uploadRoster" data-toggle="modal"><i
+                    class="fas fa-upload"></i></button>
             <button class="btn btn-outline-success" style="margin-right: 15px;" (click)="ngOnInit()"
                 [disabled]="working" *ngIf="!createAttendances"><i class="fas fa-sync"></i></button>
         </div>
@@ -177,7 +178,8 @@
                                             class="fas fa-arrow-up"></i></button>
                                     <button class="btn btn-outline-warning" (click)="changeRoster(-1)"><i
                                             class="fas fa-arrow-down"></i></button>
-                                    <button class="btn btn-outline-danger"><i class="fas fa-minus" (click)="deleteRoster()"></i></button>
+                                    <button class="btn btn-outline-danger"><i class="fas fa-minus"
+                                            (click)="deleteRoster()"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -208,7 +210,8 @@
                 </div>
             </div>
             <div class="modal-footer d-flex mt-2 justify-content-center">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (mouseup)="ngOnInit()">CLOSE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+                    (mouseup)="ngOnInit()">CLOSE</button>
             </div>
         </div>
     </div>
@@ -235,7 +238,8 @@
                 </div>
             </div>
             <div class="modal-footer d-flex mt-2 justify-content-center">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (mouseup)="ngOnInit()">CLOSE</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
+                    (mouseup)="ngOnInit()">CLOSE</button>
             </div>
         </div>
     </div>
@@ -361,15 +365,19 @@
                     <div class=" col-md-12">
                         <div class="row col-md-12">
                             <div class="col-md-6">
-                                <select class="form-control" (change)="getRosters_templates($event.target.value)">
+                                <label>TAG:</label>
+                                <select class="form-control" (change)="getRosters_templates($event.target.value)" *ngIf="!newRoster">
                                     <option *ngFor="let tag of roster_tags">{{tag}}</option>
                                 </select>
+                                <input type="text" *ngIf="newRoster" class="form-control" [(ngModel)]="selectedType.tag">
                             </div>
                             <div class="col-md-6">
-                                <select class="form-control" (change)="setRosterType($event.target.value)">
+                                <label>NAME:</label>
+                                <select class="form-control" (change)="setRosterType($event.target.value)" *ngIf="!newRoster">
                                     <option *ngFor="let roster of selected_types" value="{{roster.idroster_types}}">
                                         {{roster.name}}</option>
                                 </select>
+                                <input type="text" *ngIf="newRoster" class="form-control" [(ngModel)]="selectedType.name">
                             </div>
                         </div>
                         <div class="row col-md-12" style="margin-top:25px">
@@ -504,7 +512,7 @@
                                             <label>Fixed:</label>
                                             <input type=text class="form-control" [(ngModel)]="selectedSchedule.fixed"
                                                 [disabled]="true" *ngIf="!editingTimes">
-                                            <input type="time" class="form-control" [(ngModel)]="selectedSchedule.fixed"
+                                            <input type="text" class="form-control" [(ngModel)]="selectedSchedule.fixed"
                                                 *ngIf="editingTimes">
                                         </div>
                                     </div>
@@ -522,10 +530,10 @@
             </div>
             <div class="modal-footer d-flex justify-content-between mt-2">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCE</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="setNewRoster()"
+                    *ngIf="!needUpdate(1) && !needUpdate(2) && !needUpdate(3) && !needUpdate(4) && !needUpdate(5) && !needUpdate(6) && !needUpdate(7) && !newRoster">NEW</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
-                    *ngIf="!needUpdate(1) && !needUpdate(2) && !needUpdate(3) && !needUpdate(4) && !needUpdate(5) && !needUpdate(6) && !needUpdate(7)">ADD</button>
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
-                    *ngIf="needUpdate(1) || needUpdate(2) || needUpdate(3) || needUpdate(4) || needUpdate(5) || needUpdate(6) || needUpdate(7)"
+                    *ngIf="needUpdate(1) || needUpdate(2) || needUpdate(3) || needUpdate(4) || needUpdate(5) || needUpdate(6) || needUpdate(7) || newRoster"
                     (click)="saveRooster()">SAVE</button>
             </div>
         </div>
