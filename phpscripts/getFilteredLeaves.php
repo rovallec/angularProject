@@ -4,10 +4,7 @@ header('Access-Control-Allow-Headers: *');
 require 'database.php';
 require 'funcionesVarias.php';
 
-//$postdata = file_get_contents("php://input");
 $postdata = trim(file_get_contents("php://input"), "\xEF\xBB\xBF");
-//$postdata = utf8_encode($postdata);
-//$postdata = json_encode($postdata);
 $request = json_decode($postdata);
 
 $name = ($request->name);
@@ -15,14 +12,6 @@ $start = ($request->start);
 $end = ($request->end);
 $idsup = ($request->idsup);
 
-/*
-echo($postdata);
-echo "<br>";
-echo(json_encode($request));
-echo "<br>";
-echo($request);
-echo "<br>";
-*/
 $return = [];
 $i = 0;
 $and = ";";
@@ -53,9 +42,9 @@ $sql = "SELECT
         INNER JOIN hires h ON h.idhires = e.id_hire 
         INNER JOIN (SELECT UPPER(CONCAT(TRIM(p1.first_name), ' ', TRIM(p1.second_name), ' ', TRIM(p1.first_lastname), ' ', TRIM(p1.second_lastname))) as name, p1.idprofiles from profiles p1) p2 on (p2.idprofiles = h.id_profile)
         WHERE hr.status = 'REQUESTED'
-          and l.`start` >= '$start'
-          and l.`end` <= '$end'
-          and e.reporter = " . $idsup .
+          AND (l.`start` BETWEEN '$start' AND '$end'
+          OR l.`end` BETWEEN '$start' AND '$end')
+          AND e.reporter = " . $idsup .
         $and;
 
 if($result = mysqli_query($con, $sql)){
@@ -73,6 +62,7 @@ if($result = mysqli_query($con, $sql)){
     $return[$i]['start'] = $res['start'];
     $return[$i]['end'] = $res['end'];
     $return[$i]['dateTime'] = $res['time'];
+    $return[$i]['chequed'] = 'false';
     $i++;
   }
   echo(json_encode($return));
