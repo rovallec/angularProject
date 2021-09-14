@@ -35,8 +35,8 @@ if($res = mysqli_query($con, $sql)){
         $id_employee = $row['id_employee'];
         $id_type = $row['id_type'];
         $week = $row['week_value'];
-        if($count <= (int)$max){
-            $sql_1 = "INSERT INTO rosters VALUES (NULL, $id_employee, $id_to, $id_type, $week);";
+        if($count <= $max){
+            $sql_1 = "INSERT INTO rosters VALUES (NULL, $id_employee, $id_to, $id_type, '$week');";
             if($transact->query($sql_1)){
                 $count++;
                 $eof++;
