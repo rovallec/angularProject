@@ -172,7 +172,17 @@ export class attendences {
     igss:string;
     tk_exp:string;
     tk_imp:string;
-    constructor() {
+    schedule_fix:string;
+    time_in_aux0:string;
+    time_in_systems_issues:string;
+    time_in_lunch:string;
+    break_abuse:string;
+    exceptions_meeting_feedback:string;
+    exceptions_offline_training:string;
+    systems_issues_by_sup:string;
+    floor_support:string;
+    time_training:string;
+        constructor() {
         this.igss = '0';
         this.tk_exp = '0';
         this.idattendences = null;
@@ -193,6 +203,16 @@ export class attendences {
         this.balance = null;
         this.state = null;
         this.tk_imp = null;
+        this.time_in_aux0 = null;
+        this.time_in_systems_issues = null;
+        this.time_in_lunch = null;
+        this.break_abuse = null;
+        this.exceptions_meeting_feedback = null;
+        this.exceptions_offline_training = null;
+        this.systems_issues_by_sup = null;
+        this.floor_support = null;
+        this.time_training = null;
+        this.schedule_fix = null
     }
 }
 
@@ -978,6 +998,7 @@ export class sup_exception {
     status: string;
     id_employee:string;
     duplicated:string;
+    id_type:string;
     constructor() {
         this.avaya = null;
         this.name = null;
@@ -989,6 +1010,7 @@ export class sup_exception {
         this.status = "FALSE";
         this.id_employee = null;
         this.duplicated = '0';
+        this.id_type = null;
     }
 }
 

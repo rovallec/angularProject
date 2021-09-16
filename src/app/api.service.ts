@@ -1050,6 +1050,10 @@ insertRosters(rst:roster_types){
 copyRosters(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/copyRosters.php`, any);
 }
+
+insertScheduleFix(adj:attendences_adjustment){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertScheduleFix.php`, adj)
+}
 }
 
 
