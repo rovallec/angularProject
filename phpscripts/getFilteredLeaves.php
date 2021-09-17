@@ -24,6 +24,7 @@ if (ifExist($name)) {
 
 $sql = "SELECT 
           DISTINCT e.reporter, 
+          p2.name,
           e.idemployees, 
           h.*, 
           hr.*, 
@@ -63,6 +64,7 @@ if($result = mysqli_query($con, $sql)){
     $return[$i]['end'] = $res['end'];
     $return[$i]['dateTime'] = $res['time'];
     $return[$i]['chequed'] = 'false';
+    $return[$i]['name'] = $res['name'];
     $i++;
   }
   echo(json_encode($return));
