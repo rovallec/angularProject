@@ -6,10 +6,7 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
-echo($request);
-echo(json_encode($request));
-
-$idattendences = ($request->idattendences);
+$idattendences = ($request->id_attendence);
 $id_employee = ($request->id_employee);
 $status = ($request->status);
 $state = ($request->state);
@@ -28,35 +25,40 @@ try
       $row = $res->fetch_assoc();
       $idhr_processes = $row['idhr_processes'];
       $sql2 = "UPDATE hr_processes SET 
-              status = $status
+              status = '$status'
               WHERE idhr_processes = $idhr_processes;";
 
     if ($res2 = $transact->query($sql2) === true) {
       $sql3 = "UPDATE attendence_adjustemnt SET
-              state = $state
-              WHERE id_attendence = $idattendences;"
+              state = '$state'
+              WHERE id_attendence = $idattendences;";
       
       if ($res3 = $transact->query($sql3) === true) {
-        echo("poceso ejecutado correctamente.");
+        echo("Proceso ejecutado correctamente.");
+        http_response_code(200);
       } else {
         $error =  mysqli_error($transact);
           echo("<br>Error : " . $error . "<br>");
           throw new Exception($error);
+          http_response_code(403);
       }
     } else {
       $error =  mysqli_error($transact);
       echo("<br>Error : " . $error . "<br>");
       throw new Exception($error);
+      http_response_code(402);
     }
   } else {
     $error =  mysqli_error($transact);
     echo("<br>Error : " . $error . "<br>");
     throw new Exception($error);
+    http_response_code(401);
   }
 } catch(\Throwable $e) {
   $error = "Error: |Unable to update the justification due to the following error: |" . $e->getMessage() . "|The changes will be reversed.";  
   echo(json_encode($error));
   $transact->rollback();
+  http_response_code(404);
 }
 
 $transact->close();

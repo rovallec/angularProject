@@ -9,11 +9,12 @@
     $id = ($request->id);
     $result = [];
 
-    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name`, profiles.gender FROM `employees`
-    LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
-    LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
+    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name`, profiles.gender 
+    FROM `employees`
+    INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
+    INNER JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
     LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile
-    LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `id_profile` = $id;";
+    INNER JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `hires`.`id_profile` = $id;";
 
     if($res = mysqli_query($con, $sql)){
         while($r = mysqli_fetch_assoc($res)){

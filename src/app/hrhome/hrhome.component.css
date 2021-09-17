@@ -1,61 +1,61 @@
-thead{
-    line-height: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    background-color: rgb(245, 244, 244);
-    font-style: normal;
-    border-color: rgb(235, 234, 234);
-    border-style: solid;
-    border-width: 1.5px;
+thead {
+  line-height: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  background-color: rgb(245, 244, 244);
+  font-style: normal;
+  border-color: rgb(235, 234, 234);
+  border-style: solid;
+  border-width: 1.5px;
 }
-thead th{
-    border-right-style: solid;
-    padding: 0.50rem;
-    border-width: 1px;
-    border-right-color: rgb(233, 232, 232);
+thead th {
+  border-right-style: solid;
+  padding: 0.5rem;
+  border-width: 1px;
+  border-right-color: rgb(233, 232, 232);
 }
-tbody td{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    padding: 0.50rem;
-    border-right-style: solid;
-    line-height: 0.60;
-    border-width: 1px;
-    border-right-color: rgb(233, 232, 232);
+tbody td {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  padding: 0.5rem;
+  border-right-style: solid;
+  line-height: 0.6;
+  border-width: 1px;
+  border-right-color: rgb(233, 232, 232);
 }
-tbody tr{
-    font-size:12px;
-    cursor: pointer;
+tbody tr {
+  font-size: 12px;
+  cursor: pointer;
 }
-i{
-    cursor:pointer;
-}
-
-.table-light{
-    text-align: center;
-    border-collapse: collapse;
-    border: solid 2px #e9e8e8;
-    text-transform: uppercase;
-    line-height: inherit;
+i {
+  cursor: pointer;
 }
 
-.table-light tr td{
-    text-align: center;
-    text-transform: uppercase;
-    line-height: inherit;
-    border: solid 2px #e9e8e8;
-    padding:0px;
+.table-light {
+  text-align: center;
+  border-collapse: collapse;
+  border: solid 2px #e9e8e8;
+  text-transform: uppercase;
+  line-height: inherit;
 }
-.table-light tr td{
-    text-align: center;
-    text-transform: uppercase;
-    line-height: inherit;
-    border: solid 2px #e9e8e8;
-    padding:0px;
+
+.table-light tr td {
+  text-align: center;
+  text-transform: uppercase;
+  line-height: inherit;
+  border: solid 2px #e9e8e8;
+  padding: 0px;
 }
-.table-light tr{
-    text-align: center;
-    text-transform: uppercase;
-    line-height: inherit;
-    border: solid 2px #e9e8e8;
-    padding:0px;
+.table-light tr td {
+  text-align: center;
+  text-transform: uppercase;
+  line-height: inherit;
+  border: solid 2px #e9e8e8;
+  padding: 0px;
+}
+.table-light tr {
+  text-align: center;
+  text-transform: uppercase;
+  line-height: inherit;
+  border: solid 2px #e9e8e8;
+  padding: 0px;
 }

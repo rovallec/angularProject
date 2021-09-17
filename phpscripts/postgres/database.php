@@ -26,11 +26,6 @@ function connect()
   if (!$connect) {
     die('Error de conexión: ' . pg_result_error($connect));
   }
-	/*if(mysqli_connect_errno($connect))
-	{
-		die("Failed to connect: " . mysqli_connect_errno());
-	}
-*/
 	return $connect;
 }
 

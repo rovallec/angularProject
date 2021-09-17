@@ -9,13 +9,13 @@ $request = json_decode($postdata);
 $id_process = ($request->id_process);
 $status = ($request->status)
 
-$sql = "UPDATE `hr_processes` SET `status` = '$status', `notes` = `notes` . '|| $status By ' WHERE `idhr_processes` = $id_process;";
+$sql = "UPDATE `hr_processes` SET `status` = '$status', `notes` = `notes` . '|| ' . $status . ' By ' WHERE `idhr_processes` = $id_process;";
 
 if(mysqli_query($con, $sql)){
+    echo(json_encode('1'));
     http_response_code(200);
-    echo('1');
-}else{
+} else {
+    echo(json_encode($sql));
     http_response_code(404);
-    echo($sql);
 }
 ?>

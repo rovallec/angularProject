@@ -144,7 +144,7 @@ export class HrprofilesComponent implements OnInit {
 
   termNotification: string = 'YES';
   editingEmail: boolean = false;
-  editingGender:boolean = false;  
+  editingGender:boolean = false;
   editingBirthday:boolean = false;
   editingProfesion:boolean = false;
   editingJob:boolean = false;
@@ -314,6 +314,7 @@ export class HrprofilesComponent implements OnInit {
 
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.workingEmployee = emp;
+      console.log(emp);
       this.profile[0].date_joining = emp.hiring_date;
       this.activeEmp = emp.idemployees;
       this.accId = emp.account;
@@ -389,8 +390,8 @@ export class HrprofilesComponent implements OnInit {
         }
       })
       this.apiService.getAttendences({ id: this.route.snapshot.paramMap.get('id'), date: "<= '" + dt + "'" }).subscribe((att: attendences[]) => {
-        this.apiService.getVacations({ id: this.workingEmployee.id_profile }).subscribe((vac: vacations[]) => {
-          this.apiService.getLeaves({ id: this.workingEmployee.id_profile }).subscribe((leave: leaves[]) => {
+        this.apiService.getVacations({ id: this.route.snapshot.paramMap.get('id') }).subscribe((vac: vacations[]) => {
+          this.apiService.getLeaves({ id: this.route.snapshot.paramMap.get('id') }).subscribe((leave: leaves[]) => {
             this.apiService.getDPAtt({ id: this.workingEmployee.idemployees, date_1: actualPeriod.start, date_2: actualPeriod.end }).subscribe((dp: disciplinary_processes[]) => {
               this.apiService.getTermdt(this.workingEmployee).subscribe((trm: terminations) => {
                 this.showAttendences = att;
@@ -512,7 +513,7 @@ export class HrprofilesComponent implements OnInit {
   getAttAdjustemt() {
     this.editAdj = false;
     this.apiService.getAttAdjustments({ id: this.activeEmp }).subscribe((adj: attendences_adjustment[]) => {
-      
+
       this.showAttAdjustments = [];
       if (adj.length >= 16) {
         for (let i = (adj.length - 1); i > (adj.length - 16); i = i - 1) {
@@ -767,7 +768,7 @@ export class HrprofilesComponent implements OnInit {
     leave.id_type = '5';
     leave.id_department = this.activeLeave.id_department;
     leave.date = this.activeLeave.date;
-    leave.notes = this.activeLeave.notes + '|| Created by split start: ' + 
+    leave.notes = this.activeLeave.notes + '|| Created by split start: ' +
                   this.activeLeave.start + ' end: ' + this.activeLeave.end + '.';
     leave.status = 'PENDING';
     leave.motive = this.activeLeave.motive;
@@ -783,7 +784,7 @@ export class HrprofilesComponent implements OnInit {
     let end: string = '';
     let f: Date = new Date(this.leaveDates[0].dates);
     f = this.addDays(f, 1);
- 
+
     this.activeLeave.id_type = '5';
     this.activeLeave.id_employee = this.workingEmployee.idemployees;
     note = leave.notes;
@@ -797,13 +798,13 @@ export class HrprofilesComponent implements OnInit {
         let ld: leavesAction = this.leaveDates[i];
         if (ld.action=='PENDING') {
           start = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
-          
+
           if ((leave.start == null) || (leave.start.trim() == '')) {
             leave.start = start;
           }
 
           leave.status = 'PENDING';
-          
+
           console.log('Estado pendiente: ');
           console.log(leave);
           console.log("<br>");
@@ -813,7 +814,7 @@ export class HrprofilesComponent implements OnInit {
           if (!isNullOrUndefined(leave.start)) {
             leave.end = end;
             leavesNew.push(leave);
-          } 
+          }
           console.log(leave);
           leave = this.fillLeave();
           f = this.addDays(f, 1);
@@ -828,7 +829,7 @@ export class HrprofilesComponent implements OnInit {
         }
       }
 
-      leavesNew.forEach(ln => {        
+      leavesNew.forEach(ln => {
         this.apiService.insertLeaves(ln).subscribe((_str: string) => {
           this.complete_adjustment = true;
           this.getLeaves();
@@ -854,7 +855,7 @@ export class HrprofilesComponent implements OnInit {
 
     let days: number = new Date(leave.end).getTime() - new Date(leave.start).getTime();
     days = days / (1000*3600*24);
-    
+
     start = new Date(leave.start).getDate();
     end = new Date(leave.end).getDate();
 
@@ -865,13 +866,13 @@ export class HrprofilesComponent implements OnInit {
 
     for (let i = 0; i <= days; i++) {
       let ld: leavesAction = new leavesAction;
-      f = this.addDays(f, 1); 
+      f = this.addDays(f, 1);
 
       ld.dates = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
       ld.action = 'PENDING';
       this.leaveDates.push(ld);
     }
-    
+
   }
 
   addDays(fecha: Date, days: number): Date {
@@ -1812,7 +1813,7 @@ export class HrprofilesComponent implements OnInit {
 
     this.transfer_newCode = this.apiService.getCode(transfer.prefix, transfer.correlative, length);
   }
-  
+
   getIrtra() {
     let m: string;
     let f: string;
@@ -1903,7 +1904,7 @@ export class HrprofilesComponent implements OnInit {
   editAddress() {
     this.editingAddress = true;
   }
-  
+
   editBirthday(){
     this.editingBirthday = true;
   }
@@ -1911,7 +1912,7 @@ export class HrprofilesComponent implements OnInit {
   editGender(){
     this.editingGender = true;
   }
-  
+
   editProfesion(){
     this.editingProfesion = true;
   }
@@ -1943,7 +1944,7 @@ export class HrprofilesComponent implements OnInit {
   editHeadsets(){
     this.editingHeadsets = true;
   }
-  
+
 
   closeEditNames() {
     if (this.editingAddress) {
