@@ -61,7 +61,7 @@ if(isset($postdata) && !empty($postdata)){
   $institution_name = ($request->institution_name);
   $degree = ($request->degree);
   $name = ($request->name);
-  $description = ($request->description);
+  $description = 'First Interview';
   $waves = json_decode(json_encode($request->wave));
   $date = formatDates(($waves->starting_date));
   $id_userpr = ($request->id_userpr);
