@@ -541,7 +541,7 @@ export class HrprofilesComponent implements OnInit {
         this.showAttendences.forEach(att_show=>{
           if(att_show.date == at_adj.attendance_date && (at_adj.id_department == '5' || at_adj.id_department == '27')){
             att_show.igss = (Number(att_show.igss) + Number(at_adj.amount)).toFixed(2);
-          }else if(att_show.date == at_adj.attendance_date && at_adj.id_department == '28'){
+          }else if(att_show.date == at_adj.attendance_date && at_adj.id_department == '28' && (at_adj.reason != 'Schedule FIX')){
             att_show.tk_exp = (Number(att_show.tk_exp) + Number(at_adj.amount)).toFixed(2);
           }
         })

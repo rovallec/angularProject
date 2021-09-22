@@ -188,6 +188,41 @@ export class AttendenceImportComponent implements OnInit {
               supervisors.supervisor = element['SUPERVISOR'];
               supervisors.time = element['TIME'];
               supervisors.id_type = element['TYPE'];
+              switch (supervisors.id_type.toString()) {
+                case '1':
+                  supervisors.reason = 'Schedule FIX';
+                  break;
+                case '2':
+                  supervisors.reason = 'Time in Aux 0';
+                  break;
+                case '3':
+                  supervisors.reason = 'Time In System Issues';
+                  break;
+                case '4':
+                  supervisors.reason = 'Time in lunch';
+                  break;
+                case '5':
+                  supervisors.reason = 'Break Abuse';
+                  break;
+                case '6':
+                  supervisors.reason = 'Exceptions Meeting & feedback';
+                  break;
+                case '7':
+                  supervisors.reason = 'Exceptions offline Training';
+                  break;
+                case '8':
+                  supervisors.reason = 'System Issues by Sup';
+                  break;
+                case '9':
+                  supervisors.reason = 'Floor Support';
+                  break;
+                case '10':
+                  supervisors.reason = 'TIME TRAINING';
+                  break;
+                case '11':
+                  supervisors.reason = 'CCR Productive';
+                  break;
+              }
               this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: supervisors.avaya, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
                 if (isNull(emp)) {
                   supervisors.status = 'FALSE';
@@ -211,7 +246,7 @@ export class AttendenceImportComponent implements OnInit {
                 this.sups.forEach(element => {
                   let add: boolean = true;
                   temp_sups.forEach(temp => {
-                    if (temp.avaya == element.avaya && temp.date == element.date && temp.time == element.time) {
+                    if (temp.avaya == element.avaya && temp.date == element.date && temp.time == element.time && element.reason == temp.reason) {
                       add = false;
                       duplicated++;
                     }
@@ -378,6 +413,10 @@ export class AttendenceImportComponent implements OnInit {
                     adjustment.time_before = attendance[0].worked_time;
                     adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
                     adjustment.amount = sup.time;
+                  }else{
+                    adjustment.amount = sup.time;
+                    adjustment.time_before = attendance[0].worked_time;
+                    adjustment.time_after = attendance[0].worked_time;
                   }
                   adjustment.state = "PENDING";
                   if(adjust_sch){

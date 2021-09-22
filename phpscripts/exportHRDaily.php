@@ -185,9 +185,9 @@ FROM
     INNER JOIN hires ON hires.idhires = `emp`.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = `emp`.id_account
-   INNER JOIN (
+    INNER JOIN (
 		select date_add('$start', interval `row` day) AS `dates` from
-		( 
+		(
 			SELECT @rowd := @rowd + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
