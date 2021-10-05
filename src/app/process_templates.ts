@@ -207,6 +207,7 @@ export class attendences_adjustment {
     start:string;
     end:string;
     dateTime:string;
+    name: string;
     //justifications
     id_process: string;
     reason: string;
@@ -222,7 +223,7 @@ export class attendences_adjustment {
     error:string;
     nearsol_id:string;
     adj_type:string;
-    account:string;
+    account: string;
     constructor() {
         //adjustments
         this.idattendence_adjustemnt = null;
@@ -235,6 +236,7 @@ export class attendences_adjustment {
         this.state = null;
         this.start = null;
         this.end = null;
+        this.name = null;
         //justifications
         this.id_process = null;
         this.reason = null;
@@ -2003,7 +2005,6 @@ export class paystubview{
         this.ignore = false;
     }
 }
-
 export class contractCheck{
     name:string;
     birthday:string;
@@ -2122,3 +2123,82 @@ export class employeesByWaves {
         this.action = null;
     }
 }
+
+export class clauses {
+  idclauses: string;
+  name: string;
+  description: string
+  constructor() {
+    this.idclauses = null;
+    this.name = null;
+    this.description = null;
+  }
+}
+
+export class contract_templates {
+  idtemplates: string;
+  name: string;
+  constructor() {
+    this.idtemplates = null;
+    this.name = null;
+  }
+
+  public set _idtemplates(value : string) {
+    this.idtemplates = value;
+  }
+
+  public get _idtemplates() : string {
+    return this.idtemplates;
+  }
+
+  public set _name(value : string) {
+    this.name = value;
+  }
+
+  public get _name() : string {
+    return this.name;
+  }
+
+}
+
+export class clauses_templates {
+  idclauses_templates: string;
+  id_clause: string;
+  id_template: string;
+  ordernum: string;
+  tag: string;
+  selected: boolean;
+  private oldordernum: string;
+  private newordernum: string;
+  constructor() {
+    this.idclauses_templates = null;
+    this.id_clause = null;
+    this.id_template = null;
+    this.ordernum = null;
+    this.tag = null;
+    this.selected = false;
+    this.oldordernum = null;
+    this.newordernum = null;
+  }
+
+  setnewordernum(val: string) {
+    this.oldordernum = this.ordernum;
+    this.newordernum = val;
+    this.ordernum = val;
+  }
+
+  getoldordernum(): string {
+    return this.oldordernum;
+  }
+ }
+
+export class all_templates extends clauses_templates {
+  nameTemplate: string;
+  clauses: clauses[];
+  constructor() {
+    super();
+    this.nameTemplate = null;
+    this.clauses = [];
+  }
+}
+

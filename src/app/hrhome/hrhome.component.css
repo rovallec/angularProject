@@ -59,3 +59,31 @@ i {
   border: solid 2px #e9e8e8;
   padding: 0px;
 }
+
+.check {
+  background: white;
+  background-color: rgba(255, 255, 255, 0);
+  /*opacity:0.8; */
+  border: 0px;
+  color: #28a745;
+  border-color: white;
+}
+
+.check :hover {
+  background: #28a745;
+  background-color: rgba(255, 255, 255, 0);
+  /*opacity:0.8; */
+  border: 1px;
+  color: #fff;
+  background-color: #28a745;
+  border-color: white;
+}
+
+.select-sl {
+  height: 20px;
+  width: 200px;
+  background: none repeat scroll 0 0 #ffffff;
+  box-shadow: 0 0 10px #e8e8e8 inset;
+  border: 1px solid #3e3e3e;
+  border-radius: 5px;
+}

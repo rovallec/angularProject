@@ -25,10 +25,12 @@ if($result = mysqli_query($con,$sql)){
         $exportRow[5]=$row['dpi'];
         $exportRow[6]=$row['primary_phone'];
         for ($a=0; $a < 7; $a++) { 
-            if($days[$a]==explode(",", $row['days_off'])[0] || $days[$a]==explode(",", $row['days_off'])[1]){
-                $exportRow[7+$a] = "OFF";
-            }else{
-                $exportRow[7+$a] = explode(":",$row['start_time'])[0] . ":" . explode(":",$row['start_time'])[1] . "-" . explode(":", $row['end_time'])[0] . ":" . explode(":", $row['end_time'])[1];
+            if (strpos($row['days_off'], ',')) {
+                if($days[$a]==explode(",", $row['days_off'])[0] || $days[$a]==explode(",", $row['days_off'])[1]){
+                    $exportRow[7+$a] = "OFF";
+                }else{
+                    $exportRow[7+$a] = explode(":",$row['start_time'])[0] . ":" . explode(":",$row['start_time'])[1] . "-" . explode(":", $row['end_time'])[0] . ":" . explode(":", $row['end_time'])[1];
+                }
             }
         }
         fputcsv($output, $exportRow);

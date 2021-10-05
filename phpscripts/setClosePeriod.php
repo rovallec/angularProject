@@ -48,7 +48,7 @@ try {
     throw new Exception($error);
   }
 
-  $sql2 =  "SELECT COUNT(start) AS count FROM periods WHERE START = $v_start";
+  $sql2 =  "SELECT COUNT(start) AS count FROM periods WHERE start = $v_start AND type_period=0;";
   if ($result2 = $transact->query($sql2)) {
     $row2 = $result2->fetch_assoc();
     $count = $row2['count'];          

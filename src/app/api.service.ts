@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -13,6 +13,7 @@ import { applyent_contact, schedule_visit } from './addTemplate';
 import { Data } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { isNullOrUndefined } from 'util';
+import { isEmptyExpression } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,10 @@ PHP_API_SERVER = environment.PHP_root; // Desarrollo
 //PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
+
+isEmptyString(str: String): boolean {
+  return (str.trim() === '' || isNullOrUndefined(str));
+}
 
 readProfiles():Observable<profiles[]>{
   return this.httpClient.get<profiles[]>(`${this.PHP_API_SERVER}/phpscripts/read_profiles.php`);
@@ -529,6 +534,10 @@ setCloseActualPeriods(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setCloseActualPeriod.php`, any);
 }
 
+updateClauseTemplate(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateClauseTemplate.php`, any);
+}
+
 setCompleted(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/setCompleted.php`, any);
 }
@@ -977,6 +986,38 @@ updateTermination(term:terminations){
 
 getDates(Dates:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/getDates.php`, Dates);
+}
+
+getClauses(){
+  return this.httpClient.get<clauses[]>(`${this.PHP_API_SERVER}/phpscripts/getClauses.php`);
+}
+
+saveClause(any: clauses) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/saveClause.php`, any);
+}
+
+deleteClause(any: clauses) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteClause.php`, any);
+}
+
+updateClause(any: clauses) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateClause.php`, any);
+}
+
+getContract_Templates(){
+  return this.httpClient.get<contract_templates[]>(`${this.PHP_API_SERVER}/phpscripts/getContract_Templates.php`);
+}
+
+getClauses_Templates(){
+  return this.httpClient.get<clauses_templates[]>(`${this.PHP_API_SERVER}/phpscripts/getClauses_Templates.php`);
+}
+
+saveClauseTemplate(any: clauses_templates) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/saveClauseTemplate.php`, any);
+}
+
+deleteClauseTemplate(any: clauses_templates) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteClauseTemplate.php`, any);
 }
 
 }

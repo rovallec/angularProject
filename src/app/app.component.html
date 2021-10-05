@@ -1,25 +1,25 @@
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#003b71">
   <a class="navbar-brand" *ngIf="!getAuth()">
-    <img src="http://172.18.2.45/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+    <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px">
   </a>
   <a class="navbar-brand" *ngIf="getAuth()">
-    <img src="http://172.18.2.45/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+    <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/rehome" *ngIf="getSaved().department == '2'"
       (click)="SetSel('HOME')">
-    <img src="http://172.18.2.45/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+    <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/achome" *ngIf="getSaved().department == '4'"
       (click)="SetSel('HOME')">
-    <img src="http://172.18.2.45/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+    <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/pyhome" *ngIf="getSaved().department == '28'"
       (click)="SetSel('HOME')">
-    <img src="http://172.18.2.45/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+    <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/fhome" *ngIf="getSaved().department == '29'"
       (click)="SetSel('HOME')">
-    <img src="http://172.18.2.45/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+    <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/hrhome"
       *ngIf="getSaved().department == '5' || getSaved().department == '27'">
-    <img src="http://172.18.2.45/assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+    <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/acphhome" *ngIf="getSaved().department == '37'"
       (click)="SetSel('HOME')">
   </a>
@@ -111,7 +111,7 @@
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/vacationsrep"
-          style="color: white" [ngClass]="{'act':selectedOption=='VACATIONSREP'}" (click)="SetSel('VACATIONSREP')">VACATIONS REPORT</a> 
+          style="color: white" [ngClass]="{'act':selectedOption=='VACATIONSREP'}" (click)="SetSel('VACATIONSREP')">VACATIONS REPORT</a>
           <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/paystubs"
           style="color: white" [ngClass]="{'act':selectedOption=='PYST'}" (click)="SetSel('PYST')">PAYSTUBS</a>
       </li>

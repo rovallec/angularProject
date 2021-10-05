@@ -118,4 +118,98 @@ function getMonth($amonth){
   }
 }
 
+function number_letter($value) {
+  $lang = 'es';
+  $value = removeCommas($value);
+  $f = new NumberFormatter($lang, NumberFormatter::SPELLOUT);
+  $t = $f->format($value);
+  //
+  //$f = numfmt_create('es', NumberFormatter::SPELLOUT );
+  //$t = numfmt_format($f, $value);
+
+
+  return $t;
+}
+
+function date_letter($value) {
+  $values = explode('-', $value);
+  if(count($values) == 3 && checkdate($values[1], $values[0], $values[2])) {
+    $value = formatDates($value);
+  }
+  $letter = number_letter($values[0]) . " de " . getMonth($values[1]) . " del año " . number_letter($values[2]);    
+  return $letter;
+}
+
+function dpi_letter($value) {
+  $value = removeCommas($value);
+  $value = str_replace(' ', '', $value);
+  $chunk = array();
+  $chunk = str_split(strval($value));
+
+  if (count($chunk) == 13) {
+    $dpi1 = $chunk[0] . $chunk[1] . $chunk[2] . $chunk[3];
+    $dpi2 = $chunk[4] . $chunk[5] . $chunk[6] . $chunk[7] . $chunk[8];
+    $dpi3 = $chunk[9] . $chunk[10] . $chunk[11] . $chunk[12];
+
+    $f = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+    $t = '';
+    
+    $isCero = true;
+    $letter = '';
+    $i=0;
+    while ($i <= 3) {
+      if (($isCero) and ($chunk[$i]==0)) {
+        $letter = $letter . ' cero ';
+      } else {
+        $isCero = false;
+        $letter = $letter . $f->format($dpi1);
+        $t = $t . $letter;
+        break;
+      }
+      $i++;
+    };
+
+    $isCero = true;
+    $letter = '';
+    $i=4;
+    while ($i <= 8) {
+      if (($isCero) and ($chunk[$i]==0)) {
+        $letter = $letter . ' cero ';
+      } else {
+        $isCero = false;
+        $letter = $letter . $f->format($dpi2);
+        $t = $t . ' espacio ' . $letter;
+        break;
+      }
+      $i++;
+    };
+
+    $isCero = true;
+    $letter = '';
+    $i=9;
+    
+    while ($i <= 12) {
+      if (($isCero) and ($chunk[$i]==0)) {
+        $letter = $letter . ' cero ';
+      } else {
+        $isCero = false;
+        $letter = $letter . $f->format($dpi3);
+        $t = $t . ' espacio ' . $letter;
+        break;
+      }
+      $i++;
+    };
+  } else {
+    $t = '';
+  }
+
+  //$t = $t;
+  return $t;
+}
+
+$dpi = '193008430';
+//echo( $dpi);
+echo(dpi_letter($dpi));
+
+
 ?>

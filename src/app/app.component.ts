@@ -56,10 +56,10 @@ export class AppComponent {
 
   getEmployeeData(){
     this.SetSel("EMPD");
-    window.open("http://172.18.2.45/phpscripts/exportEmployeesData.php", "_blank");
+    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportEmployeesData.php", "_blank");
   }
 
-  
+
   getExceptions(){
     let dt:Date = new Date();
     let start:string = null;
@@ -74,11 +74,11 @@ export class AppComponent {
       end = nwDate.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString().padStart(2,"0") + "-" + nwDate.getDate().toString();
     }
     this.SetSel("EXPEX");
-    window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end , "_blank");
+    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end , "_blank");
   }
 
   getServicesReport(){
     this.SetSel("SERVR");
-    window.open("http://172.18.2.45/phpscripts/exportServicesF.php", "_blank");
+    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportServicesF.php", "_blank");
   }
 }

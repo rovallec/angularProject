@@ -24,7 +24,10 @@
         <table style="width: 100%; margin-top:20px">
             <tr *ngIf="!searching">
                 <td style="padding:6px; background-color:rgb(209, 225, 247); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255)">
-                    NEW EMPLOYEES<i class="fas fa-sync" style="margin-left:85vw;" (click)="start()"></i>
+                    NEW EMPLOYEES
+                    <i class="fas fa-file-export" style="margin-left: 85vw;" (click)="exportContractReport()" tittle="Export Contract Report"></i>
+                    <i class="fas fa-clone" style="margin-left:1vw;" data-toggle="modal" data-target="#contractClauses" tittle="Contract Clauses"></i>
+                    <i class="fas fa-sync" style="margin-left:1vw;" (click)="start()" tittle="Update"></i>
                 </td>
             </tr>
             <table style="width: 100%; padding-top:15px" *ngIf="!searching">
@@ -131,7 +134,7 @@
                                         <th>NEARSOL ID</th>
                                         <th>NAME</th>
                                         <th>STATUS</th>
-                                        <th>REPORT</th>
+                                        <th>CONTRACT</th>
                                         <th *ngIf="makeEmployee">PLATFORM</th>
                                         <th *ngIf="makeEmployee">GENERATE</th>
                                     </thead>
@@ -141,11 +144,10 @@
                                             <td style="padding:0px; vertical-align: middle;" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">{{emp.nearsol_id}}</td>
                                             <td style="padding:0px; vertical-align: middle;" (click)="setContractCheck(emp.idemployees)" data-toggle="modal" data-target="#contractCheck">{{emp.first_name}} {{emp.second_name}} {{emp.first_lastname}}
                                                 {{emp.second_lastname}}</td>
-                                            <td style="padding:0px; vertical-align: middle;" ><select [disabled]="!makeEmployee || emp.status === 'EMPLOYEE'"
-                                                    [(ngModel)]="emp.status"
-                                                    style="height:20px; width:100px;     border: 1px solid #3e3e3e;
-                                                border-radius: 5px 5px 5px 5px;
-                                                box-shadow: 0 0 10px #E8E8E8 inset;  padding: 2px;   background: none repeat scroll 0 0 #FFFFFF;">
+                                            <td style="padding:0px; vertical-align: middle;">
+                                              <select [disabled]="!makeEmployee || emp.status === 'EMPLOYEE'" [(ngModel)]="emp.status"
+                                                style="height:20px; width:100px; border: 1px solid #3e3e3e; border-radius: 5px 5px 5px 5px;
+                                                box-shadow: 0 0 10px #E8E8E8 inset; padding: 2px; background: none repeat scroll 0 0 #FFFFFF;">
                                                     <option>EMPLOYEE</option>
                                                     <option *ngIf="!makeEmployee">HIRED</option>
                                                     <option *ngIf="!makeEmployee">REJECTED</option>
@@ -154,9 +156,12 @@
                                                 </select>
                                             </td>
                                             <td style="padding:0px; vertical-align: middle;">
-                                              <button type="button" class="btn btn-outline-secondary" style="line-height: 0.4; width: 40px;">
-                                                <i class="fas fa-file-export"></i>
-                                              </button>
+                                              <select class="select-sl">
+                                                <option selected>Open this select menu</option>
+                                                <option value="1">One</option>
+                                                <option value="2">Two</option>
+                                                <option value="3">Three</option>
+                                              </select>
                                             </td>
                                             <td *ngIf="makeEmployee" style="padding:0px; vertical-align: middle;">
                                                 <select [disabled]="emp.status != 'EMPLOYEE'" style="height:20px; width:100px;     border: 1px solid #3e3e3e;
@@ -321,7 +326,8 @@
         </table>
     </div>
 </div>
-<!----------------------------------------------------------------- MODAL CONTRACT CHECK ----------------------------------------------------------------------->
+
+<!-- --------------------------------------------------- MODAL CONTRACT CHECK -------------------------------------------------------------------- -->
 <div class="modal fade" id="contractCheck" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -408,4 +414,170 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- ------------------------------------------------- MODAL CONTRACT clauses -------------------------------------------------------------------- -->
+<div class="modal fade" id="contractClauses" tabindex="-1" role="dialog" aria-labelledby="contractClausesLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-center">
+        <h5 class="modal-title" id="uploadBonusesLabel">CONTRACT CLAUSES</h5>
+      </div>
+      <div class="modal-body">
+        <div class="row col-md-12">
+          <div class="col-md-3">
+            <div class="row col-md-12">
+              <div class="form-group col-md-12">
+                <label>Name</label>
+                <select class="custom-select" size="1">
+                  <option *ngFor="let temp of templates" value="temp.idtemplates" (change)="selectContractTemplates(temp)" (click)="selectContractTemplates(temp)"> {{ temp.name }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <div class="row col-md-12">
+                  <div class="col col-md-12">
+                    <label>Tag</label>
+                  </div>
+                </div>
+                <div class="row col-md-12" style="padding-left: 0px;">
+                  <div class="col col-md-9">
+                    <input type="text" class="form-control" ([ngModel])="actAllTemplates.tag" value=" {{ actAllTemplates.tag }}" />
+                  </div>
+                  <div class="col col-md-3">
+                    <button type="button" data-bs-target="#addTagModalToggle" data-bs-toggle="modal"
+                      data-bs-dismiss="modal" (click)="changeClausesTagCheck()">
+                      <i class="far fa-check-square"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="row col-md-12">
+              <div class="form-group col-md-12">
+                <label>Assoc</label>
+                <select class="custom-select" size="5">
+                  <option *ngFor="let clause of filClauses" value="clause.idclauses" (click)="setClause(clause)" [selected]="actClause.idclauses==clause.idclauses"> {{ clause.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row col-md-12">
+              <div class="form-group col-md-12 d-flex justify-content-between">
+                <button type="button" (click)="upClause()">
+                  <i class="fas fa-angle-double-up"></i>
+                </button>
+                <button type="button" (click)="downClause()">
+                  <i class="fas fa-angle-double-down"></i>
+                </button>
+                <button type="button" (click)="deleteClauseTemplate()">
+                <i class="far fa-minus-square"></i>
+              </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row col-md-12" style="border-bottom: solid 4px #e3f2fd; margin-bottom: 20px; margin-left: 20px; width: 95%;"></div>
+        <div class="row col-md-12">
+          <div class="col-md-3">
+            <div class="row col-md-12">
+              <div class="form-group col-md-12">
+                <label>
+                  All Clauses
+                </label>
+                <select class="custom-select" size="5">
+                  <option *ngFor="let clause of clauses" value="clause.idclauses" (click)="selectClause(clause)"> {{ clause.name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row col-md-12">
+              <div class="form-group col-md-12 d-flex justify-content-between">
+                <button type="button" (click)="addNewClause()">
+                      <i class="far fa-plus-square"></i>
+                </button>
+                <button type="button" (click)="pushClause()" tittle="Add Clause to Contract">
+                  <i class="fas fa-level-up-alt"></i>
+                </button>
+                <button type="button" (click)="deleteClause()" tittle="Delete Clause">
+                  <i class="far fa-minus-square"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="row col-md-12">
+              <div class="form-group col-md-12 form-floating">
+                <label for="floatingTextarea">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="actClause.name">
+                <label for="floatingTextarea">Description</label>
+                <textarea class="form-control" placeholder="Description" id="floatingTextarea" [(ngModel)]="actClause.description" #message='ngModel'
+                  style="height: 140px; width: 100%;">
+                </textarea>
+              </div>
+            </div>
+            <div class="row col-md-12">
+              <div class="form-group col-md-12 d-flex justify-content-between">
+                <button type="button" (click)="cancelClause()">
+                  <i class="fas fa-window-close"></i>
+                </button>
+                <button type="button" (click)="saveClause()">
+                  <i class="fas fa-save"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center mt-2">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- --------------------------------------------- ADD MODAL CONTRACT clauses -------------------------------------------------------------------- -->
+<div class="modal fade" id="addTagModalToggle" aria-hidden="true" aria-labelledby="addTagContractClausesLabel"
+  tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTagContractClausesLabel">Add Clauses to Contract</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row col-md-12">
+          <div class="col-md-3">
+            <div class="row col-md-12">
+              <div class="form-group col-md-12">
+                <label>
+                  Clauses
+                </label>
+                <select class="custom-select" size="5">
+                  <option *ngFor="let clause of clauses" value="clause.idclauses" (click)="selectClause(clause)"> {{ clause.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row col-md-12">
+              <div class="form-group col-md-12 d-flex justify-content-between">
+                <button type="button" (click)="addNewClause()">
+                  <i class="far fa-plus-square"></i>
+                </button>
+                <button type="button" (click)="deleteClause()" tittle="Delete Clause">
+                  <i class="far fa-minus-square"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#contractClauses" data-bs-toggle="modal">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

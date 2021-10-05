@@ -1,10 +1,12 @@
+import { filter } from 'minimatch';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
-import { waves_template, hires_template, attendences, disciplinary_processes, process_templates, contractCheck } from '../process_templates';
+import { waves_template, hires_template, attendences, disciplinary_processes, process_templates, contractCheck, clauses, contract_templates, clauses_templates, all_templates } from '../process_templates';
 import { employees, hrProcess, vew_hire_process } from '../fullProcess';
 import { isUndefined, isNull } from 'util';
 import { AuthServiceService } from '../auth-service.service'
 import { Router } from '@angular/router';
+import { isEmptyExpression } from '@angular/compiler';
 
 @Component({
   selector: 'app-hrhome',
@@ -13,14 +15,27 @@ import { Router } from '@angular/router';
 })
 export class HrhomeComponent implements OnInit {
 
-  showWaveDetails: boolean = false;
+
   showEmployeeDetails: boolean[] = [];
   showAttendenceDetails: boolean[] = [];
   platforms: string[] = [];
+  clauses: clauses[] = [];
+  templates: contract_templates[] = [];
+  clause_templates: clauses_templates[] = [];
+  filClauses: clauses[] = [];
+  allTemplates: all_templates[] = [];
+  filAllTemplates: all_templates[] = [];
+  actAllTemplates: all_templates = new all_templates;
+  actClause: clauses = new clauses;
+  actTemplates: contract_templates = new contract_templates;
+  showWaveDetails: boolean = false;
   makeEmployee: boolean = false;
   toggleDate: boolean = false;
   searching: boolean = false;
+  confDelete: boolean = false;
+  clausesTagCheck: boolean = true;
   contract_type: string = "Default";
+  clausesState: string = 'Edit';
   bonusHire: string = '0';
 
   filter: string = null;
@@ -83,6 +98,20 @@ export class HrhomeComponent implements OnInit {
       this.allProcesses = proc;
     })
 
+    this.getContractClauses();
+  }
+
+  getContractClauses() {
+    this.apiService.getClauses().subscribe((clau: clauses[]) => {
+      this.clauses = clau;
+      this.filClauses = clau;
+      this.selectClause(this.clauses[0]);
+      this.apiService.getContract_Templates().subscribe((tem: contract_templates[]) => {
+        this.templates = tem;
+        this.getClauses_Templates();
+      })
+    })
+    this.clausesState = 'Edit';
   }
 
   gotoProfile(emp: employees) {
@@ -284,12 +313,12 @@ export class HrhomeComponent implements OnInit {
       })
     }
     if (this.word) {
-      window.open("http://172.18.2.45/phpscripts/contract_word.php?id=" + emp.idemployees, "_blank");
+      window.open(this.apiService.PHP_API_SERVER + "/phpscripts/contract_word.php?id=" + emp.idemployees, "_blank");
     } else {
       if (this.contract_type == 'Default') {
-        window.open("http://172.18.2.45/phpscripts/contract.php?id=" + emp.idemployees, "_blank");
+        window.open(this.apiService.PHP_API_SERVER + "/phpscripts/contract.php?id=" + emp.idemployees, "_blank");
       } else {
-        window.open("http://172.18.2.45/phpscripts/staffContract.php?id=" + emp.idemployees + "&other=" + this.bonusHire, "_blank");
+        window.open(this.apiService.PHP_API_SERVER + "/phpscripts/staffContract.php?id=" + emp.idemployees + "&other=" + this.bonusHire, "_blank");
       }
     }
     this.word = false;
@@ -302,8 +331,210 @@ export class HrhomeComponent implements OnInit {
     })
   }
 
+  exportContractReport() {
+    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportContractReport.php", "_blank");
+  }
+
   downloadContract(emp:hires_template){
     this.word = true;
     this.makeContracts(emp);
   }
+
+  changeClausesTagCheck() {
+    this.clausesTagCheck = !this.clausesTagCheck;
+  }
+
+  getClauses() {
+    this.apiService.getClauses().subscribe((clau: clauses[]) => {
+      this.clauses = clau;
+      this.filClauses = clau;
+      this.selectClause(this.clauses[0]);
+    })
+  }
+
+  getContract_Templates(){
+    this.apiService.getContract_Templates().subscribe((tem: contract_templates[]) => {
+      this.templates = tem;
+    })
+  }
+
+  getClauses_Templates() {
+    this.apiService.getClauses_Templates().subscribe((clau: clauses_templates[]) => {
+      this.clause_templates = clau;
+      this.getAllTemplates();
+      this.clausesState = 'Edit';
+    })
+  }
+
+  selectClause(clause: clauses) {
+    this.actClause = clause;
+  }
+
+  selectFilClause(clause: clauses) {
+    this.actClause = clause;
+  }
+
+  getAllTemplates() {
+    let i: number = 0;
+    this.templates.forEach(temp => {
+      let at: all_templates = new all_templates;
+      at.idclauses_templates = this.templates[i].idtemplates;
+      at.id_template = temp.idtemplates;
+      at.nameTemplate = temp.name;
+      at.tag = '';
+      this.clause_templates.forEach(ct => {
+        if (ct.id_template == temp.idtemplates) {
+          if ((i == this.templates.length) || (this.templates.length == 1)) {
+            at.tag = String.prototype.concat(at.tag, ct.tag);
+          } else {
+            at.tag = String.prototype.concat(at.tag, ct.tag, ', ');
+          }
+          this.clauses.forEach(clau => {
+            if (clau.idclauses == ct.id_clause) {
+              at.clauses.push(clau);
+            }
+          });
+          this.filClauses = at.clauses;
+        }
+      });
+      i++;
+      this.allTemplates.push(at);
+/*      if (i == this.templates.length) {
+        i = 0;
+      }*/
+    })
+    this.selectContractTemplates(this.templates[0]);
+  }
+
+  selectContractTemplates(contract: contract_templates) {
+    this.actTemplates = contract;
+    this.filAllTemplates = [];
+    this.allTemplates.forEach(fat => {
+      if (contract.idtemplates == fat.id_template) {
+        this.filAllTemplates.push(fat);
+        this.actAllTemplates = fat;
+        this.filClauses = this.actAllTemplates.clauses;
+      }
+    })
+    this.actAllTemplates = this.filAllTemplates[0];
+    this.setClause(this.actAllTemplates.clauses[0]);
+  }
+
+  upClause() {
+    let order: number = Number(this.actAllTemplates.ordernum);
+    this.filAllTemplates.forEach(element => {
+      if ((element.id_template == this.actAllTemplates.id_template) && (String(Number(this.actAllTemplates.ordernum) -1) == element.ordernum)) {
+        element.setnewordernum(String(order));
+        this.apiService.updateClauseTemplate(element).subscribe((str: string) => {
+          order = order - 1;
+          this.actAllTemplates.setnewordernum(String(order));
+          this.apiService.updateClauseTemplate(this.actAllTemplates).subscribe((str: string) => {
+            this.getContractClauses();
+          })
+        })
+      }
+    });
+  }
+
+  downClause() {
+    let order: number = Number(this.actAllTemplates.ordernum);
+    this.filAllTemplates.forEach(element => {
+      if ((element.id_template == this.actAllTemplates.id_template) && (String(Number(this.actAllTemplates.ordernum) +1) == element.ordernum)) {
+        element.setnewordernum(String(order));
+        this.apiService.updateClauseTemplate(element).subscribe((str: string) => {
+          order = order + 1;
+          this.actAllTemplates.setnewordernum(String(order));
+          this.apiService.updateClauseTemplate(this.actAllTemplates).subscribe((str: string) => {
+            this.getContractClauses();
+          })
+        })
+      }
+    });
+  }
+
+  deleteClauseTemplate() {
+    if (window.confirm("Are you sure you want to delete?")) {
+      this.clause_templates.forEach(element => {
+        if ((element.id_clause == this.actClause.idclauses) && (element.id_template == this.actTemplates.idtemplates)) {
+          this.apiService.deleteClauseTemplate(element).subscribe((str: string) => {
+            this.getContractClauses();
+          })
+        }
+      });
+    }
+  }
+
+  addNewClause() {
+    this.actClause = new clauses;
+    this.clausesState = 'Insert';
+  }
+
+  deleteClause() {
+    if (window.confirm("Are you sure you want to delete?")) {
+      if (this.actClause.idclauses !== null) {
+        this.apiService.deleteClause(this.actClause).subscribe((_str: string) => {
+          this.getContractClauses();
+        })
+      }
+    }
+  }
+
+  cancelClause() {
+    this.getContractClauses();
+  }
+
+
+  saveClause() {
+    if (!this.apiService.isEmptyString(this.actClause.name)) {
+      if (!this.apiService.isEmptyString(this.actClause.description)) {
+        if (this.clausesState == 'Insert') {
+          this.apiService.saveClause(this.actClause).subscribe((_str: string) => {
+            this.getContractClauses();
+          })
+        } else {
+          this.apiService.updateClause(this.actClause).subscribe((_str: string) => {
+            this.getContractClauses();
+          })
+        }
+      } else {
+        window.confirm("The clause description is empty.");
+      }
+    } else {
+      window.confirm("The clause name is empty.");
+    }
+  }
+
+  pushClause() {
+    let ct: clauses_templates = new clauses_templates;
+    let tag: string;
+
+    if (tag = prompt("Please enter the tag of the new clause", "New Tag")) {
+      ct.id_template = this.actAllTemplates.id_template;
+      ct.selected = true;
+      ct.id_clause = this.actClause.idclauses;
+      ct.tag = tag;
+      if (!this.apiService.isEmptyString(tag)) {
+        this.apiService.saveClauseTemplate(ct).subscribe((_str: string) => {
+          this.getContractClauses();
+        })
+      }
+    }
+  }
+
+  setClause(clau: clauses) {
+    this.actClause = clau;
+    this.clause_templates.forEach(element => {
+      let filtered: all_templates[] = [];
+      if ((element.id_clause == this.actClause.idclauses) && (element.id_template == this.actTemplates.idtemplates)) {
+
+        filtered = this.filAllTemplates.filter(falltemp => falltemp.id_template == element.id_template);
+        this.actAllTemplates = filtered[0];
+      }
+    })
+  }
+
+  confirmDelete(bol: boolean) {
+    this.confDelete = bol;
+  }
+
 }
