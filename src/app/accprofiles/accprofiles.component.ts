@@ -9,7 +9,7 @@ import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods, hrProcess } from '../fullProcess';
 import { AuthGuard } from '../guard/auth-guard.service';
 import { process } from '../process';
-import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha } from '../process_templates';
+import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha, accounts } from '../process_templates';
 import { profiles } from '../profiles';
 import { Observable } from "rxjs";
 import { async } from '@angular/core/testing';
@@ -74,6 +74,18 @@ export class AccprofilesComponent implements OnInit {
   adv: advances_acc = new advances_acc;
   selected_detail: credits = new credits;
   hover: string = null;
+  years: string[] = [];
+  selectedYear: string = null;
+  months: string[] = [];
+  selectedMonth: string = null;
+  activeAccountpy: string = null;
+  activePaymentMethodpy: string = null;
+  deductionsType: string[] = [];
+  acreditType: string = '0';
+  activeNewPayment:payments = new payments;
+  allAccounts:accounts[] = [];
+  allPeriods:periods[] = [];
+  editDeduction:boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -84,6 +96,7 @@ export class AccprofilesComponent implements OnInit {
   start() {
     let peridos: periods = new periods;
     let isChrome: boolean = false;
+    this.editDeduction = false;
     let a_date: string = null;
     let b_date: string = null;
     let todayDate: string = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate().toString();
@@ -92,9 +105,12 @@ export class AccprofilesComponent implements OnInit {
       isChrome = true;
     }
 
+    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
+      this.allAccounts = acc;
+    })
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
-    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+    this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id, rol: this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
 
       if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-12-01").getTime()) <= 0)) {
         a_date = (new Date(todayDate).getFullYear() - 1) + '-12-01';
@@ -127,7 +143,32 @@ export class AccprofilesComponent implements OnInit {
 
       this.apiService.getPayments(peridos).subscribe((pym: payments[]) => {
         this.payments = pym;
-        this.active_payment = pym[pym.length -1];
+        this.active_payment = pym[pym.length - 1];
+        this.years = [];
+        pym.forEach(element => {
+          let addthis: boolean = true;
+          let addthisMonth: boolean = true;
+          let addYear = element.start.split("-")[0];
+          let addMonth = element.start.split("-")[1];
+          this.years.forEach(year => {
+            if (year == addYear) {
+              addthis = false;
+            }
+          })
+          if (addthis) {
+            this.years.push(addYear);
+            this.selectedYear = this.years[0];
+          }
+          this.months.forEach(month => {
+            if (month == addMonth && this.years[0] == element.start.split('-')[0]) {
+              addthisMonth = false;
+            }
+          })
+          if (addthisMonth) {
+            this.months.push(addMonth);
+            this.selectedMonth = this.months[this.months.length - 1];
+          }
+        })
         this.setPayment();
       });
 
@@ -136,6 +177,7 @@ export class AccprofilesComponent implements OnInit {
       })
 
       this.apiService.getPeriods().subscribe((per: periods[]) => {
+        this.allPeriods = per;
         per.forEach(p => {
           if ((p.type_period == '0') && (p.status == '1')) {
             this.actualPeriod = p;
@@ -146,6 +188,19 @@ export class AccprofilesComponent implements OnInit {
   }
 
   setPayment() {
+    this.activeAccountpy = this.employee.account;
+    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
+      acc.forEach(account => {
+        if (account.idaccounts == this.active_payment.id_account_py) {
+          this.activeAccountpy = account.name
+        }
+      })
+    })
+    this.paymentMethods.forEach(pyM => {
+      if (pyM.idpayment_methods == this.active_payment.id_paymentmethod) {
+        this.activePaymentMethodpy = pyM.type + " | " + pyM.bank
+      }
+    })
     this.apiService.setPayment(this.active_payment).subscribe((_str) => {
       this.apiService.getDebits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((deb: debits[]) => {
         this.apiService.getCredits({ id: this.active_payment.id_employee, period: this.active_payment.id_period }).subscribe((cred: credits[]) => {
@@ -155,10 +210,10 @@ export class AccprofilesComponent implements OnInit {
             this.cred_benefits = cred;
             this.deb_benefits = deb;
             this.total = 0;
-            cred.forEach(c=>{
+            cred.forEach(c => {
               this.total = this.total + Number(c.amount);
             })
-            deb.forEach(d=>{
+            deb.forEach(d => {
               this.total = this.total - Number(d.amount);
             })
           }
@@ -192,10 +247,47 @@ export class AccprofilesComponent implements OnInit {
   newDeduction(str: string) {
     let date: Fecha = new Fecha;
     this.activeCred = new credits;
+    this.activeCred.id_user = this.authUser.getAuthusr().user_name;
     this.activeCred.date = date.today;
     this.insertN = str;
     this.insertNew = true;
     this.record = false;
+    if (str == 'Credit') {
+      this.deductionsType = [
+        'Ajuste de periodos anteriores',
+        'Ajuste periodos anteriores',
+        'Ajustes Periodos Anteriores',
+        'Anticipo Sobre Bono 14',
+        'Bonificacion Decreto',
+        'Bonificacion Productividad',
+        'Bonos Diversos',
+        'Bonos Diversos Cliente TK',
+        'Bonos Diversos Nearsol TK',
+        'Hiring Bonus',
+        'RAF Bonus',
+        'Salario Base',
+        'Treasure Hunt'
+      ]
+    } else {
+      this.deductionsType = [
+        'Ajuste de periodos anteriores',
+        'Anticipo Sobre Sueldo',
+        'Boleto De Ornato',
+        'Bus',
+        'Car Parking',
+        'Descuento IGSS',
+        'Descuento Judicial',
+        'Headset',
+        'ISR',
+        'Monedero',
+        'Motorcycle Parking',
+        'Parqueo',
+        'Prestamo Personal',
+        'Seguro',
+        'TARJETA DE ACCESO/PARQUEO',
+      ]
+    }
+    this.activeCred.type = this.deductionsType[0];
   }
 
   setPaymentMethod(paymentMethod: payment_methods) {
@@ -204,27 +296,39 @@ export class AccprofilesComponent implements OnInit {
   }
 
   insertDeduction() {
-    this.activeCred.id_user = this.authUser.getAuthusr().iduser;
-    this.activeCred.idpayments = this.active_payment.idpayments;
-    this.activeCred.id_employee = this.employe_id;
-    if (this.insertN == 'Debit') {
-      this.active_payment.debits = (Number(this.active_payment.debits) + Number(this.activeCred.amount)).toFixed(2);
-      this.apiService.insertDebits(this.activeCred).subscribe((str: string) => {
-        this.activeCred.iddebits = str;
-        this.apiService.insertPushedDebit(this.activeCred).subscribe((str: string) => {
-          this.setPayment();
-        })
+
+    this.apiService.getPeriods().subscribe((period: periods[]) => {
+      period.forEach(element => {
+        if (element.idperiods == this.active_payment.id_period) {
+          if (element.status != '0') {
+            this.activeCred.id_user = this.authUser.getAuthusr().iduser;
+            this.activeCred.idpayments = this.active_payment.idpayments;
+            this.activeCred.id_employee = this.employe_id;
+            if (this.insertN == 'Debit') {
+              this.active_payment.debits = (Number(this.active_payment.debits) + Number(this.activeCred.amount)).toFixed(2);
+              this.apiService.insertDebits(this.activeCred).subscribe((str: string) => {
+                this.activeCred.iddebits = str;
+                this.apiService.insertPushedDebit(this.activeCred).subscribe((str: string) => {
+                  this.setPayment();
+                })
+              })
+            } else {
+              this.active_payment.credits = (Number(this.active_payment.credits) + Number(this.activeCred.amount)).toFixed(2);
+              this.apiService.insertCredits(this.activeCred).subscribe((str: string) => {
+                this.activeCred.iddebits = str;
+                this.apiService.insertPushedCredit(this.activeCred).subscribe((str: string) => {
+                  this.setPayment();
+                })
+              })
+            }
+            this.insertNew = false;
+          }else{
+            window.alert('Insert records is only available for open periods');
+          }
+        }
       })
-    } else {
-      this.active_payment.credits = (Number(this.active_payment.credits) + Number(this.activeCred.amount)).toFixed(2);
-      this.apiService.insertCredits(this.activeCred).subscribe((str: string) => {
-        this.activeCred.iddebits = str;
-        this.apiService.insertPushedCredit(this.activeCred).subscribe((str: string) => {
-          this.setPayment();
-        })
-      })
-    }
-    this.insertNew = false;
+    })
+
   }
 
   cancelDeduction() {
@@ -233,20 +337,100 @@ export class AccprofilesComponent implements OnInit {
   }
 
   setCredit(cred: credits) {
+    this.editDeduction = false;
+    this.insertN = 'Credit';
     this.apiService.getPushedCredits(cred).subscribe((de: credits) => {
-      this.activeCred = de;
-      this.insertNew = true;
-      this.insertN = 'Credit';
-      this.record = true;
+      this.deductionsType = [
+        'Ajustes Periodos Anteriores',
+        'Anticipo Sobre Bono 14',
+        'Bonificacion Decreto',
+        'Bonificacion Productividad',
+        'Bonos Diversos',
+        'Bonos Diversos Cliente TK',
+        'Bonos Diversos Nearsol TK',
+        'Hiring Bonus',
+        'RAF Bonus',
+        'Salario Base',
+        'Treasure Hunt',
+        'Anticipo Sobre Sueldo',
+        'Anticipo Sobre Aguinaldo',
+        'Boleto De Ornato',
+        'Bus',
+        'Car Parking',
+        'Descuento IGSS',
+        'Descuento Judicial',
+        'Headset',
+        'ISR',
+        'Monedero',
+        'Motorcycle Parking',
+        'Parqueo',
+        'Prestamo Personal',
+        'Seguro',
+        'TARJETA DE ACCESO/PARQUEO',
+      ]
+      if (isNullOrUndefined(de.iddebits)) {
+        this.activeCred.type = cred.type;
+        this.activeCred.amount = cred.amount;
+        this.activeCred.date = this.active_payment.date;
+        this.activeCred.iddebits = cred.iddebits;
+        this.activeCred.idpayments = cred.idpayments;
+        this.activeCred.id_user = 'Admin';
+        this.activeCred.notes = 'Inherent Credit By Close Period';
+        this.record = true;
+      } else {
+        this.activeCred = de;
+        this.insertNew = true;
+        this.record = true;
+      }
     })
   }
 
   setDeduction(deb: debits) {
+    this.editDeduction = false;
+    this.insertN = 'Debit';
+    this.deductionsType = [
+      'Ajustes Periodos Anteriores',
+      'Anticipo Sobre Bono 14',
+      'Bonificacion Decreto',
+      'Bonificacion Productividad',
+      'Bonos Diversos',
+      'Bonos Diversos Cliente TK',
+      'Bonos Diversos Nearsol TK',
+      'Hiring Bonus',
+      'RAF Bonus',
+      'Salario Base',
+      'Treasure Hunt',
+      'Anticipo Sobre Sueldo',
+      'Anticipo Sobre Aguinaldo',
+      'Boleto De Ornato',
+      'Bus',
+      'Car Parking',
+      'Descuento IGSS',
+      'Descuento Judicial',
+      'Headset',
+      'ISR',
+      'Monedero',
+      'Motorcycle Parking',
+      'Parqueo',
+      'Prestamo Personal',
+      'Seguro',
+      'TARJETA DE ACCESO/PARQUEO',
+    ]
     this.apiService.getPushedDebits(deb).subscribe((de: credits) => {
-      this.activeCred = de;
-      this.insertNew = true;
-      this.insertN = 'Debit';
-      this.record = true;
+      if (isNullOrUndefined(de.iddebits)) {
+        this.activeCred.type = deb.type;
+        this.activeCred.amount = deb.amount;
+        this.activeCred.date = deb.date;
+        this.activeCred.iddebits = deb.iddebits;
+        this.activeCred.idpayments = deb.idpayments;
+        this.activeCred.id_user = 'Admin';
+        this.activeCred.notes = 'Inherent Debit By Close Period';
+        this.record = true;
+      } else {
+        this.activeCred = de;
+        this.insertNew = true;
+        this.record = true;
+      }
     })
   }
 
@@ -391,7 +575,7 @@ export class AccprofilesComponent implements OnInit {
                       cred_aguinaldo_productivity.notes = avg_productivity + "/ 365 *" + (Number((((new Date(end_date_plus_one).getTime() - 21600000) - (new Date(a_date).getTime())))) / (1000 * 3600 * 24)).toFixed(2) + " = " + cred_aguinaldo_productivity.amount;
                     }
                     this.cred_benefits.push(cred_aguinaldo_base);
-                    this.cred_benefits.push(cred_aguinaldo_productivity);                  
+                    this.cred_benefits.push(cred_aguinaldo_productivity);
 
                     if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(end_date_plus_one.split("-")[0]) - 1).toString() + "-07-01").getTime()) >= 0)) {
                       b_date = this.employee.hiring_date;
@@ -475,19 +659,19 @@ export class AccprofilesComponent implements OnInit {
                               this.cred_benefits.push(credit);
                             })
                           }
-                        this.apiService.getDebits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((deb: debits[]) => {
-                          if (!isNullOrUndefined(deb)) {
-                            deb.forEach(debit => {
-                              this.deb_benefits.push(debit);
+                          this.apiService.getDebits({ id: this.employee.idemployees, period: pay[0].id_period }).subscribe((deb: debits[]) => {
+                            if (!isNullOrUndefined(deb)) {
+                              deb.forEach(debit => {
+                                this.deb_benefits.push(debit);
+                              })
+                            }
+                            this.cred_benefits.forEach((crd: credits) => {
+                              this.total = this.total + Number(crd.amount);
+                            });
+                            this.deb_benefits.forEach((dbd: credits) => {
+                              this.total = this.total - Number(dbd.amount);
                             })
-                          }
-                          this.cred_benefits.forEach((crd:credits)=>{
-                            this.total = this.total + Number(crd.amount);
                           });
-                          this.deb_benefits.forEach((dbd:credits)=>{
-                            this.total = this.total - Number(dbd.amount);
-                          })
-                        });
                         })
                       }
                     })
@@ -573,34 +757,62 @@ export class AccprofilesComponent implements OnInit {
       let db: debits = new debits;
       db.status = "PAID";
       db.iddebits = debit;
-      this.apiService.updateCredits(db).subscribe((str: string) => { });
+      this.apiService.updateDebits(db).subscribe((str: string) => { });
     })
-    this.setPayment();
+    window.alert("Record Updated");
     this.acrediting = false;
+    this.acreditType = '0';
+    this.setPayment();
   }
 
-  CancelAcreditSelection(){
+  CancelAcreditSelection() {
     this.setAcreditCredits = "0";
     this.setAcreditDebits = "0";
+    this.acreditType = '0';
     this.acrediting = false;
     this.setPayment();
   }
 
-  selectedCredit(event) {
+  selectedCredit(event, str: string) {
     let val: string = "," + event.target.value;
+    let temp: string = '0';
+    this.acreditType = str;
+    this.insertN = 'Credit';
     if (event.target.checked) {
       this.setAcreditCredits = this.setAcreditCredits + val;
       this.acrediting = true;
     } else {
-      this.setAcreditCredits.replace(val, '');
+      this.setAcreditCredits.split(',').forEach(element => {
+        if (element != event.target.value && element != '0') {
+          temp = temp + "," + element;
+        }
+        this.setAcreditCredits = temp;
+      });
+      if (this.setAcreditCredits == '0') {
+        this.CancelAcreditSelection();
+      }
     }
   }
 
-  selectedDebit(event) {
+  selectedDebit(event, str: string) {
+    let val: string = "," + event.target.value;
+    let temp: string = '0';
+    this.acreditType = str;
+    this.insertN = 'Debit';
     if (event.target.checked) {
-      this.setAcreditDebits = this.setAcreditDebits + "," + event.target.value;
+      this.setAcreditDebits = this.setAcreditDebits + val;
+      this.acrediting = true;
+    } else {
+      this.setAcreditDebits.split(',').forEach(element => {
+        if (element != event.target.value && element != '0') {
+          temp = temp + "," + element;
+        }
+        this.setAcreditDebits = temp;
+      });
+      if (this.setAcreditDebits == '0') {
+        this.CancelAcreditSelection();
+      }
     }
-    this.acrediting = true;
   }
 
   setPayments(adv: advances_acc) {
@@ -677,7 +889,7 @@ export class AccprofilesComponent implements OnInit {
     this.adv = adv;
     this.adv.notes = '';
   }
-  
+
   setSelectedDetail(cred: credits) {
     this.selected_detail.type = cred.type;
     let i: number = 0;
@@ -759,4 +971,129 @@ export class AccprofilesComponent implements OnInit {
       })
     })
   }
+
+  showPayments() {
+    let pys: payments[] = [];
+    this.payments.forEach(element => {
+      if (element.start.split('-')[0] == this.selectedYear && element.start.split('-')[1] == this.selectedMonth) {
+        pys.push(element);
+      }
+    })
+    return pys;
+  }
+
+  clickSetPayment(py: payments) {
+    this.active_payment = py;
+    this.setPayment();
+  }
+
+  setMonth() {
+    this.clickSetPayment(this.showPayments()[0]);
+  }
+
+  setActiveCredType(str: string) {
+    this.activeCred.type = str;
+  }
+
+  deleteDeduction() {
+    this.apiService.getPeriods().subscribe((period: periods[]) => {
+      period.forEach(element => {
+        if (element.idperiods == this.active_payment.id_period) {
+          if (element.status != '0') {
+            this.activeCred.status = this.insertN;
+            this.apiService.deleteDeduction(this.activeCred).subscribe((str: string) => {
+              if (str == '1') {
+                window.alert('Record Successfuly Deleted');
+                this.cancelDeduction();
+              }
+            })
+          } else {
+            window.alert('Delete records is only available for open periods')
+          }
+        }
+      })
+    })
+    this.cancelDeduction();
+  }
+
+  setNewPayment(){
+    this.activeNewPayment = new payments;
+    this.activeNewPayment.idpayments = this.authUser.getAuthusr().iduser;
+    this.activeNewPayment.id_employee = this.employe_id;
+  }
+
+  createPayment(){
+    let create:boolean = true;
+    this.payments.forEach(pay=>{
+      if((pay.id_period == this.activeNewPayment.id_period && pay.id_account_py == this.activeNewPayment.id_account_py) || (isNullOrUndefined(pay.id_account_py) && this.activeNewPayment.id_account_py == this.employee.id_account) && create){
+        window.alert('An assiociated payment for this employee on that period already exist');
+        create = false;
+      }
+    })
+    if(create){
+      if(this.activeNewPayment.id_account_py == this.employee.id_account){
+        this.activeNewPayment.id_account_py = 'NULL';
+      }
+      this.apiService.insertManualPayment(this.activeNewPayment).subscribe((str:string)=>{
+        if(str == '1'){
+          window.alert("Payment successfuly created");
+        }else{
+          window.alert(str);
+        }
+        this.start();
+      })
+    }
+  }
+
+  deletePayment(){
+    let str:string;
+    str = this.active_payment.id_period;
+    this.active_payment.id_period = this.authUser.getAuthusr().iduser;
+    this.apiService.deleteManualPayment(this.active_payment).subscribe((str:string)=>{
+      if(str == '1'){
+        window.alert("Payment and dependencies successfuly deleted");
+      }else{
+        window.alert(str);
+      }
+      this.start();
+    })
+  }
+
+  updateDeduction(){
+    this.activeCred.id_user = this.authUser.getAuthusr().iduser
+    this.activeCred.status = 'EDIT';
+    this.activeCred.id_employee = this.employe_id;
+    if(this.insertN == 'Credit'){
+      this.apiService.updateCredits(this.activeCred).subscribe((str:string)=>{
+        if(str == '1'){
+          window.alert("Record successfuly updated");
+        }else{
+          window.alert(str);
+        }
+      })
+      this.start();
+    }else if(this.insertN == 'Debit'){
+      let db:debits = new debits;
+      db.amount = this.activeCred.amount;
+      db.id_employee = this.activeCred.id_employee;
+      db.id_user = this.activeCred.id_user;
+      db.iddebits = this.activeCred.iddebits;
+      db.idpayments = this.activeCred.idpayments;
+      db.status = this.activeCred.status;
+      db.type = this.activeCred.type;
+      this.apiService.updateDebits(db).subscribe((str:string)=>{
+        if(str == '1'){
+          window.alert("Record successfuly updated");
+        }else{
+          window.alert(str);
+        }
+      })
+      this.start();
+    }
+  }
+
+  setEdit(){
+    this.editDeduction = true;
+  }
+
 }

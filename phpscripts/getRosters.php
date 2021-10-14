@@ -1,0 +1,69 @@
+<?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: *');
+require 'database.php';
+
+$postdata = file_get_contents("php://input");
+$str = ($postdata);
+
+$i = 0;
+$return = [];
+$date = date("Y-m-d");
+
+$sql = "SELECT DISTINCT CONCAT(UPPER(profiles.first_name), ' ', UPPER(profiles.second_name), ' ', UPPER(profiles.first_lastname), ' ', UPPER(profiles.second_lastname)) AS `name`, 
+        hires.nearsol_id, employees.client_id, b.start AS `mon_start`, b.end AS `mon_end`, b.fixed_schedule AS `mon_fixed`, c.start AS `tue_start`, c.end AS `tue_end`,  c.fixed_schedule AS `tue_fixed`, d.start AS `wed_start`,
+        d.end AS `wed_end`,  d.fixed_schedule AS `wed_fixed`, e.start AS `thur_start`, e.end AS `thur_end`, e.fixed_schedule AS `thur_fixed`, f.start AS `fri_start`, f.end AS `fri_end`,  f.fixed_schedule AS `fri_fixed`, g.start AS `sat_start`, g.end AS `sat_end`,  g.fixed_schedule AS `sat_fixed`, idrosters,
+        h.start AS `sun_start`, h.end AS `sun_end`, h.fixed_schedule AS `sun_fixed`, rosters.week_value, COALESCE(`cnt`.`count`,1) AS `count`, idemployees, rosters.id_type, COALESCE(payments.id_account_py, employees.id_account) AS `id_account` FROM payments
+        INNER JOIN employees ON employees.idemployees = payments.id_employee
+        INNER JOIN hires ON hires.idhires = employees.id_hire
+        INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+        LEFT JOIN rosters ON employees.idemployees = rosters.id_employee
+        LEFT JOIN roster_types a ON a.idroster_types = rosters.id_type
+        LEFT JOIN roster_times b ON b.idroster_times = a.id_time_mon
+        LEFT JOIN roster_times c ON c.idroster_times = a.id_time_tue
+        LEFT JOIN roster_times d ON d.idroster_times = a.id_time_wed
+        LEFT JOIN roster_times e ON e.idroster_times = a.id_time_thur
+        LEFT JOIN roster_times f ON f.idroster_times = a.id_time_fri
+        LEFT JOIN roster_times g ON g.idroster_times = a.id_time_sat
+        LEFT JOIN roster_times h ON h.idroster_times = a.id_time_sun
+        LEFT JOIN (SELECT COUNT(idrosters) AS `count`, id_employee FROM rosters WHERE id_period = $str GROUP BY id_employee) AS `cnt` ON `cnt`.id_employee = employees.idemployees
+        WHERE employees.active = '1' AND (rosters.id_period IS NULL OR rosters.id_period = $str);";
+if($result = mysqli_query($con, $sql)){
+  while($res = mysqli_fetch_assoc($result)){
+    $return[$i]['name'] = $res['name'];
+    $return[$i]['nearsol_id'] = $res['nearsol_id'];
+    $return[$i]['client_id'] = $res['client_id'];
+    $return[$i]['mon_start'] = $res['mon_start'];
+    $return[$i]['mon_end'] = $res['mon_end'];
+    $return[$i]['tue_start'] = $res['tue_start'];
+    $return[$i]['tue_end'] = $res['tue_end'];
+    $return[$i]['wed_start'] = $res['wed_start'];
+    $return[$i]['wed_end'] = $res['wed_end'];
+    $return[$i]['thur_start'] = $res['thur_start'];
+    $return[$i]['thur_end'] = $res['thur_end'];
+    $return[$i]['fri_start'] = $res['fri_start'];
+    $return[$i]['fri_end'] = $res['fri_end'];
+    $return[$i]['sat_start'] = $res['sat_start'];
+    $return[$i]['sat_end'] = $res['sat_end'];
+    $return[$i]['sun_start'] = $res['sun_start'];
+    $return[$i]['sun_end'] = $res['sun_end'];
+    $return[$i]['week_value'] = $res['week_value'];
+    $return[$i]['count'] = $res['count'];
+    $return[$i]['id_employee'] = $res['idemployees'];
+    $return[$i]['id_account'] = $res['id_account'];
+    $return[$i]['id_schedule'] = $res['id_type'];
+    $return[$i]['mon_fixed'] = $res['mon_fixed'];
+    $return[$i]['tue_fixed'] = $res['tue_fixed'];
+    $return[$i]['wed_fixed'] = $res['wed_fixed'];
+    $return[$i]['thur_fixed'] = $res['thur_fixed'];
+    $return[$i]['fri_fixed'] = $res['fri_fixed'];
+    $return[$i]['sat_fixed'] = $res['sat_fixed'];
+    $return[$i]['sun_fixed'] = $res['sun_fixed'];
+    $i++;
+  }
+  echo(json_encode($return));
+  http_response_code(200);
+}else{
+  echo($sql);
+}
+?>

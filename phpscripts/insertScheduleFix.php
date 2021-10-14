@@ -36,7 +36,7 @@
             $sql3 = "INSERT INTO `attendence_adjustemnt`(`idattendence_adjustemnt`, `id_attendence`, `id_justification`, `time_before`, `time_after`, `amount`, `state`, `start`, `end`) VALUES (NULL, '$idattendences', '$id_justification', '$time_before', '$time_after', '$amount', '$state', '$start', '$end');";
             if(mysqli_query($con, $sql3)){
                 if($reason != "Closing Exception"){
-                    $sql4 = "UPDATE `attendences` SET `worked_time`= '$time_after' WHERE `idattendences` = '$idattendences';";
+                    $sql4 = "UPDATE `attendences` SET `scheduled`= '$time_after' WHERE `idattendences` = '$idattendences';";
                     if(mysqli_query($con, $sql4)){
                         echo("1");
                     }else{

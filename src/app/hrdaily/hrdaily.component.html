@@ -15,7 +15,12 @@
             <label style="margin-left:25%">Include All</label>
             <input type="checkbox" class="form-control" (change)="changeVal($event)">
         </div>
-        <div class="form group col-md-2"></div>
+        <div class="form group col-md-1">
+            <label style="color:white">.</label>
+            <button class="bnt btn-outline-info form-control" data-target="filterModal" data-target="#filterModal"
+                data-toggle="modal"><i class="fas fa-filter"></i></button>
+        </div>
+        <div class="form group col-md-1"></div>
     </div>
 
     <div class="form-row col-md-12" style="margin-top:25px">
@@ -33,11 +38,12 @@
             </select>
         </div>
         <div class="d-flex justify-content-center col-md-1">
-            <button class="btn btn-outline-primary" (click)="addAccount()" style="height:50px; margin-top:20%">Add <i class="fas fa-angle-double-right"></i></button>
+            <button class="btn btn-outline-primary" (click)="addAccount()" style="height:50px; margin-top:20%">Add <i
+                    class="fas fa-angle-double-right"></i></button>
         </div>
         <div class="form-group col-md-8">
-            <label
-                            style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Selected Accounts:</label>
+            <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Selected
+                Accounts:</label>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center"
                     *ngFor="let exp of exportAccounts">
@@ -60,5 +66,30 @@
             <button class="form-control" (click)="generateReprot()">Generate</button>
         </div>
         <div class="form-group col-md-5"></div>
+    </div>
+</div>
+<!---------------------------------------------------------------------------------- FILTER MODAL ------------------------------------------------>
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="uploadBonuseslLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="uploadBonusesLabel">FILTER</h5>
+            </div>
+            <div class="modal-body">
+                <div class="list-group">
+                    <label class="list-group-item hover_item" *ngFor="let filter of filterList" style="padding:0px; cursor:pointer;">
+                        <div>
+                            <input class="form-check-input me-1" type="checkbox" style="margin-left:15px;cursor:pointer;"
+                                value="{{filter}}" (change)="togleFilter(filter)">
+                            <label style="margin-left:40px;cursor:pointer;">{{filter}}</label>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
     </div>
 </div>

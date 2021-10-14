@@ -158,6 +158,8 @@ export class HrprofilesComponent implements OnInit {
   temp_day_2:string = null;
   temp_day_3:string = null;
   temp_day_4:string = null;
+  max_vac:number = 10;
+  showMore:string = 'Show More'
 
   selectedReporter:string = null;
 
@@ -395,7 +397,7 @@ export class HrprofilesComponent implements OnInit {
             this.apiService.getDPAtt({ id: this.workingEmployee.idemployees, date_1: actualPeriod.start, date_2: actualPeriod.end }).subscribe((dp: disciplinary_processes[]) => {
               this.apiService.getTermdt(this.workingEmployee).subscribe((trm: terminations) => {
                 this.showAttendences = att;
-
+                
                 this.showAttendences.forEach(atte => {
                   let valid_trm: boolean = false;
                   let activeSuspension: boolean = false;
@@ -540,7 +542,7 @@ export class HrprofilesComponent implements OnInit {
         this.showAttendences.forEach(att_show=>{
           if(att_show.date == at_adj.attendance_date && (at_adj.id_department == '5' || at_adj.id_department == '27')){
             att_show.igss = (Number(att_show.igss) + Number(at_adj.amount)).toFixed(2);
-          }else if(att_show.date == at_adj.attendance_date && at_adj.id_department == '28'){
+          }else if(att_show.date == at_adj.attendance_date && at_adj.id_department == '28' && (at_adj.reason != 'Schedule FIX')){
             att_show.tk_exp = (Number(att_show.tk_exp) + Number(at_adj.amount)).toFixed(2);
           }
         })
@@ -564,6 +566,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.time_after = this.attAdjudjment.time_before;
     this.attAdjudjment.id_department = this.authUser.getAuthusr().department;
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
+    this.attAdjudjment.id_import = '0';
     this.addJ = true;
   }
 
@@ -588,6 +591,7 @@ export class HrprofilesComponent implements OnInit {
 
   getVacations() {
     let found: boolean = false;
+    let cnt:number = 0;
     let vacYears: vacyear[] = [];
     this.vac = [];
     this.earnVacations = this.vacationsEarned * 1.25;
@@ -626,14 +630,17 @@ export class HrprofilesComponent implements OnInit {
           vacYear.selected = false;
           VacFiltered = this.showVacations.filter(svf => String(svf.year) == new Date(vac.took_date).getFullYear().toString());
           vacYear.vacations.push.apply(vacYear.vacations, VacFiltered);
-          this.vac.push(vacYear);
+            this.vac.push(vacYear);
         }
 
         this.vac.sort((a, b) => a.year - b.year);
+        this.vac.forEach(toSort=>{
+          toSort.vacations.sort((a,b)=> new Date(b.date).getTime() - new Date(a.date).getTime());
+        })
 
         vacYears.forEach(vv => {
           if (vv.year.toString() == new Date().getFullYear().toString()) {
-            vv.selected = true;
+              vv.selected = true;
           }
         })
       })
@@ -2539,6 +2546,7 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.amount = (Number(this.attAdjudjment.amount) * - 1).toFixed(2);
     this.attAdjudjment.time_before = this.attAdjudjment.time_after;
     this.attAdjudjment.time_after = (Number(this.attAdjudjment.time_after) + Number(this.attAdjudjment.amount)).toFixed(2);
+    this.attAdjudjment.id_import = '0';
     this.apiService.revertJustification(this.attAdjudjment).subscribe((str:string)=>{
       this.attAdjudjment.notes = 'Reverted from ' + this.attAdjudjment.id_process + ' created at ' + this.attAdjudjment.date;
       this.insertAdjustment();
@@ -2558,5 +2566,15 @@ export class HrprofilesComponent implements OnInit {
       this.editingAccessCard = false;
       window.alert("Record Successfully Updated");
     })
+  }
+
+  showMoreVac(){
+    if(this.max_vac == 10){
+      this.max_vac = 1000;
+      this.showMore = 'Show Less';
+    }else{
+      this.max_vac = 10;
+      this.showMore = 'Show More';
+    }
   }
 }

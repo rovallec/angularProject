@@ -72,6 +72,7 @@ if($result = mysqli_query($con,$sql)){
         $adjustes[$i]['error'] = "SUCCESS";
         $adjustes[$i]['account'] = $res['acn'];
         $adjustes[$i]['dateTime'] = $res['time'];
+        $adjustes[$i]['id_import'] = $res['id_import'];
         $i++;
     }
 }

@@ -25,9 +25,19 @@ if(explode(" ", $date)[0] === "<=" || explode(" ", $date)[0] ===  "<"){
 			$exp_id = $id_emp[1];
 			$sql = "SELECT * FROM `attendences` WHERE `date` = '$dt' AND `id_employee` = '$exp_id'  ORDER BY `date` DESC;";
 			$norm = true;
+			}else if($id == 'IMPORT'){
+				$sql = $sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `id_import`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status` FROM `hires` LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN (SELECT * FROM `attendences` WHERE `attendences`.`id_import` = $date) AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `id_import` = $date";
 			}else{
 				if(strpos($date,"BETWEEN") !== false){
 					$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status` FROM `hires` LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` LEFT JOIN `schedules` ON `schedules`.`idschedules` = `hires`.`id_schedule` LEFT JOIN `employees` ON `employees`.`id_hire` = `hires`.`idhires` LEFT JOIN (SELECT * FROM `attendences` WHERE `date` $date) AS `att` ON `att`.`id_employee` = `employees`.`idemployees`) AS `attend` WHERE `idprofiles` = $id ORDER BY `date` ASC";
+				}else if($id == 'ALL'){
+					$sql = "SELECT * FROM attendences
+							INNER JOIN employees ON employees.idemployees = attendences.id_employee
+							INNER JOIN hires ON hires.idhires = employees.id_hire
+							INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
+							INNER JOIN waves ON waves.idwaves = hires.id_wave
+							INNER JOIN schedules ON schedules.idschedules = hires.id_schedule
+							WHERE date BETWEEN $date;";
 				}else{
 					$sql = "SELECT * FROM (SELECT `profiles`.`idprofiles`, `att`.`idattendences`, `hires`.`id_wave`, `employees`.`idemployees`, `hires`.`nearsol_id`, `employees`.`client_id`, `profiles`.`first_name`, `profiles`.`second_name`, `profiles`.`first_lastname`, `profiles`.`second_lastname`, `att`.`date`, `att`.`worked_time`, `att`.`scheduled`,`schedules`.`days_off`, `profiles`.`status`
 				FROM `hires`
@@ -39,7 +49,6 @@ if(explode(" ", $date)[0] === "<=" || explode(" ", $date)[0] ===  "<"){
 			}
 		}
 	}
-
 if($result = mysqli_query($con, $sql))
 {
 	$i = 0;

@@ -1,11 +1,11 @@
 import { importType, isNull, TypeModifier } from '@angular/compiler/src/output/output_ast';
-import { Attribute, Component, OnInit } from '@angular/core';
+import { Attribute, Component, OnInit, TRANSLATIONS_FORMAT } from '@angular/core';
 import { isNullOrUndefined, isNumber } from 'util';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, credits, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, timekeeping_adjustments, vacations } from '../process_templates';
+import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, credits, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, timekeeping_adjustments, tk_import, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { BADFLAGS, DESTRUCTION } from 'dns';
 import { exit } from 'process';
@@ -66,6 +66,21 @@ export class ClosingTkComponent implements OnInit {
   deadline_time:string = new Date().getHours() + ":" + new Date().getMinutes();
   disable_date:boolean = false;
   disable_time:boolean = false;
+  filterList:string[] = ['DISCOUNTED DAYS','HOURS',	'SEVENTH', 'OT',	'HOLIDAYS',	
+  'NEARSOL BONUS',	'CLIENT BONUS',	'TREASURE HUNT',	'ADJUSTED TIME',	'ADJUSTED OT',	
+  'ADJUSTED HOLIDAY', 'VACATIONS',	'JANP',	'JAP',	'IGSS',	'IGSS Hrs.',	'INSURANCE',	'OTHER Hrs.', 'NON SHOW'];
+  filterValue:string[] = ['','','','','','','','','','','', '',	'',	'',	'',	'',	'',	'',	''];
+  setFilter:string = '0';
+  filterLogic:string[] = ['','','','','','','','','','','','','','','','','','',	''];
+  filterCompare:string[] = ['','','','','','','','','','','','','','','','','','',	''];
+  allPayroll:payroll_values_gt[] = [];
+  filterNames:string[] = ['discounted_days','discounted_hours',	'seventh', 'ot_hours',	'holidays_hours',	
+  'nearsol_bonus',	'performance_bonus',	'treasure_hunt',	'adj_hours',	'adj_ot',	
+  'adj_holidays', 'vacations','janp','jap','igss','igss_hrs','insurance','other_hrs',	'ns'];
+  activeFilter:boolean = false;
+  import_tk:tk_import[] = [];
+  fullImport:boolean = false;
+  
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
@@ -406,6 +421,7 @@ export class ClosingTkComponent implements OnInit {
                                             if (Number(attendance.worked_time) == 0) {
                                               attendance.balance = "NS";
                                               ns_count++;
+                                              rs.ns = (Number(rs.ns) + 1).toFixed(0);
                                               if (!non_show) {
                                                 non_show = true;
                                                 discounted_days = discounted_days + 1;
@@ -1116,16 +1132,31 @@ export class ClosingTkComponent implements OnInit {
           var worksheet = workbook.Sheets[first_sheet_name];
           let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
           sheetToJson.forEach(element => {
-            let cred: credits = new credits;
-            cred.iddebits = element['Nearsol ID'];
-            cred.amount = element['Amount'];
-            partial_credits.push(cred);
+            if(this.fullImport){
+              let types:string[] = ['NEARSOL BONUS', 'CLIENT BONUS', 'TREASURE HUNT', 'AJUSTES A PERIODOS ANTERIORES HORAS', 'AJUSTES A PERIODOS ANTERIORES OT', 'AJUSTES A PERIODOS ANTERIORES ASUETOS'];
+              for (let i = 0; i < types.length; i++) {
+                if(Number(element[types[i]]) > 0){
+                  let cred: credits = new credits;
+                  cred.iddebits = element['Nearsol ID'];
+                  cred.amount = element[types[i]];
+                  cred.type = types[i];
+                  partial_credits.push(cred);
+                }
+              }
+            }else{
+              let cred: credits = new credits;
+              cred.iddebits = element['Nearsol ID'];
+              cred.amount = element['Amount'];
+              cred.type = this.import_type;
+              partial_credits.push(cred);
+            }
           })
           ws++;
         })
         let count: number = 0;
         this.apiServices.getPayments(provitional_period).subscribe((paymnts: payments[]) => {
           partial_credits.forEach(ele => {
+            this.import_type = ele.type;
             this.apiServices.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               if (!isNullOrUndefined(emp[0])) {
                 paymnts.forEach(py => {
@@ -1264,5 +1295,173 @@ export class ClosingTkComponent implements OnInit {
 
   enableTime(){
     this.disable_time = false;
+  }
+
+  applyFilter(){
+    let union:string= null;
+    let temp_p:payroll_resume[] = [];
+    let temp_resume:payroll_resume[] =[];
+    let first:boolean = true;
+
+    if(this.activeFilter){
+      this.payroll_values = this.allPayroll;
+    }else{
+      this.allPayroll = this.payroll_values;
+    }
+    this.activeFilter = true;
+    for (let i = 0; i < 11; i++) {
+      let temp_p:payroll_values_gt[] = [];
+      if(this.verifyExist(this.filterList[i])){
+        if(this.filterLogic[i] == "AND"){
+          if(this.filterCompare[i] == "="){
+            this.payroll_values = this.payroll_values.filter(r => r[this.filterNames[i]] == this.filterValue[i]);
+          }else if(this.filterCompare[i] == ">"){
+            this.payroll_values = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) > Number(this.filterValue[i]));
+          }else if(this.filterCompare[i] == ">="){
+            this.payroll_values = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) >= Number(this.filterValue[i]));
+          }else if(this.filterCompare[i] == "<"){
+            this.payroll_values = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) < Number(this.filterValue[i]));
+          }else if(this.filterCompare[i] == "<="){
+            this.payroll_values = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) <= Number(this.filterValue[i]));
+          }
+        }else if(this.filterLogic[i] == "OR"){
+          if(this.payroll_values.length == this.allPayroll.length){
+            this.payroll_values = [];
+          }
+          if(this.filterCompare[i] == "="){
+            temp_p = this.payroll_values.filter(r => r[this.filterNames[i]] == this.filterValue[i]);
+          }else if(this.filterCompare[i] == ">"){
+            temp_p = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) > Number(this.filterValue[i]));
+          }else if(this.filterCompare[i] == ">="){
+            temp_p = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) >= Number(this.filterValue[i]));
+          }else if(this.filterCompare[i] == "<"){
+            temp_p = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) < Number(this.filterValue[i]));
+          }else if(this.filterCompare[i] == "<="){
+            temp_p = this.payroll_values.filter(r => Number(r[this.filterNames[i]]) <= Number(this.filterValue[i]));
+          }
+          temp_p.forEach(element=>{
+            this.payroll_values.push(element);
+          })
+        }
+      }
+    }
+
+    for (let b = 11; b < 18; b++) {
+      if(this.verifyExist(this.filterList[b])){
+        if(this.filterLogic[b] == "AND"){
+          if(isNullOrUndefined(union)){union = "AND"};
+          if(first){
+            this.payroll_values.forEach(ele=>{
+              this.resumes.forEach(res=>{
+                if(ele.id_employee == res.id_employee){
+                  temp_resume.push(res);
+                }
+              })
+            })
+          }
+          first = false;
+          if(this.filterCompare[b] == "="){
+            temp_resume = temp_resume.filter(r => r[this.filterNames[b]] == this.filterValue[b]);
+          }else if(this.filterCompare[b] == ">"){
+            temp_resume = temp_resume.filter(r => Number(r[this.filterNames[b]]) > Number(this.filterValue[b]));
+          }else if(this.filterCompare[b] == ">="){
+            temp_resume = temp_resume.filter(r => Number(r[this.filterNames[b]]) >= Number(this.filterValue[b]));
+          }else if(this.filterCompare[b] == "<"){
+            temp_resume = temp_resume.filter(r => Number(r[this.filterNames[b]]) < Number(this.filterValue[b]));
+          }else if(this.filterCompare[b] == "<="){
+            temp_resume = temp_resume.filter(r => Number(r[this.filterNames[b]]) <= Number(this.filterValue[b]));
+          }
+        }else if(this.filterLogic[b] == "OR"){
+          if(isNullOrUndefined(union)){union = "OR"};
+          temp_resume = this.resumes;
+          if(this.filterCompare[b] == "="){
+            temp_p = temp_resume.filter(r => r[this.filterNames[b]] == this.filterValue[b]);
+          }else if(this.filterCompare[b] == ">"){
+            temp_p = temp_resume.filter(r => Number(r[this.filterNames[b]]) > Number(this.filterValue[b]));
+          }else if(this.filterCompare[b] == ">="){
+            temp_p = temp_resume.filter(r => Number(r[this.filterNames[b]]) >= Number(this.filterValue[b]));
+          }else if(this.filterCompare[b] == "<"){
+            temp_p = temp_resume.filter(r => Number(r[this.filterNames[b]]) < Number(this.filterValue[b]));
+          }else if(this.filterCompare[b] == "<="){
+            temp_p = temp_resume.filter(r => Number(r[this.filterNames[b]]) <= Number(this.filterValue[b]));
+          }
+          temp_p.forEach(element=>{
+            if(temp_resume.length == this.resumes.length){
+              temp_resume = [];
+            }
+            temp_resume.push(element);
+          })
+        }
+      }
+    }
+
+    if(!isNullOrUndefined(union)){
+      let temp_to_res:payroll_values_gt[] = [];
+      let push:boolean = false;
+      temp_resume.forEach(element=>{
+        this.allPayroll.forEach(p_temp=>{
+          if(p_temp.id_employee == element.id_employee){
+            temp_to_res.push(p_temp);
+          }
+        })
+      })
+
+      if(union == "AND"){
+        this.payroll_values = temp_to_res;
+      }else if(union == "OR"){
+        temp_to_res.forEach(to_push => {
+          push = false;
+          this.payroll_values.forEach(py_val=>{
+            if(py_val.id_employee == to_push.id_employee){
+              push = true;
+            }
+          })
+          if(!push){
+            this.payroll_values.push(to_push);
+          }
+        });
+      }
+    }
+  }
+
+  togleFilter(str:string){
+    let add:boolean = true;
+    let temp:string = "0";
+    this.setFilter.split(',').forEach(ss=>{
+      if(ss != "0"){
+        if(ss.toString() == str.toString()){
+          add = false;
+        }
+      }
+    })
+    if(add){
+      this.setFilter = this.setFilter + "," + str;
+    }else{
+      this.setFilter.split(',').forEach(ss=>{
+        if(ss != "0"){
+          if(ss != str){
+            temp = temp + "," + ss ;
+          }
+        }
+      });
+      if(this.setFilter == '0'){
+        this.activeFilter = false;
+      }
+      this.setFilter = temp;
+    }
+  }
+
+  verifyExist(str:string){
+    let exist:boolean = false;
+    this.setFilter.split(',').forEach(element => {
+      if(str == element){
+        exist = true;
+      }
+    });
+    return exist;
+  }
+
+  setFull(){
+    this.fullImport = !this.fullImport;
   }
 }

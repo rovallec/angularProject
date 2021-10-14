@@ -34,7 +34,7 @@ $sql = "select id,
           date_post,
           url,
           origin,
-          label 
+          label
         from posts " . $where . $order;
 
 
@@ -54,12 +54,11 @@ if($result = pg_query($con,$sql)){
     $return[$i]['label'] = $row['label'];
     $i++;
   }
-//  echo($sql);
     echo(json_encode($return));
-}else{
-  echo(pg_result_error($con));
+} else {
+  echo(json_encode(pg_result_error($con)));
   echo("<br>");
-  echo($sql);
+  echo(json_encode($sql));
   http_response_code(400);
 }
 ?>

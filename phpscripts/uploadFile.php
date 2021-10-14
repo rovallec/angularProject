@@ -5,6 +5,38 @@ $profile = $_POST["profile"];
 $user = $_POST["user"];
 $rnd =  rand(99,99999);
 
+
+if($_POST['process']=="tk_exception"){
+
+    $names = [];
+    $nameNow = [];
+    $storeName = [];
+    $res;
+    $i = 0;
+
+    $names[0] = $user;
+
+    try {
+        $nameNow[0] = $names[0];
+        $storeName[0] = "/var/www/html/uploads/" . basename($nameNow[0]);
+       if(!isset($_FILES['file1']['error']) || is_array($_FILES['file1']['error'])){
+            $nameNow[0] = 'NoFile.jpeg';
+           throw new RuntimeException('uploads/NoFile.jpeg');
+       }
+       if(!move_uploaded_file($_FILES['file1']['tmp_name'], $storeName[0])){
+           sha1($_FILES['file1']['tmp_name'], $ext);
+           throw new RuntimeException('0');
+       }else{
+           
+       }
+
+    } catch (RuntimeException $th) {
+    }
+    
+    $res['EnglishTest'] = $nameNow[0];
+
+    echo(json_encode($res));
+}
 if($_POST['process']=="updateSignature"){
     $actualName = $user  . "_Signatures_" . ".jpeg";
     $targetPath = "/var/www/html/uploads/" . basename($actualName);
@@ -20,7 +52,6 @@ if($_POST['process']=="updateSignature"){
          echo json_encode($res);
     }
 }
-
 if($_POST['process']=="secondInterview"){
 
     $names = [];

@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates, roster_types, rosters, roster_times, roster_weeks, tk_upload } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -751,7 +751,7 @@ updateCredits(credits:credits){
 }
 
 updateDebits(debits:debits){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateCredits.php`, debits);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateDebits.php`, debits);
 }
 
 insertPayments(payment:payments){
@@ -1020,6 +1020,85 @@ deleteClauseTemplate(any: clauses_templates) {
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteClauseTemplate.php`, any);
 }
 
+deleteDeduction(ded:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteDeduction.php`, ded);
+}
+
+insertManualPayment(payment:payments){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertManualPayment.php`, payment);
+}
+
+deleteManualPayment(payment:payments){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteManualPayment.php`, payment);
+}
+
+getRoster_tags(){
+  return this.httpClient.get<string[]>(`${this.PHP_API_SERVER}/phpscripts/getTags.php`);
+}
+
+getRosterTemplates(str:string){
+  return this.httpClient.post<roster_types[]>(`${this.PHP_API_SERVER}/phpscripts/getRosterTemplates.php`,str);
+}
+
+getRosterTimes(){
+  return this.httpClient.get<roster_times[]>(`${this.PHP_API_SERVER}/phpscripts/getRosterTimes.php`);
+}
+
+insertTimes(time:roster_times){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertRosterTimes.php`, time);
+}
+
+updateRosterType(rst:roster_types){
+  return this.httpClient.post<roster_types[]>(`${this.PHP_API_SERVER}/phpscripts/updateRoosterType.php`, rst);
+}
+
+getRosters(str:string){
+  return this.httpClient.post<rosters[]>(`${this.PHP_API_SERVER}/phpscripts/getRosters.php`, str);
+}
+
+insertTkimport(){
+  return this.httpClient.get<tk_upload>(`${this.PHP_API_SERVER}/phpscripts/insertTk_import.php`)
+}
+
+getTkUploads(dt:any){
+  return this.httpClient.post<tk_upload[]>(`${this.PHP_API_SERVER}/phpscripts/getTk_upload.php`, dt)
+}
+
+getUploadedAdjustments(any:any){
+  return this.httpClient.post<attendences_adjustment[]>(`${this.PHP_API_SERVER}/phpscripts/getUploadjustifications.php`, any);
+}
+
+updateRosters(rost:rosters){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateRosters.php`, rost);
+}
+
+getRosterFilter(any:any){
+  return this.httpClient.post<rosters[]>(`${this.PHP_API_SERVER}/phpscripts/getFilteredRosters.php`, any);
+}
+
+updateRosterOrder(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateRosterOrder.php`, any);
+}
+
+insertImportedRosters(rosters:roster_weeks[]){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertImportedRosters.php`, rosters);
+}
+
+deleteRoster(rst:rosters){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteRosters.php`, rst);
+}
+
+insertRosters(rst:roster_types){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertRostersTemplates.php`, rst);
+}
+
+copyRosters(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/copyRosters.php`, any);
+}
+
+insertScheduleFix(adj:attendences_adjustment){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertScheduleFix.php`, adj)
+}
 }
 
 

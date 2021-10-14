@@ -12,7 +12,7 @@ $i = 0;
 
 $sql = "SELECT hires.nearsol_id, accounts.name AS `acc`,
 profiles.idprofiles, employees.idemployees, profiles.first_name, profiles.second_name, profiles.first_lastname,
-profiles.second_lastname ,employees.client_id,`tmp`.id_employee, count(`tmp`.idattendences) AS `cnt`, group_concat(`tmp`.date) AS `dates` FROM 
+profiles.second_lastname ,employees.client_id,`tmp`.id_employee, count(`tmp`.idattendences) AS `cnt`, group_concat(`tmp`.date) AS `dates` FROM
 (SELECT attendences.* FROM attendences
 LEFT JOIN hr_processes ON attendences.id_employee = hr_processes.id_employee
 INNER JOIN vacations ON vacations.id_process = hr_processes.idhr_processes AND attendences.date = vacations.date AND vacations.count > 0.5
@@ -22,9 +22,9 @@ SELECT attendences.* FROM attendences
 LEFT JOIN hr_processes ON attendences.id_employee = hr_processes.id_employee
 INNER JOIN leaves ON attendences.date BETWEEN leaves.start AND leaves.end AND leaves.id_process = hr_processes.idhr_processes
 WHERE attendences.worked_time > 0 AND attendences.date BETWEEN '$st' AND '$nd' AND hr_processes.status = 'PENDING'
-UNION 
-SELECT idattendences, id_employee, date, scheduled, worked_time, 0, null FROM (
-SELECT attendences.idattendences, attendences.id_employee, attendences.date, 
+UNION
+SELECT idattendences, id_employee, date, scheduled, worked_time, id_import, 0 FROM (
+SELECT attendences.idattendences, attendences.id_employee, attendences.date, attendences.id_import,
 attendences.scheduled, attendences.worked_time, COUNT(leaves.idleaves) AS `cnt`, COUNT(vacations.idvacations) AS `vac_count`,
 `susp`.`cnt` AS `suspensions_count`
 FROM attendences
@@ -37,7 +37,7 @@ attendences
 INNER JOIN hr_processes ON hr_processes.id_employee = attendences.id_employee AND hr_processes.id_type = 6
 INNER JOIN disciplinary_requests ON disciplinary_requests.id_process = hr_processes.idhr_processes
 INNER JOIN disciplinary_processes ON disciplinary_processes.id_request = disciplinary_requests.iddisciplinary_requests
-INNER JOIN suspensions ON suspensions.id_disciplinary_process = disciplinary_processes.iddisciplinary_processes 
+INNER JOIN suspensions ON suspensions.id_disciplinary_process = disciplinary_processes.iddisciplinary_processes
 			AND (suspensions.day_1 = attendences.date OR suspensions.day_2 = attendences.date OR suspensions.day_3 = attendences.date OR suspensions.day_4 = attendences.date)
 WHERE hr_processes.status = 'DISPATCHED'
 GROUP BY idattendences) AS `susp` ON `susp`.idattendences = attendences.idattendences
@@ -63,5 +63,7 @@ if($request = mysqli_query($con,$sql)){
         $i++;
     }
     echo(json_encode($res));
+}else{
+    echo(json_encode($sql));
 }
 ?>

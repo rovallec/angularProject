@@ -24,6 +24,26 @@ export class HrdailyComponent implements OnInit {
   isExportable: boolean = false;
   me: users = new users;
   targetStatus:string = "'PENDING'";
+  filterList:string[] = [
+    'IGSS',
+    'WFM Correction',
+    'Private Doctor',
+    'Birth Certificate',
+    'Supervisor Exception',
+    'Death Certificate',
+    'Closing Exception',
+    'Marriage Certificate',
+    'VTO Unpaid',
+    'Others Unpaid',
+    'Others Paid',
+    'Maternity',
+    'Leave of Absence Unpaid',
+    'IGSS Unpaid',
+    'IGSS Paid',
+    'COVID Unpaid',
+    'COVID Paid'
+  ];
+  setFilter:string = "'-1'";
 
   constructor(private apiService: ApiService, private authUsr: AuthServiceService) { }
 
@@ -61,7 +81,6 @@ export class HrdailyComponent implements OnInit {
   }
 
   addAccount() {
-    console.log(this.accountAdd);
     let acc: accounts[] = [];
 
     this.accounts.forEach((item: accounts) => {
@@ -109,10 +128,18 @@ export class HrdailyComponent implements OnInit {
         }
         acId = acId + itm.idaccounts;
       })
-      if (this.me.department == '28') {
+      if (this.me.department == '28' && this.setFilter == "'-1'") {
         window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo + "&state=" + this.targetStatus, "_blank");
       } else {
-        window.open("http://172.18.2.45/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId + "&state=" + this.targetStatus, "_blank");
+        if(this.me.department == '28'){
+          this.accounts.forEach((itm: accounts) => {
+            if (this.exportAccounts.indexOf(itm) != 0) {
+              acId = acId + ",";
+            }
+            acId = acId + itm.idaccounts;
+          })
+        }
+        window.open("http://172.18.2.45/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId + "&state=" + this.targetStatus + "&filter=" + this.setFilter, "_blank");
       }
     }
   }
@@ -122,6 +149,36 @@ export class HrdailyComponent implements OnInit {
       this.targetStatus = "'PENDING', 'DISPATCHED', 'COMPLETED'";
     }else{
       this.targetStatus = "'PENDING'";
+    }
+  }
+
+  togleFilter(str:string){
+    let add:boolean = true;
+    let temp:string = "'-1'";
+    this.setFilter.split(',').forEach(ss=>{
+      if(ss != "'-1'"){
+        ss = ss.replace("'", "");
+        ss = ss.replace("'", "");
+        ss = ss.substr(1, ss.length);
+        if(ss.toString() == str.toString()){
+          add = false;
+        }
+      }
+    })
+    if(add){
+      this.setFilter = this.setFilter + ", '" + str + "'";
+    }else{
+      this.setFilter.split(',').forEach(ss=>{
+        if(ss != "'-1'"){
+          ss = ss.replace("'", "");
+          ss = ss.replace("'", "");
+          ss = ss.substr(1, ss.length);
+          if(ss != str){
+            temp = temp + ", '" + ss + "'";
+          }
+        }
+      })
+      this.setFilter = temp;
     }
   }
 }

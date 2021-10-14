@@ -52,7 +52,7 @@ export class VacationsRepComponent implements OnInit {
       idemployees = idemployees + this.employees[index].idemployees + ',';      
     }
     idemployees = idemployees + '0';    
-    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportVacationsReport.php?employees=" + idemployees, "_blank");
+    window.open("http://172.18.2.45/phpscripts/exportVacationsReport.php?employees=" + idemployees, "_blank");
   }
 
 }

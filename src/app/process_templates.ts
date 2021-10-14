@@ -171,7 +171,18 @@ export class attendences {
     state: string;
     igss:string;
     tk_exp:string;
-    constructor() {
+    tk_imp:string;
+    schedule_fix:string;
+    time_in_aux0:string;
+    time_in_systems_issues:string;
+    time_in_lunch:string;
+    break_abuse:string;
+    exceptions_meeting_feedback:string;
+    exceptions_offline_training:string;
+    systems_issues_by_sup:string;
+    floor_support:string;
+    time_training:string;
+        constructor() {
         this.igss = '0';
         this.tk_exp = '0';
         this.idattendences = null;
@@ -187,10 +198,21 @@ export class attendences {
         this.second_lastname = null;
         this.day_off1 = null;
         this.day_off2 = null;
-        this.status = null;
+        this.status = '0';
         this.id_wave = null;
         this.balance = null;
         this.state = null;
+        this.tk_imp = null;
+        this.time_in_aux0 = null;
+        this.time_in_systems_issues = null;
+        this.time_in_lunch = null;
+        this.break_abuse = null;
+        this.exceptions_meeting_feedback = null;
+        this.exceptions_offline_training = null;
+        this.systems_issues_by_sup = null;
+        this.floor_support = null;
+        this.time_training = null;
+        this.schedule_fix = null
     }
 }
 
@@ -223,7 +245,8 @@ export class attendences_adjustment {
     error:string;
     nearsol_id:string;
     adj_type:string;
-    account: string;
+    account:string;
+    id_import:string;
     constructor() {
         //adjustments
         this.idattendence_adjustemnt = null;
@@ -252,6 +275,7 @@ export class attendences_adjustment {
         this.error = null;
         this.nearsol_id = null;
         this.adj_type = null;
+        this.id_import = '0';
     }
 }
 
@@ -972,6 +996,9 @@ export class sup_exception {
     notes: string;
     supervisor: string;
     status: string;
+    id_employee:string;
+    duplicated:string;
+    id_type:string;
     constructor() {
         this.avaya = null;
         this.name = null;
@@ -981,6 +1008,9 @@ export class sup_exception {
         this.notes = null;
         this.supervisor = null;
         this.status = "FALSE";
+        this.id_employee = null;
+        this.duplicated = '0';
+        this.id_type = null;
     }
 }
 
@@ -1315,13 +1345,6 @@ export class payroll_values_gt{
     id_payment:string = null;
     client_id:string = null;
     nearsol_id:string = null;
-    discounted_days:string = null;
-    seventh:string = null;
-    discounted_hours:string = null;
-    ot_hours:string = null;
-    holidays_hours:string = null;
-    performance_bonus:string = null;
-    treasure_hunt:string = null;
     agent_name:string = null;
     account_name:string = null;
     agent_status:string = null;
@@ -1329,10 +1352,17 @@ export class payroll_values_gt{
     hrs:number = null;
     next_seventh:number = null;
     adjustments:string = null;
-    adj_holidays:string = null;
-    adj_ot:string = null;
-    adj_hours:string = null;
+    discounted_days:string = null;
+    discounted_hours:string = null;
+    seventh:string = null;
+    ot_hours:string = null;
+    holidays_hours:string = null;
     nearsol_bonus:string = null;
+    performance_bonus:string = null;
+    treasure_hunt:string = null;
+    adj_hours:string = null;
+    adj_ot:string = null;
+    adj_holidays:string = null;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;
@@ -1690,6 +1720,7 @@ export class payroll_resume{
     igss_hrs:string;
     insurance:string;
     other_hrs:string;
+    ns:string;
     constructor(){
         this.nearsol_id = null;
         this.client_id = null;
@@ -1701,6 +1732,7 @@ export class payroll_resume{
         this.igss_hrs = '0';
         this.insurance = '0';
         this.other_hrs = '0';
+        this.ns = '0';
     }
 }
 
@@ -2202,3 +2234,336 @@ export class all_templates extends clauses_templates {
   }
 }
 
+export class tk_import{
+    idpayments:string;
+    client_bonus:string;
+    nearsol_bonus:string;
+    treasure_hunt:string;
+    adjust_hrs:string;
+    adjust_ot:string;
+    adjust_hld:string;
+    constructor(){
+        this.idpayments = null;
+        this.client_bonus = null;
+        this.nearsol_bonus = null;
+        this.treasure_hunt = null;
+        this.adjust_hrs = null;
+        this.adjust_ot = null;
+        this.adjust_hld = null;
+    }
+}
+
+export class roster_types{
+    idroster_types:string;
+    tag:string;
+    name:string;
+    id_time_mon:string;
+    id_time_tue:string;
+    id_time_wed:string;
+    id_time_thur:string;
+    id_time_fri:string;
+    id_time_sat:string;
+    id_time_sun:string;
+    mon_start:string;
+    mon_end:string;
+    tue_start:string;
+    tue_end:string;
+    wed_start:string;
+    wed_end:string;
+    thur_start:string;
+    thur_end:string;
+    fri_start:string;
+    fri_end:string;
+    sat_start:string;
+    sat_end:string;
+    sun_start:string;
+    sun_end:string;
+    constructor(){
+        this.idroster_types = null;
+        this.tag = null;
+        this.name = null;
+        this.id_time_mon = null;
+        this.id_time_tue = null;
+        this.id_time_wed = null;
+        this.id_time_thur = null;
+        this.id_time_fri = null;
+        this.id_time_sat = null;
+        this.id_time_sun = null;
+        this.mon_start = null;
+        this.mon_end = null;
+        this.tue_start = null;
+        this.tue_end = null;
+        this.wed_start = null;
+        this.wed_end = null;
+        this.thur_start = null;
+        this.thur_end = null;
+        this.fri_start = null;
+        this.fri_end = null;
+        this.sat_start = null;
+        this.sat_end = null;
+        this.sun_start = null;
+        this.sun_end = null;
+    }
+}
+
+export class roster_times{
+    idroster_times:string;
+    start:string;
+    end:string;
+    fixed:string;
+    constructor(){
+        this.idroster_times = null;
+        this.start = null;
+        this.end = null;
+        this.fixed = null;
+    }
+}
+
+export class rosters{
+    idrosters:string;
+    name:string;
+    nearsol_id:string;
+    client_id:string;
+    mon_start:string;
+    mon_end:string;
+    tue_start:string;
+    tue_end:string;
+    wed_start:string;
+    wed_end:string;
+    thur_start:string;
+    thur_end:string;
+    fri_start:string;
+    fri_end:string;
+    sat_start:string;
+    sat_end:string;
+    sun_start:string;
+    sun_end:string;
+    week_value:string;
+    count:string;
+    showed:string;
+    id_employee:string;
+    id_schedule:string;
+    status:string;
+    id_period:string;
+    id_account:string;
+    tag:string;
+    roster_name:string;
+    mon_fixed:string;
+    tue_fixed:string;
+    wed_fixed:string;
+    thur_fixed:string;
+    fri_fixed:string;
+    sat_fixed:string;
+    sun_fixed:string;
+    constructor(){
+        this.idrosters = null;
+        this.name = null;
+        this.nearsol_id = null;
+        this.client_id = null;
+        this.mon_start = null;
+        this.mon_end = null;
+        this.tue_start = null;
+        this.tue_end = null;
+        this.wed_start = null;
+        this.wed_end = null;
+        this.fri_start = null;
+        this.fri_end = null;
+        this.sat_start = null;
+        this.sun_start = null;
+        this.week_value = null;
+        this.count = null;
+        this.showed = null;
+        this.id_employee = null;
+        this.status = null;
+        this.id_period = null;
+        this.id_account = null;
+        this.tag = null;
+        this.roster_name = null;
+        this.mon_fixed = null;
+        this.tue_fixed = null;
+        this.wed_fixed = null;
+        this.thur_fixed = null;
+        this.fri_fixed = null;
+        this.sat_fixed = null;
+        this.sun_fixed = null;
+    }
+}
+
+export class roster_views{
+    idrosters:string;
+    id_account:string;
+    id_employee:string;
+    nearsol_id:string;
+    client_id:string;
+    name:string;
+    day_1:string;
+    day_2:string;
+    day_3:string;
+    day_4:string;
+    day_5:string;
+    day_6:string;
+    day_7:string;
+    day_8:string;
+    day_9:string;
+    day_10:string;
+    day_11:string;
+    day_12:string;
+    day_13:string;
+    day_14:string;
+    day_15:string;
+    day_16:string;
+    fixed_1:string;
+    fixed_2:string;
+    fixed_3:string;
+    fixed_4:string;
+    fixed_5:string;
+    fixed_6:string;
+    fixed_7:string;
+    fixed_8:string;
+    fixed_9:string;
+    fixed_10:string;
+    fixed_11:string;
+    fixed_12:string;
+    fixed_13:string;
+    fixed_14:string;
+    fixed_15:string;
+    fixed_16:string;
+    att_status_1:string;
+    att_status_2:string;
+    att_status_3:string;
+    att_status_4:string;
+    att_status_5:string;
+    att_status_6:string;
+    att_status_7:string;
+    att_status_8:string;
+    att_status_9:string;
+    att_status_10:string;
+    att_status_11:string;
+    att_status_12:string;
+    att_status_13:string;
+    att_status_14:string;
+    att_status_15:string;
+    att_status_16:string;
+    id_period:string;
+    status:string;
+    constructor(){
+        this.idrosters = null;
+        this.id_account = null;
+        this.id_employee = null;
+        this.nearsol_id = null;
+        this.client_id = null;
+        this.name = null;
+        this.day_1 = null;
+        this.day_2 = null;
+        this.day_3 = null;
+        this.day_4 = null;
+        this.day_5 = null;
+        this.day_6 = null;
+        this.day_7 = null;
+        this.day_8 = null;
+        this.day_9 = null;
+        this.day_10 = null;
+        this.day_11 = null;
+        this.day_12 = null;
+        this.day_13 = null;
+        this.day_14 = null;
+        this.day_15 = null;
+        this.day_16 = null;
+        this.fixed_1 = null;
+        this.fixed_2 = null;
+        this.fixed_3 = null;
+        this.fixed_4 = null;
+        this.fixed_5 = null;
+        this.fixed_6 = null;
+        this.fixed_7 = null;
+        this.fixed_8 = null;
+        this.fixed_9 = null;
+        this.fixed_10 = null;
+        this.fixed_11 = null;
+        this.fixed_12 = null;
+        this.fixed_13 = null;
+        this.fixed_14 = null;
+        this.fixed_15 = null;
+        this.fixed_16 = null;
+        this.att_status_1 = '1';
+        this.att_status_2 = '1';
+        this.att_status_3 = '1';
+        this.att_status_4 = '1';
+        this.att_status_5 = '1';
+        this.att_status_6 = '1';
+        this.att_status_7 = '1';
+        this.att_status_8 = '1';
+        this.att_status_9 = '1';
+        this.att_status_10 = '1';
+        this.att_status_11 = '1';
+        this.att_status_12 = '1';
+        this.att_status_13 = '1';
+        this.att_status_14 = '1';
+        this.att_status_15 = '1';
+        this.att_status_16 = '1';
+        this.id_period = null;
+        this.status = null;
+    }
+}
+
+export class tk_upload{
+    idtk_import:string;
+    date:string;
+    path:string;
+    constructor(){
+        this.idtk_import = null;
+        this.date = null;
+        this.path = null;
+    }
+}
+
+export class roster_weeks{
+    id_employee:string;
+    id_period:string;
+    mon_start:string;
+    mon_end:string;
+    mon_fixed:string;
+    tue_start:string;
+    tue_end:string;
+    tue_fixed:string;
+    wed_start:string;
+    wed_end:string;
+    wed_fixed:string;
+    thur_start:string;
+    thur_end:string;
+    thur_fixed:string;
+    fri_start:string;
+    fri_end:string;
+    fri_fixed:string;
+    sat_start:string;
+    sat_end:string;
+    sat_fixed:string;
+    sun_start:string;
+    sun_end:string;
+    sun_fixed:string;
+    constructor(){
+        this.id_employee = null;
+        this.id_period = null;
+        this.mon_start = null;
+        this.mon_end = null;
+        this.mon_fixed = null;
+        this.tue_start = null;
+        this.tue_end = null;
+        this.tue_fixed = null;
+        this.wed_start = null;
+        this.wed_end = null;
+        this.wed_fixed = null;
+        this.thur_start = null;
+        this.thur_end = null;
+        this.thur_fixed = null;
+        this.fri_start = null;
+        this.fri_end = null;
+        this.fri_fixed = null;
+        this.sat_start = null;
+        this.sat_end = null;
+        this.sat_fixed = null;
+        this.sun_start = null;
+        this.sun_end = null;
+        this.sun_fixed = null;
+    }
+}

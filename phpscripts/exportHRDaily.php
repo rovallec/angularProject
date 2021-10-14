@@ -9,9 +9,16 @@ $start = $_GET['from'];
 $end = $_GET['to'];
 $accounts = $_GET['accounts'];
 $state = $_GET['state'];
+$filter = $_GET['filter'];
 $spliter = [];
 $exportRow = [];
-$sql = "SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
+if($filter == '-1'){
+    $filter = ' = -1';
+}else{
+    $filter = ' IN (' . $filter . ')';
+}
+$sql = "SELECT * FROM (
+SELECT accounts.name AS `acc_name`, hires.nearsol_id, employees.client_id, CONCAT(profiles.first_name, ' ', profiles.second_name, ' ', profiles.first_lastname, ' ', profiles.second_lastname) AS `name`,
 'IGSS' AS `type_of_payment`, DATE_FORMAT(attendences.date, '%Y/%m/%d'), attendence_adjustemnt.start, attendence_adjustemnt.end, attendence_adjustemnt.amount, hr_processes.notes
 FROM
 	attendence_justifications
@@ -97,7 +104,7 @@ WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
       OR (leaves.end BETWEEN '$start' AND '$end')
       OR (leaves.end >= '$start')
       OR (leaves.start <= '$end'))
-      AND (`dt`.`dates` BETWEEN '$start' AND '$end')
+      OR (`dt`.`dates` BETWEEN '$start' AND '$end')
       AND (hr_processes.id_department != 28 AND hr_processes.id_type = 5 AND hr_processes.status IN ($state) AND (leaves.motive = 'IGSS Unpaid' OR leaves.motive = 'Others Unpaid' OR leaves.motive = 'VTO Unpaid' OR leaves.motive = 'COVID Unpaid')) AND employees.id_account IN ($accounts)
 
 UNION
@@ -178,9 +185,9 @@ FROM
     INNER JOIN hires ON hires.idhires = `emp`.id_hire
     INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 	INNER JOIN accounts ON accounts.idaccounts = `emp`.id_account
-   INNER JOIN (
+    INNER JOIN (
 		select date_add('$start', interval `row` day) AS `dates` from
-		( 
+		(
 			SELECT @rowd := @rowd + 1 as `row` FROM 
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t,
 			(select 0 union all select 1 union all select 2 union all select 3 union all select 4 union all select 5 union all select 6 union all select 7 union all select 8 union all select 9) t2, 
@@ -190,8 +197,9 @@ FROM
 		) sequence
 		where date_add('$start', interval `row` day) <= '$end'
     ) AS `dt` ON `dt`.`dates` = suspensions.day_1 OR `dt`.`dates` = suspensions.day_2 OR `dt`.`dates` = suspensions.day_3 OR `dt`.`dates` = suspensions.day_4
-WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '$start' AND '$end') AND `emp`.id_account IN ($accounts)";
-
+WHERE (hr_processes.date BETWEEN '$start' AND '$end') OR (`dt`.`dates` BETWEEN '$start' AND '$end') AND `emp`.id_account IN ($accounts)
+)
+AS `report` WHERE `type_of_payment` $filter";
 $output = fopen("php://output", "w");
 fputcsv($output, array("ACCOUNT", "NERSOL ID", "CLIENT ID", "COMPLETE NAME", " TYPE OF PAYMENT", "DATE (M/D/Y)", "START", "END", "LENGTH", "NOTES"));
 if($result = mysqli_query($con,$sql)){

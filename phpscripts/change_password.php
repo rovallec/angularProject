@@ -11,7 +11,7 @@ header('Access-Control-Allow-Headers: *');
 		$password = ($request->password);
 		
 		$sql1 = 'USE mysql';
-        $sql = "ALTER user '$user'@'%' IDENTIFIED by '$password';";
+        $sql = "ALTER user '$user'@'localhost' IDENTIFIED by '$password';";
 
 		if (mysqli_query($con, $sql1)) {
 			if(mysqli_query($con, $sql))
@@ -22,20 +22,16 @@ header('Access-Control-Allow-Headers: *');
 					if (mysqli_query($con, $sql2)) {
 						echo(json_encode('changed'));
 					} else {
-						echo("Error 2: <br>");
-						echo mysqli_error($con);
+						echo (json_encode(mysqli_error($con)));
 					}
 				} else {
-					echo("Error 3: <br>");
-					echo mysqli_error($con);
+					echo (json_encode(mysqli_error($con)));
 				}
 			} else {
-				echo("Error 0: <br>");
-				echo mysqli_error($con);
+				echo (json_encode(mysqli_error($con)));
 			}
 		}
-	} else {
-		echo("Error 1: <br>");
-		echo mysqli_error($con);
+	} else {		
+		echo (json_encode(mysqli_error($con)));
 	}
 ?>

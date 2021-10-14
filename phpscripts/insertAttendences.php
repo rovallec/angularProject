@@ -23,8 +23,13 @@
             $worked = validarDatos($de->worked_time);
             $id = validarDatos($de->id_wave);
             $d_off = validarDatos($de->day_off1);
-            $sql = "INSERT INTO attendences (idattendences, id_employee, date, scheduled, worked_time)  
-                        SELECT * FROM (SELECT null,$id_employee AS `1`,'$date' AS `2`,'$scheduled' AS `3`,'$worked' AS `4`) 
+            try {
+                $tk_imp = validarDatos($de->tk_imp);
+            } catch (\Throwable $th) {
+                $tk_imp = 'NULL';
+            }
+            $sql = "INSERT INTO attendences (idattendences, id_employee, date, scheduled, worked_time, id_import) 
+                        SELECT * FROM (SELECT null,$id_employee AS `1`,'$date' AS `2`,'$scheduled' AS `3`,'$worked' AS `4`, $tk_imp AS `5`) 
                         AS tmp WHERE NOT EXISTS (SELECT date FROM attendences WHERE id_employee = $id_employee AND date = '$date') LIMIT 1;";
             if(mysqli_query($con, $sql)){
             }else{
@@ -67,9 +72,9 @@
                         $att[$i]['status'] = $row['status'];
                         $i++;
                     }
-                    
                     echo json_encode($att);
                 }else{
+                    echo($sql);
                     http_response_code(200);
                 }
     }

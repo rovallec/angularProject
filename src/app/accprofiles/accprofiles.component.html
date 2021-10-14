@@ -103,183 +103,120 @@
                 </div>
                 <div class="tab-pane fade show active" id="nav-attendence" role="tabpanel"
                     aria-labelledby="nav-attendence-tab">
-                    <div class="form-row col-sm-12">
-                        <label
-                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">PAYMENTS</label>
-                        <div class="form-row col-md-12" style="padding-bottom:25px">
-                            <div class="form-group col-md-4"></div>
-                            <div class="form-group col-md-4">
-                                <select class="form-control" [(ngModel)]="active_payment" (change)="setPayment()">
-                                    <option *ngFor="let payment of payments" [ngValue]="payment">{{payment.start}} TO
-                                        {{payment.end}}
-                                    </option>
+                    <div class="form-row col-md-12" style="margin-top:25px; margin-bottom: 25px;">
+                        <div class="col-md-3">
+                            <div class="row col-md-12">
+                                <label>Year:</label>
+                                <select class="form-control selectable" [(ngModel)]="selectedYear">
+                                    <option *ngFor="let year of years">{{year}}</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-4"></div>
+                            <div class="row col-md-12">
+                                <label>Month:</label>
+                                <select class="form-control selectable" [(ngModel)]="selectedMonth"
+                                    (change)="setMonth()">
+                                    <option *ngFor="let month of months">{{month}}</option>
+                                </select>
+                            </div>
+                            <div class="row col-md-12" style="margin-top:10px">
+                                <label>Period:</label>
+                                <div class="list-group w-100" id="list-tab" role="tablist">
+                                    <a class="list-group-item list-group-item-action w-100 selectable"
+                                        (click)="clickSetPayment(pys)"
+                                        [ngClass]="{'active': active_payment.idpayments == pys.idpayments}"
+                                        *ngFor="let pys of showPayments()">{{pys.start}} TO {{pys.end}}</a>
+                                </div>
+                            </div>
+                            <div class="row col-md-12 d-flex justify-content-between" style="margin-top:25px">
+                                <div>
+                                    <button class="form-control btn btn-outline-danger" data-toggle="modal" data-target="#deletePayment"><i class="far fa-trash-alt"></i></button>
+                                </div>
+                                <div>
+                                    <button class="form-control btn btn-outline-warning" (click)="acreditSelection()" [disabled]="acreditType === '0'"><i class="fas fa-credit-card"></i></button>
+                                </div>
+                                <div>
+                                    <button class="form-control btn btn-outline-success" data-toggle="modal" data-target="#addPayment" (click)="setNewPayment()"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-row col-md-12">
-                            <div class="form-group col-md-2"></div>
-                            <div class="form-group col-md-8" style="border-bottom:solid 3px #e3f2fd;"></div>
-                            <div class="form-group col-md-2"></div>
-                        </div>
-                        <div class="form-row col-md-12" style="padding-bottom:25px">
-                            <div class="form-group col-md-1"></div>
-                            <div class="form-group col-md-5">
-                                <label
-                                    style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">CREDITS</label>
-                                <div class="form-row col-md-12" style="padding-bottom:25px">
-                                    <table class="table table-striped table-hover"
-                                        style="border-right:solid 4px #e3f2fd">
-                                        <thead style="text-align:center">
-                                            <th></th>
-                                            <th>ID</th>
-                                            <th>CONCEPT</th>
-                                            <th>AMOUNT</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let cred of credits" class="selectable"
-                                                [ngClass]="{'table-warning': cred.status === 'PAID'}">
-                                                <td><input type="checkbox" value="{{cred.iddebits}}"
-                                                        (change)="selectedCredit($event)" *ngIf="cred.status != 'PAID'">
-                                                    <input type="checkbox" value="{{cred.iddebits}}"
-                                                        (change)="selectedCredit($event)" [disabled]="true"
-                                                        [checked]="true" *ngIf="cred.status == 'PAID'">
-                                                </td>
-                                                <td style="text-align: center;" (click)="setCredit(cred)">
-                                                    {{cred.iddebits}}</td>
-                                                <td style="text-align: center;" (click)="setCredit(cred)">{{cred.type}}
-                                                </td>
-                                                <td style="text-align: center;" (click)="setCredit(cred)">
-                                                    {{cred.amount}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew && !acrediting">
-                                    <div class="form-group col-md-2"></div>
-                                    <div class="form-group col-md-8" style="border-bottom:solid 4px #e3f2fd"></div>
-                                    <div class="form-group col-md-2"></div>
-                                </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew && !acrediting"
-                                    style="margin-top:25px">
-                                    <div class="form-group col-md-5"></div>
-                                    <div class="form-group col-md-2">
-                                        <button class="form-control" (click)="newDeduction('Credit')">Insert</button>
-                                    </div>
-                                    <div class="form-group col-md-5"></div>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-5">
-                                <label
-                                    style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">DEBITS</label>
-                                <div class="form-row col-md-12" style="padding-bottom:25px;">
-                                    <table class="table table-striped table-hover"
-                                        style="margin-right:solid 4px #f4f8ff">
-                                        <thead style="text-align:center">
-                                            <th></th>
-                                            <th>ID</th>
-                                            <th>CONCEPT</th>
-                                            <th>AMOUNT</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let deb of debits" class="selectable"
-                                                (click)="setDeduction(deb)">
-                                                <td><input type="checkbox" value="{{deb.iddebits}}"
-                                                        (change)="selectedDebit($event)" *ngIf="deb.status != 'PAID'">
-                                                    <input type="checkbox" value="{{deb.iddebits}}"
-                                                        (change)="selectedDebit($event)" [disabled]="true"
-                                                        [checked]="true" *ngIf="deb.status == 'PAID'">
-                                                </td>
-                                                <td style="text-align: center;">{{deb.iddebits}}</td>
-                                                <td style="text-align: center;">{{deb.type}}</td>
-                                                <td style="text-align: center;">{{deb.amount}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew && !acrediting">
-                                    <div class="form-group col-md-2"></div>
-                                    <div class="form-group col-md-8" style="border-bottom:solid 4px #e3f2fd"></div>
-                                    <div class="form-group col-md-2"></div>
-                                </div>
-                                <div class="form-row col-md-12" *ngIf="!insertNew && !acrediting"
-                                    style="margin-top:25px">
-                                    <div class="form-group col-md-5"></div>
-                                    <div class="form-group col-md-2">
-                                        <button class="form-control" (click)="newDeduction('Debit')">Insert</button>
-                                    </div>
-                                    <div class="form-group col-md-5"></div>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-1"></div>
-                        </div>
-                        <div class="form-row col-md-12" *ngIf="insertNew || acrediting">
-                            <div class="form-group col-md-1"></div>
-                            <div class="form-group col-md-10" style="border-bottom:solid 4px #e3f2fd"></div>
-                            <div class="form-group col-md-1"></div>
-                        </div>
-                        <div class="form-row col-md-12" *ngIf="!insertNew && acrediting" style="padding-bottom:25px; margin-top:10px">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-2">
-                                <button class="form-control" (click)="CancelAcreditSelection()">Cancel</button>
-                            </div>
-                            <div class="col-md-2"></div>
-                            <div class="col-md-2">
-                                <button class="form-control" (click)="acreditSelection()">Acredit</button>
-                            </div>
-                            <div class="col-md-3"></div>
-                        </div>
-                        <div class="form-row col-md-12" *ngIf="insertNew && !acrediting" style="padding-bottom:25px">
-                            <label
-                                style="font-size: 14px; font-weight: bold; margin-left:48%;margin-top: 10px;">{{insertN}}</label>
-                            <div class="form-row col-md-12">
-                                <div class="form-group col-md-3">
-                                    <label style="text-align: center;">Concept:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="activeCred.type"
-                                        [disabled]="record">
-                                </div>
-                                <div class="form-group col-md-6"></div>
-                                <div class="form-group col-md-3">
-                                    <label style="text-align: center;">Amount:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="activeCred.amount"
-                                        [disabled]="record">
-                                </div>
-                            </div>
-                            <div class="form-row col-md-12">
-                                <div class="form-group col-md-12">
-                                    <label style="text-align: center;">Notes:</label>
-                                    <textarea class="form-control" width="100%" [(ngModel)]="activeCred.notes"
-                                        [disabled]="record"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-row col-md-12" style="padding-bottom: 25px;">
+                        <div class="col-md-9">
+                            <div class="row col-md-12">
                                 <div class="form-group col-md-4">
-                                    <label style="text-align: center;">User:</label>
-                                    <input type="text" [disabled]="true" class="form-control"
-                                        [(ngModel)]="activeCred.id_user">
+                                    <label>Account:</label>
+                                    <input type="text" [(ngModel)]="activeAccountpy" class="form-control" disabled="true">
                                 </div>
-                                <div class="form-group col-md-4"></div>
                                 <div class="form-group col-md-4">
-                                    <label style="text-align: center;">Date:</label>
-                                    <input type="text" [disabled]="true" class="form-control"
-                                        [(ngModel)]="activeCred.date">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Payment Method:</label>
+                                    <input type="text" [(ngModel)]="activePaymentMethodpy" class="form-control" disabled="true">
                                 </div>
                             </div>
-                            <div class="form-row col-md-12">
-                                <div class="form-group col-md-2"></div>
-                                <div class="form-group col-md-8" style="border-bottom:solid 4px #e3f2fd"></div>
-                                <div class="form-group col-md-2"></div>
-                            </div>
-                            <div class="form-row col-md-12" style="margin-top:25px">
-                                <div class="form-group col-md-1"></div>
-                                <div class="form-group col-md-2">
-                                    <button class="form-control" (click)="cancelDeduction()">Cancel</button>
+                            <div class="row col-md-12 margin-top:25px">
+                                <div class="col-md-6 right-border-middle">
+                                    <div class="row col-md-12 d-flex justify-content-center">
+                                        <label style="font-weight: bolder; font-size: 16px;">CREDITS</label>
+                                    </div>
+                                    <div class="row col-md-12 d-flex justify-content-center">
+                                        <table class="table table-light table-hover selectable" style="width: 100%;">
+                                            <thead>
+                                                <th>STATUS</th>
+                                                <th>ID</th>
+                                                <th>CONCEPT</th>
+                                                <th>AMOUNT</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let cred of credits" [ngClass]="{'table-warning':(cred.status === 'ACREDIT' || cred.status === 'PAID')}">
+                                                    <td style="text-align: center;"><input type="checkbox" [value]="cred.iddebits" 
+                                                        [checked]="cred.status === 'PAID' || cred.status === 'ACREDIT'" (change)="selectedCredit($event, 'credits')"
+                                                        [disabled]="acreditType === 'debits' || cred.status === 'ACREDIT' || cred.status === 'PAID'"></td>
+                                                    <td (click)="setCredit(cred)" data-target="#deduction_view"
+                                                    data-toggle="modal">{{cred.iddebits}}</td>
+                                                    <td (click)="setCredit(cred)" data-target="#deduction_view"
+                                                    data-toggle="modal">{{cred.type}}</td>
+                                                    <td (click)="setCredit(cred)" data-target="#deduction_view"
+                                                    data-toggle="modal">{{cred.amount}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" style="text-align:center;" class="hover-blue" (click)="newDeduction('Credit')"data-target="#deduction_view"
+                                                    data-toggle="modal"><i class="fas fa-plus"></i></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-6"></div>
-                                <div class="form-group col-md-2">
-                                    <button class="form-control" (click)="insertDeduction()">Aceptar</button>
+                                <div class="col-md-6">
+                                    <div class="row col-md-12 d-flex justify-content-center">
+                                        <label style="font-weight: bolder; font-size: 16px;">DEBITS</label>
+                                    </div>
+                                    <div class="row col-md-12 d-flex justify-content-center">
+                                        <table class="table table-light table-hover selectable" style="width: 100%;">
+                                            <thead>
+                                                <th>STATUS</th>
+                                                <th>ID</th>
+                                                <th>CONCEPT</th>
+                                                <th>AMOUNT</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let deb of debits" [ngClass]="{'table-warning':(deb.status === 'ACREDIT' || deb.status === 'PAID')}">
+                                                    <td style="text-align: center;"><input type="checkbox" [value]="deb.iddebits" 
+                                                        [checked]="deb.status === 'PAID' || deb.status === 'ACREDIT'" (change)="selectedDebit($event, 'debits')"
+                                                        [disabled]="acreditType === 'credits' || deb.status === 'ACREDIT' || deb.status === 'PAID'"></td>
+                                                    <td (click)="setDeduction(deb)" data-target="#deduction_view"
+                                                    data-toggle="modal">{{deb.iddebits}}</td>
+                                                    <td (click)="setDeduction(deb)" data-target="#deduction_view"
+                                                    data-toggle="modal">{{deb.type}}</td>
+                                                    <td (click)="setDeduction(deb)" data-target="#deduction_view"
+                                                    data-toggle="modal">{{deb.amount}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" style="text-align:center;" class="hover-blue" (click)="newDeduction('Debit')" data-target="#deduction_view"
+                                                    data-toggle="modal"><i class="fas fa-plus"></i></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-1"></div>
                             </div>
                         </div>
                     </div>
@@ -557,7 +494,8 @@
                 <div class="modal-body d-flex justify-content-between">
                     <div style="width: 90%; margin-left: 5%;" class="row d-flex flex-column">
                         <div [ngClass]="{'blue-hover':hover==='1'}" (mouseenter)="setHover('2')">
-                            <p style="font-size: 16px; font-weight: bold; border-bottom: solid 4px #003b71;">{{selected_detail.status}}</p>
+                            <p style="font-size: 16px; font-weight: bold; border-bottom: solid 4px #003b71;">
+                                {{selected_detail.status}}</p>
                         </div>
 
                         <div (mouseenter)="setHover('2')" [ngClass]="{'blue-hover':hover==='2'}">
@@ -587,9 +525,170 @@
                             <div>
                                 <p style="text-align: right;">Q.{{selected_detail.amount | number: '3.1-2' }}</p>
                             </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-right mt-2">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                        </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-right mt-2">
-                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!----------------------------------------------------------------------------------------------DEDUCTION DETAIL MODAL--------------------------------------------------------------->
+<div class="modal fade" id="deduction_view" tabindex="-1" role="dialog" aria-labelledby="calc_detail"
+    aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="search_modalLabel"
+                    style="font-weight:bold; text-align: center; font-size: 18px;">Dedution Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding:5px">
+                <div class="col-md-12" >
+                    <div class="row col-md-12" style="padding-right:0px">
+                        <div class="col-md-5" style="padding-right:0px">
+                            <label>Concept:</label>
+                            <select [disabled]='record && !editDeduction' class="form-control" [(ngModel)]="activeCred.type" (change)="setActiveCredType($event.target.value)">
+                                <option *ngFor="let ded of deductionsType">{{ded}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="padding-right:0px"></div>
+                        <div class="col-md-5" style="padding-right:0px">
+                            <label>Amount:</label>
+                            <input type="text" [disabled]='record && !editDeduction' class="form-control" [(ngModel)]="activeCred.amount">
+                        </div>
+                    </div>
+                    <div class="row col-md-12" style="padding-right:0px">
+                        <div class="col-md-12" style="padding-right:0px">
+                            <label>Notes:</label>
+                            <textarea class="form-control" width="100%" [disabled]='record' [(ngModel)]="activeCred.notes"></textarea>
+                        </div>
+                    </div>
+                    <div class="row col-md-12" style="padding-right:0px">
+                        <div class="col-md-4" style="padding-right:0px">
+                            <label>User:</label>
+                            <input type="text" disabled="true" class="form-control" [(ngModel)]="activeCred.id_user">
+                        </div>
+                        <div class="col-md-4" style="padding-right:0px"></div>
+                        <div class="col-md-4" style="padding-right:0px">
+                            <label>Date:</label>
+                            <input type="text" disabled="true" class="form-control" [(ngModel)]="activeCred.date">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:25px">
+                <div class="col-md-3" *ngIf="!record">
+                    <button class="form-control btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+                <div class="col-md-6" *ngIf="!record"></div>
+                <div class="col-md-3" *ngIf="!record">
+                    <button class="form-control btn-outline-primary" (click)="insertDeduction()" data-dismiss="modal">Accept</button>
+                </div>
+                <div class="col-md-1" *ngIf="record"></div>
+                <div class="col-md-2" *ngIf="record">
+                    <button class="form-control btn-outline-secondary" data-dismiss="modal">Close</button>
+                </div>
+                <div class="col-md-2" *ngIf="record"></div>
+                <div class="col-md-2" *ngIf="record && !editDeduction">
+                    <button class="form-control btn-outline-warning" data-dismiss="modal" (click)="deleteDeduction()">Delete</button>
+                </div>
+                <div class="col-md-2" *ngIf="record"></div>
+                <div class="col-md-2" *ngIf="record">
+                    <button class="form-control btn-outline-primary" *ngIf="!editDeduction" (click)="setEdit()">Edit</button>
+                    <button class="form-control btn-outline-primary" *ngIf="editDeduction" (click)="updateDeduction()" data-dismiss="modal">Save</button>
+                </div>
+                <div class="col-md-1" *ngIf="record"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------------------------------------------------------------ADD PAYMET MODAL--------------------------------------------------------------->
+<div class="modal fade" id="addPayment" tabindex="-1" role="dialog" aria-labelledby="calc_detail"
+    aria-hidden="true">
+    <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="search_modalLabel"
+                    style="font-weight:bold; text-align: center; font-size: 18px;">Insert Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding:5px">
+                <div class="col-md-12" >
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Payment Method:</label>
+                            <select class="form-control" [(ngModel)]="activeNewPayment.id_paymentmethod">
+                                <option *ngFor="let pm of paymentMethods" value="{{pm.idpayment_methods}}">{{pm.type}} - {{pm.bank}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <label>Account:</label>
+                            <select class="form-control" [(ngModel)]="activeNewPayment.id_account_py">
+                                <option *ngFor="let acc of allAccounts" value='{{acc.idaccounts}}'>{{acc.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10">
+                            <label>Period:</label>
+                            <select class="form-control" [(ngModel)]="activeNewPayment.id_period">
+                                <option *ngFor="let period of allPeriods" value="{{period.idperiods}}">{{period.start}} TO {{period.end}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:25px">
+                <div class="d-flex col-md-12">
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-primary" (click)="createPayment()" data-dismiss="modal">Crete</button>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------------------------------------------------------------------DELETE PAYMET MODAL--------------------------------------------------------------->
+<div class="modal fade" id="deletePayment" tabindex="-1" role="dialog" aria-labelledby="calc_detail"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="search_modalLabel"
+                    style="font-weight:bold; text-align: center; font-size: 18px;">Insert Payment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding:5px">
+                <div class="col-md-12" >
+                    <label>Delete this record will also delete all associated credits and debits, are you sure you want to proceede?</label>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:25px">
+                <div class="d-flex col-md-12">
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-primary" (click)="deletePayment()" data-dismiss="modal">Accept</button>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-secondary" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

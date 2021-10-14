@@ -48,6 +48,8 @@ import { ItdashboardComponent } from './itdashboard/itdashboard.component';
 import { ItprofilesComponent } from './itprofiles/itprofiles.component';
 import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component';
 import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.component';
+import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenance.component';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -91,7 +93,8 @@ import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.co
     ItdashboardComponent,
     ItprofilesComponent,
     PaystubSendmailComponent,
-    WaveMaintenanceComponent
+    WaveMaintenanceComponent,
+    RostermaintenanceComponent
   ],
   imports: [
     BrowserModule,
@@ -99,7 +102,7 @@ import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.co
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
