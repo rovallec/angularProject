@@ -23,7 +23,7 @@ if (mysqli_query($con, $sql)){
     if (mysqli_query($con, $sql2)) {
         http_response_code(200);
     } else {
-        echo(json_encode($sql));
+        echo(json_encode($sql2));
         http_response_code(422);
     }
 } else {
