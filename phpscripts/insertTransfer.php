@@ -10,9 +10,15 @@ $employee = ($request->employee);
 $account_id = ($request->account);
 $client_id = $request->client_id;
 
+$correlative = 0;
+
 try {
     $correlative = $request->correlative;
 } catch (\Throwable $th) {
+    $correlative = 1;
+}
+
+if($correlative = 0){
     $correlative = 1;
 }
 
