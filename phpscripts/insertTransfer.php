@@ -10,20 +10,14 @@ $employee = ($request->employee);
 $account_id = ($request->account);
 $client_id = $request->client_id;
 
-try {
-    $correlative = $request->correlative;
-} catch (\Throwable $th) {
-    $correlative = 1;
-}
-
-$sql2 = "UPDATE accounts SET correlative = correlative + $correlative where idaccounts = $account_id;";
+$sql2 = "UPDATE accounts SET correlative = correlative + 1 where idaccounts = $account_id;";
 $sql = "UPDATE `employees` SET `id_account` = '$account_id' WHERE `idemployees` = '$employee'";
 
 if (mysqli_query($con, $sql)){
     if (mysqli_query($con, $sql2)) {
         http_response_code(200);
     } else {
-        echo(json_encode($sql));
+        echo(json_encode($sql2));
         http_response_code(422);
     }
 } else {
