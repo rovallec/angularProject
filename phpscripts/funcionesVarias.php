@@ -207,9 +207,4 @@ function dpi_letter($value) {
   return $t;
 }
 
-$dpi = '193008430';
-//echo( $dpi);
-echo(dpi_letter($dpi));
-
-
 ?>
