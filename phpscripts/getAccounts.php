@@ -12,6 +12,7 @@ if($request = mysqli_query($con,$sql)){
         $res[$i]['id_client'] = $row['id_client'];
         $res[$i]['correlative'] = $row['correlative'];
         $res[$i]['prefix'] = $row['prefix'];
+        $res[$i]['patronal_number'] = $row['patronal_number'];
         $i++;
     }
     echo(json_encode($res));

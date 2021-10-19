@@ -32,6 +32,7 @@
             $result['state'] = $r['state'];
             $result['gender'] = $r['gender'];
             $result['nearsol_id'] = $r['nearsol_id'];
+            $result['society'] = $r['society'];
         }
         echo(json_encode($result));
     }

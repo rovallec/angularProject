@@ -1,10 +1,48 @@
-li:hover{
-    background-color:#f9423a ;
+li:hover {
+  background-color: #f9423a;
 }
-.no_background:hover{
-    background-color: transparent;
+.no_background:hover {
+  background-color: transparent;
 }
 
-li .act{
-    border-bottom: solid 3px #f9423a;
+li .act {
+  border-bottom: solid 3px #f9423a;
+}
+
+@media only screen and (min-width: 50px) and (max-width: 800px) {
+  body {
+    text-rendering: optimizeLegibility;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+  }
+
+  th {
+    font-size: x-small;
+    white-space: nowrap;
+  }
+
+  td {
+    font-size: x-small;
+    white-space: nowrap;
+  }
+
+  tr {
+    font-size: x-small;
+    white-space: nowrap;
+  }
+  tr .selectable {
+    font-size: x-small;
+    white-space: nowrap;
+  }
+
+  .col-sm-6 {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }

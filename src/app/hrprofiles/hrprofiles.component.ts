@@ -2,7 +2,7 @@ import { Component, OnInit, ɵCodegenComponentFactoryResolver } from '@angular/c
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -159,8 +159,9 @@ export class HrprofilesComponent implements OnInit {
   temp_day_3:string = null;
   temp_day_4:string = null;
   max_vac:number = 10;
-  showMore:string = 'Show More'
-
+  showMore: string = 'Show More';
+  patron: patronal[] = [];
+  actPatron: patronal = new patronal;
   selectedReporter:string = null;
 
   reasons: string[] = [
@@ -316,13 +317,22 @@ export class HrprofilesComponent implements OnInit {
 
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
       this.workingEmployee = emp;
-      console.log(emp);
-      this.profile[0].date_joining = emp.hiring_date;
-      this.activeEmp = emp.idemployees;
-      this.accId = emp.account;
-      this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear()) * 12));
-      this.getVacations();
-      this.getAllaccounts();
+      this.apiService.getPatronalNumber().subscribe((pat: patronal[]) => {
+        this.patron = pat;
+        this.patron.forEach(p => {
+          if (this.workingEmployee.society == p.name) {
+            this.actPatron = p;
+          }
+        });
+        this.actualLetters.patronal_number = this.actPatron.patronal_number;
+        this.actualLetters.company = this.actPatron.name;
+        this.profile[0].date_joining = emp.hiring_date;
+        this.activeEmp = emp.idemployees;
+        this.accId = emp.account;
+        this.vacationsEarned = (new Date(this.todayDate).getMonth() - new Date(this.profile[0].date_joining).getMonth() + ((new Date(this.todayDate).getFullYear() - new Date(this.profile[0].date_joining).getFullYear()) * 12));
+        this.getVacations();
+        this.getAllaccounts();
+      })
     })
 
     this.getAttendences(this.todayDate);
@@ -397,7 +407,7 @@ export class HrprofilesComponent implements OnInit {
             this.apiService.getDPAtt({ id: this.workingEmployee.idemployees, date_1: actualPeriod.start, date_2: actualPeriod.end }).subscribe((dp: disciplinary_processes[]) => {
               this.apiService.getTermdt(this.workingEmployee).subscribe((trm: terminations) => {
                 this.showAttendences = att;
-                
+
                 this.showAttendences.forEach(atte => {
                   let valid_trm: boolean = false;
                   let activeSuspension: boolean = false;
@@ -618,7 +628,7 @@ export class HrprofilesComponent implements OnInit {
         if (vac.action == "Add") {
           this.returnedVacations = this.returnedVacations + Number(vac.count);
         }
-        if (vac.action == "Take" && vac.status != "DISMISSED") {
+        if (vac.action == "Paid" && vac.status != "DISMISSED") {
           this.tookVacations = this.tookVacations + Number(vac.count);
         } else if (vac.status == 'DISMISSED') {
           this.dismissedVacations = this.dismissedVacations + Number(vac.count);
@@ -1362,6 +1372,7 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Letter':
           this.actualLetters.id_process = str;
+          this.actualLetters.patronal_number = this.actPatron.patronal_number;
           this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
             this.actualLetters.base_salary = emp.base_payment;
             this.actualLetters.productivity_salary = emp.productivity_payment;
@@ -1376,7 +1387,7 @@ export class HrprofilesComponent implements OnInit {
             this.apiService.getPeriods().subscribe((periods: periods[]) => {
               this.apiService.getPayments(periods[periods.length - 1]).subscribe((payment: payments[]) => {
                 this.currentPayVacations = true;
-                this.addVacation("Take", "4");
+                this.addVacation("Paid", "4");
                 this.currentPayVacations = false;
                 this.activeVacation.id_employee = this.route.snapshot.paramMap.get('id');
                 this.activeVacation.id_user = this.authUser.getAuthusr().iduser;

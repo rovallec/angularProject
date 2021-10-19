@@ -145,7 +145,7 @@
                                     <tbody>
                                         <tr *ngFor="let att of showAttendences" style="cursor:pointer"
                                             (click)="addJustification(att)" class="selectable" [ngClass]="{'table-danger': (att.balance === 'NS' || att.balance === 'JANP' || att.balance === 'SUSPENSION'),
-                                            'table-warning':att.balance < 0, 'table-success': att.balance > 0,
+                                            'table-warning': att.balance < 0, 'table-success': att.balance > 0,
                                             'table-info':att.balance === 'OFF' || att.balance === 'VAC',
                                             'table-light':att.balance === 'HLD' || att.balance === 0}">
                                             <td>{{att.date}}</td>
@@ -350,7 +350,7 @@
                                                             </td>
                                                             <td *ngIf="v.year==vacation.year">{{vacation.status}}</td>
                                                         </tr>
-                                                        <tr class="table-light">                                
+                                                        <tr class="table-light">
                                                             <td colspan="5" style="text-align: right;"><label style="text-decoration: underline solid blue; color: blue; cursor:pointer" (click)="showMoreVac()">{{showMore}}</label></td>
                                                         </tr>
                                                     </tbody>
@@ -1631,7 +1631,7 @@
 
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -1702,7 +1702,7 @@
 
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -1747,7 +1747,7 @@
 
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -1875,7 +1875,7 @@
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -1885,8 +1885,9 @@
                     </div>
                     <!---------------------------------------------------------------------------------PAY VACATIONS----------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Pay Vacations'">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">PAY
-                            VACATION</label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">
+                          PAY VACATION
+                        </label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
@@ -1922,7 +1923,7 @@
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -1974,16 +1975,14 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Company:</label>
-                                <select class="form-control" [(ngModel)]="actualLetters.company"
-                                    [disabled]="viewRecProd">
-                                    <option>Nearsol S.A.</option>
-                                    <option>PRG Recurso Humano S.A.</option>
+                                <select class="form-control" [(ngModel)]="actualLetters.company" [disabled]="true">
+                                    <option *ngFor="let pat of patron" [selected]="pat.name == actualLetters.company"> {{  pat.name  }} </option>
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Patronal Number:</label>
                                 <input type="text" class="form-control" [(ngModel)]="actualLetters.patronal_number"
-                                    [disabled]="viewRecProd">
+                                    [disabled]="true">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Language:</label>
@@ -1996,7 +1995,7 @@
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -2053,7 +2052,7 @@
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -2204,7 +2203,7 @@
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
@@ -2286,7 +2285,7 @@
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-1"></div>
                             <div class="form-group col-md-2">
-                                <button class="form-control" (click)="cancelView()">Cance</button>
+                                <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
                             <div class="form-group col-md-6"></div>
                             <div class="form-group col-md-2">

@@ -41,7 +41,8 @@ export class HrdailyComponent implements OnInit {
     'IGSS Unpaid',
     'IGSS Paid',
     'COVID Unpaid',
-    'COVID Paid'
+    'COVID Paid',
+    'VAC'
   ];
   setFilter:string = "'-1'";
 

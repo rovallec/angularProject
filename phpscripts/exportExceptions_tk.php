@@ -67,7 +67,7 @@ FROM
     INNER JOIN accounts ON accounts.idaccounts = employees.id_account
 WHERE ((hr_processes.date BETWEEN '$start' AND '$end')
 	  OR (vacations.date BETWEEN '$start' AND '$end'))
-      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4 AND hr_processes.status IN ($state))
+      AND (hr_processes.id_department != 28 AND hr_processes.id_type = 4 AND vacations.action != 'Paid' AND hr_processes.status IN ($state))
 
 UNION
 

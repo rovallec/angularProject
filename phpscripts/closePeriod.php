@@ -38,7 +38,7 @@ if(parse_str(explode("-", $next_start)[2]) == 15){
 }
 
 
-$sql = "UPDATE `periods` SET `status` = 0 WHERE `idperiods` = $id";
+$sql = "UPDATE `periods` SET `status` = 0 WHERE `idperiods` = $id;";
 $sql1 = "INSERT INTO `periods` (`idperiods`, `start`, `end`, `status`) VALUES (null, '$next_start', '$next_end', '1');";
 $sql2 = "SELECT * FROM `payment_methods` LEFT JOIN `employees` ON `employees`.`idemployees` = `payment_methods`.`id_employee` WHERE `predeterm` = 1 AND `active` = 1;";
 $sql3 = "SELECT * from attendence_adjustemnt LEFT JOIN attendence_justifications ON attendence_justifications.idattendence_justifications = attendence_adjustemnt.id_justification LEFT JOIN hr_processes ON hr_processes.idhr_processes = attendence_justifications.id_process WHERE date < '$next_start';";

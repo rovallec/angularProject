@@ -70,18 +70,20 @@ export class hires_template {
 }
 
 export class accounts {
-    idaccounts: string;
-    name: string;
-    id_client: string;
-    correlative: string;
-    prefix: string;
-    constructor() {
-        this.idaccounts = null;
-        this.name = null;
-        this.id_client = null;
-        this.correlative = null;
-        this.prefix = null;
-    }
+  idaccounts: string;
+  name: string;
+  id_client: string;
+  correlative: string;
+  prefix: string;
+  patronal_number: string;
+  constructor() {
+    this.idaccounts = null;
+    this.name = null;
+    this.id_client = null;
+    this.correlative = null;
+    this.prefix = null;
+    this.patronal_number = null;
+  }
 }
 
 export class schedules {
@@ -2566,4 +2568,17 @@ export class roster_weeks{
         this.sun_end = null;
         this.sun_fixed = null;
     }
+}
+
+export class patronal {
+  idpatronals: string;
+  name: string;
+  patronal_number: string;
+  nit_patrono: string;
+  constructor() {
+    this.idpatronals = null;
+    this.name = null;
+    this.patronal_number = null;
+    this.nit_patrono = null;
+  }
 }

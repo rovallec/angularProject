@@ -10,7 +10,25 @@
 
     $rs = [];
     $i = 0;
-    $sql = "SELECT `profiles`.`idprofiles`, `hr_processes`.*, `users`.*, `accounts`.`name` as `departmet`, `vacations`.idvacations, `vacations`.`id_process`, `vacations`.`action`, `vacations`.`count`, `vacations`.`date` as dt, `process_types`.`idprocess_types`, `process_types`.`name` as `type`, `employees`.*, `hires`.* FROM `vacations` LEFT JOIN `hr_processes` ON `hr_processes`.`idhr_processes` = `vacations`.`id_process` LEFT JOIN `process_types` ON `process_types`.`idprocess_types` = `hr_processes`.`id_type` LEFT JOIN `users` ON `users`.`idUser` = `hr_processes`.`id_user` LEFT JOIN `employees` ON `employees`.`idemployees` = `hr_processes`.`id_employee` LEFT JOIN `accounts` ON `accounts`.`idaccounts` = `hr_processes`.`id_department` LEFT JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire` LEFT JOIN `profiles` ON `profiles`.`idprofiles` = `hires`.`id_profile` WHERE `idprofiles` = $id;";
+    $sql = "SELECT p.idprofiles, hp.*, u.*, a.name as `departmet`, 
+                v.idvacations, 
+                v.id_process, 
+                v.action, 
+                v.`count`, 
+                v.`date` as dt, 
+                pt.idprocess_types, 
+                pt.name as `type`, 
+                e.*, 
+                h.* 
+            FROM employees e
+            INNER JOIN hires h ON h.idhires = e.id_hire 
+            INNER JOIN profiles p ON p.idprofiles = h.id_profile
+            INNER JOIN hr_processes hp on e.idemployees = hp.id_employee
+            INNER JOIN vacations v ON hp.idhr_processes = v.id_process
+            INNER JOIN accounts a ON a.idaccounts = hp.id_department
+            LEFT JOIN process_types pt ON pt.idprocess_types = hp.id_type 
+            LEFT JOIN users u ON u.idUser = hp.id_user
+            WHERE p.idprofiles = $id;";
 
     if($result = mysqli_query($con, $sql)){
         while ($row = mysqli_fetch_assoc($result)) {
