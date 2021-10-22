@@ -2,6 +2,8 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { employees } from './fullProcess';
 import { profiles, profiles_family, profiles_histories } from './profiles';
 
+
+export type StringOrNumber = number | string;
 export class process_templates {
     idprocess_templates: string;
     name: string;
@@ -169,7 +171,7 @@ export class attendences {
     day_off2: string;
     status: string;
     id_wave: string;
-    balance: string;
+    balance: StringOrNumber;
     state: string;
     igss:string;
     tk_exp:string;
