@@ -14,7 +14,7 @@
     INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
     INNER JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
     LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile
-    INNER JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `hires`.`id_profile` = $id;";
+    LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `hires`.`id_profile` = $id;";
 
     if($res = mysqli_query($con, $sql)){
         while($r = mysqli_fetch_assoc($res)){
