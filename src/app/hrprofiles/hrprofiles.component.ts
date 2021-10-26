@@ -2,7 +2,7 @@ import { Component, OnInit, ɵCodegenComponentFactoryResolver } from '@angular/c
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal, file_info } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -17,6 +17,7 @@ import { Z_STREAM_END } from 'zlib';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { exit } from 'process';
 import { element } from 'protractor';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-hrprofiles',
@@ -34,6 +35,11 @@ export class HrprofilesComponent implements OnInit {
   staffes: users[] = [];
   family: profiles_family[] = [];
   selected_family: profiles_family = new profiles_family;
+  imagenPrevia: any;
+  filePDF: file_info = new file_info;
+  files: any = [];
+  loading: boolean;
+  previsualizacion: string;
 
   attAdjudjment: attendences_adjustment = new attendences_adjustment;
   activeVacation: vacations = new vacations;
@@ -294,7 +300,7 @@ export class HrprofilesComponent implements OnInit {
 
   ]
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute, public authUser: AuthServiceService) { }
+  constructor(private apiService: ApiService, private route: ActivatedRoute, public authUser: AuthServiceService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.todayDate = new Date().getFullYear().toString() + "-" + (new Date().getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date().getDate()).toString().padStart(2, "0");
@@ -333,9 +339,10 @@ export class HrprofilesComponent implements OnInit {
         this.getVacations();
         this.getAllaccounts();
       })
+      this.getAttendences(this.todayDate);
     })
 
-    this.getAttendences(this.todayDate);
+
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
     this.attAdjudjment.date = this.todayDate;
     this.attAdjudjment.state = 'PENDING';
@@ -2588,4 +2595,65 @@ export class HrprofilesComponent implements OnInit {
       this.showMore = 'Show More';
     }
   }
+
+  printLetter() {
+    var url = this.apiService.PHP_API_SERVER + "/phpscripts/letterVacations.php?name=" + this.workingEmployee.name +
+      "&date=" + this.activeVacation.took_date + "&job=" + this.workingEmployee.job +
+      "&start_date=" + this.workingEmployee.hiring_date + "&department=" + this.workingEmployee.id_account +
+      "&days_requested=" + this.activeVacation.count + "&nearsol_id=" + this.workingEmployee.nearsol_id ;
+    window.open(url, "_blank");
+  }
+
+  uploadLetter(event): any {
+    const archivoCapturado = event.target.files[0];
+    if (archivoCapturado.type=='application/pdf') {
+      this.filePDF.id = this.activeVacation.id_process;
+      this.filePDF.name = this.workingEmployee.nearsol_id + '-' + this.activeVacation.id_process + '.pdf';
+      this.filePDF.type = archivoCapturado.type;
+
+      this.extraerBase64(archivoCapturado).then((pdf: any) => {
+        //this.previsualizacion = pdf.base;
+        this.filePDF.file = pdf.base;
+      })
+      this.files.push(archivoCapturado);
+      console.log(this.filePDF);
+    } else {
+      window.alert('It is only allowed to upload files with a .pdf extension.');
+    }
+  }
+
+  saveLetter(): any {
+    try {
+      this.apiService.saveFile(this.filePDF).subscribe(res => {
+        console.log('Respuesta del servidor: ', res);
+      })
+    } catch (e) {
+      console.log('Error', e);
+    }
+  }
+
+  extraerBase64 = async ($event: any) => new Promise((resolve, reject) => {
+    try {
+      const unsafePdf = window.URL.createObjectURL($event);
+      const filePDF = this.sanitizer.bypassSecurityTrustUrl(unsafePdf);
+      const reader = new FileReader();
+      reader.readAsDataURL($event);
+      reader.onload = () => {
+        resolve({
+          blob: $event,
+          filePDF,
+          base: reader.result
+        });
+      };
+      reader.onerror = error => {
+        resolve({
+          blob: $event,
+          filePDF,
+          base: null
+        });
+      };
+    } catch (e) {
+      return null;
+    }
+  })
 }

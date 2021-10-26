@@ -3,7 +3,7 @@ import { employees } from './fullProcess';
 import { profiles, profiles_family, profiles_histories } from './profiles';
 
 
-export type StringOrNumber = number | string;
+export type StringOrNumber = string;
 export class process_templates {
     idprocess_templates: string;
     name: string;
@@ -2582,5 +2582,18 @@ export class patronal {
     this.name = null;
     this.patronal_number = null;
     this.nit_patrono = null;
+  }
+}
+
+export class file_info {
+  id: string;
+  name: string;
+  type: string;
+  file: any;
+  constructor() {
+    this.id = null;
+    this.name = null;
+    this.type = null;
+    this.file = null;
   }
 }

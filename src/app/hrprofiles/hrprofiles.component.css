@@ -152,6 +152,10 @@ i {
   border: 1px solid #e9e8e8;
 }
 
+.selectable {
+  cursor: pointer;
+}
+
 @media only screen and (min-width: 50px) and (max-width: 800px) {
   body {
     text-rendering: optimizeLegibility;
