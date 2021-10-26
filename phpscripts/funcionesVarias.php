@@ -207,4 +207,19 @@ function dpi_letter($value) {
   return $t;
 }
 
+function formatLongDateToday() {
+  $formatDate = date('d',);
+  $formatDate = $formatDate . ' de ';
+  $formatDate = $formatDate . getMonth(date('m'));
+  $formatDate = $formatDate . ' del ';
+  $formatDate = $formatDate . date('Y');
+  return $formatDate;
+}
+
+function today() {
+  $Today = formatDatesPlus(Date("y.m.d"), 0);
+  return $Today;
+}
+
+
 ?>

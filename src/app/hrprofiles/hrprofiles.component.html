@@ -543,8 +543,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;"
+                        <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd; margin-top: 20px;"
                             *ngIf="vacationAdd && !editLeave">
+                            <div class="form-row col-md-12 d-flex justify-content-between">
+                              <div class="form-group col-md-2"></div>
+                              <div class="form-group col-md-8 text-center">
+                                <label>View Letter:</label>
+                              </div>
+                              <div class="form-group col-md-2"></div>
+                            </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2"></div>
                                 <div class="form-group col-md-8">
@@ -600,8 +607,18 @@
                                     <button class="form-control" (click)="cancelVacation()"
                                         *ngIf="editVac">Cancel</button>
                                 </div>
-                                <div class="form-group col-md-8">
+                                <div class="form-group col-md-4">
                                     <button class="form-control" (click)="cancelView()" *ngIf="!editVac">Return</button>
+                                </div>
+                                <div class="form-group col-md-2">
+                                  <button class="form-control" type="button">
+                                    <i class="far fa-eye selectable" (click)="printLetter()"></i>
+                                  </button>
+                                </div>
+                                <div class="form-group col-md-2">
+                                  <button class="form-control" type="button">
+                                    <i class="fas fa-file-upload" data-target="#fileUploadModal" data-toggle="modal"></i>
+                                  </button>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="insertVacation()"
@@ -2804,6 +2821,27 @@
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
                 <button class="btn btn-outline-primary" type="button" data-dismiss="modal" (click)="sendMailTransfer()">
                     SEND
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------------------------------- FILE UPLOAD MODAL ------------------------------------------------>
+<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="fileUploadLabel">FILE UPLOAD</h5>
+            </div>
+            <div class="modal-body">
+               <input type="file" (change)="uploadLetter($event)" accept="*.pdf" class="form-control">
+            </div>
+            <div class="modal-footer d-flex justify-content-between mt-2">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+                <button type="button" class="btn btn-outline-primary" (click)="saveLetter()" [disabled]="loading" data-dismiss="modal">
+                  {{  (loading) ? 'Loading...' : 'SAVE' }}
                 </button>
             </div>
         </div>

@@ -1064,6 +1064,10 @@ getTkUploads(dt:any){
   return this.httpClient.post<tk_upload[]>(`${this.PHP_API_SERVER}/phpscripts/getTk_upload.php`, dt)
 }
 
+saveFile(file: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/saveFiles.php`, file);
+}
+
 getUploadedAdjustments(any:any){
   return this.httpClient.post<attendences_adjustment[]>(`${this.PHP_API_SERVER}/phpscripts/getUploadjustifications.php`, any);
 }

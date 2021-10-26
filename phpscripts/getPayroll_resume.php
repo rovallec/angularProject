@@ -12,7 +12,8 @@ $id_account = ($request->id_account);
 $res = [];
 $i = 0;
 
-$sql = "SELECT * FROM payroll_resume WHERE id_period = $id AND account = $id_account";
+$sql = "SELECT * FROM payroll_resume WHERE id_period = $id AND account = $id_account;";
+
 if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
         $res[$i]['idpayroll_resume'] = $row['idpayroll_resume'];
