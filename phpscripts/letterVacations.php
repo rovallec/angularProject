@@ -2,9 +2,8 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 
-header("Content-type:application/pdf");
-header("Content-Disposition:inline;filename='$filename");
-readfile("downloaded.pdf");
+header('Content-Type:application/pd');
+header('Content-Disposition: attachment; filename="' . "Test.pdf" . '"');
 
 require 'funcionesVarias.php';
 
