@@ -1,6 +1,11 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
+
+header("Content-type:application/pdf");
+header("Content-Disposition:inline;filename='$filename");
+readfile("downloaded.pdf");
+
 require 'funcionesVarias.php';
 
 try{
