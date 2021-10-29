@@ -2,7 +2,7 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 
-header('Content-Type:application/pd');
+header('Content-Type:application/pdf');
 header('Content-Disposition: attachment; filename="' . "Test.pdf" . '"');
 
 require 'funcionesVarias.php';
