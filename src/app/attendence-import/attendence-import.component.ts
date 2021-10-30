@@ -206,7 +206,7 @@ export class AttendenceImportComponent implements OnInit {
   uploadAttendences() {
     //TAB 1
     this.attendences.forEach(element => {
-      if (element.day_off1 == 'OMMIT' || element.day_off1 == 'NOT MATCH') {
+      if (element.day_off1 == 'OMMIT' || element.day_off1 == 'NO MATCH') {
         this.fail.push(element);
       } else {
         if (element.day_off1 == 'APPLY') {
@@ -249,6 +249,8 @@ export class AttendenceImportComponent implements OnInit {
         })
       })
     })
+
+    console.log(this.fail.length + this.correct.length + this.apply.length + " " + this.attendences.length)
 
     if (this.fail.length + this.correct.length + this.apply.length == this.attendences.length) {
       this.apiService.insertTkimport().subscribe((str: tk_upload) => {
