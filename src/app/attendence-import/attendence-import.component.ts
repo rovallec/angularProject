@@ -80,48 +80,6 @@ export class AttendenceImportComponent implements OnInit {
             nwAtt.second_name = nm.split(" ")[1];
             nwAtt.first_lastname = nm.split(" ")[2];
             nwAtt.second_lastname = nm.split(" ")[3];
-            nwAtt.schedule_fix = Number(element['Schedule FIX']).toFixed();
-            nwAtt.time_in_aux0 = Number(element['Time in Aux 0']).toFixed();
-            nwAtt.time_in_systems_issues = Number(element['Time in System Issues']).toFixed();
-            nwAtt.time_in_lunch = Number(element['Time in lunch']).toFixed();
-            nwAtt.break_abuse = Number(element['Break Abuse']).toFixed();
-            nwAtt.exceptions_meeting_feedback = Number(element['Exceptions Meeting & feedback']).toFixed();
-            nwAtt.exceptions_offline_training = Number(element['Exceptions offline Training']).toFixed();
-            nwAtt.systems_issues_by_sup = Number(element['System Issues by Sup']).toFixed();
-            nwAtt.floor_support = Number(element['Floor Support']).toFixed();
-            nwAtt.time_training = Number(element['TIME TRAINING']).toFixed();
-            let arr_exp:string[] = ['Schedule FIX', 'Time in Aux 0', 'Time in System Issues',	'Time in lunch', 'Break Abuse',	'Exceptions Meeting & feedback', 'Exceptions offline Training',
-                                    'System Issues by Sup', 'Floor Support',  'TIME TRAINING'];
-
-            for (let exp = 0; exp < 10; exp++) {
-              let excp_sup:sup_exception = new sup_exception;
-              excp_sup.avaya = element['Client ID'];
-              excp_sup.date = element['Date'];
-              excp_sup.name = element['Name'];
-              excp_sup.reason = arr_exp[exp];
-              excp_sup.supervisor = "ATTENDANCE";
-              excp_sup.time = Number(element[arr_exp[exp]]).toFixed(5);
-              excp_sup.id_type = (exp + 1).toFixed(0);
-              this.apiService.getSearchEmployees({ filter: 'client_id', value: excp_sup.avaya, dp: 'exact', rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-                if (isNull(emp)) {
-                  excp_sup.status = 'FALSE';
-                } else {
-                  excp_sup.status = 'TRUE';
-                }
-              emp = emp.sort((a, b) => Number(b.active) - Number(a.active)).sort((c, d) => Number(d.idemployees) - Number(c.idemployees));
-                if (emp.length > 1) {
-                  excp_sup.duplicated = '1';
-                  emp.forEach(toPush => {
-                    this.repeatedExp.push(toPush);
-                  })
-                } else {
-                  excp_sup.duplicated = '0';
-                }
-                excp_sup.id_employee = emp[0].idemployees;
-                this.sups.push(excp_sup);
-              })
-            }
-
 
             if (element['Scheduled'] == 'OFF') {
               nwAtt.scheduled = 'OFF';
@@ -134,9 +92,9 @@ export class AttendenceImportComponent implements OnInit {
             } else {
               nwAtt.balance = parseFloat((parseFloat(nwAtt.worked_time) - parseFloat(nwAtt.scheduled)).toString()).toFixed(3);
             }
-            
             this.attendences.push(nwAtt);
           } catch (error) {
+
           }
         });
         let att: attendences[] = [];
@@ -144,7 +102,7 @@ export class AttendenceImportComponent implements OnInit {
         this.attendences.forEach(elem => {
           elem.day_off1 = "NO MATCH";
           this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp: 'exact', rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-            emp = emp.sort((a, b) => Number(b.active) - Number(a.active)).sort((c, d) => Number(d.idemployees) - Number(c.idemployees))
+            emp = emp.sort((a, b) => Number(b.active) - Number(a.active)).sort((c,d)=>Number(d.idemployees) - Number(c.idemployees))
             if (emp.length > 1) {
               emp.forEach(reapeted => {
                 this.reapetedEmployees.push(reapeted);
@@ -187,55 +145,19 @@ export class AttendenceImportComponent implements OnInit {
               supervisors.reason = element['REASON'];
               supervisors.supervisor = element['SUPERVISOR'];
               supervisors.time = element['TIME'];
-              supervisors.id_type = element['TYPE'];
-              switch (supervisors.id_type.toString()) {
-                case '1':
-                  supervisors.reason = 'Schedule FIX';
-                  break;
-                case '2':
-                  supervisors.reason = 'Time in Aux 0';
-                  break;
-                case '3':
-                  supervisors.reason = 'Time In System Issues';
-                  break;
-                case '4':
-                  supervisors.reason = 'Time in lunch';
-                  break;
-                case '5':
-                  supervisors.reason = 'Break Abuse';
-                  break;
-                case '6':
-                  supervisors.reason = 'Exceptions Meeting & feedback';
-                  break;
-                case '7':
-                  supervisors.reason = 'Exceptions offline Training';
-                  break;
-                case '8':
-                  supervisors.reason = 'System Issues by Sup';
-                  break;
-                case '9':
-                  supervisors.reason = 'Floor Support';
-                  break;
-                case '10':
-                  supervisors.reason = 'TIME TRAINING';
-                  break;
-                case '11':
-                  supervisors.reason = 'CCR Productive';
-                  break;
-              }
               this.apiService.getSearchEmployees({ dp: 'all', filter: 'client_id', value: supervisors.avaya, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
                 if (isNull(emp)) {
                   supervisors.status = 'FALSE';
                 } else {
                   supervisors.status = 'TRUE';
                 }
-                emp = emp.sort((a, b) => Number(b.active) - Number(a.active)).sort((c, d) => Number(d.idemployees) - Number(c.idemployees));
-                if (emp.length > 1) {
+                emp = emp.sort((a, b) => Number(b.active) - Number(a.active)).sort((c,d)=>Number(d.idemployees)-Number(c.idemployees));
+                if(emp.length > 1){
                   supervisors.duplicated = '1';
-                  emp.forEach(toPush => {
+                  emp.forEach(toPush=>{
                     this.repeatedExp.push(toPush);
                   })
-                } else {
+                }else{
                   supervisors.duplicated = '0';
                 }
                 supervisors.name = emp[0].name;
@@ -246,7 +168,7 @@ export class AttendenceImportComponent implements OnInit {
                 this.sups.forEach(element => {
                   let add: boolean = true;
                   temp_sups.forEach(temp => {
-                    if (temp.avaya == element.avaya && temp.date == element.date && temp.time == element.time && element.reason == temp.reason) {
+                    if (temp.avaya == element.avaya && temp.date == element.date && temp.time == element.time) {
                       add = false;
                       duplicated++;
                     }
@@ -349,8 +271,6 @@ export class AttendenceImportComponent implements OnInit {
               if (sup.status == 'TRUE') {
                 this.apiService.getAttendences({ date: "= '" + sup.date + "'", id: sup.id_employee }).subscribe((attendance: attendences[]) => {
                   let adjustment: attendences_adjustment = new attendences_adjustment;
-                  let adjust_time:boolean = true;
-                  let adjust_sch:boolean = false;
                   adjustment.id_import = str.idtk_import;
                   adjustment.id_employee = sup.id_employee;
                   adjustment.id_user = this.authService.getAuthusr().iduser;
@@ -359,86 +279,17 @@ export class AttendenceImportComponent implements OnInit {
                   adjustment.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString());
                   adjustment.notes = "Supervisor: " + sup.supervisor + " Reason: " + sup.reason;
                   adjustment.status = 'PENDING';
-                  switch (sup.id_type) {
-                    case '1':
-                      adjustment.reason = 'Schedule FIX';
-                      adjust_time = false;
-                      adjust_sch = true;
-                      break;
-                    case '2':
-                      adjustment.reason = 'Time in Aux 0';
-                      adjust_time = true;
-                      break;
-                    case '3':
-                      adjustment.reason = 'Time In System Issues';
-                      adjust_time = true
-                      break;
-                    case '4':
-                      adjustment.reason = 'Time in lunch';
-                      if(Number(sup.time) > 1){
-                        adjust_time = true;
-                      }
-                      break;
-                    case '5':
-                      adjustment.reason = 'Break Abuse';
-                      adjust_time = true;
-                      break;
-                    case '6':
-                      adjustment.reason = 'Exceptions Meeting & feedback';
-                      adjust_time = true;
-                      break;
-                    case '7':
-                      adjustment.reason = 'Exceptions offline Training';
-                      adjust_time = true;
-                      break;
-                    case '8':
-                      adjustment.reason = 'System Issues by Sup';
-                      adjust_time = true;
-                      break;
-                    case '9':
-                      adjustment.reason = 'Floor Support';
-                      adjust_time = true;
-                      break;
-                    case '10':
-                      adjustment.reason = 'TIME TRAINING';
-                      adjust_time = true;
-                      break;
-                    case '11':
-                      adjustment.reason = 'CCR Productive';
-                      adjust_time = true;
-                      break;
-                  }
+                  adjustment.reason = 'Supervisor Exception';
                   adjustment.id_attendence = attendance[0].idattendences;
-                  if(adjust_time){
-                    adjustment.time_before = attendance[0].worked_time;
-                    adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
-                    adjustment.amount = sup.time;
-                  }else{
-                    adjustment.amount = sup.time;
-                    adjustment.time_before = attendance[0].worked_time;
-                    adjustment.time_after = attendance[0].worked_time;
-                  }
+                  adjustment.time_before = attendance[0].worked_time;
+                  adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
+                  adjustment.amount = sup.time;
                   adjustment.state = "PENDING";
-                  if(adjust_sch){
-                    adjustment.time_after = sup.time;
-                    adjustment.time_before = attendance[0].scheduled;
-                    if(attendance[0].scheduled != 'OFF'){
-                      adjustment.amount = (Number(attendance[0].scheduled) - Number(sup.time)).toFixed(2);
-                    }else{
-                      adjustment.amount = (Number(sup.time)).toFixed(2);
+                  this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {
+                    if (i == this.sups.length) {
+                      this.completed = true;
                     }
-                    this.apiService.insertScheduleFix(adjustment).subscribe((str:string)=>{
-                      if (i == this.sups.length) {
-                        this.completed = true;
-                      }
-                    })
-                  }else{
-                    this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {
-                      if (i == this.sups.length) {
-                        this.completed = true;
-                      }
-                    })
-                  }
+                  })
                 })
               }
             })
@@ -523,8 +374,8 @@ export class AttendenceImportComponent implements OnInit {
     return this.attendences.sort((a, b) => Number(b.id_wave) - Number(a.id_wave));
   }
 
-  sortExceptions() {
-    return this.sups.sort((a, b) => Number(b.duplicated) - Number(a.duplicated));
+  sortExceptions(){
+    return this.sups.sort((a,b)=>Number(b.duplicated) - Number(a.duplicated));
   }
   getReapeted(att: attendences) {
     return this.reapetedEmployees.filter((a, b) => this.reapetedEmployees.findIndex(item => item.name == a.name) === b).filter(c => c.client_id == att.client_id);
@@ -534,7 +385,7 @@ export class AttendenceImportComponent implements OnInit {
     return this.repeatedExp.filter((a, b) => this.repeatedExp.findIndex(item => item.name == a.name) === b).filter(c => c.client_id == exp.avaya);
   }
 
-  setExpReapeted(sup: sup_exception, rep: string) {
+  setExpReapeted(sup:sup_exception,rep:string){
     sup.id_employee = rep;
   }
 
