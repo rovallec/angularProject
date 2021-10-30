@@ -206,7 +206,7 @@ export class AttendenceImportComponent implements OnInit {
   uploadAttendences() {
     //TAB 1
     this.attendences.forEach(element => {
-      if (element.day_off1 == 'OMMIT') {
+      if (element.day_off1 == 'OMMIT' || element.day_off1 == 'NOT MATCH') {
         this.fail.push(element);
       } else {
         if (element.day_off1 == 'APPLY') {
