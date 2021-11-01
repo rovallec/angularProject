@@ -47,8 +47,8 @@ if($result = mysqli_query($con, $sql))
 			LEFT JOIN (SELECT 'SI' AS `insurance`, id_employee FROM insurances INNER JOIN hr_processes ON hr_processes.idhr_processes = insurances.id_process) 
 						AS `insurance` ON `insurance`.id_employee = employees.idemployees
 			INNER JOIN users ON users.idUser = employees.reporter
-			LEFT JOIN (SELECT users.user_name, id_profile FROM processes INNER JOIN users ON users.idUser = processes.id_user WHERE name = 'First Interview')
-					   	AS `first_interview` ON `first_interview`.id_profile = profiles.idprofiles WHERE idemployees = $id_employee ORDER BY valid_from ASC LIMIT 1";
+			LEFT JOIN (SELECT users.user_name, processes.id_profile FROM processes INNER JOIN users ON users.idUser = processes.id_user WHERE name = 'First Interview')
+					   	AS `first_interview` ON `first_interview`.id_profile = profiles.idprofiles WHERE employees.idemployees = $id_employee ORDER BY valid_from ASC LIMIT 1";
 	if($result = mysqli_query($con, $sql2)){
 		while($row = mysqli_fetch_assoc($result))
 		{
