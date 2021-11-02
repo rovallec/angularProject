@@ -250,8 +250,6 @@ export class AttendenceImportComponent implements OnInit {
       })
     })
 
-    console.log(this.fail.length + this.correct.length + this.apply.length + " " + this.attendences.length)
-
     if (this.fail.length + this.correct.length + this.apply.length == this.attendences.length) {
       this.apiService.insertTkimport().subscribe((str: tk_upload) => {
         let formData = new FormData;
