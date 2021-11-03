@@ -81,4 +81,9 @@ export class AppComponent {
     this.SetSel("SERVR");
     window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportServicesF.php", "_blank");
   }
+
+  exportAdvancesReport(){
+    this.SetSel("ADVREP");
+    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportAdvancesReport.php", "_blank");
+  }
 }

@@ -112,14 +112,18 @@
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/vacationsrep"
           style="color: white" [ngClass]="{'act':selectedOption=='VACATIONSREP'}" (click)="SetSel('VACATIONSREP')">VACATIONS REPORT</a>
-          <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/paystubs"
+        <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/paystubs"
           style="color: white" [ngClass]="{'act':selectedOption=='PYST'}" (click)="SetSel('PYST')">PAYSTUBS</a>
-          <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
+        <a *ngIf="getSaved().department == '28'" class="nav-link" style="color: white"
           [ngClass]="{'act':selectedOption=='ROSTER'}" (click)="SetSel('ROSTER')" routerLink="/roster">ROSTER</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/wavemaintenance" style="color: white"
           [ngClass]="{'act':selectedOption=='WAVEMANT'}" (click)="SetSel('WAVEMANT')">WAVE MAINTENANCE</a>
+      </li>
+      <li *ngIf="getAuth()" class="nav-item">
+        <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link"
+          style="color: white" [ngClass]="{'act':selectedOption=='ADVREP'}" (click)="exportAdvancesReport()">ADVANCES REPORT</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
