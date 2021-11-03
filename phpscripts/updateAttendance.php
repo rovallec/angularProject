@@ -31,6 +31,7 @@ if($result = mysqli_query($con, $sql))
 {
 	http_response_code(200);
 }else{
+	echo(json_encode($sql));
 	http_response_code(404);
 }
 ?>
