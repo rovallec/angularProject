@@ -373,9 +373,9 @@
                                 </div>
                                 <div class="form-group col-md-4"></div>
                                 <div class="form-group col-md-3">
-                                    <button class="form-control" (click)="addVacation('Take', '4')"
+                                    <button class="form-control" (click)="addVacation('Paid', '4')"
                                         *ngIf="availableVacations > 0">Take</button>
-                                    <button [disabled]="true" class="form-control" (click)="addVacation('Take', '4')"
+                                    <button [disabled]="true" class="form-control" (click)="addVacation('Paid', '4')"
                                         *ngIf="availableVacations === 0">Take</button>
                                 </div>
                                 <div class="form-group col-md-1"></div>
@@ -2200,10 +2200,20 @@
                                     <option>Aguinaldo</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-4" *ngIf="actualAdvance.type!=='Sueldo'">
                                 <label>Monto:</label>
                                 <input type="text" class="form-control" [(ngModel)]="actualAdvance.amount"
                                     [disabled]="viewRecProd">
+                            </div>
+                            <!-- // holder en typescript que ponga el valor en días * (la suma del salario Base + el complementario / 30 / 8);  max=30 días de adelanto. -->
+                            <div class="form-group col-md-2" *ngIf="actualAdvance.type=='Sueldo'">
+                              <label>Monto:</label>
+                              <input type="text" class="form-control" [(ngModel)]="actualAdvance.amount" [disabled]="viewRecProd" (change)="validateAmount()">
+                            </div>
+                            <div class="form-group col-md-2" *ngIf="actualAdvance.type=='Sueldo'">
+                              <label>Días:</label>
+                                <input type="number" max="30" class="form-control" [(ngModel)]="advanceDays"
+                                    [disabled]="viewRecProd" (change)="prorataSalary()">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Classification:</label>
