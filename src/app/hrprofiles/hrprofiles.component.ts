@@ -170,7 +170,7 @@ export class HrprofilesComponent implements OnInit {
   patron: patronal[] = [];
   actPatron: patronal = new patronal;
   selectedReporter:string = null;
-  advanceDays: number = 0;
+  advanceDays: number = 1;
 
   reasons: string[] = [
     "Asistencia",
@@ -1599,6 +1599,7 @@ export class HrprofilesComponent implements OnInit {
       case 'Advance':
         this.apiService.getAdvances(this.actuallProc).subscribe((adv: advances) => {
           this.actualAdvance = adv;
+          this.validateAmount();
         })
         break;
       case 'Rise':
@@ -2682,5 +2683,12 @@ export class HrprofilesComponent implements OnInit {
     }
 
     this.advanceDays = Number(Number(Number(this.actualAdvance.amount) / dailyPayment).toFixed(0));
+    if (this.advanceDays == 0) {
+      this.advanceDays = 1;
+    }
+  }
+
+  exportAdvancesReport() {
+    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportAdvancesReport.php?idemployee=" + this.workingEmployee.idemployees, "_blanck");
   }
 }

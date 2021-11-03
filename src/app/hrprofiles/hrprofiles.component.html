@@ -673,11 +673,10 @@
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-1"></div>
                                 <div class="form-group col-md-8">
-                                    <label
-                                        style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Request<i
-                                            class="far fa-eye" (click)="printDP()" style="margin-left:5px"
-                                            *ngIf="storedRequest"></i><i class="fas fa-arrow-left"
-                                            style="margin-left:5px" (click)="cancelView()"></i></label>
+                                    <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Request
+                                        <i class="far fa-eye" (click)="printDP()" style="margin-left:5px" *ngIf="storedRequest"></i>
+                                        <i class="fas fa-arrow-left" style="margin-left:5px" (click)="cancelView()"></i>
+                                    </label>
                                 </div>
                                 <div class="form-group col-md-1"></div>
                             </div>
@@ -1658,9 +1657,10 @@
                     </div>
                     <!--------------------------------------------------------------IRTRA REQUEST-------------------------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'IRTRA Request'">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">IRTRA
-                            REQUEST<i class="far fa-eye"
-                                (click)="getIrtra()"></i></label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">
+                            IRTRA REQUEST
+                            <i class="far fa-eye" (click)="getIrtra()"></i>
+                        </label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
@@ -1952,8 +1952,10 @@
                     </div>
                     <!---------------------------------------------------------------------------------LETTERS----------------------------------------------------------------------->
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Letter'">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">LETTER<i
-                                class="far fa-eye" (click)="getLetter()" *ngIf="viewRecProd"></i></label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">
+                            LETTER
+                            <i class="far fa-eye" (click)="getLetter()" *ngIf="viewRecProd"></i>
+                        </label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
@@ -2172,8 +2174,10 @@
                     </div>
                     <!---------------------------------------------------------------------------------ADVANCES----------------------------------------------------------------------->
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Advance'">
-                        <label
-                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">ADVANCES</label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">
+                            ADVANCES
+                            <i class="far fa-eye" (click)="exportAdvancesReport()" *ngIf="actualAdvance.idadvances!==null && actualAdvance.type=='Sueldo'"></i>
+                        </label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
