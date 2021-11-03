@@ -1347,31 +1347,33 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Rise':
           let end: boolean = false;
-          this.actualRise.id_process = str;
-          this.actualRise.id_employee = this.actuallProc.id_profile;
-          this.actualRise.old_salary = (Number(this.workingEmployee.productivity_payment) + Number(this.workingEmployee.base_payment)).toFixed(2);
-          this.actualRise.new_productivity_payment = (Number(this.actualRise.new_salary) - Number(this.workingEmployee.base_payment)).toFixed(2);
-          try {
-            if (isNullOrUndefined(this.actualRise.approved_date) || isNullOrUndefined(this.actualRise.approved_by) ||
-              isNullOrUndefined(this.actualRise.effective_date) || isNullOrUndefined(this.actualRise.trial_start) || isNullOrUndefined(this.actualRise.trial_end)) {
-              throw new Error('Incomplete data.');
-            } else {
-              end = false;
-            }
-          } catch (error) {
-            window.alert(error);
-            end = true;
-          }
-
-          if (!end) {
-            this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
-              if (str.split("|")[0] == "1") {
-                window.alert("Action successfuly recorded.");
-                this.cancelView();
+          if (window.confirm("Are you sure you want to save?")) {
+            this.actualRise.id_process = str;
+            this.actualRise.id_employee = this.actuallProc.id_profile;
+            this.actualRise.old_salary = (Number(this.workingEmployee.productivity_payment) + Number(this.workingEmployee.base_payment)).toFixed(2);
+            this.actualRise.new_productivity_payment = (Number(this.actualRise.new_salary) - Number(this.workingEmployee.base_payment)).toFixed(2);
+            try {
+              if (isNullOrUndefined(this.actualRise.approved_date) || isNullOrUndefined(this.actualRise.approved_by) ||
+                isNullOrUndefined(this.actualRise.effective_date) || isNullOrUndefined(this.actualRise.trial_start) || isNullOrUndefined(this.actualRise.trial_end)) {
+                throw new Error('Incomplete data.');
               } else {
-                window.alert("An error has occured:\n" + str.split("|")[1]);
+                end = false;
               }
-            })
+            } catch (error) {
+              window.alert(error);
+              end = true;
+            }
+
+            if (!end) {
+              this.apiService.insertRise(this.actualRise).subscribe((str: string) => {
+                if (str.split("|")[0] == "1") {
+                  window.alert("Action successfuly recorded.");
+                  this.cancelView();
+                } else {
+                  window.alert("An error has occured:\n" + str.split("|")[1]);
+                }
+              })
+            }
           }
           break;
         case 'Call Tracker':
