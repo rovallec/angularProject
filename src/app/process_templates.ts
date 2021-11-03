@@ -1416,10 +1416,12 @@ export class reporters {
     idUser: string;
     username: string;
     signature: string;
+    department: string;
     constructor(){
         this.idUser = null;
         this.username = null;
         this.signature = null;
+        this.department = null;
     }
 }
 

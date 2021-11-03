@@ -13,7 +13,8 @@ import { applyent_contact, schedule_visit } from './addTemplate';
 import { Data } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { isNullOrUndefined } from 'util';
-import { isEmptyExpression } from '@angular/compiler';
+import { analyzeNgModules, isEmptyExpression } from '@angular/compiler';
+import { element } from 'protractor';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,16 @@ constructor(private httpClient:HttpClient) { }
 
 isEmptyString(str: String): boolean {
   return (str.trim() === '' || isNullOrUndefined(str));
+}
+
+filterReporter(rep1: reporters[], str: string):reporters[]{
+  let rep2: reporters[] = [];
+  rep1.forEach(element => {
+    if (element.department === str) {
+      rep2.push(element);
+    }
+  })
+  return rep2;
 }
 
 readProfiles():Observable<profiles[]>{

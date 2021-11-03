@@ -117,6 +117,9 @@ export class AttendenceImportComponent implements OnInit {
                 } else {
                   excp_sup.duplicated = '0';
                 }
+                if (isNullOrUndefined(emp[0].idemployees)) {
+                  console.log(emp[0]);
+                }
                 excp_sup.id_employee = emp[0].idemployees;
                 this.sups.push(excp_sup);
               })
@@ -134,7 +137,7 @@ export class AttendenceImportComponent implements OnInit {
             } else {
               nwAtt.balance = parseFloat((parseFloat(nwAtt.worked_time) - parseFloat(nwAtt.scheduled)).toString()).toFixed(3);
             }
-            
+
             this.attendences.push(nwAtt);
           } catch (error) {
           }
@@ -143,6 +146,9 @@ export class AttendenceImportComponent implements OnInit {
 
         this.attendences.forEach(elem => {
           elem.day_off1 = "NO MATCH";
+          if (isNullOrUndefined(elem.client_id)) {
+            console.log(elem);
+          }
           this.apiService.getSearchEmployees({ filter: 'client_id', value: elem.client_id, dp: 'exact', rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
             emp = emp.sort((a, b) => Number(b.active) - Number(a.active)).sort((c, d) => Number(d.idemployees) - Number(c.idemployees))
             if (emp.length > 1) {

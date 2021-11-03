@@ -320,7 +320,8 @@ export class HrprofilesComponent implements OnInit {
     });
 
     this.apiService.getApprovers().subscribe((usrs: users[]) => {
-      this.approvals = usrs;
+      let reporters: users[] = usrs.filter(usr => usr.department == this.workingEmployee.account);
+      this.approvals = reporters;
     });
 
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
