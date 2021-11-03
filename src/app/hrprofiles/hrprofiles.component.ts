@@ -635,7 +635,7 @@ export class HrprofilesComponent implements OnInit {
         if (vac.action == "Add") {
           this.returnedVacations = this.returnedVacations + Number(vac.count);
         }
-        if (vac.action == "Paid" && vac.status != "DISMISSED") {
+        if (((vac.action == "Paid") || (vac.action == "Take")) && vac.status != "DISMISSED") {
           this.tookVacations = this.tookVacations + Number(vac.count);
         } else if (vac.status == 'DISMISSED') {
           this.dismissedVacations = this.dismissedVacations + Number(vac.count);
