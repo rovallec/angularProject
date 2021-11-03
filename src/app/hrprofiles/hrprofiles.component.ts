@@ -2687,8 +2687,4 @@ export class HrprofilesComponent implements OnInit {
       this.advanceDays = 1;
     }
   }
-
-  exportAdvancesReport() {
-    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportAdvancesReport.php?idemployee=" + this.workingEmployee.idemployees, "_blanck");
-  }
 }
