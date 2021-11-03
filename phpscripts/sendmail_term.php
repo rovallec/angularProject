@@ -40,11 +40,11 @@ if($result = mysqli_query($con, $sql))
 			INNER JOIN hires ON hires.idhires = employees.id_hire
 			INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
 			INNER JOIN accounts ON accounts.idaccounts = employees.id_account
-			LEFT JOIN (SELECT SUM(vacations.count) AS `count`, hr_processes.id_employee
-						FROM vacations
+			LEFT JOIN (SELECT SUM(vacations.count) AS `count`, hr_processes.id_employee 
+						FROM vacations 
 						INNER JOIN hr_processes ON hr_processes.idhr_processes = vacations.id_process WHERE hr_processes.id_type = 4 AND hr_processes.status != 'DISMISSED'
 						GROUP BY id_employee) AS `vac` ON `vac`.id_employee = employees.idemployees
-			LEFT JOIN (SELECT 'SI' AS `insurance`, hr_processes.id_employee FROM insurances INNER JOIN hr_processes ON hr_processes.idhr_processes = insurances.id_process)
+			LEFT JOIN (SELECT 'SI' AS `insurance`, hr_processes.id_employee FROM insurances INNER JOIN hr_processes ON hr_processes.idhr_processes = insurances.id_process) 
 						AS `insurance` ON `insurance`.id_employee = employees.idemployees
 			INNER JOIN users ON users.idUser = employees.reporter
 			LEFT JOIN (SELECT users.user_name, processes.id_profile FROM processes INNER JOIN users ON users.idUser = processes.id_user WHERE name = 'First Interview')

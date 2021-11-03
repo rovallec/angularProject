@@ -1,4 +1,5 @@
-import { Component, OnInit, ɵCodegenComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, NgModule, ɵCodegenComponentFactoryResolver } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
@@ -169,6 +170,7 @@ export class HrprofilesComponent implements OnInit {
   patron: patronal[] = [];
   actPatron: patronal = new patronal;
   selectedReporter:string = null;
+  advanceDays: number = 1;
 
   reasons: string[] = [
     "Asistencia",
@@ -635,7 +637,7 @@ export class HrprofilesComponent implements OnInit {
         if (vac.action == "Add") {
           this.returnedVacations = this.returnedVacations + Number(vac.count);
         }
-        if (vac.action == "Paid" && vac.status != "DISMISSED") {
+        if (((vac.action == "Paid") || (vac.action == "Take")) && vac.status != "DISMISSED") {
           this.tookVacations = this.tookVacations + Number(vac.count);
         } else if (vac.status == 'DISMISSED') {
           this.dismissedVacations = this.dismissedVacations + Number(vac.count);
@@ -1597,6 +1599,7 @@ export class HrprofilesComponent implements OnInit {
       case 'Advance':
         this.apiService.getAdvances(this.actuallProc).subscribe((adv: advances) => {
           this.actualAdvance = adv;
+          this.validateAmount();
         })
         break;
       case 'Rise':
@@ -2656,4 +2659,36 @@ export class HrprofilesComponent implements OnInit {
       return null;
     }
   })
+
+  prorataSalary() {
+    const DiasMes = 30; // Se toma a Mes comercial.
+    let salary: number;
+    if(this.advanceDays <= DiasMes) {
+      salary = this.advanceDays * ((Number(this.workingEmployee.base_payment) + Number(this.workingEmployee.productivity_payment)) / DiasMes);
+      this.actualAdvance.amount = salary.toFixed(2);
+    } else {
+      this.actualAdvance.amount = '0.00';
+      this.advanceDays = DiasMes;
+      this.prorataSalary();
+    }
+  }
+
+  validateAmount() {
+    const DiasMes = 30; // Se toma a Mes comercial.
+    let maxSalary: number = (Number(this.workingEmployee.base_payment) + Number(this.workingEmployee.productivity_payment));
+    let dailyPayment = maxSalary / DiasMes;
+
+    if (Number(this.actualAdvance.amount) > maxSalary) {
+      this.actualAdvance.amount = maxSalary.toFixed(2);
+    }
+
+    this.advanceDays = Number(Number(Number(this.actualAdvance.amount) / dailyPayment).toFixed(0));
+    if (this.advanceDays == 0) {
+      this.advanceDays = 1;
+    }
+  }
+
+  exportAdvancesReport() {
+    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportAdvancesReport.php?idemployee=" + this.workingEmployee.idemployees, "_blanck");
+  }
 }
