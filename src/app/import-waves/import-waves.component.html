@@ -138,7 +138,7 @@
               {{ prof.second_lastname }}
             </td>
             <td>
-              <input type="date" [(ngModel)]="prof.day_of_birth" class="form-control">
+              <input type="date" [(ngModel)]="prof.day_of_birth" class="form-control" datetime="dd-MM-yyyy">
             </td>
             <td>
               <button class="btn-outline-warning" *ngIf="prof.state=='Error'" disabled="true" data-toggle="tooltip"

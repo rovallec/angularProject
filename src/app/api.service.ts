@@ -445,6 +445,10 @@ insertTransfer(employee:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertTransfer.php`, employee);
 }
 
+updateCorrelativeAccount(any:any){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateCorrelativeAccount.php`, any);
+}
+
 insertJudicials(judicials:judicials){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertJudicials.php`, judicials);
 }
