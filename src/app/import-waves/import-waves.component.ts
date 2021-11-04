@@ -79,11 +79,6 @@ export class ImportWavesComponent implements OnInit {
     this.accounts = [];
     this.apiServices.getAccounts().subscribe((acc: accounts[]) => {
       this.accounts = acc.filter(account => account.id_client == cl );
-      /*acc.forEach(account => {
-        if (account.id_client == cl) {
-          this.accounts.push(account);
-        }
-      });*/
       this.selectedAccount = this.accounts[0];
     })
   }

@@ -1347,6 +1347,7 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Rise':
           let end: boolean = false;
+          // Prompt
           if (window.confirm("Are you sure you want to save?")) {
             this.actualRise.id_process = str;
             this.actualRise.id_employee = this.actuallProc.id_profile;
