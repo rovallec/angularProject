@@ -8,6 +8,7 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $archivo_binario = ($request->file);
+$archivo_binario = str_replace('data:application/pdf;base64,','',$archivo_binario);
 $name = validarDatos($request->name);
 $tipo = validarDatos($request->type);
 $id = validarDatos($request->id);

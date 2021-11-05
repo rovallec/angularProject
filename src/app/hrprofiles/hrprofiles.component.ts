@@ -125,7 +125,7 @@ export class HrprofilesComponent implements OnInit {
   editingDPI: boolean = false;
   editingPhones: boolean = false;
   editingAddress: boolean = false;
-
+  processUpload: string = '';
   departamento: string = null;
   earnVacations: number = 0;
   tookVacations: number = 0;
@@ -2619,7 +2619,6 @@ export class HrprofilesComponent implements OnInit {
       this.filePDF.type = archivoCapturado.type;
 
       this.extraerBase64(archivoCapturado).then((pdf: any) => {
-        //this.previsualizacion = pdf.base;
         this.filePDF.file = pdf.base;
       })
       this.files.push(archivoCapturado);
@@ -2629,7 +2628,7 @@ export class HrprofilesComponent implements OnInit {
     }
   }
 
-  saveLetter(): any {
+  saveFile(): any {
     try {
       this.apiService.saveFile(this.filePDF).subscribe(res => {
         console.log('Respuesta del servidor: ', res);
@@ -2637,6 +2636,18 @@ export class HrprofilesComponent implements OnInit {
     } catch (e) {
       console.log('Error', e);
     }
+  }
+
+  getFilePDF(type: string) {
+    let url: string = '';
+    if (type == 'Vacation') {
+      this.processUpload = 'Vacation';
+      url = this.apiService.PHP_API_SERVER + '/phpscripts/getFilePDF.php?id=' + this.activeVacation.id_process;
+    } else if (type == 'Advance') {
+      this.processUpload = 'Advance';
+      url = this.apiService.PHP_API_SERVER + '/phpscripts/getFilePDF.php?id=' + this.actualAdvance.id_process;
+    }
+    window.open(url, "_blank");
   }
 
   extraerBase64 = async ($event: any) => new Promise((resolve, reject) => {
@@ -2690,5 +2701,34 @@ export class HrprofilesComponent implements OnInit {
     if (this.advanceDays == 0) {
       this.advanceDays = 1;
     }
+  }
+
+  uploadAdvance(event): any {
+    const archivoCapturado = event.target.files[0];
+    if (archivoCapturado.type=='application/pdf') {
+      this.filePDF.id = this.actuallProc.idprocesses;
+      this.filePDF.name = this.workingEmployee.nearsol_id + '-' + this.actuallProc.idprocesses + '.pdf';
+      this.filePDF.type = archivoCapturado.type;
+
+      this.extraerBase64(archivoCapturado).then((pdf: any) => {
+        this.filePDF.file = pdf.base;
+      })
+      this.files.push(archivoCapturado);
+      console.log(this.filePDF);
+    } else {
+      window.alert('It is only allowed to upload files with a .pdf extension.');
+    }
+  }
+
+  typeProcessUpload(type: string) {
+    this.processUpload = type;
+  }
+
+  printAdvances() {
+    var url = this.apiService.PHP_API_SERVER + "/phpscripts/letterVacations.php?name=" + this.workingEmployee.name +
+      "&date=" + this.activeVacation.took_date + "&job=" + this.workingEmployee.job +
+      "&start_date=" + this.workingEmployee.hiring_date + "&department=" + this.workingEmployee.id_account +
+      "&days_requested=" + this.activeVacation.count + "&nearsol_id=" + this.workingEmployee.nearsol_id ;
+    window.open(url, "_blank");
   }
 }

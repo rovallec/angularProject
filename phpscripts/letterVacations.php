@@ -78,7 +78,7 @@ echo "
     <tr style='font-size: 12px;'>
       <td colspan='4' style='padding-left: 20px; width:180px; font-weight: bold;'>Dias solicitados para pago:</td>
     </tr>
-    <tr style='font-size: 9px;'>
+    <tr style='font-size: 9px; font-weight: bold;'>
       <td style='width:30px'></td>
       <td>$date</td>
     </tr>

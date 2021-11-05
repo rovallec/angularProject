@@ -9,6 +9,19 @@ $request = json_decode($postdata);
 $employee = ($request->employee);
 $account_id = ($request->account);
 $client_id = $request->client_id;
+$correlative = 0;
+
+try {
+    $correlative = $request->correlative;
+} catch (\Throwable $th) {
+    $correlative = 1;
+}
+
+if($correlative = 0){
+    $correlative = 1;
+}
+
+$sql2 = "UPDATE accounts SET correlative = correlative + $correlative where idaccounts = $account_id;";
 
 $sql2 = "UPDATE accounts SET correlative = correlative + 1 where idaccounts = $account_id;";
 $sql = "UPDATE `employees` SET `id_account` = '$account_id' WHERE `idemployees` = '$employee'";

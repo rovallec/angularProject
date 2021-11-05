@@ -604,25 +604,34 @@
                             </div>
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2">
-                                    <button class="form-control" (click)="cancelVacation()"
-                                        *ngIf="editVac">Cancel</button>
+                                    <button class="form-control" (click)="cancelVacation()" *ngIf="editVac">
+                                        Cancel
+                                    </button>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <button class="form-control" (click)="cancelView()" *ngIf="!editVac">Return</button>
+                                    <button class="form-control" (click)="cancelView()" *ngIf="!editVac">
+                                        Return
+                                    </button>
                                 </div>
                                 <div class="form-group col-md-2">
-                                  <button class="form-control" type="button">
-                                    <i class="far fa-eye selectable" (click)="printLetter()"></i>
+                                  <button class="form-control" type="button" (click)="printLetter()">
+                                    <i class="far fa-eye selectable"></i>
                                   </button>
                                 </div>
                                 <div class="form-group col-md-2">
-                                  <button class="form-control" type="button">
-                                    <i class="fas fa-file-upload" data-target="#fileUploadModal" data-toggle="modal"></i>
-                                  </button>
+                                    <button class="form-control" type="button" data-target="#fileUploadModal" data-toggle="modal" (click)="typeProcessUpload('Vacations')">
+                                        <i class="fas fa-file-upload"></i>
+                                    </button>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="form-control" (click)="insertVacation()"
-                                        *ngIf="editVac">Accept</button>
+                                    <button class="form-control" type="button" (click)="getFilePDF('Vacation')" [disabled]="activeVacation.id_process==null">
+                                        <i class="fas fa-file-download"></i>
+                                    </button>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="form-control" (click)="insertVacation()" *ngIf="editVac">
+                                        Accept
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -2230,6 +2239,25 @@
                                     [disabled]="viewRecProd"></textarea>
                             </div>
                         </div>
+                        <div class="form-row col-md-12" *ngIf="viewRecProd">
+                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-md-2" [disabled]="true">
+                                <button class="form-control" type="button" (click)="printAdvances()">
+                                    <i class="far fa-eye selectable"></i>
+                                </button>
+                            </div>
+                            <div class="form-group col-md-2" *ngIf="true">
+                                <button class="form-control" type="button" data-target="#fileUploadModal" data-toggle="modal" (click)="typeProcessUpload('Advance')">
+                                    <i class="fas fa-file-upload"></i>
+                                </button>
+                            </div>
+                            <div class="form-group col-md-2" *ngIf="true">
+                                <button class="form-control" type="button" (click)="getFilePDF('Advance')" [disabled]="actualAdvance.id_process==null">
+                                    <i class="fas fa-file-download"></i>
+                                </button>
+                            </div>
+                            <div class="form-group col-md-2"></div>
+                        </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
@@ -2848,11 +2876,12 @@
                 <h5 class="modal-title" id="fileUploadLabel">FILE UPLOAD</h5>
             </div>
             <div class="modal-body">
-               <input type="file" (change)="uploadLetter($event)" accept="*.pdf" class="form-control">
+                <input type="file" (change)="uploadLetter($event)" accept="*.pdf" class="form-control" *ngIf="processUpload=='Vacation'">
+                <input type="file" (change)="uploadAdvance($event)" accept="*.pdf" class="form-control" *ngIf="processUpload=='Advance'">
             </div>
             <div class="modal-footer d-flex justify-content-between mt-2">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
-                <button type="button" class="btn btn-outline-primary" (click)="saveLetter()" [disabled]="loading" data-dismiss="modal">
+                <button type="button" class="btn btn-outline-primary" (click)="saveFile()" [disabled]="loading" data-dismiss="modal">
                   {{  (loading) ? 'Loading...' : 'SAVE' }}
                 </button>
             </div>
