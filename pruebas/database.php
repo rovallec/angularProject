@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 	die();
 }
 
-//define('db_host', '172.18.200.21');
 define('db_host', 'localhost');
 define('db_user','neadmin');
 define('db_password','N$4rsol.@dmin');
@@ -20,24 +19,22 @@ define('db_name','minearsol');
 
 function connect()
 {
-    $connect = pg_connect("host=" . db_host ." dbname=". db_name . " user=" . db_user . " password=" . db_password)
-    or die('No se ha podido conectar: ' . pg_last_error());
-
+	$connect = mysqli_connect(db_host,db_user,db_password,db_name);
   if (!$connect) {
-    die('Error de conexión: ' . pg_result_error($connect));
+    die('Error de conexión: ' . mysqli_connect_error());
   }
+	/*if(mysqli_connect_errno($connect))
+	{
+		die("Failed to connect: " . mysqli_connect_errno());
+	}
+*/
 	return $connect;
 }
 
 $con = connect();
 
 function transaction() {
-	$connect = new PDO("pgsql:host=" . db_host ." dbname=". db_name . " user=" . db_user . " password=" . db_password)
-	or die('No se ha podido conectar: ' . pg_last_error());
-
-	if (!$connect) {
-	  die('Error de conexión: ' . pg_result_error($connect));
-	}
+	$connect = new mysqli(db_host,db_user,db_password,db_name);
 	return $connect;
 }
 
