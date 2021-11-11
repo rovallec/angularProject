@@ -50,6 +50,7 @@ import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.co
 import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.component';
 import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenance.component';
 import { DatePipe } from '@angular/common';
+import { HolidaysComponent } from './holidays/holidays.component';
 
 
 @NgModule({
@@ -94,7 +95,8 @@ import { DatePipe } from '@angular/common';
     ItprofilesComponent,
     PaystubSendmailComponent,
     WaveMaintenanceComponent,
-    RostermaintenanceComponent
+    RostermaintenanceComponent,
+    HolidaysComponent
   ],
   imports: [
     BrowserModule,

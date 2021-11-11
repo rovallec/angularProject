@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates, roster_types, rosters, roster_times, roster_weeks, tk_upload, patronal } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates, roster_types, rosters, roster_times, roster_weeks, tk_upload, patronal, holiday } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -1117,6 +1117,22 @@ copyRosters(any:any){
 
 getPatronalNumber() {
   return this.httpClient.get<patronal[]>(`${this.PHP_API_SERVER}/phpscripts/getPatronalNumber.php`);
+}
+
+getHolidays(any: any) {
+  return this.httpClient.post<holiday[]>(`${this.PHP_API_SERVER}/phpscripts/getHolidays.php`, any);
+}
+
+insertHolidays(holi: holiday) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertHolidays.php`, holi);
+}
+
+updateHolidays(holi: holiday) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateHolidays.php`, holi);
+}
+
+deleteHolidays(holi: holiday) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/deleteHolidays.php`, holi);
 }
 
 insertScheduleFix(adj:attendences_adjustment){

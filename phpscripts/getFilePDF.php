@@ -12,7 +12,7 @@ $id = ($request->id);
 
 $id = $_GET['id'];
 
-$sql = "select archivo, name from file where id_process = $id LIMIT 0, 1;";
+$sql = "SELECT archivo, name FROM file WHERE id_process = $id LIMIT 0, 1;";
 if($result = mysqli_query($con,$sql)){
 $row = mysqli_fetch_assoc($result);
   //while($row = mysqli_fetch_assoc($result)){
