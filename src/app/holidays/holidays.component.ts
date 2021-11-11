@@ -95,15 +95,17 @@ export class HolidaysComponent implements OnInit {
 
   deleteHoliday(aHoliday: holiday) {
     this.selectedHoliday = aHoliday;
-    try {
-      this.apiService.deleteHolidays(this.selectedHoliday).subscribe((str: string) => {
-        if (str !== '') {
-          console.log(str);
-        }
-      });
-    } finally {
-      this.state = 'Browse';
-      this.start();
+    if (window.confirm("Are you sure you want to delete?")) {
+      try {
+        this.apiService.deleteHolidays(this.selectedHoliday).subscribe((str: string) => {
+          if (str !== '') {
+            console.log(str);
+          }
+        });
+      } finally {
+        this.state = 'Browse';
+        this.start();
+      }
     }
   }
 
