@@ -24,7 +24,7 @@ if(parse_str(explode("-",$date)[2]) > 15){
     FROM `services` 
     LEFT JOIN `internal_processes` ON `internal_processes`.`idinternal_processes` = `services`.`id_process`
     LEFT JOIN `periods` ON `periods`.`end` = '$date' AND `services`.`frecuency` BETWEEN `periods`.`start` AND `periods`.`end`
-    WHERE (`frecuency` = 'UNIQUE' OR `frecuency` = 'BIWEEKLY' OR `frecuency` OR `periods`.`idperiods` IS NOT NULL) AND `id_employee` = $id AND services.`status` = 1;";
+    WHERE (`frecuency` = 'UNIQUE' OR `frecuency` = 'BIWEEKLY' OR  `periods`.`idperiods` IS NOT NULL) AND `id_employee` = $id AND services.`status` = 1;";
 }
 
 if($result = mysqli_query($con, $sql)){
