@@ -38,7 +38,7 @@ if($result = mysqli_query($con, $sql)){
         $user[$i]['frecuency'] = $row['frecuency'];
         $user[$i]['status'] = $row['status'];
         $user[$i]['current'] = $row['current'];
-        $r[$i]['type'] = $result['type'];
+        $user[$i]['type'] = $result['type'];
         $i = $i + 1;
     };
     echo json_encode($user);
