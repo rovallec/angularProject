@@ -10,7 +10,7 @@ import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { schedule_visit } from '../addTemplate';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, debits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients, billing_detail } from '../process_templates';
+import { attendences, attendences_adjustment, credits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients, billing_detail, debits, timekeeping_adjustments } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
@@ -93,9 +93,11 @@ export class PeriodsComponent implements OnInit {
   selectedClient: string = null;
   base: boolean = false;
   emp_set: string = null;
-  selected_patrono:string = 'PRG Recurso Humano, S.A.';
+  selected_patrono: string = 'PRG Recurso Humano, S.A.';
+  payrollvalues: payroll_values_gt[] = [];
+  adj_values: timekeeping_adjustments[] = [];
 
-  constructor(public apiService: ApiService, public route: ActivatedRoute, public authService:AuthServiceService) { }
+  constructor(public apiService: ApiService, public route: ActivatedRoute, public authService: AuthServiceService) { }
 
   ngOnInit() {
     this.start();
@@ -158,7 +160,7 @@ export class PeriodsComponent implements OnInit {
         this.deductions = db;
       })
     } else {
-      this.apiService.getSearchEmployees({ dp: 'all', filter: this.filter, value: this.value, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+      this.apiService.getSearchEmployees({ dp: 'all', filter: this.filter, value: this.value, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
         this.employees = emp;
       })
     }
@@ -201,7 +203,7 @@ export class PeriodsComponent implements OnInit {
         pv.forEach(payroll_value => {
           let is_trm: boolean = false;
           let py: payments = new payments;
-          this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_value.id_employee, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+          this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_value.id_employee, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
             this.apiService.getTermdt(emp[0]).subscribe((trm: terminations) => {
               this.apiService.getClosingRise({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((rises: rises) => {
                 this.apiService.getTransfers({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((trns: hrProcess) => {
@@ -231,12 +233,11 @@ export class PeriodsComponent implements OnInit {
                           } else {
                             productivity_salary = ((Number(emp[0].productivity_payment) - 250) / 240);
                           }
- 
+
                           if (new Date(emp[0].hiring_date).getTime() > new Date(this.period.start).getTime()) {
-                            console.log(Number(py.days));
-                            py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours)/8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
-                            if(((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24)) >= 14){
-                              py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())/(1000*3600*24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours)/8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000*3600*24))))).toFixed(2);
+                            py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours) / 8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24))))).toFixed(2);
+                            if (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24)) >= 14) {
+                              py.days = (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24)) + 1) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh) + (Number(payroll_value.discounted_hours) / 8) - (((new Date(emp[0].hiring_date).getTime() - new Date(this.period.start).getTime()) / (1000 * 3600 * 24))))).toFixed(2);
                             }
                           }
 
@@ -283,7 +284,7 @@ export class PeriodsComponent implements OnInit {
                           py.employee_name = emp[0].name;
                           py.holidays_hours = payroll_value.holidays_hours;
                           py.idpayroll_values = payroll_value.idpayroll_values;
-                          py.holidays = (Number(payroll_value.holidays_hours) * (base_salary + productivity_salary + (250/240)) * 1.5).toFixed(2);
+                          py.holidays = (Number(payroll_value.holidays_hours) * (base_salary + productivity_salary + (250 / 240)) * 1.5).toFixed(2);
                           py.base = (Number(base_salary) * Number(py.base_hours)).toFixed(2);
                           py.productivity = (Number(productivity_salary) * Number(py.productivity_hours)).toFixed(2);
 
@@ -298,7 +299,7 @@ export class PeriodsComponent implements OnInit {
                           let decreot_credit: credits = new credits;
                           let ot_credit: credits = new credits;
                           let holiday_credit: credits = new credits;
-                          let adjustments:credits = new credits;
+                          let adjustments: credits = new credits;
                           let isr: number = 0;
 
                           let igss_debit: debits = new debits;
@@ -329,27 +330,27 @@ export class PeriodsComponent implements OnInit {
                             this.global_credits.push(holiday_credit);
                           }
 
-                          if(Math.abs(Number(payroll_value.adj_hours))>0 ||Math.abs( Number(payroll_value.adj_holidays))>0 || Math.abs(Number(payroll_value.adj_ot))>0){
+                          if (Math.abs(Number(payroll_value.adj_hours)) > 0 || Math.abs(Number(payroll_value.adj_holidays)) > 0 || Math.abs(Number(payroll_value.adj_ot)) > 0) {
 
-                            let adjustment_base:credits = new credits;
-                            let adjustment_ot:credits = new credits;
-                            let adjustment_hld:credits = new credits;
-                            adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250/240))).toFixed(2);
-                            adjustment_base.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250/240))).toFixed(2);
+                            let adjustment_base: credits = new credits;
+                            let adjustment_ot: credits = new credits;
+                            let adjustment_hld: credits = new credits;
+                            adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
+                            adjustment_base.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.type = "Ajuste Horas Nominales";
 
                             if (emp[0].job != 'Supervisor De Operaciones' && emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
-                              adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 2)).toFixed(2);
-                              adjustment_ot.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 2)).toFixed(2);
+                              adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 2)).toFixed(2);
+                              adjustment_ot.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 2)).toFixed(2);
                               adjustment_ot.type = "Ajuste OT";
                             } else {
-                              adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
-                              adjustment_ot.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
+                              adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
+                              adjustment_ot.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
                               adjustment_ot.type = "Ajuste OT";
                             }
 
-                            adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
-                            adjustment_hld.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250/240)) * 1.5)).toFixed(2);
+                            adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
+                            adjustment_hld.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
                             adjustment_hld.type = "Ajuste HLD";
 
                             adjustments.type = "Ajustes periodos anteriores";
@@ -372,7 +373,7 @@ export class PeriodsComponent implements OnInit {
                           let sum_cred: number = 0
                           cred.forEach(credit => {
                             if (credit.status == "PENDING" && credit.idpayments == py.idpayments) {
-                              sum_cred =Number(Number(sum_cred) + Number(credit.amount));
+                              sum_cred = Number(Number(sum_cred) + Number(credit.amount));
                             }
                           })
                           py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
@@ -392,34 +393,56 @@ export class PeriodsComponent implements OnInit {
 
 
                           services.forEach(service => {
-                            if (Number(service.max) == 0 || Number(service.max) > (Number(service.current) + Number(service.amount))) {
-                              let service_debit: debits = new debits;
-                              service_debit.amount = Number(service.amount).toFixed(2);
-                              service_debit.type = service.name;
-                              service_debit.idpayments = py.idpayments;
-                              py.debits = (Number(py.debits) + Number(service.amount)).toFixed(2);
-                              service.current = (Number(service.current) + Number(service.amount)).toFixed(2);
-                              this.global_debits.push(service_debit);
-                            } else if (Number(service.max) != 0) {
-                              if (Number(service.max) <= (Number(service.current) + Number(service.amount))) {
+                            if (service.type == '0') {
+                              if ((Number(service.max) == 0 || Number(service.max) >= (Number(service.current) + Number(service.amount)))) {
                                 let service_debit: debits = new debits;
-                                service_debit.amount = (Number(service.max) - Number(service.current)).toFixed(2);
+                                service_debit.amount = Number(service.amount).toFixed(2);
                                 service_debit.type = service.name;
                                 service_debit.idpayments = py.idpayments;
                                 py.debits = (Number(py.debits) + Number(service.amount)).toFixed(2);
-                                service.current = (Number(service.current) + Number(service_debit.amount)).toFixed(2);
-                                service.status = '0';
+                                service.current = (Number(service.current) + Number(service.amount)).toFixed(2);
                                 this.global_debits.push(service_debit);
+                              } else if (Number(service.max) != 0) {
+                                if (Number(service.max) <= (Number(service.current) + Number(service.amount))) {
+                                  let service_debit: debits = new debits;
+                                  service_debit.amount = (Number(service.max) - Number(service.current)).toFixed(2);
+                                  service_debit.type = service.name;
+                                  service_debit.idpayments = py.idpayments;
+                                  py.debits = (Number(py.debits) + Number(service.amount)).toFixed(2);
+                                  service.current = (Number(service.current) + Number(service_debit.amount)).toFixed(2);
+                                  service.status = '0';
+                                  this.global_debits.push(service_debit);
+                                }
+                              }
+                            } else if ((service.type == '1') && (Number(service.max) == 0 || Number(service.max) >= (Number(service.current) + Number(service.amount)))) {
+                              let service_credit: credits = new credits;
+                              service_credit.amount = Number(service.amount).toFixed(2);
+                              service_credit.type = service.name;
+                              service_credit.idpayments = py.idpayments;
+                              py.credits = (Number(py.credits) + Number(service.amount)).toFixed(2);
+                              service.current = (Number(service.current) + Number(service_credit.amount)).toFixed(2);
+                              service.status = '0';
+                              this.global_credits.push(service_credit);
+                            } else if (Number(service.max) != 0) {
+                              if (Number(service.max) <= (Number(service.current) + Number(service.amount))) {
+                                let service_credit: debits = new debits;
+                                service_credit.amount = (Number(service.max) - Number(service.current)).toFixed(2);
+                                service_credit.type = service.name;
+                                service_credit.idpayments = py.idpayments;
+                                py.debits = (Number(py.debits) + Number(service.amount)).toFixed(2);
+                                service.current = (Number(service.current) + Number(service_credit.amount)).toFixed(2);
+                                service.status = '0';
+                                this.global_credits.push(service_credit);
                               }
                             }
-                            if (service.frecuency == "UNIQUE") {
+                            if (service.frecuency == "UNIQUE" || service.frecuency.includes("-")) {
                               service.status = '0';
                             }
                             this.global_services.push(service);
                           });
 
                           judicials.forEach(judicial => {
-                            if(!isNullOrUndefined(judicial)){
+                            if (!isNullOrUndefined(judicial)) {
                               if (Number(judicial.max) == 0 || Number(judicial.max) > (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100)))) {
                                 let judicial_discount: debits;
                                 judicial_discount = new debits();
@@ -514,7 +537,7 @@ export class PeriodsComponent implements OnInit {
     this.progress = 1;
     try {
       this.payments.forEach(py => {
-        this.progress = this.progress +1;
+        this.progress = this.progress + 1;
         this.apiService.setPayment(py).subscribe((str_3: string) => {
           if (String(str_3).split("|")[0] == "0") {
             throw new Error('Error updating Payments');
@@ -524,14 +547,14 @@ export class PeriodsComponent implements OnInit {
       this.pushDeductions('credits', this.global_credits);
       this.pushDeductions('debits', this.global_debits);
       this.global_services.forEach(service => {
-        this.progress = this.progress +1 ;
+        this.progress = this.progress + 1;
         if (Number(service.max) === Number(service.current) || service.frecuency == "UNIQUE") {
           service.status = '0';
         }
         this.apiService.updateServices(service).subscribe((str: string) => { });
       });
       this.global_judicials.forEach(judicial => {
-        this.progress = this.progress +1;
+        this.progress = this.progress + 1;
         this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
           if (str_r.split("|")[0] == '0') {
             throw new Error('Error updating Legal Deductions');
@@ -547,7 +570,7 @@ export class PeriodsComponent implements OnInit {
         }
       })
     } catch (error) {
-      let e:Error = error;
+      let e: Error = error;
       window.alert("An error has occured:\n" + e.message);
     } finally {
       this.progress = 0;
@@ -583,23 +606,23 @@ export class PeriodsComponent implements OnInit {
             })
 
             cred.forEach(credit => {
-              if(this.period.status == "3"){
-              if (credit.status == "PENDING") {
-                this.detailed_credits.push(credit);
-              }
-              }else{
+              if (this.period.status == "3") {
+                if (credit.status == "PENDING") {
+                  this.detailed_credits.push(credit);
+                }
+              } else {
                 this.detailed_credits.push(credit);
               }
             })
 
             deb.forEach(debit => {
-              if(this.period.status == "3"){
-              if (debit.status == "PENDING") {
+              if (this.period.status == "3") {
+                if (debit.status == "PENDING") {
+                  this.detailed_debits.push(debit);
+                }
+              } else {
                 this.detailed_debits.push(debit);
               }
-            }else{
-              this.detailed_debits.push(debit);
-            }
             })
 
             this.global_credits.forEach(global_cred => {
@@ -663,7 +686,7 @@ export class PeriodsComponent implements OnInit {
         var bstr = arr.join("");
         var workbook = XLSX.read(bstr, { type: "binary" });
         workbook.SheetNames.forEach(sheets => {
-          let ws:number = 0;
+          let ws: number = 0;
           var first_sheet_name = workbook.SheetNames[ws];
           var worksheet = workbook.Sheets[first_sheet_name];
           let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
@@ -678,7 +701,7 @@ export class PeriodsComponent implements OnInit {
         let count: number = 0;
         this.apiService.getPayments(provitional_period).subscribe((paymnts: payments[]) => {
           partial_credits.forEach(ele => {
-            this.apiService.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits, rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+            this.apiService.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: ele.iddebits, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               ele.type = this.importType;
               if (!isNullOrUndefined(emp[0])) {
                 paymnts.forEach(py => {
@@ -720,7 +743,7 @@ export class PeriodsComponent implements OnInit {
   pushDeductions(str: string, credits?: credits[], debits?: debits[]) {
     if (str == 'debits') {
       credits.forEach(cred => {
-        if(cred.amount != 'NaN'){
+        if (cred.amount != 'NaN') {
           cred.amount = Number(cred.amount).toFixed(2);
           this.apiService.insertDebits(cred).subscribe((str: string) => { });
         }
@@ -728,7 +751,7 @@ export class PeriodsComponent implements OnInit {
     } else {
       if (str == 'credits') {
         credits.forEach(cred => {
-          if(cred.amount != 'NaN'){
+          if (cred.amount != 'NaN') {
             cred.amount = Number(cred.amount).toFixed(2);
             this.apiService.insertCredits(cred).subscribe((str: string) => { });
           }
@@ -756,11 +779,11 @@ export class PeriodsComponent implements OnInit {
   }
 
   saveBilling() {
-    let any: any = {"month": this.period.start.split("-")[1], "account": this.selected_accounts};
+    let any: any = { "month": this.period.start.split("-")[1], "account": this.selected_accounts };
     let month: string = new Date(this.period.start).getMonth.toString();
-    this.apiService.getBilling(month).subscribe((Billing: billing_detail)=>{
+    this.apiService.getBilling(month).subscribe((Billing: billing_detail) => {
       if (isNullOrUndefined(Billing)) {
-        this.apiService.saveBilling(any).subscribe((str: string)=>{
+        this.apiService.saveBilling(any).subscribe((str: string) => {
           // por el momento no hacer nada.
         })
       } else {
@@ -770,23 +793,23 @@ export class PeriodsComponent implements OnInit {
   }
 
   exportBilling() {
-    let selectedPeriod:string = null;
-    let cnt:number = 0;
-      this.apiService.getPeriods().subscribe((pr:periods[])=>{
-        pr.forEach(p=>{
-          if(p.start.split("-")[1] == this.period.start.split("-")[1]){
-            cnt ++;
-            if(!isNullOrUndefined(selectedPeriod)){
-              selectedPeriod = selectedPeriod + "," + p.idperiods;
-            }else{
-              selectedPeriod = p.idperiods;
-            }
-            if(cnt == 2){
-              window.open("http://172.18.2.45/phpscripts/exportBilling.php?period=" + selectedPeriod + "&netsuit=" + this.selected_accounts, "_self")
-            }
+    let selectedPeriod: string = null;
+    let cnt: number = 0;
+    this.apiService.getPeriods().subscribe((pr: periods[]) => {
+      pr.forEach(p => {
+        if (p.start.split("-")[1] == this.period.start.split("-")[1]) {
+          cnt++;
+          if (!isNullOrUndefined(selectedPeriod)) {
+            selectedPeriod = selectedPeriod + "," + p.idperiods;
+          } else {
+            selectedPeriod = p.idperiods;
           }
-        })
+          if (cnt == 2) {
+            window.open("http://172.18.2.45/phpscripts/exportBilling.php?period=" + selectedPeriod + "&netsuit=" + this.selected_accounts, "_self")
+          }
+        }
       })
+    })
   }
 
   setAccountingPolicy() {
@@ -817,22 +840,149 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
-  setPatrono(str:string){
+  setPatrono(str: string) {
     this.selected_patrono = str;
   }
 
-  exportIgss(){
-    let user:string = this.authService.getAuthusr().signature;
-    let patrono:string = this.selected_patrono;
-    let address:string = "20 Calle 5-25";
-    let nit_patrono:string = null;
-    let patronal_number:string = null;
-    if(patrono == 'PRG Recurso Humano, S.A.'){
+  exportIgss() {
+    let user: string = this.authService.getAuthusr().signature;
+    let patrono: string = this.selected_patrono;
+    let address: string = "20 Calle 5-25";
+    let nit_patrono: string = null;
+    let patronal_number: string = null;
+    if (patrono == 'PRG Recurso Humano, S.A.') {
       nit_patrono = "92956971";
       patronal_number = "145998";
     }
-    let t_period:string = this.period.idperiods;
+    let t_period: string = this.period.idperiods;
     window.open("http://172.18.2.45/phpscripts/exportIgss.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
 
+  }
+
+  setPayrollValues(event) {
+    this.file = event.target.files[0];
+    let fileReader = new FileReader();
+    let pr: periods = new periods;
+    let progress: number = 0;
+    let progress_2:number = 0;
+
+    fileReader.readAsArrayBuffer(this.file);
+    fileReader.onload = (e) => {
+      if (!this.completed) {
+        this.arrayBuffer = fileReader.result;
+        var data = new Uint8Array(this.arrayBuffer);
+        var arr = new Array();
+        for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+        var bstr = arr.join("");
+        var workbook = XLSX.read(bstr, { type: "binary" });
+        workbook.SheetNames.forEach(sheets => {
+
+          var first_sheet_name = workbook.SheetNames[0];
+          var worksheet = workbook.Sheets[first_sheet_name];
+          let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+          sheetToJson.forEach(element => {
+            this.apiService.getSearchEmployees({ dp: 'all', filter: 'nearsol_id', value: element['ID'], rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+              let paymentValue = new payroll_values_gt;
+              paymentValue.client_id = element['Avaya'];
+              paymentValue.nearsol_id = element['ID'];
+              pr.start = 'explicit_period';
+              pr.status = emp[0].idemployees;
+              pr.end = this.period.idperiods;
+              this.apiService.getPayments(pr).subscribe((pymnts: payments[]) => {
+                if (pymnts.length == 1) {
+                  paymentValue.status = '1';
+                } else {
+                  paymentValue.status = '0';
+                }
+                progress++;
+                if (!isNullOrUndefined(pymnts[0].idpayments)) {
+                  paymentValue.id_payment = pymnts[0].idpayments;
+                  paymentValue.agent_name = element['Full Name'];
+                  paymentValue.id_reporter = element['Supervisor'];
+                  paymentValue.discounted_days = element['Days to discount'];
+                  paymentValue.seventh = element['7th'];
+                  paymentValue.total_days = element['Total'];
+                  paymentValue.discounted_hours = element['Hours to discount'];
+                  paymentValue.ot_hours = element['OT'];
+                  paymentValue.holidays_hours = element['Holiday Hours'];
+                  paymentValue.performance_bonus = element['Performance Bonus'];
+                  paymentValue.treasure_hunt = element['Treasure Hunt'];
+                  this.payrollvalues.push(paymentValue);
+                }
+                if (progress == sheetToJson.length) {
+                  console.log(this.payrollvalues);
+                  var first_sheet_name2 = workbook.SheetNames[1];
+                  var worksheet2 = workbook.Sheets[first_sheet_name2];
+                  let sheetToJson2 = XLSX.utils.sheet_to_json(worksheet2, { raw: true });
+                  sheetToJson2.forEach(ele => {
+                    this.payrollvalues.forEach(py_val => {
+                      if (py_val.client_id == ele['Avaya'] && py_val.nearsol_id == ele['AID']) {
+                        py_val.adj_hours = (Number(py_val.adj_hours) + (Number(ele['Days to Pay']) * 8) + Number(ele['Regular Hours'])).toFixed(2);
+                        py_val.adj_ot = (Number(py_val.adj_ot) + Number(ele['OT'])).toFixed(2);
+                        py_val.adj_holidays = (Number(py_val.adj_holidays) + Number(ele['Horas Asueto'])).toFixed(2);
+                        if (Number(py_val.adj_hours) > 0 || Number(py_val.adj_ot) > 0 || Number(py_val.adj_holidays) > 0) {
+                          let adj: timekeeping_adjustments = new timekeeping_adjustments;
+                          adj.amount_holidays = (Number(ele['Horas Asueto'])).toFixed(2);
+                          adj.amount_hrs = ((Number(ele['Days to Pay']) * 8) + Number(ele['Regular Hours'])).toFixed(2);
+                          adj.amount_ot = (Number(ele['OT'])).toFixed(2);
+                          adj.id_payment = py_val.id_payment;
+                        }
+                        py_val.performance_bonus = (Number(py_val.performance_bonus) + Number(ele['Bono Performance'])).toFixed(2);
+                        if (Number(ele['Reintegro de / bus parqueo']) > 0) {
+                          let cred: credits = new credits;
+                          cred.amount = Number(ele['Reintegro de / bus parqueo']).toFixed(2);
+                          cred.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                          cred.id_employee = py_val.id_employee;
+                          cred.id_user = this.authService.getAuthusr().iduser;
+                          cred.idpayments = py_val.id_payment;
+                          cred.status = 'PENDING';
+                          cred.type = "Parking"
+                          this.global_credits.push(cred);
+                        } else if (Number(ele['Reintegro de / bus parqueo']) < 0) {
+                          let deb: debits = new debits;
+                          deb.amount = Number(ele['Reintegro de / bus parqueo'] * (-1)).toFixed(2);
+                          deb.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                          deb.id_employee = py_val.id_employee;
+                          deb.id_user = this.authService.getAuthusr().iduser;
+                          deb.idpayments = py_val.id_payment;
+                          deb.status = 'PENDING';
+                          deb.type = "Parking";
+                          this.global_debits.push(deb);
+                        }
+                        if (Number(ele['Reintegro de / bus parqueo']) > 0) {
+                          let cred: credits = new credits;
+                          cred.amount = Number(ele['Reintegro de / bus parqueo']).toFixed(2);
+                          cred.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                          cred.id_employee = py_val.id_employee;
+                          cred.id_user = this.authService.getAuthusr().iduser;
+                          cred.idpayments = py_val.id_payment;
+                          cred.status = 'PENDING';
+                          cred.type = "Parking"
+                          this.global_credits.push(cred);
+                        } else if (Number(ele['Reintegro de / bus parqueo']) < 0) {
+                          let deb: debits = new debits;
+                          deb.amount = Number(ele['Reintegro de / bus parqueo'] * (-1)).toFixed(2);
+                          deb.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                          deb.id_employee = py_val.id_employee;
+                          deb.id_user = this.authService.getAuthusr().iduser;
+                          deb.idpayments = py_val.id_payment;
+                          deb.status = 'PENDING';
+                          deb.type = "Parking";
+                          this.global_debits.push(deb);
+                        }
+                      }
+                    })
+                    progress_2++;
+                    if(progress_2 == sheetToJson2.length){
+                      console.log(this.payrollvalues);
+                    }
+                  });
+                }
+              })
+            })
+          })
+        })
+      }
+    }
   }
 }

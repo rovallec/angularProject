@@ -937,6 +937,7 @@ export class services {
     frecuency: string;
     status: string;
     current: string;
+    type:string;
     //Process
     idinternal_process: string;
     id_user: string;
@@ -952,13 +953,14 @@ export class services {
         this.amount = null;
         this.max = null;
         this.frecuency = null;
-        this.status = null;
+        this.status = '0';
         this.idinternal_process = null;
         this.id_user = null;
         this.proc_name = null;
         this.date = null;
         this.proc_status = null;
-        this.notes = null
+        this.notes = null;
+        this.type = '0';
     }
 }
 
@@ -1367,6 +1369,7 @@ export class payroll_values_gt{
     adj_hours:string = null;
     adj_ot:string = null;
     adj_holidays:string = null;
+    status:string;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;
@@ -1390,6 +1393,7 @@ export class payroll_values_gt{
         this.hrs = null;
         this.next_seventh = null;
         this.adjustments = null;
+        this.status = null;
     }
 }
 
@@ -2596,4 +2600,15 @@ export class file_info {
     this.type = null;
     this.file = null;
   }
+}
+
+export class alertModal{
+    header:string;
+    content:string;
+    type:number;
+    constructor(){
+        this.header = null;
+        this.content = null;
+        this.type = null;
+    }
 }

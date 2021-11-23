@@ -35,55 +35,76 @@
         </div>
         <div class="form-group col-md-5">
             <!-----------------------------------SEARCH---------------------------------------------------------------------->
-            <i class="fas fa-search" aria-hidden="true" style="margin-left:5px" data-toggle="tooltip"
-                data-placement="top" title="Search Employee" (click)="searchCloseEmployee()" *ngIf="showPayments"></i>
+            <button class="btn btn-outline-secondary" *ngIf="showPayments" style="margin-left:5px"
+                (click)="searchCloseEmployee()"><i class="fas fa-search" aria-hidden="true" data-toggle="tooltip"
+                    data-placement="top" title="Search Employee" *ngIf="showPayments"></i></button>
 
-            <i class="fas fa-search" aria-hidden="true" style="margin-left:5px" data-toggle="tooltip"
-                data-placement="top" title="Search Employee" (click)="searchEmployee()" *ngIf="!showPayments"></i>
+            <button class="btn btn-outline-secondary" *ngIf="!showPayments" style="margin-left:5px"
+                (click)="searchEmployee()"><i class="fas fa-search" aria-hidden="true" data-toggle="tooltip"
+                    data-placement="top" title="Search Employee" *ngIf="!showPayments"></i></button>
 
-            <i class="fas fa-minus-circle" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
-                title="Cancel Search" (click)="cancelCloseSearch()" *ngIf="showPayments && !searchClosed"></i>
+            <button class="btn btn-outline-secondary" *ngIf="showPayments && !searchClosed" style="margin-left:5px"
+                (click)="cancelCloseSearch()"><i class="fas fa-minus-circle" data-toggle="tooltip" data-placement="top"
+                    title="Cancel Search" *ngIf="showPayments && !searchClosed"></i></button>
 
-            <i class="fas fa-minus-circle" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
-                title="Cancel Search" (click)="cancelSearch()" *ngIf="!showPayments"></i>
+            <button class="btn btn-outline-secondary" (click)="cancelSearch()" *ngIf="!showPayments"
+                style="margin-left:5px"><i class="fas fa-minus-circle" data-toggle="tooltip" data-placement="top"
+                    title="Cancel Search" *ngIf="!showPayments"></i></button>
             <!-----------------------------------SEARCH---------------------------------------------------------------------->
 
             <!-----------------------------------GLOBAL---------------------------------------------------------------------->
-            <i class="fas fa-globe-americas" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
-                title="Show All" (click)="showAll()" *ngIf="!showPayments"></i>
+            <button class="btn btn-outline-secondary" (click)="showAll()" *ngIf="!showPayments"
+                style="margin-left:5px"><i class="fas fa-globe-americas" data-toggle="tooltip" data-placement="top"
+                    title="Show All" *ngIf="!showPayments"></i></button>
             <!-----------------------------------GLOBAL---------------------------------------------------------------------->
 
             <!------------------------------------COMPLETE / DISMISS Close--------------------------------------------------->
-            <i class="fas fa-times-circle" style="margin-left:5px" (click)="closeClose()"
-                *ngIf="showPayments && searchClosed && period.status == '1'"></i>
+            <button class="btn btn-outline-secondary" (click)="closeClose()"
+                *ngIf="showPayments && searchClosed && period.status == '1'" style="margin-left:5px"><i
+                    class="fas fa-times-circle"
+                    *ngIf="showPayments && searchClosed && period.status == '1'"></i></button>
 
-            <i class="fas fa-check-circle" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
-                title="Save Close Period" (click)="completePeriod()"
-                *ngIf="showPayments && !completed && period.status == '3'"></i>
+            <button class="btn btn-outline-secondary" (click)="completePeriod()"
+                *ngIf="showPayments && !completed && period.status == '3'" style="margin-left:5px"><i
+                    class="fas fa-check-circle" data-toggle="tooltip" data-placement="top" title="Save Close Period"
+                    *ngIf="showPayments && !completed && period.status == '3'"></i></button>
             <!------------------------------------COMPLETE / DISMISS Close--------------------------------------------------->
 
             <!-------------------------------------CLOSE PERIOD-------------------------------------------------------------->
-            <i class="fas fa-store-slash" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
-                title="Calc Close Period" (click)="closePeriod()" *ngIf="!showPayments"></i>
+            <button class="btn btn-outline-secondary" (click)="closePeriod()"
+                *ngIf="!showPayments && period.status == '3'" style="margin-left:5px"><i class="fas fa-store-slash"
+                    data-toggle="tooltip" data-placement="top" title="Calc Close Period"
+                    *ngIf="!showPayments"></i></button>
+            <button class="btn btn-outline-secondary" *ngIf="!showPayments && period.status != '3'"
+                style="margin-left: 5px;" data-target="#uploadPayrollValues"
+                data-toggle="modal">
+                <i class="far fa-clock"></i>
+            </button>
             <!-------------------------------------CLOSE PERIOD-------------------------------------------------------------->
 
             <!-------------------------------------IMPORT DEDUCTIONS--------------------------------------------------------->
-            <i class="fas fa-arrow-circle-up" style="margin-left:5px" (click)="activeImport()"
-                *ngIf="!showPayments && (period.status == '3' || period.status == '1')"></i>
+            <button class="btn btn-outline-secondary"
+                *ngIf="!showPayments && (period.status == '3' || period.status == '1')" (click)="activeImport()"
+                style="margin-left:5px"><i class="fas fa-arrow-circle-up"
+                    *ngIf="!showPayments && (period.status == '3' || period.status == '1')"></i></button>
             <!-------------------------------------IMPORT DEDUCTIONS--------------------------------------------------------->
 
             <!-------------------------------------EXPORT REPORTS------------------------------------------------------------->
-            <i class="fas fa-download" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
-                title="Payroll Report" (click)="exportPayrollReport()" *ngIf="period.status == '0'"></i>
+            <button class="btn btn-outline-secondary" (click)="exportPayrollReport()" *ngIf="period.status == '0'"
+                style="margin-left:5px"><i class="fas fa-download" data-toggle="tooltip" data-placement="top"
+                    title="Payroll Report" *ngIf="period.status == '0'"></i></button>
 
-            <i class="fas fa-file-invoice-dollar" style="margin-left:5px" *ngIf="period.status == '0'"
-                data-toggle="modal" data-target="#setBilling"></i>
+            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#setBilling"
+                *ngIf="period.status == '0'" style="margin-left:5px"><i class="fas fa-file-invoice-dollar"
+                    *ngIf="period.status == '0'"></i></button>
 
-            <i class="fas fa-money-check-alt d-inline-block" style="margin-left:5px" data-toggle="tooltip"
-                data-placement="top" title="Bank Report" (click)="exportBankReport()" *ngIf="period.status == '0'"></i>
+            <button class="btn btn-outline-secondary" *ngIf="period.status == '0'" style="margin-left:5px"
+                data-toggle="tooltip" data-placement="top" title="Bank Report" (click)="exportBankReport()"><i
+                    class="fas fa-money-check-alt d-inline-block" *ngIf="period.status == '0'"></i></button>
 
-            <i class="fas fa-file-contract" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
-                title="Get IGSS" data-toggle="modal" data-target="#setPatrono"></i>
+            <button class="btn btn-outline-secondary" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
+                title="Get IGSS" data-toggle="modal" data-target="#setPatrono"><i
+                    class="fas fa-file-contract"></i></button>
             <!-------------------------------------EXPORT REPORTS------------------------------------------------------------->
 
         </div>
@@ -419,7 +440,8 @@
                     <button type="button" class="btn btn-primary" (click)="saveBilling()">Save</button>
                 </div>
                 <div class="d-flex justify-content-right">
-                    <button type="button" class="btn btn-primary" (click)="exportBilling()" data-dismiss="modal">Generate</button>
+                    <button type="button" class="btn btn-primary" (click)="exportBilling()"
+                        data-dismiss="modal">Generate</button>
                 </div>
             </div>
         </div>
@@ -440,12 +462,40 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
                         <label>Patrono:</label>
-                        <select class="form-control" [ngModel]="selected_patrono" (change)="setPatrono($event.target.value)">
+                        <select class="form-control" [ngModel]="selected_patrono"
+                            (change)="setPatrono($event.target.value)">
                             <option>PRG Recurso Humano, S.A.</option>
                             <option>Nearsol, S.A.</option>
                         </select>
                     </div>
                     <div class="col-md-2"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex justify-content-left">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                <div class="d-flex justify-content-right">
+                    <button type="button" class="btn btn-primary" (click)="exportIgss()">Generate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------------------------------------------- UPLOAD PAYROLLVALUES -------------------------------------------------------------------->
+<div class="modal fade" id="uploadPayrollValues" tabindex="-1" aria-labelledby="uploadPayrollValuesLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="st-uploadPayrollValuesLabel">UPLOAD PAYROLL VALUES</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row col-md-12">
+                    <input type="file" class="form-control" (change)="setPayrollValues($event)">
                 </div>
             </div>
             <div class="modal-footer">
