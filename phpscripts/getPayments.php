@@ -87,8 +87,7 @@ $i = 0;
                 LEFT JOIN (
                     SELECT SUM(COALESCE(amount_hrs,0)) AS `amount_hrs`, SUM(COALESCE(amount_ot,0)) AS `amount_ot`, SUM(COALESCE(amount_holidays,0)) AS `amount_holidays`,
                     id_payment FROM timekeeping_adjustments GROUP BY id_payment
-                ) AS `tk_adj`  ON `tk_adj`.id_payment = payments.idpayments WHERE `id_employee` = $status AND `payments.id_period` = $end";
-                echo($sql);
+                ) AS `tk_adj`  ON `tk_adj`.id_payment = payments.idpayments WHERE `id_employee` = $status AND `payments`.`id_period` = $end";
     }
 }
 
