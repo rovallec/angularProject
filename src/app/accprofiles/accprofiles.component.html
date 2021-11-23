@@ -802,8 +802,8 @@
                             <option>UNIQUE</option>
                             <option>ANTICIPATED</option>
                         </select>
-                        <input type="date" *ngIf="(newService.frecuency != 'MONTHLY' ||
-                        newService.frecuency != 'BIWEEKLY' ||
+                        <input type="date" *ngIf="(newService.frecuency != 'MONTHLY' &&
+                        newService.frecuency != 'BIWEEKLY' &&
                         newService.frecuency != 'UNIQUE') && (isDate(newService.frecuency) || newService.frecuency == 'ANTICIPATED')" class="form-control" [(ngModel)]="newService.frecuency">
                     </div>
                     <div class="col-md-3" *ngIf="!recorded_service">
