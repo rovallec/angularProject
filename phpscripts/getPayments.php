@@ -18,14 +18,76 @@ $i = 0;
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `treasure_hunt`, id_payment FROM credits WHERE type = 'Treasure Hunt' GROUP BY id_payment) AS `treasure_hunt` ON `treasure_hunt`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `nearsol_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Nearsol TK' GROUP BY id_payment) AS `nearsol_bonus` ON `nearsol_bonus`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `client_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Cliente TK' GROUP BY id_payment) AS `client_bonus` ON `client_bonus`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount_hrs,0)) AS `amount_hrs`, SUM(COALESCE(amount_ot,0)) AS `amount_ot`, SUM(COALESCE(amount_holidays,0)) AS `amount_holidays`, id_payment FROM timekeeping_adjustments GROUP BY id_payment) AS `tk_adj`  ON `tk_adj`.id_payment = payments.idpayments WHERE `id_period` = $idperiods;";
     }else{
     if($start != "explicit"){
-        $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `treasure_hunt`, id_payment FROM credits WHERE type = 'Treasure Hunt' GROUP BY id_payment) AS `treasure_hunt` ON `treasure_hunt`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `nearsol_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Nearsol TK' GROUP BY id_payment) AS `nearsol_bonus` ON `nearsol_bonus`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `client_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Cliente TK' GROUP BY id_payment) AS `client_bonus` ON `client_bonus`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount_hrs,0)) AS `amount_hrs`, SUM(COALESCE(amount_ot,0)) AS `amount_ot`, SUM(COALESCE(amount_holidays,0)) AS `amount_holidays`, id_payment FROM timekeeping_adjustments GROUP BY id_payment) AS `tk_adj`  ON `tk_adj`.id_payment = payments.idpayments WHERE `id_employee` = $status;";
+        $sql = "SELECT * FROM `payments`
+                LEFT JOIN periods ON periods.idperiods = payments.id_period
+                LEFT JOIN employees ON payments.id_employee = employees.idemployees
+                LEFT JOIN hires ON hires.idhires = employees.id_hire
+                LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `treasure_hunt`, id_payment 
+                    FROM credits 
+                    WHERE type = 'Treasure Hunt' GROUP BY id_payment
+                ) AS `treasure_hunt` ON `treasure_hunt`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `nearsol_bonus`, id_payment FROM credits
+                    WHERE type = 'Bonos Diversos Nearsol TK' GROUP BY id_payment
+                ) AS `nearsol_bonus` ON `nearsol_bonus`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `client_bonus`, id_payment FROM credits
+                    WHERE type = 'Bonos Diversos Cliente TK' GROUP BY id_payment
+                ) AS `client_bonus` ON `client_bonus`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount_hrs,0)) AS `amount_hrs`, SUM(COALESCE(amount_ot,0)) AS `amount_ot`,
+                    SUM(COALESCE(amount_holidays,0)) AS `amount_holidays`, id_payment FROM timekeeping_adjustments GROUP BY id_payment
+                ) AS `tk_adj`  ON `tk_adj`.id_payment = payments.idpayments WHERE `id_employee` = $status;";
     } else if($start == 'explicit'){
-        $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `treasure_hunt`, id_payment FROM credits WHERE type = 'Treasure Hunt' GROUP BY id_payment) AS `treasure_hunt` ON `treasure_hunt`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `nearsol_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Nearsol TK' GROUP BY id_payment) AS `nearsol_bonus` ON `nearsol_bonus`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `client_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Cliente TK' GROUP BY id_payment) AS `client_bonus` ON `client_bonus`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount_hrs,0)) AS `amount_hrs`, SUM(COALESCE(amount_ot,0)) AS `amount_ot`, SUM(COALESCE(amount_holidays,0)) AS `amount_holidays`, id_payment FROM timekeeping_adjustments GROUP BY id_payment) AS `tk_adj`  ON `tk_adj`.id_payment = payments.idpayments WHERE `id_employee` = $status";
+        $sql = "SELECT * FROM `payments`
+                LEFT JOIN periods ON periods.idperiods = payments.id_period
+                LEFT JOIN employees ON payments.id_employee = employees.idemployees
+                LEFT JOIN hires ON hires.idhires = employees.id_hire
+                LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `treasure_hunt`, id_payment FROM credits 
+                    WHERE type = 'Treasure Hunt' GROUP BY id_payment
+                ) AS `treasure_hunt` ON `treasure_hunt`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `nearsol_bonus`, id_payment FROM credits 
+                    WHERE type = 'Bonos Diversos Nearsol TK' GROUP BY id_payment
+                ) AS `nearsol_bonus` ON `nearsol_bonus`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `client_bonus`, id_payment FROM credits 
+                    WHERE type = 'Bonos Diversos Cliente TK' GROUP BY id_payment
+                ) AS `client_bonus` ON `client_bonus`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount_hrs,0)) AS `amount_hrs`, SUM(COALESCE(amount_ot,0)) AS `amount_ot`, SUM(COALESCE(amount_holidays,0)) AS `amount_holidays`,
+                    id_payment FROM timekeeping_adjustments GROUP BY id_payment
+                ) AS `tk_adj`  ON `tk_adj`.id_payment = payments.idpayments WHERE `id_employee` = $status";
     } else if($start == 'explicit_Termination'){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `treasure_hunt`, id_payment FROM credits WHERE type = 'Treasure Hunt' GROUP BY id_payment) AS `treasure_hunt` ON `treasure_hunt`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `nearsol_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Nearsol TK' GROUP BY id_payment) AS `nearsol_bonus` ON `nearsol_bonus`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `client_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Cliente TK' GROUP BY id_payment) AS `client_bonus` ON `client_bonus`.id_payment = payments.idpayments LEFT JOIN timekeeping_adjustments ON timekeeping_adjustments.id_payment = payments.idpayments WHERE `id_employee` = $status AND periods.end >= employees.HIRING_DATE ORDER BY periods.idperiods DESC LIMIT 0, 6;";
     } else if($start == 'explicit_employee'){
         $sql = "SELECT * FROM `payments` LEFT JOIN periods ON periods.idperiods = payments.id_period LEFT JOIN employees on payments.id_employee = employees.idemployees left join hires on hires.idhires = employees.id_hire left join profiles on profiles.idprofiles = hires.id_profile LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `treasure_hunt`, id_payment FROM credits WHERE type = 'Treasure Hunt' GROUP BY id_payment) AS `treasure_hunt` ON `treasure_hunt`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `nearsol_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Nearsol TK' GROUP BY id_payment) AS `nearsol_bonus` ON `nearsol_bonus`.id_payment = payments.idpayments LEFT JOIN (SELECT SUM(COALESCE(amount,0)) AS `client_bonus`, id_payment FROM credits WHERE type = 'Bonos Diversos Cliente TK' GROUP BY id_payment) AS `client_bonus` ON `client_bonus`.id_payment = payments.idpayments LEFT JOIN timekeeping_adjustments ON timekeeping_adjustments.id_payment = payments.idpayments WHERE `id_employee` = $status;";
-    }
+    } else if($start == 'explicit_period'){
+        $sql = "SELECT * FROM `payments`
+                LEFT JOIN periods ON periods.idperiods = payments.id_period
+                LEFT JOIN employees ON payments.id_employee = employees.idemployees
+                LEFT JOIN hires ON hires.idhires = employees.id_hire
+                LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `treasure_hunt`, id_payment FROM credits 
+                    WHERE type = 'Treasure Hunt' GROUP BY id_payment
+                ) AS `treasure_hunt` ON `treasure_hunt`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `nearsol_bonus`, id_payment FROM credits 
+                    WHERE type = 'Bonos Diversos Nearsol TK' GROUP BY id_payment
+                ) AS `nearsol_bonus` ON `nearsol_bonus`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount,0)) AS `client_bonus`, id_payment FROM credits 
+                    WHERE type = 'Bonos Diversos Cliente TK' GROUP BY id_payment
+                ) AS `client_bonus` ON `client_bonus`.id_payment = payments.idpayments
+                LEFT JOIN (
+                    SELECT SUM(COALESCE(amount_hrs,0)) AS `amount_hrs`, SUM(COALESCE(amount_ot,0)) AS `amount_ot`, SUM(COALESCE(amount_holidays,0)) AS `amount_holidays`,
+                    id_payment FROM timekeeping_adjustments GROUP BY id_payment
+                ) AS `tk_adj`  ON `tk_adj`.id_payment = payments.idpayments WHERE `id_employee` = $status AND `payments.id_period` = $end";
 }
 
 if($result = mysqli_query($con, $sql)){
