@@ -3,7 +3,7 @@ import { employees } from './fullProcess';
 import { profiles, profiles_family, profiles_histories } from './profiles';
 
 
-export type StringOrNumber = string | number;
+export type StringOrNumber = string;
 export type StringType = 'Browse' | 'Insert' | 'Edit' | 'Enabled' | 'Disabled' | 'Checked' | 'Unchequed';
 export class process_templates {
     idprocess_templates: string;

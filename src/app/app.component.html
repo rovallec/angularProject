@@ -118,14 +118,16 @@
           [ngClass]="{'act':selectedOption=='ROSTER'}" (click)="SetSel('ROSTER')" routerLink="/roster">ROSTER</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
-        <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/holidays" style="color: white"
-          [ngClass]="{'act':selectedOption=='HOLIDAYS'}" (click)="SetSel('HOLIDAYS')">HOLIDAYS</a>
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/wavemaintenance" style="color: white"
           [ngClass]="{'act':selectedOption=='WAVEMANT'}" (click)="SetSel('WAVEMANT')">WAVE MAINTENANCE</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link"
           style="color: white" [ngClass]="{'act':selectedOption=='ADVREP'}" (click)="exportAdvancesReport()">ADVANCES REPORT</a>
+      </li>
+      <li *ngIf="getAuth()" class="nav-item">
+        <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/holidays"
+          style="color: white" [ngClass]="{'act':selectedOption=='HOLIDAYS'}" (click)="SetSel('HOLIDAYS')">HOLIDAYS</a>
       </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">

@@ -88,6 +88,9 @@ export class HolidaysComponent implements OnInit {
   }
 
   editHoliday(AHoliday: holiday) {
+    this.holidays.forEach(h => {
+      h.state = 'Browse';
+    });
     this.state = 'Edit';
     this.selectedHoliday = AHoliday;
     this.selectedHoliday.state = this.state;
