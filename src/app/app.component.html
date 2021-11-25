@@ -129,6 +129,10 @@
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/holidays"
           style="color: white" [ngClass]="{'act':selectedOption=='HOLIDAYS'}" (click)="SetSel('HOLIDAYS')">HOLIDAYS</a>
       </li>
+      <li *ngIf="getAuth()" class="nav-item">
+        <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/dailypayroll"
+            style="color: white" [ngClass]="{'act':selectedOption=='DAILYPAYROLL'}" (click)="SetSel('DAILYPAYROLL')">DAILY PAYROLL</a>
+      </li>
     </ul>
     <form class="form-inline" *ngIf="getAuth()">
       <div class="dropdown">

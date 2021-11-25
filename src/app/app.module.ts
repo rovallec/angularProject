@@ -51,6 +51,7 @@ import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.co
 import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenance.component';
 import { DatePipe } from '@angular/common';
 import { HolidaysComponent } from './holidays/holidays.component';
+import { DailypayrollvaluesComponent } from './dailypayrollvalues/dailypayrollvalues.component';
 
 
 @NgModule({
@@ -96,7 +97,8 @@ import { HolidaysComponent } from './holidays/holidays.component';
     PaystubSendmailComponent,
     WaveMaintenanceComponent,
     RostermaintenanceComponent,
-    HolidaysComponent
+    HolidaysComponent,
+    DailypayrollvaluesComponent
   ],
   imports: [
     BrowserModule,

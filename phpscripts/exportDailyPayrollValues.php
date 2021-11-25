@@ -1,12 +1,14 @@
 <?php
-//exportDaylyPayrollValues.php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
 require 'funcionesVarias.php';
 header("Pragma: public");
 header("Expires: 0");
-$filename = "exportDaylyPayrollValues.xls";
+$period = $_GET['period'];
+$account = $_GET['account'];
+$accname = $_GET['accname'];
+$filename = "exportDaylyPayrollValues_" . $accname . "_period_". $period . ".xls";
 header("Content-type: application/x-msdownload");
 header("Content-Disposition: attachment; filename=$filename");
 header("Pragma: no-cache");
@@ -16,11 +18,6 @@ header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 $i = 0;
 $j = 0;
 $totalEmployees = 0;
-//$period = $_GET['period'];
-$period = 48;
-$account = 1;
-//$id_1 = explode(",",$period)[0];
-//$id_2 = explode(",",$period)[1];
 $rowExport = array();
 $emp = array();
 $row2 = array();
@@ -124,7 +121,7 @@ foreach ($emp as $element => $value) {
   $body[$i][9] = $emp[$i]['oldep'];
   $body[$i][10] = $emp[$i]['newdep'];
   */
-  //array_push($body, $element);
+
   $i++;
 }
 
@@ -149,7 +146,7 @@ foreach($period_days as $actual_day) {
               if (aj.reason='TIME TRAINING', aa.amount, 0) AS time_training,
               /*SUM(DISTINCT aa.amount) AS total_exceptions, */
               if (aj.reason='CCR Productive', aa.amount, 0) AS ccr_productive,
-              if (a.scheduled='OFF', 'OFF', if(a.scheduled='NaN', 'NaN', 'X')) AS attendance,
+              if (a.scheduled='OFF', 'OFF', if(a.scheduled='NaN', 'NaN', 'X')) AS attendance, /* corregir para que tenga NS */
               if (aj.reason='', aa.amount, 0) AS total_time_to_pay,
               if (aj.reason='', aa.amount, 0) AS missing_time,
               if (aj.reason='', aa.amount, 0) AS over_time
@@ -203,8 +200,6 @@ foreach($period_days as $actual_day) {
           $eleRow = $rowExport[$i][0];
 
           if ($eleBody == $eleRow) {
-            //echo ($body[$j][3] . '|' . $rowExport[$i][2] . '|' . $rowExport[$i][3] . '|' . $fields);
-            //echo "<br>";
             $body[$j][$fields + 1]  = $rowExport[$i][3];
             $body[$j][$fields + 2]  = $rowExport[$i][4];
             $body[$j][$fields + 3]  = $rowExport[$i][5];
@@ -248,9 +243,7 @@ foreach($period_days as $actual_day) {
         }
 
       } // End for
-      //$fields = 5 + (18 * ($numday - 1));
     } // End for
-
   } else {
     echo json_encode($sql3);
     http_response_code(423);
@@ -258,10 +251,7 @@ foreach($period_days as $actual_day) {
   $numday ++;
 }// end foreach
 
-
-
 $title = ['Avaya', 'AID', 'Name', 'Supervisor', 'Termination'];
-
 for ($k=1; $k <= $days; $k++) {
   array_push($title, 'Scheduled');
   array_push($title, 'Schedule FIX');
@@ -318,7 +308,6 @@ echo "
           }
           echo"</tr>";
       }
-
 echo "</tbody></table>";
 
 ?>
