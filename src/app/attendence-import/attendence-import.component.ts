@@ -281,8 +281,13 @@ export class AttendenceImportComponent implements OnInit {
                   adjustment.status = 'PENDING';
                   adjustment.reason = 'Supervisor Exception';
                   adjustment.id_attendence = attendance[0].idattendences;
+                  //Si la excepcion es de Schedule Fix debe tomar el tiempo de schedule
+                  //adjustment.time_before = attendance[0].scheduled;
                   adjustment.time_before = attendance[0].worked_time;
+                  //omitir si es una de las excepciones del reporte Aux0
                   adjustment.time_after = (Number(sup.time) + Number(attendance[0].worked_time)).toFixed(3);
+                  //adjustment.time_before = attendance[0].scheduled + sup.time;
+                  //si es de algun tipo de los del reporte time_after = worked_time
                   adjustment.amount = sup.time;
                   adjustment.state = "PENDING";
                   this.apiService.insertAttJustification(adjustment).subscribe((str: string) => {

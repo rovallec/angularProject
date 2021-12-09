@@ -569,6 +569,7 @@ export class PyprofilesComponent implements OnInit {
   SaveRoaster(att: attendences) {
     this.edit = false;
     // proceso para grabar los cambios.
+    //Si el cambio es de schedule, crear excepcion de acuerdo a los parametros del import-attendance
     this.apiService.updateAttendances(att).subscribe((_str: string) => {
       this.attendances.forEach(element => {
         if ((element === att)) {

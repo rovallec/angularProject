@@ -96,6 +96,10 @@ export class PeriodsComponent implements OnInit {
   selected_patrono: string = 'PRG Recurso Humano, S.A.';
   payrollvalues: payroll_values_gt[] = [];
   adj_values: timekeeping_adjustments[] = [];
+  closing_import: boolean = false;
+  working_import: boolean = true;
+  conflictedPeriods: payments[] = [];
+  setImport:payroll_values_gt[] = [];
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authService: AuthServiceService) { }
 
@@ -859,12 +863,19 @@ export class PeriodsComponent implements OnInit {
 
   }
 
+  cancelImport() {
+    this.closing_import = false;
+    this.payroll_values = [];
+  }
+
   setPayrollValues(event) {
     this.file = event.target.files[0];
     let fileReader = new FileReader();
     let pr: periods = new periods;
     let progress: number = 0;
-    let progress_2:number = 0;
+    let progress_2: number = 0;
+    let max_1: number = 0;
+    let max_2: number = 0;
 
     fileReader.readAsArrayBuffer(this.file);
     fileReader.onload = (e) => {
@@ -875,33 +886,99 @@ export class PeriodsComponent implements OnInit {
         for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
         var bstr = arr.join("");
         var workbook = XLSX.read(bstr, { type: "binary" });
-        workbook.SheetNames.forEach(sheets => {
-
-          var first_sheet_name = workbook.SheetNames[0];
-          var worksheet = workbook.Sheets[first_sheet_name];
-          let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-          sheetToJson.forEach(element => {
-            this.apiService.getSearchEmployees({ dp: 'all', filter: 'nearsol_id', value: element['ID'], rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-              let paymentValue = new payroll_values_gt;
-              paymentValue.client_id = element['Avaya'];
-              paymentValue.nearsol_id = element['ID'];
+        var first_sheet_name = workbook.SheetNames[0];
+        var first_sheet_name_2 = workbook.SheetNames[1];
+        var worksheet = workbook.Sheets[first_sheet_name];
+        let sheetToJson = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+        max_1 = sheetToJson.length;
+        sheetToJson.forEach(element => {
+          this.apiService.getSearchEmployees({ dp: 'exact', filter: 'nearsol_id', value: element['ID'], rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+            if (!isNullOrUndefined(emp[0])) {
               pr.start = 'explicit_period';
               pr.status = emp[0].idemployees;
               pr.end = this.period.idperiods;
               this.apiService.getPayments(pr).subscribe((pymnts: payments[]) => {
-                if (pymnts.length == 1) {
-                  paymentValue.status = '1';
-                } else {
-                  paymentValue.status = '0';
-                }
                 progress++;
+                if(!isNullOrUndefined(pymnts[0])){
                 if (!isNullOrUndefined(pymnts[0].idpayments)) {
-                  paymentValue.id_payment = pymnts[0].idpayments;
+                  let paymentValue = new payroll_values_gt;
+                  if (pymnts.length == 1) {
+                    paymentValue.status = '1';
+                    paymentValue.client_id = element['Avaya'];
+                    paymentValue.nearsol_id = element['ID'];
+                    paymentValue.id_payment = pymnts[0].idpayments;
+                    paymentValue.id_employee = emp[0].idemployees;
+                    paymentValue.agent_name = element['Full Name'];
+                    paymentValue.id_reporter = element['Supervisor'];
+                    paymentValue.discounted_days = element['Days to discount'];
+                    paymentValue.seventh = element['7th'];
+                    paymentValue.total_days = element['Total Days to discount'];
+                    paymentValue.discounted_hours = element['Hours to discount'];
+                    paymentValue.ot_hours = element['OT'];
+                    paymentValue.holidays_hours = element['Holiday Hours'];
+                    paymentValue.performance_bonus = element['Performance Bonus'];
+                    paymentValue.treasure_hunt = element['Treasure Hunt'];
+                    this.payrollvalues.push(paymentValue);
+                  } else {
+                    if (pymnts.length == 0) {
+                      paymentValue.status = '0';
+                      paymentValue.client_id = element['Avaya'];
+                      paymentValue.nearsol_id = element['ID'];
+                      paymentValue.id_payment = "NULL";
+                      paymentValue.id_employee = emp[0].idemployees;
+                      paymentValue.agent_name = element['Full Name'];
+                      paymentValue.id_reporter = element['Supervisor'];
+                      paymentValue.discounted_days = element['Days to discount'];
+                      paymentValue.seventh = element['7th'];
+                      paymentValue.total_days = element['Total Days to discount'];
+                      paymentValue.discounted_hours = element['Hours to discount'];
+                      paymentValue.ot_hours = element['OT'];
+                      paymentValue.holidays_hours = element['Holiday Hours'];
+                      paymentValue.performance_bonus = element['Performance Bonus'];
+                      paymentValue.treasure_hunt = element['Treasure Hunt'];
+                      this.payrollvalues.push(paymentValue);
+                    } else {
+                      this.apiService.getTransfers({ id_employee: emp[0].idemployees, start: pr.start, end: pr.end }).subscribe((hr: hrProcess) => {
+                        paymentValue.status = '3';
+                        paymentValue.client_id = element['Avaya'];
+                        paymentValue.nearsol_id = element['ID'];
+                        pymnts.forEach(py => {
+                          this.conflictedPeriods.push(py);
+                        })
+                        if(emp[0].id_account == this.selectedAccount.idaccounts){
+                          this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys =>{
+                            if(pys.id_account_py == '0'){
+                              paymentValue.id_payment = pys.idpayments;
+                            }
+                          })
+                        }
+                        paymentValue.id_employee = emp[0].idemployees;
+                        paymentValue.agent_name = element['Full Name'];
+                        paymentValue.id_reporter = element['Supervisor'];
+                        paymentValue.discounted_days = element['Days to discount'];
+                        paymentValue.seventh = element['7th'];
+                        paymentValue.total_days = element['Total Days to discount'];
+                        paymentValue.discounted_hours = element['Hours to discount'];
+                        paymentValue.ot_hours = element['OT'];
+                        paymentValue.holidays_hours = element['Holiday Hours'];
+                        paymentValue.performance_bonus = element['Performance Bonus'];
+                        paymentValue.treasure_hunt = element['Treasure Hunt'];
+                        this.payrollvalues.push(paymentValue);
+                      })
+                    }
+                  }
+                }else{
+                  let paymentValue = new payroll_values_gt;
+                  paymentValue.status = '0';
+                  paymentValue.client_id = element['Avaya'];
+                  paymentValue.nearsol_id = element['ID'];
+                  paymentValue.id_payment = "NULL";
+                  paymentValue.id_employee = emp[0].idemployees;
                   paymentValue.agent_name = element['Full Name'];
                   paymentValue.id_reporter = element['Supervisor'];
                   paymentValue.discounted_days = element['Days to discount'];
                   paymentValue.seventh = element['7th'];
-                  paymentValue.total_days = element['Total'];
+                  paymentValue.total_days = element['Total Days to discount'];
                   paymentValue.discounted_hours = element['Hours to discount'];
                   paymentValue.ot_hours = element['OT'];
                   paymentValue.holidays_hours = element['Holiday Hours'];
@@ -909,28 +986,46 @@ export class PeriodsComponent implements OnInit {
                   paymentValue.treasure_hunt = element['Treasure Hunt'];
                   this.payrollvalues.push(paymentValue);
                 }
+              }else{
+                let paymentValue = new payroll_values_gt;
+                paymentValue.status = '0';
+                paymentValue.client_id = element['Avaya'];
+                paymentValue.nearsol_id = element['ID'];
+                paymentValue.id_payment = "NULL";
+                paymentValue.id_employee = emp[0].idemployees;
+                paymentValue.agent_name = element['Full Name'];
+                paymentValue.id_reporter = element['Supervisor'];
+                paymentValue.discounted_days = element['Days to discount'];
+                paymentValue.seventh = element['7th'];
+                paymentValue.total_days = element['Total Days to discount'];
+                paymentValue.discounted_hours = element['Hours to discount'];
+                paymentValue.ot_hours = element['OT'];
+                paymentValue.holidays_hours = element['Holiday Hours'];
+                paymentValue.performance_bonus = element['Performance Bonus'];
+                paymentValue.treasure_hunt = element['Treasure Hunt'];
+                this.payrollvalues.push(paymentValue);
+              }
                 if (progress == sheetToJson.length) {
-                  console.log(this.payrollvalues);
-                  var first_sheet_name2 = workbook.SheetNames[1];
-                  var worksheet2 = workbook.Sheets[first_sheet_name2];
-                  let sheetToJson2 = XLSX.utils.sheet_to_json(worksheet2, { raw: true });
-                  sheetToJson2.forEach(ele => {
+                  var worksheet_2 = workbook.Sheets[first_sheet_name_2];
+                  let sheetToJson_2 = XLSX.utils.sheet_to_json(worksheet_2, { raw: true });
+                  max_2 = sheetToJson_2.length;
+                  sheetToJson_2.forEach(ele => {
                     this.payrollvalues.forEach(py_val => {
                       if (py_val.client_id == ele['Avaya'] && py_val.nearsol_id == ele['AID']) {
-                        py_val.adj_hours = (Number(py_val.adj_hours) + (Number(ele['Days to Pay']) * 8) + Number(ele['Regular Hours'])).toFixed(2);
-                        py_val.adj_ot = (Number(py_val.adj_ot) + Number(ele['OT'])).toFixed(2);
-                        py_val.adj_holidays = (Number(py_val.adj_holidays) + Number(ele['Horas Asueto'])).toFixed(2);
+                        py_val.adj_hours = (Number(py_val.adj_hours) + (Number(this.ifNull(ele['Days to Pay'])) * 8) + Number(this.ifNull(ele['Regular Hours']))).toFixed(2);
+                        py_val.adj_ot = (Number(py_val.adj_ot) + Number(this.ifNull(ele['OT']))).toFixed(2);
+                        py_val.adj_holidays = (Number(py_val.adj_holidays) + Number(this.ifNull(ele['Horas Asueto']))).toFixed(2);
                         if (Number(py_val.adj_hours) > 0 || Number(py_val.adj_ot) > 0 || Number(py_val.adj_holidays) > 0) {
                           let adj: timekeeping_adjustments = new timekeeping_adjustments;
-                          adj.amount_holidays = (Number(ele['Horas Asueto'])).toFixed(2);
-                          adj.amount_hrs = ((Number(ele['Days to Pay']) * 8) + Number(ele['Regular Hours'])).toFixed(2);
-                          adj.amount_ot = (Number(ele['OT'])).toFixed(2);
+                          adj.amount_holidays = (Number(this.ifNull(ele['Horas Asueto']))).toFixed(2);
+                          adj.amount_hrs = ((Number(this.ifNull(ele['Days to Pay'])) * 8) + Number(this.ifNull(ele['Regular Hours']))).toFixed(2);
+                          adj.amount_ot = (Number(this.ifNull(ele['OT']))).toFixed(2);
                           adj.id_payment = py_val.id_payment;
                         }
-                        py_val.performance_bonus = (Number(py_val.performance_bonus) + Number(ele['Bono Performance'])).toFixed(2);
-                        if (Number(ele['Reintegro de / bus parqueo']) > 0) {
+                        py_val.performance_bonus = (Number(py_val.performance_bonus) + Number(this.ifNull(ele['Bono Performance']))).toFixed(2);
+                        if (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) > 0) {
                           let cred: credits = new credits;
-                          cred.amount = Number(ele['Reintegro de / bus parqueo']).toFixed(2);
+                          cred.amount = Number(this.ifNull(ele['Reintegro de / bus parqueo'])).toFixed(2);
                           cred.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
                           cred.id_employee = py_val.id_employee;
                           cred.id_user = this.authService.getAuthusr().iduser;
@@ -938,9 +1033,9 @@ export class PeriodsComponent implements OnInit {
                           cred.status = 'PENDING';
                           cred.type = "Parking"
                           this.global_credits.push(cred);
-                        } else if (Number(ele['Reintegro de / bus parqueo']) < 0) {
+                        } else if (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) < 0) {
                           let deb: debits = new debits;
-                          deb.amount = Number(ele['Reintegro de / bus parqueo'] * (-1)).toFixed(2);
+                          deb.amount = (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) * (-1)).toFixed(2);
                           deb.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
                           deb.id_employee = py_val.id_employee;
                           deb.id_user = this.authService.getAuthusr().iduser;
@@ -949,9 +1044,9 @@ export class PeriodsComponent implements OnInit {
                           deb.type = "Parking";
                           this.global_debits.push(deb);
                         }
-                        if (Number(ele['Reintegro de / bus parqueo']) > 0) {
+                        if (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) > 0) {
                           let cred: credits = new credits;
-                          cred.amount = Number(ele['Reintegro de / bus parqueo']).toFixed(2);
+                          cred.amount = Number(this.ifNull(ele['Reintegro de / bus parqueo'])).toFixed(2);
                           cred.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
                           cred.id_employee = py_val.id_employee;
                           cred.id_user = this.authService.getAuthusr().iduser;
@@ -959,9 +1054,9 @@ export class PeriodsComponent implements OnInit {
                           cred.status = 'PENDING';
                           cred.type = "Parking"
                           this.global_credits.push(cred);
-                        } else if (Number(ele['Reintegro de / bus parqueo']) < 0) {
+                        } else if (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) < 0) {
                           let deb: debits = new debits;
-                          deb.amount = Number(ele['Reintegro de / bus parqueo'] * (-1)).toFixed(2);
+                          deb.amount = (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) * (-1)).toFixed(2);
                           deb.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
                           deb.id_employee = py_val.id_employee;
                           deb.id_user = this.authService.getAuthusr().iduser;
@@ -973,16 +1068,173 @@ export class PeriodsComponent implements OnInit {
                       }
                     })
                     progress_2++;
-                    if(progress_2 == sheetToJson2.length){
-                      console.log(this.payrollvalues);
+                    if ((progress_2 + progress) == (max_1 + max_2)) {
+                      this.closing_import = true;
+                      this.working = false;
                     }
                   });
                 }
               })
-            })
+            }else{
+              progress++;
+              let paymentValue = new payroll_values_gt;
+              paymentValue.status = '0';
+              paymentValue.client_id = element['Avaya'];
+              paymentValue.nearsol_id = element['ID'];
+              paymentValue.id_payment = "NULL";
+              paymentValue.agent_name = element['Full Name'];
+              paymentValue.id_reporter = element['Supervisor'];
+              paymentValue.discounted_days = element['Days to discount'];
+              paymentValue.seventh = element['7th'];
+              paymentValue.total_days = element['Total Days to discount'];
+              paymentValue.discounted_hours = element['Hours to discount'];
+              paymentValue.ot_hours = element['OT'];
+              paymentValue.holidays_hours = element['Holiday Hours'];
+              paymentValue.performance_bonus = element['Performance Bonus'];
+              paymentValue.treasure_hunt = element['Treasure Hunt'];
+              this.payrollvalues.push(paymentValue);
+              if (progress == sheetToJson.length) {
+                var worksheet_2 = workbook.Sheets[first_sheet_name_2];
+                let sheetToJson_2 = XLSX.utils.sheet_to_json(worksheet_2, { raw: true });
+                max_2 = sheetToJson_2.length;
+                sheetToJson_2.forEach(ele => {
+                  this.payrollvalues.forEach(py_val => {
+                    if (py_val.client_id == ele['Avaya'] && py_val.nearsol_id == ele['AID']) {
+                      py_val.adj_hours = (Number(py_val.adj_hours) + (Number(this.ifNull(ele['Days to Pay'])) * 8) + Number(this.ifNull(ele['Regular Hours']))).toFixed(2);
+                      py_val.adj_ot = (Number(py_val.adj_ot) + Number(this.ifNull(ele['OT']))).toFixed(2);
+                      py_val.adj_holidays = (Number(py_val.adj_holidays) + Number(this.ifNull(ele['Horas Asueto']))).toFixed(2);
+                      if (Number(py_val.adj_hours) > 0 || Number(py_val.adj_ot) > 0 || Number(py_val.adj_holidays) > 0) {
+                        let adj: timekeeping_adjustments = new timekeeping_adjustments;
+                        adj.amount_holidays = (Number(this.ifNull(ele['Horas Asueto']))).toFixed(2);
+                        adj.amount_hrs = ((Number(this.ifNull(ele['Days to Pay'])) * 8) + Number(this.ifNull(ele['Regular Hours']))).toFixed(2);
+                        adj.amount_ot = (Number(this.ifNull(ele['OT']))).toFixed(2);
+                        adj.id_payment = py_val.id_payment;
+                      }
+                      py_val.performance_bonus = (Number(py_val.performance_bonus) + Number(this.ifNull(ele['Bono Performance']))).toFixed(2);
+                      if (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) > 0) {
+                        let cred: credits = new credits;
+                        cred.amount = Number(this.ifNull(ele['Reintegro de / bus parqueo'])).toFixed(2);
+                        cred.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                        cred.id_employee = py_val.id_employee;
+                        cred.id_user = this.authService.getAuthusr().iduser;
+                        cred.idpayments = py_val.id_payment;
+                        cred.status = 'PENDING';
+                        cred.type = "Parking"
+                        this.global_credits.push(cred);
+                      } else if (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) < 0) {
+                        let deb: debits = new debits;
+                        deb.amount = (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) * (-1)).toFixed(2);
+                        deb.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                        deb.id_employee = py_val.id_employee;
+                        deb.id_user = this.authService.getAuthusr().iduser;
+                        deb.idpayments = py_val.id_payment;
+                        deb.status = 'PENDING';
+                        deb.type = "Parking";
+                        this.global_debits.push(deb);
+                      }
+                      if (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) > 0) {
+                        let cred: credits = new credits;
+                        cred.amount = Number(this.ifNull(ele['Reintegro de / bus parqueo'])).toFixed(2);
+                        cred.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                        cred.id_employee = py_val.id_employee;
+                        cred.id_user = this.authService.getAuthusr().iduser;
+                        cred.idpayments = py_val.id_payment;
+                        cred.status = 'PENDING';
+                        cred.type = "Parking"
+                        this.global_credits.push(cred);
+                      } else if (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) < 0) {
+                        let deb: debits = new debits;
+                        deb.amount = (Number(this.ifNull(ele['Reintegro de / bus parqueo'])) * (-1)).toFixed(2);
+                        deb.date = new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate();
+                        deb.id_employee = py_val.id_employee;
+                        deb.id_user = this.authService.getAuthusr().iduser;
+                        deb.idpayments = py_val.id_payment;
+                        deb.status = 'PENDING';
+                        deb.type = "Parking";
+                        this.global_debits.push(deb);
+                      }
+                    }
+                  })
+                  progress_2++;
+                  if ((progress_2 + progress) == (max_1 + max_2)) {
+                    this.closing_import = true;
+                    this.working = false;
+                  }
+                });
+              }
+            }
           })
         })
       }
     }
+  }
+
+  ifNull(obj) {
+    if (isNullOrUndefined(obj)) {
+      return 0
+    } else {
+      if (obj == 'NaN') {
+        return 0;
+      } else {
+        return obj;
+      }
+    }
+  }
+
+  sortedPayrollValues() {
+    this.payroll_values = this.payrollvalues.sort((a, b) => (Number(a.status) - Number(b.status)));
+  }
+  
+  getConflicted(pay:payments){
+    return this.conflictedPeriods.filter(a => a.id_employee == pay.id_employee);
+  }
+
+  getAccountName(str){
+    if(isNullOrUndefined(str) || str == '0' || str == '' || str == ' ' || str == 'NULL'){
+      let a:accounts = new accounts;
+      a.idaccounts = '0';
+      a.name = this.selectedAccount.name
+      return a;
+    }else{
+      return this.accounts.filter(a => a.idaccounts == str)[0];
+    }
+  }
+
+  filterUnique(pay:payments){
+    let str:string[] = [];
+    let add:boolean = true;
+    this.conflictedPeriods.filter(a=>a.id_employee == pay.id_employee).forEach(py=>{
+      add = true;
+      str.forEach(string=>{
+        if(string == this.getAccountName(py.id_account_py).name){
+          add = false;
+        }
+      })
+      console.log(add);
+      if(add == true){
+        str.push(this.getAccountName(py.id_account_py).name);
+      }
+    })
+    return str;
+  }
+
+  setPayrollValues_import(){
+    this.payroll_values.forEach(payroll_val=>{
+      if(payroll_val.status == '1' || payroll_val.status == '3'){
+        this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_val.id_employee, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
+          if(!isNullOrUndefined(emp[0])){
+            let pr:periods = new periods;
+            pr.start = 'explicit_period';
+            pr.status = emp[0].idemployees;
+            pr.end = this.period.idperiods;
+            this.apiService.getPayments(pr).subscribe((payment:payments[])=>{
+              if(!isNullOrUndefined(payment[0])){
+                payment.filter(a=>this.getAccountName(a.id_account_py).idaccounts == this.getAccountName(payroll_val.id_account).idaccounts)
+              }
+            })
+          }
+        })
+      }
+    })
   }
 }
