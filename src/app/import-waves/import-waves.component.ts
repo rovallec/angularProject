@@ -189,7 +189,7 @@ export class ImportWavesComponent implements OnInit {
               i++;
               if ((i>=this.fullprofiles.length) && (error==false)) {
                 window.alert("Profiles successfuly created");
-                this.apiServices.insertTransfer({ employee: element.employee.idemployees, account: element.employee.id_account, client_id: element.employee.client_id, correlative: this.correlative }).subscribe((str: string) => {
+                this.apiServices.updateCorrelativeAccount({ employee: element.employee.idemployees, account: element.employee.id_account, client_id: element.employee.client_id, correlative: this.correlative }).subscribe((str: string) => {
                 })
               }
             })
