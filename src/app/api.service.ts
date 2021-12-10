@@ -1115,10 +1115,6 @@ copyRosters(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/copyRosters.php`, any);
 }
 
-updateCorrelativeAccount(any: any) {
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateCorrelativeAccount.php`, any);
-}
-
 getPatronalNumber() {
   return this.httpClient.get<patronal[]>(`${this.PHP_API_SERVER}/phpscripts/getPatronalNumber.php`);
 }

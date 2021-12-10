@@ -948,7 +948,6 @@ export class PeriodsComponent implements OnInit {
                         })
                         if(emp[0].id_account == this.selectedAccount.idaccounts){
                           this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys =>{
-                            console.log(pys.id_account_py + "|" + this.selectedAccount.idaccounts + "|" + isNullOrUndefined(pys.id_account_py));
                             if(pys.id_account_py == this.selectedAccount.idaccounts || isNullOrUndefined(pys.id_account_py)){
                               paymentValue.id_payment = pys.idpayments;
                               paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
@@ -1235,14 +1234,21 @@ export class PeriodsComponent implements OnInit {
             this.apiService.getPayments(pr).subscribe((payment:payments[])=>{
               if(!isNullOrUndefined(payment[0])){
                 progress++;
-                if(payroll_val.status == '3' ){
+                if(payroll_val.status == '3' && payroll_val.agent_status != '1'){
                   payment.forEach(pymnt=>{
-                    console.log(emp[0].account + " " + this.getAccountName(pymnt.id_account_py).name)
-                    if(emp[0].account == this.getAccountName(pymnt.id_account_py).name){
+                    if(!isNullOrUndefined(pymnt.id_account_py) && payroll_val.account_name == this.getAccountName(pymnt.id_account_py).name){
                       payroll_val.id_payment = pymnt.idpayments;
+                    }else{
+                      if(isNullOrUndefined(pymnt.id_account_py) && this.selectedAccount.idaccounts == emp[0].id_account){
+                        payroll_val.id_payment = pymnt.idpayments;
+                      }
                     }
+                    this.payrollvalues.filter(t => t.id_employee == payroll_val.id_employee).forEach(mod=>{
+                      mod.agent_status = '1';
+                    })
                   })
                   this.setImport.push(payroll_val);
+                  console.log(this.setImport);
                 }
                 if(emp[0].id_account == this.selectedAccount.idaccounts){
                   progress++;
@@ -1259,7 +1265,6 @@ export class PeriodsComponent implements OnInit {
               }else{
                 progress++;
                 if(progress >= this.payrollvalues.length){
-                  console.log(this.setImport);
                   this.loading_import = false;
                 }
               }
@@ -1267,7 +1272,6 @@ export class PeriodsComponent implements OnInit {
           }else{
             progress++;
             if(progress >= this.payrollvalues.length){
-              console.log(this.setImport);
               this.loading_import = false;
             } 
           }
@@ -1275,7 +1279,6 @@ export class PeriodsComponent implements OnInit {
       }else{
         progress++;
         if(progress >= this.payrollvalues.length){
-          console.log(this.setImport);
           this.loading_import = false;
         }
       }
