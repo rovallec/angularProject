@@ -16,6 +16,8 @@ define('db_user', $usr);
 define('db_password', $pss);
 define('db_name','intranet');
 
+echo('hola');
+
 $authUser = [];
 
 $authUser['idusers'] = 'NULL';
