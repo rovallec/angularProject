@@ -51,7 +51,7 @@ $sql = "SELECT
         WHERE hp.status = 'REQUESTED'
         AND hp.id_type = '2' " 
         . $id;
-        
+
 if($result = mysqli_query($con,$sql)){
   while($res = mysqli_fetch_assoc($result)){
     $adjustes[$i]['idattendence_adjustemnt'] = $res['idattendence_adjustemnt'];
