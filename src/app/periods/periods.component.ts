@@ -101,6 +101,8 @@ export class PeriodsComponent implements OnInit {
   conflictedPeriods: payments[] = [];
   setImport:payroll_values_gt[] = [];
   loading_import:boolean = false;
+  save_import:boolean = false;
+  loading_save:boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authService: AuthServiceService) { }
 
@@ -1234,37 +1236,44 @@ export class PeriodsComponent implements OnInit {
             this.apiService.getPayments(pr).subscribe((payment:payments[])=>{
               if(!isNullOrUndefined(payment[0])){
                 progress++;
-                if(payroll_val.status == '3' && payroll_val.agent_status != '1'){
+                payroll_val.id_account = emp[0].id_account;
+                payroll_val.id_period = this.period.idperiods;
+                payroll_val.id_reporter = emp[0].reporter;
+                payroll_val.next_seventh = 0;
+                let found:boolean = false;
+                if(payroll_val.status == '3' && !found){
                   payment.forEach(pymnt=>{
-                    if(!isNullOrUndefined(pymnt.id_account_py) && payroll_val.account_name == this.getAccountName(pymnt.id_account_py).name){
+                    if(!isNullOrUndefined(pymnt.id_account_py) && !found){
                       payroll_val.id_payment = pymnt.idpayments;
+                      payroll_val.id_account = pymnt.id_account_py;
+                      found = true;
                     }else{
-                      if(isNullOrUndefined(pymnt.id_account_py) && this.selectedAccount.idaccounts == emp[0].id_account){
+                      if(isNullOrUndefined(pymnt.id_account_py) && !found){
                         payroll_val.id_payment = pymnt.idpayments;
+                        found = true;
                       }
                     }
-                    this.payrollvalues.filter(t => t.id_employee == payroll_val.id_employee).forEach(mod=>{
-                      mod.agent_status = '1';
-                    })
                   })
                   this.setImport.push(payroll_val);
-                  console.log(this.setImport);
                 }
-                if(emp[0].id_account == this.selectedAccount.idaccounts){
+                if(emp[0].id_account == this.selectedAccount.idaccounts && payroll_val.status != '3'){
                   progress++;
                   this.setImport.push(payroll_val);
                   if(progress >= this.payrollvalues.length){
+                    this.save_import = true;
                     this.loading_import = false;
                   }
                 }else{
                   progress++;
                   if(progress >= this.payrollvalues.length){
+                    this.save_import = true;
                     this.loading_import = false;
                   }
                 }
               }else{
                 progress++;
                 if(progress >= this.payrollvalues.length){
+                  this.save_import = true;
                   this.loading_import = false;
                 }
               }
@@ -1272,6 +1281,7 @@ export class PeriodsComponent implements OnInit {
           }else{
             progress++;
             if(progress >= this.payrollvalues.length){
+              this.save_import = true;
               this.loading_import = false;
             } 
           }
@@ -1279,6 +1289,7 @@ export class PeriodsComponent implements OnInit {
       }else{
         progress++;
         if(progress >= this.payrollvalues.length){
+          this.save_import = true;
           this.loading_import = false;
         }
       }
@@ -1291,5 +1302,41 @@ export class PeriodsComponent implements OnInit {
 
   setAccountDis(pys:payments, str:string){
     pys.account = str;
+  }
+
+  clearData(){
+    this.payrollvalues = [];
+    this.payroll_values = [];
+    this.global_credits = [];
+    this.global_debits = [];
+    this.credits = [];
+    this.debits = [];
+    this.loading_import = false;
+    this.loading_save = false;
+  }
+
+  saveImportedPayroll(){
+    this.loading_save = true;
+      this.apiService.insertPayroll_values_gt(this.payrollvalues.filter(a => a.status == '3' || a.status == '1')).subscribe((str:string)=>{
+        if(str == '1'){
+          window.alert("Payroll Values Successfully Imported")
+        }else{
+          window.alert("Please share the following error with your Administrator \n " + str );
+        }
+        this.credits = [];
+        this.debits = [];
+        this.credits = this.global_credits;
+        this.debits = this.global_debits;
+        if(!isNullOrUndefined(this.debits)){
+          this.pushDeductions("credits",this.debits);
+        }
+        if(!isNullOrUndefined(this.credits)){
+          this.pushDeductions("debits", this.credits);
+        }
+        this.apiService.updatePeriods({id:this.period.idperiods, status:'3'}).subscribe((str:string)=>{
+          window.alert("Process Successfuly Completed");
+          this.loading_save = false;
+        })
+    })
   }
 }

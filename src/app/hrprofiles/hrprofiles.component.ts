@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal, file_info } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal, file_info, alertModal } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -171,6 +171,8 @@ export class HrprofilesComponent implements OnInit {
   actPatron: patronal = new patronal;
   selectedReporter:string = null;
   advanceDays: number = 1;
+
+  alert:alertModal = new alertModal;
 
   reasons: string[] = [
     "Asistencia",
@@ -2505,23 +2507,35 @@ export class HrprofilesComponent implements OnInit {
   }
 
   updateVacation() {
-    this.apiService.updateVacations(this.activeVacation).subscribe((str: string) => {
-      window.alert("Change successfuly recorded");
-      let revertVac: vacations = new vacations;
-      revertVac.date = this.activeVacation.date;
-      revertVac.took_date = this.todayDate;
-      revertVac.id_department = this.authUser.getAuthusr().department;
-      revertVac.id_employee = this.route.snapshot.paramMap.get('id');
-      revertVac.id_type = '3';
-      revertVac.action = "Add";
-      revertVac.count = this.activeVacation.count;
-      revertVac.id_user = this.authUser.getAuthusr().iduser;
-      revertVac.notes = "Revert From Dismissed";
-      revertVac.status = 'COMPLETED';
-      this.activeVacation = revertVac;
-      this.insertVacation();
-      this.cancelView();
-    })
+    if(this.activeVacation.status == 'DISMISSED'){
+      this.apiService.updateVacations(this.activeVacation).subscribe((str: string) => {
+        window.alert("Change successfuly recorded");
+        let revertVac: vacations = new vacations;
+        revertVac.date = this.activeVacation.date;
+        revertVac.took_date = this.todayDate;
+        revertVac.id_department = this.authUser.getAuthusr().department;
+        revertVac.id_employee = this.route.snapshot.paramMap.get('id');
+        revertVac.id_type = '3';
+        revertVac.action = "Add";
+        revertVac.count = this.activeVacation.count;
+        revertVac.id_user = this.authUser.getAuthusr().iduser;
+        revertVac.notes = "Revert From Dismissed";
+        revertVac.status = 'COMPLETED';
+        this.activeVacation = revertVac;
+        this.insertVacation();
+        this.cancelView();
+      })
+    }else{
+      this.apiService.updateVacation(this.activeVacation).subscribe((str:string)=>{
+        if(str == '1'){
+          this.alert.header = 'Vacation Approved';
+          this.alert.content = 'Change successfully recorded';
+          let ele = document.getElementById('dispay_alert');
+          ele.click();
+          this.cancelView();
+        }
+      })
+    }
   }
 
   updateLeave() {

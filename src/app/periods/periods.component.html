@@ -107,9 +107,10 @@
                     class="fas fa-file-contract"></i></button>
             <!-------------------------------------EXPORT REPORTS------------------------------------------------------------->
             <!-------------------------------------PAYROLL VALUES------------------------------------------------------------->
-            <button class="btn btn-outline-secondary" *ngIf="closing_import && !loading_import"><i class="fas fa-times"></i></button>
-            <button class="btn btn-outline-secondary" *ngIf="closing_import && !loading_import" style="margin-left: 5px;" (click)="setPayrollValues_import()"><i class="fas fa-check"></i></button>
-            <div class="d-flex align-items-center" *ngIf="loading_import" style="margin-left: 10px;">
+            <button class="btn btn-outline-secondary" *ngIf="closing_import && !loading_import && !save_import" (click)="clearData()"><i class="fas fa-times"></i></button>
+            <button class="btn btn-outline-secondary" *ngIf="closing_import && !loading_import && !save_import" style="margin-left: 5px;" (click)="setPayrollValues_import()"><i class="fas fa-check"></i></button>
+            <button class="btn btn-outline-secondary" *ngIf="closing_import && save_import && !loading_save" style="margin-left: 5px;" (click)="saveImportedPayroll()"><i class="far fa-save"></i></button>
+            <div class="d-flex align-items-center" *ngIf="(loading_import && !loading_save) || (!loading_import && loading_save)" style="margin-left: 10px;">
                 <strong>Loading...</strong>
                 <div class="spinner-border ms-auto" role="status" aria-hidden="true" style="margin-left:10px"></div>
             </div>

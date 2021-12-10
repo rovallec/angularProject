@@ -1138,6 +1138,10 @@ deleteHolidays(holi: holiday) {
 insertScheduleFix(adj:attendences_adjustment){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertScheduleFix.php`, adj);
 }
+
+updateVacation(vac:vacations){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateVacation.php`, vac);
+}
 }
 
 
