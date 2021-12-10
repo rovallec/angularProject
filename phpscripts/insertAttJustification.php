@@ -19,6 +19,8 @@
 
     $str = "";
 
+    echo('hello');
+
     $sql = "INSERT INTO `hr_processes`(`idhr_processes`, `id_user`, `id_employee`, `id_type`, `id_department`, `date`, `notes`, `status`, `id_import`) VALUES (NULL, '$id_user', '$id_employee', '$id_type', '$id_department', '$date', '$notes', '$status', '$id_import');";
 
     if(mysqli_query($con, $sql)){
