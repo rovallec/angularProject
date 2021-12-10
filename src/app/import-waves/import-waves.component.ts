@@ -5,7 +5,6 @@ import * as XLSX from 'xlsx';
 import { isNullOrUndefined } from 'util';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { profiles_family, profiles_histories } from '../profiles';
-import { exception } from 'console';
 import { AppComponent } from '../app.component';
 import { AuthServiceService } from '../auth-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,6 +26,7 @@ export class ImportWavesComponent implements OnInit {
   progress: number = 0;
   max_progress: number = 0;
   step: string = 'Cargando...';
+  allReporters: reporters[] = [];
   reporters: reporters[] = [];
   actualReporter: reporters = new reporters;
   showdiv: boolean = false;
@@ -63,11 +63,12 @@ export class ImportWavesComponent implements OnInit {
     this.isLoading = false;
     this.fullprofiles = [];
     this.apiServices.getClients().subscribe((cls: clients[]) => {
+      this.getReporter();
       this.clients = cls;
       this.selectedClient = cls[0].idclients;
       this.setClient(this.selectedClient);
     })
-    this.getReporter();
+
     this.any = null;
     this.arrayBuffer = null;
     this.filelist = null;
@@ -77,11 +78,7 @@ export class ImportWavesComponent implements OnInit {
   setClient(cl: string) {
     this.accounts = [];
     this.apiServices.getAccounts().subscribe((acc: accounts[]) => {
-      acc.forEach(account => {
-        if (account.id_client == cl) {
-          this.accounts.push(account);
-        }
-      });
+      this.accounts = acc.filter(account => account.id_client == cl );
       this.selectedAccount = this.accounts[0];
     })
   }
@@ -221,16 +218,19 @@ export class ImportWavesComponent implements OnInit {
     this.correlative = Number(corr) * 100;
     this.code = this.apiServices.getCode(this.selectedAccount.prefix, corr, 6);
     this.waves.prefix = this.code;
-    // set payments
+    this.reporters = this.apiServices.filterReporter(this.allReporters, this.selectedAccount.idaccounts);
   }
 
   getReporter() {
     let i = 0;
     this.apiServices.getReporter().subscribe((rep: reporters[]) => {
-      rep.forEach(reporter => {
+      this.reporters = rep;
+      this.allReporters = rep;
+      /*rep.forEach(reporter => {
+        this.allReporters[i] = reporter;
         this.reporters[i] = reporter;
         i++;
-      })
+      })*/
     })
   }
 

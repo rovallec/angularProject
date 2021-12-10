@@ -64,7 +64,8 @@ export class WaveMaintenanceComponent implements OnInit {
 
   setAccount(acc) {
     this.selectedAccount = acc;
-    
+    this.filterApprovers();
+
     this.apiServices.getWaves().subscribe((wave: waves_template[]) => {
       this.waves = [];
       this.setWave(wave[0]);
@@ -94,7 +95,7 @@ export class WaveMaintenanceComponent implements OnInit {
       } else {
         emp.action = 'APPLY';
       }
-      
+
     })
   }
 
@@ -114,7 +115,7 @@ export class WaveMaintenanceComponent implements OnInit {
 
   insertProc() {
     this.employees.forEach(employee => {
-      
+
       if (employee.action=='APPLY') {
         this.apiServices.getEmployeeId({ id: employee.id_profile }).subscribe((emp: employees) => {
           this.actuallProc.prc_date = this.todayDate;
@@ -137,8 +138,8 @@ export class WaveMaintenanceComponent implements OnInit {
               if (isNullOrUndefined(this.actualRise.approved_date) || isNullOrUndefined(this.actualRise.approved_by) ||
                 isNullOrUndefined(this.actualRise.effective_date) || isNullOrUndefined(this.actualRise.trial_start) || isNullOrUndefined(this.actualRise.trial_end)) {
                   let message: string = '';
-                  message = 'Aproved Date: ' + isNullOrUndefined(this.actualRise.approved_date) + ' Approved by: ' + isNullOrUndefined(this.actualRise.approved_by) + 
-                            ' Effective_Date: ' + isNullOrUndefined(this.actualRise.effective_date) + 
+                  message = 'Aproved Date: ' + isNullOrUndefined(this.actualRise.approved_date) + ' Approved by: ' + isNullOrUndefined(this.actualRise.approved_by) +
+                            ' Effective_Date: ' + isNullOrUndefined(this.actualRise.effective_date) +
                             ' Trial_start: ' + isNullOrUndefined(this.actualRise.trial_start) + ' trial_end: ' + isNullOrUndefined(this.actualRise.effective_date);
                 throw new Error('Incomplete data. ' + message);
               } else {
@@ -153,7 +154,7 @@ export class WaveMaintenanceComponent implements OnInit {
               this.apiServices.insertRise(this.actualRise).subscribe((str: string) => {
                 if (str.split("|")[0] == "1") {
                   window.alert("Action successfuly recorded.");
-                  
+
                 } else {
                   window.alert("An error has occured:\n" + str.split("|")[1]);
                 }
@@ -183,5 +184,12 @@ export class WaveMaintenanceComponent implements OnInit {
   setTrialEnd(str: string) {
     this.actualRise.trial_end = str;
     console.log(this.actualRise.trial_end + ' info enviada: ' + str);
+  }
+
+  filterApprovers() {
+    this.apiServices.getApprovers().subscribe((usrs: users[]) => {
+      let reporters: users[] = usrs.filter(usr => usr.department == this.selectedAccount.idaccounts);
+      this.approvals = reporters;
+    })
   }
 }

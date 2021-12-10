@@ -42,6 +42,8 @@ import { ItprofilesComponent } from './itprofiles/itprofiles.component';
 import { PaystubSendmailComponent } from './paystub-sendmail/paystub-sendmail.component';
 import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.component';
 import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenance.component';
+import { HolidaysComponent } from './holidays/holidays.component';
+import { DailypayrollvaluesComponent } from './dailypayrollvalues/dailypayrollvalues.component';
 
 const routes:Routes = [
   {
@@ -225,6 +227,16 @@ const routes:Routes = [
   {
     path:'wavemaintenance',
     component:WaveMaintenanceComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'holidays',
+    component:HolidaysComponent,
+    canActivate:[AuthGuard]
+  },
+  {
+    path:'dailypayroll',
+    component: DailypayrollvaluesComponent,
     canActivate:[AuthGuard]
   },
   {

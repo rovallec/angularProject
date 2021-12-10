@@ -24,11 +24,12 @@
       </select>
     </div>
     <div class="row p-2">
-      <div class="list-group w-100" id="list-tab" role="tablist" *ngFor="let acc of accounts">
-        <a class="list-group-item list-group-item-action w-100 active" [tabindex]="acc.idaccounts" style="cursor: pointer;"
-          (click)="setAccount(acc)" *ngIf="selectedAccount.idaccounts == acc.idaccounts">{{acc.name}}</a>
-        <a class="list-group-item list-group-item-action w-100" [tabindex]="acc.idaccounts" style="cursor: pointer;"
-          (click)="setAccount(acc)" *ngIf="selectedAccount.idaccounts !== acc.idaccounts">{{acc.name}}</a>
+      <div class="list-group w-100" id="list-tab" role="tablist">
+        <div *ngFor="let acc of accounts">
+          <a class="list-group-item list-group-item-action w-100" [tabindex]="acc.idaccounts"
+            [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}" style="cursor: pointer;"
+            (click)="setAccount(acc)">{{acc.name}}</a>
+        </div>
       </div>
     </div>
   </div>
@@ -137,7 +138,7 @@
               {{ prof.second_lastname }}
             </td>
             <td>
-              <input type="date" [(ngModel)]="prof.day_of_birth" class="form-control">
+              <input type="date" [(ngModel)]="prof.day_of_birth" class="form-control" datetime="dd-MM-yyyy">
             </td>
             <td>
               <button class="btn-outline-warning" *ngIf="prof.state=='Error'" disabled="true" data-toggle="tooltip"

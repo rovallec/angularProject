@@ -1,0 +1,45 @@
+<div class="row col-md-12" style="margin-top: 20px;">
+  <div class="col-md-3">
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <div class="row p-2">
+          <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
+            <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
+          </select>
+        </div>
+        <div class="row p-2">
+          <div class="list-group w-100" id="list-tab" role="tablist" *ngFor="let acc of accounts">
+            <a class="list-group-item list-group-item-action w-100" [tabindex]="acc.idaccounts" style="cursor: pointer;"
+              (click)="setAccount(acc)" *ngIf="selectedAccount.idaccounts!==acc.idaccounts">{{acc.name}}</a>
+            <a class="list-group-item list-group-item-action w-100 active" [tabindex]="acc.idaccounts"
+              style="cursor: pointer;" (click)="setAccount(acc)"
+              *ngIf="selectedAccount.idaccounts==acc.idaccounts">{{acc.name}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="row">
+      <div class="col-md-auto">
+        <label class="col-form-label">
+          Select Period:
+        </label>
+      </div>
+      <div class="col-md-auto">
+        <select class="form-control">
+          <option *ngFor="let per of periods" [value]="per" [selected]="per==selectedPeriod" (click)="setSelPeriod(per)">
+            Period: {{ per.idperiods }} - {{ per.start }} to {{ per.end }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-auto">
+        <button type="button" class="btn btn-outline-success" (click)="exportReport()">
+          Export
+          <i class="fas fa-file-excel"></i>
+        </button>
+      </div>
+      <div class="col-md-auto"></div>
+    </div>
+  </div>
+</div>

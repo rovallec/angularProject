@@ -37,7 +37,8 @@ export class OttrackerComponent implements OnInit {
       this.setClient(this.clients[0].idclients);
     })
     this.apiServices.getApprovers().subscribe((usrs: users[]) => {
-      this.approvals = usrs;
+      let reporters: users[] = usrs.filter(usr => usr.department == this.selectedClient);
+      this.approvals = reporters;
     })
   }
 
@@ -59,6 +60,7 @@ export class OttrackerComponent implements OnInit {
     }
 
     this.selectedAccount = acc;
+    this.filterApprovers();
     this.apiServices.getSearchEmployees({ filter: "id_account", value: this.selectedAccount.idaccounts, dp: 'exact', rol:this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
       emp.forEach(employee => {
         this.apiServices.getAttPeriod({ id: employee.idemployees, date_1: start, date_2: end }).subscribe((att: attendences[]) => {
@@ -290,5 +292,12 @@ export class OttrackerComponent implements OnInit {
         })
       })
     }
+  }
+
+  filterApprovers() {
+    this.apiServices.getApprovers().subscribe((usrs: users[]) => {
+      let reporters: users[] = usrs.filter(usr => usr.department == this.selectedAccount.idaccounts);
+      this.approvals = reporters;
+    })
   }
 }

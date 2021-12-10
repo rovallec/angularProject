@@ -4,6 +4,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 
 
 export type StringOrNumber = string;
+export type StringType = 'Browse' | 'Insert' | 'Edit' | 'Enabled' | 'Disabled' | 'Checked' | 'Unchequed';
 export class process_templates {
     idprocess_templates: string;
     name: string;
@@ -1420,10 +1421,12 @@ export class reporters {
     idUser: string;
     username: string;
     signature: string;
+    department: string;
     constructor(){
         this.idUser = null;
         this.username = null;
         this.signature = null;
+        this.department = null;
     }
 }
 
@@ -2586,6 +2589,25 @@ export class patronal {
     this.name = null;
     this.patronal_number = null;
     this.nit_patrono = null;
+  }
+}
+
+export class holiday {
+  idholidays: string;
+  name: string;
+  type: string;
+  id_account: string;
+  date: string;
+  year: number;
+  state: StringType;
+  constructor() {
+    this.idholidays = null;
+    this.name = null;
+    this.type = null;
+    this.id_account = null;
+    this.date = null;
+    this.year = null;
+    this.state = 'Browse';
   }
 }
 

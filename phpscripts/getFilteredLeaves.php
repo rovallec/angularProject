@@ -17,7 +17,7 @@ $i = 0;
 $and = ";";
 
 if (ifExist($name)) {
-  $and = " and p2.name like '%'$name'%'; ";
+  $and = " and p2.name like '%" . $name . "%'; ";
 } else {
   $and = ";";
 }

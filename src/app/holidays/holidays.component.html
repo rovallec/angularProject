@@ -1,0 +1,110 @@
+<div class="row col-md-12" style="margin-top: 20px;">
+  <div class="col-md-3">
+    <div class="row col-md-12">
+      <div class="col-md-12">
+        <div class="row p-2">
+          <select class="form-control" [(ngModel)]="selectedClient" (change)="setClient(selectedClient)">
+            <option *ngFor="let client of clients" [value]="client.idclients">{{client.name}}</option>
+          </select>
+        </div>
+        <div class="row p-2">
+          <div class="list-group w-100" id="list-tab" role="tablist" *ngFor="let acc of accounts">
+            <a class="list-group-item list-group-item-action w-100" [tabindex]="acc.idaccounts"
+              style="cursor: pointer;" (click)="setAccount(acc)"
+              *ngIf="selectedAccount.idaccounts!==acc.idaccounts" >{{acc.name}}</a>
+            <a class="list-group-item list-group-item-action w-100 active" [tabindex]="acc.idaccounts"
+              style="cursor: pointer;" (click)="setAccount(acc)"
+              *ngIf="selectedAccount.idaccounts==acc.idaccounts">{{acc.name}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="row col-md-12 d-flex">
+      <div class="col-md-4 mr-auto p-2"></div>
+      <div class="col-md-3 p-2">
+        <select class="form-control" >
+          <option *ngFor="let y of year" [value]="y" [selected]="y==selectedYear" (click)="setYear(y)">
+            {{ y }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3 p-2"></div>
+      <div class="col-md-2 p-2">
+        <button type="button" class="form-control btn-outline-primary" (click)="addHoliday()" [disabled]="state=='Insert'" >
+          <i class="far fa-plus-square"></i>
+          New
+        </button>
+      </div>
+    </div>
+    <div class="row col-md-12" style="margin-top: 20px;">
+      <table  class="table table-striped d-xl-table" >
+        <thead>
+          <tr style="text-align: center; font-weight: bold;">
+            <td>
+              NAME
+            </td>
+            <td>
+              TYPE
+            </td>
+            <td>
+              DATE
+            </td>
+            <td>
+              EDIT
+            </td>
+            <td>
+              DELETE
+            </td>
+            <td>
+              SAVE
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let holi of holidays" (keyup)="onKeyUpEvent($event)">
+            <td>
+              <input type="text" class="form-control" [(ngModel)]="holi.name" [disabled]="holi.state=='Browse'" *ngIf="holi.state!=='Browse'">
+              <div *ngIf="holi.state=='Browse'">
+                {{ holi.name }}
+              </div>
+            </td>
+            <td>
+              <select class="form-control" [(ngModel)]="holi.type" (change)="setType(holi)" [disabled]="holi.state=='Browse'">
+                <option *ngFor="let type of typeHoliday" [value]="type.id">{{ type.description }}</option>
+              </select>
+            </td>
+            <td>
+              <input type="date" class="form-control" [(ngModel)]="holi.date" [disabled]="holi.state=='Browse'">
+            </td>
+            <td>
+              <button type="button" class="form-control btn-outline-success" (click)="editHoliday(holi)" [disabled]="holi.state!=='Browse'">
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+            <td>
+              <button type="button" class="form-control btn-outline-danger" (click)="deleteHoliday(holi)" *ngIf="holi.state=='Browse'">
+                <i class="far fa-trash-alt"></i>
+              </button>
+              <button type="button" class="form-control btn-outline-danger" (click)="cancelHoliday(holi)" *ngIf="holi.state!=='Browse'">
+                <i class="fas fa-ban"></i>
+              </button>
+            </td>
+            <td>
+              <button type="button" class="form-control btn-outline-primary" (click)="saveHoliday(holi)" [disabled]="holi.state=='Browse'" >
+                <i class="far fa-save"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr style="text-align: center; font-weight: bold; background-color: #f5f4f4; font: 75% Verdana">
+            <td colspan="6">
+              Total days: {{ holidays.length }}
+            </td>
+          </tr>
+      </table>
+    </div>
+  </div>
+</div>

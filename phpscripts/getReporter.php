@@ -5,7 +5,7 @@ require 'database.php';
 
 $user = [];
 
-$sql = "SELECT idUser, username, signature FROM users WHERE id_role IN(6,7) AND valid = 1 ORDER BY idUser;";
+$sql = "SELECT idUser, username, signature, department FROM users WHERE id_role IN(6,7) AND valid = 1 ORDER BY idUser;";
 
 if($result = mysqli_query($con, $sql)){
     $i = 0;
@@ -13,6 +13,7 @@ if($result = mysqli_query($con, $sql)){
         $user[$i]['idUser'] = $row['idUser'];
         $user[$i]['username'] = $row['username'];
         $user[$i]['signature'] = $row['signature'];
+        $user[$i]['department'] = $row['department'];
         $i++;
     };
     echo json_encode($user);
