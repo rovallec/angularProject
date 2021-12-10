@@ -26,6 +26,7 @@ try {
 	$mysqlc = mysqli_connect(db_host,db_user,db_password,db_name) or die(json_encode($authUser));
 
 	if (mysqli_connect_errno()) {
+		echo(mysqli_error($mysqlc));
 		$authUser['idusers'] = 'NULL';
 	}else{
 		echo(mysqli_error($mysqlc));
