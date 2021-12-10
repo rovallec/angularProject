@@ -107,8 +107,12 @@
                     class="fas fa-file-contract"></i></button>
             <!-------------------------------------EXPORT REPORTS------------------------------------------------------------->
             <!-------------------------------------PAYROLL VALUES------------------------------------------------------------->
-            <button class="btn btn-outline-secondary" *ngIf="closing_import"><i class="fas fa-times"></i></button>
-            <button class="btn btn-outline-secondary" *ngIf="closing_import" style="margin-left: 5px;" (click)="setPayrollValues_import()"><i class="fas fa-check"></i></button>
+            <button class="btn btn-outline-secondary" *ngIf="closing_import && !loading_import"><i class="fas fa-times"></i></button>
+            <button class="btn btn-outline-secondary" *ngIf="closing_import && !loading_import" style="margin-left: 5px;" (click)="setPayrollValues_import()"><i class="fas fa-check"></i></button>
+            <div class="d-flex align-items-center" *ngIf="loading_import" style="margin-left: 10px;">
+                <strong>Loading...</strong>
+                <div class="spinner-border ms-auto" role="status" aria-hidden="true" style="margin-left:10px"></div>
+            </div>
             <!-------------------------------------PAYROLL VALUES------------------------------------------------------------->
         </div>
     </div>
@@ -151,7 +155,7 @@
                         <td>{{pys.agent_name}}</td>
                         <td *ngIf="pys.status == '1'">{{selectedAccount.name}}</td>
                         <td *ngIf="pys.status == '3'">
-                            <select [(ngModel)]="getAccountName(pys.id_account_py).name">
+                            <select [(ngModel)]="pys.account_name" (change)="setAccountDis(pys, $event.target.value)">
                                 <option *ngFor="let pym of filterUnique(pys)">{{pym}}</option>
                             </select>
                         </td>

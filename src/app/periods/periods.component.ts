@@ -100,6 +100,7 @@ export class PeriodsComponent implements OnInit {
   working_import: boolean = true;
   conflictedPeriods: payments[] = [];
   setImport:payroll_values_gt[] = [];
+  loading_import:boolean = false;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authService: AuthServiceService) { }
 
@@ -947,8 +948,10 @@ export class PeriodsComponent implements OnInit {
                         })
                         if(emp[0].id_account == this.selectedAccount.idaccounts){
                           this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys =>{
-                            if(pys.id_account_py == '0'){
+                            console.log(pys.id_account_py + "|" + this.selectedAccount.idaccounts + "|" + isNullOrUndefined(pys.id_account_py));
+                            if(pys.id_account_py == this.selectedAccount.idaccounts || isNullOrUndefined(pys.id_account_py)){
                               paymentValue.id_payment = pys.idpayments;
+                              paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
                             }
                           })
                         }
@@ -1069,6 +1072,7 @@ export class PeriodsComponent implements OnInit {
                     })
                     progress_2++;
                     if ((progress_2 + progress) == (max_1 + max_2)) {
+                      this.orderAlerts()
                       this.closing_import = true;
                       this.working = false;
                     }
@@ -1210,7 +1214,6 @@ export class PeriodsComponent implements OnInit {
           add = false;
         }
       })
-      console.log(add);
       if(add == true){
         str.push(this.getAccountName(py.id_account_py).name);
       }
@@ -1219,7 +1222,9 @@ export class PeriodsComponent implements OnInit {
   }
 
   setPayrollValues_import(){
-    this.payroll_values.forEach(payroll_val=>{
+    let progress:number = 0;
+    this.loading_import = true;
+    this.payrollvalues.forEach(payroll_val=>{
       if(payroll_val.status == '1' || payroll_val.status == '3'){
         this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_val.id_employee, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
           if(!isNullOrUndefined(emp[0])){
@@ -1229,12 +1234,59 @@ export class PeriodsComponent implements OnInit {
             pr.end = this.period.idperiods;
             this.apiService.getPayments(pr).subscribe((payment:payments[])=>{
               if(!isNullOrUndefined(payment[0])){
-                payment.filter(a=>this.getAccountName(a.id_account_py).idaccounts == this.getAccountName(payroll_val.id_account).idaccounts)
+                progress++;
+                if(payroll_val.status == '3' ){
+                  payment.forEach(pymnt=>{
+                    console.log(emp[0].account + " " + this.getAccountName(pymnt.id_account_py).name)
+                    if(emp[0].account == this.getAccountName(pymnt.id_account_py).name){
+                      payroll_val.id_payment = pymnt.idpayments;
+                    }
+                  })
+                  this.setImport.push(payroll_val);
+                }
+                if(emp[0].id_account == this.selectedAccount.idaccounts){
+                  progress++;
+                  this.setImport.push(payroll_val);
+                  if(progress >= this.payrollvalues.length){
+                    this.loading_import = false;
+                  }
+                }else{
+                  progress++;
+                  if(progress >= this.payrollvalues.length){
+                    this.loading_import = false;
+                  }
+                }
+              }else{
+                progress++;
+                if(progress >= this.payrollvalues.length){
+                  console.log(this.setImport);
+                  this.loading_import = false;
+                }
               }
             })
+          }else{
+            progress++;
+            if(progress >= this.payrollvalues.length){
+              console.log(this.setImport);
+              this.loading_import = false;
+            } 
           }
         })
+      }else{
+        progress++;
+        if(progress >= this.payrollvalues.length){
+          console.log(this.setImport);
+          this.loading_import = false;
+        }
       }
     })
+  }
+
+  orderAlerts(){
+    this.payrollvalues = this.payrollvalues.sort((a,b) => Number(b.status) - Number(a.status));
+  }
+
+  setAccountDis(pys:payments, str:string){
+    pys.account = str;
   }
 }
