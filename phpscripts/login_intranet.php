@@ -59,6 +59,6 @@ try {
 		$authUser['idusers'] = 'NULL';
 		echo(mysqli_error($mysqlc));
 }
-echo($mysqlc);
+echo($sql);
 echo json_encode($authUser);
 ?>
