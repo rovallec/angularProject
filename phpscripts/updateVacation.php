@@ -19,3 +19,4 @@ if(mysqli_query($con, $sql)){
     echo(json_encode($sql));
     http_response_code(404);
 }
+?>
