@@ -23,11 +23,11 @@ export class ItdashboardComponent implements OnInit {
 
 
   gotoProfile(emp:employees){
-    this.route.navigate(['./fProfile', emp.idemployees]);
+    this.route.navigate(['./itProfile', emp.idemployees]);
   }
 
   start(){
-    this.apiService.getallEmployees({nm:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
+    this.apiService.getallEmployees({nm:'all'}).subscribe((emp:employees[])=>{
       this.allEmployees = emp;
     })
   }

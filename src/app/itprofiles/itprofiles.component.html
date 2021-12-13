@@ -47,22 +47,57 @@
         <td colspan="2" style="padding-top:30px" *ngIf="!newProc">
             <nav width=100% style="border-top: 4px solid #e3f2fd;">
                 <div class="nav nav-tabs active" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
+                    <a class="nav-item nav-link active" id="nav-inventory-tab" data-toggle="tab" href="#nav-inventory"
+                        role="tab" aria-controls="nav-inventory" aria-selected="false">Inventory</a>
                     <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
                         aria-controls="nav-contact" aria-selected="false">Contact</a>
                     <a class="nav-item nav-link" id="nav-emergency-tab" data-toggle="tab" href="#nav-emergency"
                         role="tab" aria-controls="nav-emergency" aria-selected="false">Emergency</a>
                     <a class="nav-item nav-link" id="nav-medical-tab" data-toggle="tab" href="#nav-medical" role="tab"
                         aria-controls="nav-medical" aria-selected="false">Medical</a>
-                    <a class="nav-item nav-link" id="nav-bus-tab" data-toggle="tab" href="#nav-bus" role="tab"
-                        aria-controls="nav-bus" aria-selected="false" (click)="setService('bus')">Bus</a>
-                    <a class="nav-item nav-link" id="nav-parking-tab" data-toggle="tab" href="#nav-parking" role="tab"
-                        aria-controls="nav-parking" aria-selected="false" (click)="setService('parking')">Parking</a>
                 </div>
             </nav>
 
             <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-contact" role="tabpanel"
-                    aria-labelledby="nav-contact-tab">
+                <div class="tab-pane fade show active" id="nav-inventory" role="tabpanel"
+                    aria-labelledby="nav-inventory-tab">
+                    <div class="row col-md-12" style="margin-top:20px">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8 d-flex justify-content-center">
+                            <label style="font-size: 16px; font-weight: bolder;">ASSIGNATIONS</label>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <div class="row col-md-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10" style="min-height:256px;border:black 2px solid;max-height: 256px;overflow:auto;padding:0px;margin:0px">
+                            <table style="width:100%;padding:0px;margin:0px" class="table table-striped table-hover table_custom">
+                                <thead>
+                                    <th>CODE</th>
+                                    <th>TYPE</th>
+                                    <th>SERIAL</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CPU1048</td>
+                                        <td>LAPTOP</td>
+                                        <td>1019466901752</td>
+                                    </tr>                                  
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="row col-md-12" style="margin-top:10px">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-10 d-flex justify-content-end">
+                            <button class="btn btn-outline-success" style="margin-left:10px"><i class="fas fa-plus"></i></button>
+                            <button class="btn btn-outline-secondary" style="margin-left:10px"><i class="fas fa-minus"></i></button>
+                        </div>
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                     <div class="form-row" style="margin-top:30px">
                         <div class="form-group col-md-12">
                             <div class="form-row">

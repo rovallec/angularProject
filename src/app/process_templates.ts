@@ -2634,3 +2634,38 @@ export class alertModal{
         this.type = null;
     }
 }
+
+export class asset_movements{
+    first_name:string;
+    second_name:string;
+    first_lastname:string;
+    second_lastname:string;
+    nearsol_id:string;
+    dpi:string;
+    account:string;
+    code:string;
+    type:string;
+    brand:string;
+    model:string;
+    serial:string;
+    movement:string;
+    asset_status:string;
+    movement_status:string;
+    constructor(){
+        this.first_name = null;
+        this.second_name  = null;
+        this.first_lastname  = null;
+        this.second_lastname  = null;
+        this.nearsol_id  = null;
+        this.dpi  = null;
+        this.account  = null;
+        this.code  = null;
+        this.type  = null;
+        this.brand  = null;
+        this.model  = null;
+        this.serial  = null;
+        this.movement  = null;
+        this.asset_status  = null;
+        this.movement_status  = null;
+    }
+}

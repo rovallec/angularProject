@@ -245,6 +245,10 @@ const routes:Routes = [
     canActivate:[AuthGuard]
   },
   {
+    path:'itProfile/:id',
+    component:ItprofilesComponent
+  },
+  {
     path:'',
     redirectTo:'/login',
     pathMatch:'full'
