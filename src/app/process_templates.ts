@@ -1,6 +1,7 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { employees } from './fullProcess';
 import { profiles, profiles_family, profiles_histories } from './profiles';
+import { process } from './process';
 
 
 export type StringOrNumber = string;
@@ -2238,6 +2239,14 @@ export class all_templates extends clauses_templates {
     super();
     this.nameTemplate = null;
     this.clauses = [];
+  }
+}
+
+export class hr_process extends process {
+  mount: number;
+  constructor() {
+    super();
+    this.mount = 0;
   }
 }
 
