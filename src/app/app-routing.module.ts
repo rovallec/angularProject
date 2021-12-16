@@ -44,6 +44,7 @@ import { WaveMaintenanceComponent } from './wave-maintenance/wave-maintenance.co
 import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenance.component';
 import { HolidaysComponent } from './holidays/holidays.component';
 import { DailypayrollvaluesComponent } from './dailypayrollvalues/dailypayrollvalues.component';
+import { ItInventoryReportComponent } from './it-inventory-report/it-inventory-report.component';
 
 const routes:Routes = [
   {
@@ -247,6 +248,10 @@ const routes:Routes = [
   {
     path:'itProfile/:id',
     component:ItprofilesComponent
+  },
+  {
+    path:'itInventory',
+    component:ItInventoryReportComponent
   },
   {
     path:'',

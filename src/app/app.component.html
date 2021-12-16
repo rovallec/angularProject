@@ -50,6 +50,8 @@
           style="color: white" [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
           <a *ngIf="getSaved().department == '37'" class="nav-link" routerLink="/acphhome" style="color: white"
           [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
+          <a *ngIf="getSaved().department == '33'" class="nav-link" routerLink="/ithome" style="color: white"
+          [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
       </li>
       <li class="nav-item dropdown" *ngIf="getAuth()">
         <a [ngClass]="{'act':selectedOption=='IMP'}" *ngIf="getSaved().department == '28'"
@@ -66,6 +68,8 @@
           TIME</a>
         <a *ngIf="getSaved().department == '29'" class="nav-link"
           style="color: white" [ngClass]="{'act':selectedOption=='SERVICES'}" (click)="getServicesReport()">SERVICES REPORT</a>
+        <a *ngIf="getSaved().department == '33'" class="nav-link" routerLink="/itInventory"
+          style="color: white" [ngClass]="{'act':selectedOption=='INV'}" (click)="SetSel('INV')">INVENTORY</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/attImport" (click)="SetSel('IMP')">Attendance</a>
           <a class="dropdown-item" routerLink="/supExceptions" (click)="SetSel('IMP')">Sup. Exceptions</a>

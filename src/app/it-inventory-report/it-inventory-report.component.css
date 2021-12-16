@@ -21,17 +21,9 @@
 .table_custom th{
     padding:0px;
     margin:0px;
-    height: 40px;
+    height: 30px;
     font-size: 13px;
+    background-color: black;
+    color: white;
     text-align: center;
-}
-
-.selected_row tr{
-    background-color: #003b71;
-    color: white;
-}
-
-.selected_row td{
-    background-color: #003b71;
-    color: white;
 }

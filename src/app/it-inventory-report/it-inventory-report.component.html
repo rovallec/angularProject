@@ -1,0 +1,87 @@
+<div class="row col-md-12" style="margin-top:20px">
+    <div class="col-md-2" style="height: 80vh;overflow:auto;max-height: 80vh;padding-top:20px;border-right: solid #e3f2fd 3px;">
+        <div class="row col-md-12">
+            <label style="border-bottom:solid 4px #e3f2fd; width:70%">CURRENTS</label>
+            <div class="row col-md-12" *ngFor="let current_type of current_types">
+                <label>{{current_type.name}}</label>
+                <input type="text" class="form-control" [disabled]='true' [placeholder]="current_type.count">
+            </div>
+        </div>
+        <div class="row col-md-12" style="margin-top:25px">
+            <label style="border-bottom:solid 4px #e3f2fd; width:70%">CATEGORIES</label>
+            <div class="row col-md-12" *ngFor="let types of asset_types">
+                <label>{{types.name}}</label>
+                <input type="text" class="form-control" [disabled]='true' [placeholder]="types.count">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10" style="max-height: 80vh;overflow:auto">
+        <nav width=100%>
+            <div class="nav nav-tabs active" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
+                <a class="nav-item nav-link active" id="nav-unallocted-tab" data-toggle="tab" href="#nav-unallocted" role="tab"
+                aria-controls="nav-unallocted" aria-selected="false" (click)="setCurrent(1)">UNALLOCATED</a>
+                <a class="nav-item nav-link" id="nav-allocated-tab" data-toggle="tab" href="#nav-allocated"
+                    role="tab" aria-controls="nav-allocated" aria-selected="false" (click)="setCurrent(2)">ALLOCATED</a>
+            </div>
+        </nav>
+
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-unallocted" role="tabpanel"
+                aria-labelledby="nav-unallocted-tab">
+                <div class="row col-md-12" style="margin-top:20px">
+                    <table class="table table-striped table-hover table_custom">
+                        <thead>
+                            <th>ID</th>
+                            <th>TYPE</th>
+                            <th>CODE</th>
+                            <th>SERIAL</th>
+                            <th>BRAND</th>
+                            <th>MODEL</th>
+                            <th>STATUS</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ass of unallocatedAssets">
+                                <td>{{ass.id}}</td>
+                                <td>{{ass.type_name}}</td>
+                                <td>{{ass.code}}</td>
+                                <td>{{ass.serial}}</td>
+                                <td>{{ass.brand}}</td>
+                                <td>{{ass.model}}</td>
+                                <td>{{ass.status}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade show" id="nav-allocated" role="tabpanel"
+            aria-labelledby="nav-allocated-tab">
+                <div class="row col-md-12" style="margin-top:20px">
+                    <table class="table table-striped table-hover table_custom">
+                        <thead>
+                            <th>ID</th>
+                            <th>TYPE</th>
+                            <th>CODE</th>
+                            <th>SERIAL</th>
+                            <th>BRAND</th>
+                            <th>MODEL</th>
+                            <th>EMPLOYEE</th>
+                            <th>STATUS</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let asset of allocatedAssets">
+                                <td>{{asset.id}}</td>
+                                <td>{{asset.type_name}}</td>
+                                <td>{{asset.code}}</td>
+                                <td>{{asset.serial}}</td>
+                                <td>{{asset.brand}}</td>
+                                <td>{{asset.model}}</td>
+                                <td>{{asset.employee_name}}</td>
+                                <td>{{asset.status}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
