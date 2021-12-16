@@ -22,6 +22,9 @@
     <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
       alt="" style="margin-left: 30px" routerLink="/acphhome" *ngIf="getSaved().department == '37'"
       (click)="SetSel('HOME')">
+      <img src="./assets/header_logo.png" width="200" height="40" class="d-inline-block align-top"
+      alt="" style="margin-left: 30px" routerLink="/ithome" *ngIf="getSaved().department == '33'"
+      (click)="SetSel('HOME')">
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +50,8 @@
           style="color: white" [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
           <a *ngIf="getSaved().department == '37'" class="nav-link" routerLink="/acphhome" style="color: white"
           [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
+          <a *ngIf="getSaved().department == '33'" class="nav-link" routerLink="/ithome" style="color: white"
+          [ngClass]="{'act':selectedOption=='HOME'}" (click)="SetSel('HOME')">HOME</a>
       </li>
       <li class="nav-item dropdown" *ngIf="getAuth()">
         <a [ngClass]="{'act':selectedOption=='IMP'}" *ngIf="getSaved().department == '28'"
@@ -63,6 +68,8 @@
           TIME</a>
         <a *ngIf="getSaved().department == '29'" class="nav-link"
           style="color: white" [ngClass]="{'act':selectedOption=='SERVICES'}" (click)="getServicesReport()">SERVICES REPORT</a>
+        <a *ngIf="getSaved().department == '33'" class="nav-link" routerLink="/itInventory"
+          style="color: white" [ngClass]="{'act':selectedOption=='INV'}" (click)="SetSel('INV')">INVENTORY</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" routerLink="/attImport" (click)="SetSel('IMP')">Attendance</a>
           <a class="dropdown-item" routerLink="/supExceptions" (click)="SetSel('IMP')">Sup. Exceptions</a>
@@ -126,11 +133,11 @@
           style="color: white" [ngClass]="{'act':selectedOption=='ADVREP'}" (click)="exportAdvancesReport()">ADVANCES REPORT</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
-        <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/holidays"
+        <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/holidays"
           style="color: white" [ngClass]="{'act':selectedOption=='HOLIDAYS'}" (click)="SetSel('HOLIDAYS')">HOLIDAYS</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
-        <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link" routerLink="/dailypayroll"
+        <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/dailypayroll"
             style="color: white" [ngClass]="{'act':selectedOption=='DAILYPAYROLL'}" (click)="SetSel('DAILYPAYROLL')">DAILY PAYROLL</a>
       </li>
     </ul>

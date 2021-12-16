@@ -1,6 +1,6 @@
 import { isNull } from '@angular/compiler/src/output/output_ast';
 import { splitAtColon } from '@angular/compiler/src/util';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouteConfigLoadEnd } from '@angular/router';
 import { promise } from 'protractor';
 import { isNullOrUndefined } from 'util';
@@ -9,7 +9,7 @@ import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods, hrProcess } from '../fullProcess';
 import { AuthGuard } from '../guard/auth-guard.service';
 import { process } from '../process';
-import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha, accounts } from '../process_templates';
+import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha, accounts, alertModal } from '../process_templates';
 import { profiles } from '../profiles';
 import { Observable } from "rxjs";
 import { async } from '@angular/core/testing';
@@ -22,6 +22,8 @@ import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
   styleUrls: ['./accprofiles.component.css']
 })
 export class AccprofilesComponent implements OnInit {
+
+  
 
   employee: employees = new employees;
   activePaymentMethod: payment_methods = new payment_methods;
@@ -86,6 +88,13 @@ export class AccprofilesComponent implements OnInit {
   allAccounts:accounts[] = [];
   allPeriods:periods[] = [];
   editDeduction:boolean = false;
+  services:services[] = [];
+  newService:services = new services;
+  recorded_service:boolean = false;
+  alertMod:alertModal = new alertModal;
+  ele:Element;
+  repeateService:string = "DISABLE";
+  serviceTimes:number = 0;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -110,6 +119,11 @@ export class AccprofilesComponent implements OnInit {
     })
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
+    
+    this.apiService.getServices({id:this.employe_id}).subscribe((sr:services[])=>{
+      this.services = sr
+    })
+
     this.apiService.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: this.employe_id, rol: this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
 
       if ((new Date(this.employee.hiring_date).getTime() - (new Date((Number(todayDate.split("-")[0]) - 1).toString() + "-12-01").getTime()) <= 0)) {
@@ -1096,4 +1110,73 @@ export class AccprofilesComponent implements OnInit {
     this.editDeduction = true;
   }
 
+
+  getServices(){
+    this.apiService.getServices({id:this.employe_id}).subscribe((sr:services[])=>{
+      this.services = sr;
+    })
+  }
+
+  setService(){
+    this.recorded_service = false;
+    this.newService = new services;
+    this.newService.id_employee = this.employe_id;
+    this.newService.id_user = this.authUser.getAuthusr().iduser;
+    this.newService.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
+    this.newService.proc_status = "PENDING";
+    this.newService.status = '1';
+    this.newService.current = '0';
+  }
+
+  getService(sr:services){
+    this.recorded_service = true;
+    this.newService = sr;
+  }
+
+  isDate(frec:string){
+    if(!isNullOrUndefined(frec)){
+      return frec.includes("-");
+    }else{
+      return false;
+    }
+  }
+
+  insertService(){
+    if(this.repeateService == 'DISABLE'){
+      this.repeateService = '1';
+      this.serviceTimes = 1;
+    }
+    this.newService.max = (Number(this.newService.max)/this.serviceTimes).toFixed(2);
+    for (let index = 1; index <= Number(this.serviceTimes); index++) {
+      if(this.isDate(this.newService.frecuency)){
+        this.newService.frecuency = new Date (new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getFullYear().toString().padStart(2,"0")
+                                    + "-" + (new Date (new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getMonth() + 1).toFixed().padStart(2,"0")
+                                    + "-" + new Date (new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getDate().toFixed().padStart(2,"0");
+        if(index > 1){
+          this.newService.notes = this.newService.notes + " | " + " Reapete every " + this.repeateService + " Maximun of " + this.serviceTimes + " execution #" + index;
+          this.newService.current = (Number(this.newService.current) + Number(this.newService.amount)).toFixed(2);
+        }
+      }
+      this.newService.proc_name = "Service " + this.newService.name;
+      this.apiService.insertService(this.newService).subscribe((str:string)=>{
+      this.alertMod.content = "Service Successfuly Created";
+      this.alertMod.header = 'Service Created';
+      this.alertMod.type = 1;
+      if(index == Number(this.serviceTimes)){
+        this.newService = new services;
+        document.getElementById("openAlertModal").click()
+      }
+    }) 
+    }
+  }
+
+  saveService(){
+    this.newService.id_user = this.authUser.getAuthusr().iduser;
+    this.apiService.updateService(this.newService).subscribe((str:string)=>{
+      this.alertMod.content = "Service Successfuly Updated";
+      this.alertMod.header = 'Service Updated';
+      this.alertMod.type = 1;
+      document.getElementById("openAlertModal").click()
+    })
+  }
 }

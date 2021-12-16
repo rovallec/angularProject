@@ -54,6 +54,8 @@
                         aria-controls="nav-adv" aria-selected="false">Advances</a>
                     <a class="nav-item nav-link" id="nav-term-tab" data-toggle="tab" href="#nav-term" role="tab"
                         aria-controls="nav-term" aria-selected="false" *ngIf="employee.active === '0'">Termination</a>
+                    <a class="nav-item nav-link" id="nav-services-tab" data-toggle="tab" href="#nav-services" role="tab"
+                        aria-controls="nav-services" aria-selected="false">Services</a>
                 </div>
             </nav>
 
@@ -178,7 +180,7 @@
                                                     data-toggle="modal">{{cred.amount}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="4" style="text-align:center;" class="hover-blue" (click)="newDeduction('Credit')"data-target="#deduction_view"
+                                                    <td colspan="4" style="text-align:center;" class="hover-blue" (click)="newDeduction('Credit')" data-target="#deduction_view"
                                                     data-toggle="modal"><i class="fas fa-plus"></i></td>
                                                 </tr>
                                             </tbody>
@@ -392,6 +394,53 @@
                         </div>
                         <div class="col-md-1">
                         </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="nav-services" role="tabpanel" aria-labelledby="nav-services-tab">
+                    <div class="form-row col-sm-12" style="margin-bottom:25px">
+                        <label style="font-size: 20px; font-weight: bold; margin-left:42.5%;margin-top: 10px;">SERVICES</label>
+                        <div class="row col-md-12">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <table class="table table-light table-hover">
+                                    <thead>
+                                        <th>ID</th>
+                                        <th>TYPE</th>
+                                        <th>AMOUNT</th>
+                                        <th>MAX</th>
+                                        <th>CURRENT</th>
+                                        <th>FRECUENCY</th>
+                                        <th>STATUS</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="selectable" *ngFor="let service of services" 
+                                        [ngClass]="{'table-danger':service.status == '0','table-success':service.status == '1'}"
+                                        (mousedown)="getService(service)" data-target="#servicesView"
+                                        data-toggle="modal" style="user-select: none; -moz-user-select: none; -khtml-user-select: none; text-align: center;">
+                                            <td>{{service.idservices}}</td>
+                                            <td>{{service.name}}</td>
+                                            <td>{{service.amount}}</td>
+                                            <td>{{service.max}}</td>
+                                            <td>{{service.current}}</td>
+                                            <td>{{service.frecuency}}</td>
+                                            <td *ngIf="service.status == 1">ACTIVE</td><td *ngIf="service.status == 0">INACTIVE</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="row col-md-8">
+                            <div class="d-flex justify-content-end w-100">
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-outline-success" style="margin-left:10px" (mousedown)="setService()"  data-target="#servicesView"
+                                    data-toggle="modal"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
                     </div>
                 </div>
             </div>
@@ -684,11 +733,163 @@
             <div class="modal-footer" style="margin-top:25px">
                 <div class="d-flex col-md-12">
                     <div class="col-md-4">
-                        <button class="form-control btn-outline-primary" (click)="deletePayment()" data-dismiss="modal">Accept</button>
+                        <button class="form-control btn-outline-secondary" data-dismiss="modal">Cancel</button>
                     </div>
                     <div class="col-md-4"></div>
                     <div class="col-md-4">
-                        <button class="form-control btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                        <button class="form-control btn-outline-primary" (click)="deletePayment()" data-dismiss="modal">Accept</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------------------------------------------- SERVICE MODAL--------------------------------------------------------------->
+<div class="modal fade" id="servicesView" tabindex="-1" role="dialog" aria-labelledby="servicesViewV"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="search_modalLabel"
+                    style="font-weight:bold; text-align: center; font-size: 18px;">SERVICE</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding:5px">
+                <div class="row col-md-12">
+                    <div class="col-md-1"></div>
+                    <div class="form-group col-md-8">
+                        <label>NAME:</label>
+                        <select class="form-control" [(ngModel)]="newService.name">
+                            <option>RAF</option>
+                            <option>Advance</option>
+                            <option>Advance Debit</option>
+                            <option>Monthly Bus</option>
+                            <option>Car Parking</option>
+                            <option>Motorcycle Parking</option>
+                            <option>CLIENT BONUS</option>
+                            <option>CLIENT BONUS</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>TYPE:</label>
+                        <select class="form-control" [(ngModel)]="newService.type" [disabled]="recorded_service">
+                            <option [value]="0">DEBIT</option>
+                            <option [value]="1">CREDIT</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="col-md-2" *ngIf="recorded_service"></div>
+                    <div class="col-md-2">
+                        <label>AMOUNT:</label>
+                        <input class="form-control" type="number" [(ngModel)]="newService.amount">
+                    </div>
+                    <div class="col-md-2">
+                        <label>MAX:</label>
+                        <input class="form-control" type="number" [(ngModel)]="newService.max">
+                    </div>
+                    <div class="col-md-3">
+                        <label>FRECUENCY:</label>
+                        <select class="form-control" *ngIf="(newService.frecuency == 'MONTHLY' ||
+                        newService.frecuency == 'BIWEEKLY' ||
+                        newService.frecuency == 'UNIQUE' || !isDate(newService.frecuency)) && newService.frecuency != 'ANTICIPATED'" [(ngModel)]="newService.frecuency">
+                            <option>MONTHLY</option>
+                            <option>BIWEEKLY</option>
+                            <option>UNIQUE</option>
+                            <option>ANTICIPATED</option>
+                        </select>
+                        <input type="date" *ngIf="(newService.frecuency != 'MONTHLY' &&
+                        newService.frecuency != 'BIWEEKLY' &&
+                        newService.frecuency != 'UNIQUE') && (isDate(newService.frecuency) || newService.frecuency == 'ANTICIPATED')" class="form-control" [(ngModel)]="newService.frecuency">
+                    </div>
+                    <div class="col-md-3" *ngIf="!recorded_service">
+                        <label>REPEATE (days):</label>
+                        <select class="form-control" [(ngModel)]="repeateService" *ngIf="repeateService == 'DISABLE'">
+                            <option>DISABLE</option>
+                            <option>ENABLE</option>
+                        </select>
+                        <input type="number" class="form-control" *ngIf="repeateService != 'DISABLE'" [(ngModel)]="repeateService">
+                    </div>
+                    <div class="col-md-2" *ngIf="!recorded_service && repeateService != 'DISABLE'">
+                        <label>TIMES:</label>
+                        <input type="number" class="form-control" [(ngModel)]="serviceTimes">
+                    </div>
+                    <div class="col-md-2" *ngIf="recorded_service"></div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="form-group col-md-12">
+                        <label>Notes:</label>
+                        <textarea class="form-control" width="100%" [(ngModel)]="newService.notes"
+                            #message='ngModel'></textarea>
+                    </div>
+                </div>
+                <div class="row col-md-12">
+                    <div class="form-group col-md-4">
+                        <label>DATE:</label>
+                        <input type="text" class="form-control" [(ngModel)]="newService.date" [disabled]="true">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>CURRENT:</label>
+                        <input type="text" class="form-control" [(ngModel)]="newService.current">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>STATUS:</label>
+                        <select [(ngModel)]="newService.status" class="form-control" [disabled]="!recorded_service">
+                            <option [value]="0">INACTIVE</option>
+                            <option [value]="1">ACTIVE</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:25px">
+                <div class="d-flex col-md-12">
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-secondary" data-dismiss="modal" (click)="start()">Cancel</button>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-primary" data-dismiss="modal" *ngIf="!recorded_service" (click)="insertService()">Accept</button>
+                        <button class="form-control btn-outline-primary" data-dismiss="modal" *ngIf="recorded_service" (click)="saveService()">Save</button>
+                        <button hidden="true" data-target="#alertModal"
+                        data-toggle="modal" id="openAlertModal"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------------------------------------------------------- ALERT MODAL--------------------------------------------------------------->
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModal"
+    aria-hidden="true" #alertModal>
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="search_modalLabel"
+                    style="font-weight:bold; text-align: center; font-size: 18px; text-align: center;">{{alertMod.header}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding:5px">
+                <div class="row col-md-12">
+                    <label style="text-align: center">{{alertMod.content}}</label>
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top:25px">
+                <div class="d-flex col-md-12">
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-secondary" data-dismiss="modal" *ngIf="alertMod.type == 0" (mouseup)="start()">Cancel</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="form-control btn-outline-primary" data-dismiss="modal" *ngIf="alertMod.type == 1" (mouseup)="start()">Close</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="form-control btn-outline-primary" data-dismiss="modal" *ngIf="alertMod.type == 0">Accept</button>
                     </div>
                 </div>
             </div>

@@ -939,6 +939,7 @@ export class services {
     frecuency: string;
     status: string;
     current: string;
+    type:string;
     //Process
     idinternal_process: string;
     id_user: string;
@@ -954,13 +955,14 @@ export class services {
         this.amount = null;
         this.max = null;
         this.frecuency = null;
-        this.status = null;
+        this.status = '0';
         this.idinternal_process = null;
         this.id_user = null;
         this.proc_name = null;
         this.date = null;
         this.proc_status = null;
-        this.notes = null
+        this.notes = null;
+        this.type = '0';
     }
 }
 
@@ -1369,6 +1371,7 @@ export class payroll_values_gt{
     adj_hours:string = null;
     adj_ot:string = null;
     adj_holidays:string = null;
+    status:string;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;
@@ -1392,6 +1395,7 @@ export class payroll_values_gt{
         this.hrs = null;
         this.next_seventh = null;
         this.adjustments = null;
+        this.status = null;
     }
 }
 
@@ -2627,4 +2631,119 @@ export class file_info {
     this.type = null;
     this.file = null;
   }
+}
+
+export class alertModal{
+    header:string;
+    content:string;
+    type:number;
+    constructor(){
+        this.header = null;
+        this.content = null;
+        this.type = null;
+    }
+}
+
+export class asset_movements{
+    idassets:string;
+    idemployees:string;
+    first_name:string;
+    second_name:string;
+    first_lastname:string;
+    second_lastname:string;
+    nearsol_id:string;
+    dpi:string;
+    account:string;
+    code:string;
+    type:string;
+    brand:string;
+    model:string;
+    serial:string;
+    movement:string;
+    asset_status:string;
+    movement_status:string;
+    active_selection:boolean;
+    date:string;
+    notes:string;
+    user_name:string;
+    constructor(){
+        this.idemployees = null;
+        this.first_name = null;
+        this.second_name  = null;
+        this.first_lastname  = null;
+        this.second_lastname  = null;
+        this.nearsol_id  = null;
+        this.dpi  = null;
+        this.account  = null;
+        this.code  = null;
+        this.type  = null;
+        this.brand  = null;
+        this.model  = null;
+        this.serial  = null;
+        this.movement  = null;
+        this.asset_status  = null;
+        this.movement_status  = null;
+        this.active_selection = false;
+        this.date = null;
+        this.notes = null;
+        this.user_name = null;
+    }
+}
+
+export class movement_types{
+    idmovement_types:string;
+    name:string;
+    description:string;
+    constructor(){
+        this.idmovement_types = null;
+        this.name = null;
+        this.description = null;
+    }
+}
+
+export class asset_types{
+    idasset_type:string;
+    name:string;
+    description:string;
+    count:string;
+    constructor(){
+        this.idasset_type = null;
+        this.name = null;
+        this.description = null;
+        this.count = null;
+    }
+}
+
+export class assets{
+    idassets:string;
+    id_type:string;
+    id_manufacture:string;
+    code:string;
+    cost:string;
+    serial:string;
+    status:string;
+    type_name:string;
+    brand:string;
+    model:string;
+    selected:boolean;
+    movement:string;
+    id_user:string;
+    employee_name:string;
+    date:string;
+    constructor(){
+        this.idassets = null;
+        this.id_type = null;
+        this.id_manufacture = null;
+        this.code = null;
+        this.cost = null;
+        this.serial = null;
+        this.status = null;
+        this.type_name = null;
+        this.brand = null;
+        this.model = null;
+        this.selected = false;
+        this.movement = '1';
+        this.employee_name = null;
+        this.date = null;
+    }
 }

@@ -66,8 +66,8 @@ if($result = mysqli_query($con, $sql))
 			$hires[$i]['date'] = $row['date'];
 			$hires[$i]['worked_time'] = $row['worked_time'];
 			$hires[$i]['scheduled'] = $row['scheduled'];
-			$hires[$i]['day_off1'] = explode(",", $row['days_off'])[0];
-			$hires[$i]['day_off2'] = explode(",", $row['days_off'])[1];
+			$hires[$i]['day_off1'] = 'N/A';
+			$hires[$i]['day_off2'] = 'N/A';
 			$hires[$i]['status'] = $row['status'];
 			$hires[$i]['id_wave'] = $row['id_wave'];
 		}else{

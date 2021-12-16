@@ -28,6 +28,7 @@
             $r[$i]['date'] = $result['date'];
             $r[$i]['proc_status'] = $result['proc_status'];
             $r[$i]['notes'] = $result['notes'];
+            $r[$i]['type'] = $result['type'];
             $i++;
         };
         echo(json_encode($r));

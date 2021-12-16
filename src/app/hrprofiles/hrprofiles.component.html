@@ -373,9 +373,9 @@
                                 </div>
                                 <div class="form-group col-md-4"></div>
                                 <div class="form-group col-md-3">
-                                    <button class="form-control" (click)="addVacation('Paid', '4')"
+                                    <button class="form-control" (click)="addVacation('Take', '4')"
                                         *ngIf="availableVacations > 0">Take</button>
-                                    <button [disabled]="true" class="form-control" (click)="addVacation('Paid', '4')"
+                                    <button [disabled]="true" class="form-control" (click)="addVacation('Take', '4')"
                                         *ngIf="availableVacations === 0">Take</button>
                                 </div>
                                 <div class="form-group col-md-1"></div>
@@ -587,12 +587,13 @@
                                 <div class="form-group col-md-3">
                                     <label>Status:</label>
                                     <input type="text" class="form-control"
-                                        *ngIf="editVac || activeVacation.status != 'PENDING'"
+                                        *ngIf="editVac || (activeVacation.status != 'PENDING' && activeVacation.status != 'APPROVED')"
                                         [(ngModel)]="activeVacation.status" [disabled]="true">
                                     <select [(ngModel)]="activeVacation.status" class="form-control"
-                                        *ngIf="!editVac && activeVacation.status == 'PENDING'"
+                                        *ngIf="!editVac && (activeVacation.status == 'PENDING' || activeVacation.status == 'APPROVED')"
                                         (change)="updateVacation()">
-                                        <option *ngIf="activeVacation.status == 'PENDING'">PENDING</option>
+                                        <option *ngIf="activeVacation.status == 'PENDING' || activeVacation.status == 'APPROVED'">PENDING</option>
+                                        <option>APPROVED</option>
                                         <option>DISMISSED</option>
                                     </select>
                                 </div>
@@ -1943,9 +1944,9 @@
                             <div class="form-group col-md-2" *ngIf="!viewRecProd">
                                 <label>Amount:</label>
                                 <input type="number" class="form-control" [(ngModel)]="actuallProc.mount" (change)="updateMountProc(actuallProc.mount)"
-                                    [disabled]="viewRecProd" min="0.5" max="availableVacations" *ngIf="actuallProc.mount<=number(availableVacations)">
+                                    [disabled]="viewRecProd" min="0.5" max="availableVacations" *ngIf="haveAvailableVacations">
                                 <input type="number" class="form-control" [(ngModel)]="actuallProc.mount" (change)="updateMountProc(actuallProc.mount)"
-                                  [disabled]="viewRecProd" min="0.5" max="availableVacations" *ngIf="actuallProc.mount>number(availableVacations)">
+                                  [disabled]="viewRecProd" min="0.5" max="availableVacations" *ngIf="!haveAvailableVacations">
                             </div>
                             <div class="form-group col-md-5">
                                 <!--<button class="form-control" type="button" data-target="#notificationModal" data-toggle="modal">
@@ -2894,6 +2895,7 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
 
 <!---------------------------------------------------------------------------------- NOTIFICATION MODAL ------------------------------------------------>
 <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notification"
@@ -2913,6 +2915,22 @@
                 <!--<button type="button" class="btn btn-outline-primary" (click)="saveFile()" [disabled]="loading" data-dismiss="modal">
                   {{  (loading) ? 'Loading...' : 'SAVE' }}
                 </button>-->
+=======
+<button hide=true data-target="#alertModal" data-toggle="modal" id='dispay_alert'></button>
+<!---------------------------------------------------------------------------------- ALERT MODAL ------------------------------------------------>
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="fileUploadLabel">{{alert.header}}</h5>
+            </div>
+            <div class="modal-body">
+                <label>{{alert.content}}</label>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+>>>>>>> master
             </div>
         </div>
     </div>

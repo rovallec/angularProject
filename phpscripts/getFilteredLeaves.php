@@ -47,7 +47,7 @@ $sql = "SELECT
           OR l.`end` BETWEEN '$start' AND '$end')
           AND e.reporter = " . $idsup .
         $and;
-
+        
 if($result = mysqli_query($con, $sql)){
   while($res = mysqli_fetch_assoc($result)){
     $return[$i]['id_process'] = $res['idhr_processes'];

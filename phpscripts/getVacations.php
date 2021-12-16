@@ -29,7 +29,6 @@
             LEFT JOIN process_types pt ON pt.idprocess_types = hp.id_type 
             LEFT JOIN users u ON u.idUser = hp.id_user
             WHERE p.idprofiles = $id;";
-
     if($result = mysqli_query($con, $sql)){
         while ($row = mysqli_fetch_assoc($result)) {
             $rs[$i]['id_process'] = $row['idhr_processes'];

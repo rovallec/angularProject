@@ -21,18 +21,19 @@ export class ItdashboardComponent implements OnInit {
   ngOnInit() {
   }
 
+
   gotoProfile(emp:employees){
-    this.route.navigate(['./fProfile', emp.idemployees]);
+    this.route.navigate(['./itProfile', emp.idemployees]);
   }
 
   start(){
-    this.apiService.getallEmployees({nm:this.authService.getAuthusr().department}).subscribe((emp:employees[])=>{
+    this.apiService.getallEmployees({nm:'all'}).subscribe((emp:employees[])=>{
       this.allEmployees = emp;
     })
   }
 
   searchEmployee(){
-    this.apiService.getSearchEmployees({filter:this.filter, value:this.value, dp:this.authService.getAuthusr().department, rol:this.authService.getAuthusr().id_role}).subscribe((emp:employees[])=>{
+    this.apiService.getSearchEmployees({filter:this.filter, value:this.value, dp:'all', rol:this.authService.getAuthusr().id_role}).subscribe((emp:employees[])=>{
       this.allEmployees = emp;
     });
     this.searching = true;

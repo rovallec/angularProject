@@ -39,9 +39,8 @@
             INNER JOIN users u ON (u.idUser = e.reporter)
             INNER JOIN users u2 on (p.idprofiles = u2.id_profile) 
             INNER JOIN (SELECT UPPER(CONCAT(TRIM(p1.first_name), ' ', TRIM(p1.second_name), ' ', TRIM(p1.first_lastname), ' ', TRIM(p1.second_lastname))) AS name, p1.idprofiles FROM profiles p1) p2 ON (p2.idprofiles = h.id_profile)
-            LEFT JOIN (SELECT COUNT(f1.idfamilies) AS children, f1.id_profile FROM families f1 WHERE f1.relationship IN('Hijo', 'Hija')) f ON (p.idprofiles = f.id_profile)
+            LEFT JOIN (SELECT COUNT(f1.idfamilies) AS children, f1.id_profile FROM families f1 WHERE f1.relationship IN('Hijo', 'Hija') GROUP BY id_profile) f ON (p.idprofiles = f.id_profile)
             WHERE p.idprofiles = $id;";
-
     if ($res = mysqli_query($con, $sql)) {
         while($r = mysqli_fetch_assoc($res)){
             $result['id_profile'] = $r['id_profile'];
