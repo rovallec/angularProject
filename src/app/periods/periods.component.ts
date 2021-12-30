@@ -342,9 +342,24 @@ export class PeriodsComponent implements OnInit {
                             let adjustment_base: credits = new credits;
                             let adjustment_ot: credits = new credits;
                             let adjustment_hld: credits = new credits;
+                            let performance_bonus:credits = new credits;
+                            let treasure_hunt:credits = new credits;
+
                             adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.type = "Ajuste Horas Nominales";
+
+                            if(Number(payroll_value.performance_bonus) != 0){
+                              performance_bonus.amount = payroll_value.performance_bonus;
+                              performance_bonus.type = "Performance Bonus";
+                              this.global_credits.push(performance_bonus);
+                            }
+
+                            if(Number(payroll_value.treasure_hunt) != 0){
+                              treasure_hunt.amount = payroll_value.treasure_hunt;
+                              treasure_hunt.type = "Treasure Hunt";
+                              this.global_credits.push(treasure_hunt);
+                            }
 
                             if (emp[0].job != 'Supervisor De Operaciones' && emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                               adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 2)).toFixed(2);
