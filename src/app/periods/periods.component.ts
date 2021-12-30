@@ -344,6 +344,7 @@ export class PeriodsComponent implements OnInit {
                             let adjustment_hld: credits = new credits;
                             let performance_bonus:credits = new credits;
                             let treasure_hunt:credits = new credits;
+                            let nearsol_bonus:credits = new credits;
 
                             adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
@@ -353,6 +354,12 @@ export class PeriodsComponent implements OnInit {
                               performance_bonus.amount = payroll_value.performance_bonus;
                               performance_bonus.type = "Performance Bonus";
                               this.global_credits.push(performance_bonus);
+                            }
+
+                            if(Number(payroll_value.nearsol_bonus) != 0){
+                              nearsol_bonus.amount = payroll_value.nearsol_bonus;
+                              nearsol_bonus.type = "Nearsol Bonus";
+                              this.global_credits.push(nearsol_bonus);
                             }
 
                             if(Number(payroll_value.treasure_hunt) != 0){
@@ -935,6 +942,7 @@ export class PeriodsComponent implements OnInit {
                     paymentValue.ot_hours = element['OT'];
                     paymentValue.holidays_hours = element['Holiday Hours'];
                     paymentValue.performance_bonus = element['Performance Bonus'];
+                    paymentValue.nearsol_bonus = element['Nearsol Bonus'];
                     paymentValue.treasure_hunt = element['Treasure Hunt'];
                     this.payrollvalues.push(paymentValue);
                   } else {
@@ -953,6 +961,7 @@ export class PeriodsComponent implements OnInit {
                       paymentValue.ot_hours = element['OT'];
                       paymentValue.holidays_hours = element['Holiday Hours'];
                       paymentValue.performance_bonus = element['Performance Bonus'];
+                      paymentValue.nearsol_bonus = element['Nearsol Bonus'];
                       paymentValue.treasure_hunt = element['Treasure Hunt'];
                       this.payrollvalues.push(paymentValue);
                     } else {
@@ -981,6 +990,7 @@ export class PeriodsComponent implements OnInit {
                         paymentValue.ot_hours = element['OT'];
                         paymentValue.holidays_hours = element['Holiday Hours'];
                         paymentValue.performance_bonus = element['Performance Bonus'];
+                        paymentValue.nearsol_bonus = element['Nearsol Bonus'];
                         paymentValue.treasure_hunt = element['Treasure Hunt'];
                         this.payrollvalues.push(paymentValue);
                       })
@@ -1002,6 +1012,7 @@ export class PeriodsComponent implements OnInit {
                   paymentValue.ot_hours = element['OT'];
                   paymentValue.holidays_hours = element['Holiday Hours'];
                   paymentValue.performance_bonus = element['Performance Bonus'];
+                  paymentValue.nearsol_bonus = element['Nearsol Bonus'];
                   paymentValue.treasure_hunt = element['Treasure Hunt'];
                   this.payrollvalues.push(paymentValue);
                 }
@@ -1021,6 +1032,7 @@ export class PeriodsComponent implements OnInit {
                 paymentValue.ot_hours = element['OT'];
                 paymentValue.holidays_hours = element['Holiday Hours'];
                 paymentValue.performance_bonus = element['Performance Bonus'];
+                paymentValue.nearsol_bonus = element['Nearsol Bonus'];
                 paymentValue.treasure_hunt = element['Treasure Hunt'];
                 this.payrollvalues.push(paymentValue);
               }
