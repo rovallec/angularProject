@@ -7,8 +7,9 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 //echo(json_encode($request));
 
-$id_check = ($request->id_check);
-$id_check = json_decode($request->id_check);
+
+$idcheck = ($request->idchecks);
+//$id_check = json_decode($request->id_check);
 /*
 
 
