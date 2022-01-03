@@ -926,8 +926,8 @@ getCheck(any: any) {
   return this.httpClient.post<checks>(`${this.PHP_API_SERVER}/phpscripts/getCheck.php`, any);
 }
 
-getCheckDetails(any: any) {
-  return this.httpClient.post<checksDetails[]>(`${this.PHP_API_SERVER}/phpscripts/getCheckDetails.php`, any);
+getCheckDetails(idchecks: any) {
+  return this.httpClient.post<checksDetails[]>(`${this.PHP_API_SERVER}/phpscripts/getCheckDetails.php`, idchecks);
 }
 
 printChecks(any: any) {
