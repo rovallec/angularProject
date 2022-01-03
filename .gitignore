@@ -54,3 +54,4 @@ src/environments/environment.prod.ts
 phpscripts/postgres/database.php
 .vscode/launch.json
 .vscode/settings.json
+.vscode/launch.json

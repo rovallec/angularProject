@@ -45,6 +45,7 @@ import { RostermaintenanceComponent } from './rostermaintenance/rostermaintenanc
 import { HolidaysComponent } from './holidays/holidays.component';
 import { DailypayrollvaluesComponent } from './dailypayrollvalues/dailypayrollvalues.component';
 import { ItInventoryReportComponent } from './it-inventory-report/it-inventory-report.component';
+import { ChecksComponent } from './checks/checks.component';
 
 const routes:Routes = [
   {
@@ -225,6 +226,13 @@ const routes:Routes = [
     component:PaystubSendmailComponent,
     canActivate:[AuthGuard]
   },
+  {
+    path:'checks',
+    component:ChecksComponent,
+    canActivate:[AuthGuard]
+  },
+
+
   {
     path:'wavemaintenance',
     component:WaveMaintenanceComponent,

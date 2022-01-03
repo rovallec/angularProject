@@ -27,8 +27,13 @@
       <div class="list-group w-100" id="list-tab" role="tablist">
         <div *ngFor="let acc of accounts">
           <a class="list-group-item list-group-item-action w-100" [tabindex]="acc.idaccounts"
-            [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}" style="cursor: pointer;"
-            (click)="setAccount(acc)">{{acc.name}}</a>
+            style="cursor: pointer;" *ngIf="selectedAccount.idaccounts != acc.idaccounts" (click)="setAccount(acc)">
+            {{acc.name}}
+          </a>
+          <a class="list-group-item list-group-item-action w-100 active" [tabindex]="acc.idaccounts"
+            style="cursor: pointer;" (click)="setAccount(acc)" *ngIf="selectedAccount.idaccounts == acc.idaccounts">
+            {{acc.name}}
+          </a>
         </div>
       </div>
     </div>
@@ -164,3 +169,6 @@
       </table>
     </div>
   </div>
+
+  
+  

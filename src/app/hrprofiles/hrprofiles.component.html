@@ -1941,12 +1941,18 @@
                         </div>
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-5"></div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2" *ngIf="!viewRecProd">
                                 <label>Amount:</label>
-                                <input type="number" class="form-control" [(ngModel)]="actuallProc.idprocesses"
-                                    [disabled]="viewRecProd">
+                                <input type="number" class="form-control" [(ngModel)]="actuallProc.mount" (change)="updateMountProc(actuallProc.mount)"
+                                    [disabled]="viewRecProd" min="0.5" max="availableVacations" *ngIf="haveAvailableVacations">
+                                <input type="number" class="form-control" [(ngModel)]="actuallProc.mount" (change)="updateMountProc(actuallProc.mount)"
+                                  [disabled]="viewRecProd" min="0.5" max="availableVacations" *ngIf="!haveAvailableVacations">
                             </div>
-                            <div class="form-group col-md-5"></div>
+                            <div class="form-group col-md-5">
+                                <!--<button class="form-control" type="button" data-target="#notificationModal" data-toggle="modal">
+                                    <i class="fas fa-file-upload"></i>
+                                </button>-->
+                            </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                             <div class="form-group col-md-2">
@@ -2889,6 +2895,27 @@
         </div>
     </div>
 </div>
+<<<<<<< HEAD
+
+<!---------------------------------------------------------------------------------- NOTIFICATION MODAL ------------------------------------------------>
+<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notification"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h5 class="modal-title" id="notification">ERROR!!</h5>
+            </div>
+            <div class="modal-body">
+                <p>
+                  The vacations entered are less than those available.
+                </p>
+            </div>
+            <div class="modal-footer d-flex justify-content-between mt-2">
+                <button type="button" class="btn btn-outline-error" data-dismiss="modal">CLOSE</button>
+                <!--<button type="button" class="btn btn-outline-primary" (click)="saveFile()" [disabled]="loading" data-dismiss="modal">
+                  {{  (loading) ? 'Loading...' : 'SAVE' }}
+                </button>-->
+=======
 <button hide=true data-target="#alertModal" data-toggle="modal" id='dispay_alert'></button>
 <!---------------------------------------------------------------------------------- ALERT MODAL ------------------------------------------------>
 <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel"
@@ -2903,6 +2930,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-center">
                 <button class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+>>>>>>> master
             </div>
         </div>
     </div>

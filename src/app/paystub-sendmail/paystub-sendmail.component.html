@@ -25,11 +25,14 @@
         <div class="row col-md-12" style="margin-top: 10px; padding-right:0%">
             <div class="col-md-2">
                 <div class="list-group w-100" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action w-100" *ngFor="let period of periods"
-                        [tabindex]="period.idperiods" (click)="setSelection(period)"
-                        [ngClass]="{'active': selectedPeriod.idperiods == period.idperiods}"
-                        style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO
-                        {{period.end}}</a>
+                  <div *ngFor="let period of periods" >
+                    <a class="list-group-item list-group-item-action w-100 active" [tabindex]="period.idperiods"
+                      (click)="setSelection(period)" *ngIf="selectedPeriod.idperiods==period.idperiods"
+                        style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO {{period.end}}</a>
+                    <a class="list-group-item list-group-item-action w-100" [tabindex]="period.idperiods"
+                      (click)="setSelection(period)" *ngIf="selectedPeriod.idperiods!==period.idperiods"
+                      style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO {{period.end}}</a>
+                  </div>
                 </div>
             </div>
             <div class="col-md-1"></div>
@@ -280,4 +283,3 @@
       </div>
     </div>
   </div>
-  

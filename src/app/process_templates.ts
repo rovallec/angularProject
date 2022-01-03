@@ -1,6 +1,7 @@
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { employees } from './fullProcess';
 import { profiles, profiles_family, profiles_histories } from './profiles';
+import { process } from './process';
 
 
 export type StringOrNumber = string;
@@ -1790,6 +1791,15 @@ export class selectedOption {
     }
 }
 
+export class checkclass {
+    checked: boolean;
+    object: any;
+    constructor(Achecked: boolean, Aobj: any) {
+        this.checked = Achecked;
+        this.object = Aobj;
+    }
+}
+
 export class accountingPolicies {
     external_id: string;
     amount: string;
@@ -2245,6 +2255,29 @@ export class all_templates extends clauses_templates {
   }
 }
 
+export class hr_process extends process {
+  mount: number;
+  constructor() {
+    super();
+    this.mount = 0;
+  }
+}
+
+export class selcredits extends credits {
+  checked: boolean;
+  constructor() {
+    super();
+    this.checked = false;
+  }
+}
+
+export class seldebits extends debits {
+  checked: boolean;
+  constructor() {
+    super();
+    this.checked = false;
+  }
+}
 export class tk_import{
     idpayments:string;
     client_bonus:string;
@@ -2737,4 +2770,70 @@ export class assets{
         this.employee_name = null;
         this.date = null;
     }
+}
+
+export class checks{
+  idchecks: string;
+  place: string;
+  date: string;
+  value: string;
+  name: string;
+  description: string;
+  negotiable: string;
+  checked: boolean;
+  nearsol_id: string;
+  client_id: string;
+  id_account: string;
+  document: string; // check number
+  bankAccount: string;
+  printDetail: boolean;
+  constructor(){
+    this.idchecks = null;
+    this.place = null;
+    this.date = null;
+    this.value = null;
+    this.name = null;
+    this.description = null;
+    this.negotiable = null;
+    this.checked = false;
+    this.nearsol_id = null;
+    this.client_id = null;
+    this.id_account = null;
+    this.document = null;
+    this.bankAccount = null;
+    this.printDetail = false;
+  }
+}
+export class checksDetails {
+  id_check: string;
+  id_detail: string;
+  id_account: string;
+  name: string;
+  id_movement: string;
+  movement: string;
+  debits: string;
+  credits: string;
+  checked: boolean;
+  constructor() {
+    this.id_check = null;
+    this.id_detail = null;
+    this.id_account = null;
+    this.name = null;
+    this.debits = null;
+    this.credits = null;
+    this.checked = false;
+  }
+}
+
+export class checkbooks {
+  idcheckbook: string;
+  account_bank: string;
+  name_bank: string;
+  next_correlative: number;
+  constructor() {
+    this.idcheckbook = null;
+    this.account_bank = null;
+    this.name_bank = null;
+    this.next_correlative = null;
+  }
 }

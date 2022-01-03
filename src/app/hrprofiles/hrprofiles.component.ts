@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal, file_info, alertModal } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal, file_info, alertModal, hr_process } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -72,8 +72,8 @@ export class HrprofilesComponent implements OnInit {
   discilplinary_processes: disciplinary_processes[] = [];
   insurances: insurances = new insurances;
   beneficiaries: beneficiaries[] = [];
-  process_templates: process[] = [];
-  processRecord: process[] = [];
+  process_templates: hr_process[] = [];
+  processRecord: hr_process[] = [];
   allAccounts: accounts[] = [];
   municipios: string[] = [];
   tovalidate: profiles[] = [];
@@ -97,7 +97,7 @@ export class HrprofilesComponent implements OnInit {
   editInview: boolean = false;
   viewRecProd: boolean = false;
   addProc: boolean = false;
-  actuallProc: process = new process;
+  actuallProc: hr_process = new hr_process;
   newProcess: boolean = false;
   addBeneficiary: boolean = false;
   modifyInsurance: boolean = false;
@@ -132,12 +132,13 @@ export class HrprofilesComponent implements OnInit {
   availableVacations: number = 0;
   returnedVacations: number = 0;
   dismissedVacations: number = 0;
+  haveAvailableVacations = function haveAvailableVacations() { return this.actuallProc.mount <= Number(this.availableVacations); };
   actualPeriod: periods = new periods;
   complete_adjustment: boolean = false;
 
   original_account: string = null;
 
-  approvals: users[] = [new users];
+  approvals: users[] = [];
   motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid', 'COVID Unpaid', 'COVID Paid', 'IGSS Paid'];
 
   maxDate: string = null;
@@ -759,12 +760,12 @@ export class HrprofilesComponent implements OnInit {
     this.modifyInsurance = false;
     this.newProcess = false;
     this.addProc = false;
-    this.actuallProc = new process;
+    this.actuallProc = new hr_process;
     this.viewRecProd = false;
     this.getProcessesrecorded();
     this.actualTerm = new terminations;
     this.actualReport = new reports;
-    this.actuallProc = new process;
+    this.actuallProc = new hr_process;
     this.actualRise = new rises;
     this.actualAdvance = new advances;
     this.apiService.getPeriods().subscribe((p: periods[]) => {
@@ -1086,7 +1087,7 @@ export class HrprofilesComponent implements OnInit {
         if (this.activeRequest.dp_grade == 'Terminacion Laboral') {
           this.newRequest = false;
           this.storedRequest = false;
-          let act: process = new process;
+          let act: hr_process = new hr_process;
           act.idprocesses = "8";
           act.name = 'Termination';
           act.descritpion = 'Employee Termination';
@@ -1194,7 +1195,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getTemplates() {
-    this.apiService.getTemplates().subscribe((prs: process[]) => {
+    this.apiService.getTemplates().subscribe((prs: hr_process[]) => {
       this.process_templates = prs;
     });
   }
@@ -1206,7 +1207,7 @@ export class HrprofilesComponent implements OnInit {
     }
   }
 
-  setProcess(act: process) {
+  setProcess(act: hr_process) {
     this.newRequest = false;
     this.storedRequest = false;
     this.viewRecProd = false;
@@ -1247,10 +1248,10 @@ export class HrprofilesComponent implements OnInit {
         this.actualTerm.headsets = "YES";
         this.actualTerm.nearsol_experience = '0';
         this.actualTerm.supervisor_experience = '0';
-        let proc: process = new process;
+        let proc: hr_process = new hr_process;
         proc.id_profile = this.workingEmployee.id_profile;
         proc.id_role = '1';
-        this.apiService.getProcesses(proc).subscribe((processes: process[]) => {
+        this.apiService.getProcesses(proc).subscribe((processes: hr_process[]) => {
           processes.forEach(process => {
             if (process.name == 'First Interview') {
               let prP: fullPreapproval = new fullPreapproval;
@@ -1398,7 +1399,7 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Pay Vacations':
           let cnt: number = 0;
-          for (let i = 0; i < (parseFloat(this.actuallProc.idprocesses)); i++) {
+          for (let i = 0; i < (parseFloat(this.actuallProc.mount.toString())); i++) {
             this.apiService.getPeriods().subscribe((periods: periods[]) => {
               this.apiService.getPayments(periods[periods.length - 1]).subscribe((payment: payments[]) => {
                 this.currentPayVacations = true;
@@ -1408,7 +1409,7 @@ export class HrprofilesComponent implements OnInit {
                 this.activeVacation.id_user = this.authUser.getAuthusr().iduser;
                 this.activeVacation.id_department = this.workingEmployee.account;
                 this.activeVacation.date = this.todayDate;
-                this.activeVacation.notes = this.actuallProc.descritpion;
+                this.activeVacation.notes = 'Total: ' + this.actuallProc.mount + ' | ' + this.actuallProc.descritpion;
                 this.activeVacation.took_date = this.todayDate;
                 this.insertVacation();
                 let cred: credits = new credits;
@@ -1545,7 +1546,7 @@ export class HrprofilesComponent implements OnInit {
   getProcessesrecorded() {
     this.countTerm = 0;
     this.apiService.getEmployeeId({ id: this.route.snapshot.paramMap.get('id') }).subscribe((emp: employees) => {
-      this.apiService.getProcRecorded({ id: emp.idemployees }).subscribe((prc: process[]) => {
+      this.apiService.getProcRecorded({ id: emp.idemployees }).subscribe((prc: hr_process[]) => {
         this.processRecord = prc;
         this.processRecord.forEach(pr => {
           if (pr.name == 'Termination') {
@@ -1556,7 +1557,7 @@ export class HrprofilesComponent implements OnInit {
     })
   }
 
-  viewProcess(pr: process) {
+  viewProcess(pr: hr_process) {
     this.viewRecProd = true;
     this.actuallProc = pr;
     switch (this.actuallProc.name) {
@@ -1570,10 +1571,10 @@ export class HrprofilesComponent implements OnInit {
       case 'Termination':
         this.apiService.getTerm(this.actuallProc).subscribe((trm: terminations) => {
           this.countTerm++;
-          let proc: process = new process;
+          let proc: hr_process = new hr_process;
           proc.id_profile = this.profile[0].id_profile;
           proc.id_role = '1';
-          this.apiService.getProcesses(proc).subscribe((processes: process[]) => {
+          this.apiService.getProcesses(proc).subscribe((processes: hr_process[]) => {
             processes.forEach(process => {
               if (process.name == 'First Interview') {
                 let prP: fullPreapproval = new fullPreapproval;
@@ -2247,7 +2248,7 @@ export class HrprofilesComponent implements OnInit {
         this.municipios.push('Santa Catarina Barahona');
         break;
       case 'San Marcos':
-        this.municipios.push('San Marcos ');
+        this.municipios.push('San Marcos');
         this.municipios.push('Ayutla');
         this.municipios.push('Catarina');
         this.municipios.push('Comitancillo');
@@ -2422,7 +2423,7 @@ export class HrprofilesComponent implements OnInit {
   mergeProfile() {
     this.validating = true;
     this.apiService.insertMergeProfile({ id_old: this.workingEmployee.id_profile, id_new: this.selectedToMerge }).subscribe((str: string) => {
-      let proc: process = new process;
+      let proc: hr_process = new hr_process;
       proc.id_profile = this.workingEmployee.idemployees;
       proc.id_user = this.authUser.getAuthusr().iduser;
       proc.idprocesses = '20';
@@ -2745,4 +2746,14 @@ export class HrprofilesComponent implements OnInit {
       "&days_requested=" + this.activeVacation.count + "&nearsol_id=" + this.workingEmployee.nearsol_id ;
     window.open(url, "_blank");
   }
+
+  updateMountProc(Amount: number) {
+    if (this.availableVacations <= Amount) {
+      this.actuallProc.mount = Amount;
+    } else {
+      this.actuallProc.mount = this.availableVacations;
+    }
+  }
 }
+
+
