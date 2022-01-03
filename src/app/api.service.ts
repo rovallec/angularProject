@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates, roster_types, rosters, roster_times, roster_weeks, tk_upload, patronal, holiday, asset_movements, movement_types, assets, StringOrNumber, asset_types } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates, roster_types, rosters, roster_times, roster_weeks, tk_upload, patronal, holiday, asset_movements, movement_types, assets, StringOrNumber, asset_types, checks, checksDetails, checkbooks } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -24,8 +24,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = environment.PHP_root; // Desarrollo
-PHP_API_SERVER = "http://172.18.2.45";  // produccion
+PHP_API_SERVER = environment.PHP_root; // Desarrollo
+//PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -497,6 +497,10 @@ getAllPeriods(){
   return this.httpClient.get<periods[]>(`${this.PHP_API_SERVER}/phpscripts/getAllPeriods.php`);
 }
 
+getPeriodsByEmployee(id: any){
+  return this.httpClient.post<periods[]>(`${this.PHP_API_SERVER}/phpscripts/getPeriodsByEmployee.php`, id);
+}
+
 getDeductions(any:any){
   return this.httpClient.post<deductions[]>(`${this.PHP_API_SERVER}/phpscripts/getDeductions.php`,any);
 }
@@ -907,6 +911,28 @@ getBilling(any:any){
 
 saveBilling(any:any){
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertBilling.php`, any);
+}
+
+saveCheck(any: any) {
+  //let any: { head: checks, detail: checksDetails[] } = { head, detail };
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/saveCheck.php`, any);
+}
+
+getCheckBooks() {
+  return this.httpClient.get<checkbooks[]>(`${this.PHP_API_SERVER}/phpscripts/getCheckBooks.php`);
+}
+
+getCheck(any: any) {
+  return this.httpClient.post<checks>(`${this.PHP_API_SERVER}/phpscripts/getCheck.php`, any);
+}
+
+getCheckDetails(any: any) {
+  return this.httpClient.post<checksDetails[]>(`${this.PHP_API_SERVER}/phpscripts/getCheckDetails.php`, any);
+}
+
+printChecks(any: any) {
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/printChecks.php`, any);
+
 }
 
 sendMail(any:any){

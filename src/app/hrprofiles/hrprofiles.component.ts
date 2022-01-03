@@ -138,7 +138,7 @@ export class HrprofilesComponent implements OnInit {
 
   original_account: string = null;
 
-  approvals: users[] = [new users];
+  approvals: users[] = [];
   motives: string[] = ['Leave of Absence Unpaid', 'Maternity', 'Others Paid', 'Others Unpaid', 'IGSS Unpaid', 'VTO Unpaid', 'COVID Unpaid', 'COVID Paid', 'IGSS Paid'];
 
   maxDate: string = null;

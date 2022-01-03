@@ -169,7 +169,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let cred of credits" [ngClass]="{'table-warning':(cred.status === 'ACREDIT' || cred.status === 'PAID')}">
-                                                    <td style="text-align: center;"><input type="checkbox" [value]="cred.iddebits" 
+                                                    <td style="text-align: center;"><input type="checkbox" [value]="cred.iddebits"
                                                         [checked]="cred.status === 'PAID' || cred.status === 'ACREDIT'" (change)="selectedCredit($event, 'credits')"
                                                         [disabled]="acreditType === 'debits' || cred.status === 'ACREDIT' || cred.status === 'PAID'"></td>
                                                     <td (click)="setCredit(cred)" data-target="#deduction_view"
@@ -201,7 +201,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr *ngFor="let deb of debits" [ngClass]="{'table-warning':(deb.status === 'ACREDIT' || deb.status === 'PAID')}">
-                                                    <td style="text-align: center;"><input type="checkbox" [value]="deb.iddebits" 
+                                                    <td style="text-align: center;"><input type="checkbox" [value]="deb.iddebits"
                                                         [checked]="deb.status === 'PAID' || deb.status === 'ACREDIT'" (change)="selectedDebit($event, 'debits')"
                                                         [disabled]="acreditType === 'credits' || deb.status === 'ACREDIT' || deb.status === 'PAID'"></td>
                                                     <td (click)="setDeduction(deb)" data-target="#deduction_view"
@@ -414,7 +414,7 @@
                                         <th>STATUS</th>
                                     </thead>
                                     <tbody>
-                                        <tr class="selectable" *ngFor="let service of services" 
+                                        <tr class="selectable" *ngFor="let service of services"
                                         [ngClass]="{'table-danger':service.status == '0','table-success':service.status == '1'}"
                                         (mousedown)="getService(service)" data-target="#servicesView"
                                         data-toggle="modal" style="user-select: none; -moz-user-select: none; -khtml-user-select: none; text-align: center;">
@@ -424,7 +424,7 @@
                                             <td>{{service.max}}</td>
                                             <td>{{service.current}}</td>
                                             <td>{{service.frecuency}}</td>
-                                            <td *ngIf="service.status == 1">ACTIVE</td><td *ngIf="service.status == 0">INACTIVE</td>
+                                            <td *ngIf="service.status == '1'">ACTIVE</td><td *ngIf="service.status == '0'">INACTIVE</td>
                                         </tr>
                                     </tbody>
                                 </table>
