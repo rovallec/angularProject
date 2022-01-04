@@ -323,7 +323,9 @@ export class HrprofilesComponent implements OnInit {
     });
 
     this.apiService.getApprovers().subscribe((usrs: users[]) => {
-      let reporters: users[] = usrs.filter(usr => usr.department == this.workingEmployee.account);
+      // Se comentarea ya que al editar un supervisor si puede pertenecer a otra cuenta.
+      //let reporters: users[] = usrs.filter(usr => usr.department == this.workingEmployee.account);
+      let reporters: users[] = usrs;
       this.approvals = reporters;
     });
 

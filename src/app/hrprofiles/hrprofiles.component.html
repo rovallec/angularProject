@@ -64,7 +64,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label>Joining Date:</label>
-                        <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile[0].date_joining">
+                        <input type="date" class="form-control" [disabled]="true" [(ngModel)]="profile[0].date_joining" datetime="dd-MM-yyyy">
                     </div>
                     <div class="form-group col-md-2">
                         <label for="txt_nationality">Avaya ID:</label>
@@ -129,7 +129,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Date:</label>
                                     <input type="date" class="form-control"
-                                        (change)="getAttendences($event.target.value)" [value]="todayDate">
+                                        (change)="getAttendences($event.target.value)" [value]="todayDate" datetime="dd-MM-yyyy">
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
@@ -208,8 +208,8 @@
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-2">
                                     <label>Date:</label>
-                                    <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.attendance_date"
-                                        class="form-control">
+                                    <input type="date" [disabled]="true" [(ngModel)]="attAdjudjment.attendance_date"
+                                        class="form-control" datetime="dd-MM-yyyy">
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label>Before:</label>
@@ -254,8 +254,8 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Date:</label>
-                                    <input type="text" [disabled]="true" [(ngModel)]="attAdjudjment.date"
-                                        class="form-control">
+                                    <input type="date" [disabled]="true" [(ngModel)]="attAdjudjment.date"
+                                        class="form-control" datetime="dd-MM-yyyy">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Status:</label>
@@ -441,12 +441,12 @@
                                 <div class="form-group col-md-4">
                                     <label>Start:</label>
                                     <input type="date" class="form-control" [(ngModel)]="activeLeave.start"
-                                        [disabled]="showLeave">
+                                        [disabled]="showLeave" datetime="dd-MM-yyyy">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>End:</label>
                                     <input type="date" class="form-control" [(ngModel)]="activeLeave.end"
-                                        [disabled]="showLeave">
+                                        [disabled]="showLeave" datetime="dd-MM-yyyy">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Approved:</label>
@@ -472,8 +472,8 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Date:</label>
-                                    <input type="text" [disabled]="true" class="form-control"
-                                        [(ngModel)]="activeLeave.date">
+                                    <input type="date" [disabled]="true" class="form-control"
+                                        [(ngModel)]="activeLeave.date" datetime="dd-MM-yyyy">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Status:</label>
@@ -557,7 +557,7 @@
                                 <div class="form-group col-md-8">
                                     <label>Date:</label>
                                     <input type="date" class="form-control"
-                                        (change)="pushVacationDate($event.target.value)" *ngIf="editVac">
+                                        (change)="pushVacationDate($event.target.value)" *ngIf="editVac" datetime="dd-MM-yyyy">
                                     <input type="text" class="form-control" [(ngModel)]="activeVacation.took_date"
                                         *ngIf="!editVac" disabled="true">
                                 </div>
@@ -574,7 +574,7 @@
                                 <div class="form-group col-md-3">
                                     <label>Date:</label>
                                     <input type="text" class="form-control" disabled="true"
-                                        [(ngModel)]="activeVacation.date">
+                                        [(ngModel)]="activeVacation.date" datetime="dd-MM-yyyy">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Days:</label>
@@ -730,8 +730,8 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Date:</label>
-                                    <input type="text" class="form-control" [disabled]=true
-                                        [(ngModel)]="activeRequest.date">
+                                    <input type="date" class="form-control" [disabled]=true
+                                        [(ngModel)]="activeRequest.date" datetime="dd-MM-yyyy">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Status:</label>
@@ -814,7 +814,7 @@
                                 <div class="form-group col-md-3">
                                     <label>Imposition Date:</label>
                                     <input type="date" (change)="pushRequestDate($event.target.value)"
-                                        class="form-control"
+                                        class="form-control" datetime="dd-MM-yyyy"
                                         *ngIf="activeRequest.status != 'DISPATCHED' && activeRequest.status != 'CLOSED' &&  activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED'">
                                     <input type="text" class="form-control" [(ngModel)]="activeRequest.imposition_date"
                                         *ngIf="activeRequest.status !='ACCEPTED'" [disabled]="true">
@@ -884,7 +884,7 @@
                                 <div class="form-group col-md-4">
                                     <label>Date:</label>
                                     <input class="form-control" type="date"
-                                        (change)="pushAudienceDate($event.target.value)"
+                                        (change)="pushAudienceDate($event.target.value)" datetime="dd-MM-yyyy"
                                         *ngIf=" activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED'">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.audience_date"
@@ -951,7 +951,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Day 1:</label>
                                     <input type="date" (change)="pushDay1($event.target.value)" class="form-control"  [(ngModel)]="activeRequest.day_1"
-                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension">
+                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension" datetime="dd-MM-yyyy">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_1"
                                         *ngIf="!editingSuspension && (activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE' || activeRequest.status === 'COMPLETED')">
@@ -960,7 +960,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Day 2:</label>
                                     <input type="date" (change)="pushDay2($event.target.value)" class="form-control" [(ngModel)]="activeRequest.day_2"
-                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension">
+                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension" datetime="dd-MM-yyyy">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_2"
                                         *ngIf="!editingSuspension && (activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE' || activeRequest.status === 'COMPLETED')">
@@ -971,7 +971,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Day 3:</label>
                                     <input type="date" (change)="pushDay3($event.target.value)" class="form-control" [(ngModel)]="activeRequest.day_3"
-                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension">
+                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension" datetime="dd-MM-yyyy">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_3"
                                         *ngIf="!editingSuspension && (activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE' || activeRequest.status === 'COMPLETED')">
@@ -980,7 +980,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Day 4:</label>
                                     <input type="date" (change)="pushDay4($event.target.value)" class="form-control" [(ngModel)]="activeRequest.day_4"
-                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension">
+                                        *ngIf="(activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED') || editingSuspension" datetime="dd-MM-yyyy">
                                     <input class="form-control" type="text" [disabled]="true"
                                         [(ngModel)]="activeRequest.day_4"
                                         *ngIf="!editingSuspension && (activeRequest.status === 'DISPATCHED' || activeRequest.status === 'INACTIVE' || activeRequest.status === 'COMPLETED')">
@@ -1036,7 +1036,7 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input class="form-control" [(ngModel)]="insurances.date" [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="insurances.date" [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>User:</label>
@@ -1563,8 +1563,8 @@
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="families">Birthdate:</label>
-                                    <input type="text" class="form-control" [disabled]="true"
-                                        value="{{ selected_family.affinity_birthdate }}">
+                                    <input type="date" class="form-control" [disabled]="true"
+                                        value="{{ selected_family.affinity_birthdate }}" datetime="dd-MM-yyyy">
                                 </div>
                             </div>
                             <!--   Botones de family -->
@@ -1629,8 +1629,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
 
@@ -1684,8 +1684,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
 
@@ -1754,8 +1754,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
 
@@ -1800,7 +1800,7 @@
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
                                 <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="!newProcess">
+                                    [disabled]="!newProcess" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -1863,8 +1863,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -1883,16 +1883,16 @@
                             <div class="form-group col-md-3">
                                 <label>Approved Date:</label>
                                 <input type="date" class="form-control" (change)="setApproveddate($event.target.value)"
-                                    *ngIf="!viewRecProd">
-                                <input type="text" class="form-control" [(ngModel)]="actualSurvey.approved_date"
-                                    *ngIf="viewRecProd" [disabled]="true">
+                                    *ngIf="!viewRecProd" datetime="dd-MM-yyyy">
+                                <input type="date" class="form-control" [(ngModel)]="actualSurvey.approved_date"
+                                    *ngIf="viewRecProd" [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Notification Date:</label>
                                 <input type="date" class="form-control"
-                                    (change)="setNotificationdate($event.target.value)" *ngIf="!viewRecProd">
-                                <input type="text" class="form-control" [(ngModel)]="actualSurvey.notification_date"
-                                    *ngIf="viewRecProd" [disabled]="true">
+                                    (change)="setNotificationdate($event.target.value)" *ngIf="!viewRecProd" datetime="dd-MM-yyyy">
+                                <input type="date" class="form-control" [(ngModel)]="actualSurvey.notification_date"
+                                    *ngIf="viewRecProd" [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                             <div class="form-groop col-md-3">
                                 <label>Score:</label>
@@ -1928,8 +1928,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -1985,8 +1985,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -2002,9 +2002,9 @@
                             <div class="form-group col-md-6">
                                 <label>Emition Date:</label>
                                 <input type="date" (change)="setLetterDate($event.target.value)" class="form-control"
-                                    *ngIf="!viewRecProd">
-                                <input type="text" class="form-control" [(ngModel)]="actualLetters.emition_date"
-                                    [disabled]="true" *ngIf="viewRecProd">
+                                    *ngIf="!viewRecProd" datetime="dd-MM-yyyy">
+                                <input type="date" class="form-control" [(ngModel)]="actualLetters.emition_date"
+                                    [disabled]="true" *ngIf="viewRecProd" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -2055,8 +2055,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -2112,8 +2112,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -2142,10 +2142,10 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label>Approved Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualRise.approved_date"
-                                    *ngIf="viewRecProd" [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actualRise.approved_date"
+                                    *ngIf="viewRecProd" [disabled]="true" datetime="dd-MM-yyyy">
                                 <input type="date" class="form-control" (change)="setApprovalDate($event.target.value)"
-                                    *ngIf="!viewRecProd">
+                                    *ngIf="!viewRecProd" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -2158,24 +2158,24 @@
                         <div class="form-row col-md-12">
                             <div class="form-group col-md-4">
                                 <label>Effectve Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualRise.effective_date"
-                                    *ngIf="viewRecProd" [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actualRise.effective_date"
+                                    *ngIf="viewRecProd" [disabled]="true" datetime="dd-MM-yyyy">
                                 <input type="date" class="form-control" (change)="setEffectiveDate($event.target.value)"
-                                    *ngIf="!viewRecProd">
+                                    *ngIf="!viewRecProd" datetime="dd-MM-yyyy">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Trial Start:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualRise.trial_start"
-                                    *ngIf="viewRecProd" [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actualRise.trial_start"
+                                    *ngIf="viewRecProd" [disabled]="true" datetime="dd-MM-yyyy">
                                 <input type="date" class="form-control" (change)="setTrialStart($event.target.value)"
-                                    *ngIf="!viewRecProd">
+                                    *ngIf="!viewRecProd" datetime="dd-MM-yyyy">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Trial End:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualRise.trial_end"
-                                    *ngIf="viewRecProd" [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actualRise.trial_end"
+                                    *ngIf="viewRecProd" [disabled]="true" datetime="dd-MM-yyyy">
                                 <input type="date" class="form-control" (change)="setTrialEnd($event.target.value)"
-                                    *ngIf="!viewRecProd">
+                                    *ngIf="!viewRecProd" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
@@ -2206,8 +2206,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -2292,8 +2292,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Date:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                    [disabled]="true">
+                                <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                    [disabled]="true" datetime="dd-MM-yyyy">
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -2377,8 +2377,8 @@
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Date:</label>
-                                        <input type="text" class="form-control" [(ngModel)]="actuallProc.prc_date"
-                                            [disabled]="true">
+                                        <input type="date" class="form-control" [(ngModel)]="actuallProc.prc_date"
+                                            [disabled]="true" datetime="dd-MM-yyyy">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
@@ -2436,7 +2436,7 @@
                                             <div class="form-group col-md-12">
                                                 <label>Check Delivery:</label>
                                                 <input type="date" class="form-control"
-                                                    (change)="setCheckBanck($event.target.value)" *ngIf="!viewRecProd">
+                                                    (change)="setCheckBanck($event.target.value)" *ngIf="!viewRecProd" datetime="dd-MM-yyyy">
                                                 <input type="text" class="form-control"
                                                     [(ngModel)]="actualTerm.bank_check" [disabled]="true"
                                                     *ngIf="viewRecProd">
@@ -2457,12 +2457,12 @@
                                             <div class="form-group col-sm-6">
                                                 <label>From:</label>
                                                 <input type="date" class="form-control"
-                                                    (change)="setFromDate($event.target.value)">
+                                                    (change)="setFromDate($event.target.value)" datetime="dd-MM-yyyy">
                                             </div>
                                             <div class="form-group col-sm-6">
                                                 <label>To:</label>
                                                 <input type="date" class="form-control"
-                                                    (change)="setToDate($event.target.value)">
+                                                    (change)="setToDate($event.target.value)" datetime="dd-MM-yyyy">
                                             </div>
                                         </div>
                                         <div class="form-row col-md-12">
@@ -2530,9 +2530,9 @@
                                         <label>Valid From</label>
                                         <input type="date" class="form-control"
                                             (change)="setValidFrom($event.target.value)"
-                                            *ngIf="!viewRecProd &&  !dpTerm">
-                                        <input type="text" class="form-control" [(ngModel)]="actualTerm.valid_from"
-                                            [disabled]="true" *ngIf="viewRecProd  || dpTerm">
+                                            *ngIf="!viewRecProd &&  !dpTerm" datetime="dd-MM-yyyy">
+                                        <input type="date" class="form-control" [(ngModel)]="actualTerm.valid_from"
+                                            [disabled]="true" *ngIf="viewRecProd  || dpTerm" datetime="dd-MM-yyyy">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
