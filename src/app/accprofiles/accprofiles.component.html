@@ -229,28 +229,32 @@
                         <label style="font-size: 20px; font-weight: bold; margin-left:42.5%;margin-top: 10px;">PAYMENT
                             METHODS</label>
                         <div class="form-row col-md-12">
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <th style="text-align: center;">TYPE</th>
-                                    <th style="text-align: center;">NUMBER</th>
-                                    <th style="text-align: center;">BANK</th>
-                                    <th style="text-align: center;">ACTIVE</th>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let paymentMethod of paymentMethods"
-                                        (click)="setPaymentMethod(paymentMethod)">
-                                        <td style="text-align: center;">{{paymentMethod.type}}</td>
-                                        <td style="text-align: center;">{{paymentMethod.number}}</td>
-                                        <td style="text-align: center;">{{paymentMethod.bank}}</td>
-                                        <td style="text-align: center;">{{paymentMethod.predeterm}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="form-group col-md-1"></div>
+                            <div class="form-group col-md-10">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <th style="text-align: center;">TYPE</th>
+                                        <th style="text-align: center;">NUMBER</th>
+                                        <th style="text-align: center;">BANK</th>
+                                        <th style="text-align: center;">ACTIVE</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let paymentMethod of paymentMethods"
+                                            (click)="setPaymentMethod(paymentMethod)">
+                                            <td style="text-align: center;">{{paymentMethod.type}}</td>
+                                            <td style="text-align: center;">{{paymentMethod.number}}</td>
+                                            <td style="text-align: center;">{{paymentMethod.bank}}</td>
+                                            <td style="text-align: center;">{{paymentMethod.predeterm}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group col-md-1"></div>
                         </div>
                         <div class="form-row col-md-12">
-                            <div class="form-group col-md-2"></div>
-                            <div class="form-group col-md-8" style="border-bottom:solid 3px #e3f2fd;"></div>
-                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-md-1"></div>
+                            <div class="form-group col-md-10" style="border-bottom:solid 3px #e3f2fd;"></div>
+                            <div class="form-group col-md-1"></div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="newPaymentMethod || recordPaymentMethod"
                             style="margin-top:25px">
@@ -670,7 +674,7 @@
                 </button>
             </div>
             <div class="modal-body" style="padding:5px">
-                <div class="col-md-12" >
+                <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-4">
                             <label>Payment Method:</label>
