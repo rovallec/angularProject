@@ -21,7 +21,7 @@ $sql = "SELECT paystub_details.result, employees.client_id, paystub_details.idpa
         INNER JOIN employees ON employees.idemployees = payments.id_employee
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
-        INNER JOIN payment_methods ON payment_methods.active = 1 AND payment_methods.id_employee = payments.id_employee
+        INNER JOIN payment_methods ON payment_methods.predeterm = 1 AND payment_methods.id_employee = payments.id_employee
         INNER JOIN accounts ON accounts.idaccounts = employees.id_account
         INNER JOIN periods ON periods.idperiods = payments.id_period
         INNER JOIN users ON users.idUser = employees.reporter
