@@ -357,7 +357,8 @@ export class ChecksComponent implements OnInit {
   getCheck() {
     this.apiService.getCheck({ account: this.selectedCheckbook.account_bank, check: this.actualCheck.document }).subscribe((chb: checks) => {
       this.actualCheck = chb;
-      this.apiService.getCheckDetails({ idchecks: this.actualCheck.idchecks }).subscribe((det: checksDetails[]) => {
+      console.log(this.actualCheck);
+      this.apiService.getCheckDetails(this.actualCheck).subscribe((det: checksDetails[]) => {
         this.details = det;
       })
     })
