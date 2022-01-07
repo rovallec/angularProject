@@ -6,13 +6,13 @@ require 'database.php';
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $account = ($request->account);
-$check = ($request->check);
+$document = ($request->document);
 
 
 $res = [];
 $i = 0;
 
-$sql = "SELECT * FROM checks WHERE bankAccount = '$account' AND document = '$check;'";
+$sql = "SELECT * FROM checks WHERE bankAccount = '$account' AND document = '$document';";
 
 if ($result = mysqli_query($con, $sql)) {
   while($row = mysqli_fetch_assoc($result)){

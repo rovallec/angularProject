@@ -9,11 +9,12 @@
     $id = ($request->id);
     $result = [];
 
-    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name`, profiles.gender
+    $sql = "SELECT `users`.`user_name` AS `rep`, `employees`.*, `hires`.*, `accounts`.`name` AS `acc_name`, profiles.gender, p2.name 
     FROM `employees`
     INNER JOIN `hires` ON `hires`.`idhires` = `employees`.`id_hire`
     INNER JOIN `accounts` ON `accounts`.`idaccounts` = `employees`.`id_account`
     LEFT JOIN profiles ON profiles.idprofiles = hires.id_profile
+    LEFT JOIN (SELECT UPPER(CONCAT(TRIM(p1.first_name), ' ', TRIM(p1.second_name), ' ', TRIM(p1.first_lastname), ' ', TRIM(p1.second_lastname))) as name, p1.idprofiles from profiles p1) p2 on (p2.idprofiles = hires.id_profile)
     LEFT JOIN `users` ON `users`.`idUser` = `employees`.`reporter` WHERE `hires`.`id_profile` = $id;";
 
     if($res = mysqli_query($con, $sql)){
@@ -33,6 +34,7 @@
             $result['gender'] = $r['gender'];
             $result['nearsol_id'] = $r['nearsol_id'];
             $result['society'] = $r['society'];
+            $result['name'] = $r['name'];
         }
         echo(json_encode($result));
     }

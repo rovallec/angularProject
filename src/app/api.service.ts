@@ -914,7 +914,6 @@ saveBilling(any:any){
 }
 
 saveCheck(any: any) {
-  //let any: { head: checks, detail: checksDetails[] } = { head, detail };
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/saveCheck.php`, any);
 }
 
@@ -926,13 +925,12 @@ getCheck(any: any) {
   return this.httpClient.post<checks>(`${this.PHP_API_SERVER}/phpscripts/getCheck.php`, any);
 }
 
-getCheckDetails(idchecks: any) {
-  return this.httpClient.post<checksDetails[]>(`${this.PHP_API_SERVER}/phpscripts/getCheckDetails.php`, idchecks);
+getCheckDetails(check: checks) {
+  return this.httpClient.get<checksDetails[]>(`${this.PHP_API_SERVER}/phpscripts/getCheckDetails.php?idchecks=` + check[0].idchecks);
 }
 
-printChecks(any: any) {
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/printChecks.php`, any);
-
+printChecks(check: checks) {
+  return this.httpClient.get<string>(`${this.PHP_API_SERVER}/phpscripts/printChecks.php?idchecks=` + check.idchecks);
 }
 
 sendMail(any:any){

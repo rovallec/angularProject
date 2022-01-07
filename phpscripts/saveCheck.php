@@ -25,6 +25,7 @@ $id_account = $head2->id_account;
 $document = $head2->document;
 $bankAccount = $head2->bankAccount;
 $printDetail = $head2->printDetail;
+$payment = $head2->payment;
 
 if ($printDetail=='True') {
   $printDetail = 1;
@@ -51,14 +52,13 @@ try
     $sql2 = " INSERT INTO checks " .
               "(idchecks, place, date, value, name, description, negotiable, " .
               "  nearsol_id, client_id, id_account, document, bankAccount, " .
-              "  printDetail) " .
-              "VALUES (null, '$place', '$date', $value, '$name', '$description', '$negotiable', " . 
+              "  printDetail, payment) " .
+              "VALUES (null, '$place', str_to_date('$date','%d-%m-%Y'), $value, '$name', '$description', '$negotiable', " . 
               "  '$nearsol_id', '$client_id', '$id_account', '$document', '$bankAccount', " .
-              "  $printDetail);";
+              "  $printDetail, $payment);";
 
     if ($res2 = $transact->query($sql2) === true) {
-          $id_check = $transact->insert_id;
-          
+      $id_check = $transact->insert_id;
 
       /* ********************* */
       /* ****** DETAILS ****** */
@@ -80,7 +80,7 @@ try
                 " VALUES ($id_detail, $id_check, '$id_account', '$name', '$id_movement', '$movement', $debits, $credits);";
 
         if ($res3 = $transact->query($sql3) === true) {
-          echo("Success | $id_check | Proceso ejecutado correctamente.");
+          echo(json_encode("Success | " . $id_check . " | Proceso ejecutado correctamente."));
           http_response_code(200);
         } else {
           $error = mysqli_error($transact);
@@ -90,7 +90,9 @@ try
           throw new Exception($error);
           http_response_code(423);
         } // end if SQL 3
-      } // End foreach      
+      } // End foreach
+      echo(json_encode("Success | " . $id_check . " | Proceso ejecutado correctamente."));
+      http_response_code(200);
     } else {
       $error = mysqli_error($transact);
       $error = '422 -> ' . $error . $sql2;
@@ -106,7 +108,7 @@ try
     http_response_code(421);
   }
 } catch(\Throwable $e) {
-  $error = "Error: |Unable to update the check due to the following error: |" . $e->getMessage() . "|The changes will be reversed.";  
+  $error = "Error: |Unable to save the check due to the following error: |" . $e->getMessage() . "|The changes will be reversed.";  
   echo(json_encode($error));
   $transact->rollback();
   http_response_code(424);

@@ -1,11 +1,35 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
-
-header('Content-Type:application/pdf');
-header('Content-Disposition: attachment; filename="' . "Test.pdf" . '"');
-
 require 'funcionesVarias.php';
+
+$filename = "Test.pdf";
+header("Content-Type: application/pdf");
+//header("Content-type: application/octet-stream");
+header("Content-Disposition: attachment; filename=\" $filename \"");
+header('Content-Length: ' . filesize($file));
+readfile("Test.pdf");
+/*
+header("Content-type:application/pdf");
+header("Content-Disposition:attachment;filename='downloaded.pdf'");
+readfile("original.pdf");
+*/
+/*
+$name = 'file.pdf';
+//file_get_contents is standard function
+$content = file_get_contents($name);
+//header('Content-Type: application/pdf');
+header('Content-Length: '.strlen( $content ));
+header('Content-disposition: inline; filename="' . $name . '"');
+header('Cache-Control: public, must-revalidate, max-age=0');
+header('Pragma: public');
+header('Expires: Sat, 26 Jul 2022 05:00:00 GMT');
+header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+echo $content;
+
+*/
+
+
 
 try{
   $date = $_GET['date'];
@@ -125,5 +149,5 @@ echo "
       <td colspan='4'>$name</td>
     </tr>
   </table>
-</div>"
+</div>";
 ?>

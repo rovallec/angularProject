@@ -7,12 +7,18 @@
       aria-controls="nav-period" aria-selected="false">Checks by Period</a>
   </div>
 </nav>
-<!-- Cheques Individuales -->
+<!-- Cheques  -->
 <div class="tab-content" id="nav-tabContent">
+  <!-- Cheques Individuales -->
   <div class="tab-pane fade show active" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab">
     <div class="form-group" style="margin-left: 10px;">
       <div class="form-row mt">
-        <div class="col-md-5"></div>
+        <div class="col-md-5 ml align-self-md-auto">
+          <button type="button" class="btn btn-outline-primary" (click)="ngOnInit()">
+            New Check
+            <i class="fas fa-money-check-alt"></i>
+          </button>
+        </div>
         <div class="col-md-2">
           <h2>
             <label class="align-center col-form-label">
@@ -31,7 +37,7 @@
               Account:
             </label>
             <select class="form-control">
-              <option *ngFor="let checkbook of checkbooks" (click)="setCheckBook($event.target.value)">
+              <option *ngFor="let checkbook of checkbooks" (click)="setCheckBook($event.target.value)" [(ngModel)]="selectedCheckbook">
                 {{ checkbook.account_bank }}
               </option>
             </select>
@@ -46,7 +52,7 @@
             <label>
               Check:
             </label>
-            <input type="number" class="form-control" [(ngModel)]="actualCheck.document" placeholder="correlative" (keyup.enter)="getCheck()" [disabled]="actualCheck.idchecks!==null">
+            <input type="number" class="form-control" [(ngModel)]="actualCheck.document" placeholder="0" (keyup.enter)="getCheck()" [disabled]="actualCheck.idchecks!==null">
           </div>
         </div>
         <div class="form-row mt">
@@ -189,6 +195,7 @@
       </div>
     </div>
   </div>
+  <!-- Cheques por Período -->
   <div class="tab-pane fade show" id="nav-period" role="tabpanel" aria-labelledby="nav-period-tab">
     <div class="form-row col-sm-12">
       <div class="row col-md-12 mt">
@@ -200,24 +207,52 @@
             </select>
           </div>
           <div class="col-md-1"></div>
+          <!-- Encabezado Botones del período. -->
           <div class="col-md-9 d-flex flex-row-reverse">
             <div>
               <button class="form-control btn btn-outline-success" (click)="unCheckAll()" title="Send">
                 <i class="fas fa-share-square"></i>
               </button>
             </div>
-            <div style="margin-right:10px">
+            <div style="margin-right: 10px">
               <button class="form-control btn btn-outline-info" title="Select All" (click)="checkAll()">
                 <i class="fas fa-check-double"></i>
               </button>
             </div>
-            <div style="margin-right:10px">
+            <div style="margin-right: 10px">
               <button class="form-control btn btn-outline-danger" title="Clear Selection">
                 <i class="fas fa-ban"></i>
               </button>
             </div>
+            <!--
+            <div style="margin-right: 10px">
+              <button type="button" class="form-control btn btn-outline-primary" title="Print" (click)="printChecksByPeriod()">
+                <i class="fas fa-print"></i>
+              </button>
+            </div>
+            -->
+            <div style="margin-right: 10px">
+              <button type="button" class="form-control btn btn-outline-primary" title="Print" (click)="saveChecksByPeriod()">
+                <i class="fas fa-save"></i>
+              </button>
+            </div>
+            <div style="margin-right: 10px;" class="p-2 flex-fill bd-highlight">
+            </div>
+              <!-- Seleccionar chequera -->
+            <div class="col-md-2" style="margin-right: 125px;">
+              <select class="form-control">
+                <option *ngFor="let checkbook of checkbooks" (click)="setCheckBook($event.target.value)" [(ngModel)]="selectedCheckbook">
+                  {{ checkbook.account_bank }}
+                </option>
+              </select>
+            </div>
+            <div style="margin-right: 10px;">
+              <label>
+                Account:
+              </label>
+            </div>
           </div>
-
+          <!-- Detalle, Listado de empleados por período. -->
           <div class="row col-md-12" style="margin-top: 10px; padding-right:0%">
             <div class="col-md-2">
               <div class="list-group w-100" id="list-tab" role="tablist">
@@ -239,26 +274,33 @@
                   <th>CLIENT ID</th>
                   <th>NAME</th>
                   <th>ACCOUNT</th>
-                  <th>EMAIL</th>
+                  <th>VALUE</th>
                   <th>RESULT</th>
                   <th>SELECT</th>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let pst_view of paystubs" class='selectable'
-                    [ngClass]="{'table-secondary':pst_view.ignore}">
-                    <td (click)="setpaystubSelected(pst_view)" data-toggle="modal" data-target="#attendance_detail">
-                      {{pst_view.nearsol_id}}</td>
-                    <td (click)="setpaystubSelected(pst_view)" data-toggle="modal" data-target="#attendance_detail">
-                      {{pst_view.client_id}}</td>
-                    <td (click)="setpaystubSelected(pst_view)" data-toggle="modal" data-target="#attendance_detail">
-                      {{pst_view.employee_name}}</td>
-                    <td (click)="setpaystubSelected(pst_view)" data-toggle="modal" data-target="#attendance_detail">
-                      {{pst_view.account}}</td>
-                    <td (click)="setpaystubSelected(pst_view)" data-toggle="modal" data-target="#attendance_detail">
-                      {{pst_view.email}}</td>
-                    <td>{{pst_view.result}}</td>
-                    <td style="text-align: center;"><input type="checkbox" [checked]="pst_view.select"
-                        (change)="setStatus(pst_view)">
+                  <tr *ngFor="let cdemployees of creditsDebitsByEmployees" class='selectable'>
+                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                        {{ cdemployees.nearsol_id }}
+                      </td>
+                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                        {{ cdemployees.client_id }}
+                      </td>
+                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                        {{ cdemployees.name }}
+                      </td>
+                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                        {{ cdemployees.account }}
+                      </td>
+                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                        {{ cdemployees.total | number: '3.1-2' }}
+                      </td>
+                      <td>
+                        {{ cdemployees.check }}
+                      </td>
+                      <td style="text-align: center;"><input type="checkbox" [checked]="cdemployees.checked"
+                          (change)="setStatusCBEmp(cdemployees)">
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -270,8 +312,7 @@
 </div>
 
 <!----------------------------------------------------------- MODAL SAVE CHECK ---------------------------------------------------------->
-<div class="modal fade" id="alertCheck" tabindex="-1" role="dialog" aria-labelledby="alertCheckLabel"
-  aria-hidden="true">
+<div class="modal fade" id="alertCheck" tabindex="-1" role="dialog" aria-labelledby="alertCheckLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="dialog">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between mt-2">
@@ -372,6 +413,7 @@
               </table>
             </div>
           </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="form-control" data-dismiss="modal" (click)="addCreditsDebits()">Ok</button>
@@ -380,226 +422,94 @@
   </div>
 </div>
 
-<!----------------------------------------------------------- MODAL PAYSTUB ------------------------------------------------------------->
-<div class="modal fade" id="attendance_detail" tabindex="-1" role="dialog" aria-labelledby="eattendance_detailLabel">
-  <div class="modal-dialog modal-xl">
+<!---------------------------------------------------------------------------------- AlertShowCheck MODAL ------------------------------------------------>
+<div class="modal fade" id="alertShowCheck" tabindex="-1" role="dialog" aria-labelledby="alertShowCheckLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{selectedPaystub.employee_name}}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-        <body *ngIf="!selectedPaystub.select">
-          <table style='margin-top:25px;width:90%;margin-left:5%;border-collapse: unset; text-align:left'>
-            <tr>
-              <td>{{selectedPaystub.society}}</td>
-              <td style='text-align:right'>NIT: {{selectedPaystub.employeer_nit}}</td>
-            </tr>
-            <tr style='margin-left:2.5%;width:95%'>
-              <td>Jornada: {{selectedPaystub.account}}</td>
-              <td style='text-align:right'>Nomina No.: {{selectedPaystub.idpayments}}</td>
-            </tr>
-            <tr style='margin-left:2.5%;width:95%'>
-              <td>Recibo de Pago de Sueldos y Salarios</td>
-              <td></td>
-            </tr>
-            <tr style='border:solid black 2px; width:100%'>
-              <td colspan='2'>
-                <table style='width:100%;margin-top:2px;border:solid black 2px;border-collapse: unset; text-align:left'>
-                  <tr>
-                    <td>Por el Periodo del {{selectedPaystub.start}}</td>
-                    <td>Al {{selectedPeriod.end}}</td>
-                    <td>FORMA DE PAGO</td>
-                  </tr>
-                  <tr>
-                    <td>Codigo de Empleado {{selectedPaystub.nearsol_id}}</td>
-                    <td>NIT del empleado {{selectedPaystub.nit}}</td>
-                    <td>{{selectedPaystub.type}} {{selectedPaystub.number}}</td>
-                  </tr>
-                  <tr>
-                    <td>No. Afiliacion IGSS {{selectedPaystub.iggs}}</td>
-                    <td>Supervisor: {{selectedPaystub.user_name}}</td>
-                    <td>{{selectedPaystub.bank}}</td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td colspan='2'>
-                <table style='width:100%;margin-top:0px;border:solid black 2px;border-collapse: unset; text-align:left'>
-                  <tr>
-                    <td>Dias del Periodo:</td>
-                    <td>15</td>
-                    <td>Dias Descontados:</td>
-                    <td>{{selectedPaystub.discounted_days}}</td>
-                    <td>Horas Extraordinarias:</td>
-                    <td>{{selectedPaystub.ot_hours}}</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Horas Descontadas:</td>
-                    <td>{{selectedPaystub.discounted_hours}}</td>
-                    <td>Horas Asueto:</td>
-                    <td>{{selectedPaystub.holidays_hours}}</td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <table style='width:100%;margin-top:0px;border:solid black 2px;border-collapse: unset; text-align:left'>
-                  <tr>
-                    <td>Sueldo Ordinario:</td>
-                    <td>{{selectedPaystub.base}}</td>
-                  </tr>
-                  <tr>
-                    <td>Sueldo ExtraOrdinario:</td>
-                    <td>{{selectedPaystub.ot}}</td>
-                  </tr>
-                  <tr>
-                    <td>Sueldo ExtraOrdinario Dias De Asueto:</td>
-                    <td>{{selectedPaystub.holidays}}</td>
-                  </tr>
-                  <tr>
-                    <td>Bonificación Incentivo (Decretos 78-89,7-2000 y 37-2001):</td>
-                    <td>{{selectedPaystub.decreto}}</td>
-                  </tr>
-                  <tr>
-                    <td>Bonificación por Productividad (Decretos 78-89,7-2000 y 37-2001):</td>
-                    <td>{{selectedPaystub.bonificaciones}}</td>
-                  </tr>
-                  <tr>
-                    <td>Bonificación por Eficiencia (Decretos 78-89,7-2000 y 37-2001) Bonos:</td>
-                    <td>{{selectedPaystub.eficiencia}}</td>
-                  </tr>
-                  <tr>
-                    <td>Bonificación por Eficiencia (Decretos 78-89,7-2000 y 37-2001) Ajustes:</td>
-                    <td>{{selectedPaystub.ajustes}}</td>
-                  </tr>
-                  <tr>
-                    <td style='color:white'>.</td>
-                    <td></td>
-                  </tr>
-                </table>
-              </td>
-              <td>
-                <table
-                  style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
-                  <tr>
-                    <td>IGSS Laboral:</td>
-                    <td>({{selectedPaystub.igss_amount}})</td>
-                  </tr>
-                  <tr>
-                    <td>Descuentso (Bus/Parqueo):</td>
-                    <td>({{selectedPaystub.parqueo}})</td>
-                  </tr>
-                  <tr>
-                    <td>Otras Deducciones:</td>
-                    <td>({{selectedPaystub.otras_deducciones}})</td>
-                  </tr>
-                  <tr>
-                    <td>ANticipo Sobre Sueldos:</td>
-                    <td>({{selectedPaystub.anticipos}})</td>
-                  </tr>
-                  <tr>
-                    <td>ISR:</td>
-                    <td>({{selectedPaystub.isr}})</td>
-                  </tr>
-                  <tr>
-                    <td style='color:white'>.</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td style='color:white'>.</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td style='color:white'>.</td>
-                    <td></td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td colspan='2'>
-                <div style='position:relative;width:100%'>
-                  <div style='width:33%;float:left'>
-                    <table
-                      style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
-                      <tr>
-                        <td>Total Devengado:</td>
-                        <td>{{selectedPaystub.total_cred}}</td>
-                      </tr>
-                      <tr>
-                        <td style='border-bottom:solid black 3px'>Total Descuentos:</td>
-                        <td style='border-bottom:solid black 3px'>({{selectedPaystub.total_deb}})</td>
-                      </tr>
-                      <tr>
-                        <td>Sueldo Liquido:</td>
-                        <td>{{selectedPaystub.liquido}}</td>
-                      </tr>
-                    </table>
-                  </div>
-                  <div style='width:66.6%;float:left;margin-left:0.4%'>
-                    <table
-                      style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
-                      <tr>
-                        <td style='color:white'>f</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td style='text-align:right;border-bottom:solid white 1px'>f:</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-                      <tr>
-                        <td></td>
-                        <td colspan='2'
-                          style='border-top:solid black 2px;text-align:center;border-collapse: unset; text-align:center'>
-                          {{selectedPaystub.employee_name}}</td>
-                        <td></td>
-                      </tr>
-                    </table>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan='2'>
-                <div style='position:relative;'>
-                  <table
-                    style='width:100%;margin-top:0px;border:solid black 2px;height:100%;border-collapse: unset; text-align:left'>
-                    <tr>
-                      <td>Observaciones:</td>
-                      <td colspan='4'></td>
-                    </tr>
-                    <tr>
-                      <td style='color:white'>.</td>
-                      <td colspan='4'></td>
-                    </tr>
-                  </table>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </body>
-
-        <body *ngIf="selectedPaystub.select" id='template' [innerHTML]="html">
-        </body>
-        <div class="row col-md-12 d-flex justify-content-center" *ngIf="selectedPaystub.select"
-          style="margin-top:15px;">
-          <p>{{selectedPaystub.result}}</p>
+      <div class="modal-header d-flex justify-content-between mt-2">
+        <div class="form-col justify-self-center w-100">
+          <h5 class="modal-title justify-content-center" id="alertShowCheckLabel" style="text-align: center;">
+            SHOW CHECK
+          </h5>
+        </div>
+        <div class="form-col justify-self-right">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      <div class="modal-body">
+        <div class="row ml-2">
+          <h5>
+            <strong>Employee:</strong> {{ selCredDebByEmp.name }}
+          </h5>
+        </div>
+        <div class="row">
+          <table class="table table-striped table-hover table-borderless">
+            <thead>
+              <tr style="max-height: 20px; height: 20px; font-size: 12px; color: #fff; font-weight: bold;" class="blue-nearsol">
+                <td align="center" class="title">
+                  Checked
+                </td>
+                <td align="center" class="title">
+                  Type
+                </td>
+                <td align="center" class="title">
+                  Credits
+                </td>
+                <td align="center" class="title">
+                  Debits
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let credit of selCredDebByEmp.credits" class="selectable">
+                <td align="center">
+                  <input type="checkbox" class="form-check-input smc" (change)="getTotalCred()" [(ngModel)]="credit.checked"
+                    placeholder="Add">
+                </td>
+                <td>
+                  {{ credit.object.type }}
+                </td>
+                <td align="right">
+                  {{ credit.object.amount | number: '1.1-2' }}
+                </td>
+                <td align="right">
+                  0.00
+                </td>
+              </tr>
+              <tr *ngFor="let debit of selCredDebByEmp.debits" class="selectable">
+                <td align="center">
+                  <input type="checkbox" class="form-check-input smc" (change)="getTotalCred()" [(ngModel)]="debit.checked"
+                    placeholder="Add">
+                </td>
+                <td>
+                  {{ debit.object.type }}
+                </td>
+                <td align="right">
+                  0.00
+                </td>
+                <td align="right">
+                  {{ debit.object.amount| number: '1.1-2'}}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot class="">
+              <tr>
+                <td colspan="5" class="total">
+                  <strong>Total: </strong>{{ selCredDebByEmp.total | number: '1.1-2' }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-between mt-2">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+        <button class="btn btn-outline-primary" type="button" data-dismiss="modal" (click)="addCreditsDebitsByEmp()">
+          SAVE
+        </button>
       </div>
     </div>
   </div>

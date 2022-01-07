@@ -2742,10 +2742,10 @@ export class HrprofilesComponent implements OnInit {
   }
 
   printAdvances() {
-    var url = this.apiService.PHP_API_SERVER + "/phpscripts/letterVacations.php?name=" + this.workingEmployee.name +
-      "&date=" + this.activeVacation.took_date + "&job=" + this.workingEmployee.job +
+    var url = this.apiService.PHP_API_SERVER + "/phpscripts/letterVacations.php?name=" + encodeURIComponent(this.workingEmployee.name) +
+      "&date=" + this.activeVacation.took_date + "&job=" + encodeURIComponent(this.workingEmployee.job) +
       "&start_date=" + this.workingEmployee.hiring_date + "&department=" + this.workingEmployee.id_account +
-      "&days_requested=" + this.activeVacation.count + "&nearsol_id=" + this.workingEmployee.nearsol_id ;
+      "&days_requested=" + this.activeVacation.count + "&nearsol_id=" + this.workingEmployee.nearsol_id;
     window.open(url, "_blank");
   }
 
