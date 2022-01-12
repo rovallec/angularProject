@@ -66,21 +66,21 @@ export class ClosingTkComponent implements OnInit {
   deadline_time:string = new Date().getHours() + ":" + new Date().getMinutes();
   disable_date:boolean = false;
   disable_time:boolean = false;
-  filterList:string[] = ['DISCOUNTED DAYS','HOURS',	'SEVENTH', 'OT',	'HOLIDAYS',	
-  'NEARSOL BONUS',	'CLIENT BONUS',	'TREASURE HUNT',	'ADJUSTED TIME',	'ADJUSTED OT',	
+  filterList:string[] = ['DISCOUNTED DAYS','HOURS',	'SEVENTH', 'OT',	'HOLIDAYS',
+  'NEARSOL BONUS',	'CLIENT BONUS',	'TREASURE HUNT',	'ADJUSTED TIME',	'ADJUSTED OT',
   'ADJUSTED HOLIDAY', 'VACATIONS',	'JANP',	'JAP',	'IGSS',	'IGSS Hrs.',	'INSURANCE',	'OTHER Hrs.', 'NON SHOW'];
   filterValue:string[] = ['','','','','','','','','','','', '',	'',	'',	'',	'',	'',	'',	''];
   setFilter:string = '0';
   filterLogic:string[] = ['','','','','','','','','','','','','','','','','','',	''];
   filterCompare:string[] = ['','','','','','','','','','','','','','','','','','',	''];
   allPayroll:payroll_values_gt[] = [];
-  filterNames:string[] = ['discounted_days','discounted_hours',	'seventh', 'ot_hours',	'holidays_hours',	
-  'nearsol_bonus',	'performance_bonus',	'treasure_hunt',	'adj_hours',	'adj_ot',	
+  filterNames:string[] = ['discounted_days','discounted_hours',	'seventh', 'ot_hours',	'holidays_hours',
+  'nearsol_bonus',	'performance_bonus',	'treasure_hunt',	'adj_hours',	'adj_ot',
   'adj_holidays', 'vacations','janp','jap','igss','igss_hrs','insurance','other_hrs',	'ns'];
   activeFilter:boolean = false;
   import_tk:tk_import[] = [];
   fullImport:boolean = false;
-  
+
 
   constructor(public apiServices: ApiService, public authUser: AuthServiceService) { }
 
@@ -111,6 +111,8 @@ export class ClosingTkComponent implements OnInit {
       });
       this.setYear();
     })
+    this.periods.reverse();
+    this.years.sort();
   }
 
   setClient(cl: string) {
@@ -395,7 +397,7 @@ export class ClosingTkComponent implements OnInit {
                                             if(new Date(justification.dateTime).getTime() >= refTime){
                                               attendance.worked_time = (Number(attendance.worked_time) - Number(justification.amount)).toFixed(4);
                                             }
-                                          } 
+                                          }
                                         }
                                       });
 
@@ -405,7 +407,7 @@ export class ClosingTkComponent implements OnInit {
                                         if (Number(attendance.worked_time) > 0) {
                                           attendance.balance = (Number(attendance.worked_time)).toFixed(3);
                                           discounted_hours = discounted_hours + Number(attendance.worked_time);
-                                        }  
+                                        }
                                       } else {
                                         if(!isNullOrUndefined(emp[0].children) && !isNullOrUndefined(emp[0].gender)){
                                           if(Number(emp[0].children) > 0){
@@ -483,7 +485,7 @@ export class ClosingTkComponent implements OnInit {
                                         disc = true;
                                         discounted_days = discounted_days + 1
                                         disc_on_week = disc_on_week + 1;
-                                        
+
                                       }
 
                                       if ((janp_sequence + non_show_sequence) == 5 && !disc) {
@@ -703,8 +705,8 @@ export class ClosingTkComponent implements OnInit {
                                                               window.alert(String(str).split("|")[1]);
                                                             }
                                                             else {
-                                                              window.alert( String(str).split("|")[0] + "\n" + 
-                                                                            String(str).split("|")[1] + "\n" + 
+                                                              window.alert( String(str).split("|")[0] + "\n" +
+                                                                            String(str).split("|")[1] + "\n" +
                                                                             String(str).split("|")[2]);
                                                             }
                                                             this.resumes = pr;
@@ -1192,7 +1194,7 @@ export class ClosingTkComponent implements OnInit {
               if (count >= (partial_credits.length - 1)) {
                 this.importEnd = true;
                 this.completed = true;
-              }              
+              }
             })
           })
         })
@@ -1270,7 +1272,7 @@ export class ClosingTkComponent implements OnInit {
     }
     this.start();
   }
-  
+
   disableDate(){
     this.disable_date = true;
   }

@@ -156,8 +156,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <label>EMPLOYEE:</label>
-                        <select [size]="7" class="form-control" (change)="setEmployee($event.target.value)"
+                        <label>Employee:</label>
+                        <select [size]="9" class="form-control" (change)="setEmployee($event.target.value)"
                             [(ngModel)]="selectedEmployeeRoster.id_employee">
                             <option *ngFor='let employee of selectedRosters' [value]="employee.id_employee">
                                 {{employee.name}}</option>
@@ -166,8 +166,8 @@
                     <div class="col-md-2">
                         <div class="row">
                             <div class="col-md-12" style="padding:0px">
-                                <label>ROSTERS:</label>
-                                <select size="5" class="form-control" (change)="setEmployeeRoster($event.target.value)"
+                                <label>Rosters:</label>
+                                <select size="7" class="form-control" (change)="setEmployeeRoster($event.target.value)"
                                     [(ngModel)]="selectedEmployeeRoster.idrosters">
                                     <option *ngFor="let rost of employeeRoster let i = index" [value]="rost.idrosters">
                                         {{i}}</option>
@@ -190,21 +190,21 @@
                     <div class="col-md-4">
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label>TAG:</label>
+                                <label>Tag:</label>
                                 <input type="text" [disabled]="true" class="form-control"
                                     [(ngModel)]="selectedEmployeeRoster.tag">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label>TAG:</label>
+                                <label>Tag:</label>
                                 <input type="text" [disabled]="true" class="form-control"
                                     [(ngModel)]="selectedEmployeeRoster.roster_name">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <label>ACTIVE WEEK:</label>
+                                <label>Active Week:</label>
                                 <input type="text" [disabled]="true" class="form-control"
                                     [(ngModel)]="selectedEmployeeRoster.week_value">
                             </div>
@@ -212,7 +212,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer d-flex mt-2 justify-content-center">
+            <div class="modal-footer d-flex mt-2 justify-content-between">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
                     (mouseup)="ngOnInit()">CLOSE</button>
             </div>
@@ -234,13 +234,13 @@
                 <div class="row col-md-12">
                     <div class="col-md-2"></div>
                     <div class="form-group col-md-8">
-                        <label>UPLOAD:</label>
+                        <label>Upload:</label>
                         <input type="file" class="form-control" (change)="addFile($event)">
                     </div>
                     <div class="col-md-2"></div>
                 </div>
             </div>
-            <div class="modal-footer d-flex mt-2 justify-content-center">
+            <div class="modal-footer d-flex mt-2 justify-content-between">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
                     (mouseup)="ngOnInit()">CLOSE</button>
             </div>
@@ -262,13 +262,13 @@
                 <div class="row col-md-12">
                     <div class="col-md-1"></div>
                     <div class="col-md-5">
-                        <label>FROM:</label>
+                        <label>From:</label>
                         <select class="form-control" [(ngModel)]="selectedFromPeriod.idperiods" (change)="splicePeriods_to($event.target.value)">
                             <option *ngFor="let period of periods_from" [value]="period.idperiods">{{period.start}} TO {{period.end}}</option>
                         </select>
                     </div>
                     <div class="col-md-5">
-                        <label>TO:</label>
+                        <label>To:</label>
                         <select class="form-control" [(ngModel)]="selectedToPeriod.idperiods" (change)="splicePeriods_from($event.target.value)">
                             <option *ngFor="let period of periods_to" [value]="period.idperiods">{{period.start}} TO {{period.end}}</option>
                         </select>
@@ -281,7 +281,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer d-flex mt-2 justify-content-center">
+            <div class="modal-footer d-flex mt-2 justify-content-between">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
                     (mouseup)="ngOnInit()">CLOSE</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="copyRoster()">COPY</button>
@@ -304,7 +304,7 @@
                 <div class="row col-md-12">
                     <div class="col-md-2"></div>
                     <div class="form-group col-md-8">
-                        <label>Filter:</label>
+                        <label>Search For:</label>
                         <input type="text" class="form-control" [(ngModel)]="searchString">
                     </div>
                     <div class="col-md-2"></div>
@@ -333,13 +333,13 @@
                 <div class="row col-md-12">
                     <div class="col-md-6 form-group">
                         <div class="row">
-                            <label>Tag</label>
+                            <label>Tag:</label>
                             <select class="form-control" (change)="getRosters_templates($event.target.value)">
                                 <option *ngFor="let tag of roster_tags">{{tag}}</option>
                             </select>
                         </div>
                         <div class="row">
-                            <label>Week</label>
+                            <label>Week:</label>
                             <select class="form-control" [(ngModel)]="week_value">
                                 <option>1</option>
                                 <option *ngIf="getMaxWeek() >= 2">2</option>
@@ -348,7 +348,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 form-group">
-                        <label>Types:</label>
+                        <label>Description:</label>
                         <select size=5 class="form-control" (change)="setRosterType($event.target.value)">
                             <option *ngFor="let roster of selected_types" value="{{roster.idroster_types}}">
                                 {{roster.name}}</option>
@@ -372,7 +372,7 @@
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-10">
-                        <label>Employees</label>
+                        <label>Employees:</label>
                         <select class="form-control" [size]="maxSelection()" disabled="true">
                             <option *ngFor="let selection of selectedRosters">{{selection.name}}</option>
                         </select>
@@ -380,8 +380,7 @@
                     <div class="col-md-1"></div>
                 </div>
             </div>
-            <div class="modal-footer d-flex mt-2"
-                [ngClass]="{'justify-content-between':!completed, 'justify-content-center':completed}">
+            <div class="modal-footer d-flex mt-2" class="justify-content-between">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
                     [disabled]="!working && !completed" (click)="reload()">CLOSE</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" (click)="saveRosters()"
@@ -410,7 +409,7 @@
                     <div class=" col-md-12">
                         <div class="row col-md-12">
                             <div class="col-md-6">
-                                <label>TAG:</label>
+                                <label>Tag:</label>
                                 <select class="form-control" (change)="getRosters_templates($event.target.value)"
                                     *ngIf="!newRoster">
                                     <option *ngFor="let tag of roster_tags">{{tag}}</option>
@@ -419,7 +418,7 @@
                                     [(ngModel)]="selectedType.tag">
                             </div>
                             <div class="col-md-6">
-                                <label>NAME:</label>
+                                <label>Name:</label>
                                 <select class="form-control" (change)="setRosterType($event.target.value)"
                                     *ngIf="!newRoster">
                                     <option *ngFor="let roster of selected_types" value="{{roster.idroster_types}}">
@@ -441,7 +440,7 @@
                                             <span class="long">Tuesday</span>
                                         </th>
                                         <th>
-                                            <span class="long">Wendsday</span>
+                                            <span class="long">Wednesday</span>
                                         </th>
                                         <th>
                                             <span class="long">Thursday</span>
@@ -522,7 +521,7 @@
                             <div class="row col-md-12">
                                 <div class="col-md-4">
                                     <div class="row col-md-12">
-                                        <label>ID:</label>
+                                        <label>Id:</label>
                                         <select class="form-control" size="4"
                                             (change)="setSchedule_type($event.target.value)">
                                             <option *ngFor="let schedule_type of schedule_types"
@@ -567,7 +566,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label>Used On</label>
+                                    <label>Used On:</label>
                                     <select size=4 class="form-control" [disabled]="true">
                                         <option *ngFor="let used of useds">{{used.name}}</option>
                                     </select>
@@ -578,7 +577,7 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-between mt-2">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
                 <button type="button" class="btn btn-outline-secondary" (click)="setNewRoster()"
                     *ngIf="!needUpdate(1) && !needUpdate(2) && !needUpdate(3) && !needUpdate(4) && !needUpdate(5) && !needUpdate(6) && !needUpdate(7) && !newRoster">NEW</button>
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"
