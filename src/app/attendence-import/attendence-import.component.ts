@@ -80,6 +80,31 @@ export class AttendenceImportComponent implements OnInit {
             nwAtt.second_name = nm.split(" ")[1];
             nwAtt.first_lastname = nm.split(" ")[2];
             nwAtt.second_lastname = nm.split(" ")[3];
+
+            if (element['Scheduled'] == 'OFF') {
+              nwAtt.scheduled = 'OFF';
+            } else {
+              nwAtt.scheduled = parseFloat(element['Scheduled']).toFixed(3);
+            }
+            nwAtt.worked_time = parseFloat(element['Worked']).toFixed(3);
+            if (nwAtt.scheduled == 'OFF') {
+              nwAtt.balance = nwAtt.worked_time;
+            } else {
+              nwAtt.balance = parseFloat((parseFloat(nwAtt.worked_time) - parseFloat(nwAtt.scheduled)).toString()).toFixed(3);
+            }
+            this.attendences.push(nwAtt);
+          } catch (error) {
+
+          }
+          /*try {
+            nm = element['Name'];
+            nwAtt = new attendences;
+            nwAtt.date = element['Date'];
+            nwAtt.client_id = element['Client ID'];
+            nwAtt.first_name = nm.split(" ")[0];
+            nwAtt.second_name = nm.split(" ")[1];
+            nwAtt.first_lastname = nm.split(" ")[2];
+            nwAtt.second_lastname = nm.split(" ")[3];
             nwAtt.schedule_fix = Number(element['Schedule FIX']).toFixed();
             nwAtt.time_in_aux0 = Number(element['Time in Aux 0']).toFixed();
             nwAtt.time_in_systems_issues = Number(element['Time in System Issues']).toFixed();
@@ -140,7 +165,7 @@ export class AttendenceImportComponent implements OnInit {
             this.attendences.push(nwAtt);
           } catch (error) {
 
-          }
+          }*/
         });
         let att: attendences[] = [];
 
