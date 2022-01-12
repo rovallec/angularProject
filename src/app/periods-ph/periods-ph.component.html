@@ -2,7 +2,7 @@
     <div class="row col-md-12">
         <div class="col-md-3"></div>
         <div class="form-group col-md-2" *ngIf="!showAll && !importPayroll">
-            <label>FROM:</label>
+            <label>From:</label>
             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activePeriod.start">
         </div>
         <div class="form-group col-md-2" *ngIf="showAll && !importPayroll">
@@ -16,7 +16,7 @@
         </div>
 
         <div class="form-group col-md-2" *ngIf="!showAll && !importPayroll">
-            <label>TO:</label>
+            <label>To:</label>
             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="activePeriod.end">
         </div>
         <div class="form-group col-md-2" *ngIf="showAll && !importPayroll">

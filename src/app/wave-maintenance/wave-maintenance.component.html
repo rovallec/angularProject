@@ -72,7 +72,7 @@
               JOB
             </td>
             <td>
-              BIRTHDAY
+              DATE OF BIRTH
             </td>
             <td>
               ACTION
@@ -162,7 +162,7 @@
             </div>
             <!--
             <div class="form-group col-md-6">
-              <label>Old Position</label>
+              <label>Previous Position</label>
               <input type="text" class="form-control" [(ngModel)]="actualRise.old_position" [disabled]="true">
             </div>-->
           </div>
@@ -179,7 +179,7 @@
               </select>
             </div>
             <div class="form-group col-md-4">
-              <label>Approved Date:</label>
+              <label>Date of Approval:</label>
               <input type="text" class="form-control" [(ngModel)]="actualRise.approved_date"
                 [disabled]="true" *ngIf="viewRecProd">
               <input type="date" class="form-control" (change)="setApprovalDate($event.target.value)"

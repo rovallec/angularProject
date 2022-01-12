@@ -21,7 +21,7 @@
                     <input type="password" name="password" class="form-control" [ngModelOptions]="{standalone:true}"
                         [(ngModel)]="usr.password">
                 </div>
-                <h5 class="card-tittle" style="color: red" *ngIf=wrongAuth>Error loginning</h5>
+                <h5 class="card-tittle" style="color: red" *ngIf=wrongAuth>Error Login In</h5>
                 <p class="card-text" style="color: red" *ngIf=wrongAuth>Wrong Username or Password</p>
                 <h5 class="card-tittle" style="color: red" *ngIf=inactiveAcc>Error getting data</h5>
                 <p class="card-text" style="color: red" *ngIf=inactiveAcc>Your account is inactive</p>
