@@ -1319,16 +1319,16 @@ export class Fecha{
         let yyyy: string = fecha.getFullYear().toString();
         this.year = yyyy;
         this.month = MM;
-        return (yyyy + '-' + MM + '-' + dd);
+        return (dd + '-' + MM + '-' + yyyy);
     }
 
     transform(Adate: Date): string {
         let dd: string = String(Adate.getDate()).padStart(2,'0');
         let MM: string = String(Adate.getMonth() + 1).padStart(2, '0');
         let yyyy: string = Adate.getFullYear().toString();
-        let sdate: string = (yyyy + '-' + MM + '-' + dd);
+        let sdate: string = (dd + '-' + MM + '-' + yyyy);
         if (sdate == 'NaN-NaN-NaN') {
-            sdate = '1970-01-01';
+            sdate = '01-01-1970';
         }
         return sdate;
     }
@@ -2787,6 +2787,7 @@ export class checks{
   document: string; // check number
   bankAccount: string;
   printDetail: boolean;
+  payment: string;
   constructor(){
     this.idchecks = null;
     this.place = null;
@@ -2802,6 +2803,7 @@ export class checks{
     this.document = null;
     this.bankAccount = null;
     this.printDetail = false;
+    this.payment = null;
   }
 }
 export class checksDetails {
@@ -2837,3 +2839,31 @@ export class checkbooks {
     this.next_correlative = null;
   }
 }
+
+export class creditsdebitsbyemployees {
+  idemployees: string;
+  nearsol_id: string;
+  client_id: string;
+  idpayments: string;
+  name: string;
+  account: string;
+  credits: checkclass[];
+  debits: checkclass[];
+  total: number;
+  check: string;
+  checked: boolean;
+  constructor() {
+    this.idemployees = null;
+    this.nearsol_id = null;
+    this.client_id = null;
+    this.idpayments = null;
+    this.name = null;
+    this.account = null;
+    this.credits = [];
+    this.debits = [];
+    this.total = 0;
+    this.check = null;
+    this.checked = false;
+  }
+}
+
