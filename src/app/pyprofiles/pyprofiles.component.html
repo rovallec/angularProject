@@ -17,7 +17,7 @@
                         <input type="text" class="form-control" [disabled]='true' [(ngModel)]='employee.account'>
                     </div>
                     <div class="form-group col-md-2">
-                        <label>Supervisor:</label>
+                        <label>Reporting To:</label>
                         <input type="text" class="form-control" [disabled]='true' [(ngModel)]="employee.user_name">
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile.day_of_birth">
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="txt_birth">Termination Notification:</label>
+                        <label for="txt_birth">Date Notified of Termination:</label>
                         <input type="text" class="form-control" [disabled]="true" [(ngModel)]="profile.day_of_birth">
                     </div>
                 </div>
@@ -67,32 +67,27 @@
                     <div class="form-row" style="margin-top:30px">
                         <div class="form-group col-md-12">
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="txt_primary_phone">Primary Phone Number:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile.primary_phone"
-                                        [disabled]="true">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="txt_secondary_phone">Secondary Phone Number:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile.secondary_phone"
-                                        [disabled]="true">
-                                </div>
+                              <div class="form-group col-md-3">
+                                <label for="txt_primary_phone" style="font-size: 1.1rem;">Primary Phone Number:</label>
+                                <input type="text" class="form-control" [(ngModel)]="profile.primary_phone" [disabled]="true">
+                              </div>
+                              <div class="form-group col-md-3">
+                                <label for="txt_secondary_phone" style="font-size: 1.1rem;">Secondary Phone Number:</label>
+                                <input type="text" class="form-control" [(ngModel)]="profile.secondary_phone" [disabled]="true">
+                              </div>
+                              <div class="form-group col-md-6">
+                                <label for="txt_email" style="font-size: 1.1rem;">Email Address:</label>
+                                <input type="text" class="form-control" [(ngModel)]="profile.email" [disabled]="true">
+                              </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="txt_address">Address:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile.address"
-                                        [disabled]="true">
+                                <div class="form-group col-md-8">
+                                    <label for="txt_address" style="font-size: 1.1rem;">Address:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile.address" [disabled]="true">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="txt_city">City:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile.city"
-                                        [disabled]="true">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="txt_email">Email Address:</label>
-                                    <input type="text" class="form-control" [(ngModel)]="profile.email"
-                                        [disabled]="true">
+                                    <label for="txt_city" style="font-size: 1.1rem;">City:</label>
+                                    <input type="text" class="form-control" [(ngModel)]="profile.city" [disabled]="true">
                                 </div>
                             </div>
                         </div>
@@ -102,36 +97,34 @@
                 <div class="tab-pane fade" id="nav-emergency" role="tabpanel" aria-labelledby="nav-emergency-tab">
                     <div class="form-group col-md-12">
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_fristName">First Given Name:</label>
+                            <div class="form-group col-md-3">
+                                <label for="txt_emergency_fristName" style="font-size: 1.1rem;">First Given Name:</label>
                                 <input type="text" class="form-control" [(ngModel)]="profile.emergency_first_name"
                                     [disabled]="true">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_secondName">Second Given Name:</label>
+                            <div class="form-group col-md-3">
+                                <label for="txt_emergency_secondName" style="font-size: 1.1rem;">Second Given Name:</label>
                                 <input class="text" class="form-control" [(ngModel)]="profile.emergency_second_name"
                                     [disabled]="true">
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_lastname">First Family Name:</label>
+                            <div class="form-group col-md-3">
+                                <label for="txt_emergency_lastname" style="font-size: 1.1rem;">First Family Name:</label>
                                 <input type="text" class="form-control" [(ngModel)]="profile.emergency_first_lastname"
                                     [disabled]="true">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_secondLastname">Second Family Name:</label>
+                            <div class="form-group col-md-3">
+                                <label for="txt_emergency_secondLastname" style="font-size: 1.1rem;">Second Family Name:</label>
                                 <input type="text" class="form-control" [(ngModel)]="profile.emergency_second_lastname"
                                     [disabled]="true">
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_phone">Phone Number:</label>
+                            <div class="form-group col-md-3">
+                                <label for="txt_emergency_phone" style="font-size: 1.1rem;">Phone Number:</label>
                                 <input type="text" class="form-control" [(ngModel)]="profile.phone" [disabled]="true">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="txt_emergency_relationship">Contact:</label>
+                            <div class="form-group col-md-3">
+                                <label for="txt_emergency_relationship" style="font-size: 1.1rem;">Contact:</label>
                                 <input type="text" class="form-control" [(ngModel)]="profile.relationship"
                                     [disabled]="true">
                             </div>
@@ -288,7 +281,7 @@
                             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="roster">
                         </div>
                         <div class="form-group col-md-2">
-                            <label>ATTENDED</label>
+                            <label>HOURS WORKED</label>
                             <input type="text" class="form-control" [disabled]="true" [(ngModel)]="attended">
                         </div>
                         <div class="form-group col-md-2">

@@ -3,7 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { isNullOrUndefined } from 'util';
 import { ApiService } from '../api.service';
 import { employees } from '../fullProcess';
-import { periods, paystubview, checks, checksDetails, Fecha, AccountingAccounts, credits, debits, seldebits, selcredits, checkclass, checkbooks } from '../process_templates';
+import { periods, paystubview, checks, checksDetails, Fecha, AccountingAccounts, credits, debits, seldebits, selcredits, checkclass, checkbooks, creditsdebitsbyemployees } from '../process_templates';
 
 @Component({
   selector: 'app-checks',
@@ -19,7 +19,6 @@ export class ChecksComponent implements OnInit {
   selectedCheckbook: checkbooks = new checkbooks;
   years: string[] = [new Date().getFullYear().toString()];
   periods: periods[] = [];
-  actualPeriod: periods = new periods;
   selectedPeriodEmp: number;
   periodsByEmployee: periods[] = [];
   selectedYear: string = new Date().getFullYear().toString();
@@ -35,6 +34,9 @@ export class ChecksComponent implements OnInit {
   credits: checkclass[] = [];
   debits: checkclass[] = [];
   totalPay: number = 0;
+  totalCred: number = 0;
+  creditsDebitsByEmployees: creditsdebitsbyemployees[] = [];
+  selCredDebByEmp: creditsdebitsbyemployees = new creditsdebitsbyemployees;
 
 
   ngOnInit() {
@@ -42,6 +44,7 @@ export class ChecksComponent implements OnInit {
     this.getCheckBooks();
     this.getAccounts();
     this.getemployees();
+    this.periods.reverse();
   }
 
   getCheckBooks() {
@@ -56,6 +59,7 @@ export class ChecksComponent implements OnInit {
     this.checkbooks.forEach((chb: checkbooks) => {
       if (sch === chb.account_bank) {
         this.selectedCheckbook = chb;
+        this.actualCheck = new checks;
         this.actualCheck.document = chb.next_correlative.toString();
         this.setCheck();
       }
@@ -85,6 +89,9 @@ export class ChecksComponent implements OnInit {
           this.getPayments();
         }
       })
+      this.years.sort();
+      this.periods = this.periods.reverse();
+      this.selectedPeriod = this.periods[0];
     });
   }
 
@@ -96,12 +103,15 @@ export class ChecksComponent implements OnInit {
           this.periods.push(period);
         }
       })
+      this.years.sort();
+      this.periods = this.periods.reverse();
       this.setSelection(this.periods[0]);
     })
   }
 
   setSelection(period: periods) {
     this.selectedPeriod = period;
+    this.selectedPeriodEmp = Number(this.selectedPeriod.idperiods);
     this.getPayments();
   }
 
@@ -125,12 +135,19 @@ export class ChecksComponent implements OnInit {
           pst.ignore = false;
         }
       })
-      this.paystubs = pst_view;
+      this.paystubs = pst_view.filter(pysf => pysf.type === 'BANK CHECK');
+      this.getInfoEmployees();
     })
   }
 
   setpaystubSelected(pst_view:paystubview){
     this.selectedPaystub = pst_view;
+    this.creditsDebitsByEmployees.forEach(credDebByEmp => {
+      if ((credDebByEmp.client_id == this.selectedPaystub.client_id) && (credDebByEmp.idpayments == this.selectedPaystub.idpayments)) {
+        this.getTotalCred(credDebByEmp);
+        this.setCredDebByEmp(credDebByEmp);
+      }
+    })
     this.html = this._sanitizer.bypassSecurityTrustHtml(this.selectedPaystub.content);
   }
 
@@ -139,17 +156,8 @@ export class ChecksComponent implements OnInit {
     console.log(this.paystubs[this.paystubs.indexOf(pst_view)]);
   }
 
-  sendMails(){
-    let count = 0;
-    this.paystubs.forEach(py=>{
-      if(py.select && !py.ignore){
-        this.apiService.sendMail({id_payment:py.idpayments}).subscribe((pstv:paystubview)=>{
-          count++;
-          console.log(pstv);
-          console.log(count);
-        });
-      }
-    })
+  setStatusCBEmp(Emp: creditsdebitsbyemployees) {
+    this.creditsDebitsByEmployees[this.creditsDebitsByEmployees.indexOf(Emp)].checked = !this.creditsDebitsByEmployees[this.creditsDebitsByEmployees.indexOf(Emp)].checked;
   }
 
   setCheck() {
@@ -170,17 +178,15 @@ export class ChecksComponent implements OnInit {
   }
 
   checkAll() {
-    this.checks.forEach(check => {
-      check.checked = true;
-      check.negotiable = 'NEGOCIABLE';
-    });
+    this.paystubs.forEach(pay => {
+      pay.select = true;
+    })
   }
 
   unCheckAll() {
-    this.checks.forEach(check => {
-      check.checked = false;
-      check.negotiable = 'NO NEGOCIABLE';
-    });
+    this.paystubs.forEach(pay => {
+      pay.select = false;
+    })
   }
 
   changeVal(val) {
@@ -203,8 +209,7 @@ export class ChecksComponent implements OnInit {
   }
 
   onChangeValue(event: string) {
-    let value: string = event;
-    this.actualCheck.value = parseFloat(value).toFixed(2);
+    this.actualCheck.value = parseFloat(event).toFixed(2);
   }
 
   addDetail() {
@@ -247,20 +252,26 @@ export class ChecksComponent implements OnInit {
 
   getemployees() {
     this.apiService.getallEmployees({ department: 'NoLimitAC' }).subscribe((emp: employees[]) => {
-      this.employees = emp;
+      emp.forEach(empl => {
+        if (empl.nearsol_id != null && empl.nearsol_id.trim() != '') {
+          this.employees.push(empl);
+        }
+      })
     })
   }
 
   getFilteredEmployees(ANearsol_Id: string) {
     this.employees.forEach((emp) => {
-      if (emp.nearsol_id.toUpperCase() == ANearsol_Id.toUpperCase()) {
-        this.actualEmployee = emp;
-        this.actualCheck.name = this.actualEmployee.name;
-        this.actualCheck.nearsol_id = this.actualEmployee.nearsol_id;
-        this.actualCheck.client_id = this.actualEmployee.client_id;
-        this.apiService.getPeriodsByEmployee({ id: this.actualEmployee.idemployees }).subscribe(periods => {
-          this.periodsByEmployee = periods;
-        })
+      if (!isNullOrUndefined(emp.nearsol_id)) {
+        if (emp.nearsol_id.toUpperCase() == ANearsol_Id.toUpperCase()) {
+          this.actualEmployee = emp;
+          this.actualCheck.name = this.actualEmployee.name;
+          this.actualCheck.nearsol_id = this.actualEmployee.nearsol_id;
+          this.actualCheck.client_id = this.actualEmployee.client_id;
+          this.apiService.getPeriodsByEmployee({ id: this.actualEmployee.idemployees }).subscribe(periods => {
+            this.periodsByEmployee = periods;
+          })
+        }
       }
     })
   }
@@ -345,6 +356,10 @@ export class ChecksComponent implements OnInit {
     this.actualCheck.value = this.totalPay.toFixed(2);
   }
 
+  addCreditsDebitsByEmp() {
+    //this.selectedPaystub.liquido = this.selCredDebByEmp.total.toString();
+  }
+
   saveCheck() {
     this.apiService.saveCheck({ head: this.actualCheck, detail: this.details }).subscribe((str: string) => {
       if (str.split("|")[0].trim() == "Success") {
@@ -355,7 +370,8 @@ export class ChecksComponent implements OnInit {
   }
 
   getCheck() {
-    this.apiService.getCheck({ account: this.selectedCheckbook.account_bank, check: this.actualCheck.document }).subscribe((chb: checks) => {
+    //console.log(this.actualCheck);
+    this.apiService.getCheck({ account: this.selectedCheckbook.account_bank, document: this.actualCheck.document }).subscribe((chb: checks) => {
       this.actualCheck = chb;
       console.log(this.actualCheck);
       this.apiService.getCheckDetails(this.actualCheck).subscribe((det: checksDetails[]) => {
@@ -365,8 +381,136 @@ export class ChecksComponent implements OnInit {
   }
 
   printChecks() {
-    this.apiService.printChecks({ idchecks: this.actualCheck.idchecks }).subscribe((_str: string) => {
+    this.apiService.printChecks(this.actualCheck).subscribe((_str: string) => {
       // no hace nada.
      })
   }
+
+  getInfoEmployees() {
+    this.paystubs.forEach((paystub) => {
+      let credDebByEmp: creditsdebitsbyemployees = new creditsdebitsbyemployees;
+      this.employees.forEach((employee) => {
+        if (employee.nearsol_id == paystub.nearsol_id) {
+          credDebByEmp.idemployees = employee.idemployees;
+          credDebByEmp.nearsol_id = paystub.nearsol_id;
+          credDebByEmp.client_id = paystub.client_id;
+          credDebByEmp.idpayments = paystub.idpayments;
+          credDebByEmp.name = paystub.employee_name;
+          credDebByEmp.account = paystub.account;
+          credDebByEmp.check = '';
+          credDebByEmp.checked = false;
+
+          // credits
+          credDebByEmp.credits = [];
+          this.apiService.getCredits({ id: employee.idemployees, period: this.selectedPeriodEmp }).subscribe((cred: credits[]) => {
+            cred.forEach((credit) => {
+              if ((Number(credit.amount) != 0) && (credit.status == 'PENDING')) {
+                let obj: checkclass = new checkclass(true, credit);
+                credDebByEmp.credits.push(obj);
+              }
+            })
+            this.getTotalCred(credDebByEmp);
+          })
+
+          // debits
+          credDebByEmp.debits = [];
+          this.apiService.getDebits({ id: employee.idemployees, period: this.selectedPeriodEmp }).subscribe((deb: debits[]) => {
+            deb.forEach((debit: debits) => {
+              if ((Number(debit.amount) != 0) && (debit.status == 'PENDING')) {
+                let obj: checkclass = new checkclass(true, debit);
+                credDebByEmp.debits.push(obj);
+              }
+            })
+            this.getTotalCred(credDebByEmp);
+          })
+          this.getTotalCred(credDebByEmp);
+          //if (credDebByEmp.total>0.00) {
+            this.creditsDebitsByEmployees.push(credDebByEmp);
+          //}
+        } // end if
+      }) // end foreach employees
+    }) //end foreach paystubs
+  };
+
+  setCredDebByEmp(Avalue) {
+    this.selCredDebByEmp = Avalue;
+  }
+
+  getTotalCred(AcredDeb: creditsdebitsbyemployees) {
+    this.totalCred = 0;
+    if (isNullOrUndefined(AcredDeb)) {
+      this.selCredDebByEmp = this.selCredDebByEmp;
+    } else {
+      this.selCredDebByEmp = AcredDeb;
+    }
+
+    this.selCredDebByEmp.credits.forEach((credit) => {
+      if (credit.checked) {
+        this.totalCred = this.totalCred + Number(credit.object.amount);
+      }
+    })
+
+     this.selCredDebByEmp.debits.forEach((debit) => {
+      if (debit.checked) {
+        this.totalCred = this.totalCred - Number(debit.object.amount);
+      }
+     })
+
+    if (this.totalCred < 0) {
+      this.totalCred = 0;
+    }
+    this.selCredDebByEmp.total = this.totalCred;
+  }
+
+  saveChecksByPeriod() {
+    let fecha: Fecha = new Fecha;
+    let details: checksDetails[] = [];
+    let next_correlative: number = this.selectedCheckbook.next_correlative;
+    this.checks = [];
+    this.creditsDebitsByEmployees.forEach(cbEmp => {
+      if (cbEmp.checked) {
+        let check: checks = new checks;
+        check.place = "Guatemala";
+        check.date = fecha.getToday();
+        check.value = cbEmp.total.toFixed(2);
+        check.name = cbEmp.name.toUpperCase();
+        check.description = 'PAGO DE PRESTACIONES LABORALES DEL ' + this.selectedPeriod.start + ' AL ' + this.selectedPeriod.end;
+        check.negotiable = 'NO NEGOCIABLE';
+        check.checked = cbEmp.checked;
+        check.nearsol_id = cbEmp.nearsol_id;
+        check.client_id = cbEmp.client_id;
+        check.id_account = cbEmp.account;
+        check.payment = cbEmp.idpayments;
+        check.document = next_correlative.toString(); // check number
+        check.bankAccount = this.selectedCheckbook.account_bank;
+        check.printDetail = false;
+        this.apiService.saveCheck({ head: check, detail: details }).subscribe((str: string) => {
+          if (str.split("|")[0].trim() == "Success") {
+            check.idchecks = str.split("|")[1];
+            this.checks.push(check);
+            this.apiService.printChecks(check).subscribe((str: string) => {
+              console.log(str);
+            });
+            cbEmp.check = ' Check No.: ' + check.document + ' Account: ' + check.bankAccount;
+          } else {
+            if (str.split("|")[0].trim() == "Error:") {
+              window.confirm(str.split("|")[1] + "\n" + str.split("|")[2] + "\n" + str.split("|")[3]);
+              console.log(str.split("|")[2]);
+            }
+          }
+        })
+        next_correlative++;
+      } // fin IF
+    }) // fin foreach
+  }
+
+  printChecksByPeriod() {
+    this.checks.forEach((check) => {
+      this.apiService.printChecks(check).subscribe((_str: string) => {
+      // no hace nada.
+      });
+    })
+
+  }
+
 }

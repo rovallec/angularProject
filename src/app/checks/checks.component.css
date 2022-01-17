@@ -22,6 +22,7 @@ thead th {
   border-width: 1px;
   border-right-color: rgb(233, 232, 232);
   text-align: center;
+  white-space: nowrap;
 }
 tbody td {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
@@ -31,9 +32,11 @@ tbody td {
   border-width: 1px;
   border-right-color: rgb(233, 232, 232);
   text-align: center;
+  white-space: nowrap;
 }
 tbody tr {
   font-size: 12px;
+  white-space: nowrap;
 }
 
 tfoot td {
@@ -43,10 +46,12 @@ tfoot td {
   line-height: 0.6;
   border-width: 1px;
   border-right-color: rgb(233, 232, 232);
+  white-space: nowrap;
 }
 
 tfoot tr {
   font-size: 12px;
+  white-space: nowrap;
 }
 
 i {
@@ -226,6 +231,16 @@ input[type="number"] {
     white-space: nowrap;
   }
 
+  thead {
+    font-size: x-small;
+    white-space: nowrap;
+  }
+
+  tbody {
+    font-size: x-small;
+    white-space: nowrap;
+  }
+
   th {
     font-size: x-small;
     white-space: nowrap;
@@ -255,6 +270,11 @@ input[type="number"] {
   .ml {
     margin-left: 0px;
   }
+
+  .period {
+    font-size: x-small;
+    font-weight: bold;
+  }
 }
 
 .align-center {
@@ -281,4 +301,8 @@ label {
   height: 12px;
   width: 12px;
   margin-top: -3px;
+}
+
+.period {
+  font-weight: bold;
 }
