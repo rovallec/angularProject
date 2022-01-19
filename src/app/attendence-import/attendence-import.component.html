@@ -123,10 +123,20 @@
                             <td *ngIf="att.id_wave === '1' && !showReg"><select class="form-control" (change)="setEmployeeRepeated(att, $event.target.value)" style="font-size: 13px;">
                                 <option *ngFor="let rep of getReapeted(att)" [value]="rep.idemployees">{{rep.name}}</option>
                             </select></td>
-                            <td>{{att.scheduled}}</td>
-                            <td>{{att.worked_time}}</td>
-                            <td *ngIf="!showReg">{{att.balance}}</td>
-                            <td *ngIf="showReg">{{att.worked_time - att.scheduled}}</td>
+                            <td *ngIf="att.scheduled!='NaN'">
+                                {{ att.scheduled }}
+                            </td>
+                            <td *ngIf="att.scheduled=='NaN'">
+                                No Data Found
+                            </td>
+                            <td>{{ att.worked_time }}</td>
+                            <td *ngIf="!showReg && att.balance!='NaN'">
+                                {{ att.balance }}
+                            </td>
+                            <td *ngIf="showReg || att.balance=='NaN'">
+                                No Data Found
+                            </td>
+                            <td *ngIf="showReg">{{ att.worked_time - att.scheduled }}</td>
                             <td *ngIf="!showReg">
                                 <select [(ngModel)]="att.day_off1" [disabled]="att.day_off1 != 'OMMIT'"
                                     class="form-control" (change)="setAction(att)">
