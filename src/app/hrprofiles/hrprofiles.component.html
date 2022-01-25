@@ -2236,8 +2236,12 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Classification:</label>
-                                <input type="text" class="form-control" [(ngModel)]="actualAdvance.classification"
+                                <select class="form-control" [(ngModel)]="actualAdvance.classification"
                                     [disabled]="viewRecProd">
+                                    <option>PERSONAL</option>
+                                    <option>LABORAL</option>
+                                    <option>OTROS</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-row col-md-12">
@@ -2632,9 +2636,9 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let prc of process_templates" (click)="setProcess(prc)">
-                                    <td>{{prc.idprocesses}}</td>
-                                    <td>{{prc.name}}</td>
-                                    <td>{{prc.descritpion}}</td>
+                                    <td style="font-size:16px">{{prc.idprocesses}}</td>
+                                    <td style="font-size:16px">{{prc.name}}</td>
+                                    <td style="font-size:16px">{{prc.descritpion}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -2662,10 +2666,10 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let pr of processRecord" (click)="viewProcess(pr)">
-                                    <td>{{pr.idprocesses}}</td>
-                                    <td>{{pr.name}}</td>
-                                    <td>{{pr.user_name}}</td>
-                                    <td>{{pr.status}}</td>
+                                    <td style="font-size:16px">{{pr.idprocesses}}</td>
+                                    <td style="font-size:16px">{{pr.name}}</td>
+                                    <td style="font-size:16px">{{pr.user_name}}</td>
+                                    <td style="font-size:16px">{{pr.status}}</td>
                                 </tr>
                             </tbody>
                         </table>
