@@ -2392,7 +2392,7 @@
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
-                                        <label>Access Card</label><i class="fas fa-edit" style="margin-left:2px"
+                                        <label>Access Card Return: </label><i class="fas fa-edit" style="margin-left:2px"
                                         (click)="editAccessCard()" *ngIf="!editingAccessCard"></i><i class="fas fa-edit" style="margin-left:2px"
                                         (click)="updateTermination()" *ngIf="editingAccessCard"></i>
                                         <select class="form-control" [(ngModel)]="actualTerm.access_card"
@@ -2412,7 +2412,7 @@
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
-                                        <label>Headsets</label><i class="fas fa-edit" style="margin-left:2px"
+                                        <label>Headsets Return: </label><i class="fas fa-edit" style="margin-left:2px"
                                         (click)="editHeadsets()" *ngIf="!editingHeadsets"></i><i class="fas fa-edit" style="margin-left:2px"
                                         (click)="updateTermination()" *ngIf="editingHeadsets"></i>
                                         <select class="form-control" [(ngModel)]="actualTerm.headsets"
@@ -2453,7 +2453,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group col-md-8">
-                                        <label>Period To Pay</label>
+                                        <label>Period To Pay:</label>
                                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
                                             <div class="form-group col-sm-6">
                                                 <label>From:</label>
@@ -2474,6 +2474,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group col-md-12" *ngIf="viewRecProd">
+                                            <label>Current:</label>
                                             <input type="text" class="form-control"
                                                 [(ngModel)]="actualTerm.period_to_pay" *ngIf="viewRecProd"
                                                 [disabled]="true" maxlength="100">
@@ -2484,7 +2485,7 @@
                             <div class="form-group col-sm-6">
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-4">
-                                        <label>Kind:</label>
+                                        <label>Reason:</label>
                                         <select class="form-control" [(ngModel)]="actualTerm.kind"
                                             [disabled]="viewRecProd || dpTerm">
                                             <option>Renuncia</option>
@@ -2510,7 +2511,7 @@
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-4">
-                                        <label>Rehireable</label>
+                                        <label>Rehireabl0e:</label>
                                         <select class="form-control" [(ngModel)]="actualTerm.rehireable"
                                             [disabled]="viewRecProd  || dpTerm">
                                             <option>REHIREABLE</option>
@@ -2518,17 +2519,17 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Nearsol's Exp.</label>
+                                        <label>Nearsol's Exp.:</label>
                                         <input type="number" class="form-control" min="0" max="10"
                                             [(ngModel)]="actualTerm.nearsol_experience" [disabled]="viewRecProd">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label>Sup's Exp.</label>
+                                        <label>Sup's Exp.:</label>
                                         <input type="number" class="form-control" min="0" max="10"
                                             [(ngModel)]="actualTerm.supervisor_experience" [disabled]="viewRecProd">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>Valid From</label>
+                                        <label>Valid From:</label>
                                         <input type="date" class="form-control"
                                             (change)="setValidFrom($event.target.value)"
                                             *ngIf="!viewRecProd &&  !dpTerm" datetime="dd-MM-yyyy">
@@ -2538,7 +2539,7 @@
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
-                                        <label>Comments:</label>
+                                        <label>Explication - Comments:</label>
                                         <textarea class="form-control" width="100%" [(ngModel)]="actualTerm.comments"
                                             [disabled]="viewRecProd"></textarea>
                                     </div>
@@ -2553,7 +2554,7 @@
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
-                                        <label>Insurance's Notification</label>
+                                        <label>Insurance's Notification:</label>
                                         <select class="form-control" [(ngModel)]="actualTerm.insurance_notification"
                                             [disabled]="viewRecProd">
                                             <option>YES</option>
@@ -2563,19 +2564,19 @@
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-6">
-                                        <label>Recriuter:</label>
+                                        <label>Recruiter:</label>
                                         <input type="text" class="form-control" [disabled]="true"
                                             [(ngModel)]="first_interview.username">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>OPS Interview:</label>
+                                        <label>OPS Interview ER:</label>
                                         <input type="text" class="form-control" [disabled]="true"
                                             [(ngModel)]="second_interview.english_test">
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-12">
-                                        <label>Send Notification</label>
+                                        <label>Send Notification:</label>
                                         <select class="form-control" [(ngModel)]="termNotification" [disabled]="viewRecProd">
                                             <option>YES</option>
                                             <option>NO</option>
