@@ -491,7 +491,7 @@
             <tbody>
               <tr *ngFor="let credit of selCredDebByEmp.credits" class="selectable">
                 <td align="center">
-                  <input type="checkbox" class="form-check-input smc" (change)="getTotalCred()"
+                  <input type="checkbox" class="form-check-input smc" (change)="getTotalCred(credit)"
                     [(ngModel)]="credit.checked" placeholder="Add">
                 </td>
                 <td>
@@ -506,7 +506,7 @@
               </tr>
               <tr *ngFor="let debit of selCredDebByEmp.debits" class="selectable">
                 <td align="center">
-                  <input type="checkbox" class="form-check-input smc" (change)="getTotalCred()"
+                  <input type="checkbox" class="form-check-input smc" (change)="getTotalCred(debit)"
                     [(ngModel)]="debit.checked" placeholder="Add">
                 </td>
                 <td>
