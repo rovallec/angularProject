@@ -1235,7 +1235,7 @@ export class HrprofilesComponent implements OnInit {
         this.actualRise.new_position = this.workingEmployee.job;
         this.actualRise.old_position = this.workingEmployee.job;
         break;
-      case 'Pay Vacations':
+      case 'Vacations To Be Paid':
         if (this.availableVacations < 1) {
           this.addVac = false;
         } else {
@@ -1399,7 +1399,7 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView();
           })
           break;
-        case 'Pay Vacations':
+        case 'Vacations To Be Paid':
           let cnt: number = 0;
           for (let i = 0; i < (parseFloat(this.actuallProc.mount.toString())); i++) {
             this.apiService.getPeriods().subscribe((periods: periods[]) => {
