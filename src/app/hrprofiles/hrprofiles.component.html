@@ -273,10 +273,10 @@
                                 <div class="form-group col-md-3"></div>
                             </div>
                             <div class="form-row col-md-12" *ngIf="!editAdj">
+                                <div class="form-group col-md-8"></div>
                                 <div class="form-group col-md-2">
                                     <button (click)="cancelAdjustment()" class="form-control">Cancel</button>
                                 </div>
-                                <div class="form-group col-md-8"></div>
                                 <div class="form-group col-md-2">
                                     <button (click)="insertAdjustment()" class="form-control">Accept</button>
                                 </div>
@@ -533,12 +533,10 @@
                                 </div>
                             </div>
                             <div class="form-row col-md-12">
+                                <div class="form-group col-md-8"></div>
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="cancelView()"
                                         *ngIf="editLeave && !showLeave">Cancel</button>
-                                </div>
-                                <div class="form-group col-md-8">
-
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="form-control" (click)="insertLeave()"
@@ -757,11 +755,11 @@
                             </div>
                             <div class="form-row col-md-12"
                                 *ngIf="setNewRequest ||  activeRequest.status === 'PENDING'">
+                                <div class="form-group col-md-6"></div>
                                 <div class="form-group col-md-3">
                                     <button class="form-control" (click)="cancelView()"
                                         *ngIf="setNewRequest">Cancel</button>
                                 </div>
-                                <div class="form-group col-md-6"></div>
                                 <div class="form-group col-md-3">
                                     <button class="form-control" (click)="insertDPRequest()"
                                         *ngIf="setNewRequest">Set</button>
@@ -991,10 +989,10 @@
                             </div>
                             <div class="form-row col-md-12"
                                 *ngIf="storedRequest &&  activeRequest.status != 'DISPATCHED' && activeRequest.status != 'INACTIVE' && activeRequest.status != 'COMPLETED'">
+                                <div class="form-group col-md-6"></div>
                                 <div class="form-group col-md-3">
                                     <button class="form-control" (click)="cancelView()">Cancel</button>
                                 </div>
-                                <div class="form-group col-md-6"></div>
                                 <div class="form-group col-md-3">
                                     <button class="form-control" (click)="addDP()">Save</button>
                                 </div>
@@ -1051,10 +1049,10 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertInsurances()">Accept</button>
                             </div>
@@ -1126,13 +1124,13 @@
                             </table>
                         </div>
                         <div class="form-row col-md-12">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="activeModify()"
                                     *ngIf="!modifyInsurance && !addBeneficiary">Modify</button>
                                 <button class="form-control" (click)="cancelView()"
                                     *ngIf="modifyInsurance || addBeneficiary">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertBeneficiary()"
                                     *ngIf="!modifyInsurance && !addBeneficiary">New</button>
@@ -1494,10 +1492,10 @@
                         </div>
                     </div>
                     <div class="form-row col-md-12" *ngIf="!validating">
+                        <div class="form-group col-md-8"></div>
                         <div class="form-group col-md-2">
                             <button class="form-control">Cancel</button>
                         </div>
-                        <div class="form-group col-md-8"></div>
                         <div class="form-group col-md-2">
                             <button class="form-control" (click)="mergeProfile()">Merge</button>
                         </div>
@@ -1657,10 +1655,10 @@
                         </div>
 
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -1729,10 +1727,10 @@
                         </div>
 
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Generate</button>
                             </div>
@@ -1774,10 +1772,10 @@
                         </div>
 
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -1838,10 +1836,10 @@
                             <div class="form-group col-md-4"></div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd && accId != accChange">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -1902,10 +1900,10 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -1914,7 +1912,7 @@
                     <!---------------------------------------------------------------------------------PAY VACATIONS----------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Vacations To Be Paid'">
                         <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">
-                          PAY VACATION
+                          VACATIONS TO BE PAID
                         </label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
@@ -1956,10 +1954,10 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()" *ngIf="addVac">Accept</button>
                                 <button class="form-control" (click)="showAlert('Not enough vacations to take')"
@@ -2030,10 +2028,10 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -2087,10 +2085,10 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -2180,10 +2178,10 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -2271,10 +2269,10 @@
                             <div class="form-group col-md-2"></div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -2352,10 +2350,10 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12" style="margin-top:25px" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="insertProc()">Accept</button>
                             </div>
@@ -2588,10 +2586,10 @@
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2">
                                 <button class="form-control" (click)="cancelView()">Cancel</button>
                             </div>
-                            <div class="form-group col-md-8"></div>
                             <div class="form-group col-md-2" *ngIf="countTerm==0">
                                 <button class="form-control" (click)="insertProc()"
                                     *ngIf="actualTerm.valid_from!=null && actualTerm.valid_from!=''">Accept</button>
