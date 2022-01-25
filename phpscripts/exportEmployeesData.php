@@ -8,6 +8,8 @@ require 'database.php';
 $exportRow = [];
 $i = 0;
 
+echo "\xEF\xBB\xBF";
+
 $sql = "SELECT users.*, employees.*, `term`.*, hires.*, profiles.*, accounts.name as `acc_name` FROM employees 
         LEFT JOIN (
                 SELECT * FROM terminations 
