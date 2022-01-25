@@ -642,9 +642,11 @@
 
                 <div class="tab-pane fade" id="nav-dp" role="tabpanel" aria-labelledby="nav-dp-tab">
                     <div class="form-row col-md-12">
-                        <label
-                            style="font-size: 20px; font-weight: bold; margin-left:50%;margin-top: 10px;">Disciplinary
-                            Processes</label>
+                        <div class="form-group col-md-12" style="text-align:center;">
+                          <label style="font-size: 20px; font-weight: bold;margin-top: 10px;">
+                            Disciplinary Processes
+                          </label>
+                        </div>
                         <div class="form-group col-sm-6">
                             <div class="form-row col-md-12">
                                 <label
@@ -672,11 +674,11 @@
                                 </table>
                             </div>
                             <div class="form-row col-md-12">
-                                <div class="form-group col-md-5"></div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-4"></div>
+                                <div class="form-group col-md-4">
                                     <button class="form-control" (click)="setRequest()">Request Details</button>
                                 </div>
-                                <div class="form-group col-md-5"></div>
+                                <div class="form-group col-md-4"></div>
                             </div>
                         </div>
                         <div class="form-group col-sm-6" style="border-left: solid 4px #e3f2fd;"
@@ -684,7 +686,8 @@
                             <div class="form-row col-md-12">
                                 <div class="form-group col-md-1"></div>
                                 <div class="form-group col-md-8">
-                                    <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Request Details
+                                    <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">
+                                        Request Details
                                         <i class="far fa-eye" (click)="printDP()" style="margin-left:5px" *ngIf="storedRequest"></i>
                                         <i class="fas fa-arrow-left" style="margin-left:5px" (click)="cancelView()"></i>
                                     </label>
@@ -768,9 +771,9 @@
                             <div class="form-row col-md-12" *ngIf="storedRequest && activeRequest.status != 'PENDING'">
                                 <div class="form-group col-md-1"></div>
                                 <div class="form-group col-md-8">
-                                    <label
-                                        style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">Disciplinary
-                                        Process</label>
+                                    <label style="font-size: 14px; font-weight: bold; margin-left:50%;margin-top: 10px;">
+                                        Disciplinary Process
+                                    </label>
                                 </div>
                                 <div class="form-group col-md-1"></div>
                             </div>
@@ -1738,8 +1741,7 @@
                     </div>
                     <!---------------------------------------------------------------------------------LEGAL DESCOUNT-------------------------------------------------------------------->
                     <div class="form-row col-md-12" *ngIf="actuallProc.name == 'Legal Discount'">
-                        <label
-                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">LEGAL</label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">LEGAL</label>
                         <div class="form-row col-md-12">
                             <div class="form-gorup col-md-4">
                                 <label>User:</label>
@@ -2617,8 +2619,8 @@
             <table width="100%" *ngIf="newProcess">
                 <tr width="100%">
                     <td style="padding:6px; background-color:rgb(227, 239, 255); border-style:solid; border-width: 1px; border-color:rgb(173, 199, 255); height: 15px;">
-                        <b>New Action</b><i class="fas fa-arrow-circle-left" style="margin-left: 90%"
-                            (click)="addProcess()"></i>
+                        <b>New Action</b>
+                        <i class="fas fa-arrow-circle-left" style="margin-left: 90%" (click)="addProcess()"></i>
                 </tr>
                 <tr>
                     <td
