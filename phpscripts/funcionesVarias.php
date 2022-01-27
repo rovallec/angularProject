@@ -159,7 +159,7 @@ function dpi_letter($value) {
     $i=0;
     while ($i <= 3) {
       if (($isCero) and ($chunk[$i]==0)) {
-        $letter = $letter . 'cero ';
+        $letter = $letter . ' cero ';
       } else {
         $isCero = false;
         $letter = $letter . $f->format($dpi1);
@@ -174,7 +174,7 @@ function dpi_letter($value) {
     $i=4;
     while ($i <= 8) {
       if (($isCero) and ($chunk[$i]==0)) {
-        $letter = $letter . 'cero ';
+        $letter = $letter . ' cero ';
       } else {
         $isCero = false;
         $letter = $letter . $f->format($dpi2);
@@ -190,7 +190,7 @@ function dpi_letter($value) {
     
     while ($i <= 12) {
       if (($isCero) and ($chunk[$i]==0)) {
-        $letter = $letter . ' cero ';
+        $letter = $letter . 'cero ';
       } else {
         $isCero = false;
         $letter = $letter . $f->format($dpi3);
