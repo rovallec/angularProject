@@ -55,7 +55,7 @@ CROSS JOIN (SELECT @i := 0) r
 ORDER BY a.name ASC ;";
 
 
-$title = ['NO.', 'Account', 'Wave', 'Nombre Completo', 'Dirección', 'Vecindad', 'Título', 'Genero', 'nacionalidad', 'DPI', 'Letras', 'Fecha de Nacimineto', 'Edad #', 'Edad (Letras)', 'Estado Civil', 'Fecha Ingreso', 'dia', 'mes', 'año', 'Revisados', 'NUMERO DE CONTRATO', 'CONTRACT YEAR', 'SALARIO BASE', 'SALARIO BASE #', 'BONIFICACION INCENTIVO', '78-89', 'Bono eficiencia #', 'bono ef letras', 'puesto', 'funciones', 'Salario Total', 'Salario Tot #'];
+$title = ['NO.', 'Account', 'Wave', 'Nombre Completo', 'Dirección', 'Vecindad', 'Título', 'Genero', 'nacionalidad', 'DPI', 'Letras', 'Fecha de Nacimineto', 'Edad #', 'Edad (Letras)', 'Estado Civil', 'Fecha Ingreso', 'dia', 'mes', 'año', 'dia', 'mes', 'año', 'Revisados', 'NUMERO DE CONTRATO', 'CONTRACT YEAR', 'SALARIO BASE', 'SALARIO BASE #', 'BONIFICACION INCENTIVO', '78-89', 'Bono eficiencia #', 'bono ef letras', 'puesto', 'funciones', 'Salario Total', 'Salario Tot #'];
 $output = fopen("php://output", "w");
 fputcsv($output, $title);
 if($result = mysqli_query($con,$sql)){
@@ -92,19 +92,22 @@ if($result = mysqli_query($con,$sql)){
     $exportRow[16] = $row['hiring_day'];
     $exportRow[17] = $row['hiring_month'];
     $exportRow[18] = $row['hiring_year'];
-    $exportRow[19] = $row['revised'];
-    $exportRow[20] = $row['number_contract'];
-    $exportRow[21] = $row['contract_year'];
-    $exportRow[22] = number_letter($row['base_payment']);
-    $exportRow[23] = $row['base_payment'];
-    $exportRow[24] = $row['bonus_letter'];
-    $exportRow[25] = $row['productivity_payment'];
-    $exportRow[26] = $row['78-89'];
-    $exportRow[27] = number_letter($row['78-89']);
-    $exportRow[28] = $row['job'];
-    $exportRow[29] = $row['functions'];
-    $exportRow[30] = number_letter($row['total_salary']);
-    $exportRow[31] = $row['total_salary'];
+    $exportRow[19] = number_letter($row['hiring_day']);
+    $exportRow[20] = getMonth($row['hiring_month']);
+    $exportRow[21] = number_letter($row['hiring_year']);
+    $exportRow[22] = $row['revised'];
+    $exportRow[23] = $row['number_contract'];
+    $exportRow[24] = $row['contract_year'];
+    $exportRow[25] = number_letter($row['base_payment']);
+    $exportRow[26] = $row['base_payment'];
+    $exportRow[27] = $row['bonus_letter'];
+    $exportRow[28] = $row['productivity_payment'];
+    $exportRow[29] = $row['78-89'];
+    $exportRow[30] = number_letter($row['78-89']);
+    $exportRow[31] = $row['job'];
+    $exportRow[32] = $row['functions'];
+    $exportRow[33] = number_letter($row['total_salary']);
+    $exportRow[34] = $row['total_salary'];
     fputcsv($output, $exportRow,",");
     $i++;
   };
