@@ -79,26 +79,28 @@ if($result = mysqli_query($con,$sql)){
     $exportRow[11] = $row['birthday'];
     $exportRow[12] = $row['age'];
     $exportRow[13] = number_letter($row['age']);
-    switch ($row['marital_status']) {
-      case 'SINGLE':
-        if ($marrital_status == 'Femenino') {
-          $marrital_status = $marrital_status . ", " . 'Soltera';
-        } else if ($marrital_status == 'Masculino') {
-          $marrital_status = $marrital_status . ", " . 'Soltero';
-        }
-      case 'MARRIED':
-        if ($marrital_status == 'Femenino') {
-          $marrital_status = $marrital_status . ", " . 'Casada';
-        } else if ($marrital_status == 'Masculino') {
-          $marrital_status = $marrital_status . ", " . 'Cadado';
-        }
-      case 'DIVORCEE':
-        if ($marrital_status == 'Femenino') {
-          $marrital_status = $marrital_status . ", " . 'Divorciada';
-        } else if ($marrital_status == 'Masculino') {
-          $marrital_status = $marrital_status . ", " . 'Divorciado';
-        }
-      break;
+    if($row['marital_status'] != ''){
+      switch ($row['marital_status']) {
+        case 'SINGLE':
+          if ($marrital_status == 'Femenino') {
+            $marrital_status = $marrital_status . ", " . 'Soltera';
+          } else if ($marrital_status == 'Masculino') {
+            $marrital_status = $marrital_status . ", " . 'Soltero';
+          }
+        case 'MARRIED':
+          if ($marrital_status == 'Femenino') {
+            $marrital_status = $marrital_status . ", " . 'Casada';
+          } else if ($marrital_status == 'Masculino') {
+            $marrital_status = $marrital_status . ", " . 'Cadado';
+          }
+        case 'DIVORCEE':
+          if ($marrital_status == 'Femenino') {
+            $marrital_status = $marrital_status . ", " . 'Divorciada';
+          } else if ($marrital_status == 'Masculino') {
+            $marrital_status = $marrital_status . ", " . 'Divorciado';
+          }
+        break;
+      }
     }
     $exportRow[14] = $marrital_status;
     $exportRow[15] = $row['hiring_date'];
