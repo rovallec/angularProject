@@ -131,6 +131,16 @@ function number_letter($value) {
   return $t;
 }
 
+function number_letter_quetzales($value) {
+  $value = removeCommas($value);
+  $base_n_init = explode(".", number_format(((float)$value),2));
+  $base_n_int_l = $f->format($base_n_init[0]);
+  $base_n_cent_l = $f->format(number_format($base_n_init[1],2));
+
+  $t = number_letter($base_n_int_l) . ' quetzales ' . number_letter($base_n_cent_l) . 'centavos';
+  return $t;
+}
+
 function date_letter($value) {
   $values = explode('-', $value);
   if(count($values) == 3 && checkdate($values[1], $values[0], $values[2])) {

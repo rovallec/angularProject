@@ -98,12 +98,17 @@ if($result = mysqli_query($con,$sql)){
     $exportRow[22] = $row['revised'];
     $exportRow[23] = $row['number_contract'];
     $exportRow[24] = $row['contract_year'];
-    $exportRow[25] = number_letter(number_format(((float)$row['base_payment']),2));
+
+    //$base_n_init = explode(".", number_format(((float)$row['base_payment']),2));
+    //$base_n_int_l = $f->format($base_n_init[0]);
+    //$base_n_cent_l = $f->format(number_format($base_n_init[1],2));
+
+    $exportRow[25] = number_letter_quetzales($row['base_payment']);
     $exportRow[26] = number_format(((float)$row['base_payment']),2);
-    $exportRow[27] = $row['bonus_letter'];
-    $exportRow[28] = number_format(((float)$row['productivity_payment']),2);
-    $exportRow[29] = $row['78-89'];
-    $exportRow[30] = number_letter($row['78-89']);
+    $exportRow[27] = number_letter_quetzales($row['78-89']);
+    $exportRow[28] = $row['78-89'];
+    $exportRow[29] = number_letter(number_format(((float)$row['productivity_payment']),2));
+    $exportRow[30] = number_format(((float)$row['productivity_payment']),2);
     $exportRow[31] = $row['job'];
     $exportRow[32] = $row['functions'];
     $exportRow[33] = number_letter(number_format(((float)$row['total_salary']),2));
