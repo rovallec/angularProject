@@ -4,7 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
-import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods } from './fullProcess';
+import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods, salaryReport } from './fullProcess';
 import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates, roster_types, rosters, roster_times, roster_weeks, tk_upload, patronal, holiday, asset_movements, movement_types, assets, StringOrNumber, asset_types, checks, checksDetails, checkbooks } from './process_templates';
 
 import { Observable } from 'rxjs';
@@ -24,8 +24,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = environment.PHP_root; // Desarrollo
-PHP_API_SERVER = "http://172.18.2.45";  // produccion
+PHP_API_SERVER = environment.PHP_root; // Desarrollo
+//PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -267,6 +267,14 @@ getallHrProcesses(){
 
 getSearchEmployees(str:any){
   return this.httpClient.post<employees[]>(`${this.PHP_API_SERVER}/phpscripts/getFilteredEmployees.php`, str);
+}
+
+getSalaryReport(filter: any) {
+  return this.httpClient.post<salaryReport[]>(`${this.PHP_API_SERVER}/phpscripts/getSalaryReport.php`, filter);
+}
+
+exportSalaryReport(filter: any) {
+  return this.httpClient.post<any>(`${this.PHP_API_SERVER}/phpscripts/exportSalaryReport.php`, filter);
 }
 
 insertAttJustification(adj:attendences_adjustment){

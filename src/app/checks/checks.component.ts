@@ -481,7 +481,7 @@ export class ChecksComponent implements OnInit {
         check.client_id = cbEmp.client_id;
         check.id_account = cbEmp.account;
         check.payment = cbEmp.idpayments;
-        check.document = next_correlative.toString(); // check number
+        check.document = String(next_correlative); // check number
         check.bankAccount = this.selectedCheckbook.account_bank;
         check.printDetail = false;
         this.apiService.saveCheck({ head: check, detail: details }).subscribe((str: string) => {

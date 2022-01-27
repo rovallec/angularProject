@@ -54,6 +54,7 @@ import { HolidaysComponent } from './holidays/holidays.component';
 import { DailypayrollvaluesComponent } from './dailypayrollvalues/dailypayrollvalues.component';
 import { ItInventoryReportComponent } from './it-inventory-report/it-inventory-report.component';
 import { ChecksComponent } from './checks/checks.component';
+import { AcsalaryreportComponent } from './acsalaryreport/acsalaryreport.component';
 
 
 @NgModule({
@@ -102,7 +103,8 @@ import { ChecksComponent } from './checks/checks.component';
     HolidaysComponent,
     DailypayrollvaluesComponent,
     ItInventoryReportComponent,
-    ChecksComponent
+    ChecksComponent,
+    AcsalaryreportComponent
   ],
   imports: [
     BrowserModule,

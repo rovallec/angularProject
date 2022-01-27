@@ -752,6 +752,7 @@ export class HrprofilesComponent implements OnInit {
     this.editLeave = false;
     this.showLeave = false;
     this.setNewRequest = false;
+    this.newRequest = false;
     this.reasonRequiered = false;
     this.storedRequest = false;
     this.newAudience = "NO";
@@ -1197,8 +1198,14 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getTemplates() {
+    this.process_templates = [];
     this.apiService.getTemplates().subscribe((prs: hr_process[]) => {
-      this.process_templates = prs;
+      prs.forEach(pt => {
+        if (Number(pt.idprocesses) < 20) {
+          this.process_templates.push(pt);
+        }
+      })
+      //this.process_templates = prs;
     });
   }
 
@@ -1504,7 +1511,7 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Legal Discount':
           this.actualJudicial.id_process = str;
-          this.apiService.insertJudicials(this.actualJudicial).subscribe((str: string) => {
+          this.apiService.insertJudicials(this.actualJudicial).subscribe((_str: string) => {
             this.cancelView();
           })
           break;

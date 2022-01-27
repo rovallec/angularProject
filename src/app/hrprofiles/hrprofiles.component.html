@@ -2363,8 +2363,9 @@
                     </div>
                     <!---------------------------------------------------------------------TERMINATION-------------------------------------------------------------->
                     <div class="form-group col-md-12" *ngIf="actuallProc.name === 'Termination'">
-                        <label
-                            style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">TERMINATION</label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:45%;margin-top: 10px;">
+                          TERMINATION
+                        </label>
                         <div class="form-row">
                             <div class="form-group col-sm-6">
                                 <div class="form-row col-md-12">
@@ -2594,7 +2595,7 @@
                             </div>
                             <div class="form-group col-md-2" *ngIf="countTerm==0">
                                 <button class="form-control" (click)="insertProc()"
-                                    *ngIf="actualTerm.valid_from!=null && actualTerm.valid_from!=''">Accept</button>
+                                    *ngIf="((actualTerm.valid_from!=null) && (actualTerm.valid_from!=''))">Accept</button>
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="viewRecProd">
