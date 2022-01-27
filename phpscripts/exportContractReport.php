@@ -6,6 +6,8 @@ header('Content-Disposition: attachment; filename="' . "reporteDeContratos.csv" 
 require 'database.php';
 include 'funcionesVarias.php';
 
+$marital_status = '';
+
 echo "\xEF\xBB\xBF";
 $i = 0;
 
@@ -82,27 +84,27 @@ if($result = mysqli_query($con,$sql)){
     if($row['marital_status'] != ''){
       switch ($row['marital_status']) {
         case 'SINGLE':
-          if ($marrital_status == 'Femenino') {
-            $marrital_status = $marrital_status . ", " . 'Soltera';
-          } else if ($marrital_status == 'Masculino') {
-            $marrital_status = $marrital_status . ", " . 'Soltero';
+          if ($marital_status == 'Femenino') {
+            $marital_status = $marital_status . ", " . 'Soltera';
+          } else if ($marital_status == 'Masculino') {
+            $marital_status = $marital_status . ", " . 'Soltero';
           }
         case 'MARRIED':
-          if ($marrital_status == 'Femenino') {
-            $marrital_status = $marrital_status . ", " . 'Casada';
-          } else if ($marrital_status == 'Masculino') {
-            $marrital_status = $marrital_status . ", " . 'Cadado';
+          if ($marital_status == 'Femenino') {
+            $marital_status = $marital_status . ", " . 'Casada';
+          } else if ($marital_status == 'Masculino') {
+            $marital_status = $marital_status . ", " . 'Cadado';
           }
         case 'DIVORCEE':
-          if ($marrital_status == 'Femenino') {
-            $marrital_status = $marrital_status . ", " . 'Divorciada';
-          } else if ($marrital_status == 'Masculino') {
-            $marrital_status = $marrital_status . ", " . 'Divorciado';
+          if ($marital_status == 'Femenino') {
+            $marital_status = $marital_status . ", " . 'Divorciada';
+          } else if ($marital_status == 'Masculino') {
+            $marital_status = $marital_status . ", " . 'Divorciado';
           }
         break;
       }
     }
-    $exportRow[14] = $marrital_status;
+    $exportRow[14] = $marital_status;
     $exportRow[15] = $row['hiring_date'];
     $exportRow[16] = $row['hiring_day'];
     $exportRow[17] = $row['hiring_month'];
