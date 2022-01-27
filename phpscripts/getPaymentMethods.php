@@ -10,7 +10,22 @@ $id_employee = ($request->idemployees);
 
 $result = [];
 $i = 0;
-$sql = "SELECT * FROM payment_methods LEFT JOIN modify_payment_methods ON modify_payment_methods.id_payment_method = payment_methods.idpayment_methods WHERE `id_employee` =  $id_employee;";
+$sql = "SELECT a.idpayment_methods,
+          a.id_employee,
+          a.`type`,
+          a.`number`,
+          a.bank,
+          a.predeterm,
+          b.idmodify_payment_methods,
+          b.id_payment_method,
+          b.id_user,
+          b.`date`,          
+          b.notes,
+          u.user_name
+        FROM payment_methods a 
+          LEFT JOIN modify_payment_methods b ON (a.idpayment_methods = b.id_payment_method)
+          LEFT JOIN users u on (b.id_user = u.idUser)
+        WHERE a.`id_employee` = $id_employee;";
 
 if($res = mysqli_query($con,$sql)){
     while($row = mysqli_fetch_assoc($res)){
@@ -20,8 +35,14 @@ if($res = mysqli_query($con,$sql)){
         $result[$i]['number'] = $row{'number'};
         $result[$i]['bank'] = $row{'bank'};
         $result[$i]['predeterm'] = $row{'predeterm'};
+        $result[$i]['id_user'] = $row{'user_name'};
+        $result[$i]['date'] = $row{'date'};
+        $result[$i]['notes'] = $row{'notes'};
         $i = $i + 1;
     }
     echo(json_encode($result));
+} else {
+  echo(json_encode($sql));
+  http_response_code(400);
 }
 ?> 

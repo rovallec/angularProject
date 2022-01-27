@@ -146,7 +146,7 @@ echo "
         </table>
       </td>
     <tr style='font-size: 12px;' align='center'>
-      <td colspan='4'>$name</td>
+      <td colspan='4'> $name </td>
     </tr>
   </table>
 </div>";

@@ -123,13 +123,19 @@ function number_letter($value) {
   $value = removeCommas($value);
   $f = new NumberFormatter($lang, NumberFormatter::SPELLOUT);
   $t = $f->format($value);
-  //
-  //$f = numfmt_create('es', NumberFormatter::SPELLOUT );
-  //$t = numfmt_format($f, $value);
-
-
+  
   return $t;
 }
+
+function number_letter_quetzales($value) {
+  $base_n_init = explode(".", number_format(((float)$value),2));
+  $base_n_int_l = $f->format($base_n_init[0]);
+  $base_n_cent_l = $f->format(number_format($base_n_init[1],2));
+
+  $t = number_letter($base_n_int_l) . ' quetzales ' . number_letter($base_n_cent_l) . 'centavos';
+  return $t;
+}
+
 
 function date_letter($value) {
   $values = explode('-', $value);
@@ -194,7 +200,7 @@ function dpi_letter($value) {
       } else {
         $isCero = false;
         $letter = $letter . $f->format($dpi3);
-        $t = $t . ' espacio ' . $letter;
+        $t = $t . ' espacio' . $letter;
         break;
       }
       $i++;
