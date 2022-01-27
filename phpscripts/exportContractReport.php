@@ -84,21 +84,21 @@ if($result = mysqli_query($con,$sql)){
     switch ($row['marital_status']) {
       case 'SINGLE':
         if ($gender == 'Femenino') {
-          $marital_status = $marital_status . ", " . 'Soltera';
-        } else if ($marital_status == 'Masculino') {
-          $marital_status = $marital_status . ", " . 'Soltero';
+          $marital_status = 'Soltera';
+        } else if ($gender == 'Masculino') {
+          $marital_status = 'Soltero';
         }
       case 'MARRIED':
         if ($gender == 'Femenino') {
-          $marital_status = $marital_status . ", " . 'Casada';
-        } else if ($marital_status == 'Masculino') {
-          $marital_status = $marital_status . ", " . 'Cadado';
+          $marital_status = 'Casada';
+        } else if ($gender == 'Masculino') {
+          $marital_status = 'Cadado';
         }
       case 'DIVORCEE':
         if ($gender == 'Femenino') {
-          $marital_status = $marital_status . ", " . 'Divorciada';
-        } else if ($marital_status == 'Masculino') {
-          $marital_status = $marital_status . ", " . 'Divorciado';
+          $marital_status = 'Divorciada';
+        } else if ($gender == 'Masculino') {
+          $marital_status = 'Divorciado';
         }
       break;
     }
