@@ -11,11 +11,11 @@ $marital_status = '';
 echo "\xEF\xBB\xBF";
 $i = 0;
 
-$sql = "SELECT 
+$sql = "SELECT
 @i := @i + 1 AS 'No.',
 a.name AS account,
 w.name as wave,
-p2.name, 
+p2.name,
 cd.address,
 cd.city AS neighborhood,
 p.profesion AS title,
@@ -43,7 +43,7 @@ e.job,
 'Salario total en letras' AS total_letter,
 e.base_payment + e.productivity_payment AS total_salary
 FROM employees e
-INNER JOIN hires h ON h.idhires = e.id_hire 
+INNER JOIN hires h ON h.idhires = e.id_hire
 INNER JOIN (SELECT UPPER(CONCAT(TRIM(p1.first_name), ' ', TRIM(p1.second_name), ' ', TRIM(p1.first_lastname), ' ', TRIM(p1.second_lastname))) AS name, p1.idprofiles FROM profiles p1) p2 ON (p2.idprofiles = h.id_profile)
 INNER JOIN profiles p ON (h.id_profile = p.idprofiles)
 INNER JOIN accounts a ON a.idaccounts = e.id_account
@@ -59,7 +59,7 @@ $title = ['NO.', 'Account', 'Wave', 'Nombre Completo', 'Dirección', 'Vecindad',
 $output = fopen("php://output", "w");
 fputcsv($output, $title);
 if($result = mysqli_query($con,$sql)){
-  while($row = mysqli_fetch_assoc($result)){ 
+  while($row = mysqli_fetch_assoc($result)){
     $exportRow[0] = $row['No.'];
     $exportRow[1] = $row['account'];
     $exportRow[2] = $row['wave'];
@@ -103,16 +103,16 @@ if($result = mysqli_query($con,$sql)){
     //$base_n_int_l = $f->format($base_n_init[0]);
     //$base_n_cent_l = $f->format(number_format($base_n_init[1],2));
 
-    $exportRow[25] = number_letter_quetzales($row['base_payment']);
-    $exportRow[26] = number_format(((float)$row['base_payment']),2);
-    $exportRow[27] = number_letter_quetzales($row['78-89']);
-    $exportRow[28] = $row['78-89'];
-    $exportRow[29] = number_letter(number_format(((float)$row['productivity_payment']),2));
-    $exportRow[30] = number_format(((float)$row['productivity_payment']),2);
+    $exportRow[25] = number_letter_quetzales(number_format((float)$row['base_payment'],2));
+    $exportRow[26] = number_format((float)$row['base_payment'],2);
+    $exportRow[27] = number_letter_quetzales(number_format((float)$row['78-89'],2));
+    $exportRow[28] = number_format(((float)$row['78-89']),2);
+    $exportRow[29] = number_letter_quetzales(number_format((float)$row['productivity_payment'],2));
+    $exportRow[30] = number_format((float)$row['productivity_payment'],2);
     $exportRow[31] = $row['job'];
     $exportRow[32] = $row['functions'];
-    $exportRow[33] = number_letter(number_format(((float)$row['total_salary']),2));
-    $exportRow[34] = $row['total_salary'];
+    $exportRow[33] = number_letter_quetzales(number_format((float)$row['total_salary'],2));
+    $exportRow[34] = number_format((float)$row['total_salary'],2);
     fputcsv($output, $exportRow,",");
     $i++;
   };

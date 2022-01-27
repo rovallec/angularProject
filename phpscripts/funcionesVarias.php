@@ -70,11 +70,11 @@ function removeCommas($avalue) {
 }
 
 function addQuotes($str){
-	if($str != 'NULL'){
-		return "'" . $str . "'";
-	}else{
-		return $str;
-	}
+  if($str != 'NULL'){
+    return "'" . $str . "'";
+  }else{
+    return $str;
+  }
 }
 
 function getMonth($amonth){
@@ -134,10 +134,7 @@ function number_letter($value) {
 function number_letter_quetzales($value) {
   $value = removeCommas($value);
   $base_n_init = explode(".", number_format(((float)$value),2));
-  $base_n_int_l = $f->format($base_n_init[0]);
-  $base_n_cent_l = $f->format(number_format($base_n_init[1],2));
-
-  $t = number_letter($base_n_int_l) . ' quetzales ' . number_letter($base_n_cent_l) . 'centavos';
+  $t = number_letter($base_n_init[0]) . ' quetzales con ' . number_letter($base_n_init[1]) . ' centavos';
   return $t;
 }
 
@@ -146,7 +143,7 @@ function date_letter($value) {
   if(count($values) == 3 && checkdate($values[1], $values[0], $values[2])) {
     $value = formatDates($value);
   }
-  $letter = number_letter($values[0]) . " de " . getMonth($values[1]) . " del año " . number_letter($values[2]);    
+  $letter = number_letter($values[0]) . " de " . getMonth($values[1]) . " del año " . number_letter($values[2]);
   return $letter;
 }
 
@@ -163,7 +160,7 @@ function dpi_letter($value) {
 
     $f = new NumberFormatter("es", NumberFormatter::SPELLOUT);
     $t = '';
-    
+
     $isCero = true;
     $letter = '';
     $i=0;
@@ -197,7 +194,7 @@ function dpi_letter($value) {
     $isCero = true;
     $letter = '';
     $i=9;
-    
+
     while ($i <= 12) {
       if (($isCero) and ($chunk[$i]==0)) {
         $letter = $letter . 'cero ';
