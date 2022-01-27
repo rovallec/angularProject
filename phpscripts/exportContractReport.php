@@ -18,7 +18,7 @@ w.name as wave,
 p2.name, 
 cd.address,
 cd.city AS neighborhood,
-ed.current_level AS title,
+ed.profesion AS title,
 p.gender,
 p.nationality,
 p.dpi,
@@ -52,7 +52,7 @@ INNER JOIN waves w ON (h.id_wave = w.idwaves)
 LEFT JOIN contact_details AS cd ON (p.idprofiles = cd.id_profile)
 LEFT JOIN education_details ed ON (p.idprofiles = ed.ideducation_details)
 CROSS JOIN (SELECT @i := 0) r
-ORDER BY a.name ASC ;";
+ORDER BY a.name ASC;";
 
 
 $title = ['NO.', 'Account', 'Wave', 'Nombre Completo', 'Dirección', 'Vecindad', 'Título', 'Genero', 'nacionalidad', 'DPI', 'Letras', 'Fecha de Nacimineto', 'Edad #', 'Edad (Letras)', 'Estado Civil', 'Fecha Ingreso', 'dia', 'mes', 'año', 'Revisados', 'NUMERO DE CONTRATO', 'CONTRACT YEAR', 'SALARIO BASE', 'SALARIO BASE #', 'BONIFICACION INCENTIVO', '78-89', 'Bono eficiencia #', 'bono ef letras', 'puesto', 'funciones', 'Salario Total', 'Salario Tot #'];
