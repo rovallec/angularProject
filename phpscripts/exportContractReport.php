@@ -81,28 +81,26 @@ if($result = mysqli_query($con,$sql)){
     $exportRow[11] = $row['birthday'];
     $exportRow[12] = $row['age'];
     $exportRow[13] = number_letter($row['age']);
-    if($row['marital_status'] != ''){
-      switch ($row['marital_status']) {
-        case 'SINGLE':
-          if ($gender == 'Femenino') {
-            $marital_status = $marital_status . ", " . 'Soltera';
-          } else if ($marital_status == 'Masculino') {
-            $marital_status = $marital_status . ", " . 'Soltero';
-          }
-        case 'MARRIED':
-          if ($gender == 'Femenino') {
-            $marital_status = $marital_status . ", " . 'Casada';
-          } else if ($marital_status == 'Masculino') {
-            $marital_status = $marital_status . ", " . 'Cadado';
-          }
-        case 'DIVORCEE':
-          if ($gender == 'Femenino') {
-            $marital_status = $marital_status . ", " . 'Divorciada';
-          } else if ($marital_status == 'Masculino') {
-            $marital_status = $marital_status . ", " . 'Divorciado';
-          }
-        break;
-      }
+    switch ($row['marital_status']) {
+      case 'SINGLE':
+        if ($gender == 'Femenino') {
+          $marital_status = $marital_status . ", " . 'Soltera';
+        } else if ($marital_status == 'Masculino') {
+          $marital_status = $marital_status . ", " . 'Soltero';
+        }
+      case 'MARRIED':
+        if ($gender == 'Femenino') {
+          $marital_status = $marital_status . ", " . 'Casada';
+        } else if ($marital_status == 'Masculino') {
+          $marital_status = $marital_status . ", " . 'Cadado';
+        }
+      case 'DIVORCEE':
+        if ($gender == 'Femenino') {
+          $marital_status = $marital_status . ", " . 'Divorciada';
+        } else if ($marital_status == 'Masculino') {
+          $marital_status = $marital_status . ", " . 'Divorciado';
+        }
+      break;
     }
     $exportRow[14] = $marital_status;
     $exportRow[15] = $row['hiring_date'];
