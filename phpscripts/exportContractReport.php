@@ -94,12 +94,8 @@ if($result = mysqli_query($con,$sql)){
         } else if ($gender == 'Masculino') {
           $marital_status = 'Cadado';
         }
-      case 'DIVORCEE':
-        if ($gender == 'Femenino') {
-          $marital_status = 'Divorciada';
-        } else if ($gender == 'Masculino') {
-          $marital_status = 'Divorciado';
-        }
+      default:
+          $marital_status = ' ';
       break;
     }
     $exportRow[14] = $marital_status;
