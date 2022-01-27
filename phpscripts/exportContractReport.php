@@ -81,22 +81,11 @@ if($result = mysqli_query($con,$sql)){
     $exportRow[11] = $row['birthday'];
     $exportRow[12] = $row['age'];
     $exportRow[13] = number_letter($row['age']);
-    switch ($row['marital_status']) {
-      case 'SINGLE':
-        if ($gender == 'Femenino') {
-          $marital_status = 'Soltera';
-        } else if ($gender == 'Masculino') {
-          $marital_status = 'Soltero';
-        }
-      case 'MARRIED':
-        if ($gender == 'Femenino') {
-          $marital_status = 'Casada';
-        } else if ($gender == 'Masculino') {
-          $marital_status = 'Cadado';
-        }
-      default:
-          $marital_status = ' ';
-      break;
+    if($row['marital_status'] == 'SINGLE'){
+      $marital_status = 'Soltero';
+    }
+    if($row['marital_status'] == 'MARRIED'){
+      $marital_status = 'Casado';
     }
     $exportRow[14] = $marital_status;
     $exportRow[15] = $row['hiring_date'];
