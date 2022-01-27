@@ -29,18 +29,6 @@ export class AcsalaryreportComponent implements OnInit {
     this.getSalaryReport();
   }
 
-  searchEmployee() {
-    this.apiService.getSearchEmployees({ filter: this.filter, value: this.value, dp: this.authService.getAuthusr().department, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-      //this.allEmployees = emp;
-    });
-    this.searching = true;
-  }
-
-  cancelSearch() {
-    this.searching = false;
-    this.start();
-  }
-
   getSalaryReport() {
     this.salaryReport = [];
     this.apiService.getSalaryReport({ filter: this.filter, value: this.value }).subscribe((salrep: salaryReport[]) => {
@@ -51,7 +39,6 @@ export class AcsalaryreportComponent implements OnInit {
   exportSalaryReport() {
     var url = this.apiService.PHP_API_SERVER + "/phpscripts/exportSalaryReport.php?filter=" + this.filter + "&value=" + this.value;
     window.open(url, "_blank");
-    //this.apiService.exportSalaryReport({ filter: fil }).subscribe();
   }
 
   clearFilter() {
