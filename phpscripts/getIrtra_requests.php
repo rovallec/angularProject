@@ -19,7 +19,6 @@ if($result = mysqli_query($con, $sql)){
         $user['spouse_name'] = $row['spouse_name'];
         $user['spouse_lastname'] = $row['spouse_lastname'];
     };
-    echo($user);
     echo json_encode($user);
 }else{
     http_response_code(404);
