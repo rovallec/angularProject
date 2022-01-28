@@ -126,7 +126,7 @@ echo("
                         <td>Segundo Apellido:</td>
                         <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$second_lastname</td>
                         <td>De casada:</td>
-                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$married</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$spouse_lastname</td>
                     </tr>
                 </table>
             </td>
