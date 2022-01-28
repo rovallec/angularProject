@@ -29,7 +29,7 @@ $second_name = $_GET['second_name'];
 $zone = $_GET['zone'];
 $email = $_GET['email'];
 $spouse_name = $_GET['spouse_name'];
-$spouse_lastname = $_GET['spouse_lastname'];
+$spouse_lastname = str_replace(',', ' ', $_GET['spouse_lastname']);
 $extended_dept = $_GET['depto'];
 $extended_mun = $_GET['mun'];
 
