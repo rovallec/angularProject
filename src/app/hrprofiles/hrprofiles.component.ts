@@ -1881,7 +1881,7 @@ export class HrprofilesComponent implements OnInit {
         "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname + "," + "&depto=" + this.actualIrtrarequests.dpto
         + "&mun=" + this.actualIrtrarequests.mun, "_blank");
     } else {
-      window.open('http://172.18.2.45/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type, "_blank");
+      window.open('http://172.18.2.45/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actuallProc.status, "_blank");
     }
   }
 
