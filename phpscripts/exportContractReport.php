@@ -105,9 +105,9 @@ if($result = mysqli_query($con,$sql)){
 
     $exportRow[25] = number_letter_quetzales(number_format((float)$row['base_payment'],2));
     $exportRow[26] = number_format((float)$row['base_payment'],2);
-    $exportRow[27] = number_letter_quetzales(number_format((float)$row['78-89'],2));
+    $exportRow[27] = number_letter_quetzales_exactos(number_format((float)$row['78-89'],2));
     $exportRow[28] = number_format(((float)$row['78-89']),2);
-    $exportRow[29] = str_replace(' con cero centavos', '',number_letter_quetzales(number_format((float)$row['productivity_payment'],2)));
+    $exportRow[29] = number_letter_quetzales(number_format((float)$row['productivity_payment'],2));
     $exportRow[30] = number_format((float)$row['productivity_payment'],2);
     $exportRow[31] = $row['job'];
     $exportRow[32] = $row['functions'];
