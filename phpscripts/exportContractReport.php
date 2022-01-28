@@ -111,7 +111,7 @@ if($result = mysqli_query($con,$sql)){
     $exportRow[30] = number_format((float)$row['productivity_payment'],2);
     $exportRow[31] = $row['job'];
     $exportRow[32] = $row['functions'];
-    $exportRow[33] = number_letter_quetzales(number_format((float)$row['total_salary'],2));
+    $exportRow[33] = number_letter_quetzales_exactos(number_format((float)$row['total_salary'],2));
     $exportRow[34] = number_format((float)$row['total_salary'],2);
     fputcsv($output, $exportRow,",");
     $i++;

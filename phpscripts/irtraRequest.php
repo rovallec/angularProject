@@ -1,4 +1,5 @@
 <?php
+include 'funcionesVarias.php';
 $date = date('Y/m/d');
 $exp = explode("/", $date);
 $day = $exp[2];
@@ -15,7 +16,7 @@ $months[9] = "September";
 $months[10] = "Octuber";
 $months[11] = "November";
 $months[12] = "December";
-$month = $months[(int)$exp[1]];
+$month = getMonth((int)$exp[1]);
 $year = $exp[0];
 $name = $_GET['name'];
 $dpi = $_GET['dpi'];
