@@ -1,4 +1,5 @@
 <?php
+include 'funcionesVarias.php';
 $date = date('Y/m/d');
 $exp = explode("/", $date);
 $day = $exp[2];
