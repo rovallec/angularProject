@@ -1863,7 +1863,7 @@ export class HrprofilesComponent implements OnInit {
     let f: string;
     let married: string;
 
-    if (this.workingEmployee.gender == 'M' || this.workingEmployee.gender == 'Masculino') {
+    if (this.workingEmployee.gender == 'M' || this.workingEmployee.gender == 'Masculino' || this.workingEmployee.gender == 'MALE') {
       f = ' ';
       m = "x";
     } else {
