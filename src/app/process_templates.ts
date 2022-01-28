@@ -755,6 +755,8 @@ export class irtra_requests {
     type: string;
     spouse_name: string;
     spouse_lastname: string;
+    dpto:string;
+    mun:string;
     constructor() {
         this.idirtra_requests = null;
         this.idprocess = null;

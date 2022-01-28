@@ -1716,16 +1716,24 @@
                             </div>
                         </div>
 
-                        <div class="form-row col-md-12">
-                            <div class="form-group col-md-6">
-                                <label>Spouse Name:</label>
+                        <div class="form-row col-md-12" *ngIf="!viewRecProd">
+                            <div class="form-group col-md-3">
+                                <label>Spouse Given Name:</label>
                                 <input type="text" class="form-control" [(ngModel)]="actualIrtrarequests.spouse_name"
                                     [disabled]="viewRecProd">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label>Spouse Given Names:</label>
+                            <div class="form-group col-md-3">
+                                <label>Spouse Given Last Name:</label>
                                 <input type="text" class="form-control"
                                     [(ngModel)]="actualIrtrarequests.spouse_lastname" [disabled]="viewRecProd">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>DPI's Department:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualIrtrarequests.dpto">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>DPI's District:</label>
+                                <input type="text" class="form-control" [(ngModel)]="actualIrtrarequests.mun">
                             </div>
                         </div>
 
