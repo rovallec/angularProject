@@ -15,7 +15,7 @@ if($result = mysqli_query($con, $sql)){
     while($row = mysqli_fetch_assoc($result)){
         $user['idprocess'] = $row['id_process'];
         $user['idirtra_requests'] = $row['id_process'];
-        $user['type'] = $row['type'];
+        $user['status'] = $row['type'];
         $user['spouse_name'] = $row['spouse_name'];
         $user['spouse_lastname'] = $row['spouse_lastname'];
     };
