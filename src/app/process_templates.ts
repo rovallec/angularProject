@@ -2756,6 +2756,7 @@ export class assets{
     id_user:string;
     employee_name:string;
     date:string;
+    account:string;
     constructor(){
         this.idassets = null;
         this.id_type = null;
@@ -2771,6 +2772,7 @@ export class assets{
         this.movement = '1';
         this.employee_name = null;
         this.date = null;
+        this.account = null;
     }
 }
 
