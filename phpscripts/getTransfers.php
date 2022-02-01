@@ -11,8 +11,8 @@ $end = ($request->end);
 $hrproc = [];
 
 if($id_employee == "exp"){
-	$ns = $start.explode('|')[0];
-	$start = $start.explode('|')[1];
+	$ns = explode('|', $start)[0];
+	$start = explode('|', $start)[1];
 	$sql = "SELECT * FROM hr_processes WHERE notes like '%$ns%' AND id_type = 16 AND date BETWEEN '$start' AND '$end';";
 }else{
 	$sql = "SELECT * FROM hr_processes WHERE id_employee = $id_employee AND id_type = 16 AND date BETWEEN '$start' AND '$end';";
