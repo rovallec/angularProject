@@ -47,7 +47,7 @@ for ($i=0; $i < (count($request)); $i++) {
     $sql = $sql . 
            "(NULL,$id_employee, $id_reporter, $id_account, $id_period, $id_payment, '$client_id', '$nearsol_id', $discounted_days, $seventh, $discounted_hours, $ot_hours, $holidays_hours, $performance_bonus, $treasure_hunt, $next_seventh, $adj_hours, $adj_ot,  $adj_holidays, $nearsol_bonus)";
 }
-echo($sql);
+
 if(mysqli_query($con,$sql)){
     echo("1");
 }else{
