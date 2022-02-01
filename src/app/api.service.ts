@@ -24,8 +24,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-PHP_API_SERVER = environment.PHP_root; // Desarrollo
-//PHP_API_SERVER = "http://172.18.2.45";  // produccion
+//PHP_API_SERVER = environment.PHP_root; // Desarrollo
+PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -1203,6 +1203,10 @@ getAssetTypes(){
 
 getAllocatedAssets(){
   return this.httpClient.get<assets[]>(`${this.PHP_API_SERVER}/phpscripts/getAllocatedAssets.php`);
+}
+
+getSessions(usr:users){
+  return this.httpClient.post<users>(`${this.PHP_API_SERVER}/phpscripts/getSessions.php`, usr)
 }
 }
 

@@ -103,6 +103,7 @@ export class PeriodsComponent implements OnInit {
   loading_import:boolean = false;
   save_import:boolean = false;
   loading_save:boolean = false;
+  loadAll:boolean = false
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authService: AuthServiceService) { }
 
@@ -972,13 +973,24 @@ export class PeriodsComponent implements OnInit {
                         pymnts.forEach(py => {
                           this.conflictedPeriods.push(py);
                         })
-                        if(emp[0].id_account == this.selectedAccount.idaccounts){
-                          this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys =>{
-                            if(pys.id_account_py == this.selectedAccount.idaccounts || isNullOrUndefined(pys.id_account_py)){
-                              paymentValue.id_payment = pys.idpayments;
-                              paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
-                            }
-                          })
+                        if(this.loadAll){
+                          if(emp[0].id_account == element['ACCOUNT']){
+                            this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys =>{
+                              if(pys.id_account_py ==  element['ACCOUNT'] || isNullOrUndefined(pys.id_account_py)){
+                                paymentValue.id_payment = pys.idpayments;
+                                paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
+                              }
+                            })
+                          }
+                        }else{
+                          if(emp[0].id_account == this.selectedAccount.idaccounts){
+                            this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys =>{
+                              if(pys.id_account_py == this.selectedAccount.idaccounts || isNullOrUndefined(pys.id_account_py)){
+                                paymentValue.id_payment = pys.idpayments;
+                                paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
+                              }
+                            })
+                          }
                         }
                         paymentValue.id_employee = emp[0].idemployees;
                         paymentValue.agent_name = element['Full Name'];
@@ -1017,24 +1029,56 @@ export class PeriodsComponent implements OnInit {
                   this.payrollvalues.push(paymentValue);
                 }
               }else{
-                let paymentValue = new payroll_values_gt;
-                paymentValue.status = '0';
-                paymentValue.client_id = element['Avaya'];
-                paymentValue.nearsol_id = element['ID'];
-                paymentValue.id_payment = "NULL";
-                paymentValue.id_employee = emp[0].idemployees;
-                paymentValue.agent_name = element['Full Name'];
-                paymentValue.id_reporter = element['Supervisor'];
-                paymentValue.discounted_days = element['Days to discount'];
-                paymentValue.seventh = element['7th'];
-                paymentValue.total_days = element['Total Days to discount'];
-                paymentValue.discounted_hours = element['Hours to discount'];
-                paymentValue.ot_hours = element['OT'];
-                paymentValue.holidays_hours = element['Holiday Hours'];
-                paymentValue.performance_bonus = element['Performance Bonus'];
-                paymentValue.nearsol_bonus = element['Nearsol Bonus'];
-                paymentValue.treasure_hunt = element['Treasure Hunt'];
-                this.payrollvalues.push(paymentValue);
+                this.apiService.getTransfers({id_employee:'exp', start:element['ID'] + "|" +this.period.start, end:this.period.end}).subscribe((proc:hrProcess)=>{
+                  if(isNullOrUndefined(proc.id_employee)){
+                    let paymentValue = new payroll_values_gt;
+                    paymentValue.status = '0';
+                    paymentValue.client_id = element['Avaya'];
+                    paymentValue.nearsol_id = element['ID'];
+                    paymentValue.id_payment = "NULL";
+                    paymentValue.id_employee = emp[0].idemployees;
+                    paymentValue.agent_name = element['Full Name'];
+                    paymentValue.id_reporter = element['Supervisor'];
+                    paymentValue.discounted_days = element['Days to discount'];
+                    paymentValue.seventh = element['7th'];
+                    paymentValue.total_days = element['Total Days to discount'];
+                    paymentValue.discounted_hours = element['Hours to discount'];
+                    paymentValue.ot_hours = element['OT'];
+                    paymentValue.holidays_hours = element['Holiday Hours'];
+                    paymentValue.performance_bonus = element['Performance Bonus'];
+                    paymentValue.nearsol_bonus = element['Nearsol Bonus'];
+                    paymentValue.treasure_hunt = element['Treasure Hunt'];
+                    this.payrollvalues.push(paymentValue);
+                  }else{
+                    pr.start = 'explicit_period';
+                    pr.status = emp[0].idemployees;
+                    pr.end = this.period.idperiods;
+                    this.apiService.getPayments(pr).subscribe((pymnts: payments[]) => {
+                      pymnts.forEach(payment=>{
+                        if(!isNullOrUndefined(payment.id_account_py)){
+                          let paymentValue = new payroll_values_gt;
+                          paymentValue.status = '1';
+                          paymentValue.client_id = element['Avaya'];
+                          paymentValue.nearsol_id = element['ID'];
+                          paymentValue.id_payment = payment.idpayments;
+                          paymentValue.id_employee = emp[0].idemployees;
+                          paymentValue.agent_name = element['Full Name'];
+                          paymentValue.id_reporter = element['Supervisor'];
+                          paymentValue.discounted_days = element['Days to discount'];
+                          paymentValue.seventh = element['7th'];
+                          paymentValue.total_days = element['Total Days to discount'];
+                          paymentValue.discounted_hours = element['Hours to discount'];
+                          paymentValue.ot_hours = element['OT'];
+                          paymentValue.holidays_hours = element['Holiday Hours'];
+                          paymentValue.performance_bonus = element['Performance Bonus'];
+                          paymentValue.nearsol_bonus = element['Nearsol Bonus'];
+                          paymentValue.treasure_hunt = element['Treasure Hunt'];
+                          this.payrollvalues.push(paymentValue);
+                        }
+                      })
+                    })
+                  }
+                })
               }
                 if (progress == sheetToJson.length) {
                   var worksheet_2 = workbook.Sheets[first_sheet_name_2];
@@ -1283,7 +1327,23 @@ export class PeriodsComponent implements OnInit {
                   })
                   this.setImport.push(payroll_val);
                 }
-                if(emp[0].id_account == this.selectedAccount.idaccounts && payroll_val.status != '3'){
+                if(this.loadAll){
+                  if(emp[0].id_account == this.selectedAccount.idaccounts && payroll_val.status != '3'){
+                    progress++;
+                    this.setImport.push(payroll_val);
+                    if(progress >= this.payrollvalues.length){
+                      this.save_import = true;
+                      this.loading_import = false;
+                    }
+                  }else{
+                    progress++;
+                    if(progress >= this.payrollvalues.length){
+                      this.save_import = true;
+                      this.loading_import = false;
+                    }
+                  }
+                }else{
+                  if(emp[0].id_account == this.selectedAccount.idaccounts && payroll_val.status != '3'){
                   progress++;
                   this.setImport.push(payroll_val);
                   if(progress >= this.payrollvalues.length){
@@ -1296,6 +1356,7 @@ export class PeriodsComponent implements OnInit {
                     this.save_import = true;
                     this.loading_import = false;
                   }
+                }
                 }
               }else{
                 progress++;
@@ -1360,10 +1421,8 @@ export class PeriodsComponent implements OnInit {
         if(!isNullOrUndefined(this.credits)){
           this.pushDeductions("debits", this.credits);
         }
-        this.apiService.updatePeriods({id:this.period.idperiods, status:'3'}).subscribe((str:string)=>{
-          window.alert("Process Successfuly Completed");
-          this.loading_save = false;
-        })
+        window.alert("Process Successfuly Completed");
+        this.loading_save = false;
     })
   }
 }
