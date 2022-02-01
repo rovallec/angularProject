@@ -350,22 +350,26 @@ export class PeriodsComponent implements OnInit {
                             adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.type = "Ajuste Horas Nominales";
+                            adjustment_base.idpayments = py.idpayments;
 
                             if(Number(payroll_value.performance_bonus) != 0){
                               performance_bonus.amount = payroll_value.performance_bonus;
                               performance_bonus.type = "Performance Bonus";
+                              performance_bonus.idpayments = py.idpayments;
                               this.global_credits.push(performance_bonus);
                             }
 
                             if(Number(payroll_value.nearsol_bonus) != 0){
                               nearsol_bonus.amount = payroll_value.nearsol_bonus;
                               nearsol_bonus.type = "Nearsol Bonus";
+                              nearsol_bonus.idpayments = py.idpayments;
                               this.global_credits.push(nearsol_bonus);
                             }
 
                             if(Number(payroll_value.treasure_hunt) != 0){
                               treasure_hunt.amount = payroll_value.treasure_hunt;
                               treasure_hunt.type = "Treasure Hunt";
+                              treasure_hunt.idpayments = py.idpayments;
                               this.global_credits.push(treasure_hunt);
                             }
 
@@ -379,12 +383,15 @@ export class PeriodsComponent implements OnInit {
                               adjustment_ot.type = "Ajuste OT";
                             }
 
+
                             adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
                             adjustment_hld.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
                             adjustment_hld.type = "Ajuste HLD";
+                            adjustment_hld.idpayments = py.idpayments;
+                            adjustment_ot.idpayments = py.idpayments;
+                            adjustments.idpayments = py.idpayments;
 
                             adjustments.type = "Ajustes periodos anteriores";
-                            adjustments.idpayments = py.idpayments;
                             this.global_credits.push(adjustment_base);
                             this.global_credits.push(adjustment_ot);
                             this.global_credits.push(adjustment_hld);
@@ -1260,7 +1267,7 @@ export class PeriodsComponent implements OnInit {
   sortedPayrollValues() {
     this.payroll_values = this.payrollvalues.sort((a, b) => (Number(a.status) - Number(b.status)));
   }
-  
+
   getConflicted(pay:payments){
     return this.conflictedPeriods.filter(a => a.id_employee == pay.id_employee);
   }
@@ -1371,7 +1378,7 @@ export class PeriodsComponent implements OnInit {
             if(progress >= this.payrollvalues.length){
               this.save_import = true;
               this.loading_import = false;
-            } 
+            }
           }
         })
       }else{
