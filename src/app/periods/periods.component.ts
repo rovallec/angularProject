@@ -309,6 +309,7 @@ export class PeriodsComponent implements OnInit {
                           let holiday_credit: credits = new credits;
                           let adjustments: credits = new credits;
                           let isr: number = 0;
+                          let bonus:number = 0;
 
                           let igss_debit: debits = new debits;
 
@@ -338,7 +339,7 @@ export class PeriodsComponent implements OnInit {
                             this.global_credits.push(holiday_credit);
                           }
 
-                          if (Math.abs(Number(payroll_value.adj_hours)) > 0 || Math.abs(Number(payroll_value.adj_holidays)) > 0 || Math.abs(Number(payroll_value.adj_ot)) > 0) {
+                          if (Math.abs(Number(payroll_value.adj_hours)) > 0 || Math.abs(Number(payroll_value.adj_holidays)) > 0 || Math.abs(Number(payroll_value.adj_ot)) > 0 || Math.abs(Number(payroll_value.performance_bonus)) > 0 || Math.abs(Number(payroll_value.nearsol_bonus)) > 0 || Math.abs(Number(payroll_value.treasure_hunt)) > 0) {
 
                             let adjustment_base: credits = new credits;
                             let adjustment_ot: credits = new credits;
@@ -347,7 +348,6 @@ export class PeriodsComponent implements OnInit {
                             let treasure_hunt:credits = new credits;
                             let nearsol_bonus:credits = new credits;
 
-                            adjustments.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.type = "Ajuste Horas Nominales";
                             adjustment_base.idpayments = py.idpayments;
@@ -357,6 +357,7 @@ export class PeriodsComponent implements OnInit {
                               performance_bonus.type = "Performance Bonus";
                               performance_bonus.idpayments = py.idpayments;
                               this.global_credits.push(performance_bonus);
+                              bonus = bonus + Number(performance_bonus.amount);
                             }
 
                             if(Number(payroll_value.nearsol_bonus) != 0){
@@ -364,6 +365,7 @@ export class PeriodsComponent implements OnInit {
                               nearsol_bonus.type = "Nearsol Bonus";
                               nearsol_bonus.idpayments = py.idpayments;
                               this.global_credits.push(nearsol_bonus);
+                              bonus = bonus + Number(nearsol_bonus.amount);
                             }
 
                             if(Number(payroll_value.treasure_hunt) != 0){
@@ -371,26 +373,26 @@ export class PeriodsComponent implements OnInit {
                               treasure_hunt.type = "Treasure Hunt";
                               treasure_hunt.idpayments = py.idpayments;
                               this.global_credits.push(treasure_hunt);
+                              bonus = bonus + Number(treasure_hunt.amount);
                             }
 
                             if (emp[0].job != 'Supervisor De Operaciones' && emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
-                              adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 2)).toFixed(2);
-                              adjustment_ot.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 2)).toFixed(2);
+                              adjustment_ot.amount = ((Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 2)).toFixed(2);
                               adjustment_ot.type = "Ajuste OT";
                             } else {
-                              adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
-                              adjustment_ot.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
+                              adjustment_ot.amount = ((Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
                               adjustment_ot.type = "Ajuste OT";
                             }
 
 
-                            adjustments.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
-                            adjustment_hld.amount = (Number(adjustments.amount) + (Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
+                            adjustment_hld.amount = ((Number(payroll_value.adj_holidays) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 1.5)).toFixed(2);
                             adjustment_hld.type = "Ajuste HLD";
+
                             adjustment_hld.idpayments = py.idpayments;
                             adjustment_ot.idpayments = py.idpayments;
                             adjustments.idpayments = py.idpayments;
 
+                            adjustments.amount = (Number(adjustment_base.amount) + Number(adjustment_hld.amount) + Number(adjustment_ot.amount)).toFixed(2);
                             adjustments.type = "Ajustes periodos anteriores";
                             this.global_credits.push(adjustment_base);
                             this.global_credits.push(adjustment_ot);
@@ -413,7 +415,9 @@ export class PeriodsComponent implements OnInit {
                               sum_cred = Number(Number(sum_cred) + Number(credit.amount));
                             }
                           })
-                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + Number(adjustments.amount)).toFixed(2);
+                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) + 
+                                      Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + 
+                                      Number(adjustments.amount) + Number(bonus)).toFixed(2);
 
 
                           let sum_deb: number = 0
@@ -423,7 +427,7 @@ export class PeriodsComponent implements OnInit {
                               if (debit.type = "ISR") {
                                 isr = Number(debit.amount);
                               }
-                            }
+                            } 
                           })
                           py.debits = (sum_deb + Number(igss_debit.amount)).toFixed(2);
 
