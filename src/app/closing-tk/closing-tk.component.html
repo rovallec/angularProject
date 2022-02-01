@@ -4,27 +4,36 @@
             <div class="d-flex justify-content-between mb-3 w-100">
                 <div class="p-2">
                     <button class="btn btn-outline-danger" [disabled]="actualPeriod.status != '3'"
-                        title="Import Closing Exceptions" data-toggle="modal" data-target="#import_modal"><i
-                            class="fas fa-cloud-upload-alt"></i></button>
+                        title="Import Closing Exceptions" data-toggle="modal" data-target="#import_modal">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </button>
                 </div>
                 <div class="p-2" *ngIf="actualPeriod.status != '3'">
                     <button class="btn btn-outline-warning" data-toggle="modal" data-target="#alert_modal"
-                        tittle="Close Period"><i class="far fa-save"></i></button>
+                        tittle="Close Period">
+                        <i class="far fa-save"></i>
+                    </button>
                 </div>
                 <div class="p-2">
                     <button class="btn btn-outline-info" data-toggle="modal" data-target="#search_modal"
-                        tittle="Search"><i class="fas fa-search"></i></button>
+                        tittle="Search"><i class="fas fa-search"></i>
+                    </button>
                 </div>
                 <div class="p-2">
                     <button class="btn btn-outline-success" title="Downlaod Payroll Values"
-                        (click)="exportPayroll_values()"><i class="fas fa-file-export"></i></button>
+                        (click)="exportPayroll_values()">
+                        <i class="fas fa-file-export"></i>
+                    </button>
                 </div>
                 <div class="p-2">
                     <button class="btn btn-outline-secondary" title="Upload Bonus/Adjustments" data-toggle="modal"
-                        data-target="#uploadBonuses" *ngIf="!working && !saving"><i
-                            class="fas fa-file-upload"></i></button>
+                        data-target="#uploadBonuses" *ngIf="!working && !saving">
+                        <i class="fas fa-file-upload"></i>
+                    </button>
                     <button class="btn btn-outline-success" [disabled]="actualPeriod.status == '3'" title="Save upload"
-                        (click)="saveImport()" *ngIf="working && !saving"><i class="fas fa-check"></i></button>
+                        (click)="saveImport()" *ngIf="working && !saving">
+                        <i class="fas fa-check"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -92,22 +101,29 @@
                 <nav width=100% style="border-top: 4px solid #e3f2fd;">
                     <div class="nav nav-tabs" id="nav-tab" role="tablist" width=100% style="padding-top:15px">
                         <a class="nav-item nav-link active" id="nav-payroll-tab" data-toggle="tab" href="#nav-payroll"
-                            role="tab" aria-controls="nav-payroll" aria-selected="true" *ngIf="!working">Payroll
-                            Values <i class="fas fa-filter" data-toggle="modal" data-target="#filterModal"></i></a>
+                            role="tab" aria-controls="nav-payroll" aria-selected="true" *ngIf="!working">
+                            Payroll Values
+                            <i class="fas fa-filter" data-toggle="modal" data-target="#filterModal"></i>
+                        </a>
                         <a class="nav-item nav-link" id="nav-resume-tab" data-toggle="tab" href="#nav-resume" role="tab"
-                            aria-controls="nav-resume" aria-selected="true" *ngIf="!working">Resume</a>
+                            aria-controls="nav-resume" aria-selected="true" *ngIf="!working">
+                            Resume
+                        </a>
                         <a class="nav-item nav-link" id="nav-excep-tab" data-toggle="tab" href="#nav-excep" role="tab"
-                            aria-controls="nav-excep" aria-selected="true" *ngIf="!working">Closing Exceptions</a>
+                            aria-controls="nav-excep" aria-selected="true" *ngIf="!working">
+                            Closing Exceptions
+                        </a>
                         <a class="nav-item nav-link active" id="nav-bonuses-tab" data-toggle="tab" href="#nav-bonuses"
-                            role="tab" aria-controls="nav-bonuses" aria-selected="true"
-                            *ngIf="working">{{import_type}}</a>
+                            role="tab" aria-controls="nav-bonuses" aria-selected="true" *ngIf="working">
+                            {{import_type}}
+                        </a>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent" style="margin-top:10px">
                     <div class="tab-pane fade show active" id="nav-payroll" role="tabpanel"
                         aria-labelledby="nav-payroll-tab" *ngIf="!working">
-                        <table class="table table-striped" #userTable>
-                            <tr class="title">
+                        <table class="table table-striped" #userTable style="margin: 0 auto; padding: 0; width: fit-content;">
+                            <tr class="title" style="font-size: 0.55em; text-align: center; font-weight: bold;">
                                 <td>NEARSOL ID</td>
                                 <td>CLIENT ID</td>
                                 <td>NAME</td>
@@ -126,7 +142,7 @@
                                 <td>STATUS</td>
                             </tr>
                             <tbody>
-                                <tr *ngIf="printing">
+                                <tr *ngIf="printing" style="font-size: 0.55em; text-align: center; font-weight: bold;">
                                     <td>NEARSOL ID</td>
                                     <td>CLIENT ID</td>
                                     <td>NAME</td>
@@ -146,10 +162,10 @@
                                 </tr>
                                 <tr *ngFor="let pay of payroll_values" (click)="setAttendance(pay)" data-toggle="modal"
                                     data-target="#attendance_detail">
-                                    <td>{{pay.nearsol_id}}</td>
-                                    <td>{{pay.client_id}}</td>
-                                    <td>{{pay.agent_name}}</td>
-                                    <td>{{pay.account_name}}</td>
+                                    <td class="name">{{pay.nearsol_id}}</td>
+                                    <td class="name">{{pay.client_id}}</td>
+                                    <td class="name">{{pay.agent_name}}</td>
+                                    <td class="name">{{pay.account_name}}</td>
                                     <td>{{pay.discounted_days}}</td>
                                     <td>{{pay.discounted_hours}}</td>
                                     <td>{{pay.seventh}}</td>

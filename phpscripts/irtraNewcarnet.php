@@ -17,7 +17,7 @@ $first_lastname = $_GET['first_lastname'];
 $first_name = $_GET['first_name'];
 $fold = $_GET['fold'];
 $m = $_GET['m'];
-$married = $_GET['married'];
+$married = explode(",",strtoupper($_GET['spouse_lastname']))[0];
 $municipio = $_GET['municipio'];
 $partida = $_GET['partida'];
 $pasaport = $_GET['pasaport'];
@@ -29,7 +29,9 @@ $second_name = $_GET['second_name'];
 $zone = $_GET['zone'];
 $email = $_GET['email'];
 $spouse_name = $_GET['spouse_name'];
-$spouse_lastname = $_GET['spouse_lastname'];
+$spouse_lastname = str_replace(',', ' ', $_GET['spouse_lastname']);
+$extended_dept = $_GET['depto'];
+$extended_mun = $_GET['mun'];
 
 echo("
 <div style='margin-left:50px; width:900px'>
@@ -142,9 +144,9 @@ echo("
                         <td>DPI:</td>
                         <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$dpi</td>
                         <td>Departamento:</td>
-                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>Guatemala</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$extended_dept</td>
                         <td>Municipio:</td>
-                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>Guatemala</td>
+                        <td style='border-bottom:solid 1.5px black;min-width:70px;text-align:center'>$extended_mun</td>
                     </tr>
                 </table>
             <td>

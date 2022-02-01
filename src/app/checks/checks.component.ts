@@ -44,6 +44,7 @@ export class ChecksComponent implements OnInit {
     this.getCheckBooks();
     this.getAccounts();
     this.getemployees();
+    this.periods.reverse();
   }
 
   getCheckBooks() {
@@ -251,7 +252,11 @@ export class ChecksComponent implements OnInit {
 
   getemployees() {
     this.apiService.getallEmployees({ department: 'NoLimitAC' }).subscribe((emp: employees[]) => {
-      this.employees = emp;
+      emp.forEach(empl => {
+        if (empl.nearsol_id != null && empl.nearsol_id.trim() != '') {
+          this.employees.push(empl);
+        }
+      })
     })
   }
 
@@ -476,7 +481,7 @@ export class ChecksComponent implements OnInit {
         check.client_id = cbEmp.client_id;
         check.id_account = cbEmp.account;
         check.payment = cbEmp.idpayments;
-        check.document = next_correlative.toString(); // check number
+        check.document = String(next_correlative); // check number
         check.bankAccount = this.selectedCheckbook.account_bank;
         check.printDetail = false;
         this.apiService.saveCheck({ head: check, detail: details }).subscribe((str: string) => {

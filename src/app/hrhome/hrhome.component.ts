@@ -90,6 +90,7 @@ export class HrhomeComponent implements OnInit {
       this.editWave.push(false);
     }
     this.weekday = this.weekdays[new Date().getDay()];
+    console.log(this.authService.getAuthusr())
     this.apiService.getallEmployees(this.authService.getAuthusr()).subscribe((emp: employees[]) => {
       this.allEmployees = emp;
     });

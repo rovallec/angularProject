@@ -23,7 +23,7 @@ import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 })
 export class AccprofilesComponent implements OnInit {
 
-  
+
 
   employee: employees = new employees;
   activePaymentMethod: payment_methods = new payment_methods;
@@ -119,7 +119,7 @@ export class AccprofilesComponent implements OnInit {
     })
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
-    
+
     this.apiService.getServices({id:this.employe_id}).subscribe((sr:services[])=>{
       this.services = sr
     })
@@ -250,11 +250,12 @@ export class AccprofilesComponent implements OnInit {
 
 
   setNewpaymentMethod() {
+    let today: Fecha = new Fecha;
     this.activePaymentMethod = new payment_methods;
     this.activePaymentMethod.id_employee = this.employee.idemployees;
     this.activePaymentMethod.predeterm = "1";
     this.activePaymentMethod.id_user = this.authUser.getAuthusr().user_name;
-    this.activePaymentMethod.date = (new Date().getFullYear().toString()) + "-" + (new Date().getMonth().toString()) + "-" + (new Date().getDate().toString());
+    this.activePaymentMethod.date = today.getToday();
     this.newPaymentMethod = true;
   }
 
@@ -490,7 +491,7 @@ export class AccprofilesComponent implements OnInit {
       pr.forEach(proc => {
         if (alert && !fix) {
           fix = true;
-          window.alert('There is a duplicity on "Termination", system will take first instance');
+          window.alert('Duplicate record found: The system will use the first instance only.');
         }
         if (!alert) {
           if (proc.name === "Termination") {
@@ -1126,6 +1127,8 @@ export class AccprofilesComponent implements OnInit {
     this.newService.proc_status = "PENDING";
     this.newService.status = '1';
     this.newService.current = '0';
+    this.repeateService = "DISABLE";
+    this.serviceTimes = 0;
   }
 
   getService(sr:services){
@@ -1166,7 +1169,7 @@ export class AccprofilesComponent implements OnInit {
         this.newService = new services;
         document.getElementById("openAlertModal").click()
       }
-    }) 
+    })
     }
   }
 

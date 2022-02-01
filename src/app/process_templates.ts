@@ -755,6 +755,8 @@ export class irtra_requests {
     type: string;
     spouse_name: string;
     spouse_lastname: string;
+    dpto:string;
+    mun:string;
     constructor() {
         this.idirtra_requests = null;
         this.idprocess = null;
@@ -2754,6 +2756,7 @@ export class assets{
     id_user:string;
     employee_name:string;
     date:string;
+    account:string;
     constructor(){
         this.idassets = null;
         this.id_type = null;
@@ -2769,6 +2772,7 @@ export class assets{
         this.movement = '1';
         this.employee_name = null;
         this.date = null;
+        this.account = null;
     }
 }
 

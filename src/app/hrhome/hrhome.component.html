@@ -61,7 +61,7 @@
                                                     [(ngModel)]="wv.ops_start">
                                             </div>
                                             <div class="form-group col-md-2">
-                                                <label>Status</label>
+                                                <label>Status:</label>
                                                 <select class="form-control" [(ngModel)]="wv.state" [disabled]="!getWvView(wv)">
                                                     <option value="0">TRAINING</option>
                                                     <option value="1">NESTING</option>
@@ -101,7 +101,7 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-sm-1" *ngIf="contract_type == 'Bonus' && showEmployeeDetails[this.wavesToShow.indexOf(wv)] && makeEmployee">
-                                            <label>Bonus</label>
+                                            <label>Bonus:</label>
                                         </div>
                                         <div class="form-group col-sm-1" *ngIf="contract_type == 'Bonus' && showEmployeeDetails[this.wavesToShow.indexOf(wv)] && makeEmployee">
                                             <input class="form-control" [(ngModel)]="bonusHire">
@@ -347,7 +347,7 @@
                             <td>{{actualContractReview.name}}</td>
                         </tr>
                         <tr>
-                            <td>Birthday</td>
+                            <td>Date of Birth</td>
                             <td>{{actualContractReview.birthday}}</td>
                         </tr>
                         <tr>
@@ -429,7 +429,7 @@
           <div class="col-md-3">
             <div class="row col-md-12">
               <div class="form-group col-md-12">
-                <label>Name</label>
+                <label>Name:</label>
                 <select class="custom-select" size="1">
                   <option *ngFor="let temp of templates" value="temp.idtemplates" (change)="selectContractTemplates(temp)" (click)="selectContractTemplates(temp)"> {{ temp.name }}
                   </option>
@@ -438,7 +438,7 @@
               <div class="form-group col-md-12">
                 <div class="row col-md-12">
                   <div class="col col-md-12">
-                    <label>Tag</label>
+                    <label>Description:</label>
                   </div>
                 </div>
                 <div class="row col-md-12" style="padding-left: 0px;">
@@ -446,7 +446,7 @@
                     <input type="text" class="form-control" ([ngModel])="actAllTemplates.tag" value=" {{ actAllTemplates.tag }}" />
                   </div>
                   <div class="col col-md-3">
-                    <button type="button" data-bs-target="#addTagModalToggle" data-bs-toggle="modal"
+                    <button class="btn btn-outline-secondary" type="button" data-bs-target="#addTagModalToggle" data-bs-toggle="modal"
                       data-bs-dismiss="modal" (click)="changeClausesTagCheck()">
                       <i class="far fa-check-square"></i>
                     </button>
@@ -458,7 +458,7 @@
           <div class="col-md-9">
             <div class="row col-md-12">
               <div class="form-group col-md-12">
-                <label>Assoc</label>
+                <label>Associations:</label>
                 <select class="custom-select" size="5">
                   <option *ngFor="let clause of filClauses" value="clause.idclauses" (click)="setClause(clause)" [selected]="actClause.idclauses==clause.idclauses"> {{ clause.name }}
                   </option>
@@ -467,13 +467,13 @@
             </div>
             <div class="row col-md-12">
               <div class="form-group col-md-12 d-flex justify-content-between">
-                <button type="button" (click)="upClause()">
+                <button type="button" (click)="upClause()" class="btn btn-outline-secondary">
                   <i class="fas fa-angle-double-up"></i>
                 </button>
-                <button type="button" (click)="downClause()">
+                <button type="button" (click)="downClause()" class="btn btn-outline-secondary">
                   <i class="fas fa-angle-double-down"></i>
                 </button>
-                <button type="button" (click)="deleteClauseTemplate()">
+                <button type="button" (click)="deleteClauseTemplate()" class="btn btn-outline-secondary">
                 <i class="far fa-minus-square"></i>
               </button>
               </div>
@@ -486,7 +486,7 @@
             <div class="row col-md-12">
               <div class="form-group col-md-12">
                 <label>
-                  All Clauses
+                  All Clauses:
                 </label>
                 <select class="custom-select" size="5">
                   <option *ngFor="let clause of clauses" value="clause.idclauses" (click)="selectClause(clause)"> {{ clause.name }}</option>
@@ -495,13 +495,13 @@
             </div>
             <div class="row col-md-12">
               <div class="form-group col-md-12 d-flex justify-content-between">
-                <button type="button" (click)="addNewClause()">
+                <button type="button" (click)="addNewClause()" class="btn btn-outline-secondary">
                       <i class="far fa-plus-square"></i>
                 </button>
-                <button type="button" (click)="pushClause()" tittle="Add Clause to Contract">
+                <button type="button" (click)="pushClause()" tittle="Add Clause to Contract" class="btn btn-outline-secondary">
                   <i class="fas fa-level-up-alt"></i>
                 </button>
-                <button type="button" (click)="deleteClause()" tittle="Delete Clause">
+                <button type="button" (click)="deleteClause()" tittle="Delete Clause" class="btn btn-outline-secondary">
                   <i class="far fa-minus-square"></i>
                 </button>
               </div>
@@ -510,9 +510,9 @@
           <div class="col-md-9">
             <div class="row col-md-12">
               <div class="form-group col-md-12 form-floating">
-                <label for="floatingTextarea">Name</label>
+                <label for="floatingTextarea">Name:</label>
                 <input type="text" class="form-control" [(ngModel)]="actClause.name">
-                <label for="floatingTextarea">Description</label>
+                <label for="floatingTextarea">Description:</label>
                 <textarea class="form-control" placeholder="Description" id="floatingTextarea" [(ngModel)]="actClause.description" #message='ngModel'
                   style="height: 140px; width: 100%;">
                 </textarea>
@@ -520,10 +520,10 @@
             </div>
             <div class="row col-md-12">
               <div class="form-group col-md-12 d-flex justify-content-between">
-                <button type="button" (click)="cancelClause()">
+                <button type="button" (click)="cancelClause()" class="btn btn-outline-secondary">
                   <i class="fas fa-window-close"></i>
                 </button>
-                <button type="button" (click)="saveClause()">
+                <button type="button" (click)="saveClause()" class="btn btn-outline-secondary">
                   <i class="fas fa-save"></i>
                 </button>
               </div>
@@ -532,7 +532,7 @@
         </div>
       </div>
       <div class="modal-footer d-flex justify-content-center mt-2">
-        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" >CLOSE</button>
       </div>
     </div>
   </div>
@@ -552,7 +552,7 @@
             <div class="row col-md-12">
               <div class="form-group col-md-12">
                 <label>
-                  Clauses
+                  Clauses:
                 </label>
                 <select class="custom-select" size="5">
                   <option *ngFor="let clause of clauses" value="clause.idclauses" (click)="selectClause(clause)"> {{ clause.name }}

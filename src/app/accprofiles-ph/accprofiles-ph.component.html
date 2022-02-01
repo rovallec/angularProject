@@ -224,8 +224,9 @@
 
                 <div class="tab-pane fade" id="nav-leavs" role="tabpanel" aria-labelledby="nav-leavs-tab">
                     <div class="form-row col-sm-12" style="margin-bottom:25px">
-                        <label style="font-size: 20px; font-weight: bold; margin-left:42.5%;margin-top: 10px;">PAYMENT
-                            METHODS</label>
+                        <label style="font-size: 20px; font-weight: bold; margin-left:42.5%;margin-top: 10px;">
+                          PAYMENT METHODS
+                        </label>
                         <div class="form-row col-md-12">
                             <table class="table table-striped table-hover">
                                 <thead>
@@ -252,11 +253,12 @@
                         </div>
                         <div class="form-row col-md-12" *ngIf="newPaymentMethod || recordPaymentMethod"
                             style="margin-top:25px">
-                            <label style="font-size: 20px; font-weight: bold; margin-left:42%;margin-top: 10px;">NEW
-                                PAYMENT
-                                METHOD</label>
+                            <label style="font-size: 20px; font-weight: bold; margin-left:42%;margin-top: 10px;">
+                                NEW PAYMENT METHOD
+                            </label>
                             <div class="form-row col-md-12">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2"></div>
+                                <div class="form-group col-md-2">
                                     <label>Type:</label>
                                     <select class="form-control" [(ngModel)]="activePaymentMethod.type"
                                         [disabled]="recordPaymentMethod">
@@ -265,37 +267,44 @@
                                         <option>WALLET ACCOUNT</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label>Bank:</label>
                                     <input type="text" class="form-control"
                                         [disabled]="activePaymentMethod.type != 'BANK ACCOUNT' || recordPaymentMethod"
                                         [(ngModel)]="activePaymentMethod.bank">
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label>Account:</label>
                                     <input type="text" class="form-control"
                                         [disabled]="activePaymentMethod.type != 'BANK ACCOUNT' || recordPaymentMethod"
                                         [(ngModel)]="activePaymentMethod.number">
                                 </div>
+                                <div class="form-group col-md-2"></div>
                             </div>
                             <div class="form-row col-md-12" *ngIf="newPaymentMethod || recordPaymentMethod">
-                                <label style="text-align: center;">Notes:</label>
-                                <textarea class="form-control" width="100%" [(ngModel)]="activePaymentMethod.notes"
-                                    [disabled]="recordPaymentMethod"></textarea>
+                                <div class="form-group col-md-2"></div>
+                                <div class="form-group col-md-10">
+                                  <label style="text-align: center;">Notes:</label>
+                                  <textarea class="form-control" width="100%" [(ngModel)]="activePaymentMethod.notes"
+                                      [disabled]="recordPaymentMethod"></textarea>
+                                </div>
+                                <div class="form-group col-md-2"></div>
                             </div>
                             <div class="form-row col-md-12" *ngIf="newPaymentMethod || recordPaymentMethod"
                                 style="margin-bottom:25px">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2"></div>
+                                <div class="form-group col-md-3">
                                     <label style="text-align: center;">User:</label>
                                     <input type="text" [disabled]="true" class="form-control"
                                         [(ngModel)]="activePaymentMethod.id_user">
                                 </div>
-                                <div class="form-group col-md-4"></div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2"></div>
+                                <div class="form-group col-md-3">
                                     <label style="text-align: center;">Date:</label>
-                                    <input type="text" [disabled]="true" class="form-control"
-                                        [(ngModel)]="activePaymentMethod.date">
+                                    <input type="date" class="form-control" [disabled]="true"
+                                        [(ngModel)]="activePaymentMethod.date" datetime="dd-MM-yyyy">
                                 </div>
+                                <div class="form-group col-md-2"></div>
                             </div>
                         </div>
                         <div class="form-row col-md-12" *ngIf="newPaymentMethod">
@@ -326,8 +335,7 @@
 
                 <div class="tab-pane fade" id="nav-term" role="tabpanel" aria-labelledby="nav-term-tab">
                     <div class="row col-md-12" style="margin-top:20px">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <table style="width: 100;" class="table table-striped table-hover"
                                 style="width: 100%;text-align:center">
                                 <thead>
@@ -342,7 +350,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <table style="width: 100;" class="table table-striped table-hover"
                             style="width: 100%;text-align:center">
                             <thead>
@@ -357,7 +365,6 @@
                             </tbody>
                         </table>
                         </div>
-                        <div class="col-md-1"></div>
                     </div>
                     <div class="row col-md-12" style="margin-bottom: 15px;" *ngIf="employee.client_id != 'NONE'">
                         <div class="col-md-5"></div>

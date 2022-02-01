@@ -119,7 +119,7 @@
                                         <th>STATUS</th>
                                         <th>BANK</th>
                                         <th>ACCOUNT</th>
-                                        <th>SOCIETY</th>
+                                        <th>BUSINESS UNIT</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let hr of hires">
@@ -136,9 +136,9 @@
                                                     <option>PRG Recurso Humano, S.A.</option>
                                                 </select>
                                             </td>
-                                        </tr>                                        
+                                        </tr>
                                     </tbody>
-                                </table>                                
+                                </table>
                             </td>
                         </tr>
                         <tr style="width:100%;margin-top:10px" *ngIf="wave.show === '1' && isformerEmployer">
@@ -173,19 +173,19 @@
                                         <tr *ngFor="let fe of waveFormerEmployer">
                                             <td>{{ fe.id_employee }}</td>
                                             <td>{{ fe.name }}</td>
-                                            <td> 
+                                            <td>
                                                 <input type="text" class="form-control" [(ngModel)]="fe.indemnization" [disabled]="stateFormerEmployer=='Browser'">
                                             </td>
-                                            <td> 
+                                            <td>
                                                 <input type="text" class="form-control" [(ngModel)]="fe.aguinaldo" [disabled]="stateFormerEmployer=='Browser'">
                                             </td>
-                                            <td> 
+                                            <td>
                                                 <input type="text" class="form-control" [(ngModel)]="fe.bono14" [disabled]="stateFormerEmployer=='Browser'">
                                             </td>
-                                            <td> 
+                                            <td>
                                                 <input type="text" class="form-control" [(ngModel)]="fe.igss" [disabled]="stateFormerEmployer=='Browser'">
                                             </td>
-                                            <td> 
+                                            <td>
                                                 <input type="text" class="form-control" [(ngModel)]="fe.taxpendingpayment" [disabled]="stateFormerEmployer=='Browser'">
                                             </td>
                                         </tr>

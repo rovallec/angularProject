@@ -752,6 +752,7 @@ export class HrprofilesComponent implements OnInit {
     this.editLeave = false;
     this.showLeave = false;
     this.setNewRequest = false;
+    this.newRequest = false;
     this.reasonRequiered = false;
     this.storedRequest = false;
     this.newAudience = "NO";
@@ -1197,8 +1198,14 @@ export class HrprofilesComponent implements OnInit {
   }
 
   getTemplates() {
+    this.process_templates = [];
     this.apiService.getTemplates().subscribe((prs: hr_process[]) => {
-      this.process_templates = prs;
+      prs.forEach(pt => {
+        if (Number(pt.idprocesses) < 20) {
+          this.process_templates.push(pt);
+        }
+      })
+      //this.process_templates = prs;
     });
   }
 
@@ -1235,7 +1242,7 @@ export class HrprofilesComponent implements OnInit {
         this.actualRise.new_position = this.workingEmployee.job;
         this.actualRise.old_position = this.workingEmployee.job;
         break;
-      case 'Pay Vacations':
+      case 'Vacations To Be Paid':
         if (this.availableVacations < 1) {
           this.addVac = false;
         } else {
@@ -1399,7 +1406,7 @@ export class HrprofilesComponent implements OnInit {
             this.cancelView();
           })
           break;
-        case 'Pay Vacations':
+        case 'Vacations To Be Paid':
           let cnt: number = 0;
           for (let i = 0; i < (parseFloat(this.actuallProc.mount.toString())); i++) {
             this.apiService.getPeriods().subscribe((periods: periods[]) => {
@@ -1504,7 +1511,7 @@ export class HrprofilesComponent implements OnInit {
           break;
         case 'Legal Discount':
           this.actualJudicial.id_process = str;
-          this.apiService.insertJudicials(this.actualJudicial).subscribe((str: string) => {
+          this.apiService.insertJudicials(this.actualJudicial).subscribe((_str: string) => {
             this.cancelView();
           })
           break;
@@ -1856,7 +1863,7 @@ export class HrprofilesComponent implements OnInit {
     let f: string;
     let married: string;
 
-    if (this.workingEmployee.gender == 'M' || this.workingEmployee.gender == 'Masculino') {
+    if (this.workingEmployee.gender == 'M' || this.workingEmployee.gender == 'Masculino' || this.workingEmployee.gender == 'MALE') {
       f = ' ';
       m = "x";
     } else {
@@ -1871,8 +1878,10 @@ export class HrprofilesComponent implements OnInit {
         this.profile[0].first_lastname + '&first_name=' + this.profile[0].first_name + '&fold= ' + '&m=' + m + '&married= ' + '&municipio=' +
         this.profile[0].address.split(',')[2].replace('de ', '') + '&partida= ' + '&pasaport= ' + '&patronal=' + this.igss_patronal + '&phone=' + this.profile[0].primary_phone + '&reg= ' +
         '&second_lastname=' + this.profile[0].second_lastname + '&second_name=' + this.profile[0].second_name + '&zone=' + this.profile[0].address.split(",")[1].split(" ")[2] +
-        "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname, "_blank");
+        "&email=" + this.profile[0].email + "&spouse_name=" + this.actualIrtrarequests.spouse_name + "&spouse_lastname=" + this.actualIrtrarequests.spouse_lastname + "," + "&depto=" + this.actualIrtrarequests.dpto
+        + "&mun=" + this.actualIrtrarequests.mun, "_blank");
     } else {
+      console.log(this.actualIrtrarequests);
       window.open('http://172.18.2.45/phpscripts/irtraRequest.php?name=' + this.profile[0].first_name + " " + this.profile[0].second_name + " " + this.profile[0].first_lastname + " " + this.profile[0].second_lastname + "&dpi=" + this.profile[0].dpi + "&status=" + this.actualIrtrarequests.type, "_blank");
     }
   }

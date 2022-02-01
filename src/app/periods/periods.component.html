@@ -192,6 +192,7 @@
                         <option *ngIf="importType == 'Discount'">Seguro</option>
                         <option *ngIf="importType == 'Discount'">Judiciales</option>
                         <option *ngIf="importType == 'Discount'">Headsets</option>
+                        <option *ngIf="importType == 'Discount'">Tienda</option>
                         <option *ngIf="importType == 'Bonus'">Bonos Diversos</option>
                         <option *ngIf="importType == 'Bonus'">RAF Bonus</option>
                         <option *ngIf="importType == 'Bonus'">Treasure Hunt</option>
@@ -545,12 +546,15 @@
                 <div class="row col-md-12">
                     <input type="file" class="form-control" (change)="setPayrollValues($event)">
                 </div>
+                <div class="row d-flex justify-content-center" style="margin-top:5px">
+                    <label><input type="checkbox" [(ngModel)]="loadAll">  Load All</label>
+                </div>
             </div>
             <div class="modal-footer">
                 <div class="d-flex justify-content-left">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" (mousedown)="cancelImport()">Cancel</button>
                 </div>
-                <div class="d-flex justify-content-right">
+                <div class="d-flex justify-content-right row">
                     <button type="button" class="btn bnt-primary" disabled *ngIf="closing_import && working">
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     </button>

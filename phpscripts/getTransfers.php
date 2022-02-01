@@ -10,7 +10,14 @@ $start = ($request->start);
 $end = ($request->end);
 $hrproc = [];
 
-$sql = "SELECT * FROM hr_processes WHERE id_employee = $id_employee AND id_type = 16 AND date BETWEEN '$start' AND '$end';";
+if($id_employee == "exp"){
+	$ns = explode('|', $start)[0];
+	$start = explode('|', $start)[1];
+	$sql = "SELECT * FROM hr_processes WHERE notes like '%$ns%' AND id_type = 16 AND date BETWEEN '$start' AND '$end';";
+}else{
+	$sql = "SELECT * FROM hr_processes WHERE id_employee = $id_employee AND id_type = 16 AND date BETWEEN '$start' AND '$end';";
+}
+
 if($result = mysqli_query($con, $sql))
 	{
 	while($row = mysqli_fetch_assoc($result)){

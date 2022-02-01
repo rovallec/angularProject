@@ -252,3 +252,30 @@ export class payment_methods{
         this.notes = null;
     }
 }
+
+export class salaryReport {
+  id: string;
+  nearsol_id: string;
+  avaya_id: string;
+  name: string;
+  hiring_date: string;
+  reporter: string;
+  account: string;
+  approved_date: string;
+  base_payment: number;
+  productivity_payment: number;
+  total: number;
+  constructor() {
+    this.id = null;
+    this.nearsol_id = null;
+    this.avaya_id = null;
+    this.name = null;
+    this.hiring_date = null;
+    this.reporter = null;
+    this.account = null;
+    this.approved_date = null;
+    this.base_payment = 0.00;
+    this.productivity_payment = 0.00;
+    this.total = 0.00;
+   }
+}

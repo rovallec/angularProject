@@ -20,7 +20,7 @@
                             [(ngModel)]="prof_getted[0].dpi" [disabled]=!toggle_profile>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="txt_birth">Birthday:</label>
+                        <label for="txt_birth">Date of Birth:</label>
                         <input type="date" class="form-control" [ngModelOptions]="{standalone:true}"
                             [(ngModel)]="prof_getted[0].day_of_birth" [disabled]=!toggle_profile datetime="dd-MM-yyyy">
                     </div>
@@ -3301,24 +3301,24 @@
                     <div class="form-group col-md-12">
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="txt_emergency_fristName">Contact's First Name:</label>
+                                <label for="txt_emergency_fristName">First Given Name:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
                                     [(ngModel)]="prof_getted[0].emergency_first_name" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="txt_emergency_secondName">Contact's Middle Name:</label>
+                                <label for="txt_emergency_secondName">Secon Given Name:</label>
                                 <input class="text" class="form-control" [ngModelOptions]="{standalone:true}"
                                     [(ngModel)]="prof_getted[0].emergency_second_name" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="txt_emergency_lastname">Contact's First Lastname:</label>
+                                <label for="txt_emergency_lastname">First Family Name:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
                                     [(ngModel)]="prof_getted[0].emergency_first_lastname" [disabled]=!toggle_profile>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="txt_emergency_secondLastname">Contact's Second Lastname:</label>
+                                <label for="txt_emergency_secondLastname">Second Family Name:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
                                     [(ngModel)]="prof_getted[0].emergency_second_lastname" [disabled]=!toggle_profile>
                             </div>
@@ -3351,14 +3351,14 @@
                     <div class="form-group col-md-12">
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label for="txt_medical_treatment">Medical Treatment:</label>
+                                <label for="txt_medical_treatment">Known Medical Conditions:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
                                     [(ngModel)]="prof_getted[0].medical_treatment" [disabled]=!toggle_profile>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-gropu col-md-12">
-                                <label for="txt_medical_condition">Medical Prescription</label>
+                                <label for="txt_medical_condition">Prescription Medications:</label>
                                 <input type="text" class="form-control" [ngModelOptions]="{standalone:true}"
                                     [(ngModel)]="prof_getted[0].medical_prescription" [disabled]=!toggle_profile>
                             </div>

@@ -133,6 +133,8 @@
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '27' || getSaved().department == '5'" class="nav-link"
           style="color: white" [ngClass]="{'act':selectedOption=='ADVREP'}" (click)="exportAdvancesReport()">ADVANCES REPORT</a>
+        <a *ngIf="getSaved().department == '4'" class="nav-link" routerLink="/salaryreport" style="color: white"
+          [ngClass]="{'act':selectedOption=='salaryreport'}" (click)="SetSel('salaryreport')">SALARY REPORT</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/holidays"

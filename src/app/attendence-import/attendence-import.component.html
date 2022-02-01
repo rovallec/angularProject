@@ -2,7 +2,7 @@
     <div class="col-md-12 form-row" *ngIf="!showReg">
         <div class="form-group col-md-4"></div>
         <div class="form-group col-md-4">
-            <label>Import Attendences:</label>
+            <label>Import Attendance Records:</label>
             <input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file"
                 accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
         </div>
@@ -52,7 +52,7 @@
                 style="margin-top: 21%">Import</button>
         </div>
         <div class="form-group col-md-1">
-            <button class="form-control" (click)="toggleReg()" *ngIf="!importCompleted" style="margin-top: 21%">Historical</button>
+            <button class="form-control" (click)="toggleReg()" *ngIf="!importCompleted" style="margin-top: 21%">History</button>
         </div>
     </div>
     <div class="form-row col-md-12" *ngIf="importCompleted && !showReg">
@@ -123,10 +123,20 @@
                             <td *ngIf="att.id_wave === '1' && !showReg"><select class="form-control" (change)="setEmployeeRepeated(att, $event.target.value)" style="font-size: 13px;">
                                 <option *ngFor="let rep of getReapeted(att)" [value]="rep.idemployees">{{rep.name}}</option>
                             </select></td>
-                            <td>{{att.scheduled}}</td>
-                            <td>{{att.worked_time}}</td>
-                            <td *ngIf="!showReg">{{att.balance}}</td>
-                            <td *ngIf="showReg">{{att.worked_time - att.scheduled}}</td>
+                            <td *ngIf="att.scheduled!='NaN'">
+                                {{ att.scheduled }}
+                            </td>
+                            <td *ngIf="att.scheduled=='NaN'">
+                                No Data Found
+                            </td>
+                            <td>{{ att.worked_time }}</td>
+                            <td *ngIf="!showReg && att.balance!='NaN'">
+                                {{ att.balance }}
+                            </td>
+                            <td *ngIf="showReg || att.balance=='NaN'">
+                                No Data Found
+                            </td>
+                            <td *ngIf="showReg">{{ att.worked_time - att.scheduled }}</td>
                             <td *ngIf="!showReg">
                                 <select [(ngModel)]="att.day_off1" [disabled]="att.day_off1 != 'OMMIT'"
                                     class="form-control" (change)="setAction(att)">

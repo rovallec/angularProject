@@ -54,6 +54,18 @@ input {
   border-color: #003b71;
 }
 
+.table_ancho {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.ancho {
+  width: 50%;
+  text-align: left;
+  border: 1px solid black;
+}
+
 @media only screen and (min-width: 50px) and (max-width: 800px) {
   body {
     text-rendering: optimizeLegibility;

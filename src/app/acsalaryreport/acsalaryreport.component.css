@@ -47,6 +47,7 @@ tfoot td {
   border-width: 1px;
   border-right-color: rgb(233, 232, 232);
   white-space: nowrap;
+  color: #fff;
 }
 
 tfoot tr {
@@ -305,4 +306,8 @@ label {
 
 .period {
   font-weight: bold;
+}
+
+.mayuscula {
+  text-transform: uppercase;
 }

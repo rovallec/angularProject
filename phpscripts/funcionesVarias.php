@@ -70,11 +70,11 @@ function removeCommas($avalue) {
 }
 
 function addQuotes($str){
-	if($str != 'NULL'){
-		return "'" . $str . "'";
-	}else{
-		return $str;
-	}
+  if($str != 'NULL'){
+    return "'" . $str . "'";
+  }else{
+    return $str;
+  }
 }
 
 function getMonth($amonth){
@@ -135,6 +135,13 @@ function number_letter_quetzales($value) {
   $value = removeCommas($value);
   $base_n_init = explode(".", number_format(((float)$value),2));
   $t = number_letter($base_n_init[0]) . ' quetzales con ' . number_letter($base_n_init[1]) . ' centavos';
+  return $t;
+}
+
+function number_letter_quetzales_exactos($value) {
+  $value = removeCommas($value);
+  $base_n_init = explode(".", number_format(((float)$value),2));
+  $t = number_letter($base_n_init[0]) . ' quetzales';
   return $t;
 }
 

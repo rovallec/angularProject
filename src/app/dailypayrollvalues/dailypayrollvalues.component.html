@@ -21,11 +21,7 @@
   </div>
   <div class="col-md-9">
     <div class="row">
-      <div class="col-md-auto">
-        <label class="col-form-label">
-          Select Period:
-        </label>
-      </div>
+      <div class="col-md-auto"></div>
       <div class="col-md-auto">
         <select class="form-control">
           <option *ngFor="let per of periods" [value]="per" [selected]="per==selectedPeriod" (click)="setSelPeriod(per)">

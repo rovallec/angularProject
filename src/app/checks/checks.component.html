@@ -13,13 +13,14 @@
   <div class="tab-pane fade show active" id="nav-new" role="tabpanel" aria-labelledby="nav-new-tab">
     <div class="form-group" style="margin-left: 10px;">
       <div class="form-row mt">
-        <div class="col-md-5 ml align-self-md-auto">
-          <button type="button" class="btn btn-outline-primary" (click)="ngOnInit()">
+        <div class="col-md-2 align-self-md-auto"></div>
+        <div class="col-md-3 align-self-center">
+          <button type="button" class="btn btn-outline-primary" (click)="ngOnInit()" title="Create New Check">
             New Check
             <i class="fas fa-money-check-alt"></i>
           </button>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" style="text-align: center;">
           <h2>
             <label class="align-center col-form-label">
               Checks
@@ -29,60 +30,68 @@
         <div class="col-md-5"></div>
       </div>
       <!-- Encabezado del cheque -->
-      <div class="form-group ml">
+      <div class="form-group">
         <div class="form-row">
           <!-- Seleccionar chequera -->
+          <div class="col-md-2"></div>
           <div class="col-md-2">
             <label>
               Account:
             </label>
             <select class="form-control">
-              <option *ngFor="let checkbook of checkbooks" (click)="setCheckBook($event.target.value)" [(ngModel)]="selectedCheckbook">
+              <option *ngFor="let checkbook of checkbooks" (click)="setCheckBook($event.target.value)"
+                [(ngModel)]="selectedCheckbook">
                 {{ checkbook.account_bank }}
               </option>
             </select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-5">
             <label>
               Bank:
             </label>
-            <input type="text" class="form-control" [(ngModel)]="selectedCheckbook.name_bank" placeholder="Name Bank" disabled="true">
+            <input type="text" class="form-control" [(ngModel)]="selectedCheckbook.name_bank" placeholder="Name Bank"
+              disabled="true">
           </div>
-          <div class="col-md-3">
+          <div class="col-md-1">
             <label>
               Check:
             </label>
-            <input type="number" class="form-control" [(ngModel)]="actualCheck.document" placeholder="0" (keyup.enter)="getCheck()" [disabled]="actualCheck.idchecks!==null">
+            <input type="number" class="form-control" [(ngModel)]="actualCheck.document" placeholder="0"
+              (keyup.enter)="getCheck()" [disabled]="actualCheck.idchecks!==null">
           </div>
         </div>
         <div class="form-row mt">
-          <div class="col-md-3">
+          <div class="col-md-2"></div>
+          <div class="col-md-5">
             <label>
-              Place:
+              Location:
             </label>
             <input type="text" class="form-control" [(ngModel)]="actualCheck.place" placeholder="Guatemala">
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label>
               Date:
             </label>
             <input type="date" class="form-control" [(ngModel)]="actualCheck.date">
           </div>
-          <div class="col-md-4">
+          <div class="col-md-1">
             <label>
-              Value:
+              Amount:
             </label>
-            <input type="number" class="form-control input-md" min="0.00" step="0.01" [(ngModel)]="actualCheck.value" placeholder="0.00" (change)="onChangeValue($event.target.value)" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+            <input type="number" class="form-control input-md" min="0.00" step="0.01" [(ngModel)]="actualCheck.value"
+              placeholder="0.00" (change)="onChangeValue($event.target.value)" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
           </div>
         </div>
         <div class="form-row mt">
+          <div class="col-md-2"></div>
           <div class="col-md-5">
             <label>
               Description:
             </label>
-            <input type="text" class="form-control" value="Motive" [(ngModel)]="actualCheck.description" placeholder="Motive">
+            <input type="text" class="form-control" value="Motive" [(ngModel)]="actualCheck.description"
+              placeholder="Motive">
           </div>
-          <div class="col-md-5">
+          <div class="col-md-3">
             <label>
               Name:
             </label>
@@ -90,14 +99,17 @@
           </div>
         </div>
         <div class="form-row mt">
+          <div class="col-md-2"></div>
           <div class="col-md-1">
             <label>
               Negotiable:
             </label>
             <div style="margin-left: 15px;" class="form-group form-row col-md-1">
-              <input type="checkbox" class="form-check-input" (change)="changeVal($event)" [(ngModel)]="actualCheck.checked" placeholder="Print label 'No Negociable'">
+              <input type="checkbox" class="form-check-input" (change)="changeVal($event)"
+                [(ngModel)]="actualCheck.checked" placeholder="Print label 'No Negociable'">
             </div>
           </div>
+          <!-- Se habilitará cuando quede habilitada la impresión de los detalles
           <div class="col-md-1">
             <label>
               Print detail:
@@ -107,19 +119,22 @@
                 placeholder="Print Detail">
             </div>
           </div>
+          -->
           <div class="col-md-1 justify-content-right md-2">
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#alertCheck">
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#alertCheck"  title="Add Details">
               Add Details
               <i class="fa-plus-square fas" aria-hidden="true"></i>
             </button>
           </div>
         </div>
         <!-- Detalle del cheque -->
-        <div class="form-row" *ngIf="details.length>0">
-          <div class="col-md-10 mt">
+        <div class="form-row mt" *ngIf="details.length>0">
+          <div class="col-md-2 mt"></div>
+          <div class="col-md-8 mt">
             <table class="table table-striped table-hover table-borderless">
               <thead>
-                <tr style="max-height: 20px; height: 20px; font-size: 12px; color: #fff; font-weight: bold;" class="blue-nearsol">
+                <tr style="max-height: 20px; height: 20px; font-size: 12px; color: #fff; font-weight: bold;"
+                  class="blue-nearsol">
                   <td align="center" class="title">
                     CHECKED
                   </td>
@@ -139,32 +154,39 @@
               </thead>
               <tbody>
                 <tr *ngFor="let detail of details" class="selectable">
-                  <td align="center" valign="center">
-                    <input type="checkbox" [value]="detail.checked" [checked]="detail.checked==true" (change)="selectedDetail(detail)" [(ngModel)]="detail.checked">
+                  <td align="center" valign="center" style="width: 8%;">
+                    <input type="checkbox" [value]="detail.checked" [checked]="detail.checked==true"
+                      (change)="selectedDetail(detail)" [(ngModel)]="detail.checked">
                   </td>
-                  <td>
+                  <td style="width: 10%;">
                     <select class="form-control" style="text-align: center;">
-                      <option *ngFor="let account of accounts" (click)="setAccount(detail, account)">{{ account.external_id }}</option>
+                      <option *ngFor="let account of accounts" (click)="setAccount(detail, account)">{{
+                        account.external_id }}</option>
                     </select>
                   </td>
                   <td>
                     <input type="text" class="form-control disabled" [(ngModel)]="detail.name" disabled="true">
                   </td>
-                  <td style="max-width: 250px; width: 250px;">
-                    <input type="number" class="form-control input-md" min="0.00" step="0.01" [(ngModel)]="detail.debits" [disabled]="detail.credits!='0.00'" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                  <td style="max-width: 200px; width: 200px;">
+                    <input type="number" class="form-control input-md" min="0.00" step="0.01"
+                      [(ngModel)]="detail.debits" [disabled]="detail.credits!='0.00'"
+                      ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
                   </td>
-                  <td style="max-width: 250px; width: 250px;">
-                    <input type="number" class="form-control input-md" min="0.00" step="0.01" [(ngModel)]="detail.credits" [disabled]="detail.debits!='0.00'" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
+                  <td style="max-width: 200px; width: 200px;">
+                    <input type="number" class="form-control input-md" min="0.00" step="0.01"
+                      [(ngModel)]="detail.credits" [disabled]="detail.debits!='0.00'"
+                      ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
                   </td>
                 </tr>
               </tbody>
               <tfoot>
                 <tr style="max-height: 15px; height: 15px; font-size: 8px; background-color: #ffffff;">
                   <!-- Controles -->
-                  <td align="center" style="border-style: none;">
-                    <div class="form-row d-flex justify-content-between mt-2">
-                      <div class="col-md-9 justify-content-center md-2">
-                        <button type="button" class="btn btn-outline-danger" style="line-height: 10px;" (click)="deleteDetail(false)">
+                  <td align="left" style="border-style: none;" colspan="2">
+                    <div class="form-row">
+                      <div class="col-md-9">
+                        <button type="button" class="btn btn-outline-danger" style="line-height: 10px;"
+                          (click)="deleteDetail(false)" title="Delete details">
                           Delete
                           <i class="fa-trash-alt fas" aria-hidden="true"></i>
                         </button>
@@ -175,22 +197,23 @@
               </tfoot>
             </table>
           </div>
-          <div class="col-md-2"></div>
+          <div class="col-md-2 mt"></div>
         </div>
         <div class="form-row">
-          <div class="col-md-4"></div>
+          <div class="col-md-5"></div>
           <div class="col-md-2 mt">
-            <button type="button" class="form-control btn-outline-primary" (click)="saveCheck()" *ngIf="actualCheck.idchecks===null">
+            <button type="button" class="form-control btn-outline-primary" (click)="saveCheck()"
+              *ngIf="actualCheck.idchecks===null" title="Save">
               Save
               <i class="fas fa-save"></i>
             </button>
-            <button type="button" class="form-control btn-outline-primary" (click)="printChecks()" *ngIf="actualCheck.idchecks!==null">
+            <button type="button" class="form-control btn-outline-primary" (click)="printChecks()"
+              *ngIf="actualCheck.idchecks!==null"  title="Print">
               Print
               <i class="fas fa-print"></i>
             </button>
           </div>
-          <div class="col-md-4">
-          </div>
+          <div class="col-md-5"></div>
         </div>
       </div>
     </div>
@@ -206,9 +229,8 @@
               <option *ngFor="let year of years">{{year}}</option>
             </select>
           </div>
-          <div class="col-md-1"></div>
-          <!-- Encabezado Botones del período. -->
-          <div class="col-md-9 d-flex flex-row-reverse">
+          <div class="col-md-10 d-flex flex-row-reverse">
+            <!-- Encabezado Botones del período. -->
             <div>
               <button class="form-control btn btn-outline-success" (click)="unCheckAll()" title="Send">
                 <i class="fas fa-share-square"></i>
@@ -224,24 +246,19 @@
                 <i class="fas fa-ban"></i>
               </button>
             </div>
-            <!--
             <div style="margin-right: 10px">
-              <button type="button" class="form-control btn btn-outline-primary" title="Print" (click)="printChecksByPeriod()">
-                <i class="fas fa-print"></i>
-              </button>
-            </div>
-            -->
-            <div style="margin-right: 10px">
-              <button type="button" class="form-control btn btn-outline-primary" title="Print" (click)="saveChecksByPeriod()">
+              <button type="button" class="form-control btn btn-outline-primary" title="Save and Print"
+                (click)="saveChecksByPeriod()">
                 <i class="fas fa-save"></i>
               </button>
             </div>
             <div style="margin-right: 10px;" class="p-2 flex-fill bd-highlight">
             </div>
-              <!-- Seleccionar chequera -->
+            <!-- Seleccionar chequera -->
             <div class="col-md-2" style="margin-right: 125px;">
               <select class="form-control">
-                <option *ngFor="let checkbook of checkbooks" (click)="setCheckBook($event.target.value)" [(ngModel)]="selectedCheckbook">
+                <option *ngFor="let checkbook of checkbooks" (click)="setCheckBook($event.target.value)"
+                  [(ngModel)]="selectedCheckbook">
                   {{ checkbook.account_bank }}
                 </option>
               </select>
@@ -257,17 +274,18 @@
             <div class="col-md-2">
               <div class="list-group w-100" id="list-tab" role="tablist">
                 <div *ngFor="let period of periods">
-                  <a class="list-group-item list-group-item-action w-100 active" [tabindex]="period.idperiods"
+                  <a class="list-group-item list-group-item-action w-100 period active blue-nearsol" [tabindex]="period.idperiods"
                     (click)="setSelection(period)" *ngIf="selectedPeriod.idperiods==period.idperiods"
-                    style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO {{period.end}}</a>
-                  <a class="list-group-item list-group-item-action w-100" [tabindex]="period.idperiods"
+                    style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO
+                    {{period.end}}</a>
+                  <a class="list-group-item list-group-item-action w-100 period" [tabindex]="period.idperiods"
                     (click)="setSelection(period)" *ngIf="selectedPeriod.idperiods!==period.idperiods"
-                    style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO {{period.end}}</a>
+                    style="cursor: pointer; font-weight: bold;text-align: center;">{{period.start}} TO
+                    {{period.end}}</a>
                 </div>
               </div>
             </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-9 p-0">
+            <div class="col-md-10 p-0">
               <table class="table table-stripped table-hover">
                 <thead>
                   <th>NEARSOL ID</th>
@@ -276,30 +294,31 @@
                   <th>ACCOUNT</th>
                   <th>VALUE</th>
                   <th>RESULT</th>
-                  <th>SELECT</th>
+                  <th>INCLUDE IN THIS PAYCHECK</th>
                 </thead>
                 <tbody>
                   <tr *ngFor="let cdemployees of creditsDebitsByEmployees" class='selectable'>
-                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
-                        {{ cdemployees.nearsol_id }}
-                      </td>
-                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
-                        {{ cdemployees.client_id }}
-                      </td>
-                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
-                        {{ cdemployees.name }}
-                      </td>
-                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
-                        {{ cdemployees.account }}
-                      </td>
-                      <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
-                        {{ cdemployees.total | number: '3.1-2' }}
-                      </td>
-                      <td>
-                        {{ cdemployees.check }}
-                      </td>
-                      <td style="text-align: center;"><input type="checkbox" [checked]="cdemployees.checked"
-                          (change)="setStatusCBEmp(cdemployees)">
+                    <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                      {{ cdemployees.nearsol_id }}
+                    </td>
+                    <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                      {{ cdemployees.client_id }}
+                    </td>
+                    <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                      {{ cdemployees.name }}
+                    </td>
+                    <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                      {{ cdemployees.account }}
+                    </td>
+                    <td (click)="setCredDebByEmp(cdemployees)" data-toggle="modal" data-target="#alertShowCheck">
+                      {{ cdemployees.total | number: '3.1-2' }}
+                    </td>
+                    <td>
+                      {{ cdemployees.check }}
+                    </td>
+                    <td style="text-align: center;">
+                      <input type="checkbox" [checked]="cdemployees.checked" (change)="setStatusCBEmp(cdemployees)">
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -318,7 +337,7 @@
       <div class="modal-header d-flex justify-content-between mt-2">
         <div class="form-col justify-self-center w-100">
           <h5 class="modal-title justify-content-center" id="alertCheckLabel" style="text-align: center;">
-            SAVE CHECK
+            Save Check
           </h5>
         </div>
         <div class="form-col justify-self-right">
@@ -332,9 +351,12 @@
           <div class="form-row col-md-12">
             <div class="col-md-6">
               <label>Nearsol_ID</label>
-              <input type="text" class="form-control" (keyup)="getFilteredEmployees($event.target.value)" list="nearsol_id" [(ngModel)]="actualEmployee.nearsol_id">
+              <input type="text" class="form-control" (change)="getFilteredEmployees($event.target.value)"
+                (keyup)="getFilteredEmployees($event.target.value)" list="nearsol_id"
+                [(ngModel)]="actualEmployee.nearsol_id">
               <datalist id="nearsol_id">
-                <option *ngFor="let employee of employees" (click)="getFilteredEmployees($event.target.value)">{{ employee.nearsol_id }}</option>
+                <option *ngFor="let employee of employees" (click)="getFilteredEmployees($event.target.value)">{{
+                  employee.nearsol_id }}</option>
               </datalist>
             </div>
             <div class="col-md-6">
@@ -346,8 +368,10 @@
         <div class="form-group col-md-12">
           <div class="form-row col-md-6">
             <label>Periods</label>
-            <select class="form-control" style="text-align: center;" [(ngModel)]="selectedPeriodEmp" (change)="searchCreditsDebits()" >
-              <option *ngFor="let period of periodsByEmployee" value="{{ period.idperiods }}">{{ period.idperiods+") " }} {{ period.start }} - {{ period.end }}</option>
+            <select class="form-control" style="text-align: center;" [(ngModel)]="selectedPeriodEmp"
+              (change)="searchCreditsDebits()">
+              <option *ngFor="let period of periodsByEmployee" value="{{ period.idperiods }}">{{ period.idperiods+") "
+                }} {{ period.start }} - {{ period.end }}</option>
             </select>
           </div>
         </div>
@@ -356,9 +380,10 @@
             <div class="col-md-12">
               <table class="table table-striped table-hover table-borderless">
                 <thead>
-                  <tr style="max-height: 20px; height: 20px; font-size: 12px; color: #fff; font-weight: bold;" class="blue-nearsol">
+                  <tr style="max-height: 20px; height: 20px; font-size: 12px; color: #fff; font-weight: bold;"
+                    class="blue-nearsol">
                     <td align="center" class="title">
-                      Checked
+                      Include in this paycheck
                     </td>
                     <td align="center" class="title">
                       Type
@@ -374,8 +399,8 @@
                 <tbody>
                   <tr *ngFor="let credit of credits" class="selectable">
                     <td align="center">
-                      <input type="checkbox" class="form-check-input smc" (change)="getTotal()" [(ngModel)]="credit.checked"
-                        placeholder="Add">
+                      <input type="checkbox" class="form-check-input smc" (change)="getTotal()"
+                        [(ngModel)]="credit.checked" placeholder="Add">
                     </td>
                     <td>
                       {{ credit.object.type }}
@@ -389,8 +414,8 @@
                   </tr>
                   <tr *ngFor="let debit of debits" class="selectable">
                     <td align="center">
-                      <input type="checkbox" class="form-check-input smc" (change)="getTotal()" [(ngModel)]="debit.checked"
-                        placeholder="Add">
+                      <input type="checkbox" class="form-check-input smc" (change)="getTotal()"
+                        [(ngModel)]="debit.checked" placeholder="Add">
                     </td>
                     <td>
                       {{ debit.object.type }}
@@ -426,6 +451,99 @@
 <div class="modal fade" id="alertShowCheck" tabindex="-1" role="dialog" aria-labelledby="alertShowCheckLabel"
   aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex justify-content-between mt-2">
+        <div class="form-col justify-self-center w-100">
+          <h5 class="modal-title justify-content-center" id="alertShowCheckLabel" style="text-align: center;">
+            SHOW CHECK
+          </h5>
+        </div>
+        <div class="form-col justify-self-right">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="row ml-2">
+          <h5>
+            <strong>Employee:</strong> {{ selCredDebByEmp.name }}
+          </h5>
+        </div>
+        <div class="row">
+          <table class="table table-striped table-hover table-borderless">
+            <thead>
+              <tr style="max-height: 20px; height: 20px; font-size: 12px; color: #fff; font-weight: bold;"
+                class="blue-nearsol">
+                <td align="center" class="title">
+                  Include in this paycheck
+                </td>
+                <td align="center" class="title">
+                  Type
+                </td>
+                <td align="center" class="title">
+                  Credits
+                </td>
+                <td align="center" class="title">
+                  Debits
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let credit of selCredDebByEmp.credits" class="selectable">
+                <td align="center">
+                  <input type="checkbox" class="form-check-input smc" (change)="getTotalCred(credit)"
+                    [(ngModel)]="credit.checked" placeholder="Add">
+                </td>
+                <td>
+                  {{ credit.object.type }}
+                </td>
+                <td align="right">
+                  {{ credit.object.amount | number: '1.1-2' }}
+                </td>
+                <td align="right">
+                  0.00
+                </td>
+              </tr>
+              <tr *ngFor="let debit of selCredDebByEmp.debits" class="selectable">
+                <td align="center">
+                  <input type="checkbox" class="form-check-input smc" (change)="getTotalCred(debit)"
+                    [(ngModel)]="debit.checked" placeholder="Add">
+                </td>
+                <td>
+                  {{ debit.object.type }}
+                </td>
+                <td align="right">
+                  0.00
+                </td>
+                <td align="right">
+                  {{ debit.object.amount| number: '1.1-2'}}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot class="">
+              <tr>
+                <td colspan="5" class="total">
+                  <strong>Total: </strong>{{ selCredDebByEmp.total | number: '1.1-2' }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-between mt-2">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CLOSE</button>
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="addCreditsDebitsByEmp()">
+          SAVE
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----------------------------------------------------------- MODAL PAYSTUB ------------------------------------------------------------->
+<div class="modal fade" id="attendance_detail" tabindex="-1" role="dialog" aria-labelledby="eattendance_detailLabel">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header d-flex justify-content-between mt-2">
         <div class="form-col justify-self-center w-100">

@@ -30,7 +30,7 @@ if ($filter=='All' || trim($filter)=='' || trim($value)=='') {
   $and = " AND h.nearsol_id LIKE '%" . $value . "%'";
 } else if ($filter=='nearsol_id') {
   $and = " AND $filter = str_to_date('$value', '%d-%m-%Y')";
-} 
+}
 
 $i = 0;
 
@@ -66,7 +66,6 @@ $sql = "SELECT DISTINCT
         INNER JOIN profiles p ON p.idprofiles = h.id_profile
         INNER JOIN users u ON u.idUser = e.reporter
         INNER JOIN (SELECT UPPER(CONCAT(TRIM(p1.first_name), ' ', TRIM(p1.second_name), ' ', TRIM(p1.first_lastname), ' ', TRIM(p1.second_lastname))) as name, p1.idprofiles from profiles p1) p2 on (p2.idprofiles = p.idprofiles)
-        INNER JOIN contact_details cd on (p.idprofiles = cd.id_profile)
         LEFT JOIN hr_processes hp ON (e.idemployees = hp.id_employee)
         LEFT JOIN rises r ON (hp.idhr_processes = r.id_process)
         WHERE e.active  = 1
@@ -96,7 +95,7 @@ if($result = mysqli_query($con,$sql)){
       echo "</td>";
     }
     echo"</tr>";
-  };      
+  };
 echo "</tbody></table>";
 } else {
   echo json_decode($sql);

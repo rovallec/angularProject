@@ -19,7 +19,7 @@ $base_payment = ($request->base_payment);
 $job = ($request->job);
 $productivity_payment = ($request->productivity_payment);
 
-$sql = "INSERT INTO `waves`(`idwaves`, `id_account`, `starting_date`, `end_date`, `max_recriut`, `hires`, `name`, `trainning_schedule`, `prefix`, `ops_start`, `state`, `base_payment`, `job`, `productivity_payment`) VALUES (null, '$id_account', 'str_to_date('$starting_date','%d-%m-%Y')', 'str_to_date('$starting_date','%d-%m-%Y')', '$max_recriut', '0', '$name', '$training_schedule', '$prefix', '$ops_start', '$state', '$base_payment', '$job', '$productivity_payment');";
+$sql = "INSERT INTO `waves`(`idwaves`, `id_account`, `starting_date`, `end_date`, `max_recriut`, `hires`, `name`, `trainning_schedule`, `prefix`, `ops_start`, `state`, `base_payment`, `job`, `productivity_payment`) VALUES (null, '$id_account', STR_TO_DATE('$starting_date','%d-%m-%Y'), STR_TO_DATE('$starting_date','%d-%m-%Y'), '$max_recriut', '0', '$name', '$training_schedule', '$prefix', '$ops_start', '$state', '$base_payment', '$job', '$productivity_payment');";
 if(mysqli_query($con,$sql)){
 	echo(mysqli_insert_id($con));
 }else{

@@ -30,13 +30,13 @@ if ($filter=='All' || trim($filter)=='') {
   $and = " AND h.nearsol_id LIKE '%" . $value . "%'";
 } else if ($filter=='nearsol_id') {
   $and = " AND $filter = str_to_date('$value', '%d-%m-%Y')";
-} 
+}
 
 $sql = "SELECT DISTINCT
           e.idemployees,
           h.nearsol_id,
           e.client_id, /* avaya_id */
-          e.hiring_date,  
+          e.hiring_date,
           p2.name,
           u.user_name AS rep,
           a.name AS acc_name,
@@ -50,7 +50,6 @@ $sql = "SELECT DISTINCT
         INNER JOIN profiles p ON p.idprofiles = h.id_profile
         INNER JOIN users u ON u.idUser = e.reporter
         INNER JOIN (SELECT UPPER(CONCAT(TRIM(p1.first_name), ' ', TRIM(p1.second_name), ' ', TRIM(p1.first_lastname), ' ', TRIM(p1.second_lastname))) as name, p1.idprofiles from profiles p1) p2 on (p2.idprofiles = p.idprofiles)
-        INNER JOIN contact_details cd on (p.idprofiles = cd.id_profile)
         LEFT JOIN hr_processes hp ON (e.idemployees = hp.id_employee)
         LEFT JOIN rises r ON (hp.idhr_processes = r.id_process)
         WHERE e.active  = 1

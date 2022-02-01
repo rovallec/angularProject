@@ -22,15 +22,14 @@
   </div>
   <div class="col-md-9">
     <div class="row col-md-12 d-flex">
-      <div class="col-md-4 mr-auto p-2"></div>
-      <div class="col-md-3 p-2">
+      <div class="col-md-2 p-2 mr-auto">
         <select class="form-control" >
           <option *ngFor="let y of year" [value]="y" [selected]="y==selectedYear" (click)="setYear(y)">
             {{ y }}
           </option>
         </select>
       </div>
-      <div class="col-md-3 p-2"></div>
+      <div class="col-md-8 p-2"></div>
       <div class="col-md-2 p-2">
         <button type="button" class="form-control btn-outline-primary" (click)="addHoliday()" [disabled]="state=='Insert'" >
           <i class="far fa-plus-square"></i>
@@ -39,7 +38,7 @@
       </div>
     </div>
     <div class="row col-md-12" style="margin-top: 20px;">
-      <table  class="table table-striped d-xl-table" >
+      <table  class="table table-striped d-xl-table table_ancho" >
         <thead>
           <tr style="text-align: center; font-weight: bold;">
             <td>
@@ -78,12 +77,12 @@
             <td>
               <input type="date" class="form-control" [(ngModel)]="holi.date" [disabled]="holi.state=='Browse'">
             </td>
-            <td>
+            <td class="ancho">
               <button type="button" class="form-control btn-outline-success" (click)="editHoliday(holi)" [disabled]="holi.state!=='Browse'">
                 <i class="fas fa-edit"></i>
               </button>
             </td>
-            <td>
+            <td class="ancho">
               <button type="button" class="form-control btn-outline-danger" (click)="deleteHoliday(holi)" *ngIf="holi.state=='Browse'">
                 <i class="far fa-trash-alt"></i>
               </button>
@@ -91,7 +90,7 @@
                 <i class="fas fa-ban"></i>
               </button>
             </td>
-            <td>
+            <td class="ancho">
               <button type="button" class="form-control btn-outline-primary" (click)="saveHoliday(holi)" [disabled]="holi.state=='Browse'" >
                 <i class="far fa-save"></i>
               </button>
