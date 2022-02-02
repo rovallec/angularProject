@@ -55,6 +55,7 @@ try
               "VALUES (null, '$place', STR_TO_DATE('$date','%d-%m-%Y'), $value, '$name', '$description', '$negotiable', " . 
               "  '$nearsol_id', '$client_id', '$id_account', '$document', '$bankAccount', " .
               "  $printDetail);";
+              echo($sql2);
 
     if (($res2 = $transact->query($sql2))) {
           $id_check = $transact->insert_id;
