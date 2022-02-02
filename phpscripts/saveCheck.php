@@ -58,6 +58,7 @@ try
 
     if (($res2 = $transact->query($sql2))) {
           $id_check = $transact->insert_id;
+          echo($id_check);
           
 
       /* ********************* */
