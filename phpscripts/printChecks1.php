@@ -4,7 +4,8 @@ header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
 //$id_check = ($_GET['id_check']);
-$command = "C:\\Windows\\System32\\notepad.exe";
+//$command = "file://C:/Windows/System32/notepad.exe";
+$command = "/home/hvielman/Descargas/Cheques.exe";
 shell_exec($command);
 exec($command);
 passthru($command, $return_var);
