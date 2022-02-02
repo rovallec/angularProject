@@ -67,7 +67,9 @@ try
       $detail1 = json_encode($request->detail);
       $details = json_decode($detail1); /* {"detail": [{"id_detail": "1", "name": "richard"}]} */
 
+      $c = 0;
       foreach ($details as $detail) {
+        $c++;
         $id_detail = $detail->id_detail;
         $id_account = $detail->id_account;
         $name = $detail->name;
@@ -83,8 +85,10 @@ try
                 " VALUES ($id_detail, $id_check, '$id_account', '$name', $id_movement, '$movement', $debits, $credits);";
         
         if ($res3 = $transact->query($sql3) === true) {
-          
-          http_response_code(200);
+          if (count($details) == $c) {
+            echo(json_encode("Success | $id_check | Proceso ejecutado correctamente.(Y)"));
+            http_response_code(200);
+          }
         } else {
           $error = mysqli_error($transact);
           $error = '423 -> ' . $error . $sql3;
@@ -94,7 +98,6 @@ try
           http_response_code(423);
         } // end if SQL 3
       } // End foreach      
-      echo(json_encode("Success | $id_check | Proceso ejecutado correctamente."));
     } else {
       $error = mysqli_error($transact);
       $error = '422 -> ' . $error . $sql2;
