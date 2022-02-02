@@ -44,8 +44,8 @@ export class AccdashboardComponent implements OnInit {
   }
 
   getPeriods() {
-    this.apiService.getPeriods().subscribe((prd: periods[]) => {      
-      prd.forEach(per => {        
+    this.apiService.getPeriods().subscribe((prd: periods[]) => {
+      prd.forEach(per => {
         if (per.status=='0'){
           per.status = 'CLOSED';
         } else if (per.status=='1') {
@@ -56,6 +56,7 @@ export class AccdashboardComponent implements OnInit {
         }
       })
       this.periods = prd;
+      this.periods.reverse();
     });
   }
 
@@ -146,7 +147,7 @@ export class AccdashboardComponent implements OnInit {
                     } else {
                       window.alert("An error has occured:\n" + str.split("|")[0] + "\n" + str.split("|")[1]);
                     }
-                  })                     
+                  })
                 } else  {
                   window.alert("An error has occured:\n" + str.split("|")[1] + "\n" + str.split("|")[2]);
                 }
@@ -236,19 +237,19 @@ export class AccdashboardComponent implements OnInit {
   }
 
   insertFormerEmployer() {
-    this.apiService.insertFormerEmployer(this.actualFormerEmployer).subscribe((_str: string) => { 
+    this.apiService.insertFormerEmployer(this.actualFormerEmployer).subscribe((_str: string) => {
     //
     })
   }
 
   getFormerEmployer() {
-    this.apiService.getFormerEmployer().subscribe((str: formerEmployer[]) => { 
+    this.apiService.getFormerEmployer().subscribe((str: formerEmployer[]) => {
       this.formerEmployer = str;
     })
   }
 
   updateFormerEmployer() {
-    this.apiService.updateFormerEmployer(this.actualFormerEmployer).subscribe((_str: string) => { 
+    this.apiService.updateFormerEmployer(this.actualFormerEmployer).subscribe((_str: string) => {
       //
       })
   }
@@ -257,10 +258,10 @@ export class AccdashboardComponent implements OnInit {
     this.waveFormerEmployer.forEach(emp => {
       this.actualFormerEmployer = emp;
       if (emp.idformer_employes == null) {
-        if (!(((this.actualFormerEmployer.indemnization == '') && (this.actualFormerEmployer.aguinaldo == '') && 
-        (this.actualFormerEmployer.bono14 == '') && (this.actualFormerEmployer.igss == '') 
-        && (this.actualFormerEmployer.taxpendingpayment == '')) || ((this.actualFormerEmployer.indemnization == null) && (this.actualFormerEmployer.aguinaldo == null) && 
-        (this.actualFormerEmployer.bono14 == null) && (this.actualFormerEmployer.igss == null) 
+        if (!(((this.actualFormerEmployer.indemnization == '') && (this.actualFormerEmployer.aguinaldo == '') &&
+        (this.actualFormerEmployer.bono14 == '') && (this.actualFormerEmployer.igss == '')
+        && (this.actualFormerEmployer.taxpendingpayment == '')) || ((this.actualFormerEmployer.indemnization == null) && (this.actualFormerEmployer.aguinaldo == null) &&
+        (this.actualFormerEmployer.bono14 == null) && (this.actualFormerEmployer.igss == null)
         && (this.actualFormerEmployer.taxpendingpayment == null)))) {
           this.insertFormerEmployer();
         }

@@ -375,9 +375,9 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let at of detailed_attendance table-hover"
-                                    [ngClass]="{'table-danger':(at.balance === 'JANP' || at.balance === 'NS' || at.balance === 'LOA'), 'table-success':at.balance > 0,
-                         'table-info':(at.balance === 'OFF' || at.balance === 'VAC' || at.balance === 'JAP'), 
-                         'table-light':at.balance === '0', 'table-warning':at.balance < 0, 'table-secondary':at.balance === 'TERM' || at.balance === 'TRANSFER'}">
+                                    [ngClass]="{'table-danger':(at.balance === 'JANP' || at.balance === 'NS' || at.balance === 'LOA'), 'table-success':at.balance > '0',
+                         'table-info':(at.balance === 'OFF' || at.balance === 'VAC' || at.balance === 'JAP'),
+                         'table-light':at.balance === '0', 'table-warning':at.balance < '0', 'table-secondary':at.balance === 'TERM' || at.balance === 'TRANSFER'}">
                                     <td>{{at.date}}</td>
                                     <td>{{at.scheduled}}</td>
                                     <td>{{at.worked}}</td>
