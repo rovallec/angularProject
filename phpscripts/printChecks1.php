@@ -6,6 +6,7 @@ require 'database.php';
 //$id_check = ($_GET['id_check']);
 
 shell_exec("cmd");
+exec('C:\Windows\System32/cmd.exe ping google.com.gt');   
 
 /*
 $res = [];
