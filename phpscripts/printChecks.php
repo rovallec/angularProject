@@ -68,7 +68,7 @@ try{
     echo(json_encode($return_var));
     exec($command, $return_var);
     echo(json_encode($return_var));
-    shell_exec($command, $return_var);
+    shell_exec($command);
 
     echo(json_encode($return_var));
     http_response_code(200);
