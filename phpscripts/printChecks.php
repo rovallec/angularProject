@@ -64,13 +64,13 @@ try{
     $command = $path . $params;
     $ultima_linea = system($command, $return_var);
     echo(json_encode($return_var));
-    passthru($command, $return_var);
+    /*passthru($command, $return_var);
     echo(json_encode($return_var));
     exec($command, $return_var);
     echo(json_encode($return_var));
     shell_exec($command);
 
-    echo(json_encode($return_var));
+    echo(json_encode($return_var));*/
     http_response_code(200);
   } else {
     echo(json_encode(mysqli_error($con). "<br>" . $sql));
