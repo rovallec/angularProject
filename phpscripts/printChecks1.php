@@ -4,12 +4,26 @@ header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
 //$id_check = ($_GET['id_check']);
-//$command = "file://C:/Windows/System32/notepad.exe";
-$command = "/home/hvielman/Descargas/Cheques.exe";
+$path = '"file://C:/Users/Public/Cheques.exe"';
+//$path = "file://C:/Windows/System32/notepad.exe";
+//$path = "/home/hvielman/Descargas/Cheques.exe";
+$params = ' -NEGOCIABLE:"' .$negociable . '" -FECHA:"' . $fecha .'" -NOMBRE:"' . $nombre . '" -VALOR:"' .$valor. '" -MONEDA:"' . $moneda . '" -AUTORIZACION:"' . $autorizacion . '" -CONCEPTO:"' . $concepto . '" -DOCUMENTO:"' . $documento . '"';
+$command = $path . $params;
+
 shell_exec($command);
-exec($command);
+
+exec($command, $return_var);
+
+echo("<br>");
+echo(json_encode($return_var));
+
 passthru($command, $return_var);
-shell_exec($command);
+
+echo("<br>");
+echo(json_encode($return_var));
+
+//shell_exec($command, $return_var);
+
 
 /*
 $res = [];
