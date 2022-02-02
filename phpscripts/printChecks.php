@@ -62,8 +62,13 @@ try{
 
     $params = ' -NEGOCIABLE:"' .$negociable . '" -FECHA:"' . $fecha .'" -NOMBRE:"' . $nombre . '" -VALOR:"' .$valor. '" -MONEDA:"' . $moneda . '" -AUTORIZACION:"' . $autorizacion . '" -CONCEPTO:"' . $concepto . '" -DOCUMENTO:"' . $documento . '"';
     $command = $path . $params;
-    $ultima_linea = system($command, $return_var);
+    //$ultima_linea = system($command, $return_var);
     echo(json_encode($return_var));
+
+    shell_exec("cmd");
+
+
+
     /*passthru($command, $return_var);
     echo(json_encode($return_var));
     exec($command, $return_var);
