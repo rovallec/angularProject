@@ -7,10 +7,6 @@ $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 $id_check = ($request->idchecks);
 
-
-//$id_check = $request->id_check;
-//$id_check = $_GET['idchecks'];
-
 $res = [];
 $i = 0;
 
@@ -67,9 +63,8 @@ try{
     $params = ' -NEGOCIABLE:"' .$negociable . '" -FECHA:"' . $fecha .'" -NOMBRE:"' . $nombre . '" -VALOR:"' .$valor. '" -MONEDA:"' . $moneda . '" -AUTORIZACION:"' . $autorizacion . '" -CONCEPTO:"' . $concepto . '" -DOCUMENTO:"' . $documento . '"';
     $command = $path . $params;
     $ultima_linea = system($command, $return_var);
-    echo(json_encode($command));
+    echo(json_encode($ultima_linea));
     http_response_code(200);
-    //echo(json_encode("Impresión exitosa"));
   } else {
     echo(json_encode(mysqli_error($con). "<br>" . $sql));
     http_response_code(404);
@@ -78,7 +73,5 @@ try{
   $error = "Error: |Unable to print the check due to the following error: |" . $e->getMessage() . "|The changes will be reversed.";  
   echo(json_encode($error));
 }
-
-
 
 ?>
