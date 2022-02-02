@@ -67,7 +67,7 @@ try
       /* ********************* */
       $detail1 = json_encode($request->detail);
       $details = json_decode($detail1); /* {"detail": [{"id_detail": "1", "name": "richard"}]} */
-      echo($details);
+
       foreach ($details as $detail) {
         $id_detail = $detail->id_detail;
         $id_account = $detail->id_account;
@@ -77,7 +77,8 @@ try
         $debits = $detail->debits;
         $credits = $detail->credits;
         $value = $credits + $debits;
-        
+        echo($detail);
+
         $sql3 = " INSERT INTO checks_details (id_detail, id_check, id_account, name, id_movement, movement, debits, credits) " .
                 " VALUES ($id_detail, $id_check, '$id_account', '$name', '$id_movement', '$movement', $debits, $credits);";
         echo($sql3);
