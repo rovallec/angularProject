@@ -59,8 +59,7 @@ try
 
     if (($res2 = $transact->query($sql2))) {
           $id_check = $transact->insert_id;
-          echo($id_check);
-          
+
 
       /* ********************* */
       /* ****** DETAILS ****** */
@@ -77,13 +76,14 @@ try
         $debits = $detail->debits;
         $credits = $detail->credits;
         $value = $credits + $debits;
-        echo($detail);
+        $checked = $detail->checked;
+        
 
         $sql3 = " INSERT INTO checks_details (id_detail, id_check, id_account, name, id_movement, movement, debits, credits) " .
-                " VALUES ($id_detail, $id_check, '$id_account', '$name', '$id_movement', '$movement', $debits, $credits);";
-        echo($sql3);
+                " VALUES ($id_detail, $id_check, '$id_account', '$name', $id_movement, '$movement', $debits, $credits);";
+        
         if ($res3 = $transact->query($sql3) === true) {
-          echo("Success | $id_check | Proceso ejecutado correctamente.");
+          
           http_response_code(200);
         } else {
           $error = mysqli_error($transact);
@@ -94,6 +94,7 @@ try
           http_response_code(423);
         } // end if SQL 3
       } // End foreach      
+      echo(json_encode("Success | $id_check | Proceso ejecutado correctamente."));
     } else {
       $error = mysqli_error($transact);
       $error = '422 -> ' . $error . $sql2;

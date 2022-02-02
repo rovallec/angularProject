@@ -232,9 +232,10 @@
           <div class="col-md-10 d-flex flex-row-reverse">
             <!-- Encabezado Botones del período. -->
             <div>
+              <!--
               <button class="form-control btn btn-outline-success" (click)="unCheckAll()" title="Send">
                 <i class="fas fa-share-square"></i>
-              </button>
+              </button>-->
             </div>
             <div style="margin-right: 10px">
               <button class="form-control btn btn-outline-info" title="Select All" (click)="checkAll()">
@@ -242,7 +243,7 @@
               </button>
             </div>
             <div style="margin-right: 10px">
-              <button class="form-control btn btn-outline-danger" title="Clear Selection">
+              <button class="form-control btn btn-outline-danger" (click)="unCheckAll()" title="Clear Selection">
                 <i class="fas fa-ban"></i>
               </button>
             </div>
@@ -321,6 +322,13 @@
                     </td>
                   </tr>
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="7" style="text-align: center;">
+                      Total Employees: {{ creditsDebitsByEmployees.length }}
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             </div>
           </div>
