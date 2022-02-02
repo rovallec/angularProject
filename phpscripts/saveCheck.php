@@ -65,7 +65,7 @@ try
       /* ********************* */
       /* ****** DETAILS ****** */
       /* ********************* */
-      $detail1 = json_encode($request->detail)
+      $detail1 = json_encode($request->detail);
       $details = json_decode($detail1); /* {"detail": [{"id_detail": "1", "name": "richard"}]} */
 
       foreach ($details as $detail) {
