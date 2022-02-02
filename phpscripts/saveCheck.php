@@ -94,7 +94,7 @@ try
           http_response_code(423);
         } // end if SQL 3
       } // End foreach
-      echo(json_encode("Success | " . $id_check . " | Proceso ejecutado correctamente."));
+      //echo(json_encode("Success | " . $id_check . " | Proceso ejecutado correctamente."));
       http_response_code(200);
     } else {
       $error = mysqli_error($transact);
