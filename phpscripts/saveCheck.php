@@ -55,7 +55,7 @@ try
               "VALUES (null, '$place', STR_TO_DATE('$date','%d-%m-%Y'), $value, '$name', '$description', '$negotiable', " . 
               "  '$nearsol_id', '$client_id', '$id_account', '$document', '$bankAccount', " .
               "  $printDetail);";
-              echo($sql2);
+
 
     if (($res2 = $transact->query($sql2))) {
           $id_check = $transact->insert_id;
@@ -66,7 +66,7 @@ try
       /* ****** DETAILS ****** */
       /* ********************* */
 
-      $details = ($request->detail);
+      $details = json_decode($request->detail); /* {"detail": [{"id_detail": "1", "name": "richard"}]} */
 
       foreach ($details as $detail) {
         $id_detail = $detail->id_detail;
@@ -80,7 +80,7 @@ try
         
         $sql3 = " INSERT INTO checks_details (id_detail, id_check, id_account, name, id_movement, movement, debits, credits) " .
                 " VALUES ($id_detail, $id_check, '$id_account', '$name', '$id_movement', '$movement', $debits, $credits);";
-
+        echo($sql3);
         if ($res3 = $transact->query($sql3) === true) {
           echo("Success | $id_check | Proceso ejecutado correctamente.");
           http_response_code(200);
