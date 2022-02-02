@@ -3,10 +3,11 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
-$postdata = file_get_contents("php://input");
-$request = json_decode($postdata);
-$id_check = ($request->idchecks);
+//$id_check = ($_GET['id_check']);
 
+shell_exec("cmd");
+
+/*
 $res = [];
 $i = 0;
 
@@ -64,8 +65,8 @@ try{
     $command = $path . $params;
     //$ultima_linea = system($command, $return_var);
     //echo(json_encode($return_var));
-
-    shell_exec("cmd");
+*/
+  
 
 
 
@@ -76,6 +77,7 @@ try{
     shell_exec($command);
 
     echo(json_encode($return_var));*/
+    /*
     http_response_code(200);
   } else {
     echo(json_encode(mysqli_error($con). "<br>" . $sql));
@@ -85,5 +87,5 @@ try{
   $error = "Error: |Unable to print the check due to the following error: |" . $e->getMessage() . "|The changes will be reversed.";  
   echo(json_encode($error));
 }
-
+*/
 ?>
