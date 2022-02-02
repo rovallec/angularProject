@@ -25,6 +25,7 @@ $id_account = $head2->id_account;
 $document = $head2->document;
 $bankAccount = $head2->bankAccount;
 $printDetail = $head2->printDetail;
+$payment = $head2->payment;
 
 if ($printDetail=='True') {
   $printDetail = 1;
@@ -46,26 +47,23 @@ $sql1 = "UPDATE checkbook SET " .
 try 
 {
   if ($res1 = $transact->query($sql1) === true) {
-    //$row1 = $res1->fetch_assoc();
 
     $sql2 = " INSERT INTO checks " .
               "(idchecks, place, date, value, name, description, negotiable, " .
               "  nearsol_id, client_id, id_account, document, bankAccount, " .
-              "  printDetail) " .
-              "VALUES (null, '$place', STR_TO_DATE('$date','%d-%m-%Y'), $value, '$name', '$description', '$negotiable', " . 
+              "  printDetail, payment) " .
+              "VALUES (null, '$place', str_to_date('$date','%d-%m-%Y'), $value, '$name', '$description', '$negotiable', " . 
               "  '$nearsol_id', '$client_id', '$id_account', '$document', '$bankAccount', " .
-              "  $printDetail);";
+              "  $printDetail, $payment);";
 
-
-    if (($res2 = $transact->query($sql2))) {
-          $id_check = $transact->insert_id;
-
+    if ($res2 = $transact->query($sql2) === true) {
+      $id_check = $transact->insert_id;
 
       /* ********************* */
       /* ****** DETAILS ****** */
       /* ********************* */
-      $detail1 = json_encode($request->detail);
-      $details = json_decode($detail1); /* {"detail": [{"id_detail": "1", "name": "richard"}]} */
+
+      $details = ($request->detail);
 
       $c = 0;
       foreach ($details as $detail) {
@@ -78,15 +76,13 @@ try
         $debits = $detail->debits;
         $credits = $detail->credits;
         $value = $credits + $debits;
-        $checked = $detail->checked;
         
-
         $sql3 = " INSERT INTO checks_details (id_detail, id_check, id_account, name, id_movement, movement, debits, credits) " .
-                " VALUES ($id_detail, $id_check, '$id_account', '$name', $id_movement, '$movement', $debits, $credits);";
-        
+                " VALUES ($id_detail, $id_check, '$id_account', '$name', '$id_movement', '$movement', $debits, $credits);";
+
         if ($res3 = $transact->query($sql3) === true) {
           if (count($details) == $c) {
-            echo(json_encode("Success | $id_check | Proceso ejecutado correctamente.(Y)"));
+            echo(json_encode("Success | " . $id_check . " | Proceso ejecutado correctamente."));
             http_response_code(200);
           }
         } else {
@@ -97,7 +93,7 @@ try
           throw new Exception($error);
           http_response_code(423);
         } // end if SQL 3
-      } // End foreach      
+      } // End foreach
     } else {
       $error = mysqli_error($transact);
       $error = '422 -> ' . $error . $sql2;
