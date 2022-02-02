@@ -52,7 +52,7 @@ try
               "(idchecks, place, date, value, name, description, negotiable, " .
               "  nearsol_id, client_id, id_account, document, bankAccount, " .
               "  printDetail) " .
-              "VALUES (null, '$place', '$date', $value, '$name', '$description', '$negotiable', " . 
+              "VALUES (null, '$place', STR_TO_DATE('$date','%d-%m-%Y'), $value, '$name', '$description', '$negotiable', " . 
               "  '$nearsol_id', '$client_id', '$id_account', '$document', '$bankAccount', " .
               "  $printDetail);";
 
