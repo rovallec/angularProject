@@ -56,7 +56,7 @@ try
               "  '$nearsol_id', '$client_id', '$id_account', '$document', '$bankAccount', " .
               "  $printDetail);";
 
-    if ($res2 = $transact->query($sql2) === true) {
+    if (($res2 = $transact->query($sql2))) {
           $id_check = $transact->insert_id;
           
 
