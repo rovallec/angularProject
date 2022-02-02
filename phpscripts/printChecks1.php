@@ -4,9 +4,11 @@ header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
 //$id_check = ($_GET['id_check']);
-
-shell_exec("cmd");
-exec('C:\Windows\System32\notepad.exe');
+$command = "C:\\Windows\\System32\\notepad.exe";
+shell_exec($command);
+exec($command);
+passthru($command, $return_var);
+shell_exec($command);
 
 /*
 $res = [];
