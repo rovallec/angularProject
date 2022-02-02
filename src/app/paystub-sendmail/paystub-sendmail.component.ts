@@ -81,7 +81,7 @@ export class PaystubSendmailComponent implements OnInit {
       })
       this.paystubs = pst_view;
       this.paystubs.forEach(pay => {
-        if (Number(pay.anticipos) < 0) {
+        if (Number(pay.anticipos) > 0) {
           pay.total_deb = (Math.abs(Number(pay.total_deb)) + Math.abs(Number(pay.anticipos)) ).toFixed(2);
         }
       })
