@@ -63,7 +63,7 @@ try{
     $params = ' -NEGOCIABLE:"' .$negociable . '" -FECHA:"' . $fecha .'" -NOMBRE:"' . $nombre . '" -VALOR:"' .$valor. '" -MONEDA:"' . $moneda . '" -AUTORIZACION:"' . $autorizacion . '" -CONCEPTO:"' . $concepto . '" -DOCUMENTO:"' . $documento . '"';
     $command = $path . $params;
     $ultima_linea = system($command, $return_var);
-    echo(json_encode($ultima_linea));
+    echo(json_encode($return_var));
     http_response_code(200);
   } else {
     echo(json_encode(mysqli_error($con). "<br>" . $sql));
