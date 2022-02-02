@@ -4,7 +4,7 @@ header('Access-Control-Allow-Headers: *');
 require 'database.php';
 
 //$id_check = ($_GET['id_check']);
-$path = '"file://C:/Users/Public/Cheques.exe"';
+$path = '"C:/Users/Public/Cheques.exe"';
 //$path = '"file://C:/Windows/System32/notepad.exe"';
 //$path = "/home/hvielman/Descargas/Cheques.exe";
 $params = ' -NEGOCIABLE:"NO NEGOCIABLE" -FECHA:"Guatemala, 02-02-2022" -NOMBRE:"STEFHANI LUCIA ROCHE AROCHE" -VALOR:"5284.26" -MONEDA:"Q" -AUTORIZACION:"" -CONCEPTO:"PAGO DE PRESTACIONES LABORALES DEL 2021-06-16 AL 2021-06-30" -DOCUMENTO:"8"';
