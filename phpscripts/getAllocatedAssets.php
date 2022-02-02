@@ -11,12 +11,13 @@ $sql1 = "SELECT asset_type.*, asset_manufactures.*, asset_movements.*, assets.* 
         FROM assets
         INNER JOIN asset_type ON asset_type.idasset_type = assets.id_type
         INNER JOIN asset_manufactures ON asset_manufactures.idasset_manufactures = assets.id_manufacture
-        LEFT JOIN asset_movements ON asset_movements.idasset_movements = assets.idassets AND asset_movements.status = 1
+        INNER JOIN asset_movements ON asset_movements.idasset_movements = assets.idassets AND asset_movements.status = 1
         INNER JOIN employees ON employees.idemployees = asset_movements.id_employee
         INNER JOIN hires ON hires.idhires = employees.id_hire
         INNER JOIN profiles ON profiles.idprofiles = hires.id_profile
         INNER JOIN accounts ON accounts.idaccounts = employees.id_account
         WHERE asset_movements.idasset_movements IS NOT NULL;";
+
 if($result = mysqli_query($con, $sql1)){
     while($row = mysqli_fetch_assoc($result)){
         $res[$i]['idassets'] = $row['idassets'];
