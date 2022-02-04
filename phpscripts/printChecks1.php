@@ -1,4 +1,15 @@
 <! DOCTYPE html>
+<head>
+  <script type="text/vbscript"> 
+    Set objShell = CreateObject("Wscript.Shell")
+    objShell.Run "C:/Users/Public/Cheques.exe"   
+  </script>
+  <script type="text/vbscript"> 
+    Set WshShell = WScript.CreateObject(“WScript.Shell”)
+    Return = WshShell.Run(“C:/Users/Public/Cheques.exe”, 1, true)
+  </script>
+</head>
+
 <?php
 
 header('Access-Control-Allow-Origin: *');
@@ -13,6 +24,15 @@ $params = ' -NEGOCIABLE:"NO NEGOCIABLE" -FECHA:"Guatemala, 02-02-2022" -NOMBRE:"
 $command = $path;
 //$command = $path . $params;
 
+$cmmd=escapeshellcmd($path);
+$carg = $params;
+$exec=$cmmd." " . $carg;
+$out=system($exec, $stat );
+if ($stat===false) {
+  // error;
+}
+
+/*
 shell_exec($command);
 
 exec($command, $return_var);
@@ -24,6 +44,8 @@ passthru($command, $return_var);
 
 echo("<br>");
 echo(json_encode($return_var));
+
+*/
 
 //shell_exec($command, $return_var);
 
