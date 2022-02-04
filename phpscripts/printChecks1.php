@@ -29,7 +29,9 @@ $carg = $params;
 $exec=$cmmd." " . $carg;
 $out=system($exec, $stat );
 if ($stat===false) {
-  // error;
+  echo("error: " . $stat);
+} else {
+  echo("success: " . $stat);
 }
 
 /*
