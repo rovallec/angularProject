@@ -14,9 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 $serverName = "172.18.2.39"; //172.18.2.39
 $connectionInfo = array( "Database"=>"MiNearsol_local", "UID"=>"minearsol", "PWD"=>"Nearsol.2020");
-        
+
 function connectSQL()
 {
+  $serverName = "172.18.2.39"; //172.18.2.39
+  $connectionInfo = array( "Database"=>"MiNearsol_local", "UID"=>"minearsol", "PWD"=>"Nearsol.2020");
   $connSQL = sqlsrv_connect( $serverName, $connectionInfo);
   if (!$connSQL) {
     die('Error de conexión: ' . sqlsrv_errors());
