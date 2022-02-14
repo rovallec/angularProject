@@ -9,7 +9,7 @@ $request = json_decode($postdata);
 
 $head = json_encode($request->head);
 $head2 = (json_decode($head));
-$seconds = 10; // Time to sleep in each cycle.
+$seconds = 2; // Time to sleep in each cycle.
 
 /* ********************* */
 /* **** checkbooks ***** */
