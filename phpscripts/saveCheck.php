@@ -9,7 +9,7 @@ $request = json_decode($postdata);
 
 $head = json_encode($request->head);
 $head2 = (json_decode($head));
-$seconds = 2; // Time to sleep in each cycle.
+$seconds = 4; // Time to sleep in each cycle.
 
 /* ********************* */
 /* **** checkbooks ***** */
@@ -76,7 +76,7 @@ try
         $movement = $detail->movement;
         $debits = $detail->debits;
         $credits = $detail->credits;
-        $value = $credits + $debits;
+        //$value = $credits + $debits;
 
         $sql3 = " INSERT INTO checks_details (id_detail, id_check, id_account, name, id_movement, movement, debits, credits) " .
                 " VALUES ($id_detail, $id_check, '$id_accountdet', '$namedet', '$id_movement', '$movement', $debits, $credits);";
@@ -101,12 +101,13 @@ try
 
       try{
         $c = 0;
+        $dateSQL = explode('-', $date)[2].'-'.explode('-', $date)[1].'-'.explode('-', $date)[0];
         if( $connSQL ) {
           $sqlSrv2 = " INSERT INTO MiNearsol_local.dbo.checks " .
                     "(idchecks, place, date, value, name, description, negotiable, " .
                     "  nearsol_id, client_id, id_account, document, bankAccount, " .
                     "  printDetail, payment, printed) " .
-                    "VALUES ($id_check, '$place', '$date', $value, '$name', '$description', ".
+                    "VALUES ($id_check, '$place', '$dateSQL', $value, '$name', '$description', ".
                     "'$negotiable', '$nearsol_id', '$client_id', '$id_account', '$document', " .
                     "'$bankAccount', $printDetail, $payment, 0);";
 
@@ -116,17 +117,17 @@ try
           $prepare2 = sqlsrv_prepare( $connSQL, $sqlSrv2, [0, 0]);
 
           if (sqlsrv_execute($prepare2) === true) {
-            foreach ($details as $detail) {
+            foreach ($details as $detailSQL) {
               $c++;
 
-              $id_detail = $detail->id_detail;
-              $id_accountdet = $detail->id_account;
-              $namedet = $detail->name;
-              $id_movement = $detail->id_movement;
-              $movement = $detail->movement;
-              $debits = $detail->debits;
-              $credits = $detail->credits;
-              $value = $credits + $debits;
+              $id_detail = $detailSQL->id_detail;
+              $id_accountdet = $detailSQL->id_account;
+              $namedet = $detailSQL->name;
+              $id_movement = $detailSQL->id_movement;
+              $movement = $detailSQL->movement;
+              $debits = $detailSQL->debits;
+              $credits = $detailSQL->credits;
+              //$value = $credits + $debits;
 
               $sqlSrv3 =  "INSERT INTO MiNearsol_local.dbo.checks_details (id_detail, id_check, id_account, name, id_movement, movement, debits, credits) " .
                           "VALUES ($id_detail, $id_check, '$id_accountdet', '$namedet', $id_movement, '$movement', $debits, $credits);";
@@ -167,7 +168,7 @@ try
         http_response_code(430);
       } finally {
         sqlsrv_close($connSQL);  
-        sleep($seconds);
+        //sleep($seconds);
       }
       
       //

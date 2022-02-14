@@ -464,10 +464,10 @@ export class ChecksComponent implements OnInit {
 
   saveChecksByPeriod() {
     let fecha: Fecha = new Fecha;
-    let details: checksDetails[] = [];
     let next_correlative: number = this.selectedCheckbook.next_correlative;
     this.checks = [];
     this.creditsDebitsByEmployees.forEach(cbEmp => {
+      let details: checksDetails[] = [];
       if (cbEmp.checked) {
         let check: checks = new checks;
         let i = 0;
@@ -517,14 +517,15 @@ export class ChecksComponent implements OnInit {
             })
           }
         })
-        console.log(details);
         this.apiService.saveCheck({ head: check, detail: details }).subscribe((str: string) => {
           if (str.split("|")[0].trim() == "Success") {
             check.idchecks = str.split("|")[1];
             this.checks.push(check);
+            /*
             this.apiService.printChecks(check).subscribe((str: string) => {
               console.log(str);
             });
+            */
             cbEmp.check = ' Check No.: ' + check.document + ' Account: ' + check.bankAccount;
           } else {
             if (str.split("|")[0].trim() == "Error:") {
