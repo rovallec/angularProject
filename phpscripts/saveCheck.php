@@ -9,7 +9,6 @@ $request = json_decode($postdata);
 
 $head = json_encode($request->head);
 $head2 = (json_decode($head));
-$seconds = 4; // Time to sleep in each cycle.
 
 /* ********************* */
 /* **** checkbooks ***** */
@@ -168,7 +167,6 @@ try
         http_response_code(430);
       } finally {
         sqlsrv_close($connSQL);  
-        //sleep($seconds);
       }
       
       //
