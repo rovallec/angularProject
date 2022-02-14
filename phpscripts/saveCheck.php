@@ -2,13 +2,14 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: *');
 require 'database.php';
+require 'databaseSQL.php'
 
 $postdata = file_get_contents("php://input");
 $request = json_decode($postdata);
 
 $head = json_encode($request->head);
 $head2 = (json_decode($head));
-
+$seconds = 10; // Time to sleep in each cycle.
 
 /* ********************* */
 /* **** checkbooks ***** */
@@ -99,11 +100,8 @@ try
       //
 
       try{
-        $serverName = "172.18.2.39"; //172.18.2.39
-        $connectionInfo = array( "Database"=>"MiNearsol_local", "UID"=>"minearsol", "PWD"=>"Nearsol.2020");
-        $conn = sqlsrv_connect( $serverName, $connectionInfo);
         $c = 0;
-        if( $conn ) {
+        if( $connSQL ) {
           $sqlSrv2 = " INSERT INTO MiNearsol_local.dbo.checks " .
                     "(idchecks, place, date, value, name, description, negotiable, " .
                     "  nearsol_id, client_id, id_account, document, bankAccount, " .
@@ -115,7 +113,7 @@ try
           $qty = 0;
           $id = 0;
           $params = array( &$qty, &$id);
-          $prepare2 = sqlsrv_prepare( $conn, $sqlSrv2, [0, 0]);
+          $prepare2 = sqlsrv_prepare( $connSQL, $sqlSrv2, [0, 0]);
 
           if (sqlsrv_execute($prepare2) === true) {
             foreach ($details as $detail) {
@@ -134,7 +132,7 @@ try
                           "VALUES ($id_detail, $id_check, '$id_accountdet', '$namedet', $id_movement, '$movement', $debits, $credits);";
 
 
-              $prepare3 = sqlsrv_prepare( $conn, $sqlSrv3, [0, 0]);
+              $prepare3 = sqlsrv_prepare( $connSQL, $sqlSrv3, [0, 0]);
               if ( sqlsrv_execute($prepare3) === true) {
                 if (count($details) == $c) {
                   echo(json_encode("Success | " . $id_check . " | Proceso ejecutado correctamente."));
@@ -167,9 +165,11 @@ try
         echo(json_encode($error));
         $transact->rollback();
         http_response_code(430);
+      } finally {
+        sqlsrv_close($connSQL);  
+        sleep($seconds);
       }
-
-      sqlsrv_close($conn);
+      
       //
       //
       // proceso de grabado en SQL Server.
