@@ -122,8 +122,8 @@ try
               $c++;
 
               $id_detail = $detail->id_detail;
-              $id_account = $detail->id_account;
-              $name = $detail->name;
+              $id_accountdet = $detail->id_account;
+              $namedet = $detail->name;
               $id_movement = $detail->id_movement;
               $movement = $detail->movement;
               $debits = $detail->debits;
