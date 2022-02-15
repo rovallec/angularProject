@@ -14,7 +14,7 @@ $rol = ($request->rol);
 
 if($dp != '4' && $dp != '28'){
     if($dp == '27'){
-        $add_sql = "`employees`.`id_account` = '13' OR `employees`.`id_account` = '25' OR `employees`.`id_account` = '23' OR `employees`.`id_account` = '26' OR `employees`.`id_account` = '12' OR `employees`.`id_account` = '27' OR `employees`.`id_account` = '33' OR `employees`.`id_account` = '44'";
+        $add_sql = "`employees`.`id_account` = '13' OR `employees`.`id_account` = '25' OR `employees`.`id_account` = '23' OR `employees`.`id_account` = '26' OR `employees`.`id_account` = '12' OR `employees`.`id_account` = '27' OR `employees`.`id_account` = '33' OR `employees`.`id_account` = '44' OR `employees`.`id_account` = '49'";
     }else{
         if($dp == '5' || $dp == '29'){
             if($rol != '13'){
