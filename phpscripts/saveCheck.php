@@ -106,7 +106,7 @@ try
                     "(idchecks, place, date, value, name, description, negotiable, " .
                     "  nearsol_id, client_id, id_account, document, bankAccount, " .
                     "  printDetail, payment, printed) " .
-                    "VALUES ($id_check, '$place', '$dateSQL', $value, '$name', '$description', ".
+                    "VALUES ($id_check, '$place', date_long('$dateSQL'), $value, '$name', '$description', ".
                     "'$negotiable', '$nearsol_id', '$client_id', '$id_account', '$document', " .
                     "'$bankAccount', $printDetail, $payment, 0);";
 
@@ -166,7 +166,7 @@ try
         $transact->rollback();
         http_response_code(430);
       } finally {
-        sqlsrv_close($connSQL);  
+        sqlsrv_close($connSQL);
       }
       
       //
