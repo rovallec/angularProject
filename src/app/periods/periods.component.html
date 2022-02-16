@@ -71,13 +71,19 @@
             <!------------------------------------COMPLETE / DISMISS Close--------------------------------------------------->
 
             <!-------------------------------------CLOSE PERIOD-------------------------------------------------------------->
-            <button class="btn btn-outline-secondary" (click)="closePeriod()"
-                *ngIf="!showPayments && period.status == '3'" style="margin-left:5px"><i class="fas fa-store-slash"
-                    data-toggle="tooltip" data-placement="top" title="Calc Close Period"
-                    *ngIf="!showPayments && !closing_import"></i></button>
+            <button class="btn btn-outline-secondary" (click)="closePeriod()" *ngIf="!showPayments && period.status == '3'"
+              style="margin-left:5px" title="Calc Close Period">
+              <i class="fas fa-store-slash" data-toggle="tooltip" data-placement="top"
+                *ngIf="!showPayments && !closing_import"></i>
+            </button>
+            <button class="btn btn-outline-secondary" (click)="togglePeriod()" *ngIf="!showPayments && (period.status == '3' || period.status == '1')"
+              style="margin-left:5px" title="Toggle Period">
+                <i class="fa-solid fa-recycle" data-toggle="tooltip" data-placement="top"></i>
+            </button>
+                    updatePeriods
             <button class="btn btn-outline-secondary" *ngIf="!showPayments && period.status != '3' && !closing_import"
                 style="margin-left: 5px;" data-target="#uploadPayrollValues"
-                data-toggle="modal">
+                data-toggle="modal" title="Upload Payroll Values">
                 <i class="far fa-clock"></i>
             </button>
             <!-------------------------------------CLOSE PERIOD-------------------------------------------------------------->

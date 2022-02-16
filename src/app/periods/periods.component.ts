@@ -415,8 +415,8 @@ export class PeriodsComponent implements OnInit {
                               sum_cred = Number(Number(sum_cred) + Number(credit.amount));
                             }
                           })
-                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) + 
-                                      Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + 
+                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) +
+                                      Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) +
                                       Number(adjustments.amount) + Number(bonus)).toFixed(2);
 
 
@@ -427,7 +427,7 @@ export class PeriodsComponent implements OnInit {
                               if (debit.type = "ISR") {
                                 isr = Number(debit.amount);
                               }
-                            } 
+                            }
                           })
                           py.debits = (sum_deb + Number(igss_debit.amount)).toFixed(2);
 
@@ -1434,6 +1434,22 @@ export class PeriodsComponent implements OnInit {
         }
         window.alert("Process Successfuly Completed");
         this.loading_save = false;
+    })
+  }
+
+  togglePeriod() {
+    let newStatus: string = '3';
+    if (this.period.status == '1') {
+      newStatus = '3'
+    } else if (this.period.status == '3') {
+      newStatus = '1'
+    } else {
+      window.alert("No available status to toggle.");
+    }
+
+    this.apiService.updatePeriods({ id: this.period.idperiods, status: newStatus }).subscribe((_str: string) => {
+      window.alert("Period Updated Success");
+      this.ngOnInit();
     })
   }
 }
