@@ -807,12 +807,26 @@ export class PeriodsComponent implements OnInit {
     }
   }
 
-  exportPayrollReport() {
-    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
+  async exportPayrollReport() {
+    try {
+      window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
-  exportBankReport() {
-    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportBankReport.php?AID_Period=" + this.period.idperiods, "_self")
+  async exportBankReport() {
+    try {
+      window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportBankReport.php?AID_Period=" + this.period.idperiods, "_self")
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   setAccount(str: string) {
@@ -853,9 +867,16 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
-  setAccountingPolicy() {
+  async setAccountingPolicy() {
     // Se encarga de generar la póliza contable al período en curso si no existiera.
-    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_blank")
+    try {
+      window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_blank")
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   setClient(cl: string) {
@@ -885,7 +906,7 @@ export class PeriodsComponent implements OnInit {
     this.selected_patrono = str;
   }
 
-  exportIgss() {
+  async exportIgss() {
     let user: string = this.authService.getAuthusr().signature;
     let patrono: string = this.selected_patrono;
     let address: string = "20 Calle 5-25";
@@ -896,8 +917,14 @@ export class PeriodsComponent implements OnInit {
       patronal_number = "145998";
     }
     let t_period: string = this.period.idperiods;
-    window.open("http://172.18.2.45/phpscripts/exportIgss.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
-
+    try {
+      window.open("http://172.18.2.45/phpscripts/exportIgss.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   cancelImport() {

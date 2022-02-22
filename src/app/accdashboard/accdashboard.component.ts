@@ -207,7 +207,7 @@ export class AccdashboardComponent implements OnInit {
             if(isNull(pym) || pym.length == 0){
               hire.bool = false;
             }else{
-              if(pym.length>0){
+              if(pym.length>0 && (pym.filter(p => p.predeterm == '1')[0].type != 'BANK CHECK')){
                 hire.bool = true;
               }else{
                 hire.bool = false;

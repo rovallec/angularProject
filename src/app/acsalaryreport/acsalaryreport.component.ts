@@ -36,9 +36,16 @@ export class AcsalaryreportComponent implements OnInit {
     })
   }
 
-  exportSalaryReport() {
+  async exportSalaryReport() {
     var url = this.apiService.PHP_API_SERVER + "/phpscripts/exportSalaryReport.php?filter=" + this.filter + "&value=" + this.value;
-    window.open(url, "_blank");
+    try {
+      window.open(url, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   clearFilter() {

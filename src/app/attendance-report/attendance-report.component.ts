@@ -31,7 +31,7 @@ export class AttendanceReportComponent implements OnInit {
     let newPool:accounts[] = [];
     this.selectedAccounts.push(acc);
     this.lastSelection = acc;
-    
+
     this.accounts.forEach(account=>{
       if(account.idaccounts != acc.split(".")[0]){
         newPool.push(account);
@@ -85,7 +85,7 @@ export class AttendanceReportComponent implements OnInit {
     }
   }
 
-  getReport(){
+  async getReport(){
     let acc:string = null;
     this.selectedAccounts.forEach(str=> {
       if(!isNull(acc)){
@@ -94,6 +94,13 @@ export class AttendanceReportComponent implements OnInit {
         acc = str.split(".")[0];
       }
     })
-    window.open("http://172.18.2.45/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank");
+    try {
+      window.open("http://172.18.2.45/phpscripts/exportAtt.php?from=" + this.fromDate + "&to=" + this.toDate + "&acc=" + acc, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 }

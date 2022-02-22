@@ -134,9 +134,14 @@ export class ChecksComponent implements OnInit {
           pst.select = false;
           pst.ignore = false;
         }
+        if (pst.client_id == '7133067') {
+          console.log(pst);
+        }
       })
+
       this.paystubs = pst_view.filter(pysf => pysf.type === 'BANK CHECK');
-      this.getInfoEmployees();
+        this.getInfoEmployees();
+
     })
   }
 

@@ -80,12 +80,26 @@ export class IsrmanagerComponent implements OnInit {
     this.getIsr();
   }
 
-  getIsrReport() {
-    window.open("http://172.18.2.45/phpscripts/exportIsrReport.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
+  async getIsrReport() {
+    try {
+      window.open("http://172.18.2.45/phpscripts/exportIsrReport.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
-  getTermReport() {
-    window.open("http://172.18.2.45/phpscripts/exportIsrReport_term.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
+  async getTermReport() {
+    try {
+      window.open("http://172.18.2.45/phpscripts/exportIsrReport_term.php?start=" + this.selectedPeriod.start + "&end=" + this.selectedPeriod.end, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   setIsrReport() {

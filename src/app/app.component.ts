@@ -55,13 +55,20 @@ export class AppComponent {
     })
   }
 
-  getEmployeeData(){
+  async getEmployeeData(){
     this.SetSel("EMPD");
-    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportEmployeesData.php", "_blank");
+    try {
+          window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportEmployeesData.php", "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
 
-  getExceptions(){
+  async getExceptions(){
     let dt:Date = new Date();
     let start:string = null;
     let end:string = null;
@@ -75,16 +82,37 @@ export class AppComponent {
       end = nwDate.getFullYear().toString() + "-" + (dt.getMonth() + 1).toString().padStart(2,"0") + "-" + nwDate.getDate().toString();
     }
     this.SetSel("EXPEX");
-    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end , "_blank");
+    try {
+      window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportExceptions_tk.php?start=" + start + "&end=" + end, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
-  getServicesReport(){
+  async getServicesReport(){
     this.SetSel("SERVR");
-    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportServicesF.php", "_blank");
+    try {
+      window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportServicesF.php", "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
-  exportAdvancesReport(){
+  async exportAdvancesReport(){
     this.SetSel("ADVREP");
-    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportAdvancesReport.php", "_blank");
+    try {
+      window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportAdvancesReport.php", "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 }
