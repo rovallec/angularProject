@@ -60,11 +60,18 @@ export class CalllistreportComponent implements OnInit {
     this.errorHandle = false;
   }
 
-  downloadReport(){
+  async downloadReport(){
     if(isUndefined(this.selectedWave)){
       this.errorHandle = true;
     }else{
-    window.open("http://172.18.2.45/phpscripts/exportClasslist.php?wave=" + this.selectedWave.idwaves);
+      try {
+        window.open("http://172.18.2.45/phpscripts/exportClasslist.php?wave=" + this.selectedWave.idwaves);
+      } catch (error) {
+        alert("It could not to generate the report.");
+      } finally {
+        await new Promise( resolve => setTimeout(resolve, 1000));
+        window.confirm("The report has been generated.");
+      }
     }
   }
 }
