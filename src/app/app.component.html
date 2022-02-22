@@ -139,6 +139,8 @@
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/holidays"
           style="color: white" [ngClass]="{'act':selectedOption=='HOLIDAYS'}" (click)="SetSel('HOLIDAYS')">HOLIDAYS</a>
+          <a *ngIf="getSaved().department == '4' || getSaved().department == '5'" class="nav-link" routerLink="/wavemaintenance" style="color: white"
+          [ngClass]="{'act':selectedOption=='WAVEMANT'}" (click)="SetSel('WAVEMANT')">WAVE MAINTENANCE</a>
       </li>
       <li *ngIf="getAuth()" class="nav-item">
         <a *ngIf="getSaved().department == '28'" class="nav-link" routerLink="/dailypayroll"
