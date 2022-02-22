@@ -1187,6 +1187,11 @@ export class PeriodsComponent implements OnInit {
                       this.working = false;
                     }
                   });
+                  if ((progress_2 + progress) == (max_1 + max_2)) {
+                    this.orderAlerts()
+                    this.closing_import = true;
+                    this.working = false;
+                  }
                 }
               })
             }else{
