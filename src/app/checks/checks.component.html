@@ -232,14 +232,13 @@
           <div class="col-md-10 d-flex flex-row-reverse">
             <!-- Encabezado Botones del período. -->
             <div>
-              <!--
-              <button class="form-control btn btn-outline-success" (click)="unCheckAll()" title="Send">
-                <i class="fas fa-share-square"></i>
-              </button>-->
+              <button class="form-control btn btn-outline-secondary" (click)="unCheckAll()" title="Unselect All">
+                <i class="fa-light fa-square"></i>
+              </button>
             </div>
             <div style="margin-right: 10px">
               <button class="form-control btn btn-outline-info" title="Select All" (click)="checkAll()">
-                <i class="fas fa-check-double"></i>
+                <i class="fas fa-check"></i>
               </button>
             </div>
             <div style="margin-right: 10px">
@@ -255,8 +254,17 @@
             </div>
             <div style="margin-right: 10px;" class="p-2 flex-fill bd-highlight">
             </div>
+            <!-- Ingresar descripción general del cheque por período. -->
+            <div class="col-md-5" style="margin-right: 10px;">
+              <input type="text" class="form-control" value="Motive" [(ngModel)]="description_check" placeholder="Motive">
+            </div>
+            <div style="margin-right: 10px; margin-top: 5px;">
+              <label>
+                Description:
+              </label>
+            </div>
             <!-- Seleccionar chequera -->
-            <div class="col-md-2" style="margin-right: 125px;">
+            <div class="col-md-2" style="margin-right: 10px;">
               <select class="form-control">
                 <option *ngFor="let checkbook of checkbooks" (click)="setCheckBook($event.target.value)"
                   [(ngModel)]="selectedCheckbook">
@@ -264,7 +272,7 @@
                 </option>
               </select>
             </div>
-            <div style="margin-right: 10px;">
+            <div style="margin-right: 10px; margin-top: 5px;">
               <label>
                 Account:
               </label>

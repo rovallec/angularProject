@@ -37,6 +37,7 @@ export class ChecksComponent implements OnInit {
   totalCred: number = 0;
   creditsDebitsByEmployees: creditsdebitsbyemployees[] = [];
   selCredDebByEmp: creditsdebitsbyemployees = new creditsdebitsbyemployees;
+  description_check: string = '';
 
 
   ngOnInit() {
@@ -134,14 +135,13 @@ export class ChecksComponent implements OnInit {
           pst.select = false;
           pst.ignore = false;
         }
-        if (pst.client_id == '7133067') {
-          console.log(pst);
-        }
       })
 
       this.paystubs = pst_view.filter(pysf => pysf.type === 'BANK CHECK');
-        this.getInfoEmployees();
-
+      this.getInfoEmployees();
+      if (this.description_check.trim()=='') {
+        this.description_check = 'PAGO DE PRESTACIONES LABORALES DEL ' + this.selectedPeriod.start + ' AL ' + this.selectedPeriod.end;
+      }
     })
   }
 
@@ -183,14 +183,14 @@ export class ChecksComponent implements OnInit {
   }
 
   checkAll() {
-    this.paystubs.forEach(pay => {
-      pay.select = true;
+    this.creditsDebitsByEmployees.forEach(cdbe => {
+      cdbe.checked = true;
     })
   }
 
   unCheckAll() {
-    this.paystubs.forEach(pay => {
-      pay.select = false;
+    this.creditsDebitsByEmployees.forEach(cdbe => {
+      cdbe.checked = false;
     })
   }
 
@@ -480,7 +480,7 @@ export class ChecksComponent implements OnInit {
         check.date = fecha.getToday();
         check.value = cbEmp.total.toFixed(2);
         check.name = cbEmp.name.toUpperCase();
-        check.description = 'PAGO DE PRESTACIONES LABORALES DEL ' + this.selectedPeriod.start + ' AL ' + this.selectedPeriod.end;
+        check.description = this.description_check;
         check.negotiable = 'NO NEGOCIABLE';
         check.checked = cbEmp.checked;
         check.nearsol_id = cbEmp.nearsol_id;
