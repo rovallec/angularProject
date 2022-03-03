@@ -22,8 +22,7 @@ export class AppComponent {
     valid:'N/A',
     password:'N/A',
     id_role:'N/A',
-    signature:'N/A',
-    timeStamp:'N/A'
+    signature:'N/A'
   };
   selectedOption:string = 'HOME';
   uploadFile:string = null;
