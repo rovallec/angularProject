@@ -1467,6 +1467,7 @@ export class PeriodsComponent implements OnInit {
         }
         window.alert("Process Successfuly Completed");
         this.loading_save = false;
+        this.ngOnInit();
     })
   }
 
