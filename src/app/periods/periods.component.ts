@@ -212,7 +212,6 @@ export class PeriodsComponent implements OnInit {
           let is_trm: boolean = false;
           let py: payments = new payments;
           this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_value.id_employee, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-            console.log(emp[0].idemployees);
             this.apiService.getTermdt(emp[0]).subscribe((trm: terminations) => {
               this.apiService.getClosingRise({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((rises: rises) => {
                 this.apiService.getTransfers({ id_employee: emp[0].idemployees, start: this.period.start, end: this.period.end }).subscribe((trns: hrProcess) => {
