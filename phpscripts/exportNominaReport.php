@@ -125,7 +125,7 @@ SELECT DISTINCT
   0.00 AS 'PrestamoPersonal', 
    /* Detalle de Bonos / Ajustes */
   IF(j.type='Ajustes Periodos Anteriores',         ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'AjustesPeriodos',
-  IF(j.type = 'Bonos Diversos',         ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonosDiversos',
+  IF(j.type = 'Bonos Diversos' OR j.type 'Performance Bonus',         ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonosDiversos',
   IF(j.type='BONOS POR ASISTENCIA',     ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonoPorAsistencia',
   IF(j.type='TREASURE HUNT',            ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'TreasureHunt',
   IF(j.type like '%RAF%',                 ROUND(COALESCE(j.amount, 0.00), 2), 0.00) AS 'BonosPorReferidos', 
