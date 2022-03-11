@@ -24,8 +24,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = environment.PHP_root; // Desarrollo
-PHP_API_SERVER = "http://172.18.2.45";  // produccion
+PHP_API_SERVER = environment.PHP_root; // Desarrollo
+//PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -823,6 +823,10 @@ updateFamily(family:profiles_family):Observable<string>{
 
 delFamily(family:profiles_family):Observable<string>{
   return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/delete_family.php`, family);
+}
+
+delPayrollAccount(any: any):Observable<string>{
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/delPayrollAccount.php`, any);
 }
 
 createFamily(family:profiles_family):Observable<string>{

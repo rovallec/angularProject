@@ -1,3 +1,4 @@
+import { isNull } from '@angular/compiler/src/output/output_ast';
 import { NumberFormatStyle } from '@angular/common';
 import { formattedError, IfStmt, ThrowStmt } from '@angular/compiler';
 import { Route } from '@angular/compiler/src/core';
@@ -10,7 +11,7 @@ import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { schedule_visit } from '../addTemplate';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients, billing_detail, debits, timekeeping_adjustments } from '../process_templates';
+import { attendences, attendences_adjustment, credits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients, billing_detail, debits, timekeeping_adjustments, accountsCount } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
@@ -29,7 +30,6 @@ import { AuthServiceService } from '../auth-service.service';
   templateUrl: './periods.component.html',
   styleUrls: ['./periods.component.css']
 })
-
 
 export class PeriodsComponent implements OnInit {
   completed: boolean = false;
@@ -78,7 +78,7 @@ export class PeriodsComponent implements OnInit {
   importString: string = 'Bonos Diversos';
   loading: boolean = false;
   isrs: isr[] = [];
-  accounts: accounts[] = [];
+  accounts: accountsCount[] = [];
   payroll_values: payroll_values_gt[] = [];
   max_progress: number = 0;
   selectedPayment: payments = new payments;
@@ -112,9 +112,7 @@ export class PeriodsComponent implements OnInit {
   }
 
   start() {
-    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
-      this.accounts = acc;
-    })
+    this.getAccounts();
     this.getDeductions();
     this.apiService.getFilteredPeriods({ id: this.route.snapshot.paramMap.get('id') }).subscribe((p: periods) => {
       this.period = p;
@@ -144,6 +142,26 @@ export class PeriodsComponent implements OnInit {
       this.clients = cl;
       this.setClient(cl[0].idclients);
     })
+  }
+
+  getAccounts() {
+    this.accounts = [];
+    this.apiService.getAccounts().subscribe((acc: accountsCount[]) => {
+      this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
+        acc.filter(a => a.id_client == acc[0].id_client).forEach(account => {
+          account.payrollCount = 0;
+          if (!isNullOrUndefined(pv)) {
+            pv.forEach(p => {
+              if (account.idaccounts == p.id_account) {
+                account.payrollCount++;
+              }
+            });
+          }
+          this.accounts.push(account);
+        });
+        this.setAccount_sh(this.accounts[0]);
+      });
+    });
   }
 
   getDeductions() {
@@ -704,7 +722,7 @@ export class PeriodsComponent implements OnInit {
     this.showPayments = true;
   }
 
-  addfile(event) {
+  addfile(event: { target: { files: any[]; }; }) {
     this.credits = [];
     this.file = event.target.files[0];
     let partial_credits: credits[] = [];
@@ -882,13 +900,23 @@ export class PeriodsComponent implements OnInit {
   setClient(cl: string) {
     this.accounts = [];
     this.selectedClient = cl;
-    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
-      acc.forEach(account => {
-        if (account.id_client == cl) {
-          this.accounts.push(account);
-        }
+    this.apiService.getAccounts().subscribe((acc: accountsCount[]) => {
+      this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
+        acc.filter(a => a.id_client == cl).forEach(account => {
+          if (account.id_client == cl) {
+            account.payrollCount = 0;
+            if (!isNullOrUndefined(pv)) {
+              pv.forEach(p => {
+                if (account.idaccounts == p.id_account) {
+                  account.payrollCount++;
+                }
+              });
+            }
+            this.accounts.push(account);
+          }
+        });
+        this.setAccount_sh(this.accounts[0]);
       });
-      this.setAccount_sh(this.accounts[0]);
     })
   }
 
@@ -900,6 +928,19 @@ export class PeriodsComponent implements OnInit {
       this.show_payments.push(p);
       //}
     })
+  }
+
+  delPayrollAccount(acc: accounts) {
+    if (window.confirm("Are you sure you want to delete?")) {
+      this.apiService.delPayrollAccount({ id_period: this.period.idperiods, id_account: acc.idaccounts }).subscribe((str: string) => {
+        if (str.trim() === '') {
+          window.alert("Payroll account deleted successfully.")
+        } else {
+          console.log(str);
+        }
+        this.ngOnInit();
+      })
+    }
   }
 
   setPatrono(str: string) {
@@ -932,7 +973,7 @@ export class PeriodsComponent implements OnInit {
     this.payroll_values = [];
   }
 
-  setPayrollValues(event) {
+  setPayrollValues(event: { target: { files: any[]; }; }) {
     this.file = event.target.files[0];
     let fileReader = new FileReader();
     let pr: periods = new periods;
@@ -1288,7 +1329,7 @@ export class PeriodsComponent implements OnInit {
     }
   }
 
-  ifNull(obj) {
+  ifNull(obj: string) {
     if (isNullOrUndefined(obj)) {
       return 0
     } else {
@@ -1308,7 +1349,7 @@ export class PeriodsComponent implements OnInit {
     return this.conflictedPeriods.filter(a => a.id_employee == pay.id_employee);
   }
 
-  getAccountName(str){
+  getAccountName(str: string){
     if(isNullOrUndefined(str) || str == '0' || str == '' || str == ' ' || str == 'NULL'){
       let a:accounts = new accounts;
       a.idaccounts = '0';

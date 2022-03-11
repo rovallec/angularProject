@@ -2871,3 +2871,10 @@ export class creditsdebitsbyemployees {
   }
 }
 
+export class accountsCount extends accounts {
+  payrollCount: number;
+  constructor() {
+    super();
+    this.payrollCount = 0;
+  }
+}
