@@ -1,4 +1,3 @@
-import { isNull } from '@angular/compiler/src/output/output_ast';
 import { NumberFormatStyle } from '@angular/common';
 import { formattedError, IfStmt, ThrowStmt } from '@angular/compiler';
 import { Route } from '@angular/compiler/src/core';
