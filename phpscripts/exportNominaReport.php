@@ -205,7 +205,7 @@ COALESCE(IF(i.type='Ajuste Salarial',                            ROUND(i.amount,
 COALESCE(IF(i.type='Boleto de Ornato',                           ROUND(i.amount, 2), 0.00), 0.00) AS 'BoletoDeOrnato',
 COALESCE(IF(i.type like'%SEGURO%',                               ROUND(i.amount, 2), 0.00), 0.00) AS 'DescuentoSeguro',
 COALESCE(IF(i.type IN('Descuento Judicial', 'Acuerdo Judicial'), ROUND(i.amount, 2), 0.00), 0.00) AS 'DescuentosJudiciales',
-COALESCE(IF(i.type like'%HEADSET%',                              ROUND(i.amount, 2), 0.00), 0.00) AS 'HeadSet',
+COALESCE(IF(i.type like'%TIENDA%',                              ROUND(i.amount, 2), 0.00), 0.00) AS 'HeadSet',
 COALESCE(IF(i.type='ISR',                                        ROUND(i.amount, 2), 0.00), 0.00) AS 'ISREmpleados',
 COALESCE(IF(i.type like'%Car%Parking%',                          ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoEmpleados',
 COALESCE(IF(i.type='MOTORCYCLE PARKING',                         ROUND(i.amount, 2), 0.00), 0.00) AS 'ParqueoMotos',
@@ -459,7 +459,7 @@ LIMIT 0, 10000;";
 
 
 
-$title = ['Empleado', 'Cliente', 'Nombre Del Trabajador', 'Jornada', 'Seccion', 'banco', 'Transferencia / Cheque', 'DPI', 'No. De IGSS', 'Periodo', 'Salario', 'Dias Trabajados', 'Horas Ordinarias', 'Horas Extraordinarias', 'Horas Asuetos', 'Salario Base', 'Salario Extraordinario', 'Salario Comisiones', 'Salario Septimos', 'Salario Asuetos', 'Salario Total', 'Ausencias', 'Salario Neto', 'IGSS', 'Otras', 'Descuentos', 'Anticipo Sobre Sueldo', 'Total Deducciones', 'Aguinaldo', 'Bono 14', 'Vacaciones', 'Idemnizacion', 'Ventajas Economicas', 'Ajuste Salarial', 'Bonificacion Incentivo', 'Otras Bonificaciones e Incentivos', 'Liquido A Recibir', 'Observaciones', 'Boleto De Ornato', 'Descuento De Seguro', 'Descuentos Judiciales', 'HeadSet', 'ISR Empleados', 'Parqueo Empleados', 'ParqueoMotos', 'Tarjeta De Parqueo', 'Transporte En Bus', 'Prestamo Personal', 'Ajustes Periodos', 'Bonos Diversos', 'Bono Por Asistencia', 'Treasure Hunt', 'Bonos Por Referidos', 'Bonos Por Reclutamiento'];
+$title = ['Empleado', 'Cliente', 'Nombre Del Trabajador', 'Jornada', 'Seccion', 'banco', 'Transferencia / Cheque', 'DPI', 'No. De IGSS', 'Periodo', 'Salario', 'Dias Trabajados', 'Horas Ordinarias', 'Horas Extraordinarias', 'Horas Asuetos', 'Salario Base', 'Salario Extraordinario', 'Salario Comisiones', 'Salario Septimos', 'Salario Asuetos', 'Salario Total', 'Ausencias', 'Salario Neto', 'IGSS', 'Otras', 'Descuentos', 'Anticipo Sobre Sueldo', 'Total Deducciones', 'Aguinaldo', 'Bono 14', 'Vacaciones', 'Idemnizacion', 'Ventajas Economicas', 'Ajuste Salarial', 'Bonificacion Incentivo', 'Otras Bonificaciones e Incentivos', 'Liquido A Recibir', 'Observaciones', 'Boleto De Ornato', 'Descuento De Seguro', 'Descuentos Judiciales', 'Tienda', 'ISR Empleados', 'Parqueo Empleados', 'ParqueoMotos', 'Tarjeta De Parqueo', 'Transporte En Bus', 'Prestamo Personal', 'Ajustes Periodos', 'Bonos Diversos', 'Bono Por Asistencia', 'Treasure Hunt', 'Bonos Por Referidos', 'Bonos Por Reclutamiento'];
 $output = fopen("php://output", "w");
 fputcsv($output, $title);
 if($result = mysqli_query($con,$sql)){
