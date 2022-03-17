@@ -270,7 +270,7 @@ export class PeriodsComponent implements OnInit {
                           if (!isNullOrUndefined(trns)) {
                             if (new Date(trns.date).getTime() >= new Date(this.period.start).getTime() && new Date(trns.date) <= new Date(this.period.end)) {
                               if (payroll_value.id_account == emp[0].id_account) {
-                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(trns.date).getTime() - (new Date(this.period.start).getTime()))) / (1000 * 3600 * 24))).toFixed(2);
+                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(trns.date).getTime() - (new Date(this.period.start).getTime()))) / (1000 * 3600 * 24)) - 1).toFixed(2);
                               } else {
                                 py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(this.period.end).getTime()) - (new Date(trns.date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
                               }
