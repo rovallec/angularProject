@@ -370,7 +370,7 @@ export class PeriodsComponent implements OnInit {
                             adjustment_base.idpayments = py.idpayments;
 
                             if(Number(payroll_value.performance_bonus) != 0){
-                              performance_bonus.amount = payroll_value.performance_bonus;
+                              performance_bonus.amount = Number(payroll_value.performance_bonus).toFixed(2);
                               performance_bonus.type = "Performance Bonus";
                               performance_bonus.idpayments = py.idpayments;
                               this.global_credits.push(performance_bonus);
@@ -378,7 +378,7 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             if(Number(payroll_value.nearsol_bonus) != 0){
-                              nearsol_bonus.amount = payroll_value.nearsol_bonus;
+                              nearsol_bonus.amount = Number(payroll_value.nearsol_bonus).toFixed(2);
                               nearsol_bonus.type = "Nearsol Bonus";
                               nearsol_bonus.idpayments = py.idpayments;
                               this.global_credits.push(nearsol_bonus);
@@ -386,7 +386,7 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             if(Number(payroll_value.treasure_hunt) != 0){
-                              treasure_hunt.amount = payroll_value.treasure_hunt;
+                              treasure_hunt.amount = Number(payroll_value.treasure_hunt).toFixed(2);
                               treasure_hunt.type = "Treasure Hunt";
                               treasure_hunt.idpayments = py.idpayments;
                               this.global_credits.push(treasure_hunt);
