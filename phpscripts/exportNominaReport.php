@@ -222,7 +222,7 @@ COALESCE(IF(i.type='Prestamo Personal',                              ROUND(i.amo
 FROM employees a
 INNER JOIN hires b ON (a.id_hire = b.idhires) 
 INNER JOIN profiles c ON (b.id_profile = c.idprofiles)
-INNER JOIN accounts d ON (a.id_account = d.idaccounts)
+INNER JOIN accounts d ON (COALLESCE(g.id_account_py,a.id_account) = d.idaccounts)
 INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1)
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
