@@ -511,7 +511,7 @@ export class PeriodsComponent implements OnInit {
                                 this.global_debits.push(judicial_discount);
                                 this.global_judicials.push(judicial);
                                 py.debits = (Number(py.debits) + Number(judicial_discount.amount)).toFixed(2);
-                              } else if (Number(judicial.max) < (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))) {
+                              } else if (Number(judicial.max) <= (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))) {
                                 let judicial_discount: debits;
                                 judicial_discount = new debits();
                                 judicial.current = (Number(judicial.max)).toFixed(2);
