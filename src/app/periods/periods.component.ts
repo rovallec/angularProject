@@ -393,7 +393,7 @@ export class PeriodsComponent implements OnInit {
                               bonus = bonus + Number(treasure_hunt.amount);
                             }
 
-                            if (emp[0].job != 'Supervisor De Operaciones' && emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
+                            if (emp[0].job != 'Supervisor De Operaciones' && emp[0].id_account != '7' && emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                               adjustment_ot.amount = ((Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 2)).toFixed(2);
                               adjustment_ot.type = "Ajuste OT";
                             } else {
