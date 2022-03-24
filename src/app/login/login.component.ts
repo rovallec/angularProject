@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
                       }else{
                         if(this.resUsr[0].department == "48"){
                           console.log("test");
-                          this._router.navigate["/providers"];
+                          this._router.navigate(["/providers"]);
                         }
                       }
                     }
