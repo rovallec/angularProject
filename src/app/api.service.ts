@@ -136,7 +136,7 @@ getFamilies(profile:profiles):Observable<profiles_family[]>{
 }
 
 authUsr(users:users):Observable<users[]>{
-  return this.httpClient.post<users[]>(`${this.PHP_API_SERVER}/phpscripts/login.php`, users);
+  return this.httpClient.post<users[]>(`http://181.114.12.81/phpscripts/login.php`, users);
 }
 
 insProcess(proc:process):Observable<number>{
@@ -1214,15 +1214,15 @@ getSessions(usr:users){
 }
 
 getProviders(){
-  return this.httpClient.get<providers[]>(`${this.PHP_API_SERVER}/phpscripts/getProviders.php`);
+  return this.httpClient.get<providers[]>(`http://181.114.12.81/phpscripts/getProviders.php`);
 }
 
 updateProvider(prov:providers){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateProvider.php`, prov);
+  return this.httpClient.post<string>(`http://181.114.12.81/phpscripts/updateProvider.php`, prov);
 }
 
 insertProvider(prov:providers){
-  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertProvider.php`, prov);
+  return this.httpClient.post<string>(`http://181.114.12.81/phpscripts/insertProvider.php`, prov);
 }
 }
 
