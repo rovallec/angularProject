@@ -1,17 +1,140 @@
-<table class="table">
-    <thead class="table-dark">
-        <th>NAME</th>
-        <th>CONTACT</th>
-        <th>SERVICE</th>
-        <th>PHONE</th>
-        <th>NIT</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>NEARSOL S.A.</td>
-            <td>2504-2700</td>
-            <td>BPO</td>
-            <td>10305064-7</td>
-        </tr>
-    </tbody>
-</table>
+<div class="row d-flex justify-content-end" style="margin-left:5%;width: 90%;margin-top:20px;">
+    <button class="btn btn-outline-success" data-toggle="modal" data-target="#providers" (click)="addNew()"><i class="fas fa-plus"></i></button>
+    <button class="btn btn-outline-info" style="margin-left:5px" data-toggle="modal" data-target="#filter" *ngIf="isNew(searchValue)"><i class="fas fa-filter"></i></button>
+    <button class="btn btn-outline-danger" style="margin-left:5px" (click)="cancelSearch()" *ngIf="!isNew(searchValue)"><i class="fas fa-ban"></i></button>
+    <button class="btn btn-outline-warning" style="margin-left:5px" (click)="start()"><i class="fas fa-sync"></i></button>
+</div>
+<div class="row">
+    <table class="table" style="margin-top:15px; margin-left:5%; width: 90%;">
+        <thead class="thead-dark">
+            <th style="height:25px;padding:0;text-align: center;" >NAME</th>
+            <th style="height:25px;padding:0;text-align: center;">CONTACT</th>
+            <th style="height:25px;padding:0;text-align: center;">SERVICE</th>
+            <th style="height:25px;padding:0;text-align: center;">PHONE</th>
+            <th style="height:25px;padding:0;text-align: center;">CEL</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let provider of filteredProviders" (click)="setCurrent(provider)"  data-toggle="modal" data-target="#providers">
+                <td style="height:20px;padding:0;text-align: center;">{{provider.name}}</td>
+                <td style="height:20px;padding:0;text-align: center;">{{provider.contact}}</td>
+                <td style="height:20px;padding:0;text-align: center;">{{provider.service}}</td>
+                <td style="height:20px;padding:0;text-align: center;">{{provider.phone}}</td>
+                <td style="height:20px;padding:0;text-align: center;">{{provider.cel}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!----------------------------------------------------------------------------------------------PROVIDERS MODAL--------------------------------------------------------------->
+<div class="modal fade" id="providers" tabindex="-1" role="dialog" aria-labelledby="providers_modal"
+aria-hidden="true">
+<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="search_modalLabel">{{selectedProvider.name}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+        <div class="row" style="margin-left:5px">
+            <div class="row w-100" *ngIf="isNew(selectedProvider.name)">
+                <div class="form-group col-md-12">
+                    <label>NAME:</label>
+                    <input type="text" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.name">
+                </div>
+            </div>
+        <div class="row w-100">
+            <div class="form-group col-md-4">
+                <label>CONTACT:</label>
+                <input type="text" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.contact">
+            </div>
+            <div class="form-group col-md-4">
+                <label>PHONE:</label>
+                <input type="tel" pattern="[0-9]{4}-[0-9]{4}" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.phone">
+            </div>
+            <div class="form-group col-md-4">
+                <label>CEL.:</label>
+                <input type="tel" class="form-control" pattern="[0-9]{4}-[0-9]{4}" [disabled]="!edit" [(ngModel)]="selectedProvider.cel">
+            </div>
+        </div>
+        <div class="row w-100">
+            <div class="form-group col-md-6">
+                <label>EMAIL:</label>
+                <input type="text" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.email">
+            </div>
+            <div class="form-group col-md-6">
+                <label>SERVICE:</label>
+                <input type="text" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.service">
+            </div>
+        </div>
+        <div class="row w-100">
+            <div class="form-group col-md-3">
+                <label>CONDITIONS:</label>
+                <input type="tel" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.conditions">
+            </div>        
+            <div class="form-group col-md-2">
+                <label>CREDIT:</label>
+                <select class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.credit">
+                    <option value="1">SI</option>
+                    <option value="0">NO</option>
+                </select>
+            </div>
+            <div class="form-group col-md-1">
+                <label>DAYS:</label>
+                <input type="number" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.days">
+            </div>
+            <div class="form-group col-md-2">
+                <label>IVA:</label>
+                <select class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.no_iva">
+                    <option value="1">SI</option>
+                    <option value="0">NO</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label>CONTRACT START:</label>
+                <input type="date" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.contract_start">
+            </div>
+            <div class="form-group col-md-2">
+                <label>CONTRACT END:</label>
+                <input type="date" class="form-control" [disabled]="!edit" [(ngModel)]="selectedProvider.contract_end">
+            </div>
+        </div>
+    </div>
+    </div>
+        <div class="modal-footer d-flex justify-content-between mt-2">
+            <button class="btn btn-outline-secondary" id="closeModal" data-dismiss="modal">CLOSE</button>
+            <button class="btn btn-outline-secondary" (click)="enableEdit()" *ngIf="!edit">EDIT</button>
+            <button class="btn btn-outline-secondary" (click)="enableEdit()" data-dismiss="modal" *ngIf="edit">SAVE</button>
+        </div>
+    </div>
+</div>
+</div>
+
+    <!----------------------------------------------------------------------------------------------SEARCH MODAL--------------------------------------------------------------->
+    <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="search_modal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="search_modalLabel">SEARCH</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="modal-body d-flex justify-content-center">
+                        <div class="p-2 form-group">
+                            <label>Value:</label>
+                            <input class="form-control" [(ngModel)]="searchValue" (keyup.enter)="searchNow()">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between mt-2">
+                    <button type="button" class="btn btn-outline-secondary" id="close_modal" data-dismiss="modal">CANCEL</button>
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal"
+                        (click)="searchNow()">ACCEPCT</button>
+                </div>
+            </div>
+        </div>
+    </div>

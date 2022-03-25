@@ -73,7 +73,6 @@ export class LoginComponent implements OnInit {
                         this._router.navigate(["/ithome"]);
                       }else{
                         if(this.resUsr[0].department == "48"){
-                          console.log("test");
                           this._router.navigate(["/providers"]);
                         }
                       }
@@ -90,7 +89,6 @@ export class LoginComponent implements OnInit {
             this._authService.changeAuth(false);
           };
         }
-        console.log(this.resUsr)
       });
   }
 }
