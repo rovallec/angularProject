@@ -20,13 +20,13 @@ $contract_start = ($request->contract_start);
 $contract_end = ($request->contract_end);
 $no_iva = ($request->no_iva);
 
-$sql = "INSERT INTO providers VALUES (NULL, $name, $contact, $phone, $cel, $email, $service, $credit, $conditions, $days, $contract_start, $contract_end, $no_iva)";
+$sql = "INSERT INTO providers VALUES (NULL, '$name', '$contact', '$phone', '$cel', '$email', '$service', '$credit', '$conditions', '$days', '$contract_start','$contract_end', '$no_iva')";
 
 if(mysqli_query($con, $sql)){
     echo(json_encode('1'));
     http_response_code(200);
 } else {
-    echo(json_encode($sql));
+    echo(json_encode(mysqli_error($con)));
     http_response_code(404);
 }
 ?>
