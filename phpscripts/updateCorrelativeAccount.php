@@ -17,17 +17,29 @@ try {
     $correlative = 1;
 }
 
-if($correlative = 0){
+if ($correlative == 0) {
     $correlative = 1;
 }
 
-$sql2 = "UPDATE accounts SET correlative = correlative + $correlative where idaccounts = $account_id;";
+$sqlc = "SELECT correlative FROM accounts WHERE idaccounts = $account_id;";
+if ($result = mysqli_query($con, $sqlc)){
+    $row = mysqli_fetch_assoc($result);
+    $corr = $row['correlative'];
+}
 
-$sql2 = "UPDATE accounts SET correlative = correlative + 1 where idaccounts = $account_id;";
+
+if ($corr > $correlative) {
+    $correlative = $corr + 100;
+}
+
+$sql2 = "UPDATE accounts SET correlative = $correlative where idaccounts = $account_id;";
+
+//$sql2 = "UPDATE accounts SET correlative = correlative + 1 where idaccounts = $account_id;";
 $sql = "UPDATE `employees` SET `id_account` = '$account_id' WHERE `idemployees` = '$employee'";
 
 if (mysqli_query($con, $sql)){
     if (mysqli_query($con, $sql2)) {
+        echo(json_encode('1'));
         http_response_code(200);
     } else {
         echo(json_encode($sql2));
