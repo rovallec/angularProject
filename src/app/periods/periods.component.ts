@@ -1564,4 +1564,8 @@ export class PeriodsComponent implements OnInit {
   sortPayrollValues(){
     return this.payrollvalues.sort((a,b)=>(Number(b.status)-Number(a.status)));
   }
+
+  saveSettings(){
+    
+  }
 }
