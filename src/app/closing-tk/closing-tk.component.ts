@@ -836,10 +836,17 @@ export class ClosingTkComponent implements OnInit {
     }
   }
 
-  exportPayroll_values() {
+  async exportPayroll_values() {
     this.printing = true;
     if (this.actualPeriod.status == '3') {
-      window.open("http://172.18.2.45/phpscripts/exportPayroll_values.php?id_period=" + this.actualPeriod.idperiods, "_blank");
+      try {
+        window.open("http://172.18.2.45/phpscripts/exportPayroll_values.php?id_period=" + this.actualPeriod.idperiods, "_blank");
+      } catch (error) {
+        alert("It could not to generate the report.");
+      } finally {
+        await new Promise( resolve => setTimeout(resolve, 1000));
+        window.confirm("The report has been generated.");
+      }
     } else {
       this.exportTableElmToExcel(this.userTable, 'user_data');
       window.alert("Data Successfully exported");
@@ -847,8 +854,15 @@ export class ClosingTkComponent implements OnInit {
     }
   }
 
-  exportPaidAttendances() {
-    window.open("http://172.18.2.45/phpscripts/exportPaid_attendances.php?id_period=" + this.actualPeriod.idperiods, "_blank");
+  async exportPaidAttendances() {
+    try {
+      window.open("http://172.18.2.45/phpscripts/exportPaid_attendances.php?id_period=" + this.actualPeriod.idperiods, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   searchNow() {

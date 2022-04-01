@@ -154,6 +154,15 @@ function date_letter($value) {
   return $letter;
 }
 
+function date_long($value) {
+  $values = explode('-', $value);
+  if(count($values) == 3 && checkdate($values[1], $values[0], $values[2])) {
+    $value = formatDates($value);
+  }
+  $letter = number_letter($values[2]) . " de " . getMonth($values[1]) . " del año " . number_letter($values[0]);
+  return $letter;
+}
+
 function dpi_letter($value) {
   $value = removeCommas($value);
   $value = str_replace(' ', '', $value);
@@ -234,6 +243,10 @@ function today() {
   $Today = formatDatesPlus(Date("y.m.d"), 0);
   return $Today;
 }
+
+
+//$long_date = date_long('2022-02-14');
+//echo($long_date);
 
 
 ?>

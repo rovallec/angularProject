@@ -38,9 +38,13 @@ export class SupExceptionsComponent implements OnInit {
       i = i + 1;
       if(sup.status == 'TRUE'){
         this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:sup.avaya, rol:this.authService.getAuthusr().id_role}).subscribe((emp:employees[])=>{
-          this.apiService.getAttendences({date:"= '" + sup.date + "'", id:emp[0].idemployees}).subscribe((attendance:attendences[])=>{
+          let l = 0;
+          if(emp.length > 1){
+            l = emp.length - 1;
+          }
+          this.apiService.getAttendences({date:"= '" + sup.date + "'", id:emp[l].idemployees}).subscribe((attendance:attendences[])=>{
             let adjustment:attendences_adjustment = new attendences_adjustment;
-            adjustment.id_employee = emp[0].idemployees;
+            adjustment.id_employee = emp[l].idemployees;
             adjustment.id_user = this.authService.getAuthusr().iduser;
             adjustment.id_type = '2';
             adjustment.id_department = '28';
@@ -87,13 +91,17 @@ export class SupExceptionsComponent implements OnInit {
           let supervisors:sup_exception = new sup_exception;
           supervisors.avaya = element['AVAYA'];
           supervisors.date = element['DATE'];
-          supervisors.name = element['NAME'];
           supervisors.notes = element['NOTES'];
           supervisors.reason = element['REASON'];
           supervisors.supervisor = element['SUPERVISOR'];
           supervisors.time = element['TIME'];
           this.apiService.getSearchEmployees({dp:'all', filter:'client_id', value:supervisors.avaya, rol:this.authService.getAuthusr().id_role}).subscribe((emp:employees[])=>{
-            if(isNullOrUndefined(emp[0])){
+            let l = 0;
+            if(emp.length > 1){
+              l = emp.length - 1;
+            }
+          supervisors.name = emp[l].name;  
+            if(isNullOrUndefined(emp[l])){
               supervisors.status = 'FALSE';
             }else{
               supervisors.status = 'TRUE';

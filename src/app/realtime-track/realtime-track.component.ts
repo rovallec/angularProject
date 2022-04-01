@@ -106,13 +106,20 @@ export class RealtimeTrackComponent implements OnInit {
     this.searchOptions[0].value = 'between';
   }
 
-  downloadReport(){
+  async downloadReport(){
     if(this.selectedOption == 'between'){
       this.selectedValue = "BETWEEN_'" + this.selectedDate[0].toString() + "-" + this.selectedDate[1].toString() + "-" + this.selectedDate[2].toString() + "'_AND_'" + this.selectedDateB[0].toString() + "-" + this.selectedDateB[1].toString() + "-" + this.selectedDateB[2].toString() + "'";
     }
     if(this.selectedValue == 'IS NULL'){
       this.selectedValue = 'IS_NULL';
     }
-    window.open("http://172.18.2.45/phpscripts/exportRealTrack.php?filter=" + this.selectedOption + "&value=" + this.selectedValue, "_blank");
+    try {
+      window.open("http://172.18.2.45/phpscripts/exportRealTrack.php?filter=" + this.selectedOption + "&value=" + this.selectedValue, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 }

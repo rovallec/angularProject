@@ -47,6 +47,7 @@ import { DailypayrollvaluesComponent } from './dailypayrollvalues/dailypayrollva
 import { ItInventoryReportComponent } from './it-inventory-report/it-inventory-report.component';
 import { ChecksComponent } from './checks/checks.component';
 import { AcsalaryreportComponent } from './acsalaryreport/acsalaryreport.component';
+import { ProvidersComponent } from './providers/providers.component';
 
 const routes:Routes = [
   {
@@ -264,6 +265,10 @@ const routes:Routes = [
   {
     path:'itInventory',
     component:ItInventoryReportComponent
+  },
+  {
+    path:'providers',
+    component:ProvidersComponent
   },
   {
     path:'',

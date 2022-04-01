@@ -1,0 +1,11 @@
+tr:hover{
+    background-color: #003b71;
+    color: white;
+    border-color: #003b71;
+}
+tr{
+    cursor:pointer;
+}
+td{
+    cursor:pointer;
+}

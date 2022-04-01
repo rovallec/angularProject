@@ -152,28 +152,28 @@ export class HrprofilesComponent implements OnInit {
 
   termNotification: string = 'YES';
   editingEmail: boolean = false;
-  editingGender:boolean = false;
-  editingBirthday:boolean = false;
-  editingProfesion:boolean = false;
-  editingJob:boolean = false;
-  editingCivil:boolean = false;
-  editingNat:boolean = false;
-  editingReporter:boolean = false;
-  editingSuspension:boolean = false;
-  editingAccessCard:boolean = false;
-  editingHeadsets:boolean = false;
-  temp_day_1:string = null;
-  temp_day_2:string = null;
-  temp_day_3:string = null;
-  temp_day_4:string = null;
-  max_vac:number = 10;
+  editingGender: boolean = false;
+  editingBirthday: boolean = false;
+  editingProfesion: boolean = false;
+  editingJob: boolean = false;
+  editingCivil: boolean = false;
+  editingNat: boolean = false;
+  editingReporter: boolean = false;
+  editingSuspension: boolean = false;
+  editingAccessCard: boolean = false;
+  editingHeadsets: boolean = false;
+  temp_day_1: string = null;
+  temp_day_2: string = null;
+  temp_day_3: string = null;
+  temp_day_4: string = null;
+  max_vac: number = 10;
   showMore: string = 'Show More';
   patron: patronal[] = [];
   actPatron: patronal = new patronal;
-  selectedReporter:string = null;
+  selectedReporter: string = null;
   advanceDays: number = 1;
 
-  alert:alertModal = new alertModal;
+  alert: alertModal = new alertModal;
 
   reasons: string[] = [
     "Asistencia",
@@ -555,19 +555,19 @@ export class HrprofilesComponent implements OnInit {
           }
         })
       }
-      this.showAttendences.forEach(chng=>{
-        if(isNullOrUndefined(chng.igss)){
+      this.showAttendences.forEach(chng => {
+        if (isNullOrUndefined(chng.igss)) {
           chng.igss = '0';
         }
-        if(isNullOrUndefined(chng.tk_exp)){
+        if (isNullOrUndefined(chng.tk_exp)) {
           chng.tk_exp = '0';
         }
       })
-      adj.forEach(at_adj=>{
-        this.showAttendences.forEach(att_show=>{
-          if(att_show.date == at_adj.attendance_date && (at_adj.id_department == '5' || at_adj.id_department == '27')){
+      adj.forEach(at_adj => {
+        this.showAttendences.forEach(att_show => {
+          if (att_show.date == at_adj.attendance_date && (at_adj.id_department == '5' || at_adj.id_department == '27')) {
             att_show.igss = (Number(att_show.igss) + Number(at_adj.amount)).toFixed(2);
-          }else if(att_show.date == at_adj.attendance_date && at_adj.id_department == '28' && (at_adj.reason != 'Schedule FIX')){
+          } else if (att_show.date == at_adj.attendance_date && at_adj.id_department == '28' && (at_adj.reason != 'Schedule FIX')) {
             att_show.tk_exp = (Number(att_show.tk_exp) + Number(at_adj.amount)).toFixed(2);
           }
         })
@@ -616,7 +616,7 @@ export class HrprofilesComponent implements OnInit {
 
   getVacations() {
     let found: boolean = false;
-    let cnt:number = 0;
+    let cnt: number = 0;
     let vacYears: vacyear[] = [];
     this.vac = [];
     this.earnVacations = this.vacationsEarned * 1.25;
@@ -655,17 +655,17 @@ export class HrprofilesComponent implements OnInit {
           vacYear.selected = false;
           VacFiltered = this.showVacations.filter(svf => String(svf.year) == new Date(vac.took_date).getFullYear().toString());
           vacYear.vacations.push.apply(vacYear.vacations, VacFiltered);
-            this.vac.push(vacYear);
+          this.vac.push(vacYear);
         }
 
         this.vac.sort((a, b) => a.year - b.year);
-        this.vac.forEach(toSort=>{
-          toSort.vacations.sort((a,b)=> new Date(b.date).getTime() - new Date(a.date).getTime());
+        this.vac.forEach(toSort => {
+          toSort.vacations.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         })
 
         vacYears.forEach(vv => {
           if (vv.year.toString() == new Date().getFullYear().toString()) {
-              vv.selected = true;
+            vv.selected = true;
           }
         })
       })
@@ -802,7 +802,7 @@ export class HrprofilesComponent implements OnInit {
     leave.id_department = this.activeLeave.id_department;
     leave.date = this.activeLeave.date;
     leave.notes = this.activeLeave.notes + '|| Created by split start: ' +
-                  this.activeLeave.start + ' end: ' + this.activeLeave.end + '.';
+      this.activeLeave.start + ' end: ' + this.activeLeave.end + '.';
     leave.status = 'PENDING';
     leave.motive = this.activeLeave.motive;
     leave.approved_by = this.activeLeave.approved_by;
@@ -823,14 +823,14 @@ export class HrprofilesComponent implements OnInit {
     note = leave.notes;
     leave.notes = note + ' | Dismissed by split.';
     this.apiService.updateLeaves(leave).subscribe((str: string) => {
-      start = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+      start = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2, '0'));
       leave.start = start;
       leave.notes = note;
       leave = this.fillLeave();
       for (let i = 0; i < this.leaveDates.length; i++) {
         let ld: leavesAction = this.leaveDates[i];
-        if (ld.action=='PENDING') {
-          start = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+        if (ld.action == 'PENDING') {
+          start = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2, '0'));
 
           if ((leave.start == null) || (leave.start.trim() == '')) {
             leave.start = start;
@@ -843,7 +843,7 @@ export class HrprofilesComponent implements OnInit {
           console.log("<br>");
         } else {
           f = this.addDays(f, -1);
-          end = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+          end = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2, '0'));
           if (!isNullOrUndefined(leave.start)) {
             leave.end = end;
             leavesNew.push(leave);
@@ -852,9 +852,9 @@ export class HrprofilesComponent implements OnInit {
           leave = this.fillLeave();
           f = this.addDays(f, 1);
         }
-        end = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+        end = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2, '0'));
         f = this.addDays(f, 1);
-        if ((i==this.leaveDates.length-1) && (ld.action=='PENDING')) {
+        if ((i == this.leaveDates.length - 1) && (ld.action == 'PENDING')) {
           leave.end = end;
           leavesNew.push(leave);
           console.log('Todos los Leaves: ');
@@ -887,7 +887,7 @@ export class HrprofilesComponent implements OnInit {
     let f: Date = new Date(leave.start);
 
     let days: number = new Date(leave.end).getTime() - new Date(leave.start).getTime();
-    days = days / (1000*3600*24);
+    days = days / (1000 * 3600 * 24);
 
     start = new Date(leave.start).getDate();
     end = new Date(leave.end).getDate();
@@ -901,7 +901,7 @@ export class HrprofilesComponent implements OnInit {
       let ld: leavesAction = new leavesAction;
       f = this.addDays(f, 1);
 
-      ld.dates = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2,'0'));
+      ld.dates = (f.getFullYear().toString() + '-' + String(f.getMonth() + 1).padStart(2, '0') + '-' + String(f.getDate()).padStart(2, '0'));
       ld.action = 'PENDING';
       this.leaveDates.push(ld);
     }
@@ -1317,7 +1317,7 @@ export class HrprofilesComponent implements OnInit {
   insertProc() {
     let Abort: AbortController = new AbortController;
 
-    if(this.actuallProc.name == 'Transfer'){
+    if (this.actuallProc.name == 'Transfer') {
       this.actuallProc.descritpion = this.actuallProc.descritpion + "|" + this.workingEmployee.account + "|" + this.workingEmployee.nearsol_id;
     }
 
@@ -1487,7 +1487,7 @@ export class HrprofilesComponent implements OnInit {
                               emp_toUpdate.id_profile = this.route.snapshot.paramMap.get('id');
                               emp_toUpdate.state = 'EMPLOYEE';
                               this.apiService.updateEmployee(emp_toUpdate).subscribe((str: string) => {
-                                if(this.termNotification == 'YES'){
+                                if (this.termNotification == 'YES') {
                                   this.sendMailTransfer();
                                 }
                                 window.alert("Record successfuly inserted");
@@ -1951,43 +1951,43 @@ export class HrprofilesComponent implements OnInit {
     this.editingAddress = true;
   }
 
-  editBirthday(){
+  editBirthday() {
     this.editingBirthday = true;
   }
 
-  editGender(){
+  editGender() {
     this.editingGender = true;
   }
 
-  editProfesion(){
+  editProfesion() {
     this.editingProfesion = true;
   }
 
-  editJob(){
+  editJob() {
     this.editingJob = true;
   }
 
-  editCivil(){
+  editCivil() {
     this.editingCivil = true;
   }
 
-  editNat(){
+  editNat() {
     this.editingNat = true;
   }
 
-  editReporter(){
+  editReporter() {
     this.editingReporter = true;
   }
 
-  editSuspension(){
+  editSuspension() {
     this.editingSuspension = true;
   }
 
-  editAccessCard(){
+  editAccessCard() {
     this.editingAccessCard = true;
   }
 
-  editHeadsets(){
+  editHeadsets() {
     this.editingHeadsets = true;
   }
 
@@ -2001,16 +2001,16 @@ export class HrprofilesComponent implements OnInit {
     this.workingEmployee.platform = 'explicit_change';
     this.workingEmployee.state = 'reporter';
     this.apiService.updateProfile(this.profile[0]).subscribe((prof: profiles) => {
-      this.approvals.forEach(element=>{
-        if(element.user_name == this.workingEmployee.reporter){
+      this.approvals.forEach(element => {
+        if (element.user_name == this.workingEmployee.reporter) {
           this.workingEmployee.society = element.iduser;
         }
       })
-      this.apiService.updateEmployee(this.workingEmployee).subscribe((str:string)=>{
+      this.apiService.updateEmployee(this.workingEmployee).subscribe((str: string) => {
         this.workingEmployee.platform = 'explicit_change';
         this.workingEmployee.state = 'job';
         this.workingEmployee.society = this.workingEmployee.job;
-        this.apiService.updateEmployee(this.workingEmployee).subscribe((str:string)=>{
+        this.apiService.updateEmployee(this.workingEmployee).subscribe((str: string) => {
           window.alert("Changes successfuly recorded please re enter on this profile to retrive the new information");
         })
       })
@@ -2519,7 +2519,7 @@ export class HrprofilesComponent implements OnInit {
   }
 
   updateVacation() {
-    if(this.activeVacation.status == 'DISMISSED'){
+    if (this.activeVacation.status == 'DISMISSED') {
       this.apiService.updateVacations(this.activeVacation).subscribe((str: string) => {
         window.alert("Change successfuly recorded");
         let revertVac: vacations = new vacations;
@@ -2537,9 +2537,9 @@ export class HrprofilesComponent implements OnInit {
         this.insertVacation();
         this.cancelView();
       })
-    }else{
-      this.apiService.updateVacation(this.activeVacation).subscribe((str:string)=>{
-        if(str == '1'){
+    } else {
+      this.apiService.updateVacation(this.activeVacation).subscribe((str: string) => {
+        if (str == '1') {
           this.alert.header = 'Vacation Approved';
           this.alert.content = 'Change successfully recorded';
           let ele = document.getElementById('dispay_alert');
@@ -2563,33 +2563,33 @@ export class HrprofilesComponent implements OnInit {
     })
   }
 
-  sendMailTransfer(){
-    this.apiService.sendMailTransfer({id_employee:this.workingEmployee.idemployees}).subscribe((str:string)=>{})
+  sendMailTransfer() {
+    this.apiService.sendMailTransfer({ id_employee: this.workingEmployee.idemployees }).subscribe((str: string) => { })
   }
 
-  getAccountName(str:string):string{
-    let rtn:string = 'N/A';
-    this.allAccounts.forEach(acc=>{
-      if(acc.idaccounts == str){
+  getAccountName(str: string): string {
+    let rtn: string = 'N/A';
+    this.allAccounts.forEach(acc => {
+      if (acc.idaccounts == str) {
         rtn = acc.name;
       }
     })
     return rtn;
   }
 
-  cancelTransfer(){
-    this.apiService.revertTransfer({id:this.workingEmployee.idemployees}).subscribe((str=>{
+  cancelTransfer() {
+    this.apiService.revertTransfer({ id: this.workingEmployee.idemployees }).subscribe((str => {
       this.cancelView();
     }))
   }
 
-  revertTerm(){
-    this.apiService.revertTermination({idhr_processes:this.actualTerm.id_process}).subscribe((str:string)=>{
+  revertTerm() {
+    this.apiService.revertTermination({ idhr_processes: this.actualTerm.id_process }).subscribe((str: string) => {
       this.cancelView();
     })
   }
 
-  revertAdjustment(){
+  revertAdjustment() {
     this.attAdjudjment.notes = this.authUser.getAuthusr().user_name;
     this.attAdjudjment.id_user = this.authUser.getAuthusr().iduser;
     this.attAdjudjment.start = '12:00';
@@ -2598,32 +2598,32 @@ export class HrprofilesComponent implements OnInit {
     this.attAdjudjment.time_before = this.attAdjudjment.time_after;
     this.attAdjudjment.time_after = (Number(this.attAdjudjment.time_after) + Number(this.attAdjudjment.amount)).toFixed(2);
     this.attAdjudjment.id_import = '0';
-    this.apiService.revertJustification(this.attAdjudjment).subscribe((str:string)=>{
+    this.apiService.revertJustification(this.attAdjudjment).subscribe((str: string) => {
       this.attAdjudjment.notes = 'Reverted from ' + this.attAdjudjment.id_process + ' created at ' + this.attAdjudjment.date;
       this.insertAdjustment();
     })
   }
 
-  closeSuspension(){
-    this.apiService.updateSuspensionsDays(this.activeRequest).subscribe((str:string)=>{
+  closeSuspension() {
+    this.apiService.updateSuspensionsDays(this.activeRequest).subscribe((str: string) => {
       this.editingSuspension = false;
       this.cancelView();
     })
   }
 
-  updateTermination(){
-    this.apiService.updateTermination(this.actualTerm).subscribe((str:string)=>{
+  updateTermination() {
+    this.apiService.updateTermination(this.actualTerm).subscribe((str: string) => {
       this.editingHeadsets = false;
       this.editingAccessCard = false;
       window.alert("Record Successfully Updated");
     })
   }
 
-  showMoreVac(){
-    if(this.max_vac == 10){
+  showMoreVac() {
+    if (this.max_vac == 10) {
       this.max_vac = 1000;
       this.showMore = 'Show Less';
-    }else{
+    } else {
       this.max_vac = 10;
       this.showMore = 'Show More';
     }
@@ -2633,13 +2633,13 @@ export class HrprofilesComponent implements OnInit {
     var url = this.apiService.PHP_API_SERVER + "/phpscripts/letterVacations.php?name=" + this.workingEmployee.name +
       "&date=" + this.activeVacation.took_date + "&job=" + this.workingEmployee.job +
       "&start_date=" + this.workingEmployee.hiring_date + "&department=" + this.workingEmployee.id_account +
-      "&days_requested=" + this.activeVacation.count + "&nearsol_id=" + this.workingEmployee.nearsol_id ;
+      "&days_requested=" + this.activeVacation.count + "&nearsol_id=" + this.workingEmployee.nearsol_id;
     window.open(url, "_blank");
   }
 
   uploadLetter(event): any {
     const archivoCapturado = event.target.files[0];
-    if (archivoCapturado.type=='application/pdf') {
+    if (archivoCapturado.type == 'application/pdf') {
       this.filePDF.id = this.activeVacation.id_process;
       this.filePDF.name = this.workingEmployee.nearsol_id + '-' + this.activeVacation.id_process + '.pdf';
       this.filePDF.type = archivoCapturado.type;
@@ -2704,7 +2704,7 @@ export class HrprofilesComponent implements OnInit {
   prorataSalary() {
     const DiasMes = 30; // Se toma a Mes comercial.
     let salary: number;
-    if(this.advanceDays <= DiasMes) {
+    if (this.advanceDays <= DiasMes) {
       salary = this.advanceDays * ((Number(this.workingEmployee.base_payment) + Number(this.workingEmployee.productivity_payment)) / DiasMes);
       this.actualAdvance.amount = salary.toFixed(2);
     } else {
@@ -2731,7 +2731,7 @@ export class HrprofilesComponent implements OnInit {
 
   uploadAdvance(event): any {
     const archivoCapturado = event.target.files[0];
-    if (archivoCapturado.type=='application/pdf') {
+    if (archivoCapturado.type == 'application/pdf') {
       this.filePDF.id = this.actuallProc.idprocesses;
       this.filePDF.name = this.workingEmployee.nearsol_id + '-' + this.actuallProc.idprocesses + '.pdf';
       this.filePDF.type = archivoCapturado.type;
@@ -2759,9 +2759,10 @@ export class HrprofilesComponent implements OnInit {
   }
 
   updateMountProc(Amount: number) {
-    if (this.availableVacations <= Amount) {
+    if (Amount <= this.availableVacations) {
       this.actuallProc.mount = Amount;
     } else {
+      window.alert("The value of paid vacations cannot be greater than the pending vacations.");
       this.actuallProc.mount = this.availableVacations;
     }
   }

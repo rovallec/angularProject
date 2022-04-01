@@ -129,7 +129,11 @@ if($result = mysqli_query($con, $sql))
 			$nearsol_id = $row['nearsol_id'];
 			$parqueo = number_format($row['parqueo'],2);
 			$total_cred = number_format($row['credits'] + $row['anticipos_cred_amount'],2);
-			$total_deb = number_format($row['debits'],2);
+			if ($row['anticipos_cred_amount'] > 0) {
+				$total_deb = number_format($row['debits'] + abs($row['anticipos_cred_amount']),2);
+			} else {
+				$total_deb = number_format($row['debits'],2);
+			}			
 			$liquido = ($row['credits'] - $row['debits']);
 		}
 

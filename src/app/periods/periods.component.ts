@@ -10,7 +10,7 @@ import { isNull, isNullOrUndefined, isUndefined } from 'util';
 import { schedule_visit } from '../addTemplate';
 import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
-import { attendences, attendences_adjustment, credits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients, billing_detail, debits, timekeeping_adjustments } from '../process_templates';
+import { attendences, attendences_adjustment, credits, deductions, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, vacations, isr, accounts, payroll_values, payroll_values_gt, terminations, rises, paid_attendances, clients, billing_detail, debits, timekeeping_adjustments, accountsCount } from '../process_templates';
 import * as XLSX from 'xlsx';
 import { Observable, of } from 'rxjs';
 import { promise } from 'protractor';
@@ -29,7 +29,6 @@ import { AuthServiceService } from '../auth-service.service';
   templateUrl: './periods.component.html',
   styleUrls: ['./periods.component.css']
 })
-
 
 export class PeriodsComponent implements OnInit {
   completed: boolean = false;
@@ -78,7 +77,7 @@ export class PeriodsComponent implements OnInit {
   importString: string = 'Bonos Diversos';
   loading: boolean = false;
   isrs: isr[] = [];
-  accounts: accounts[] = [];
+  accounts: accountsCount[] = [];
   payroll_values: payroll_values_gt[] = [];
   max_progress: number = 0;
   selectedPayment: payments = new payments;
@@ -112,9 +111,7 @@ export class PeriodsComponent implements OnInit {
   }
 
   start() {
-    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
-      this.accounts = acc;
-    })
+    this.getAccounts();
     this.getDeductions();
     this.apiService.getFilteredPeriods({ id: this.route.snapshot.paramMap.get('id') }).subscribe((p: periods) => {
       this.period = p;
@@ -144,6 +141,26 @@ export class PeriodsComponent implements OnInit {
       this.clients = cl;
       this.setClient(cl[0].idclients);
     })
+  }
+
+  getAccounts() {
+    this.accounts = [];
+    this.apiService.getAccounts().subscribe((acc: accountsCount[]) => {
+      this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
+        acc.filter(a => a.id_client == acc[0].id_client).forEach(account => {
+          account.payrollCount = 0;
+          if (!isNullOrUndefined(pv)) {
+            pv.forEach(p => {
+              if (account.idaccounts == p.id_account) {
+                account.payrollCount++;
+              }
+            });
+          }
+          this.accounts.push(account);
+        });
+        this.setAccount_sh(this.accounts[0]);
+      });
+    });
   }
 
   getDeductions() {
@@ -222,7 +239,7 @@ export class PeriodsComponent implements OnInit {
 
                           if (!isNullOrUndefined(trm.valid_from) && (new Date(trm.valid_from).getTime() >= new Date(this.period.start).getTime()) && (new Date(trm.valid_from).getTime() <= new Date(this.period.end).getTime())) {
                             is_trm = true;
-                            py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) + (((((new Date(this.period.end).getTime() - new Date(this.period.start).getTime())) / (1000 * 3600 * 24)) + 1) - 15) - ((((new Date(this.period.end).getTime()) - (new Date(trm.valid_from).getTime())) / (1000 * 3600 * 24)) + 1)).toFixed(2);
+                            py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh)).toFixed(2);
                           } else {
                             py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - Number(payroll_value.seventh)).toFixed(2);
                             if (new Date(trm.valid_from).getTime() <= new Date(this.period.start).getTime()) {
@@ -255,7 +272,7 @@ export class PeriodsComponent implements OnInit {
                               if (payroll_value.id_account == emp[0].id_account) {
                                 py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(trns.date).getTime() - (new Date(this.period.start).getTime()))) / (1000 * 3600 * 24))).toFixed(2);
                               } else {
-                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(this.period.end).getTime()) - (new Date(trns.date).getTime())) / (1000 * 3600 * 24))).toFixed(2);
+                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(this.period.end).getTime()) - (new Date(trns.date).getTime())) / (1000 * 3600 * 24))- 1).toFixed(2);
                               }
                             }
                           }
@@ -353,7 +370,7 @@ export class PeriodsComponent implements OnInit {
                             adjustment_base.idpayments = py.idpayments;
 
                             if(Number(payroll_value.performance_bonus) != 0){
-                              performance_bonus.amount = payroll_value.performance_bonus;
+                              performance_bonus.amount = Number(payroll_value.performance_bonus).toFixed(2);
                               performance_bonus.type = "Performance Bonus";
                               performance_bonus.idpayments = py.idpayments;
                               this.global_credits.push(performance_bonus);
@@ -361,7 +378,7 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             if(Number(payroll_value.nearsol_bonus) != 0){
-                              nearsol_bonus.amount = payroll_value.nearsol_bonus;
+                              nearsol_bonus.amount = Number(payroll_value.nearsol_bonus).toFixed(2);
                               nearsol_bonus.type = "Nearsol Bonus";
                               nearsol_bonus.idpayments = py.idpayments;
                               this.global_credits.push(nearsol_bonus);
@@ -369,14 +386,14 @@ export class PeriodsComponent implements OnInit {
                             }
 
                             if(Number(payroll_value.treasure_hunt) != 0){
-                              treasure_hunt.amount = payroll_value.treasure_hunt;
+                              treasure_hunt.amount = Number(payroll_value.treasure_hunt).toFixed(2);
                               treasure_hunt.type = "Treasure Hunt";
                               treasure_hunt.idpayments = py.idpayments;
                               this.global_credits.push(treasure_hunt);
                               bonus = bonus + Number(treasure_hunt.amount);
                             }
 
-                            if (emp[0].job != 'Supervisor De Operaciones' && emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
+                            if (emp[0].job != 'Supervisor De Operaciones' && emp[0].id_account != '7' && emp[0].id_account != '13' && emp[0].id_account != '25' && emp[0].id_account != '22' && emp[0].id_account != '23' && emp[0].id_account != '26' && emp[0].id_account != '12' && emp[0].id_account != '20' && emp[0].id_account != '38') {
                               adjustment_ot.amount = ((Number(payroll_value.adj_ot) * (Number(base_salary) + Number(productivity_salary) + (250 / 240)) * 2)).toFixed(2);
                               adjustment_ot.type = "Ajuste OT";
                             } else {
@@ -415,8 +432,8 @@ export class PeriodsComponent implements OnInit {
                               sum_cred = Number(Number(sum_cred) + Number(credit.amount));
                             }
                           })
-                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) + 
-                                      Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) + 
+                          py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) +
+                                      Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) +
                                       Number(adjustments.amount) + Number(bonus)).toFixed(2);
 
 
@@ -427,7 +444,7 @@ export class PeriodsComponent implements OnInit {
                               if (debit.type = "ISR") {
                                 isr = Number(debit.amount);
                               }
-                            } 
+                            }
                           })
                           py.debits = (sum_deb + Number(igss_debit.amount)).toFixed(2);
 
@@ -494,8 +511,15 @@ export class PeriodsComponent implements OnInit {
                                 this.global_debits.push(judicial_discount);
                                 this.global_judicials.push(judicial);
                                 py.debits = (Number(py.debits) + Number(judicial_discount.amount)).toFixed(2);
-                              } else if (Number(judicial.max) < (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))) {
-                                judicial.current = (Number(judicial.current) + ((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount)) * (Number(judicial.amount) / 100))).toFixed(2);
+                              } else if (Number(judicial.max) <= (((Number(base_credit.amount) + Number(ot_credit.amount) + Number(holiday_credit.amount))) * (Number(judicial.amount) / 100))) {
+                                let judicial_discount: debits;
+                                judicial_discount = new debits();
+                                judicial.current = (Number(judicial.max)).toFixed(2);
+                                judicial_discount.amount = (Number(judicial.max) - Number(judicial.current)).toFixed(2);
+                                judicial_discount.type = "Descuento Judicial";
+                                judicial_discount.idpayments = py.idpayments;
+                                py.debits = (Number(py.debits) + Number(judicial_discount.amount)).toFixed(2);
+                                this.global_debits.push(judicial_discount);
                                 this.global_judicials.push(judicial);
                               }
                             }
@@ -704,7 +728,7 @@ export class PeriodsComponent implements OnInit {
     this.showPayments = true;
   }
 
-  addfile(event) {
+  addfile(event: { target: { files: any[]; }; }) {
     this.credits = [];
     this.file = event.target.files[0];
     let partial_credits: credits[] = [];
@@ -807,12 +831,26 @@ export class PeriodsComponent implements OnInit {
     }
   }
 
-  exportPayrollReport() {
-    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
+  async exportPayrollReport() {
+    try {
+      window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportNominaReport.php?AID_Period=" + this.period.idperiods, "_self");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
-  exportBankReport() {
-    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportBankReport.php?AID_Period=" + this.period.idperiods, "_self")
+  async exportBankReport() {
+    try {
+      window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportBankReport.php?AID_Period=" + this.period.idperiods, "_self")
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   setAccount(str: string) {
@@ -853,21 +891,38 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
-  setAccountingPolicy() {
+  async setAccountingPolicy() {
     // Se encarga de generar la póliza contable al período en curso si no existiera.
-    window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_blank")
+    try {
+      window.open(`${this.apiService.PHP_API_SERVER}` + "/phpscripts/exportAccountingPolicyReport.php?AID_Period=" + this.period.idperiods, "_blank")
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   setClient(cl: string) {
     this.accounts = [];
     this.selectedClient = cl;
-    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
-      acc.forEach(account => {
-        if (account.id_client == cl) {
-          this.accounts.push(account);
-        }
+    this.apiService.getAccounts().subscribe((acc: accountsCount[]) => {
+      this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
+        acc.filter(a => a.id_client == cl).forEach(account => {
+          if (account.id_client == cl) {
+            account.payrollCount = 0;
+            if (!isNullOrUndefined(pv)) {
+              pv.forEach(p => {
+                if (account.idaccounts == p.id_account) {
+                  account.payrollCount++;
+                }
+              });
+            }
+            this.accounts.push(account);
+          }
+        });
+        this.setAccount_sh(this.accounts[0]);
       });
-      this.setAccount_sh(this.accounts[0]);
     })
   }
 
@@ -881,11 +936,24 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
+  delPayrollAccount(acc: accounts) {
+    if (window.confirm("Are you sure you want to delete?")) {
+      this.apiService.delPayrollAccount({ id_period: this.period.idperiods, id_account: acc.idaccounts }).subscribe((str: string) => {
+        if (str.trim() === '') {
+          window.alert("Payroll account deleted successfully.")
+        } else {
+          console.log(str);
+        }
+        this.ngOnInit();
+      })
+    }
+  }
+
   setPatrono(str: string) {
     this.selected_patrono = str;
   }
 
-  exportIgss() {
+  async exportIgss() {
     let user: string = this.authService.getAuthusr().signature;
     let patrono: string = this.selected_patrono;
     let address: string = "20 Calle 5-25";
@@ -896,8 +964,14 @@ export class PeriodsComponent implements OnInit {
       patronal_number = "145998";
     }
     let t_period: string = this.period.idperiods;
-    window.open("http://172.18.2.45/phpscripts/exportIgss.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
-
+    try {
+      window.open("http://172.18.2.45/phpscripts/exportIgss.php?user=" + user + "&patrono=" + patrono + "&address=" + address + "&nit_patrono=" + nit_patrono + "&patronal_number=" + patronal_number + "&period=" + t_period, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   cancelImport() {
@@ -905,7 +979,7 @@ export class PeriodsComponent implements OnInit {
     this.payroll_values = [];
   }
 
-  setPayrollValues(event) {
+  setPayrollValues(event: { target: { files: any[]; }; }) {
     this.file = event.target.files[0];
     let fileReader = new FileReader();
     let pr: periods = new periods;
@@ -1160,6 +1234,11 @@ export class PeriodsComponent implements OnInit {
                       this.working = false;
                     }
                   });
+                  if ((progress_2 + progress) == (max_1 + max_2)) {
+                    this.orderAlerts()
+                    this.closing_import = true;
+                    this.working = false;
+                  }
                 }
               })
             }else{
@@ -1256,7 +1335,7 @@ export class PeriodsComponent implements OnInit {
     }
   }
 
-  ifNull(obj) {
+  ifNull(obj: string) {
     if (isNullOrUndefined(obj)) {
       return 0
     } else {
@@ -1276,7 +1355,7 @@ export class PeriodsComponent implements OnInit {
     return this.conflictedPeriods.filter(a => a.id_employee == pay.id_employee);
   }
 
-  getAccountName(str){
+  getAccountName(str: string){
     if(isNullOrUndefined(str) || str == '0' || str == '' || str == ' ' || str == 'NULL'){
       let a:accounts = new accounts;
       a.idaccounts = '0';
@@ -1434,6 +1513,23 @@ export class PeriodsComponent implements OnInit {
         }
         window.alert("Process Successfuly Completed");
         this.loading_save = false;
+        this.ngOnInit();
+    })
+  }
+
+  togglePeriod() {
+    let newStatus: string = '3';
+    if (this.period.status == '1') {
+      newStatus = '3'
+    } else if (this.period.status == '3') {
+      newStatus = '1'
+    } else {
+      window.alert("No available status to toggle.");
+    }
+
+    this.apiService.updatePeriods({ id: this.period.idperiods, status: newStatus }).subscribe((_str: string) => {
+      window.alert("Period Updated Success");
+      this.ngOnInit();
     })
   }
 }

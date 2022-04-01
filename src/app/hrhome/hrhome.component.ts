@@ -332,8 +332,15 @@ export class HrhomeComponent implements OnInit {
     })
   }
 
-  exportContractReport() {
-    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportContractReport.php", "_blank");
+  async exportContractReport() {
+    try {
+      window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportContractReport.php", "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   downloadContract(emp:hires_template){

@@ -2871,3 +2871,41 @@ export class creditsdebitsbyemployees {
   }
 }
 
+export class accountsCount extends accounts {
+  payrollCount: number;
+  constructor() {
+    super();
+    this.payrollCount = 0;
+  }
+}
+
+export class providers {
+    idproviders:string;
+    name:string;
+    contact:string;
+    phone:string;
+    cel:string;
+    email:string
+    service:string;
+    credit:string;
+    conditions:string;
+    days:string;
+    contract_start:string;
+    contract_end:string;
+    no_iva:string;
+    constructor(){
+        this.idproviders = null;
+        this.name = null;
+        this.contact = null;
+        this.phone = null;
+        this.cel = null;
+        this.email = null;
+        this.service = null;
+        this.credit = null;
+        this.conditions = null;
+        this.days = null;
+        this.contract_start = null;
+        this.contract_end = null;
+        this.no_iva = null;
+    }
+}

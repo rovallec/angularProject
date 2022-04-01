@@ -71,6 +71,10 @@ export class LoginComponent implements OnInit {
                     }else{
                       if(this.resUsr[0].department == "33"){
                         this._router.navigate(["/ithome"]);
+                      }else{
+                        if(this.resUsr[0].department == "48"){
+                          this._router.navigate(["/providers"]);
+                        }
                       }
                     }
                   }
@@ -87,5 +91,4 @@ export class LoginComponent implements OnInit {
         }
       });
   }
-
 }

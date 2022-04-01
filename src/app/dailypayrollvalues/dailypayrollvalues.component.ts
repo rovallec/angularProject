@@ -54,8 +54,15 @@ export class DailypayrollvaluesComponent implements OnInit {
     this.selectedPeriod = Aper;
   }
 
-  exportReport() {
-    window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportDailyPayrollValues.php?period=" + this.selectedPeriod.idperiods + "&account=" + this.selectedAccount.idaccounts + "&accname=" + this.selectedAccount.name, "_blank")
+  async exportReport() {
+    try {
+      window.open(this.apiService.PHP_API_SERVER + "/phpscripts/exportDailyPayrollValues.php?period=" + this.selectedPeriod.idperiods + "&account=" + this.selectedAccount.idaccounts + "&accname=" + this.selectedAccount.name, "_blank")
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
 
   setClient(cl: string) {

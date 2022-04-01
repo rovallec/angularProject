@@ -40,11 +40,20 @@ export class AttritionReportComponent implements OnInit {
     }
   }
 
-  generateReprot(){
+  async generateReprot(){
     if(!this.isExportable){
       alert("Missing information to generate the report");
-    }else{
-      window.open("http://172.18.2.45/phpscripts/exportAttritionReport.php?date=%27" + this.dateFrom + "%27%20AND%20%27" + this.dateTo + "%27", "_blank")
+    } else {
+       try {
+        window.open("http://172.18.2.45/phpscripts/exportAttritionReport.php?date=%27" + this.dateFrom + "%27%20AND%20%27" + this.dateTo + "%27", "_blank")
+      } catch (error) {
+        alert("It could not to generate the report.");
+      }
+      finally {
+        await new Promise( resolve => setTimeout(resolve, 1000));
+        //new Promise( resolve => setTimeout(resolve, 2000) );
+        window.confirm("The report has been generated.");
+      }
     }
-    }
+  }
 }

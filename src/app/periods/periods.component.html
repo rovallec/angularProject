@@ -71,13 +71,18 @@
             <!------------------------------------COMPLETE / DISMISS Close--------------------------------------------------->
 
             <!-------------------------------------CLOSE PERIOD-------------------------------------------------------------->
-            <button class="btn btn-outline-secondary" (click)="closePeriod()"
-                *ngIf="!showPayments && period.status == '3'" style="margin-left:5px"><i class="fas fa-store-slash"
-                    data-toggle="tooltip" data-placement="top" title="Calc Close Period"
-                    *ngIf="!showPayments && !closing_import"></i></button>
+            <button class="btn btn-outline-secondary" (click)="closePeriod()" *ngIf="!showPayments && period.status == '3'"
+              style="margin-left:5px" title="Calc Close Period">
+              <i class="fas fa-store-slash" data-toggle="tooltip" data-placement="top"
+                *ngIf="!showPayments && !closing_import"></i>
+            </button>
+            <button class="btn btn-outline-secondary" (click)="togglePeriod()" *ngIf="!showPayments && (period.status == '3' || period.status == '1')"
+              style="margin-left:5px" title="Toggle Period">
+                <i class="fa fa-recycle" data-toggle="tooltip" data-placement="top"></i>
+            </button>
             <button class="btn btn-outline-secondary" *ngIf="!showPayments && period.status != '3' && !closing_import"
                 style="margin-left: 5px;" data-target="#uploadPayrollValues"
-                data-toggle="modal">
+                data-toggle="modal" title="Upload Payroll Values">
                 <i class="far fa-clock"></i>
             </button>
             <!-------------------------------------CLOSE PERIOD-------------------------------------------------------------->
@@ -126,10 +131,40 @@
                 </select>
             </div>
             <div class="row p-2">
-                <div class="list-group w-100" id="list-tab" role="tablist">
-                    <a class="list-group-item list-group-item-action w-100" *ngFor="let acc of accounts"
-                        [tabindex]="acc.idaccounts" [ngClass]="{'active': selectedAccount.idaccounts == acc.idaccounts}"
-                        style="cursor: pointer;" (click)="setAccount_sh(acc)">{{acc.name}}</a>
+                <div class="list-group uses-all" id="list-tab" role="tablist" *ngFor="let acc of accounts">
+                  <div class="list-group row uses-all" style="height: 52px; max-height: 104px; margin-left: 5px;">
+                    <section >
+                      <div class="col-md-12 uses-all d-flex" style="padding-left: 0px; padding-right: 0px; margin-left: 0px; margin-right: 0px;">
+                        <a id="a" class="list-group-item list-group-item-action d-flex justify-content-between" [tabindex]="acc.idaccounts"
+                          *ngIf="selectedAccount.idaccounts != acc.idaccounts && acc.payrollCount == 0"
+                            style="cursor: pointer;" (click)="setAccount_sh(acc)">
+                            {{ acc.name }}
+                        </a>
+                        <a id="a" class="list-group-item list-group-item-action active d-flex justify-content-between" [tabindex]="acc.idaccounts"
+                          *ngIf="selectedAccount.idaccounts == acc.idaccounts"
+                          style="cursor: pointer;" (click)="setAccount_sh(acc)">
+                          {{ acc.name }}
+                          <i class="fa fa-trash pointer" [tabindex]="acc.idaccounts" (click)="delPayrollAccount(acc)"
+                            style="margin-top: 5px;" *ngIf="acc.payrollCount > 0"></i>
+                        </a>
+                        <a id="a" class="list-group-item list-group-item-action notEmpty d-flex justify-content-between" [tabindex]="acc.idaccounts"
+                          *ngIf="acc.payrollCount > 0 && selectedAccount.idaccounts != acc.idaccounts"
+                          style="cursor: pointer;" (click)="setAccount_sh(acc)">
+                          {{ acc.name }}
+                          <i class="fa fa-trash pointer" [tabindex]="acc.idaccounts"
+                            (click)="delPayrollAccount(acc)" style="margin-top: 5px;"></i>
+                        </a>
+                      </div>
+                      <!--
+                      <div class="col-md-2" style="padding-left: 0px; padding-right: 0px; margin-left: 0px; margin-right: 0px; align-tracks: center;">
+                        
+                        <a id="b" class="btn btn-outline-danger" [tabindex]="acc.idaccounts" style="cursor: pointer;"
+                          (click)="delPayrollAccount(acc)">
+                          <i class="fa fa-trash"></i>
+                        </a> 
+                      </div> -->
+                    </section>
+                  </div>
                 </div>
             </div>
         </div>
@@ -186,7 +221,9 @@
                     <select class="form-control" [(ngModel)]="importString">
                         <option *ngIf="importType == 'Discount'">ISR</option>
                         <option *ngIf="importType == 'Discount'">Prestamo Personal</option>
-                        <option *ngIf="importType == 'Discount'">TARJETA DE ACCESO/PARQUEO</option>
+                        <option *ngIf="importType == 'Discount'">TARJETA DE ACCESO</option>
+                        <option *ngIf="importType == 'Discount'">Parking Motorcycle</option>
+                        <option *ngIf="importType == 'Discount'">parking Car</option>
                         <option *ngIf="importType == 'Discount'">Transporte en Bus</option>
                         <option *ngIf="importType == 'Discount'">Boleto de Ornato</option>
                         <option *ngIf="importType == 'Discount'">Seguro</option>
@@ -375,9 +412,9 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let at of detailed_attendance table-hover"
-                                    [ngClass]="{'table-danger':(at.balance === 'JANP' || at.balance === 'NS' || at.balance === 'LOA'), 'table-success':at.balance > 0,
-                         'table-info':(at.balance === 'OFF' || at.balance === 'VAC' || at.balance === 'JAP'), 
-                         'table-light':at.balance === '0', 'table-warning':at.balance < 0, 'table-secondary':at.balance === 'TERM' || at.balance === 'TRANSFER'}">
+                                    [ngClass]="{'table-danger':(at.balance === 'JANP' || at.balance === 'NS' || at.balance === 'LOA'), 'table-success':at.balance > '0',
+                         'table-info':(at.balance === 'OFF' || at.balance === 'VAC' || at.balance === 'JAP'),
+                         'table-light':at.balance === '0', 'table-warning':at.balance < '0', 'table-secondary':at.balance === 'TERM' || at.balance === 'TRANSFER'}">
                                     <td>{{at.date}}</td>
                                     <td>{{at.scheduled}}</td>
                                     <td>{{at.worked}}</td>

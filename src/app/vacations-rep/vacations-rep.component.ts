@@ -45,14 +45,20 @@ export class VacationsRepComponent implements OnInit {
 
   }
 
-  exportVacationsReport() {
+  async exportVacationsReport() {
     let idemployees: string = '';
     let i: number = 0;
-    for (let index = 0; index < this.employees.length; index++) {      
-      idemployees = idemployees + this.employees[index].idemployees + ',';      
+    for (let index = 0; index < this.employees.length; index++) {
+      idemployees = idemployees + this.employees[index].idemployees + ',';
     }
-    idemployees = idemployees + '0';    
-    window.open("http://172.18.2.45/phpscripts/exportVacationsReport.php?employees=" + idemployees, "_blank");
+    idemployees = idemployees + '0';
+    try {
+      window.open("http://172.18.2.45/phpscripts/exportVacationsReport.php?employees=" + idemployees, "_blank");
+    } catch (error) {
+      alert("It could not to generate the report.");
+    } finally {
+      await new Promise( resolve => setTimeout(resolve, 1000));
+      window.confirm("The report has been generated.");
+    }
   }
-
 }

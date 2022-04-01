@@ -118,7 +118,7 @@ export class HrdailyComponent implements OnInit {
     }
   }
 
-  generateReprot() {
+  async generateReprot() {
     let acId: string = '';
     if (!this.isExportable) {
       alert("Missing information to generate the report");
@@ -130,7 +130,16 @@ export class HrdailyComponent implements OnInit {
         acId = acId + itm.idaccounts;
       })
       if (this.me.department == '28' && this.setFilter == "'-1'") {
-        window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo + "&state=" + this.targetStatus, "_blank");
+        try {
+          window.open("http://172.18.2.45/phpscripts/exportExceptions_tk.php?start=" + this.dateFrom + "&end=" + this.dateTo + "&state=" + this.targetStatus, "_blank");
+        } catch (error) {
+          alert("It could not to generate the report.");
+        }
+        finally {
+          await new Promise( resolve => setTimeout(resolve, 1000));
+          //new Promise( resolve => setTimeout(resolve, 2000) );
+          window.confirm("The report has been generated.");
+        }
       } else {
         if(this.me.department == '28'){
           this.accounts.forEach((itm: accounts) => {
@@ -140,7 +149,16 @@ export class HrdailyComponent implements OnInit {
             acId = acId + itm.idaccounts;
           })
         }
-        window.open("http://172.18.2.45/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId + "&state=" + this.targetStatus + "&filter=" + this.setFilter, "_blank");
+        try {
+          window.open("http://172.18.2.45/phpscripts/exportHRDaily.php?from=" + this.dateFrom + "&to=" + this.dateTo + "&accounts=" + acId + "&state=" + this.targetStatus + "&filter=" + this.setFilter, "_blank");
+        } catch (error) {
+          alert("It could not to generate the report.");
+        }
+        finally {
+          await new Promise( resolve => setTimeout(resolve, 1000));
+          //new Promise( resolve => setTimeout(resolve, 2000) );
+          window.confirm("The report has been generated.");
+        }
       }
     }
   }

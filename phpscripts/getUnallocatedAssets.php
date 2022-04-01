@@ -9,7 +9,7 @@ $i = 0;
 $sql1 = "SELECT *, asset_type.name AS `type_name`, assets.status AS `st` FROM assets
         INNER JOIN asset_type ON asset_type.idasset_type = assets.id_type
         INNER JOIN asset_manufactures ON asset_manufactures.idasset_manufactures = assets.id_manufacture
-        LEFT JOIN asset_movements ON asset_movements.idasset_movements = assets.idassets AND asset_movements.status = 1
+        LEFT JOIN asset_movements ON asset_movements.id_asset = assets.idassets AND asset_movements.status = 1
         WHERE asset_movements.idasset_movements IS NULL;";
 if($result = mysqli_query($con, $sql1)){
     while($row = mysqli_fetch_assoc($result)){

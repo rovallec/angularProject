@@ -37,6 +37,7 @@ export class ChecksComponent implements OnInit {
   totalCred: number = 0;
   creditsDebitsByEmployees: creditsdebitsbyemployees[] = [];
   selCredDebByEmp: creditsdebitsbyemployees = new creditsdebitsbyemployees;
+  description_check: string = '';
 
 
   ngOnInit() {
@@ -135,8 +136,12 @@ export class ChecksComponent implements OnInit {
           pst.ignore = false;
         }
       })
+
       this.paystubs = pst_view.filter(pysf => pysf.type === 'BANK CHECK');
       this.getInfoEmployees();
+      if (this.description_check.trim()=='') {
+        this.description_check = 'PAGO DE PRESTACIONES LABORALES DEL ' + this.selectedPeriod.start + ' AL ' + this.selectedPeriod.end;
+      }
     })
   }
 
@@ -178,14 +183,14 @@ export class ChecksComponent implements OnInit {
   }
 
   checkAll() {
-    this.paystubs.forEach(pay => {
-      pay.select = true;
+    this.creditsDebitsByEmployees.forEach(cdbe => {
+      cdbe.checked = true;
     })
   }
 
   unCheckAll() {
-    this.paystubs.forEach(pay => {
-      pay.select = false;
+    this.creditsDebitsByEmployees.forEach(cdbe => {
+      cdbe.checked = false;
     })
   }
 
@@ -464,17 +469,18 @@ export class ChecksComponent implements OnInit {
 
   saveChecksByPeriod() {
     let fecha: Fecha = new Fecha;
-    let details: checksDetails[] = [];
     let next_correlative: number = this.selectedCheckbook.next_correlative;
     this.checks = [];
     this.creditsDebitsByEmployees.forEach(cbEmp => {
+      let details: checksDetails[] = [];
       if (cbEmp.checked) {
         let check: checks = new checks;
+        let i = 0;
         check.place = "Guatemala";
         check.date = fecha.getToday();
         check.value = cbEmp.total.toFixed(2);
         check.name = cbEmp.name.toUpperCase();
-        check.description = 'PAGO DE PRESTACIONES LABORALES DEL ' + this.selectedPeriod.start + ' AL ' + this.selectedPeriod.end;
+        check.description = this.description_check;
         check.negotiable = 'NO NEGOCIABLE';
         check.checked = cbEmp.checked;
         check.nearsol_id = cbEmp.nearsol_id;
@@ -484,13 +490,47 @@ export class ChecksComponent implements OnInit {
         check.document = String(next_correlative); // check number
         check.bankAccount = this.selectedCheckbook.account_bank;
         check.printDetail = false;
+        this.creditsDebitsByEmployees.forEach(d => {
+
+          if (d.idpayments == check.payment) {
+            d.credits.forEach(cred => {
+              if (cred.checked == true) {
+                let detail: checksDetails = new checksDetails;
+                i++;
+                detail.id_detail = String(i);
+                detail.id_movement = cred.object.iddebits;
+                detail.movement = cred.object.type;
+                detail.debits = '0';
+                detail.credits = cred.object.amount;
+                detail.checked = true;
+                details.push(detail);
+              }
+            })
+
+            d.debits.forEach(deb => {
+              if (deb.checked == true) {
+                let detail: checksDetails = new checksDetails;
+                i++;
+                detail.id_detail = String(i);
+                detail.id_movement = deb.object.iddebits;
+                detail.movement = deb.object.type;
+                detail.debits = deb.object.amount;
+                detail.credits = '0';
+                detail.checked = true;
+                details.push(detail);
+              }
+            })
+          }
+        })
         this.apiService.saveCheck({ head: check, detail: details }).subscribe((str: string) => {
           if (str.split("|")[0].trim() == "Success") {
             check.idchecks = str.split("|")[1];
             this.checks.push(check);
+            /*
             this.apiService.printChecks(check).subscribe((str: string) => {
               console.log(str);
             });
+            */
             cbEmp.check = ' Check No.: ' + check.document + ' Account: ' + check.bankAccount;
           } else {
             if (str.split("|")[0].trim() == "Error:") {

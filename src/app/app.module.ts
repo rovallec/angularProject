@@ -55,6 +55,7 @@ import { DailypayrollvaluesComponent } from './dailypayrollvalues/dailypayrollva
 import { ItInventoryReportComponent } from './it-inventory-report/it-inventory-report.component';
 import { ChecksComponent } from './checks/checks.component';
 import { AcsalaryreportComponent } from './acsalaryreport/acsalaryreport.component';
+import { ProvidersComponent } from './providers/providers.component';
 
 
 @NgModule({
@@ -104,7 +105,8 @@ import { AcsalaryreportComponent } from './acsalaryreport/acsalaryreport.compone
     DailypayrollvaluesComponent,
     ItInventoryReportComponent,
     ChecksComponent,
-    AcsalaryreportComponent
+    AcsalaryreportComponent,
+    ProvidersComponent
   ],
   imports: [
     BrowserModule,
