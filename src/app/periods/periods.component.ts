@@ -98,11 +98,12 @@ export class PeriodsComponent implements OnInit {
   closing_import: boolean = false;
   working_import: boolean = true;
   conflictedPeriods: payments[] = [];
-  setImport:payroll_values_gt[] = [];
-  loading_import:boolean = false;
-  save_import:boolean = false;
-  loading_save:boolean = false;
-  loadAll:boolean = false
+  setImport: payroll_values_gt[] = [];
+  loading_import: boolean = false;
+  save_import: boolean = false;
+  loading_save: boolean = false;
+  loadAll: boolean = false;
+  currentPym: payments = new payments;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authService: AuthServiceService) { }
 
@@ -111,6 +112,7 @@ export class PeriodsComponent implements OnInit {
   }
 
   start() {
+    this.accounts = [];
     this.getAccounts();
     this.getDeductions();
     this.apiService.getFilteredPeriods({ id: this.route.snapshot.paramMap.get('id') }).subscribe((p: periods) => {
@@ -156,7 +158,9 @@ export class PeriodsComponent implements OnInit {
               }
             });
           }
-          this.accounts.push(account);
+          if(this.accounts.filter(t=>t.idaccounts == account.idaccounts).length > 0){
+            this.accounts.push(account);
+          }
         });
         this.setAccount_sh(this.accounts[0]);
       });
@@ -270,9 +274,9 @@ export class PeriodsComponent implements OnInit {
                           if (!isNullOrUndefined(trns)) {
                             if (new Date(trns.date).getTime() >= new Date(this.period.start).getTime() && new Date(trns.date) <= new Date(this.period.end)) {
                               if (payroll_value.id_account == emp[0].id_account) {
-                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(trns.date).getTime() - (new Date(this.period.start).getTime()))) / (1000 * 3600 * 24))).toFixed(2);
+                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(trns.date).getTime() - new Date(this.period.start).getTime()) / (3600 * 1000 * 24)))).toFixed(2);
                               } else {
-                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (((new Date(this.period.end).getTime()) - (new Date(trns.date).getTime())) / (1000 * 3600 * 24))- 1).toFixed(2);
+                                py.days = (((Number(payroll_value.discounted_hours) + 120) / 8) - Number(payroll_value.discounted_days) - (15 - ((new Date(trns.date).getTime() - new Date(this.period.start).getTime()) / (3600 * 1000 * 24)))).toFixed(2);
                               }
                             }
                           }
@@ -326,7 +330,7 @@ export class PeriodsComponent implements OnInit {
                           let holiday_credit: credits = new credits;
                           let adjustments: credits = new credits;
                           let isr: number = 0;
-                          let bonus:number = 0;
+                          let bonus: number = 0;
 
                           let igss_debit: debits = new debits;
 
@@ -361,15 +365,15 @@ export class PeriodsComponent implements OnInit {
                             let adjustment_base: credits = new credits;
                             let adjustment_ot: credits = new credits;
                             let adjustment_hld: credits = new credits;
-                            let performance_bonus:credits = new credits;
-                            let treasure_hunt:credits = new credits;
-                            let nearsol_bonus:credits = new credits;
+                            let performance_bonus: credits = new credits;
+                            let treasure_hunt: credits = new credits;
+                            let nearsol_bonus: credits = new credits;
 
                             adjustment_base.amount = (Number(payroll_value.adj_hours) * (Number(base_salary) + Number(productivity_salary) + (250 / 240))).toFixed(2);
                             adjustment_base.type = "Ajuste Horas Nominales";
                             adjustment_base.idpayments = py.idpayments;
 
-                            if(Number(payroll_value.performance_bonus) != 0){
+                            if (Number(payroll_value.performance_bonus) != 0) {
                               performance_bonus.amount = Number(payroll_value.performance_bonus).toFixed(2);
                               performance_bonus.type = "Performance Bonus";
                               performance_bonus.idpayments = py.idpayments;
@@ -377,7 +381,7 @@ export class PeriodsComponent implements OnInit {
                               bonus = bonus + Number(performance_bonus.amount);
                             }
 
-                            if(Number(payroll_value.nearsol_bonus) != 0){
+                            if (Number(payroll_value.nearsol_bonus) != 0) {
                               nearsol_bonus.amount = Number(payroll_value.nearsol_bonus).toFixed(2);
                               nearsol_bonus.type = "Nearsol Bonus";
                               nearsol_bonus.idpayments = py.idpayments;
@@ -385,7 +389,7 @@ export class PeriodsComponent implements OnInit {
                               bonus = bonus + Number(nearsol_bonus.amount);
                             }
 
-                            if(Number(payroll_value.treasure_hunt) != 0){
+                            if (Number(payroll_value.treasure_hunt) != 0) {
                               treasure_hunt.amount = Number(payroll_value.treasure_hunt).toFixed(2);
                               treasure_hunt.type = "Treasure Hunt";
                               treasure_hunt.idpayments = py.idpayments;
@@ -433,8 +437,8 @@ export class PeriodsComponent implements OnInit {
                             }
                           })
                           py.credits = (Number(sum_cred) + Number(base_credit.amount) + Number(productivity_credit.amount) +
-                                      Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) +
-                                      Number(adjustments.amount) + Number(bonus)).toFixed(2);
+                            Number(ot_credit.amount) + Number(holiday_credit.amount) + Number(decreot_credit.amount) +
+                            Number(adjustments.amount) + Number(bonus)).toFixed(2);
 
 
                           let sum_deb: number = 0
@@ -837,7 +841,7 @@ export class PeriodsComponent implements OnInit {
     } catch (error) {
       alert("It could not to generate the report.");
     } finally {
-      await new Promise( resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       window.confirm("The report has been generated.");
     }
   }
@@ -848,7 +852,7 @@ export class PeriodsComponent implements OnInit {
     } catch (error) {
       alert("It could not to generate the report.");
     } finally {
-      await new Promise( resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       window.confirm("The report has been generated.");
     }
   }
@@ -898,7 +902,7 @@ export class PeriodsComponent implements OnInit {
     } catch (error) {
       alert("It could not to generate the report.");
     } finally {
-      await new Promise( resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       window.confirm("The report has been generated.");
     }
   }
@@ -918,7 +922,9 @@ export class PeriodsComponent implements OnInit {
                 }
               });
             }
-            this.accounts.push(account);
+            if(this.accounts.filter(t=>t.idaccounts == account.idaccounts).length > 0){
+              this.accounts.push(account);
+            }
           }
         });
         this.setAccount_sh(this.accounts[0]);
@@ -969,7 +975,7 @@ export class PeriodsComponent implements OnInit {
     } catch (error) {
       alert("It could not to generate the report.");
     } finally {
-      await new Promise( resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       window.confirm("The report has been generated.");
     }
   }
@@ -1010,33 +1016,14 @@ export class PeriodsComponent implements OnInit {
               pr.end = this.period.idperiods;
               this.apiService.getPayments(pr).subscribe((pymnts: payments[]) => {
                 progress++;
-                if(!isNullOrUndefined(pymnts[0])){
-                if (!isNullOrUndefined(pymnts[0].idpayments)) {
-                  let paymentValue = new payroll_values_gt;
-                  if (pymnts.length == 1) {
-                    paymentValue.status = '1';
-                    paymentValue.client_id = element['Avaya'];
-                    paymentValue.nearsol_id = element['ID'];
-                    paymentValue.id_payment = pymnts[0].idpayments;
-                    paymentValue.id_employee = emp[0].idemployees;
-                    paymentValue.agent_name = element['Full Name'];
-                    paymentValue.id_reporter = element['Supervisor'];
-                    paymentValue.discounted_days = element['Days to discount'];
-                    paymentValue.seventh = element['7th'];
-                    paymentValue.total_days = element['Total Days to discount'];
-                    paymentValue.discounted_hours = element['Hours to discount'];
-                    paymentValue.ot_hours = element['OT'];
-                    paymentValue.holidays_hours = element['Holiday Hours'];
-                    paymentValue.performance_bonus = element['Performance Bonus'];
-                    paymentValue.nearsol_bonus = element['Nearsol Bonus'];
-                    paymentValue.treasure_hunt = element['Treasure Hunt'];
-                    this.payrollvalues.push(paymentValue);
-                  } else {
-                    if (pymnts.length == 0) {
-                      paymentValue.status = '0';
+                if (!isNullOrUndefined(pymnts[0])) {
+                  if (!isNullOrUndefined(pymnts[0].idpayments)) {
+                    let paymentValue = new payroll_values_gt;
+                    if (pymnts.length == 1) {
+                      paymentValue.status = '1';
                       paymentValue.client_id = element['Avaya'];
                       paymentValue.nearsol_id = element['ID'];
-                      paymentValue.id_payment = "NULL";
+                      paymentValue.id_payment = pymnts[0].idpayments;
                       paymentValue.id_employee = emp[0].idemployees;
                       paymentValue.agent_name = element['Full Name'];
                       paymentValue.id_reporter = element['Supervisor'];
@@ -1049,34 +1036,16 @@ export class PeriodsComponent implements OnInit {
                       paymentValue.performance_bonus = element['Performance Bonus'];
                       paymentValue.nearsol_bonus = element['Nearsol Bonus'];
                       paymentValue.treasure_hunt = element['Treasure Hunt'];
+                      if (this.loadAll) {
+                        paymentValue.account_name = element['ACCOUNT'];
+                      }
                       this.payrollvalues.push(paymentValue);
                     } else {
-                      this.apiService.getTransfers({ id_employee: emp[0].idemployees, start: pr.start, end: pr.end }).subscribe((hr: hrProcess) => {
-                        paymentValue.status = '3';
+                      if (pymnts.length == 0) {
+                        paymentValue.status = '0';
                         paymentValue.client_id = element['Avaya'];
                         paymentValue.nearsol_id = element['ID'];
-                        pymnts.forEach(py => {
-                          this.conflictedPeriods.push(py);
-                        })
-                        if(this.loadAll){
-                          if(emp[0].id_account == element['ACCOUNT']){
-                            this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys =>{
-                              if(pys.id_account_py ==  element['ACCOUNT'] || isNullOrUndefined(pys.id_account_py)){
-                                paymentValue.id_payment = pys.idpayments;
-                                paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
-                              }
-                            })
-                          }
-                        }else{
-                          if(emp[0].id_account == this.selectedAccount.idaccounts){
-                            this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys =>{
-                              if(pys.id_account_py == this.selectedAccount.idaccounts || isNullOrUndefined(pys.id_account_py)){
-                                paymentValue.id_payment = pys.idpayments;
-                                paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
-                              }
-                            })
-                          }
-                        }
+                        paymentValue.id_payment = "NULL";
                         paymentValue.id_employee = emp[0].idemployees;
                         paymentValue.agent_name = element['Full Name'];
                         paymentValue.id_reporter = element['Supervisor'];
@@ -1090,32 +1059,58 @@ export class PeriodsComponent implements OnInit {
                         paymentValue.nearsol_bonus = element['Nearsol Bonus'];
                         paymentValue.treasure_hunt = element['Treasure Hunt'];
                         this.payrollvalues.push(paymentValue);
-                      })
+                      } else {
+                        this.apiService.getTransfers({ id_employee: emp[0].idemployees, start: pr.start, end: pr.end }).subscribe((hr: hrProcess) => {
+                          paymentValue.status = '3';
+                          paymentValue.client_id = element['Avaya'];
+                          paymentValue.nearsol_id = element['ID'];
+                          pymnts.forEach(py => {
+                            this.conflictedPeriods.push(py);
+                          })
+                          if (this.loadAll) {
+                            console.log(this.getAccountID(element['ACCOUNT']) + "|" + emp[0].id_account);
+                            if (emp[0].id_account == this.getAccountID(element['ACCOUNT'])) {
+                              this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys => {
+                                if (pys.id_account_py == this.getAccountID(element['ACCOUNT']) || isNullOrUndefined(pys.id_account_py)) {
+                                  paymentValue.id_payment = pys.idpayments;
+                                  paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
+                                }
+                              })
+                            } else {
+                              this.conflictedPeriods.forEach(cnf => {
+                                if (cnf.id_account_py == this.getAccountID(element['ACCOUNT'])) {
+                                  paymentValue.id_payment = cnf.idpayments;
+                                  paymentValue.account_name = this.getAccountName(cnf.id_account_py).name;
+                                }
+                              })
+                            }
+                          } else {
+                            if (emp[0].id_account == this.selectedAccount.idaccounts) {
+                              this.conflictedPeriods.filter(a => a.id_employee == emp[0].idemployees).forEach(pys => {
+                                if (pys.id_account_py == this.selectedAccount.idaccounts || isNullOrUndefined(pys.id_account_py)) {
+                                  paymentValue.id_payment = pys.idpayments;
+                                  paymentValue.account_name = this.getAccountName(pys.id_account_py).name;
+                                }
+                              })
+                            }
+                          }
+                          paymentValue.id_employee = emp[0].idemployees;
+                          paymentValue.agent_name = element['Full Name'];
+                          paymentValue.id_reporter = element['Supervisor'];
+                          paymentValue.discounted_days = element['Days to discount'];
+                          paymentValue.seventh = element['7th'];
+                          paymentValue.total_days = element['Total Days to discount'];
+                          paymentValue.discounted_hours = element['Hours to discount'];
+                          paymentValue.ot_hours = element['OT'];
+                          paymentValue.holidays_hours = element['Holiday Hours'];
+                          paymentValue.performance_bonus = element['Performance Bonus'];
+                          paymentValue.nearsol_bonus = element['Nearsol Bonus'];
+                          paymentValue.treasure_hunt = element['Treasure Hunt'];
+                          this.payrollvalues.push(paymentValue);
+                        })
+                      }
                     }
-                  }
-                }else{
-                  let paymentValue = new payroll_values_gt;
-                  paymentValue.status = '0';
-                  paymentValue.client_id = element['Avaya'];
-                  paymentValue.nearsol_id = element['ID'];
-                  paymentValue.id_payment = "NULL";
-                  paymentValue.id_employee = emp[0].idemployees;
-                  paymentValue.agent_name = element['Full Name'];
-                  paymentValue.id_reporter = element['Supervisor'];
-                  paymentValue.discounted_days = element['Days to discount'];
-                  paymentValue.seventh = element['7th'];
-                  paymentValue.total_days = element['Total Days to discount'];
-                  paymentValue.discounted_hours = element['Hours to discount'];
-                  paymentValue.ot_hours = element['OT'];
-                  paymentValue.holidays_hours = element['Holiday Hours'];
-                  paymentValue.performance_bonus = element['Performance Bonus'];
-                  paymentValue.nearsol_bonus = element['Nearsol Bonus'];
-                  paymentValue.treasure_hunt = element['Treasure Hunt'];
-                  this.payrollvalues.push(paymentValue);
-                }
-              }else{
-                this.apiService.getTransfers({id_employee:'exp', start:element['ID'] + "|" +this.period.start, end:this.period.end}).subscribe((proc:hrProcess)=>{
-                  if(isNullOrUndefined(proc.id_employee)){
+                  } else {
                     let paymentValue = new payroll_values_gt;
                     paymentValue.status = '0';
                     paymentValue.client_id = element['Avaya'];
@@ -1134,37 +1129,59 @@ export class PeriodsComponent implements OnInit {
                     paymentValue.nearsol_bonus = element['Nearsol Bonus'];
                     paymentValue.treasure_hunt = element['Treasure Hunt'];
                     this.payrollvalues.push(paymentValue);
-                  }else{
-                    pr.start = 'explicit_period';
-                    pr.status = emp[0].idemployees;
-                    pr.end = this.period.idperiods;
-                    this.apiService.getPayments(pr).subscribe((pymnts: payments[]) => {
-                      pymnts.forEach(payment=>{
-                        if(!isNullOrUndefined(payment.id_account_py)){
-                          let paymentValue = new payroll_values_gt;
-                          paymentValue.status = '1';
-                          paymentValue.client_id = element['Avaya'];
-                          paymentValue.nearsol_id = element['ID'];
-                          paymentValue.id_payment = payment.idpayments;
-                          paymentValue.id_employee = emp[0].idemployees;
-                          paymentValue.agent_name = element['Full Name'];
-                          paymentValue.id_reporter = element['Supervisor'];
-                          paymentValue.discounted_days = element['Days to discount'];
-                          paymentValue.seventh = element['7th'];
-                          paymentValue.total_days = element['Total Days to discount'];
-                          paymentValue.discounted_hours = element['Hours to discount'];
-                          paymentValue.ot_hours = element['OT'];
-                          paymentValue.holidays_hours = element['Holiday Hours'];
-                          paymentValue.performance_bonus = element['Performance Bonus'];
-                          paymentValue.nearsol_bonus = element['Nearsol Bonus'];
-                          paymentValue.treasure_hunt = element['Treasure Hunt'];
-                          this.payrollvalues.push(paymentValue);
-                        }
-                      })
-                    })
                   }
-                })
-              }
+                } else {
+                  this.apiService.getTransfers({ id_employee: 'exp', start: element['ID'] + "|" + this.period.start, end: this.period.end }).subscribe((proc: hrProcess) => {
+                    if (isNullOrUndefined(proc.id_employee)) {
+                      let paymentValue = new payroll_values_gt;
+                      paymentValue.status = '0';
+                      paymentValue.client_id = element['Avaya'];
+                      paymentValue.nearsol_id = element['ID'];
+                      paymentValue.id_payment = "NULL";
+                      paymentValue.id_employee = emp[0].idemployees;
+                      paymentValue.agent_name = element['Full Name'];
+                      paymentValue.id_reporter = element['Supervisor'];
+                      paymentValue.discounted_days = element['Days to discount'];
+                      paymentValue.seventh = element['7th'];
+                      paymentValue.total_days = element['Total Days to discount'];
+                      paymentValue.discounted_hours = element['Hours to discount'];
+                      paymentValue.ot_hours = element['OT'];
+                      paymentValue.holidays_hours = element['Holiday Hours'];
+                      paymentValue.performance_bonus = element['Performance Bonus'];
+                      paymentValue.nearsol_bonus = element['Nearsol Bonus'];
+                      paymentValue.treasure_hunt = element['Treasure Hunt'];
+                      this.payrollvalues.push(paymentValue);
+                    } else {
+                      pr.start = 'explicit_period';
+                      pr.status = emp[0].idemployees;
+                      pr.end = this.period.idperiods;
+                      this.apiService.getPayments(pr).subscribe((pymnts: payments[]) => {
+                        pymnts.forEach(payment => {
+                          if (!isNullOrUndefined(payment.id_account_py)) {
+                            let paymentValue = new payroll_values_gt;
+                            paymentValue.status = '1';
+                            paymentValue.client_id = element['Avaya'];
+                            paymentValue.nearsol_id = element['ID'];
+                            paymentValue.id_payment = payment.idpayments;
+                            paymentValue.id_employee = emp[0].idemployees;
+                            paymentValue.agent_name = element['Full Name'];
+                            paymentValue.id_reporter = element['Supervisor'];
+                            paymentValue.discounted_days = element['Days to discount'];
+                            paymentValue.seventh = element['7th'];
+                            paymentValue.total_days = element['Total Days to discount'];
+                            paymentValue.discounted_hours = element['Hours to discount'];
+                            paymentValue.ot_hours = element['OT'];
+                            paymentValue.holidays_hours = element['Holiday Hours'];
+                            paymentValue.performance_bonus = element['Performance Bonus'];
+                            paymentValue.nearsol_bonus = element['Nearsol Bonus'];
+                            paymentValue.treasure_hunt = element['Treasure Hunt'];
+                            this.payrollvalues.push(paymentValue);
+                          }
+                        })
+                      })
+                    }
+                  })
+                }
                 if (progress == sheetToJson.length) {
                   var worksheet_2 = workbook.Sheets[first_sheet_name_2];
                   let sheetToJson_2 = XLSX.utils.sheet_to_json(worksheet_2, { raw: true });
@@ -1241,7 +1258,7 @@ export class PeriodsComponent implements OnInit {
                   }
                 }
               })
-            }else{
+            } else {
               progress++;
               let paymentValue = new payroll_values_gt;
               paymentValue.status = '0';
@@ -1351,65 +1368,65 @@ export class PeriodsComponent implements OnInit {
     this.payroll_values = this.payrollvalues.sort((a, b) => (Number(a.status) - Number(b.status)));
   }
 
-  getConflicted(pay:payments){
+  getConflicted(pay: payments) {
     return this.conflictedPeriods.filter(a => a.id_employee == pay.id_employee);
   }
 
-  getAccountName(str: string){
-    if(isNullOrUndefined(str) || str == '0' || str == '' || str == ' ' || str == 'NULL'){
-      let a:accounts = new accounts;
+  getAccountName(str: string) {
+    if (isNullOrUndefined(str) || str == '0' || str == '' || str == ' ' || str == 'NULL') {
+      let a: accounts = new accounts;
       a.idaccounts = '0';
       a.name = this.selectedAccount.name
       return a;
-    }else{
+    } else {
       return this.accounts.filter(a => a.idaccounts == str)[0];
     }
   }
 
-  filterUnique(pay:payments){
-    let str:string[] = [];
-    let add:boolean = true;
-    this.conflictedPeriods.filter(a=>a.id_employee == pay.id_employee).forEach(py=>{
+  filterUnique(pay: payments) {
+    let str: payments[] = [];
+    let add: boolean = true;
+    this.conflictedPeriods.filter(a => a.id_employee == pay.id_employee).forEach(py => {
       add = true;
-      str.forEach(string=>{
-        if(string == this.getAccountName(py.id_account_py).name){
+      str.forEach(string => {
+        if (string.id_account_py == py.id_account_py) {
           add = false;
         }
       })
-      if(add == true){
-        str.push(this.getAccountName(py.id_account_py).name);
+      if (add == true) {
+        str.push(py);
       }
     })
     return str;
   }
 
-  setPayrollValues_import(){
-    let progress:number = 0;
+  setPayrollValues_import() {
+    let progress: number = 0;
     this.loading_import = true;
-    this.payrollvalues.forEach(payroll_val=>{
-      if(payroll_val.status == '1' || payroll_val.status == '3'){
+    this.payrollvalues.forEach(payroll_val => {
+      if (payroll_val.status == '1' || payroll_val.status == '3') {
         this.apiService.getSearchEmployees({ dp: "exact", filter: "idemployees", value: payroll_val.id_employee, rol: this.authService.getAuthusr().id_role }).subscribe((emp: employees[]) => {
-          if(!isNullOrUndefined(emp[0])){
-            let pr:periods = new periods;
+          if (!isNullOrUndefined(emp[0])) {
+            let pr: periods = new periods;
             pr.start = 'explicit_period';
             pr.status = emp[0].idemployees;
             pr.end = this.period.idperiods;
-            this.apiService.getPayments(pr).subscribe((payment:payments[])=>{
-              if(!isNullOrUndefined(payment[0])){
+            this.apiService.getPayments(pr).subscribe((payment: payments[]) => {
+              if (!isNullOrUndefined(payment[0])) {
                 progress++;
                 payroll_val.id_account = emp[0].id_account;
                 payroll_val.id_period = this.period.idperiods;
                 payroll_val.id_reporter = emp[0].reporter;
                 payroll_val.next_seventh = 0;
-                let found:boolean = false;
-                if(payroll_val.status == '3' && !found){
-                  payment.forEach(pymnt=>{
-                    if(!isNullOrUndefined(pymnt.id_account_py) && !found){
+                let found: boolean = false;
+                if (payroll_val.status == '3' && !found) {
+                  payment.forEach(pymnt => {
+                    if (!isNullOrUndefined(pymnt.id_account_py) && !found) {
                       payroll_val.id_payment = pymnt.idpayments;
                       payroll_val.id_account = pymnt.id_account_py;
                       found = true;
-                    }else{
-                      if(isNullOrUndefined(pymnt.id_account_py) && !found){
+                    } else {
+                      if (isNullOrUndefined(pymnt.id_account_py) && !found) {
                         payroll_val.id_payment = pymnt.idpayments;
                         found = true;
                       }
@@ -1417,56 +1434,56 @@ export class PeriodsComponent implements OnInit {
                   })
                   this.setImport.push(payroll_val);
                 }
-                if(this.loadAll){
-                  if(emp[0].id_account == this.selectedAccount.idaccounts && payroll_val.status != '3'){
+                if (this.loadAll) {
+                  if (emp[0].id_account == this.selectedAccount.idaccounts && payroll_val.status != '3') {
                     progress++;
                     this.setImport.push(payroll_val);
-                    if(progress >= this.payrollvalues.length){
+                    if (progress >= this.payrollvalues.length) {
                       this.save_import = true;
                       this.loading_import = false;
                     }
-                  }else{
+                  } else {
                     progress++;
-                    if(progress >= this.payrollvalues.length){
+                    if (progress >= this.payrollvalues.length) {
                       this.save_import = true;
                       this.loading_import = false;
                     }
                   }
-                }else{
-                  if(emp[0].id_account == this.selectedAccount.idaccounts && payroll_val.status != '3'){
-                  progress++;
-                  this.setImport.push(payroll_val);
-                  if(progress >= this.payrollvalues.length){
-                    this.save_import = true;
-                    this.loading_import = false;
-                  }
-                }else{
-                  progress++;
-                  if(progress >= this.payrollvalues.length){
-                    this.save_import = true;
-                    this.loading_import = false;
+                } else {
+                  if (emp[0].id_account == this.selectedAccount.idaccounts && payroll_val.status != '3') {
+                    progress++;
+                    this.setImport.push(payroll_val);
+                    if (progress >= this.payrollvalues.length) {
+                      this.save_import = true;
+                      this.loading_import = false;
+                    }
+                  } else {
+                    progress++;
+                    if (progress >= this.payrollvalues.length) {
+                      this.save_import = true;
+                      this.loading_import = false;
+                    }
                   }
                 }
-                }
-              }else{
+              } else {
                 progress++;
-                if(progress >= this.payrollvalues.length){
+                if (progress >= this.payrollvalues.length) {
                   this.save_import = true;
                   this.loading_import = false;
                 }
               }
             })
-          }else{
+          } else {
             progress++;
-            if(progress >= this.payrollvalues.length){
+            if (progress >= this.payrollvalues.length) {
               this.save_import = true;
               this.loading_import = false;
             }
           }
         })
-      }else{
+      } else {
         progress++;
-        if(progress >= this.payrollvalues.length){
+        if (progress >= this.payrollvalues.length) {
           this.save_import = true;
           this.loading_import = false;
         }
@@ -1474,15 +1491,16 @@ export class PeriodsComponent implements OnInit {
     })
   }
 
-  orderAlerts(){
-    this.payrollvalues = this.payrollvalues.sort((a,b) => Number(b.status) - Number(a.status));
+  orderAlerts() {
+    this.payrollvalues = this.payrollvalues.sort((a, b) => Number(b.status) - Number(a.status));
   }
 
-  setAccountDis(pys:payments, str:string){
+  setAccountDis(pys: payments, str: string) {
     pys.account = str;
+    pys.idpayments = this.currentPym.idpayments;
   }
 
-  clearData(){
+  clearData() {
     this.payrollvalues = [];
     this.payroll_values = [];
     this.global_credits = [];
@@ -1493,27 +1511,27 @@ export class PeriodsComponent implements OnInit {
     this.loading_save = false;
   }
 
-  saveImportedPayroll(){
+  saveImportedPayroll() {
     this.loading_save = true;
-      this.apiService.insertPayroll_values_gt(this.payrollvalues.filter(a => a.status == '3' || a.status == '1')).subscribe((str:string)=>{
-        if(str == '1'){
-          window.alert("Payroll Values Successfully Imported")
-        }else{
-          window.alert("Please share the following error with your Administrator \n " + str );
-        }
-        this.credits = [];
-        this.debits = [];
-        this.credits = this.global_credits;
-        this.debits = this.global_debits;
-        if(!isNullOrUndefined(this.debits)){
-          this.pushDeductions("credits",this.debits);
-        }
-        if(!isNullOrUndefined(this.credits)){
-          this.pushDeductions("debits", this.credits);
-        }
-        window.alert("Process Successfuly Completed");
-        this.loading_save = false;
-        this.ngOnInit();
+    this.apiService.insertPayroll_values_gt(this.payrollvalues.filter(a => a.status == '3' || a.status == '1')).subscribe((str: string) => {
+      if (str == '1') {
+        window.alert("Payroll Values Successfully Imported")
+      } else {
+        window.alert("Please share the following error with your Administrator \n " + str);
+      }
+      this.credits = [];
+      this.debits = [];
+      this.credits = this.global_credits;
+      this.debits = this.global_debits;
+      if (!isNullOrUndefined(this.debits)) {
+        this.pushDeductions("credits", this.debits);
+      }
+      if (!isNullOrUndefined(this.credits)) {
+        this.pushDeductions("debits", this.credits);
+      }
+      window.alert("Process Successfuly Completed");
+      this.loading_save = false;
+      this.ngOnInit();
     })
   }
 
@@ -1531,5 +1549,19 @@ export class PeriodsComponent implements OnInit {
       window.alert("Period Updated Success");
       this.ngOnInit();
     })
+  }
+
+  getAccountID(str: string) {
+    let ret: string = null;
+    this.accounts.forEach(ac => {
+      if (ac.name == str) {
+        ret = ac.idaccounts;
+      }
+    })
+    return ret;
+  }
+
+  sortPayrollValues(){
+    return this.payrollvalues.sort((a,b)=>(Number(b.status)-Number(a.status)));
   }
 }
