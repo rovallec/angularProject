@@ -133,12 +133,12 @@ SELECT DISTINCT
 FROM employees a
 INNER JOIN hires b ON (a.id_hire = b.idhires) 
 INNER JOIN profiles c ON (b.id_profile = c.idprofiles)
-INNER JOIN accounts d ON (a.id_account = d.idaccounts)
-INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1)
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits j on (g.idpayments = j.id_payment)
+INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
+INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN (SELECT c2.id_payment, SUM(ROUND(c2.amount, 2)) AS amount FROM credits c2 where (c2.TYPE NOT IN('Bonificacion Decreto', 'Anticipo Sobre Sueldo', 'Salario Base') AND c2.TYPE NOT LIKE'%Horas%Extra%Laboradas%' AND c2.TYPE NOT LIKE'%Horas%De%Asueto%') GROUP BY c2.id_payment) k on (g.idpayments = k.id_payment)
 AND h.idperiods = $AID_Period
 UNION 
@@ -222,12 +222,12 @@ COALESCE(IF(i.type='Prestamo Personal',                              ROUND(i.amo
 FROM employees a
 INNER JOIN hires b ON (a.id_hire = b.idhires) 
 INNER JOIN profiles c ON (b.id_profile = c.idprofiles)
-INNER JOIN accounts d ON (a.id_account = d.idaccounts)
-INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1)
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN debits i ON (g.idpayments = i.id_payment)
+INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
+INNER JOIN clients e ON (d.id_client = e.idclients)
 AND h.idperiods = $AID_Period
 UNION 
 /* DEBITOS SOLO DUPLICADOS */
@@ -295,12 +295,12 @@ CONCAT(h.start, ' - ', h.end) AS 'Periodo',
 FROM employees a
 INNER JOIN hires b ON (a.id_hire = b.idhires) 
 INNER JOIN profiles c ON (b.id_profile = c.idprofiles)
-INNER JOIN accounts d ON (a.id_account = d.idaccounts)
-INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1)
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN debits i ON (g.idpayments = i.id_payment)
+INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
+INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN (SELECT (z1.amount + RAND() * 0.0005) AS 'amount', z1.id_payment from debits z1 INNER JOIN debits z2 on (z1.id_payment = z2.id_payment) where z1.type = 'Descuento IGSS'
             AND z2.type = 'ISR' and z1.amount = z2.amount) j on (g.idpayments = j.id_payment)
 AND h.idperiods = $AID_Period
@@ -370,11 +370,11 @@ SELECT DISTINCT
 FROM employees a
 INNER JOIN hires b ON (a.id_hire = b.idhires) 
 INNER JOIN profiles c ON (b.id_profile = c.idprofiles)
-INNER JOIN accounts d ON (a.id_account = d.idaccounts)
-INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1)
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
+INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
+INNER JOIN clients e ON (d.id_client = e.idclients)
 AND h.idperiods = $AID_Period
 UNION
 /* CREDITOS BONIFICACION DECRETO*/
@@ -442,12 +442,12 @@ SELECT DISTINCT
 FROM employees a
 INNER JOIN hires b ON (a.id_hire = b.idhires) 
 INNER JOIN profiles c ON (b.id_profile = c.idprofiles)
-INNER JOIN accounts d ON (a.id_account = d.idaccounts)
-INNER JOIN clients e ON (d.id_client = e.idclients)
 INNER JOIN payment_methods f ON (f.id_employee = a.idemployees and f.predeterm=1)
 INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod = f.idpayment_methods)
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits i on (g.idpayments = i.id_payment)
+INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
+INNER JOIN clients e ON (d.id_client = e.idclients)
 AND h.idperiods = $AID_Period  
 and i.type='Bonificacion Decreto'
 ) A1 
