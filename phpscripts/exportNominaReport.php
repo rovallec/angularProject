@@ -70,7 +70,7 @@ FROM (
 /* CREDITOS */
 SELECT DISTINCT
   g.idpayments,
-  b.NEARSOL_ID as 'idemployees', 
+  COALESCE(hr_processes.notes, b.NEARSOL_ID) as 'idemployees', 
   a.client_id,
   UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) as NombreDelTrabajador, 
   IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS JORNADA,  
@@ -139,13 +139,14 @@ INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits j on (g.idpayments = j.id_payment)
 INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
 INNER JOIN clients e ON (d.id_client = e.idclients)
+LEFT JOIN hr_processes ON (hr_processes.id_employee = a.idemployees AND hr_processes.id_type = 16 AND (hr_processes.date BETWEEN h.start AND h.end) LIMIT 1)
 INNER JOIN (SELECT c2.id_payment, SUM(ROUND(c2.amount, 2)) AS amount FROM credits c2 where (c2.TYPE NOT IN('Bonificacion Decreto', 'Anticipo Sobre Sueldo', 'Salario Base') AND c2.TYPE NOT LIKE'%Horas%Extra%Laboradas%' AND c2.TYPE NOT LIKE'%Horas%De%Asueto%') GROUP BY c2.id_payment) k on (g.idpayments = k.id_payment)
 AND h.idperiods = $AID_Period
 UNION 
 /* DEBITOS */
 SELECT DISTINCT
 g.idpayments,
-b.NEARSOL_ID as 'idemployees', 
+COALESCE(hr_processes.notes, b.NEARSOL_ID) as 'idemployees', 
 a.client_id,
 UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) as 'NombreDelTrabajador', 
 IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS 'Jornada',  
@@ -228,12 +229,13 @@ INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN debits i ON (g.idpayments = i.id_payment)
 INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
 INNER JOIN clients e ON (d.id_client = e.idclients)
+LEFT JOIN hr_processes ON (hr_processes.id_employee = a.idemployees AND hr_processes.id_type = 16 AND (hr_processes.date BETWEEN h.start AND h.end) LIMIT 1)
 AND h.idperiods = $AID_Period
 UNION 
 /* DEBITOS SOLO DUPLICADOS */
 SELECT DISTINCT
 g.idpayments,
-b.NEARSOL_ID as 'idemployees', 
+COALESCE(hr_processes.notes, b.NEARSOL_ID) as 'idemployees', 
 a.client_id,
 UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) as 'NombreDelTrabajador', 
 IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS 'Jornada',  
@@ -301,6 +303,7 @@ INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN debits i ON (g.idpayments = i.id_payment)
 INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
 INNER JOIN clients e ON (d.id_client = e.idclients)
+LEFT JOIN hr_processes ON (hr_processes.id_employee = a.idemployees AND hr_processes.id_type = 16 AND (hr_processes.date BETWEEN h.start AND h.end) LIMIT 1)
 INNER JOIN (SELECT (z1.amount + RAND() * 0.0005) AS 'amount', z1.id_payment from debits z1 INNER JOIN debits z2 on (z1.id_payment = z2.id_payment) where z1.type = 'Descuento IGSS'
             AND z2.type = 'ISR' and z1.amount = z2.amount) j on (g.idpayments = j.id_payment)
 AND h.idperiods = $AID_Period
@@ -308,7 +311,7 @@ UNION
 /* TODOS LOS EMPLEADOS QUE NO POSEEN CRÉDITOS NI DEBITOS. */
 SELECT DISTINCT
   g.idpayments,
-  b.NEARSOL_ID as 'idemployees', 
+  COALESCE(hr_processes.notes, b.NEARSOL_ID) as 'idemployees', 
   a.client_id,
   UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) as NombreDelTrabajador, 
   IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS JORNADA,  
@@ -375,12 +378,13 @@ INNER JOIN payments g on (g.id_employee = a.idemployees and g.id_paymentmethod =
 INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
 INNER JOIN clients e ON (d.id_client = e.idclients)
+LEFT JOIN hr_processes ON (hr_processes.id_employee = a.idemployees AND hr_processes.id_type = 16 AND (hr_processes.date BETWEEN h.start AND h.end) LIMIT 1)
 AND h.idperiods = $AID_Period
 UNION
 /* CREDITOS BONIFICACION DECRETO*/
 SELECT DISTINCT
   g.idpayments,
-  b.NEARSOL_ID as 'idemployees', 
+  COALESCE(hr_processes.notes, b.NEARSOL_ID) as 'idemployees', 
   a.client_id,
   UPPER(CONCAT(TRIM(c.first_name), ' ', TRIM(c.second_name), ' ', TRIM(c.first_lastname), ' ', TRIM(c.second_lastname))) as NombreDelTrabajador, 
   IF (e.idclients = 2, 'ADMINISTRATION', 'OPERATIONS') AS JORNADA,  
@@ -448,6 +452,7 @@ INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits i on (g.idpayments = i.id_payment)
 INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
 INNER JOIN clients e ON (d.id_client = e.idclients)
+LEFT JOIN hr_processes ON (hr_processes.id_employee = a.idemployees AND hr_processes.id_type = 16 AND (hr_processes.date BETWEEN h.start AND h.end) LIMIT 1)
 AND h.idperiods = $AID_Period  
 and i.type='Bonificacion Decreto'
 ) A1 
