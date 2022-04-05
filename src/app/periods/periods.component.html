@@ -111,6 +111,10 @@
                 title="Get IGSS" data-toggle="modal" data-target="#setPatrono" *ngIf="period.status == '0' && !closing_import"><i
                     class="fas fa-file-contract"></i></button>
             <!-------------------------------------EXPORT REPORTS------------------------------------------------------------->
+            <!-------------------------------------SETTINGS------------------------------------------------------------->
+            <button class="btn btn-outline-secondary" style="margin-left:5px" data-toggle="tooltip" data-placement="top"
+                title="Settings" data-toggle="modal" data-target="#settings"><i class="fa-solid fa-gears"></i></button>
+            <!-------------------------------------SETTINGS------------------------------------------------------------->
             <!-------------------------------------PAYROLL VALUES------------------------------------------------------------->
             <button class="btn btn-outline-secondary" *ngIf="closing_import && !loading_import && !save_import" (click)="clearData()"><i class="fas fa-times"></i></button>
             <button class="btn btn-outline-secondary" *ngIf="closing_import && !loading_import && !save_import" style="margin-left: 5px;" (click)="setPayrollValues_import()"><i class="fas fa-check"></i></button>
@@ -141,7 +145,7 @@
                             {{ acc.name }}
                         </a>
                         <a id="a" class="list-group-item list-group-item-action active d-flex justify-content-between" [tabindex]="acc.idaccounts"
-                          *ngIf="selectedAccount.idaccounts == acc.idaccounts"
+                          *ngIf="selectedAccount.idaccounts == acc.idaccounts && acc.payrollCount > 0"
                           style="cursor: pointer;" (click)="setAccount_sh(acc)">
                           {{ acc.name }}
                           <i class="fa fa-trash pointer" [tabindex]="acc.idaccounts" (click)="delPayrollAccount(acc)"
@@ -185,15 +189,18 @@
                     <th>TREASURE HUNT</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let pys of payrollvalues" [ngClass]="{'table-success':pys.status == '1', 'table-danger':pys.status == '0', 'table-warning':pys.status == '3'}">
+                    <tr *ngFor="let pys of sortPayrollValues()" [ngClass]="{'table-success':pys.status == '1', 'table-danger':pys.status == '0', 'table-warning':pys.status == '3'}">
                         <td>{{pys.client_id}}</td>
                         <td>{{pys.nearsol_id}}</td>
                         <td>{{pys.agent_name}}</td>
-                        <td *ngIf="pys.status == '1'">{{selectedAccount.name}}</td>
-                        <td *ngIf="pys.status == '3'">
-                            <select [(ngModel)]="pys.account_name" (change)="setAccountDis(pys, $event.target.value)">
-                                <option *ngFor="let pym of filterUnique(pys)">{{pym}}</option>
+                        <td *ngIf="pys.status == '1' && !loadAll">{{selectedAccount.name}}</td>
+                        <td *ngIf="pys.status == '3' && !loadAll">
+                            <select [(ngModel)]="currentPym" (change)="setAccountDis(pys, $event.target.value)">
+                                <option *ngFor="let pym of filterUnique(pys)" [ngValue]="pym">{{getAccountName(pym.id_account_py).name}}</option>
                             </select>
+                        </td>
+                        <td *ngIf="(pys.status == '3' && loadAll) || (pys.status == '1' && loadAll)">
+                            {{pys.account_name}}
                         </td>
                         <td *ngIf="pys.status == '0'"></td>
                         <td>{{pys.discounted_days}}</td>
@@ -596,6 +603,57 @@
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     </button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" *ngIf="!working">Preview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------------------------------------------- SETTINGS -------------------------------------------------------------------->
+<div class="modal fade" id="settings" tabindex="-1" aria-labelledby="uploadPayrollValuesLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="st-uploadPayrollValuesLabel">SETTINGS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <table class="table tbl" style="margin-left:10%;width:80%">
+                        <tr>
+                            <td style="padding:0px">SHOW TERMINATIONS</td>
+                            <td style="padding:0px"><input type="checkbox" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0px">AUTO GENERATE APPORTIONMENTS</td>
+                            <td style="padding:0px"><input type="checkbox" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0px">AUTO GENERATE LEGAL DISCOUNTS</td>
+                            <td style="padding:0px"><input type="checkbox" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0px">AUTO GENERATE ADJUSTMENTS</td>
+                            <td style="padding:0px"><input type="checkbox" class="form-control"></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0px">RECALCULATE BONUSES</td>
+                            <td style="padding:0px"><input type="checkbox" class="form-control"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex justify-content-left">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (mousedown)="cancelImport()">Cancel</button>
+                </div>
+                <div class="d-flex justify-content-right row">
+                    <button type="button" class="btn bnt-primary" disabled *ngIf="closing_import && working">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" (mousedown)="saveSettings()" *ngIf="!working">SAVE</button>
                 </div>
             </div>
         </div>

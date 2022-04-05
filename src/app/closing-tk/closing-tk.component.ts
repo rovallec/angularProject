@@ -5,7 +5,7 @@ import { ApiService } from '../api.service';
 import { employees, hrProcess } from '../fullProcess';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, credits, disciplinary_processes, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, timekeeping_adjustments, tk_import, vacations } from '../process_templates';
+import { accounts, attendance_accounts, attendences, attendences_adjustment, clients, credits, disciplinary_processes, holiday, leaves, ot_manage, paid_attendances, payments, payroll_resume, payroll_values, payroll_values_gt, periods, terminations, timekeeping_adjustments, tk_import, vacations } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { BADFLAGS, DESTRUCTION } from 'dns';
 import { exit } from 'process';
@@ -228,6 +228,7 @@ export class ClosingTkComponent implements OnInit {
             let rs: payroll_resume = new payroll_resume;
             this.step = "Calculating discounts";
             this.payroll_values = [];
+            
             this.apiServices.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               this.apiServices.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
                 this.apiServices.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
@@ -301,6 +302,17 @@ export class ClosingTkComponent implements OnInit {
                                   activeLeave = false;
                                   activeSuspension = false;
                                   mother_father_day = false;
+                                  let isHld:boolean = false;
+                                  this.apiServices.getHolidays({srt:""}).subscribe((holiday_db:holiday[])=>{
+
+                                  holiday_db.forEach(hl=>{
+                                    if(hl.id_account == this.selectedAccount.idaccounts){
+                                      console.log(hl);
+                                      if(hl.date == attendance.date){
+                                        isHld = true;
+                                      }
+                                    }
+                                  })
 
                                   if (!isNullOrUndefined(trm.valid_from)) {
                                     if (new Date(trm.valid_from).getTime() <= new Date(attendance.date).getTime()) {
@@ -418,7 +430,8 @@ export class ClosingTkComponent implements OnInit {
                                             }
                                           }
                                         }
-                                        if (attendance.date != (new Date().getFullYear() + "-01-01") && attendance.date != (new Date().getFullYear() + "-06-28") && attendance.date != (new Date().getFullYear() + "-04-01") && attendance.date != (new Date().getFullYear() + "-04-02") && attendance.date != (new Date().getFullYear() + "-04-03") && attendance.date != (new Date().getFullYear() + "-05-01") && !mother_father_day) {
+
+                                        if (!isHld) {
                                           if (Number(attendance.scheduled) > 0) {
                                             if (Number(attendance.worked_time) == 0) {
                                               attendance.balance = "NS";
@@ -566,6 +579,7 @@ export class ClosingTkComponent implements OnInit {
                                   } else {
                                     rs.other_hrs = (Number(rs.other_hrs) + Number(justification.amount)).toFixed(3);
                                   }
+                                })
                                 });
 
                                 let payroll_value: payroll_values_gt = new payroll_values_gt;
@@ -752,7 +766,7 @@ export class ClosingTkComponent implements OnInit {
                   })
                 })
               })
-            })
+          })
             if (pay.account == this.selectedAccount.idaccounts || pay.id_account_py == this.selectedAccount.idaccounts) {
               cnt = cnt + 1;
             }
