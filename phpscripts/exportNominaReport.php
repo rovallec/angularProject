@@ -451,8 +451,8 @@ INNER JOIN periods h ON (g.id_period = h.idperiods)
 INNER JOIN credits i on (g.idpayments = i.id_payment)
 INNER JOIN accounts d ON (COALESCE(g.id_account_py, a.id_account) = d.idaccounts)
 INNER JOIN clients e ON (d.id_client = e.idclients) AND h.idperiods = $AID_Period
-WHERE (a.termination_date BETWEEN h.start AND h.end) OR (a.active = 1)
 and i.type='Bonificacion Decreto'
+WHERE (a.termination_date BETWEEN h.start AND h.end) OR (a.active = 1)
 ) A1 
 GROUP BY A1.idpayments,A1.idemployees,A1.client_id,A1.NombreDelTrabajador,A1.JORNADA,A1.SECCION,A1.bank,
 A1.`Transferencia/Cheque`,
