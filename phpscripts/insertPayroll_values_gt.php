@@ -53,7 +53,7 @@ for ($i=0; $i < (count($request)); $i++) {
 if(mysqli_query($con,$sql)){
     echo("1");
 }else{
-    $str = $sql2 . "|" . mysqli_error($con) . " | " . $sql;
-    echo($sql);
+    $str = $sql2 . "|" . mysqli_error($con);
+    echo($str);
 }
 ?>
