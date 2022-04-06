@@ -612,14 +612,6 @@ export class PeriodsComponent implements OnInit {
       this.payments.forEach(py => {
         this.apiService.setPayment(py).subscribe((str_3: string) => {
           this.progress = this.progress + 1;
-          if(this.max_progress == this.progress){
-            this.progress = 0;
-            this.max_progress = 0;
-            this.working = false;
-            this.importActive = false;
-            this.showPayments = true;
-            this.completed = true;
-          }
           if (String(str_3).split("|")[0] == "0") {
             throw new Error('Error updating Payments');
           }
@@ -633,27 +625,11 @@ export class PeriodsComponent implements OnInit {
         }
         this.apiService.updateServices(service).subscribe((str: string) => {
           this.progress = this.progress + 1;
-          if(this.max_progress == this.progress){
-            this.progress = 0;
-            this.max_progress = 0;
-            this.working = false;
-            this.importActive = false;
-            this.showPayments = true;
-            this.completed = true;
-          }
          });
       });
       this.global_judicials.forEach(judicial => {
         this.apiService.updateJudicials(judicial).subscribe((str_r: string) => {
           this.progress = this.progress + 1;
-          if(this.max_progress == this.progress){
-            this.progress = 0;
-            this.max_progress = 0;
-            this.working = false;
-            this.importActive = false;
-            this.showPayments = true;
-            this.completed = true;
-          }
           if (str_r.split("|")[0] == '0') {
             throw new Error('Error updating Legal Deductions');
           }
@@ -661,7 +637,7 @@ export class PeriodsComponent implements OnInit {
       })
       this.apiService.setCloseActualPeriods({ id_period: this.period.idperiods }).subscribe((str: string) => {
         this.progress = this.progress + 1;
-        if(this.progress >= this.max_progress ){
+        if (this.progress >= this.max_progress ) {
           this.progress = 0;
           this.max_progress = 0;
           this.working = false;
@@ -847,14 +823,6 @@ export class PeriodsComponent implements OnInit {
           cred.amount = Number(cred.amount).toFixed(2);
           this.apiService.insertDebits(cred).subscribe((str: string) => { 
             this.progress = this.progress + 1;
-            if(this.max_progress == this.progress){
-              this.progress = 0;
-              this.max_progress = 0;
-              this.working = false;
-              this.importActive = false;
-              this.showPayments = true;
-              this.completed = true;
-            }
           });
         }
       });
@@ -865,14 +833,6 @@ export class PeriodsComponent implements OnInit {
             cred.amount = Number(cred.amount).toFixed(2);
             this.apiService.insertCredits(cred).subscribe((str: string) => { 
               this.progress = this.progress + 1;
-              if(this.max_progress == this.progress){
-                this.progress = 0;
-                this.max_progress = 0;
-                this.working = false;
-                this.importActive = false;
-                this.showPayments = true;
-                this.completed = true;
-              }
             });
           }
         })
