@@ -661,7 +661,7 @@ export class PeriodsComponent implements OnInit {
       })
       this.apiService.setCloseActualPeriods({ id_period: this.period.idperiods }).subscribe((str: string) => {
         this.progress = this.progress + 1;
-        if(this.max_progress == this.progress){
+        if(this.progress >= this.max_progress ){
           this.progress = 0;
           this.max_progress = 0;
           this.working = false;
