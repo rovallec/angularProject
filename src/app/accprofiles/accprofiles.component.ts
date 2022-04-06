@@ -174,7 +174,7 @@ export class AccprofilesComponent implements OnInit {
             this.selectedYear = this.years[0];
           }
           this.months.forEach(month => {
-            if (month == addMonth && this.years[0] == element.start.split('-')[0]) {
+            if ((month == addMonth && this.years[0] == element.start.split('-')[0]) || (month == addMonth && this.years[0] != element.start.split('-')[0])) {
               addthisMonth = false;
             }
           })

@@ -1374,6 +1374,7 @@ export class payroll_values_gt{
     adj_ot:string = null;
     adj_holidays:string = null;
     status:string;
+    details:string;
     constructor(){
         this.total_days = null;
         this.idpayroll_values = null;
@@ -1398,6 +1399,7 @@ export class payroll_values_gt{
         this.next_seventh = null;
         this.adjustments = null;
         this.status = null;
+        this.details = null;
     }
 }
 
