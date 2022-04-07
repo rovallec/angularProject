@@ -431,7 +431,7 @@ export class ClosingTkComponent implements OnInit {
                                           }
                                         }
 
-                                        if (!isHld) {
+                                        if (!isHld && !mother_father_day) {
                                           if (Number(attendance.scheduled) > 0) {
                                             if (Number(attendance.worked_time) == 0) {
                                               attendance.balance = "NS";
