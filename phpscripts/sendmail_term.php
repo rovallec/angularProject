@@ -88,8 +88,37 @@ if($result = mysqli_query($con, $sql))
 		} else if ($account_name == 'Arbonne') {
 			$agent_email = 'itab.terms@nearsol.gt';
 			$agent_name = 'Arbonne Terms';
-		} else {
-			//Default
+		} else if ($account_name == 'DreamTrip') {
+			$agent_email = 'itdt.terms@nearsol.gt';
+			$agent_name = 'DreamTrip Terms';
+		} else if($account_name == 'TMobile' || 
+			$account_name == 'Dishnetwork' ||
+			$account_name == 'OCA' ||
+			$account_name == 'Shutterfly' ||
+			$account_name == 'TXU' ||
+			$account_name == 'Comcast' ||
+			$account_name == 'Badcock' ||
+			$account_name == 'Calvary' ||
+			$account_name == 'Auditoria Sprint' ||
+			$account_name == 'Compliance' ||
+			$account_name == 'Lifetouch' ||
+			$account_name == 'Peco' ||
+			$account_name == 'QA' ||
+			$account_name == 'Staff Supervisor' ||
+			$account_name == 'Turnstile' ||
+			$account_name == 'Work force' ||
+			$account_name == '3rd. Party Comcast' ||
+			$account_name == 'Nearsol WFM' ||
+			$account_name == 'T-Mobile' ||
+			$account_name == 'National Grid' ||
+			$account_name == 'TXU Staff' ||
+			$account_name == 'Entergy Pre-Collect' ||
+			$account_name == 'RCM Health Care' ||
+			$account_name == 'Duke' ||
+			$account_name == 'Reliant Energy' ||
+			$account_name == 'Pepco' ||
+			$account_name == 'ACE' ||
+			$account_name == 'Prosper'){
 			$agent_email = 'agent-terms@nearsol.gt';
 			$agent_name = 'Agent Terms';
 		}
@@ -97,7 +126,7 @@ if($result = mysqli_query($con, $sql))
 
 		$mail->IsHTML(true);
 		$mail->AddAddress($agent_email, $agent_name);
-		$mail->SetFrom("tickets@nearsol.us", "MiNearsol N.B.P");
+		$mail->SetFrom("tickets@nearsol.us", "MiNearsol N.B.P " . $account_name);
 		$mail->Subject = "N.B.P $first_name $second_name $first_lastname $second_lastname";
 		$content = "<meta http-equiv='Content-Type'  content='text/html charset=UTF-8' /><body><table style='margin-left:10px;border-collapse: collapse; border: black 2px solid; width: 50%;text-align: center;'><tr style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'><td colspan='2'><u>NOTIFICACION DE BAJA DE PERSONAL</u></td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>NOMBRE / NAME</td><td style='border: solid black 1px'>$first_name $second_name $first_lastname $second_lastname</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>COD. DE EMPLEADO</td><td style='border: solid black 1px'>$nearsol_id</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>PUESTO / JOB</td><td style='border: solid black 1px'>$job</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>CUENTA / ACCOUNT</td><td style='border: solid black 1px'>$account_name</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>EMPRESA</td><td style='border: solid black 1px'>$society</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>FECHA DE INGRESO</td><td style='border: solid black 1px'>$date_joining</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>FECHA DE BAJA</td><td style='border: solid black 1px; background: #ffc000; font-weight: bolder;'>$valid_from</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>MOTIVO / REASON</td><td style='border: solid black 1px'>$reason</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>TARJETA DE ACCESSO</td><td style='border: solid black 1px'>$access_card</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'>HEADSET</td><td style='border: solid black 1px'>$headsets</td></tr><tr style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'><td colspan='2'><u>FACILITIES</u></td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Control De Acceso</td><td style='border: solid black 1px'>Eliminar Accesos</td></tr><tr style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'><td colspan='2'><u>CONTABILIDAD Y PAYROLL</u></td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Razon</td><td style='border: solid black 1px'>$motive</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Fecha entrega cheque</td><td style='border: solid black 1px'>$bank_check</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Vacaciones Gozadas</td><td style='border: solid black 1px'>$vacations dias</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Notificacion al seguro</td><td style='border: solid black 1px'>$insurance</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Supervisor</td><td style='border: solid black 1px'>$supervisor</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Periodo A Pagar</td><td style='border: solid black 1px'>$period_to_pay</td></tr><tr style='border: solid black 1px; background: #0070c0; font-weight: bolder;color:white'><td colspan='2'><u>RECLUTAMIENTO</u></td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Reclutador/Operaciones</td><td style='border: solid black 1px'>$first_interview</td></tr><tr style='border: solid black 1px'><td style='border: solid black 1px; background: #0070c0; font-weight: bolder; color:white'>Recontratable</td><td style='border: solid black 1px'>$rehireable</td></tr></table></body>";
 

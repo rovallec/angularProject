@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { profiles, profiles_family } from '../profiles';
 import { ApiService } from '../api.service';
 import { ActivatedRoute } from '@angular/router';
-import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal, file_info, alertModal, hr_process } from '../process_templates';
+import { attendences, attendences_adjustment, vacations, leaves, waves_template, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, accounts, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, credits, periods, payments, Fecha, vacyear, leavesAction, contractCheck, patronal, file_info, alertModal, hr_process, holiday } from '../process_templates';
 import { AuthServiceService } from '../auth-service.service';
 import { employees, fullPreapproval, hrProcess, payment_methods, queryDoc_Proc } from '../fullProcess';
 import { users } from '../users';
@@ -429,6 +429,17 @@ export class HrprofilesComponent implements OnInit {
                   let activeVacation: boolean = false;
                   let activeLeave: boolean = false;
                   let mother_father_day: boolean = false;
+                  let isHld:boolean = false;
+                  this.apiService.getHolidays({srt:""}).subscribe((holiday_db:holiday[])=>{
+
+                    holiday_db.forEach(hl=>{
+                      if(hl.id_account == this.workingEmployee.id_account){
+                        console.log(hl);
+                        if(hl.date == atte.date){
+                          isHld = true;
+                        }
+                      }
+                    })
 
                   if (!isNullOrUndefined(trm.valid_from)) {
                     if (new Date(trm.valid_from).getTime() <= new Date(atte.date).getTime()) {
@@ -491,7 +502,7 @@ export class HrprofilesComponent implements OnInit {
                           }
                         }
                       }
-                      if (atte.date != (new Date().getFullYear() + "-01-01") && atte.date != (new Date().getFullYear() + "-06-28") && atte.date != (new Date().getFullYear() + "-04-01") && atte.date != (new Date().getFullYear() + "-04-02") && atte.date != (new Date().getFullYear() + "-04-03") && atte.date != (new Date().getFullYear() + "-05-01") && !mother_father_day) {
+                      if (!isHld && !mother_father_day) {
                         if (Number(atte.scheduled) > 0) {
                           if (Number(atte.worked_time) == 0) {
                             atte.balance = "NS";
@@ -525,6 +536,7 @@ export class HrprofilesComponent implements OnInit {
                       }
                     }
                   }
+                })
                 })
                 this.getAttAdjustemt();
               })
