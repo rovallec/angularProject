@@ -5,7 +5,7 @@ import { ApiService } from '../api.service';
 import { AuthServiceService } from '../auth-service.service';
 import { employees } from '../fullProcess';
 import { process } from '../process';
-import { attendences, attendences_adjustment, change_id, disciplinary_processes, leaves, paid_attendances, payments, periods, process_templates, terminations, vacations } from '../process_templates';
+import { attendences, attendences_adjustment, change_id, disciplinary_processes, holiday, leaves, paid_attendances, payments, periods, process_templates, terminations, vacations } from '../process_templates';
 import { profiles } from '../profiles';
 
 @Component({
@@ -161,6 +161,7 @@ export class PyprofilesComponent implements OnInit {
               this.apiService.getAttPeriod({ id: emp[0].idemployees, date_1: strt, date_2: nd }).subscribe((att: attendences[]) => {
                 this.apiService.getAttAdjustments({ id: emp[0].idemployees }).subscribe((ad: attendences_adjustment[]) => {
                   this.apiService.getTermdt(emp[0]).subscribe((trm: terminations) => {
+                    this.apiService.getHolidays({a:'a'}).subscribe((hlds:holiday[])=>{
                     this.vacations = vac;
                     this.dps = dp;
                     this.leaves = leave;
@@ -241,6 +242,13 @@ export class PyprofilesComponent implements OnInit {
                             activeLeave = false;
                             activeSuspension = false;
                             mother_father_day = false;
+                            let isHld:boolean = false;
+                          
+                            hlds.forEach(_holiday=>{
+                              if(_holiday.id_account == emp[0].id_account && _holiday.date == attendance.date){
+                                isHld = true;
+                              }
+                            });
 
 
                             if (!isNullOrUndefined(trm.valid_from)) {
@@ -495,6 +503,7 @@ export class PyprofilesComponent implements OnInit {
                     })
                   })
                   })
+                })
                 })
               })
             })
