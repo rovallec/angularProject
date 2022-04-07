@@ -91,8 +91,34 @@ if($result = mysqli_query($con, $sql))
 		} else if ($account_name == 'DreamTrip') {
 			$agent_email = 'itdt.terms@nearsol.gt';
 			$agent_name = 'DreamTrip Terms';
-		} else {
-			//Default
+		} else if($account_name == 'TMobile' || 
+			$account_name == 'Dishnetwork' ||
+			$account_name == 'OCA' ||
+			$account_name == 'Shutterfly' ||
+			$account_name == 'TXU' ||
+			$account_name == 'Comcast' ||
+			$account_name == 'Badcock' ||
+			$account_name == 'Calvary' ||
+			$account_name == 'Auditoria Sprint' ||
+			$account_name == 'Compliance' ||
+			$account_name == 'Lifetouch' ||
+			$account_name == 'Peco' ||
+			$account_name == 'QA' ||
+			$account_name == 'Staff Supervisor' ||
+			$account_name == 'Turnstile' ||
+			$account_name == 'Work force' ||
+			$account_name == '3rd. Party Comcast' ||
+			$account_name == 'Nearsol WFM' ||
+			$account_name == 'T-Mobile' ||
+			$account_name == 'National Grid' ||
+			$account_name == 'TXU Staff' ||
+			$account_name == 'Entergy Pre-Collect' ||
+			$account_name == 'RCM Health Care' ||
+			$account_name == 'Duke' ||
+			$account_name == 'Reliant Energy' ||
+			$account_name == 'Pepco' ||
+			$account_name == 'ACE' ||
+			$account_name == 'Prosper'){
 			$agent_email = 'agent-terms@nearsol.gt';
 			$agent_name = 'Agent Terms';
 		}
