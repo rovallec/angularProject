@@ -228,7 +228,6 @@ export class ClosingTkComponent implements OnInit {
             let rs: payroll_resume = new payroll_resume;
             this.step = "Calculating discounts";
             this.payroll_values = [];
-            
             this.apiServices.getSearchEmployees({ dp: 'all', filter: 'idemployees', value: pay.id_employee, rol:this.authUser.getAuthusr().id_role }).subscribe((emp: employees[]) => {
               this.apiServices.getVacations({ id: emp[0].id_profile }).subscribe((vac: vacations[]) => {
                 this.apiServices.getLeaves({ id: emp[0].id_profile }).subscribe((leave: leaves[]) => {
@@ -241,6 +240,7 @@ export class ClosingTkComponent implements OnInit {
                           ot_manager.id_period = this.actualPeriod.idperiods;
                           this.apiServices.getApprovedOt(ot_manager).subscribe((ot_mng: ot_manage) => {
                             this.apiServices.getAttAdjustments({ id: "id|p;" + emp[0].idemployees + "|'" + this.actualPeriod.start + "' AND '" + this.actualPeriod.end + "'" }).subscribe((just: attendences_adjustment[]) => {
+                              this.apiServices.getHolidays({a:'a'}).subscribe((hlds:holiday[])=>{
 
                               let prov_period: periods = new periods;
                               let dt: Date = new Date(this.actualPeriod.start);
@@ -303,14 +303,10 @@ export class ClosingTkComponent implements OnInit {
                                   activeSuspension = false;
                                   mother_father_day = false;
                                   let isHld:boolean = false;
-                                  this.apiServices.getHolidays({srt:""}).subscribe((holiday_db:holiday[])=>{
 
-                                  holiday_db.forEach(hl=>{
-                                    if(hl.id_account == this.selectedAccount.idaccounts){
-                                      console.log(hl);
-                                      if(hl.date == attendance.date){
-                                        isHld = true;
-                                      }
+                                  hlds.forEach(_holiday=>{
+                                    if(_holiday.id_account == emp[0].id_account && _holiday.date == attendance.date){
+                                      isHld = true;
                                     }
                                   })
 
@@ -430,7 +426,7 @@ export class ClosingTkComponent implements OnInit {
                                             }
                                           }
                                         }
-
+                                        
                                         if (!isHld && !mother_father_day) {
                                           if (Number(attendance.scheduled) > 0) {
                                             if (Number(attendance.worked_time) == 0) {
@@ -579,7 +575,6 @@ export class ClosingTkComponent implements OnInit {
                                   } else {
                                     rs.other_hrs = (Number(rs.other_hrs) + Number(justification.amount)).toFixed(3);
                                   }
-                                })
                                 });
 
                                 let payroll_value: payroll_values_gt = new payroll_values_gt;
@@ -760,13 +755,14 @@ export class ClosingTkComponent implements OnInit {
                               })
                             })
                           })
+                          })
                         })
                       })
                     })
                   })
                 })
               })
-          })
+            })
             if (pay.account == this.selectedAccount.idaccounts || pay.id_account_py == this.selectedAccount.idaccounts) {
               cnt = cnt + 1;
             }

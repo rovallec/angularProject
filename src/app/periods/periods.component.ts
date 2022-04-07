@@ -150,21 +150,26 @@ export class PeriodsComponent implements OnInit {
 
   getAccounts() {
     this.accounts = [];
-    this.apiService.getAccounts().subscribe((acc: accountsCount[]) => {
-      this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
-        acc.filter(a => a.id_client == acc[0].id_client).forEach(account => {
-          if(!isNullOrUndefined(pv)){
-            account.payrollCount = pv.filter(f=>f.id_account == account.idaccounts).length;
-          }else{
-            account.payrollCount = 0;
-          }
-          if(this.accounts.filter(t=>t.idaccounts == account.idaccounts).length == 0){
-            this.accounts.push(account);
-          }
+    this.apiService.getClients().subscribe((cls:clients[])=>{
+      if(isNullOrUndefined(this.selectedClient)){
+        this.selectedClient = cls[0].idclients;
+      }
+      this.apiService.getAccounts().subscribe((acc: accountsCount[]) => {
+        this.apiService.getPayroll_values_gt(this.period).subscribe((pv: payroll_values_gt[]) => {
+          acc.filter(a => a.id_client == this.selectedClient).forEach(account => {
+            if(!isNullOrUndefined(pv)){
+              account.payrollCount = pv.filter(f=>f.id_account == account.idaccounts).length;
+            }else{
+              account.payrollCount = 0;
+            }
+            if(this.accounts.filter(t=>t.idaccounts == account.idaccounts).length == 0){
+              this.accounts.push(account);
+            }
+          });
+          this.setAccount_sh(this.accounts[0]);
         });
-        this.setAccount_sh(this.accounts[0]);
       });
-    });
+    })
   }
 
   getDeductions() {
@@ -920,7 +925,6 @@ export class PeriodsComponent implements OnInit {
 
   setClient(cl: string) {
     this.selectedClient = cl;
-    this.accounts = [];
     this.getAccounts();
   }
 
