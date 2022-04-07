@@ -83,13 +83,13 @@ if($result = mysqli_query($con, $sql))
 		$mail->Username   = "tickets@nearsol.us";
 
 		if ($account_name == 'Zero Variance') {
-			$agent_email = 'raul.ovalle@nearsol.gt';
+			$agent_email = 'itzv.terms@nearsol.gt';
 			$agent_name = 'Zero Variance Terms';
 		} else if ($account_name == 'Arbonne') {
-			$agent_email = 'raul.ovalle@nearsol.gt';
+			$agent_email = 'itab.terms@nearsol.gt';
 			$agent_name = 'Arbonne Terms';
 		} else if ($account_name == 'DreamTrip') {
-			$agent_email = 'raul.ovalle@nearsol.gt';
+			$agent_email = 'itdt.terms@nearsol.gt';
 			$agent_name = 'DreamTrip Terms';
 		} else if($account_name == 'TMobile' || 
 			$account_name == 'Dishnetwork' ||
@@ -119,7 +119,7 @@ if($result = mysqli_query($con, $sql))
 			$account_name == 'Pepco' ||
 			$account_name == 'ACE' ||
 			$account_name == 'Prosper'){
-			$agent_email = 'raul.ovalle@nearsol.gt';
+			$agent_email = 'agent-terms@nearsol.gt';
 			$agent_name = 'Agent Terms';
 		}
 
