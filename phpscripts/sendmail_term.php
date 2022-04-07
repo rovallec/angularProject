@@ -88,6 +88,9 @@ if($result = mysqli_query($con, $sql))
 		} else if ($account_name == 'Arbonne') {
 			$agent_email = 'itab.terms@nearsol.gt';
 			$agent_name = 'Arbonne Terms';
+		} else if ($account_name == 'DreamTrip') {
+			$agent_email = 'itdt.terms@nearsol.gt';
+			$agent_name = 'DreamTrip Terms';
 		} else {
 			//Default
 			$agent_email = 'agent-terms@nearsol.gt';
