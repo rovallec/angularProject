@@ -610,7 +610,7 @@ export class PeriodsComponent implements OnInit {
     this.completed = false;
     this.importActive = false;
     this.showPayments = false;
-    this.max_progress = this.global_services.length + this.global_judicials.length + this.payments.length + 1;
+    this.max_progress = this.global_services.length + this.global_judicials.length + this.payments.length + 1 + this.global_credits.length + this.global_debits.length;
     this.progress = 1;
     try {
       console.log(this.payments.length)
