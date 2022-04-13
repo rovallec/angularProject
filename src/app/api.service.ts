@@ -136,11 +136,7 @@ getFamilies(profile:profiles):Observable<profiles_family[]>{
 }
 
 authUsr(users:users):Observable<users[]>{
-  try {
-    return this.httpClient.post<users[]>(`http://181.114.12.81/phpscripts/login.php`, users); 
-  } catch (error) {
-    return this.httpClient.post<users[]>(`${this.PHP_API_SERVER}/phpscripts/login.php`, users);
-  }
+  return this.httpClient.post<users[]>(`${this.PHP_API_SERVER}/phpscripts/login.php`, users);
 }
 
 insProcess(proc:process):Observable<number>{
