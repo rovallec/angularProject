@@ -9,7 +9,7 @@ import { AuthServiceService } from '../auth-service.service';
 import { employees, payment_methods, hrProcess } from '../fullProcess';
 import { AuthGuard } from '../guard/auth-guard.service';
 import { process } from '../process';
-import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha, accounts, alertModal } from '../process_templates';
+import { advances_acc, attendences, attendences_adjustment, credits, debits, disciplinary_processes, judicials, leaves, ot_manage, payments, periods, services, terminations, vacations, Fecha, accounts, alertModal, judicialsByEmployee, hr_process } from '../process_templates';
 import { profiles } from '../profiles';
 import { Observable } from "rxjs";
 import { async } from '@angular/core/testing';
@@ -84,17 +84,20 @@ export class AccprofilesComponent implements OnInit {
   activePaymentMethodpy: string = null;
   deductionsType: string[] = [];
   acreditType: string = '0';
-  activeNewPayment:payments = new payments;
-  allAccounts:accounts[] = [];
-  allPeriods:periods[] = [];
-  editDeduction:boolean = false;
-  services:services[] = [];
-  newService:services = new services;
-  recorded_service:boolean = false;
-  alertMod:alertModal = new alertModal;
-  ele:Element;
-  repeateService:string = "DISABLE";
-  serviceTimes:number = 0;
+  activeNewPayment: payments = new payments;
+  allAccounts: accounts[] = [];
+  allPeriods: periods[] = [];
+  editDeduction: boolean = false;
+  services: services[] = [];
+  newService: services = new services;
+  recorded_service: boolean = false;
+  alertMod: alertModal = new alertModal;
+  ele: Element;
+  repeateService: string = "DISABLE";
+  serviceTimes: number = 0;
+  judicials: judicialsByEmployee[] = [];
+  newJudicials: judicialsByEmployee = new judicialsByEmployee;
+  actuallProc: hr_process = new hr_process;
 
   constructor(public apiService: ApiService, public route: ActivatedRoute, public authUser: AuthServiceService) { }
 
@@ -114,13 +117,13 @@ export class AccprofilesComponent implements OnInit {
       isChrome = true;
     }
 
-    this.apiService.getAccounts().subscribe((acc:accounts[])=>{
+    this.apiService.getAccounts().subscribe((acc: accounts[]) => {
       this.allAccounts = acc;
     })
 
     this.employe_id = this.route.snapshot.paramMap.get('id');
 
-    this.apiService.getServices({id:this.employe_id}).subscribe((sr:services[])=>{
+    this.apiService.getServices({ id: this.employe_id }).subscribe((sr: services[]) => {
       this.services = sr
     })
 
@@ -198,6 +201,8 @@ export class AccprofilesComponent implements OnInit {
           }
         })
       })
+
+      this.getJudicialsByEmployee();
     })
   }
 
@@ -337,7 +342,7 @@ export class AccprofilesComponent implements OnInit {
               })
             }
             this.insertNew = false;
-          }else{
+          } else {
             window.alert('Insert records is only available for open periods');
           }
         }
@@ -1031,28 +1036,28 @@ export class AccprofilesComponent implements OnInit {
     this.cancelDeduction();
   }
 
-  setNewPayment(){
+  setNewPayment() {
     this.activeNewPayment = new payments;
     this.activeNewPayment.idpayments = this.authUser.getAuthusr().iduser;
     this.activeNewPayment.id_employee = this.employe_id;
   }
 
-  createPayment(){
-    let create:boolean = true;
-    this.payments.forEach(pay=>{
-      if((pay.id_period == this.activeNewPayment.id_period && pay.id_account_py == this.activeNewPayment.id_account_py) || (isNullOrUndefined(pay.id_account_py) && this.activeNewPayment.id_account_py == this.employee.id_account) && create){
+  createPayment() {
+    let create: boolean = true;
+    this.payments.forEach(pay => {
+      if ((pay.id_period == this.activeNewPayment.id_period && pay.id_account_py == this.activeNewPayment.id_account_py) || (isNullOrUndefined(pay.id_account_py) && this.activeNewPayment.id_account_py == this.employee.id_account) && create) {
         window.alert('An assiociated payment for this employee on that period already exist');
         create = false;
       }
     })
-    if(create){
-      if(this.activeNewPayment.id_account_py == this.employee.id_account){
+    if (create) {
+      if (this.activeNewPayment.id_account_py == this.employee.id_account) {
         this.activeNewPayment.id_account_py = 'NULL';
       }
-      this.apiService.insertManualPayment(this.activeNewPayment).subscribe((str:string)=>{
-        if(str == '1'){
+      this.apiService.insertManualPayment(this.activeNewPayment).subscribe((str: string) => {
+        if (str == '1') {
           window.alert("Payment successfuly created");
-        }else{
+        } else {
           window.alert(str);
         }
         this.start();
@@ -1060,35 +1065,35 @@ export class AccprofilesComponent implements OnInit {
     }
   }
 
-  deletePayment(){
-    let str:string;
+  deletePayment() {
+    let str: string;
     str = this.active_payment.id_period;
     this.active_payment.id_period = this.authUser.getAuthusr().iduser;
-    this.apiService.deleteManualPayment(this.active_payment).subscribe((str:string)=>{
-      if(str == '1'){
+    this.apiService.deleteManualPayment(this.active_payment).subscribe((str: string) => {
+      if (str == '1') {
         window.alert("Payment and dependencies successfuly deleted");
-      }else{
+      } else {
         window.alert(str);
       }
       this.start();
     })
   }
 
-  updateDeduction(){
+  updateDeduction() {
     this.activeCred.id_user = this.authUser.getAuthusr().iduser
     this.activeCred.status = 'EDIT';
     this.activeCred.id_employee = this.employe_id;
-    if(this.insertN == 'Credit'){
-      this.apiService.updateCredits(this.activeCred).subscribe((str:string)=>{
-        if(str == '1'){
+    if (this.insertN == 'Credit') {
+      this.apiService.updateCredits(this.activeCred).subscribe((str: string) => {
+        if (str == '1') {
           window.alert("Record successfuly updated");
-        }else{
+        } else {
           window.alert(str);
         }
       })
       this.start();
-    }else if(this.insertN == 'Debit'){
-      let db:debits = new debits;
+    } else if (this.insertN == 'Debit') {
+      let db: debits = new debits;
       db.amount = this.activeCred.amount;
       db.id_employee = this.activeCred.id_employee;
       db.id_user = this.activeCred.id_user;
@@ -1096,10 +1101,10 @@ export class AccprofilesComponent implements OnInit {
       db.idpayments = this.activeCred.idpayments;
       db.status = this.activeCred.status;
       db.type = this.activeCred.type;
-      this.apiService.updateDebits(db).subscribe((str:string)=>{
-        if(str == '1'){
+      this.apiService.updateDebits(db).subscribe((str: string) => {
+        if (str == '1') {
           window.alert("Record successfuly updated");
-        }else{
+        } else {
           window.alert(str);
         }
       })
@@ -1107,23 +1112,23 @@ export class AccprofilesComponent implements OnInit {
     }
   }
 
-  setEdit(){
+  setEdit() {
     this.editDeduction = true;
   }
 
 
-  getServices(){
-    this.apiService.getServices({id:this.employe_id}).subscribe((sr:services[])=>{
+  getServices() {
+    this.apiService.getServices({ id: this.employe_id }).subscribe((sr: services[]) => {
       this.services = sr;
     })
   }
 
-  setService(){
+  setService() {
     this.recorded_service = false;
     this.newService = new services;
     this.newService.id_employee = this.employe_id;
     this.newService.id_user = this.authUser.getAuthusr().iduser;
-    this.newService.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth()+1).toString()) + "-" + (new Date().getDate().toString());
+    this.newService.date = (new Date().getFullYear().toString()) + "-" + ((new Date().getMonth() + 1).toString()) + "-" + (new Date().getDate().toString());
     this.newService.proc_status = "PENDING";
     this.newService.status = '1';
     this.newService.current = '0';
@@ -1131,55 +1136,164 @@ export class AccprofilesComponent implements OnInit {
     this.serviceTimes = 0;
   }
 
-  getService(sr:services){
+  getService(sr: services) {
     this.recorded_service = true;
     this.newService = sr;
   }
 
-  isDate(frec:string){
-    if(!isNullOrUndefined(frec)){
+  isDate(frec: string) {
+    if (!isNullOrUndefined(frec)) {
       return frec.includes("-");
-    }else{
+    } else {
       return false;
     }
   }
 
-  insertService(){
-    if(this.repeateService == 'DISABLE'){
+  insertService() {
+    if (this.repeateService == 'DISABLE') {
       this.repeateService = '1';
       this.serviceTimes = 1;
     }
-    this.newService.max = (Number(this.newService.max)/this.serviceTimes).toFixed(2);
+    this.newService.max = (Number(this.newService.max) / this.serviceTimes).toFixed(2);
     for (let index = 1; index <= Number(this.serviceTimes); index++) {
-      if(this.isDate(this.newService.frecuency)){
-        this.newService.frecuency = new Date (new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getFullYear().toString().padStart(2,"0")
-                                    + "-" + (new Date (new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getMonth() + 1).toFixed().padStart(2,"0")
-                                    + "-" + new Date (new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getDate().toFixed().padStart(2,"0");
-        if(index > 1){
+      if (this.isDate(this.newService.frecuency)) {
+        this.newService.frecuency = new Date(new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getFullYear().toString().padStart(2, "0")
+          + "-" + (new Date(new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getMonth() + 1).toFixed().padStart(2, "0")
+          + "-" + new Date(new Date(this.newService.frecuency).getTime() + (1000 * 3600 * 24 * (Number(this.repeateService) * (index - 1)))).getDate().toFixed().padStart(2, "0");
+        if (index > 1) {
           this.newService.notes = this.newService.notes + " | " + " Reapete every " + this.repeateService + " Maximun of " + this.serviceTimes + " execution #" + index;
           this.newService.current = (Number(this.newService.current) + Number(this.newService.amount)).toFixed(2);
         }
       }
       this.newService.proc_name = "Service " + this.newService.name;
-      this.apiService.insertService(this.newService).subscribe((str:string)=>{
-      this.alertMod.content = "Service Successfuly Created";
-      this.alertMod.header = 'Service Created';
-      this.alertMod.type = 1;
-      if(index == Number(this.serviceTimes)){
-        this.newService = new services;
-        document.getElementById("openAlertModal").click()
-      }
-    })
+      this.apiService.insertService(this.newService).subscribe((str: string) => {
+        this.alertMod.content = "Service Successfuly Created";
+        this.alertMod.header = 'Service Created';
+        this.alertMod.type = 1;
+        if (index == Number(this.serviceTimes)) {
+          this.newService = new services;
+          document.getElementById("openAlertModal").click()
+        }
+      })
     }
   }
 
-  saveService(){
+  saveService() {
     this.newService.id_user = this.authUser.getAuthusr().iduser;
-    this.apiService.updateService(this.newService).subscribe((str:string)=>{
+    this.apiService.updateService(this.newService).subscribe((str: string) => {
       this.alertMod.content = "Service Successfuly Updated";
       this.alertMod.header = 'Service Updated';
       this.alertMod.type = 1;
       document.getElementById("openAlertModal").click()
     })
+  }
+
+  getJudicialsByEmployee() {
+    this.apiService.getJudicialsByEmployee({ id_employee: this.employe_id }).subscribe((jud: judicialsByEmployee[]) => {
+      this.judicials = jud;
+    })
+  }
+
+  addJudicial() {
+    let date: Date = new Date();
+    let now = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + ' ' +
+              date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    let judicial: judicialsByEmployee = new judicialsByEmployee;
+    //judicial.id_employees = this.employe_id;
+    judicial.amount = 0;
+    judicial.current = 0;
+    judicial.max = 0;
+    judicial.state = 'Insert';
+    judicial.notes = 'Judicial Discount';
+    judicial.id_user = this.authUser.getAuthusr().iduser;
+    judicial.user_name = this.authUser.getAuthusr().user_name;
+    judicial.time = now.toString();
+    this.newJudicials = judicial;
+  }
+
+  editJudicial(jud: judicialsByEmployee) {
+    this.judicials.forEach(judicials => {
+      if (judicials == jud) {
+        judicials.state = 'Edit';
+        this.newJudicials = judicials;
+      } //end if
+    }); //end forEach
+  }
+
+  saveJudicial(jud: judicialsByEmployee) {
+    try {
+      if (jud.state == 'Edit') {
+        this.updateJudicial(jud);
+      } else if (jud.state == 'Insert') {
+        jud.user_name = this.authUser.getAuthusr().user_name;
+        this.insertJudicial(jud);
+      }
+    } finally {
+      jud.state = 'Browse';
+    }
+  }
+
+  insertJudicial(jud) {
+    const type_judicials = '17';
+    let today: Fecha = new Fecha;
+    let judicial: judicials = new judicials;
+    this.actuallProc = new hr_process;
+    judicial.amount = jud.amount;
+    judicial.current = jud.current;
+    judicial.max = jud.max;
+    this.actuallProc.idprocesses = type_judicials;
+    this.actuallProc.mount = jud.amount;
+    this.actuallProc.descritpion = null;
+    this.actuallProc.prc_date = today.today;
+    this.actuallProc.status = "NO PLAYED";
+    this.actuallProc.descritpion = jud.notes;
+    this.actuallProc.user_name = this.authUser.getAuthusr().user_name;
+    this.actuallProc.id_user = this.authUser.getAuthusr().iduser;
+    this.actuallProc.id_profile = this.employe_id;
+
+    this.apiService.insertProc(this.actuallProc).subscribe((str: string) => {
+      judicial.id_process = str;
+      this.apiService.insertJudicials(judicial).subscribe((str: string) => {
+        this.alertMod.content = "Judicial Successfuly Created";
+        this.alertMod.header = 'Judicial Created';
+        this.alertMod.type = 1;
+        document.getElementById("openAlertModal").click();
+        this.ngOnInit();
+      })
+    });
+  }
+
+  updateJudicial(jud: judicialsByEmployee) {
+    let date: Date = new Date();
+    let now = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + ' ' +
+              date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    jud.id_user = this.authUser.getAuthusr().iduser;
+    jud.time = now;
+    this.apiService.updateJudicialsAll(jud).subscribe((_str: string) => {
+
+    })
+  };
+
+  completeJudicial(jud: judicialsByEmployee) {
+    let date: Date = new Date();
+    let now = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + ' ' +
+              date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    jud.id_user = this.authUser.getAuthusr().iduser;
+    jud.time = now;
+    jud.current = jud.max;
+    jud.status = 'COMPLETED';
+    if (window.confirm("Are you sure you want to change the status to completed? \n No more judicial charges will be generated.")) {
+      this.apiService.updateJudicialsAll(jud).subscribe((str: string) => {
+        if (String(str).split("|")[0] != "0") {
+          this.alertMod.content = "Judicial Successfuly Completed";
+          this.alertMod.header = 'Judicial Completed';
+          this.alertMod.type = 1;
+          document.getElementById("openAlertModal").click();
+          this.ngOnInit();
+        } else {
+          console.log(String(str).split("|")[1]);
+        }
+      })
+    }
   }
 }

@@ -5,7 +5,7 @@ import { profiles, profiles_family, profiles_histories } from './profiles';
 import { process } from './process';
 // tslint:disable-next-line:max-line-length
 import { fullPreapproval, fullApplyentcontact, fullSchedulevisit, fullDoc_Proc, testRes, queryDoc_Proc, uploaded_documetns, search_parameters, new_hire, vew_hire_process, coincidences, employees, hrProcess, payment_methods, salaryReport } from './fullProcess';
-import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates, roster_types, rosters, roster_times, roster_weeks, tk_upload, patronal, holiday, asset_movements, movement_types, assets, StringOrNumber, asset_types, checks, checksDetails, checkbooks, providers } from './process_templates';
+import { process_templates, waves_template, hires_template, schedules, accounts, realTimeTrack, attendences, attendences_adjustment, vacations, leaves, disciplinary_processes, insurances, beneficiaries, terminations, reports, advances, rises, call_tracker, letters, supervisor_survey, judicials, irtra_requests, messagings, periods, deductions, debits, credits, payments, services, change_id, ot_manage, attendance_accounts, clients, marginalization, isr, payroll_values, advances_acc, payroll_values_gt, paid_attendances, payroll_resume, employees_Bonuses, reporters, ids_profiles, formerEmployer, accountingPolicies, AccountingAccounts, timekeeping_adjustments, policies, billing, billing_detail, sendmailRes, paystubview, contractCheck, employeesByWaves, clauses, contract_templates, clauses_templates, all_templates, roster_types, rosters, roster_times, roster_weeks, tk_upload, patronal, holiday, asset_movements, movement_types, assets, StringOrNumber, asset_types, checks, checksDetails, checkbooks, providers, judicialsByEmployee } from './process_templates';
 
 import { Observable } from 'rxjs';
 import { users } from './users';
@@ -24,8 +24,8 @@ export class ApiService {
 prof:profiles[] = [];
 id_profile:number;
 
-//PHP_API_SERVER = environment.PHP_root; // Desarrollo
-PHP_API_SERVER = "http://172.18.2.45";  // produccion
+PHP_API_SERVER = environment.PHP_root; // Desarrollo
+//PHP_API_SERVER = "http://172.18.2.45";  // produccion
 
 constructor(private httpClient:HttpClient) { }
 
@@ -136,7 +136,7 @@ getFamilies(profile:profiles):Observable<profiles_family[]>{
 }
 
 authUsr(users:users):Observable<users[]>{
-  return this.httpClient.post<users[]>(`http://181.114.12.81/phpscripts/login.php`, users);
+  return this.httpClient.post<users[]>(`${this.PHP_API_SERVER}/phpscripts/login.php`, users);
 }
 
 insProcess(proc:process):Observable<number>{
@@ -463,6 +463,14 @@ insertJudicials(judicials:judicials){
 
 getJudicials(proc:process){
   return this.httpClient.post<judicials>(`${this.PHP_API_SERVER}/phpscripts/getJudicials.php`, proc);
+}
+
+getJudicialsByEmployee(id_employee: any){
+  return this.httpClient.post<judicialsByEmployee[]>(`${this.PHP_API_SERVER}/phpscripts/getJudicialsByEmployee.php`, id_employee);
+}
+
+updateJudicialsAll(judicials: judicialsByEmployee){
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateJudicialsAll.php`, judicials);
 }
 
 insertIrtra_request(irtraRquest:irtra_requests){
@@ -1214,15 +1222,15 @@ getSessions(usr:users){
 }
 
 getProviders(){
-  return this.httpClient.get<providers[]>(`http://181.114.12.81/phpscripts/getProviders.php`);
+  return this.httpClient.get<providers[]>(`${this.PHP_API_SERVER}/phpscripts/getProviders.php`);
 }
 
 updateProvider(prov:providers){
-  return this.httpClient.post<string>(`http://181.114.12.81/phpscripts/updateProvider.php`, prov);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/updateProvider.php`, prov);
 }
 
 insertProvider(prov:providers){
-  return this.httpClient.post<string>(`http://181.114.12.81/phpscripts/insertProvider.php`, prov);
+  return this.httpClient.post<string>(`${this.PHP_API_SERVER}/phpscripts/insertProvider.php`, prov);
 }
 }
 

@@ -94,6 +94,15 @@ i {
   width: 75%;
 }
 
+.btn-xs {
+  padding: .20rem .20rem;
+  font-size: .75rem;
+  line-height: 0.50;
+  height: 0.50;
+  width: 0.50;
+  border-radius: .2rem;
+}
+
 @media only screen and (min-width: 50px) and (max-width: 800px) {
   body {
     text-rendering: optimizeLegibility;

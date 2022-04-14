@@ -735,6 +735,33 @@ export class supervisor_survey {
     }
 }
 
+export class judicialsByEmployee {
+  idjudicials: string;
+  id_process: string;
+  amount: number;
+  max: number;
+  current: number;
+  id_user: string;
+  user_name: string;
+  time: string;
+  notes: string;
+  status: string;
+  state: StringType;
+  constructor() {
+    this.idjudicials = null;
+    this.id_process = null;
+    this.amount = null;
+    this.max = null;
+    this.current = null;
+    this.id_user = null;
+    this.user_name = null;
+    this.time = null;
+    this.notes = null;
+    this.status = null;
+    this.state = null;
+  }
+}
+
 export class judicials {
     idjudicials: string;
     id_process: string;

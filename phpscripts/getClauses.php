@@ -6,7 +6,7 @@ $res = [];
 $i = 0;
 $sql = "Select * from clauses;";
 
-if($request = mysqli_query($con,$sql)){
+if ($request = mysqli_query($con,$sql)) {
   while($row = mysqli_fetch_assoc($request)){
     $res[$i]['idclauses'] = $row['idclauses'];
     $res[$i]['name'] = $row['name'];
@@ -15,5 +15,7 @@ if($request = mysqli_query($con,$sql)){
     $i++;
   }
   echo(json_encode($res));
+} else {
+  echo(json_encode($sql));
 }
 ?>
